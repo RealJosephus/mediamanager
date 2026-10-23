@@ -9,6 +9,7 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import { dtoOptions, itemImageTypes, projectItem } from '../../src/library/dto.js';
 import { cleanValue, idKey, MIN_DATE } from '../../src/library/records.js';
 import { stringifyNativeJson } from '../../src/core/json.js';
@@ -39,10 +40,11 @@ test('inherited DTO images match the actual native image field graph and cache t
   assert.equal(native.results.length, input.cases.length);
   const database = await createPostgresTestDatabase(t, 'dto_images');
   const store = new DomainStore(database), library = new LibraryService({ store, serverId: 'dto-images', programDataPath: 'Z:\\ImageContracts' });
-  t.after(() => library.close());
+  await attachLibraryNavigation(library);
   const results = [];
   try {
     for (const [caseIndex, sample] of input.cases.entries()) {
+      await library.itemCreation.close();
       await database.client.query(`TRUNCATE TABLE "${database.schemaName}"."BaseItems", "${database.schemaName}"."ItemValues" CASCADE`);
       const ids = new Map(sample.items.map((item, index) => [item.key, itemId(index)]));
       for (const definition of sample.items) {
@@ -80,27 +82,30 @@ test('inherited DTO images match the actual native image field graph and cache t
         }));
       }
       const before = await snapshot(database);
-      const baseRows = await database.rows('BaseItems');
-      // The native dependency boundary supplies this scenario's collection
-      // folders. Bind its declared root instead of deriving a different root
-      // from the unrelated common program-data directory.
-      library.options.userRoot = baseRows.find(row => row.Type === native.types.UserRootFolder) ?? null;
-      const state = await library.load(database, null, { baseRows });
-      try {
-        const target = state.byId.get(idKey(ids.get(sample.target)));
-        if (sample.batch) state.dtoImageArtistsBatch = await state.getDtoArtists(target.AlbumArtists);
-        const selected = dtoOptions({ fields: [], enableuserdata: false, enableimages: sample.options?.enableImages,
-          imagetypelimit: sample.options?.limit, enableimagetypes: sample.options?.types });
-        const result = await projectItem(target, state, null, selected, { ...library.options,
-          owner: sample.owner ? state.byId.get(idKey(ids.get(sample.owner))) : undefined });
-        const wire = JSON.parse(stringifyNativeJson(result));
-        const images = Object.fromEntries(Object.entries(wire).filter(([name]) => fields.has(name)));
-        results.push({ name: sample.name, images });
-        assert.deepEqual(images, native.results[caseIndex].images, sample.name);
-      } finally { await state.dispose(); }
+      await store.run(async session => {
+        const baseRows = await session.rows('BaseItems');
+        // The native dependency boundary supplies this scenario's collection
+        // folders. Bind its declared root instead of deriving a different root
+        // from the unrelated common program-data directory.
+        library.options.userRoot = baseRows.find(row => row.Type === native.types.UserRootFolder) ?? null;
+        const state = await library.load(session, null, { baseRows });
+        try {
+          const target = state.byId.get(idKey(ids.get(sample.target)));
+          if (sample.batch) state.dtoImageArtistsBatch = await state.getDtoArtists(target.AlbumArtists);
+          const selected = dtoOptions({ fields: [], enableuserdata: false, enableimages: sample.options?.enableImages,
+            imagetypelimit: sample.options?.limit, enableimagetypes: sample.options?.types });
+          const result = await projectItem(target, state, null, selected, { ...library.options,
+            owner: sample.owner ? state.byId.get(idKey(ids.get(sample.owner))) : undefined });
+          const wire = JSON.parse(stringifyNativeJson(result));
+          const images = Object.fromEntries(Object.entries(wire).filter(([name]) => fields.has(name)));
+          results.push({ name: sample.name, images });
+          assert.deepEqual(images, native.results[caseIndex].images, sample.name);
+        } finally { await state.dispose({ session }); }
+      });
       assert.deepEqual(await snapshot(database), before, sample.name + ' is read-only');
     }
   } finally {
-    await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ results, scope: native.scope }, null, 2) + '\n', { flag: 'wx' });
+    try { await writeFile(path.join(output, 'postgres.json'), JSON.stringify({ results, scope: native.scope }, null, 2) + '\n', { flag: 'wx' }); }
+    finally { await closeLibraryNavigation(library); }
   }
 });

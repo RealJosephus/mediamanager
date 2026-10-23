@@ -63,6 +63,8 @@ test('real PostgreSQL root navigation preserves controller and BoxSet early-retu
         Data: JSON.stringify({ CollectionType: 'movies', PhysicalLocationsList: [media] }) }),
       row(12, 'Folder', { ParentId: id(2), TopParentId: id(12), Path: media }),
       row(11, 'Folder', { Name: 'Denied parent', ParentId: id(12), Path: path.join(media, 'denied'), OfficialRating: 'R', InheritedParentalRatingValue: 21 }),
+      row(13, 'Folder', { Name: 'Denied own-country parent', ParentId: id(12), Path: path.join(media, 'denied-own-country'),
+        OfficialRating: 'R', InheritedParentalRatingValue: 21, PreferredMetadataCountryCode: 'US' }),
       row(20, 'Movie', { ParentId: id(12), TopParentId: id(12), Path: path.join(media, 'member.mkv') }),
       ...[100, 101, 102, 103, 104].map(number => row(number, 'BoxSet', {
         Path: path.join(data, 'collections', String(number)),
@@ -87,6 +89,7 @@ test('real PostgreSQL root navigation preserves controller and BoxSet early-retu
       Configuration: {}, Policy: { EnableAllFolders: true, BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
     const snapshot = async () => ({ rows: await database.rows('BaseItems', { orderBy: [{ column: 'Id', direction: 'ASC' }] }), files: await files(root) });
     const before = await snapshot();
+    let expectedCacheRows = { states: 0, cohorts: 0 };
     const unchanged = async () => {
       assert.equal(library.itemCreation.getCachedItemById(id(1)), liveRoot);
       assert.equal(liveRoot.LinkedChildren, null, 'The live null relation must not be replaced by persisted links.');
@@ -94,22 +97,30 @@ test('real PostgreSQL root navigation preserves controller and BoxSet early-retu
       const state = (await database.client.query(`SELECT
         (SELECT count(*) FROM ${q(links.schemaName)}.item_states)::integer AS states,
         (SELECT count(*) FROM ${q(links.schemaName)}.item_cohorts)::integer AS cohorts`)).rows[0];
-      assert.deepEqual(state, { states: 0, cohorts: 0 });
+      assert.deepEqual(state, expectedCacheRows, 'Only the native country fallback may populate the persistent cold Children cache.');
     };
-    async function rejects(name, operation, expected, rootReads) {
+    async function rejects(name, operation, expected, rootReads, cacheRows = expectedCacheRows) {
       const previous = nullRootPlans; let observed;
       await assert.rejects(async () => { try { await operation(); } catch (error) { observed = describeError(error); throw error; } }, expected);
       assert.equal(nullRootPlans - previous, rootReads, name + ': captured null-root consumers');
-      await unchanged(); report.cases.push({ name, error: observed, rootReads: nullRootPlans - previous });
+      expectedCacheRows = cacheRows;
+      await unchanged(); report.cases.push({ name, error: observed, rootReads: nullRootPlans - previous,
+        coldChildrenRows: { ...expectedCacheRows } });
     }
     const selectors = { Artists: 'Must not create artist', Albums: 'Must not resolve album', Studios: 'Must not create studio',
       EnableImages: false, EnableUserData: false };
     await rejects('missing parent precedes null-root resolution and all selectors',
       () => library.queryItems({ ...selectors, ParentId: id(999) }, { user }),
       { status: 400, message: 'Error processing request.' }, 0);
+    await rejects('own-country denied parent precedes cold Children and all selectors',
+      () => library.queryItems({ ...selectors, ParentId: id(13) }, { user }),
+      { status: 401, message: 'Order reader is not permitted to access Library Denied own-country parent.' }, 0);
+    // GetPreferredMetadataCountryCode consults collection folders before it
+    // falls back to configured country. That warms Children, not root links.
     await rejects('denied parent precedes null-root resolution and all selectors',
       () => library.queryItems({ ...selectors, ParentId: id(11) }, { user }),
-      { status: 401, message: 'Order reader is not permitted to access Library Denied parent.' }, 0);
+      { status: 401, message: 'Order reader is not permitted to access Library Denied parent.' }, 0,
+      { states: 1, cohorts: 1 });
     await rejects('own BoxSet rating denial precedes root resolution', () => library.getItemRecord(id(100), { user }),
       { status: 404, message: 'Item not found.' }, 0);
     for (const [number, name] of [[101, 'no links'], [102, 'typed empty membership']]) {

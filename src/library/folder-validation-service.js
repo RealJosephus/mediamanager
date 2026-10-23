@@ -7,7 +7,7 @@ import { nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNati
 import { filterResolutionCandidates } from './resolution-ignore.js';
 import { createResolvedItemEntity } from './resolved-item-entity.js';
 import { releaseCachedFolderChildren } from './folder-cache.js';
-import { collectionFoldersForItem, parentChainForItem } from './collection-membership.js';
+import { parentChainForItem } from './collection-membership.js';
 import { buildScanCollectionContext } from './scan-context.js';
 import { itemTopParentId } from './item-save-tuple.js';
 import { resolvedItemStructuralSnapshot } from './resolved-item-lifecycle.js';
@@ -175,7 +175,7 @@ export class FolderValidationService {
       const context = buildScanCollectionContext({
         root: parent,
         state,
-        collectionFolders: collectionFoldersForItem(parent, state),
+        collectionFolders: await this.library.getCollectionFolders(parent, state),
         libraryOptions: this.library.options.libraryOptions,
         configuration: this.library.options.configuration
       });

@@ -107,7 +107,8 @@ export class VideoVersionDiscovery {
     if (report) reportRemoved?.(report.item, report.parent);
   }
 
-  async #resolveFile(loaded, identityPath, expectedType, { preview = false } = {}) {
+  async #resolveFile(loaded, identityPath, expectedType, collectionType, { preview = false } = {}) {
+    if (collectionType !== null && typeof collectionType !== 'string') throw new TypeError('Video resolution requires its native content type.');
     const api = apiFor(identityPath);
     const accessPath = this.identityMap.resolve({ itemId: loaded.getNewItemId(identityPath, expectedType), identityPath,
       style: api === path.win32 ? 'windows' : 'posix' });
@@ -132,7 +133,6 @@ export class VideoVersionDiscovery {
         && apiFor(loaded.libraryRuntimeOptions.programDataPath).join(loaded.libraryRuntimeOptions.programDataPath, 'root') })) return null;
     const ignoreRule = preview ? this.ignoreRule.clone() : this.ignoreRule;
     if (await ignoreRule.shouldIgnore(candidate.identityPath, { isDirectory: entry.kind === 'directory' })) return null;
-    const collectionType = loaded.getVideoVersionCollectionType();
     const tvEpisode = loaded.parent?.IsFolder && (collectionType === 'tvshows'
       || [loaded.parent, ...(loaded.parents ?? [])].some(parent => ['Season', 'Series'].includes(parent?.Type)));
     const raw = await this.resolveFile(candidate,
@@ -168,7 +168,8 @@ export class VideoVersionDiscovery {
     return resolved;
   }
 
-  async resolveAlternateVersion(loaded, identityPath, expectedType, { preview = false, reportRemoved, baseline = loaded } = {}) {
+  async resolveAlternateVersion(loaded, identityPath, expectedType, collectionType, { preview = false, reportRemoved, baseline = loaded } = {}) {
+    if (collectionType !== null && typeof collectionType !== 'string') throw new TypeError('Alternate resolution requires its native content type.');
     if (!preview && expectedType !== videoNativeType) {
       const wrongId = nativeGuid(loaded.getNewItemId(identityPath, videoNativeType));
       const wrong = await this.lookup(loaded, wrongId);
@@ -201,7 +202,7 @@ export class VideoVersionDiscovery {
         reportRemoved?.(report.item, report.parent);
       }
     }
-    return this.#resolveFile(loaded, identityPath, expectedType, { preview });
+    return this.#resolveFile(loaded, identityPath, expectedType, collectionType, { preview });
   }
 
   async createOwnedVideo(loaded, identityPath, expectedType, { alternate = false, validate, reportAdded, reportRemoved } = {}) {
@@ -228,14 +229,15 @@ export class VideoVersionDiscovery {
       if (alternate) { item.PrimaryVersionId = loaded.item.Id; item.PresentationUniqueKey = idKey(loaded.item.Id); }
       return item;
     };
+    const collectionType = await loaded.getOwnedVideoCollectionType(loaded.item);
     // Alternate coercion can independently delete a wrong-type item. Validate
     // its prospective network writers before those irreversible file effects.
     if (alternate && validate) {
-      const draft = own(await this.#resolveFile(loaded, identityPath, expectedType, { preview: true }));
+      const draft = own(await this.#resolveFile(loaded, identityPath, expectedType, collectionType, { preview: true }));
       if (draft) await validate(draft);
     }
-    const item = own(alternate ? await this.resolveAlternateVersion(loaded, identityPath, expectedType, { reportRemoved })
-      : await this.#resolveFile(loaded, identityPath, expectedType));
+    const item = own(alternate ? await this.resolveAlternateVersion(loaded, identityPath, expectedType, collectionType, { reportRemoved })
+      : await this.#resolveFile(loaded, identityPath, expectedType, collectionType));
     if (!item) return null;
     if (!alternate) await validate?.(item);
     await this.store.serializeWrites(async () => {
@@ -259,10 +261,12 @@ export class VideoVersionDiscovery {
     if (!VIDEO_TYPES.has(loaded.item.Type)) return [];
     const result = [], seen = new Set();
     for (const identityPath of loaded.item.AdditionalParts ?? []) {
+      if (!await loaded.ownedFileExists(identityPath, videoNativeType)) continue;
       const id = loaded.getNewItemId(identityPath, videoNativeType), key = idKey(id);
       if (seen.has(key) || await this.lookup(loaded, id)) continue;
       seen.add(key);
-      const item = await this.#resolveFile(loaded, identityPath, videoNativeType, { preview: true });
+      const item = await this.#resolveFile(loaded, identityPath, videoNativeType,
+        await loaded.getOwnedVideoCollectionType(loaded.item), { preview: true });
       if (!item) continue;
       item.OwnerId = loaded.item.Id; item.IsInMixedFolder = loaded.item.IsInMixedFolder;
       result.push(item);
@@ -272,6 +276,7 @@ export class VideoVersionDiscovery {
 
   async #missing(loaded, options) {
     if (!VIDEO_TYPES.has(loaded.item.Type)) return [];
+    const collectionType = await loaded.getVideoVersionCollectionType();
     const paths = loaded.item.LocalAlternateVersions;
     if (paths === null) throw Object.assign(new TypeError('A native video version array cannot be null.'), { nativeException: 'NullReferenceException' });
     const nativeType = loaded.item.NativeType;
@@ -280,7 +285,7 @@ export class VideoVersionDiscovery {
       if (identityPath == null || identityPath === '') continue;
       const id = nativeGuid(loaded.getNewItemId(identityPath, nativeType)), key = idKey(id);
       if (seen.has(key) || await this.lookup(loaded, id)) continue;
-      const item = await this.resolveAlternateVersion(loaded, identityPath, nativeType, options);
+      const item = await this.resolveAlternateVersion(loaded, identityPath, nativeType, collectionType, options);
       if (!item) continue;
       seen.add(key);
       item.OwnerId = loaded.item.Id; item.PrimaryVersionId = loaded.item.Id;

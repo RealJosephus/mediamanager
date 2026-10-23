@@ -33,6 +33,7 @@ const sealedExecutionManifests = new Map([
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
+  ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
   ['tests/core/native-charset.test.js', ['sealed-charset', 'tests/core/fixtures/native-charset/provenance.json']],
   ['tests/core/native-json-encoder.test.js', ['sealed-json', 'tests/core/fixtures/native-json-encoder/provenance.json']],
   ['tests/http/item-deletion.test.js', ['sealed-http-delete', 'tests/http/fixtures/item-deletion/provenance.json']],
@@ -111,9 +112,12 @@ export function executionManifestReferences(contract, content, filename) {
     }
     for (const descriptor of [...content.assemblies, ...content.nativeLibraries, ...content.oracleSources]) add(descriptor);
   } else if (contract.kind === 'splashscreen-sources') {
-    for (const source of content.consumerSources) add(source);
+    for (const source of content.consumerSources) add(source, { recorded: true });
   } else if (contract.kind === 'collection-task-sources') {
-    for (const source of content.sources) add({ filename: path.join('D:/jellyfin', source.path), sha256: source.sha256 });
+    if (content.recorder) add({ ...content.recorder, filename: path.resolve(repositoryRoot, content.recorder.filename) });
+    for (const source of content.sources) add({ filename: path.join('D:/jellyfin', source.path), sha256: source.sha256 }, { recorded: true });
+  } else if (contract.kind === 'folder-progress-sources') {
+    for (const source of content.sourceFiles) add(source, { recorded: true });
   } else if (contract.kind === 'sealed-collection-playlist') {
     add({ filename: content.jellyfin.source });
     for (const descriptor of [content.record, content.raw, content.native, content.dotnet, content.jellyfinDll,

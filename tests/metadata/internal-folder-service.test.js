@@ -9,8 +9,8 @@ import { beforeMetadataRefresh } from '../../src/metadata/before-refresh.js';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { createVirtualPathReverser } from '../../src/library/options.js';
-import { cachedFolderChildren } from '../../src/library/collection-membership.js';
-import { folderChildIds, setFolderChildren, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { setFolderChildren, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
 import { markInternalFolderRefresh, internalFolderRefreshFlag, requiresInternalFolderRefresh } from '../../src/metadata/internal-folder-refresh.js';
 import { RootFolderFileData, nativeDirectoryFullName } from '../../src/library/root-folder-file-data.js';
 import { setupChildrenFixture } from './children-fixture.js';
@@ -38,7 +38,7 @@ const canonicalLocations = new Map();
 const projectLocation = (value, root) => canonicalLocations.get(root)?.has(value) ? projectStatePath(value, root) : project(value, root);
 function stateProjection(item, stateRoot) {
   return { Name: item.Name, Path: project(item.Path, stateRoot), refreshFlag: internalFolderRefreshFlag(item),
-    cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? folderChildIds(item) == null : null,
+    cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? postgresFolderChildIds(item) == null : null,
     locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type) ? item.PhysicalLocationsList.map(value => projectLocation(value, stateRoot)) : null,
     physicalIds: item.Type === 'CollectionFolder' ? item.PhysicalFolderIds : null };
 }

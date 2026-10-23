@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "name": "Movie global NFO probe collections lifecycle",
+  "culture": "en-US",
+  "serverId": "movie-global-scan-oracle",
+  "nfoChangeToleranceMs": 60000,
+  "nfoChangeWaitMs": 60001,
+  "collectionName": "Scan Fixture Collection",
+  "originalGenre": "Scan Original Genre",
+  "changedGenre": "Scan Changed Genre",
+  "studio": "Scan Fixture Studio",
+  "overview": "Stored sidecar overview",
+  "movies": [
+    "First",
+    "Second"
+  ],
+  "phases": [
+    "created",
+    "updated",
+    "deleted"
+  ],
+  "tables": [
+    "AccessSchedules",
+    "ActivityLogs",
+    "AncestorIds",
+    "ApiKeys",
+    "AttachmentStreamInfos",
+    "BaseItemImageInfos",
+    "BaseItemMetadataFields",
+    "BaseItemProviders",
+    "BaseItemTrailerTypes",
+    "BaseItems",
+    "Chapters",
+    "CustomItemDisplayPreferences",
+    "DeviceOptions",
+    "Devices",
+    "DisplayPreferences",
+    "HomeSection",
+    "ImageInfos",
+    "ItemDisplayPreferences",
+    "ItemValues",
+    "ItemValuesMap",
+    "KeyframeData",
+    "LinkedChildren",
+    "MediaSegments",
+    "MediaStreamInfos",
+    "PeopleBaseItemMap",
+    "Peoples",
+    "Permissions",
+    "Preferences",
+    "TrickplayInfos",
+    "UserData",
+    "Users",
+    "__EFMigrationsHistory",
+    "__EFMigrationsLock"
+  ],
+  "postScanTasks": [
+    "Splashscreen",
+    "Artists",
+    "CollectionPosterVerify",
+    "Collections",
+    "Genres",
+    "MusicGenres",
+    "Studios",
+    "CleanDatabase"
+  ],
+  "declaredSeams": [
+    "Independent fresh roots, fixed English configuration, offline providers, no images/discs/subtitles/lyrics/users/network content. Unused native dependencies fail closed.",
+    "Direct real LibraryManager global entry and real Node complete-scan entry; this fixture does not exercise HTTP authorization or a running full native server.",
+    "New input preparation clears only the 31 domain tables on a new supplied SQLite byte copy, preserving all DDL, EF tables/history and sqlite_sequence. Preparation is not a native/candidate business operation.",
+    "Directory monitoring is a controlled native host boundary. Both media and application-state files are real isolated files. Actual scan, NFO/XML read/save, probe and collection tasks are not substituted.",
+    "Both executors receive an already configured empty Movies library via native CollectionFolder.SaveLibraryOptions or the production Node options serializer before the business global scans. No additional candidate-only AddVirtualFolder operation is inserted."
+  ],
+  "projectionPolicy": {
+    "rawEvidence": "All 33 tables, sqlite_sequence, real XML/NFO, Item events and queue boundaries are saved without projection.",
+    "itemIdentity": "One bijection per run keyed by full native type and declared-root-relative path, or type and exact nonpath name. A stable key must retain its identity across every phase; aliases or changed bindings fail. All foreign keys and declared Data identities use this map.",
+    "itemValueIdentity": "One bijection per run from ItemValueId to exact Type and Value, retained across every phase.",
+    "paths": "Only exact declared case/media/program roots and their descendants map to fixed tokens; no arbitrary drive, temp, or filename deletion. Unknown paths remain literal.",
+    "clockColumns": [
+      "BaseItems.DateCreated",
+      "BaseItems.DateModified",
+      "BaseItems.DateLastSaved",
+      "BaseItems.DateLastRefreshed",
+      "BaseItems.DateLastMediaAdded"
+    ],
+    "clockRules": "Each non-minimum clock value must fall within the actual common-input-preparation-to-run-end UTC window (file copies can preserve the generated asset timestamp, so the preparation lower bound is carried in the frozen input). For each logical item plus named clock field, use one bijection from distinct actual 100ns values to first-observed-phase tokens across all stages and persisted Data aliases. Repeated values retain tokens; new values, backwards progression, null and minimum remain distinguishable. Coincidental equal ticks of unrelated clock roles are not an identity contract. Actual Item event clocks use the same role bindings and ordered extra tokens for intermediate values. The NFO update separately proves actual DateLastSaved plus >60000ms, with no clock override or timestamp backdating. All other Date fields remain exact.",
+    "data": "Every Data property is retained; only declared rooted paths, mapped identities and explicitly listed clock properties may be projected. Raw Data text remains in all-table receipts.",
+    "eventOrder": "The entire raw cumulative ordinal stream, including initialization and cleanup, is preserved. Business phase Item events are compared per logical item without dropping multiplicity, order, reasons, Genres, Studios or TmdbCollectionName; setup and close events remain raw diagnostics. Cross-item asynchronous interleaving is diagnostic.",
+    "postScanTasks": "Every native registration must equal the real CoreAppHost exported type order; Node names must match actual task constructor types. In each phase actual task begin/completion sequence must follow that side's registrations. Cross-runtime order equality alone is not required: all persisted/XML/Item-event/queue effects still must agree, and actual differing orders are reported."
+  },
+  "releaseAcceptance": false,
+  "queuePolicy": {
+    "expectedAdmissions": {
+      "created": 1,
+      "updated": 0,
+      "deleted": 0
+    },
+    "correlation": "The actual native QueueRefresh admission is joined to RefreshSingleItem by target identity plus the unmodified DirectoryService object reference, retained by the real MetadataRefreshOptions copy constructor. Candidate ALS joins real queuedRefresh to its actual metadataScanner call. This one-request input must remain unambiguous; duplicates or missing starts/completions fail.",
+    "comparison": "Compare original per-item request order, effective native option defaults, priority, actual metadata start/completed Item values, failure count, one-to-one admitted/started/completed/drained counts and partial order. Admission-returned may precede or follow start. No positive deduplication input is claimed; every admitted request must execute once.",
+    "completionBoundary": "Native has no public full-item queue completion event. The metadata callback is observed directly; full worker completion, including real Folder.ValidateChildren, is acknowledged only after the actual native queue lock reports empty and processing=false. Node additionally saves its real per-item worker completion. The common compared boundary is admitted -> metadata-started -> metadata-completed -> whole-worker-drained. No invented per-item completion timestamp.",
+    "globalReturn": "All six raw global-returned/drained snapshots retain 33 tables, actual scan outcome and original queue state. Success/status is compared at both boundaries; persisted state/XML and empty real queue are compared at drained boundaries. Exact cross-item async interleaving and transient global-returned backlog are diagnostic; per-request partial order and failure/drain obligations are gates."
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor, collage, XML and scheduler recording inputs; no prefix, basename or runtime-executable fallback.",
+  "scope": "Exact original-path-and-SHA-256 relocation of sealed monitor, collage, XML, scheduler, splashscreen, collection task and folder progress recording inputs; no prefix, basename or runtime-executable fallback.",
   "sourcesReviewed": "Only designated source files, controlled fixture helpers, synthetic recordings, execution/build receipts and pinned binary identities; no instance database, configuration, environment dump, key or user media is included.",
   "entries": [
     {
@@ -22,7 +22,7 @@
       "target": "tests/fixtures/recorded-native/objects/d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1.cs",
       "bytes": 83390,
       "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
-      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json"]
+      "consumers": ["tests/library/fixtures/library-task-scheduler/provenance.json", "tests/library/fixtures/folder-validation-progress/provenance.json"]
     },
     {
       "source": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
@@ -240,7 +240,8 @@
       "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
       "consumers": [
         "tests/library/fixtures/library-directory-monitor/provenance.json",
-        "tests/images/fixtures/user-view-collage/provenance.json"
+        "tests/images/fixtures/user-view-collage/provenance.json",
+        "tests/library/fixtures/folder-validation-progress/record.json"
       ]
     },
     {
@@ -331,6 +332,115 @@
       "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
       "consumers": [
         "tests/metadata/fixtures/local-xml-save-prefix/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Jellyfin.Api/Controllers/ImageController.cs",
+      "target": "tests/fixtures/recorded-native/objects/4b979f3fca700e8b8ab0a8b3680cbb46b358fea60a59f1090f2e65912c8ee8c5.cs",
+      "bytes": 87283,
+      "sha256": "4b979f3fca700e8b8ab0a8b3680cbb46b358fea60a59f1090f2e65912c8ee8c5",
+      "consumers": [
+        "tests/images/fixtures/splashscreen/files.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin-web/src/scripts/autoBackdrops.js",
+      "target": "tests/fixtures/recorded-native/objects/98ea0feb7cefeecdf345cea4b00383851aa21a90ada870ec06240ac8a986b2bf.js",
+      "bytes": 3301,
+      "sha256": "98ea0feb7cefeecdf345cea4b00383851aa21a90ada870ec06240ac8a986b2bf",
+      "consumers": [
+        "tests/images/fixtures/splashscreen/files.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin-web/src/constants/branding.ts",
+      "target": "tests/fixtures/recorded-native/objects/477a9fe473f612080696f323a49fa38856d7f74f8cea847ce9d2795948f34db7.ts",
+      "bytes": 59,
+      "sha256": "477a9fe473f612080696f323a49fa38856d7f74f8cea847ce9d2795948f34db7",
+      "consumers": [
+        "tests/images/fixtures/splashscreen/files.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/CollectionPostScanTask.cs",
+      "target": "tests/fixtures/recorded-native/objects/65c3607091c17d95340808cfef31dc41c18111fc86a78b937688d99006004ba5.cs",
+      "bytes": 5244,
+      "sha256": "65c3607091c17d95340808cfef31dc41c18111fc86a78b937688d99006004ba5",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/Entities/Movies/Movie.cs",
+      "target": "tests/fixtures/recorded-native/objects/2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43.cs",
+      "bytes": 3725,
+      "sha256": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/Collections/CollectionCreationOptions.cs",
+      "target": "tests/fixtures/recorded-native/objects/31ce43febcadfacbb80c2846801c34b1678f3ec284003463973049ab28b894c7.cs",
+      "bytes": 825,
+      "sha256": "31ce43febcadfacbb80c2846801c34b1678f3ec284003463973049ab28b894c7",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+      "target": "tests/fixtures/recorded-native/objects/d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964.cs",
+      "bytes": 20315,
+      "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "target": "tests/fixtures/recorded-native/objects/4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json",
+        "tests/library/fixtures/folder-validation-progress/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+      "target": "tests/fixtures/recorded-native/objects/c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013.cs",
+      "bytes": 27043,
+      "sha256": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/jellyfin/Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "target": "tests/fixtures/recorded-native/objects/eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92.cs",
+      "bytes": 21359,
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "consumers": [
+        "tests/library/fixtures/collection-post-scan/provenance.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager/tests/library/fixtures/folder-validation-progress/Oracle.csproj",
+      "target": "tests/fixtures/recorded-native/objects/56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234.csproj",
+      "bytes": 453,
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234",
+      "consumers": [
+        "tests/library/fixtures/folder-validation-progress/record.json"
+      ]
+    },
+    {
+      "source": "D:/mediamanager/tests/library/fixtures/folder-validation-progress/Program.cs",
+      "target": "tests/fixtures/recorded-native/objects/4ef56f222f174548b6014e221727a62f7152703c20f9f904ea65587f6bfb535e.cs",
+      "bytes": 5915,
+      "sha256": "4ef56f222f174548b6014e221727a62f7152703c20f9f904ea65587f6bfb535e",
+      "consumers": [
+        "tests/library/fixtures/folder-validation-progress/record.json"
       ]
     }
   ]

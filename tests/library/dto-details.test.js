@@ -36,7 +36,7 @@ async function insertItem(db, input, id = syntheticId(1)) {
   return row.Id;
 }
 
-async function compare(db) {
+async function compare(db, library) {
   for (const entry of input.cases) {
     for (const table of ['BaseItemImageInfos', 'PeopleBaseItemMap', 'Peoples', 'BaseItems']) {
       for (const row of await db.rows(table)) await db.delete(table, Object.fromEntries(tableDefinition(table).primaryKey.map(key => [key, row[key]])));
@@ -69,17 +69,20 @@ async function compare(db) {
       selected = [];
     }
     const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
-    const item = state.byId.get(idKey(itemId));
-    if (entry.kind === 'float') {
-      // The DLL fixture constructs float objects directly. Preserve negative zero
-      // here because a persisted numeric zero does not retain that sign bit.
-      for (const source of entry.items) for (const key of ['CriticRating', 'CommunityRating', 'NormalizationGain', 'LUFS'])
-        if (source[key] != null) state.byId.get(idKey(source.Id))[key] = Math.fround(source[key]);
-    }
-    const dto = JSON.parse(stringifyNativeJson(await projectItem(item, state, user, dtoOptions({ fields: selected, enableuserdata: false }), options)));
-    const keys = entry.kind === 'people' ? ['People', 'ImageBlurHashes'] : entry.kind === 'names' ? ['GenreItems', 'Studios'] : [...floatFields, 'AlbumId'];
-    const pick = value => Object.fromEntries(keys.filter(key => Object.hasOwn(value, key)).map(key => [key, value[key]]));
-    assert.deepEqual(pick(dto), pick(entry.kind === 'people' ? { ...expected, People: expected.persistedPeople } : expected), entry.name);
+    state.library = library;
+    try {
+      const item = state.byId.get(idKey(itemId));
+      if (entry.kind === 'float') {
+        // The DLL fixture constructs float objects directly. Preserve negative zero
+        // here because a persisted numeric zero does not retain that sign bit.
+        for (const source of entry.items) for (const key of ['CriticRating', 'CommunityRating', 'NormalizationGain', 'LUFS'])
+          if (source[key] != null) state.byId.get(idKey(source.Id))[key] = Math.fround(source[key]);
+      }
+      const dto = JSON.parse(stringifyNativeJson(await projectItem(item, state, user, dtoOptions({ fields: selected, enableuserdata: false }), options)));
+      const keys = entry.kind === 'people' ? ['People', 'ImageBlurHashes'] : entry.kind === 'names' ? ['GenreItems', 'Studios'] : [...floatFields, 'AlbumId'];
+      const pick = value => Object.fromEntries(keys.filter(key => Object.hasOwn(value, key)).map(key => [key, value[key]]));
+      assert.deepEqual(pick(dto), pick(entry.kind === 'people' ? { ...expected, People: expected.persistedPeople } : expected), entry.name);
+    } finally { await state.dispose({ session: db }); }
   }
 
   for (const table of ['BaseItemImageInfos', 'PeopleBaseItemMap', 'Peoples', 'BaseItems']) {
@@ -89,11 +92,14 @@ async function compare(db) {
   await insertItem(db, { Type: 'Video', Name: 'Featurette', OwnerId: ownerId, ExtraType: 10 }, syntheticId(201));
   await insertItem(db, { Type: 'Video', Name: 'Local trailer', OwnerId: ownerId, ExtraType: 2 }, syntheticId(202));
   const state = await loadLibrary(db, {}, { baseRows: await db.rows('BaseItems') });
-  assert.equal(state.byId.get(idKey(syntheticId(201))).ExtraType, 'Featurette');
-  const dto = await projectItem(state.byId.get(idKey(ownerId)), state, null,
-    dtoOptions({ fields: ['LocalTrailerCount', 'SpecialFeatureCount'], enableuserdata: false }), options);
-  assert.deepEqual({ LocalTrailerCount: dto.LocalTrailerCount, SpecialFeatureCount: dto.SpecialFeatureCount },
-    { LocalTrailerCount: 1, SpecialFeatureCount: 1 });
+  state.library = library;
+  try {
+    assert.equal(state.byId.get(idKey(syntheticId(201))).ExtraType, 'Featurette');
+    const dto = await projectItem(state.byId.get(idKey(ownerId)), state, null,
+      dtoOptions({ fields: ['LocalTrailerCount', 'SpecialFeatureCount'], enableuserdata: false }), options);
+    assert.deepEqual({ LocalTrailerCount: dto.LocalTrailerCount, SpecialFeatureCount: dto.SpecialFeatureCount },
+      { LocalTrailerCount: 1, SpecialFeatureCount: 1 });
+  } finally { await state.dispose({ session: db }); }
 }
 
 test('PostgreSQL library state loaders fail closed without an explicit SQL scope', async () => {
@@ -106,8 +112,10 @@ test('PostgreSQL library state loaders fail closed without an explicit SQL scope
 test(`${input.cases.length} actual DLL detail cases match on real PostgreSQL`, { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async () => {
   const schema = `dto_details_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
   const db = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
-  try { await compare(db); }
+  const library = new LibraryService({ store: new DomainStore(db), ...options });
+  try { await library.store.run(session => compare(session, library)); }
   finally {
+    await library.close();
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);
     await db.close();
@@ -121,6 +129,7 @@ test('real PostgreSQL People projection hydrates only the path-derived person id
   const db = await PostgresDatabase.open({
     connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true,
   });
+  const library = new LibraryService({ store: new DomainStore(db), ...options });
   try {
     const name = 'Bounded Person';
     const movieId = await insertItem(db, { Type: 'Movie', Name: 'Bounded people owner' }, syntheticId(300));
@@ -134,19 +143,25 @@ test('real PostgreSQL People projection hydrates only the path-derived person id
     await db.insert('PeopleBaseItemMap', { ...empty('PeopleBaseItemMap'),
       ItemId: movieId, PeopleId: peopleId, ListOrder: 0, Role: 'Lead' });
 
-    const movieRows = await db.rows('BaseItems', { where: { Id: movieId } });
-    const state = await loadLibrary(db, options, { baseRows: movieRows });
-    const hydrated = [];
-    const rows = db.rows.bind(db);
-    db.rows = (table, queryOptions) => {
-      if (table === 'BaseItems') hydrated.push([...(queryOptions?.whereIn?.Id ?? [])]);
-      return rows(table, queryOptions);
-    };
-    const dto = await projectItem(state.byId.get(idKey(movieId)), state, null,
-      dtoOptions({ fields: ['People'], enableuserdata: false }), options);
-    assert.deepEqual(dto.People.map(person => person.Id), [identity.Id.replaceAll('-', '').toLowerCase()]);
-    assert.deepEqual(hydrated, [[identity.Id]]);
+    await library.store.run(async session => {
+      const movieRows = await session.rows('BaseItems', { where: { Id: movieId } });
+      const state = await loadLibrary(session, options, { baseRows: movieRows });
+      state.library = library;
+      const hydrated = [];
+      const rows = session.rows.bind(session);
+      session.rows = (table, queryOptions) => {
+        if (table === 'BaseItems') hydrated.push([...(queryOptions?.whereIn?.Id ?? [])]);
+        return rows(table, queryOptions);
+      };
+      try {
+        const dto = await projectItem(state.byId.get(idKey(movieId)), state, null,
+          dtoOptions({ fields: ['People'], enableuserdata: false }), options);
+        assert.deepEqual(dto.People.map(person => person.Id), [identity.Id.replaceAll('-', '').toLowerCase()]);
+        assert.deepEqual(hydrated, [[identity.Id]]);
+      } finally { session.rows = rows; await state.dispose({ session }); }
+    });
   } finally {
+    await library.close();
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
     await db.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);
     await db.close();

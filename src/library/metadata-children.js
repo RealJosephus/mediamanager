@@ -13,13 +13,13 @@ import { resolvePostgresLinkedChildren, findPostgresLinkedChildByPath } from './
 import { buildPostgresSeriesEpisodePageQuery } from './postgres-series-episodes-query.js';
 import { createPresentationUniqueKey } from './presentation-key.js';
 import { resolveSeriesAsync } from './series-reference.js';
-import { nativeContainsSubPath } from './native-path.js';
-import path from 'node:path';
+import { physicalPlan } from './postgres-folder-physical-plan.js';
+import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
+import { hasPostgresFolderChildIds } from './postgres-folder-child-ids.js';
 
 const plan = (text, values = []) => Object.freeze({ text, values: Object.freeze(values) });
 const encoded = value => value == null ? null : nativeTextBytes(value);
 const type = (sql, alias) => `substring(${sql.projection(`${alias}."Type"`)} from '[^.]+$')`;
-const folders = nativeItemTypes.filter(value => nativeItemDescriptor(value).family === 'folder').map(nativeTextBytes);
 const rebase = (source, offset) => source.text.replace(/\$(\d+)\b/gu, (_, number) => '$' + (Number(number) + offset));
 
 async function cleanupResources(primary, operations, message) {
@@ -31,39 +31,6 @@ async function cleanupResources(primary, operations, message) {
     primary?.message ?? message, primary ? { cause: primary } : undefined);
 }
 
-export async function physicalPlan(session, parent, recursive, { linkedChildren, library }) {
-  const sql = nativeTextSql(session.schemaName), items = `${q(session.schemaName)}."BaseItems"`;
-  const dataPath=library.options.dataPath??(library.options.programDataPath&&path.join(library.options.programDataPath,'data'));
-  const empty=()=>plan('SELECT NULL::bytea AS "Id", 0::bigint AS "Ordinal" WHERE FALSE');
-  if(parent.Type==='Playlist')return empty();
-  if(parent.Type==='BoxSet'&&(!parent.Path||await linkedChildren.count(parent.LinkedChildren)>0n||dataPath&&nativeContainsSubPath(parent.Path,dataPath)))return empty();
-  const values = [encoded(parent.Id), folders, encoded(dataPath), encoded('MediaBrowser.Controller.Entities.Movies.BoxSet'), encoded('MediaBrowser.Controller.Playlists.Playlist')];
-  const present = expression => `${expression} IS NOT NULL AND octet_length(${expression})>0 AND ${sql.guidKey(expression)}<>'00000000000000000000000000000000'`;
-  const visible = alias => `(NOT (${present(`${alias}."OwnerId"`)}) OR ${alias}."ExtraType" IS NOT NULL)
-    AND (NOT (${present(`${alias}."PrimaryVersionId"`)}) OR NOT EXISTS(SELECT 1 FROM ${items} primary_item
-      WHERE ${sql.guidKey('primary_item."Id"')}=${sql.guidKey(`${alias}."PrimaryVersionId"`)}
-        AND ${sql.guidKey('primary_item."TopParentId"')} IS NOT DISTINCT FROM ${sql.guidKey(`${alias}."TopParentId"`)}))`;
-  if (parent.Type === 'MusicArtist' && !nonemptyId(parent.ParentId)) return plan('SELECT NULL::bytea AS "Id", 0::bigint AS "Ordinal" WHERE FALSE');
-  const ordered = `ordered AS (SELECT item.*, row_number() OVER(PARTITION BY ${sql.guidKey('item."ParentId"')}
-    ORDER BY item."SortName" ASC NULLS FIRST,item."Id") AS position FROM ${items} item WHERE ${visible('item')})`;
-  if (!recursive) return plan(`WITH ${ordered} SELECT "Id",position AS "Ordinal" FROM ordered
-    WHERE ${sql.guidKey('"ParentId"')}=${sql.guidKey('$1::bytea')} ORDER BY position`, values.slice(0, 1));
-  return plan(`WITH RECURSIVE ${ordered}, walk AS (
-    SELECT item."Id",item."Type",ARRAY[item.position] AS path,ARRAY[${sql.guidKey('$1::bytea')},${sql.guidKey('item."Id"')}] AS seen,
-      ${sql.guidKey('item."Id"')}=${sql.guidKey('$1::bytea')} AS cycle
-    FROM ordered item WHERE ${sql.guidKey('item."ParentId"')}=${sql.guidKey('$1::bytea')}
-    UNION ALL SELECT item."Id",item."Type",walk.path||item.position,walk.seen||${sql.guidKey('item."Id"')},
-      ${sql.guidKey('item."Id"')}=ANY(walk.seen) AS cycle
-    FROM walk JOIN ordered item ON ${sql.guidKey('item."ParentId"')}=${sql.guidKey('walk."Id"')}
-    WHERE NOT walk.cycle AND walk."Type"=ANY($2::bytea[]) AND walk."Type"<>$5::bytea
-      AND (walk."Type"<>$4::bytea OR EXISTS(SELECT 1 FROM ordered container WHERE container."Id"=walk."Id"
-        AND container."Path" IS NOT NULL AND octet_length(container."Path")>0
-        AND NOT EXISTS(SELECT 1 FROM ${q(session.schemaName)}."LinkedChildren" link WHERE ${sql.guidKey('link."ParentId"')}=${sql.guidKey('container."Id"')})
-        AND ($3::bytea IS NULL OR NOT (octet_length(${sql.ordinalIgnoreCaseKey('container."Path"')})>octet_length(${sql.ordinalIgnoreCaseKey('$3::bytea')})
-          AND substring(${sql.ordinalIgnoreCaseKey('container."Path"')} from 1 for octet_length(${sql.ordinalIgnoreCaseKey('$3::bytea')}))=${sql.ordinalIgnoreCaseKey('$3::bytea')}
-          AND substring(${sql.ordinalIgnoreCaseKey('container."Path"')} from octet_length(${sql.ordinalIgnoreCaseKey('$3::bytea')})+1 for 2)=ANY(ARRAY[decode('002f','hex'),decode('005c','hex')])))))
-  ) SELECT "Id",row_number() OVER(ORDER BY path) AS "Ordinal",cycle FROM walk ORDER BY path`, values);
-}
 
 /** SQL owns each complete membership and its order. All repository rows are
  * mapped into an owned typed cohort before metadata mutations can begin. */
@@ -111,15 +78,16 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
   }
 
   async function capturePhysicalChildren(session, parent, recursive, cohort, target, predicate, liveSources) {
-    if (cachedFolderChildrenSnapshot(parent) === undefined) {
+    const usesCapturedChildren = current => hasPostgresFolderChildIds(current)
+      || cachedFolderChildrenSnapshot(current) !== undefined;
+    if (!usesCapturedChildren(parent)) {
       return capturePlan(session, await physicalPlan(session, parent, recursive, { linkedChildren, library }), cohort, target, { predicate });
     }
     const ancestry = q('mm_metadata_cached_path_' + randomUUID().replaceAll('-', ''));
     await session.client.query(`CREATE TEMP TABLE ${ancestry}(key text PRIMARY KEY)`);
     const cursor = { value: 0n };
     async function captureChildren(current) {
-      const cached = cachedFolderChildrenSnapshot(current);
-      if (cached === undefined) {
+      if (!usesCapturedChildren(current)) {
         await capturePlan(session, await physicalPlan(session, current, recursive, { linkedChildren, library }), cohort, target,
           { predicate, offset: cursor.value });
         cursor.value = BigInt((await session.client.query(`SELECT COALESCE(max("Ordinal"),0) AS value FROM ${target}`)).rows[0].value);
@@ -130,28 +98,30 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
       if (!entered.rowCount) throw libraryError(409, 'The metadata folder hierarchy contains a cycle.');
       let failure;
       try {
-        // This is the already captured native Children iterable, not a newly
-        // materialized collection. Each exact child is owned across SQL awaits.
-        for (const child of cached) {
-          const owner = acquireNativeItemLinkOwner(child);
-          let childFailure, retained = false;
-          try {
-            if (predicate(child)) {
-              const ordinal = ++cursor.value, slot = await cohort.capture(child, { ordinal });
-              // The existing warm array owns these exact occurrences. Keep a
-              // branch owner through metadata consumption and mutate the exact
-              // warm object when a page restores that captured slot.
-              if (!liveSources.has(slot)) {
-                liveSources.set(slot, { reference: new WeakRef(child), owner }); retained = true;
+        // Root ID replay and explicit warm Children share the same admitted
+        // source as navigation. SQL retains the complete sequence; each page
+        // borrows its exact entities until capture and recursive reads finish.
+        await withPostgresCachedFolderChildren({ session, library, item: current }, async source => {
+          for await (const page of source.pages()) for (const child of page) {
+            const owner = acquireNativeItemLinkOwner(child);
+            let childFailure, retained = false;
+            try {
+              if (predicate(child)) {
+                const ordinal = ++cursor.value, slot = await cohort.capture(child, { ordinal });
+                // Metadata mutations must reach the same manager/warm occurrence
+                // selected by the shared Children source.
+                if (!liveSources.has(slot)) {
+                  liveSources.set(slot, { reference: new WeakRef(child), owner }); retained = true;
+                }
+                await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
+                  [ordinal, encoded(child.Id), slot, encoded(child.NativeType)]);
               }
-              await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
-                [ordinal, encoded(child.Id), slot, encoded(child.NativeType)]);
-            }
-            if (recursive && child.IsFolder) await captureChildren(child);
-          } catch (error) { childFailure = error; throw error; }
-          finally { await cleanupResources(childFailure, [() => !retained && owner.release(), () => linkedChildren.flushReleases({ session })],
-            'Cached metadata child ownership cleanup failed.'); }
-        }
+              if (recursive && child.IsFolder) await captureChildren(child);
+            } catch (error) { childFailure = error; throw error; }
+            finally { await cleanupResources(childFailure, [() => !retained && owner.release(), () => linkedChildren.flushReleases({ session })],
+              'Cached metadata child ownership cleanup failed.'); }
+          }
+        });
       } catch (error) { failure = error; throw error; }
       finally { await cleanupResources(failure, [() => session.client.query(`DELETE FROM ${ancestry} WHERE key=$1`, [key])],
         'Cached metadata child ancestry cleanup failed.'); }

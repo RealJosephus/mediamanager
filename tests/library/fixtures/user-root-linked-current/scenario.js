@@ -8,7 +8,7 @@ import { transferDatabase } from '../../../../src/migration/database-transfer.js
 import { idKey } from '../../../../src/library/records.js';
 import { stringifyNativeJson } from '../../../../src/core/json.js';
 import { newNativeItemEntity, nativeItemDescriptor } from '../../../../src/library/native-item-entity.js';
-import { setFolderChildren } from '../../../../src/library/folder-cache.js';
+import { clearFolderChildIds, releaseCachedFolderChildren, setFolderChildren } from '../../../../src/library/folder-cache.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../../../database/postgres-fixture.js';
 import { assignTestLinks, readTestLinks } from '../../collection-test-consumers.js';
 import { errorRecord, files, rows, sha, within } from '../../../http/fixtures/item-collections-current/scenario.js';
@@ -77,6 +77,24 @@ export async function openRootScenario(input, native, report) {
     const aggregate = await runtime.itemCreation.getItemById(native.rootIds.aggregate);
     assert.equal(userRoot.Type, 'UserRootFolder'); assert.equal(aggregate.Type, 'AggregateFolder');
     owners.push(runtime.itemCreation.retainItem(userRoot), runtime.itemCreation.retainItem(aggregate));
+    // The native component injects these exact RootFolder/UserRootFolder
+    // receivers before querying, rather than rerunning root initialization.
+    runtime.libraryScanHost.getAggregateFolder = async () => aggregate;
+    runtime.libraryScanHost.getUserRootFolder = async () => userRoot;
+    // The native component obtains fresh root receivers after replacing its
+    // manager cache. Runtime startup has already reconciled recording folders
+    // through GetVirtualFolders, so its exact roots may hold Children and IDs.
+    // Reset that constructor state once here; subsequent cases retain every
+    // cache and invalidation produced by the neutral operation sequence.
+    for (const folder of [userRoot, aggregate]) {
+      clearFolderChildIds(folder);
+      releaseCachedFolderChildren(folder);
+    }
+    await runtime.linkedChildren.flushReleases();
+    await runtime.linkedChildren.flushOwnedReleases();
+    report.componentRootPreparation = { boundary: 'After runtime startup and exact receiver injection, before case zero.',
+      roots: [userRoot, aggregate].map(folder => ({ id: idKey(folder.Id), nativeType: folder.NativeType,
+        action: 'Clear child IDs and release cached Children.' })), ownedReleaseDrainCompleted: true };
     // Actual native RootFolder has an empty ConcurrentBag in this component.
     // This exact explicit warm value overrides runtime's registered playlist.
     aggregate.VirtualChildren.splice(0);

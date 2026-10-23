@@ -36,5 +36,5 @@ export async function canDeleteItem(item, user, { collectionFolders = () => [], 
   if (policy.EnableContentDeletion === true) return true;
   const allowed = policy.EnableContentDeletionFromFolders ?? [];
   if (item.SourceType === 'Channel') return allowed.some(id => sameId(id, item.ChannelId));
-  return collectionFolders().some(folder => allowed.some(id => sameId(id, folder.Id)));
+  return (await collectionFolders()).some(folder => allowed.some(id => sameId(id, folder.Id)));
 }

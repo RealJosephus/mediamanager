@@ -28,8 +28,12 @@ async function setup(t, existing = 0) {
   await fixture.library.itemCreation.createItems([channel], parent, { creationIntent: 'library-save' });
   fixture.library.itemCreation.unregisterItem(channel.Id);
   assert.equal((await fixture.library.itemCreation.getItemById(channel.Id)).ServiceName, 'Emby');
-  if (existing) await fixture.library.itemCreation.createItems(Array.from({ length: existing }, (_, index) =>
-    materializeGuideProgram(program(index), { channel, now: () => fixture.now, metadataChanged }).item), channel, { creationIntent: 'library-save' });
+  if (existing) {
+    const programs = [];
+    for (let index = 0; index < existing; index++) programs.push((await materializeGuideProgram(program(index),
+      { channel, now: () => fixture.now, metadataChanged })).item);
+    await fixture.library.itemCreation.createItems(programs, channel, { creationIntent: 'library-save' });
+  }
   let clock = 0;
   const now = () => new Date(Date.parse(fixture.now) + ++clock).toISOString();
   return { ...fixture, channel, options: { store: fixture.store, library: fixture.library, linkedChildren: fixture.linkedChildren,

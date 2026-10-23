@@ -162,8 +162,11 @@ test('actual Folder.GetItems and PostgreSQL queryItems agree on current links, w
     assert.equal(complete.filter(row => row.text.includes('mm_link_resolution_batch_')).reduce((sum, row) => sum + row.returned, 0), 140);
     report.sqlBounds = { maximumReturned: Math.max(...pages.map(row => row.returned)), pageSize: 128,
       completePositiveBatchBeforeFallback: true, countAndPaginationInPostgres: true };
+    // Count this ordered child projection separately from the live root path
+    // relation read by visibility in the same request.
     const warmPages = report.queries.filter(row => row.case === 'warm Children cross bounded pages before full SQL pagination'
-      && /^SELECT source\."Ordinal",source\."SlotKey"/u.test(row.text) && row.text.includes('item_cohorts'));
+      && /^SELECT source\."Ordinal",source\."SlotKey" FROM \(SELECT cohort\."Ordinal",cohort\.slot_id AS "SlotKey",state\."Id"\s+FROM /u.test(row.text)
+      && row.text.includes('item_cohorts'));
     assert.deepEqual(warmPages.map(row => row.returned), [128, 12, 0],
       'Every warm occurrence reaches the SQL projection in bounded pages before winner filtering and response paging.');
     report.sqlBounds.completeWarmProjectionBeforeFiltering = true;

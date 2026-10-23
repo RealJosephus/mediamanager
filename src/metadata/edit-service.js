@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import { idKey, libraryError } from '../library/records.js';
-import { visibleItem } from '../library/permissions.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { applyItemMetadataUpdate, metadataEditFlags, peopleItemTypes } from './item-update.js';
 import { ItemUpdateType, validateMetadataSaves } from './save-manager.js';
@@ -33,7 +32,7 @@ export class MetadataEditService {
         state = await this.library.load(database, user, { includeUserData: false, includeLinkGraph: false,
           baseRows: await loadPostgresPageGraph(database, await loadPostgresRowsByIds(database, [itemId]), [], { includeManualLinks: false }) });
         const target = state.byId.get(idKey(itemId));
-        if (!target || user && !visibleItem(target, user, state, { ...this.library.options, query: false })) throw libraryError(404, 'Item not found.');
+        if (!target || user && !await this.library.isItemVisible(target, user, state)) throw libraryError(404, 'Item not found.');
         assertKnownItem(target);
         if (!this.loadContext || !this.updates || target.NativeType.startsWith('Plugin.')) {
           throw libraryError(501, `Metadata editing is not implemented for '${target.NativeType}'.`);
@@ -75,7 +74,7 @@ export class MetadataEditService {
         }
         const save = async (updatedItem, { recalculateRating = true } = {}) => this.loadContext.withContext(updatedItem.Id,
           { draft: updatedItem, includeChildren: false }, async context => {
-            if (recalculateRating) onMetadataChanged(updatedItem, context.parentalRating(updatedItem, ancestors));
+            if (recalculateRating) onMetadataChanged(updatedItem, await context.parentalRating(updatedItem, ancestors));
             const result = { Item: cloneNativeItemEntity(updatedItem) }, owner = acquireNativeItemLinkOwner(result.Item);
             try { await saveMetadataItem(this.updates, context, result, ItemUpdateType.MetadataEdit); }
             finally { owner.release(); }

@@ -141,7 +141,7 @@ for (const postgres of [true]) test('native PostgreSQL metadata context, real us
   const episode = await loadContext(ids.episode);
   assert.equal(episode.lookup.MetadataLanguage, 'ja'); assert.equal(episode.lookup.SeriesDisplayOrder, 'DVD');
   assert.equal(episode.lookup.SeriesProviderIds.Tmdb, '12'); assert.equal(episode.lookup.SeasonProviderIds.Tmdb, '13');
-  onMetadataChanged(episode.item, episode.parentalRating(episode.item));
+  onMetadataChanged(episode.item, await episode.parentalRating(episode.item));
   await persistMetadata(store, episode, { Item: episode.item });
   const episodeRow = (await db.rows('BaseItems', { where: { Id: ids.episode } }))[0];
   assert.equal(episodeRow.InheritedParentalRatingValue, 17); assert.equal(episodeRow.InheritedParentalRatingSubValue, 1);

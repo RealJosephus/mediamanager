@@ -21,7 +21,7 @@ const boxSet = nativeTextBytes('MediaBrowser.Controller.Entities.Movies.BoxSet')
  * final page; Node only resolves the next raw null-ID link selected by SQL.
  * Every repository/cohort read crossing into Node is bounded to 128 entries. */
 export async function createPostgresFolderCollectionCollapse({ session, library, source, sourcePlan,
-  query, options, user, aggregate, prepareVisibility }) {
+  query, options, user, prepareVisibility }) {
   const sql = nativeTextSql(session.schemaName), { linkedChildren } = library.options;
   const { itemCreation } = library;
   const prefix = 'mm_folder_collapse_' + randomUUID().replaceAll('-', '');
@@ -55,17 +55,13 @@ export async function createPostgresFolderCollectionCollapse({ session, library,
     const allTypes = groupedTypes.length === 2;
     const hasGrouped = allTypes || (await session.client.query(`SELECT EXISTS(SELECT 1 FROM ${input}
       WHERE "Type"=ANY($1::bytea[])) AS present`, [groupedTypes])).rows[0].present;
-    if (hasGrouped && aggregate && options.collapseCollectionPath !== null) {
+    if (hasGrouped && options.collapseCollectionPath !== null) {
+      if (!library.rootHost) throw libraryError(500, 'Folder grouping requires the aggregate root host.');
+      const aggregate = await library.rootHost.getAggregateFolder();
       root = await createPostgresFolderLinksQuery({ session, library, item: aggregate, user: null });
       const rootPlan = await root.prepare({}, { ...options, visibility: undefined, collapseTypes: null });
-      const rootKey = sql.pathKey('item."Path"'), targetKey = sql.pathKey(`$${rootPlan.values.length + 1}::bytea`);
-      const separator = `CASE WHEN substring(${rootKey} FROM 1 FOR 16)=decode('00770069006e0064006f00770073000000','hex')
-        THEN decode('005c','hex') ELSE decode('002f','hex') END`;
-      const pathPrefix = `(${rootKey} || CASE WHEN substring(${rootKey} FROM octet_length(${rootKey})-1 FOR 2)
-        IN (decode('002f','hex'),decode('005c','hex')) THEN ''::bytea ELSE ${separator} END)`;
       const parent = (await session.client.query({ text: `SELECT item."__SlotKey" FROM (${rootPlan.text}) item
-        WHERE item."IsFolder" IS TRUE AND (${targetKey}=${rootKey}
-          OR substring(${targetKey} FROM 1 FOR octet_length(${pathPrefix}))=${pathPrefix})
+        WHERE item."IsFolder" IS TRUE AND ${sql.pathWithin(`$${rootPlan.values.length + 1}::bytea`, 'item."Path"')}
         ORDER BY item."__SourceOrdinal" LIMIT 1`, values: [...rootPlan.values, nativeTextBytes(options.collapseCollectionPath)] })).rows[0];
       if (parent) await root.withSlot(parent.__SlotKey, async item => {
         catalogue = await createPostgresFolderLinksQuery({ session, library, item, user });

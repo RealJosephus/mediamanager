@@ -1,6 +1,6 @@
 import { idKey, nonemptyId, repositoryTopParentId, repositoryIdPresent, repositoryValue } from './records.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
-import { readCachedFolderChildren } from './folder-cache.js';
+import { cachedFolderChildrenSnapshot } from './folder-cache.js';
 import { nativeItemDescriptor } from './native-item-entity.js';
 
 
@@ -19,9 +19,12 @@ export function userRootItem(state) {
 }
 
 export function cachedFolderChildren(parent, state) {
+  const assigned = cachedFolderChildrenSnapshot(parent);
+  if (assigned !== undefined) return assigned;
   // Folder.GetCachedChildren uses the repository's default owned/alternate
-  // filtering before this list becomes the entity's cached Children.
-  return readCachedFolderChildren(parent, state, () => state.items.filter(item => idKey(repositoryValue(item, 'ParentId')) === idKey(parent.Id)
+  // filtering. This finite state projection does not populate a live Folder's
+  // Children or ID cache; production catalogues own those collections in SQL.
+  return state.items.filter(item => idKey(repositoryValue(item, 'ParentId')) === idKey(parent.Id)
     && (!repositoryIdPresent(item, 'OwnerId') || item.ExtraType != null)
     && (!repositoryIdPresent(item, 'PrimaryVersionId') || !state.items.some(primary => idKey(primary.Id) === idKey(repositoryValue(item, 'PrimaryVersionId'))
       && idKey(repositoryTopParentId(primary)) === idKey(repositoryTopParentId(item))))).sort((left, right) => {
@@ -29,7 +32,7 @@ export function cachedFolderChildren(parent, state) {
     if (a == null) return b == null ? 0 : -1;
     if (b == null) return 1;
     return Buffer.compare(Buffer.from(a), Buffer.from(b));
-  }));
+  });
 }
 
 // BaseItem.GetParents follows entity ParentId lookups. Repository AncestorIds,

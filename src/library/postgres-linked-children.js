@@ -8,6 +8,7 @@ import { nativeTextBytes, decodeNativeTextBytes } from '../database/native-text.
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { nativeGuid } from '../users/native.js';
 import { clrTrim } from '../metadata/whitespace.js';
+import { createPostgresNativeResourceGraph } from './postgres-native-resource-graph.js';
 import { mapRecord } from './records.js';
 
 const handles = new WeakSet();
@@ -48,6 +49,8 @@ class LinkedChildrenHandle {
 export class PostgresLinkedChildrenStore {
   #entries = new Map();
   #pendingReleases = new Set();
+  #ownedReleases = new Set();
+  #ownedReleaseErrors = [];
   #handleOperations = new WeakMap();
   #mutationTails = new WeakMap();
   #closed = false;
@@ -61,7 +64,8 @@ export class PostgresLinkedChildrenStore {
   constructor({ database, relationDatabase, runtimeId = randomUUID() }) {
     if (database?.dialect !== 'postgres' || typeof database.withConnection !== 'function') throw new TypeError('SQL links require a pooled PostgreSQL database.');
     if (relationDatabase) {
-      if (relationDatabase.dialect !== 'postgres' || typeof relationDatabase.withConnection !== 'function') throw new TypeError('A separate relation connection owner is required.');
+      if (relationDatabase.dialect !== 'postgres' || typeof relationDatabase.withConnection !== 'function'
+        || typeof relationDatabase.runDetached !== 'function') throw new TypeError('A separate relation connection owner is required.');
       this.relationDatabase = relationDatabase; this.#ownDatabase = false;
     } else {
       if (!database.pool?.options) throw new TypeError('The runtime link repository requires the native database pool configuration.');
@@ -132,12 +136,15 @@ export class PostgresLinkedChildrenStore {
           set_id uuid NOT NULL REFERENCES ${this.sets}(id), revision bigint NOT NULL,
           PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_states (scope_id uuid NOT NULL,slot_id uuid NOT NULL,
-          state bytea NOT NULL,"Id" bytea NOT NULL,"OfficialRating" bytea,"CustomRating" bytea,"Name" bytea,
-          "EndDateTicks" bigint,"AllImagesLocalOrSd" boolean,PRIMARY KEY(scope_id,slot_id));
+          state bytea NOT NULL,"Id" bytea NOT NULL,"OfficialRating" bytea,"CustomRating" bytea,"Name" bytea,"Path" bytea,"NativeType" bytea,
+          "PhysicalLocations" bytea[],"PreferredCountry" bytea,"Tags" bytea[],"FileSystemPathKey" bytea,"EndDateTicks" bigint,"AllImagesLocalOrSd" boolean,PRIMARY KEY(scope_id,slot_id));
         CREATE TABLE ${q(this.schemaName)}.item_cohorts (view_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
-          scope_id uuid NOT NULL,slot_id uuid NOT NULL,PRIMARY KEY(view_id,"Ordinal"));`);
+          scope_id uuid NOT NULL,slot_id uuid NOT NULL,PRIMARY KEY(view_id,"Ordinal"));
+        CREATE TABLE ${q(this.schemaName)}.folder_child_ids (scope_id uuid NOT NULL,"Ordinal" bigint NOT NULL,
+          "Id" bytea NOT NULL,PRIMARY KEY(scope_id,"Ordinal"));`);
     });
     this.#initialized = true;
+    this.resourceGraph = await createPostgresNativeResourceGraph({ linkedChildren: this });
   }
   check(handle) {
     this.#active(true);
@@ -423,6 +430,25 @@ export class PostgresLinkedChildrenStore {
       if (this.#requestRelease(handle)) this.#pendingReleases.add(handle.entry);
     });
   }
+  /** Register actual deferred resource cleanup before its entity owner exits.
+   * This always owns a task, including when called inside an admitted operation
+   * whose caller does not await the cleanup. Existing scopes remain usable
+   * after close withdraws new admissions. */
+  queueOwnedRelease(operation) {
+    this.#active(true);
+    if (typeof operation !== 'function') throw new TypeError('An owned resource release operation is required.');
+    const pending = this.#operationContext.run(this, () => this.relationDatabase.runDetached(() => Promise.resolve().then(operation)));
+    this.#ownedReleases.add(pending); this.#operations.add(pending);
+    const settled = () => {
+      this.#ownedReleases.delete(pending); this.#operations.delete(pending); this.#changed();
+    };
+    pending.then(settled, error => { this.#ownedReleaseErrors.push(error); settled(); });
+    return pending;
+  }
+  async flushOwnedReleases() {
+    while (this.#ownedReleases.size) await Promise.allSettled([...this.#ownedReleases]);
+    if (this.#ownedReleaseErrors.length) throw new AggregateError(this.#ownedReleaseErrors, 'Owned SQL resource release failed.');
+  }
   async release(handle, { session } = {}) {
     if (handle === EMPTY_NATIVE_LINKS || handle === null || handle?.released) return;
     return this.#operationContext.run(this, async () => {
@@ -501,6 +527,10 @@ export class PostgresLinkedChildrenStore {
     return Object.freeze({run:operation=>{
       if(released)throw new Error('The relation scope has been released.');
       return this.#operationContext.run(this,()=>this.#using(null,operation));
+    },admit:operation=>{
+      if(released)throw new Error('The relation scope has been released.');
+      if(typeof operation!=='function')throw new TypeError('An admitted relation callback is required.');
+      return this.#operationContext.run(this,()=>this.relationDatabase.runDetached(operation));
     },release(){if(released)return;released=true;releaseLease();}});
   }
   async persist(session, item, { reversePath = value => value, logger } = {}) {
@@ -574,12 +604,16 @@ export class PostgresLinkedChildrenStore {
     if (this.#closePromise) return this.#closePromise;
     this.#closing = true;
     this.#closePromise = (async () => {
+      const failures = [];
+      // The graph owns a persistent scope. Drain it before waiting for every
+      // scope lease, while its already-admitted views can still finish work.
+      try { await this.resourceGraph?.close(); } catch (error) { failures.push(error); }
       // Runtime has already stopped new requests/cache owners. Retained event
       // and importer owners can still finish/release; do not drop their rows.
       while (this.#operations.size || [...this.#entries.values()].some(entry => entry.references !== 0)) {
         await new Promise(resolve => this.#drainWaiters.add(resolve));
       }
-      const failures = [];
+      try { await this.flushOwnedReleases(); } catch (error) { failures.push(error); }
       if (this.#initialized) await this.#operationContext.run(this, async () => {
         try { await this.flushReleases(); } catch (error) { failures.push(error); }
         try { await this.relationDatabase.withConnection(db => db.client.query(`DROP SCHEMA ${q(this.schemaName)} CASCADE`)); }

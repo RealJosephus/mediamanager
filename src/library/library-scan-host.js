@@ -1,4 +1,4 @@
-import { releaseCachedFolderChildren } from './folder-cache.js';
+import { setFolderChildren } from './folder-cache.js';
 import { updateInheritedValues } from './item-persistence.js';
 import { ItemDeletionScope } from './item-deletion-scope.js';
 import { createMetadataChildren } from './metadata-children.js';
@@ -8,16 +8,16 @@ import path from 'node:path';
 import { getNewItemId } from '../core/identity.js';
 import { nativeGuid } from '../users/native.js';
 import { queryPostgresItemPage } from '../database/postgres-item-query.js';
-import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
-import { quoteIdentifier as q, tableDefinition } from '../database/model.js';
-import { decodeValue } from '../database/values.js';
+import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { randomUUID } from 'node:crypto';
-import { mapRecord } from './records.js';
+import { nativeItemTypes, nativeItemDescriptor } from './native-item-entity.js';
 import { loadPostgresPageGraph, loadPostgresRowsByIds } from './postgres-library-query.js';
+import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
+const folderTypes = nativeItemTypes.filter(type => nativeItemDescriptor(type).family === 'folder').map(nativeTextBytes);
 
 async function releaseResources(primary, operations) {
   const errors = [];
@@ -65,9 +65,10 @@ export class LibraryScanHost {
       const state = await this.library.load(db, null, { includeUserData: false, baseRows });
       try {
       const selectedId = type === 'UserRootFolder' ? this.library.options.userRoot?.Id : canonicalId;
-      const item = selectedId ? state.byId.get(idKey(selectedId))
+      const stored = selectedId ? state.byId.get(idKey(selectedId))
         : state.items.find(value => itemType(value) === type
           && (canonicalPath == null || sameNativePath(value.Path, canonicalPath)));
+      const item = stored && await this.itemCreation.getItemById(stored.Id);
       if (!item) throw Object.assign(new Error(`${type} is not initialized.`), { status: 500 });
       // LibraryManager.CreateRootFolder/GetUserRootFolder reset the registered
       // root Path after moving program data. Reusing an existing row or an
@@ -135,7 +136,7 @@ export class LibraryScanHost {
     this.ignoreRule.clearDirectoryCache();
   }
 
-  invalidateChildren(item) { releaseCachedFolderChildren(item); }
+  invalidateChildren(item) { setFolderChildren(item, null); }
 
   refreshMetadata(item, options) { return this.metadataScanner.refreshLiveItem(item, options); }
 
@@ -202,61 +203,27 @@ export class LibraryScanHost {
     }));
   }
 
-  async getCachedChildrenPage(parent, { startIndex = 0, limit = 128 } = {}) {
-    if (!Number.isSafeInteger(startIndex) || startIndex < 0
-      || !Number.isSafeInteger(limit) || limit < 1 || limit > 128) {
-      throw new TypeError('Cached child pages require a nonnegative offset and a limit from 1 to 128.');
-    }
-    return this.store.run(async db => {
-      const children = await queryPostgresItemPage(db, { startindex: startIndex, limit },
-        { scope: { parentId: parent.Id }, groupByPresentationKey: false });
-      const graph = await loadPostgresPageGraph(db, [...await loadPostgresRowsByIds(db, [parent.Id]), ...children.rows]);
-      const state = await this.library.load(db, null, { includeUserData: false, baseRows: graph });
-      // Hydration can omit removed-plugin types without exhausting the SQL page.
-      try { return { items: children.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean),
-        hasMore: children.rows.length === limit }; }
-      finally { await state.dispose({ session: db }); }
-    }, { readOnly: true, lockTimeoutMs: 250 });
-  }
-
   /** Configuration reads the native initial child cohort before inspecting
    * directory files. Keep that snapshot in SQL and project just its first
    * matching child; an unrelated late hydration error must precede file work. */
   withCachedChildren(parent, operation) {
-    return this.store.run(async db => {
-      const temporary = q('mm_cached_children_' + randomUUID().replaceAll('-', ''));
-      const sql = nativeTextSql(db.schemaName), table = `${q(db.schemaName)}.${q('BaseItems')}`;
-      const selection = buildPostgresItemPageQuery(db, {}, {
-        scope: { parentId: parent.Id }, groupByPresentationKey: false, includeOrdinal: true });
-      const decodeRow = raw => Object.fromEntries(tableDefinition('BaseItems').columns
-        .map(column => [column.name, decodeValue(column, raw[column.name], 'postgres')]));
-      try {
-        await db.client.query({ text: `CREATE TEMP TABLE ${temporary} AS
-          SELECT selected."__ordinal" AS "ChildOrdinal", FALSE AS "Hydrated", item.*
-          FROM (${selection.text}) selected JOIN ${table} item ON item."Id"=selected."Id"`, values: selection.values });
-        await db.client.query(`CREATE INDEX ON ${temporary} ("ChildOrdinal");
-          CREATE INDEX ON ${temporary} ((${sql.ordinalIgnoreCaseKey('"Path"')}))`);
-        for (let after = 0n; ; ) {
-          const rows = (await db.client.query({ text: `SELECT * FROM ${temporary}
-            WHERE "ChildOrdinal">$1 ORDER BY "ChildOrdinal" LIMIT 128`, values: [after] })).rows;
-          if (!rows.length) break;
-          const hydrated = rows.filter(row => mapRecord(decodeRow(row)) != null).map(row => row.ChildOrdinal);
-          if (hydrated.length) await db.client.query({ text: `UPDATE ${temporary} SET "Hydrated"=TRUE
-            WHERE "ChildOrdinal"=ANY($1::bigint[])`, values: [hydrated] });
-          after = BigInt(rows.at(-1).ChildOrdinal);
-        }
-        return await operation(Object.freeze({ firstByPath: async directory => {
-          const row = (await db.client.query({ text: `SELECT * FROM ${temporary} WHERE "Hydrated"
-            AND ${sql.ordinalIgnoreCaseKey('"Path"')}=${sql.ordinalIgnoreCaseKey('$1::bytea')}
-            ORDER BY "ChildOrdinal" LIMIT 1`, values: [nativeTextBytes(this.library.options.reversePath?.(directory) ?? directory)] })).rows[0];
-          if (!row) return null;
-          const state = await this.library.load(db, null, { includeUserData: false, includeLinkGraph: false,
-            baseRows: [decodeRow(row)] });
-          try { return state.byId.get(idKey(decodeRow(row).Id)) ?? null; }
-          finally { await state.dispose({ session: db }); }
-        } }));
-      } finally { await db.client.query(`DROP TABLE IF EXISTS ${temporary}`); }
-    });
+    return this.store.run(db => withPostgresCachedFolderChildren({ session: db, library: this.library, item: parent }, async source => {
+      const sql = nativeTextSql(db.schemaName);
+      const first = async (directory, containing) => {
+        await source.flush();
+        const plan = source.pathPlan(), offset = plan.values.length;
+        const target = `$${offset + 1}::bytea`;
+        const predicate = containing ? `source."NativeType"=ANY($${offset + 2}::bytea[]) AND
+          ${sql.pathWithin(target, 'source."Path"')}`
+          : `${sql.ordinalIgnoreCaseKey('source."Path"')}=${sql.ordinalIgnoreCaseKey(target)}`;
+        const row = (await db.client.query({ text: `SELECT source."SlotKey" FROM (${plan.text}) source
+          WHERE ${predicate} ORDER BY source."Ordinal" LIMIT 1`,
+        values: [...plan.values, nativeTextBytes(directory), ...(containing ? [folderTypes] : [])] })).rows[0];
+        return row ? source.withRetainedSlot(row.SlotKey, child => child) : null;
+      };
+      return operation(Object.freeze({ firstByPath: directory => first(directory, false),
+        firstContainingPath: directory => first(directory, true) }));
+    }));
   }
 
   async collectionDirectoryExists(item) {

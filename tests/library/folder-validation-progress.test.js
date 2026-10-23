@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { parseLosslessJson } from '../../src/core/json.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 import { assertDirectoryValidation } from './directory-validation-fixture.js';
 
 const provenanceUrl = new URL('./fixtures/folder-validation-progress/provenance.json', import.meta.url);
@@ -23,9 +24,9 @@ test('folder progress recording binds the actual native assembly, source and nin
   for (const file of provenance.fixtureFiles) assert.equal(createHash('sha256')
     .update(await readFile(new URL(file.path, repository))).digest('hex'), file.sha256, file.path);
   for (const file of provenance.referenceSources) assert.equal(createHash('sha256')
-    .update(await readFile(file.path)).digest('hex'), file.sha256, file.path);
+    .update(await readFile(recordedInputPath(file.path, [file.sha256]))).digest('hex'), file.sha256, file.path);
   for (const file of record.sourceFiles) assert.equal(createHash('sha256')
-    .update(await readFile(file.filename)).digest('hex'), file.sha256, file.filename);
+    .update(await readFile(recordedInputPath(file.filename, [file.sha256]))).digest('hex'), file.sha256, file.filename);
   assert.equal(record.passed, true);
   assert.equal(record.build.status, 0);
   assert.equal(record.process.status, 0);

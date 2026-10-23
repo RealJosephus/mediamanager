@@ -1,14 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { quoteIdentifier as q, tableDefinition } from '../database/model.js';
-import { decodeValue } from '../database/values.js';
-import { nativeTextBytes, decodeNativeTextBytes } from '../database/native-text.js';
+import { quoteIdentifier as q } from '../database/model.js';
+import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
-import { acquireNativeItemLinkOwner, hydrateNativeItemEntity, publishNativeItemLinks } from './native-item-entity.js';
+import { acquireNativeItemLinkOwner, publishNativeItemLinks } from './native-item-entity.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { cachedFolderChildrenSnapshot } from './folder-cache.js';
-import { physicalPlan } from './metadata-children.js';
+import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
 import { idKey, libraryError } from './records.js';
 import { createPostgresNativeItemQueryProjection } from './postgres-native-item-query-projection.js';
 import { createPostgresLinkedResolutionWorkspace } from './postgres-linked-resolution-workspace.js';
@@ -22,15 +21,14 @@ import { resolvePostgresLinkedChildren, findPostgresLinkedChildByPath } from './
 export async function createPostgresFolderLinksQuery({ session, library, item, user }) {
   const { linkedChildren } = library.options, { itemCreation } = library;
   if (!linkedChildren || !itemCreation) throw new TypeError('Folder queries require the runtime entity and relation owners.');
-  item = itemCreation.getCachedItemById(item.Id) ?? item;
   const owner = acquireNativeItemLinkOwner(item), children = cachedFolderChildrenSnapshot(item);
   const liveSources = new Map(), winners = q('mm_folder_winners_' + randomUUID().replaceAll('-', ''));
-  let scope, operation, resolution, cohort, projection, physicalTable, winnerTable = false, prepared, closing;
+  let scope, operation, resolution, cohort, projection, childSources, sourceTable, winnerTable = false, prepared, closing;
   const close = primary => closing ??= (async () => {
     const failures = [];
-    for (const release of [() => physicalTable && session.client.query(`DROP TABLE ${physicalTable}`),
+    for (const release of [() => sourceTable && session.client.query(`DROP TABLE ${sourceTable}`),
       () => winnerTable && session.client.query(`DROP TABLE ${winners}`), () => projection?.close(),
-      () => resolution?.dispose(primary), () => cohort?.release(), () => operation?.release(),
+      () => resolution?.dispose(primary), () => cohort?.release(), () => childSources?.release(), () => operation?.release(),
       () => owner.release(), () => linkedChildren.flushReleases({ session }), () => scope?.release()]) {
       try { await release(); } catch (error) { failures.push(error); }
     }
@@ -42,7 +40,12 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
     scope = linkedChildren.admitScope();
     if (user && item.LinkedChildrenLoaded) operation = linkedChildren.admitHandleOperation(item.LinkedChildren);
     cohort = await createNativeItemCohort({ linkedChildren,
-      resolveLiveItem: (id, slot) => liveSources.get(slot)?.deref() ?? itemCreation.getCachedItemById(id) });
+      resolveLiveItem: (id, slot) => liveSources.get(slot)?.deref() ?? itemCreation.getCachedItemById(id),
+      resolveSourceSlot: async slot => {
+        if (!childSources) return null;
+        const source = (await session.client.query(`SELECT source_slot FROM ${sourceTable} WHERE slot=$1`, [slot])).rows[0];
+        return source ? callback => childSources.withSlot(source.source_slot, callback) : null;
+      } });
     let ordinal = 0n;
     if (children !== undefined) {
       // This iterable already belongs to the live Folder. No repository
@@ -55,33 +58,22 @@ export async function createPostgresFolderLinksQuery({ session, library, item, u
         } finally { childOwner.release(); await linkedChildren.flushReleases({ session }); }
       }
     } else {
-      const source = await physicalPlan(session, item, false, { linkedChildren, library });
-      const sql = nativeTextSql(session.schemaName);
-      const target = q('mm_folder_physical_' + randomUUID().replaceAll('-', ''));
-      await session.client.query({ text: `CREATE TEMP TABLE ${target} AS
-        SELECT source."Ordinal",item.* FROM (${source.text}) source
-        JOIN ${q(session.schemaName)}."BaseItems" item ON ${sql.guidKey('item."Id"')}=${sql.guidKey('source."Id"')}`, values: source.values });
-      physicalTable = target;
-      const columns = tableDefinition('BaseItems').columns;
-      for (let after = 0n;;) {
-        const rows = (await session.client.query(`SELECT * FROM ${physicalTable} WHERE "Ordinal">$1 ORDER BY "Ordinal" LIMIT 128`, [after])).rows;
-        if (!rows.length) break;
-        const baseRows = rows.map(row => Object.fromEntries(columns.map(column => [column.name, decodeValue(column, row[column.name], 'postgres')])));
-        const state = await library.load(session, null, { baseRows, includeUserData: true,
-          includeFolderLinks: true, includeManualLinks: false, includeLinkGraph: true });
-        try {
-          for (const row of rows) {
-            const stored = state.byId.get(idKey(decodeNativeTextBytes(row.Id)));
-            if (!stored) continue;
-            const child = hydrateNativeItemEntity(stored, stored.Type === 'Trailer' ? { trailerTypes: [] } : {});
-            const childOwner = acquireNativeItemLinkOwner(child);
-            try { await cohort.capture(child, { ordinal: ++ordinal }); }
-            finally { childOwner.release(); await linkedChildren.flushReleases({ session }); }
-          }
-        } finally { await state.dispose({ session }); }
-        after = BigInt(rows.at(-1).Ordinal);
-      }
-      await session.client.query(`DROP TABLE ${physicalTable}`); physicalTable = null;
+      sourceTable = q('mm_folder_sources_' + randomUUID().replaceAll('-', ''));
+      await session.client.query(`CREATE TEMP TABLE ${sourceTable} (slot uuid PRIMARY KEY,source_slot uuid NOT NULL)`);
+      await withPostgresCachedFolderChildren({ session, library, item }, async source => {
+        childSources = source.retain();
+        for (let after = 0n;;) {
+          const count = await source.withPage({ after }, async page => {
+            for (const entry of page.entries) {
+              const slot = await cohort.capture(entry.item, { ordinal: ++ordinal });
+              await session.client.query(`INSERT INTO ${sourceTable}(slot,source_slot) VALUES($1,$2)
+                ON CONFLICT(slot) DO UPDATE SET source_slot=EXCLUDED.source_slot`, [slot, entry.slot]);
+            }
+            after = page.after; return page.entries.length;
+          });
+          if (!count) break;
+        }
+      });
     }
     if (user && !operation) {
       const loaded = await linkedChildren.load(session, item.Id);

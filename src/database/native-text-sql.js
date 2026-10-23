@@ -4,6 +4,7 @@ import { quoteIdentifier as q, columnDefinition } from './model.js';
 export function nativeTextSql(schema) {
   if (typeof schema !== 'string' || !schema) throw new TypeError('A function schema is required.');
   const call = (name, args) => `${q(schema)}.${q(name)}(${args.join(', ')})`;
+  const pathKey = expression => call('mm_native_path_key', [expression]);
   return Object.freeze({
     projection: expression => call('mm_bytes_text_projection', [expression]),
     fromProjection: expression => call('mm_text_utf8_key', [expression]),
@@ -14,7 +15,15 @@ export function nativeTextSql(schema) {
     safeInt32: expression => call('mm_safe_int32', [expression]),
     ordinalKey: expression => call('mm_text_utf16_key', [expression]),
     ordinalIgnoreCaseKey: expression => call('mm_ordinal_ignore_case_key', [expression]),
-    pathKey: expression => call('mm_native_path_key', [expression]),
+    pathKey,
+    pathWithin: (value, parent) => {
+      const target = pathKey(value), root = pathKey(parent);
+      const separator = `CASE WHEN substring(${root} FROM 1 FOR 14)=decode('00770069006e0064006f00770073','hex')
+        THEN decode('005c','hex') ELSE decode('002f','hex') END`;
+      const prefix = `(${root} || CASE WHEN substring(${root} FROM octet_length(${root})-1 FOR 2)
+        IN (decode('002f','hex'),decode('005c','hex')) THEN ''::bytea ELSE ${separator} END)`;
+      return `(${target}=${root} OR substring(${target} FROM 1 FOR octet_length(${prefix}))=${prefix})`;
+    },
     sqliteBinaryKey: expression => expression,
     sqliteAsciiLowerKey: expression => call('mm_native_ascii_lower', [expression]),
     sqliteLike: (source, pattern, escape = "''") => call('mm_text_sqlite_like', [source, pattern, escape]),

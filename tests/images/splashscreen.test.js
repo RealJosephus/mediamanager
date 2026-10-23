@@ -8,6 +8,7 @@ import sharp from 'sharp';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { SplashscreenImageGenerator, composeSplashscreenWall, nextSplashscreenImage, transformSplashscreen } from '../../src/images/splashscreen.js';
 import { observeComparison } from '../comparison-observations.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 import { fixture, fixtureRoot, nativeBytes, inputBytes, proofBytes, manifestBytes, native, input, proof, manifest, hash,
   recordedFile, rgba, recordedCoordinates, admissibleCoordinate, candidateCoordinates } from './splashscreen-fixture.js';
 
@@ -39,7 +40,7 @@ test('splashscreen raster fixtures bind 23 actual encoder cases, four transforms
   for (const entry of manifest.files) {
     const bytes = await readFile(new URL(entry.local, fixture)); assert.equal(bytes.length, entry.bytes); assert.equal(hash(bytes), entry.sha256, entry.local);
   }
-  for (const source of manifest.consumerSources) assert.equal(hash(await readFile(source.filename)), source.sha256);
+  for (const source of manifest.consumerSources) assert.equal(hash(await readFile(recordedInputPath(source.filename, [source.sha256]))), source.sha256);
   assert.equal(manifest.generatedRasterPolicy.ordinaryProcessedImagesPolicyUnchanged, true);
   assert.ok(manifestBytes.length && proofBytes.length);
   const repeat = native.results.find(row => row.sample.Repeat);

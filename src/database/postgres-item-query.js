@@ -7,7 +7,6 @@ import {
   postgresCleanValueFunctionName,
   postgresRemoveDiacriticsFunctionName,
   postgresInvariantLowerFunctionName,
-  postgresNativePathKeyFunctionName,
   postgresOrdinalIgnoreCaseKeyFunctionName,
   postgresParentalRatingScoreFunctionName,
   postgresSafeInt32FunctionName,
@@ -100,10 +99,18 @@ function validateStringArray(value, name) {
   return value;
 }
 
+function validateFolderPlan(value, name) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+    || typeof value.text !== 'string' || !value.text.trim() || !Array.isArray(value.values)) {
+    throw new TypeError(`${name} must be a relational root-folder query plan.`);
+  }
+  return value;
+}
+
 function validateRatingContext(value, name) {
   if (value == null) return null;
   if (typeof value !== 'object' || Array.isArray(value)
-    || !Array.isArray(value.folders)) {
+    || (value.foldersPlan === undefined ? !Array.isArray(value.folders) : value.folders !== undefined)) {
     throw new TypeError(`${name} must be a parental-rating context.`);
   }
   const country = entry => entry === undefined || entry === null || typeof entry === 'string';
@@ -112,7 +119,8 @@ function validateRatingContext(value, name) {
       || typeof entry.id !== 'string' || !country(entry.country)))) {
     throw new TypeError(`${name}.collectionOptions must contain identifiers and countries.`);
   }
-  for (const folder of value.folders) {
+  if (value.foldersPlan !== undefined) validateFolderPlan(value.foldersPlan, `${name}.foldersPlan`);
+  for (const folder of value.folders ?? []) {
     if (!folder || typeof folder !== 'object' || Array.isArray(folder)
       || typeof folder.id !== 'string' || typeof folder.type !== 'string'
       || !country(folder.path) || !country(folder.preferredCountry) || !country(folder.libraryCountry)
@@ -418,27 +426,55 @@ export function buildPostgresItemPageQuery(database, query, {
   }
   const runtimeTextKey = (name, expression) => `${q(database.schemaName)}.${q(name)}(${expression})`;
   const invariantLower = expression => runtimeTextKey(postgresInvariantLowerFunctionName, expression);
-  const nativePathKey = expression => runtimeTextKey(postgresNativePathKeyFunctionName, expression);
   const ordinalKey = expression => runtimeTextKey(postgresOrdinalIgnoreCaseKeyFunctionName, expression);
   const safeInt32 = expression => runtimeTextKey(postgresSafeInt32FunctionName, expression);
   const safeNativeItemData = alias => runtimeTextKey(postgresSafeNativeItemDataFunctionName,
     `${alias}."Type", ${alias}."Data"`);
-  const ratingContextBindings = new Map();
+  const ratingContextBindings = new Map(), ratingFolderBindings = new Map();
+  const bindFolderPlan = (plan, name) => {
+    validateFolderPlan(plan, name);
+    const offset = values.length;
+    const text = plan.text.replace(/\$(\d+)\b/gu, (_, index) => '$' + (Number(index) + offset));
+    values.push(...plan.values);
+    return text;
+  };
+  const folderArrayJson = (expression, encode = project) => `CASE WHEN ${expression} IS NULL THEN 'null'::jsonb
+    ELSE COALESCE((SELECT jsonb_agg(${encode('folder_value."Value"')} ORDER BY folder_value."Ordinal")
+      FROM unnest(${expression}) WITH ORDINALITY folder_value("Value","Ordinal")), '[]'::jsonb) END`;
+  const bindRatingFolders = context => {
+    // The catalogue stays in SQL. Explicit finite controls use the same JSON
+    // relation consumed below, without enumerating a production root in JS.
+    if (context.foldersPlan === undefined) return `${bind(JSON.stringify(projectDocument(context.folders)))}::jsonb`;
+    const source = bindFolderPlan(context.foldersPlan, 'parental-rating foldersPlan');
+    return `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
+      'id',${project('root_folder."Id"')},
+      'type',substring(${project('root_folder."NativeType"')} from '[^.]+$'),
+      'path',${project('root_folder."Path"')},
+      'preferredCountry',${project('root_folder."PreferredCountry"')},
+      'physicalLocations',${folderArrayJson('root_folder."PhysicalLocations"')},
+      'tags',${folderArrayJson('root_folder."Tags"')}
+    ) ORDER BY root_folder."Ordinal"), '[]'::jsonb) FROM (${source}) root_folder)`;
+  };
+  const defaultRatingContext = Object.freeze({
+    defaultCountry: memorySortConfiguration.MetadataCountryCode === undefined ? 'US' : memorySortConfiguration.MetadataCountryCode,
+    folders: [],
+  });
+  const ratingFoldersBinding = (context, name) => {
+    const validated = validateRatingContext(context ?? defaultRatingContext, name);
+    const key = validated.foldersPlan ?? JSON.stringify(validated.folders);
+    if (!ratingFolderBindings.has(key)) ratingFolderBindings.set(key, bindRatingFolders(validated));
+    return ratingFolderBindings.get(key);
+  };
   const ratingContextBinding = (context, name) => {
-    const fallbackCountry = memorySortConfiguration.MetadataCountryCode === undefined
-      ? 'US' : memorySortConfiguration.MetadataCountryCode;
-    const validated = validateRatingContext(context ?? {
-      defaultCountry: fallbackCountry,
-      folders: [],
-    }, name);
+    const validated = validateRatingContext(context ?? defaultRatingContext, name);
     const normalized = {
       defaultCountry: validated.defaultCountry === undefined ? 'US' : validated.defaultCountry,
       collectionOptions: validated.collectionOptions ?? [],
-      folders: validated.folders,
+      ...(validated.foldersPlan === undefined ? { folders: validated.folders } : { foldersPlan: validated.foldersPlan }),
     };
-    const key = JSON.stringify(normalized);
+    const key = validated.foldersPlan === undefined ? JSON.stringify(normalized) : validated;
     if (!ratingContextBindings.has(key)) ratingContextBindings.set(key, Object.freeze({
-      folders: `${bind(JSON.stringify(projectDocument(normalized.folders)))}::jsonb`,
+      folders: ratingFoldersBinding(validated, name),
       collectionOptions: `${bind(JSON.stringify(projectDocument(normalized.collectionOptions)))}::jsonb`,
       defaultCountry: bind(normalized.defaultCountry == null ? null : nativeTextProjection(normalized.defaultCountry)),
     }));
@@ -447,6 +483,8 @@ export function buildPostgresItemPageQuery(database, query, {
   const memoryPreferredMetadataCountry = (alias, context, name) => {
     const binding = ratingContextBinding(context, name);
     const idKeySql = expression => `replace(${nativeTextSql(database.schemaName).guidLower(expression)}, '-', '')`;
+    // GetCollectionFolders returns a complete List before country selection.
+    // Aggregate every matched ordinal even if an earlier folder has a country.
     return `(WITH RECURSIVE rating_country_chain("Id", "ParentId", "PreferredCountry", "Depth", "Seen") AS (
       SELECT ${alias}."Id", ${alias}."ParentId", ${project(`${alias}."PreferredMetadataCountryCode"`)}, 0,
         ARRAY[${idKeySql(`${alias}."Id"`)}]
@@ -494,8 +532,9 @@ export function buildPostgresItemPageQuery(database, query, {
         rating_option."Ordinal"
       FROM jsonb_array_elements(${binding.collectionOptions}) WITH ORDINALITY
         AS rating_option("Document", "Ordinal")
-    ), rating_matched_folders AS (
-      SELECT rating_folder.* FROM rating_folders rating_folder CROSS JOIN rating_root
+    ), rating_matched_ordinals AS (
+      SELECT COALESCE(array_agg(rating_folder."Ordinal"),ARRAY[]::bigint[]) AS "Values"
+      FROM rating_folders rating_folder CROSS JOIN rating_root
       WHERE CASE WHEN rating_folder."Path" IS NULL AND rating_root."Path" IS NULL
           OR ${ordinalKey('rating_folder."Path"')} = ${ordinalKey('rating_root."Path"')}
         THEN TRUE ELSE EXISTS (
@@ -503,6 +542,9 @@ export function buildPostgresItemPageQuery(database, query, {
             WHERE ${ordinalKey("COALESCE(rating_location.\"Value\" #>> '{}', '')")}
               = ${ordinalKey('COALESCE(rating_root."Path", \'\')')}
           ) END
+    ), rating_matched_folders AS (
+      SELECT rating_folder.* FROM rating_folders rating_folder CROSS JOIN rating_matched_ordinals matched
+      WHERE rating_folder."Ordinal"=ANY(matched."Values")
     )
     SELECT COALESCE(
       (SELECT "PreferredCountry" FROM rating_country_chain
@@ -539,16 +581,15 @@ export function buildPostgresItemPageQuery(database, query, {
   };
   const memoryBlockedTagExists = (alias, context, names, name) => {
     const blocked = names.filter(tag => String(tag).trim()).map(cleanValue);
-    if (!blocked.length) return 'FALSE';
-    const validated = validateRatingContext(context ?? {
-      defaultCountry: memorySortConfiguration.MetadataCountryCode === undefined
-        ? 'US' : memorySortConfiguration.MetadataCountryCode,
-      folders: [],
-    }, name);
-    const folders = `${bind(JSON.stringify(projectDocument(validated.folders)))}::jsonb`;
+    if (!names.length) return 'FALSE';
+    const folders = ratingFoldersBinding(context, name);
     const blockedParameter = bindNativeArray(blocked, `${name}.blockedTags`);
     const idKeySql = expression => `replace(${nativeTextSql(database.schemaName).guidLower(expression)}, '-', '')`;
-    return `EXISTS (WITH RECURSIVE rating_tag_chain("Id", "ParentId", "OwnerId", "Path", "Tags", "Depth", "Seen") AS (
+    const itemTags = nativeItemsPlan ? folderArrayJson('rating_item."Tags"')
+      : `to_jsonb(string_to_array(COALESCE(${project('rating_item."Tags"')}, ''), '|'))`;
+    // GetInheritedTags completes membership and AddRange before overlap checks.
+    // Keep that read when normalization removes every raw preference.
+    return `(WITH RECURSIVE rating_tag_chain("Id", "ParentId", "OwnerId", "Path", "Tags", "Depth", "Seen") AS (
       SELECT ${alias}."Id", ${alias}."ParentId", ${alias}."OwnerId", ${alias}."Path", ${nativeItemsPlan ? memoryList(alias, 'Tags') : `${alias}."Tags"`}, 0,
         ARRAY[${idKeySql(`${alias}."Id"`)}]
       UNION ALL
@@ -587,8 +628,9 @@ export function buildPostgresItemPageQuery(database, query, {
         COALESCE(rating_folder."Document" -> 'tags', '[]'::jsonb) AS "Tags"
       FROM jsonb_array_elements(${folders}) WITH ORDINALITY
         AS rating_folder("Document", "Ordinal")
-    ), rating_tag_matched_folders AS (
-      SELECT rating_folder.* FROM rating_tag_folders rating_folder CROSS JOIN rating_tag_root
+    ), rating_tag_matched_ordinals AS (
+      SELECT COALESCE(array_agg(rating_folder."Ordinal"),ARRAY[]::bigint[]) AS "Values"
+      FROM rating_tag_folders rating_folder CROSS JOIN rating_tag_root
       WHERE CASE WHEN rating_folder."Path" IS NULL AND rating_tag_root."Path" IS NULL
           OR ${ordinalKey('rating_folder."Path"')} = ${ordinalKey('rating_tag_root."Path"')}
         THEN TRUE ELSE EXISTS (
@@ -596,15 +638,19 @@ export function buildPostgresItemPageQuery(database, query, {
           WHERE ${ordinalKey("COALESCE(rating_location.\"Value\" #>> '{}', '')")}
             = ${ordinalKey('COALESCE(rating_tag_root."Path", \'\')')}
         ) END
+    ), rating_tag_matched_folders AS (
+      SELECT rating_folder.* FROM rating_tag_folders rating_folder CROSS JOIN rating_tag_matched_ordinals matched
+      WHERE rating_folder."Ordinal"=ANY(matched."Values")
+    ), rating_tag_snapshot AS (
+      SELECT COALESCE(jsonb_agg(rating_tag."Value"),'[]'::jsonb) AS "Values" FROM (
+        SELECT ${itemTags} AS "Tags" FROM rating_tag_chain rating_item
+        UNION ALL SELECT "Tags" FROM rating_tag_matched_folders
+      ) inherited CROSS JOIN LATERAL jsonb_array_elements_text(inherited."Tags") rating_tag("Value")
     )
-    SELECT 1 FROM rating_tag_chain rating_item
-      CROSS JOIN LATERAL unnest(${nativeItemsPlan ? 'rating_item."Tags"' : `string_to_array(COALESCE(${project('rating_item."Tags"')}, ''), '|')`}) rating_tag("Value")
-      WHERE ${runtimeTextKey(postgresCleanValueFunctionName, nativeItemsPlan ? 'rating_tag."Value"' : fromProject('rating_tag."Value"'))} = ANY(${blockedParameter})
-    UNION ALL
-    SELECT 1 FROM rating_tag_matched_folders rating_folder
-      CROSS JOIN LATERAL jsonb_array_elements_text(rating_folder."Tags") rating_tag("Value")
-      WHERE ${runtimeTextKey(postgresCleanValueFunctionName, fromProject('rating_tag."Value"'))} = ANY(${blockedParameter})
-    LIMIT 1)`;
+    SELECT CASE WHEN jsonb_array_length(snapshot."Values")>=0 THEN EXISTS(
+      SELECT 1 FROM jsonb_array_elements_text(snapshot."Values") rating_tag("Value")
+      WHERE ${runtimeTextKey(postgresCleanValueFunctionName, fromProject('rating_tag."Value"'))}=ANY(${blockedParameter})
+    ) ELSE FALSE END FROM rating_tag_snapshot snapshot)`;
   };
 
   let cachedMemorySortName;
@@ -1304,7 +1350,7 @@ export function buildPostgresItemPageQuery(database, query, {
     if (!visibility || typeof visibility !== 'object' || Array.isArray(visibility)) throw new TypeError('visibility must be an object.');
     const allowedVisibilityKeys = new Set(['topParentIds', 'libraryTopParentIds', 'ratingContext',
       'blockedTags', 'allowedTags', 'maxRating', 'maxSubRating', 'blockUnratedTypes', 'boxSetStandalone',
-      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetRootLookupOnly', 'boxSetUserRootIds', 'boxSetRootFolders', 'boxSetPathExpansion', 'itemMode',
+      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetRootLookupOnly', 'boxSetUserRootIds', 'boxSetRootFolders', 'boxSetRootFoldersPlan', 'boxSetPathExpansion', 'itemMode',
       'scopeTopParentAccess']);
     const unknown = Object.keys(visibility).filter(key => !allowedVisibilityKeys.has(key));
     if (unknown.length) throw new TypeError(`Unknown visibility option: ${unknown.join(', ')}`);
@@ -1342,7 +1388,11 @@ export function buildPostgresItemPageQuery(database, query, {
           || !folder.PhysicalLocations.every(location => location === null || typeof location === 'string'))))) {
       throw new TypeError('BoxSet root folders require complete typed Id, nullable Path and nullable PhysicalLocations.');
     }
-    if (visibility.boxSetStandalone && visibility.boxSetRootFolders === undefined) {
+    if (visibility.boxSetRootFoldersPlan !== undefined) {
+      validateFolderPlan(visibility.boxSetRootFoldersPlan, 'visibility.boxSetRootFoldersPlan');
+      if (visibility.boxSetRootFolders !== undefined) throw new TypeError('BoxSet visibility requires one root-folder source.');
+    }
+    if (visibility.boxSetStandalone && visibility.boxSetRootFolders === undefined && visibility.boxSetRootFoldersPlan === undefined) {
       throw new TypeError('Standalone BoxSet visibility requires the actual raw user-root folders.');
     }
     if (visibility.boxSetPathExpansion !== undefined && (!visibility.boxSetPathExpansion
@@ -1387,9 +1437,16 @@ export function buildPostgresItemPageQuery(database, query, {
           : bindTextArray(visibility.boxSetUserRootIds.map(wireGuid), 'visibility.boxSetUserRootIds');
         const libraryFolderIds = `NULLIF(${visibilityColumn('i', 'LibraryFolderIds', `NULLIF((${safeNativeItemData('i')} -> 'LibraryFolderIds')::jsonb,'null'::jsonb)`)}, 'null'::jsonb)`;
         const pathKeyHex = value => value === null ? null : Buffer.from(ordinalIgnoreCaseKey(value), 'utf16le').swap16().toString('hex');
-        const rootFolders = bind(JSON.stringify(visibility.boxSetRootFolders.map(folder => ({ Id: wireGuid(folder.Id),
-          Path: pathKeyHex(folder.Path),
-          PhysicalLocations: folder.PhysicalLocations?.map(pathKeyHex) ?? null }))));
+        const pathKeySql = expression => `encode(${sql.ordinalIgnoreCaseKey(expression)},'hex')`;
+        const rootFolders = visibility.boxSetRootFoldersPlan === undefined
+          ? bind(JSON.stringify(visibility.boxSetRootFolders.map(folder => ({ Id: wireGuid(folder.Id),
+            Path: pathKeyHex(folder.Path), PhysicalLocations: folder.PhysicalLocations?.map(pathKeyHex) ?? null }))))
+          : `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
+              'Id',replace(${sql.guidLower('root_folder."Id"')},'-',''),
+              'Path',${pathKeySql('root_folder."Path"')},
+              'PhysicalLocations',${folderArrayJson('root_folder."PhysicalLocations"', pathKeySql)}
+            ) ORDER BY root_folder."Ordinal"),'[]'::jsonb)
+            FROM (${bindFolderPlan(visibility.boxSetRootFoldersPlan, 'visibility.boxSetRootFoldersPlan')}) root_folder)`;
         const expansion = visibility.boxSetPathExpansion ?? { appDataPath: '%AppDataPath%', metadataPath: '%MetadataPath%' };
         const pathExpansion = bind(JSON.stringify([pathKeyHex(expansion.appDataPath), pathKeyHex(expansion.metadataPath)]));
         const terminalPathKey = runtimeTextKey(postgresExpandedPathKeyFunctionName, `terminal."Path",${pathExpansion}::jsonb`);
@@ -1989,11 +2046,7 @@ export function buildPostgresItemPageQuery(database, query, {
       // the physical folder may be the collections directory itself or any
       // native ancestor of it. Compare frozen native keys and require a path
       // separator at the prefix boundary so sibling names cannot collide.
-      const collectionKey = nativePathKey(bindNativeText(collapseCollectionPath));
-      const rootKey = nativePathKey('collapse_root."Path"');
-      const separator = `CASE WHEN substring(${rootKey} FROM 1 FOR 16) = decode('00770069006e0064006f00770073000000', 'hex') THEN decode('005c', 'hex') ELSE decode('002f', 'hex') END`;
-      const rootPrefix = `(${rootKey} || CASE WHEN substring(${rootKey} FROM octet_length(${rootKey}) - 1 FOR 2) IN (decode('002f', 'hex'), decode('005c', 'hex')) THEN ''::bytea ELSE ${separator} END)`;
-      const collectionWithinRoot = `(${collectionKey} = ${rootKey} OR substring(${collectionKey} FROM 1 FOR octet_length(${rootPrefix})) = ${rootPrefix})`;
+      const collectionWithinRoot = nativeTextSql(database.schemaName).pathWithin(bindNativeText(collapseCollectionPath), 'collapse_root."Path"');
       collapseParentScope = ` AND EXISTS (SELECT 1 FROM ${baseItems} collapse_root JOIN ${baseItems} collapse_aggregate ON ${nativeTextSql(database.schemaName).guidLower("collapse_aggregate.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("collapse_root.\"ParentId\"")} AND ${leafType('collapse_aggregate')} = 'AggregateFolder' WHERE ${nativeTextSql(database.schemaName).guidLower("collapse_root.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("collapse_parent.\"ParentId\"")} AND ${collectionWithinRoot})`;
     }
     const childType = collapseMode === 'repository' ? ' AND collapse_link."ChildType" = 0' : '';

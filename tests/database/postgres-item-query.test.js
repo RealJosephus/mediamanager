@@ -262,7 +262,7 @@ test('PostgreSQL memory BoxSet roots use normalized native path containment with
   const nativePathCall = `"media"."${postgresNativePathKeyFunctionName}"`;
   assert.ok(plan.text.split(nativePathCall).length > 3,
     'both the collections target and candidate physical root use the frozen native key');
-  assert.match(plan.text, /octet_length\([\s\S]*decode\('005c', 'hex'\)/u,
+  assert.match(plan.text, /octet_length\([\s\S]*decode\('005c',\s*'hex'\)/u,
     'ancestor matching appends the platform separator before testing the prefix');
   assert.doesNotMatch(plan.text,
     /replace\(lower\(COALESCE\(collapse_root\."Path", ''\)\), chr\(92\), '\/'\)/u,

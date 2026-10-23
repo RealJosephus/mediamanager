@@ -1,7 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {PostgresDatabase} from '../../src/database/postgres.js';
 import {PostgresLinkedChildrenStore,EMPTY_NATIVE_LINKS} from '../../src/library/postgres-linked-children.js';
-import {releaseNativeItemLinks,publishNativeItemLinks} from '../../src/library/native-item-entity.js';
+import {releaseNativeItemLinks,publishNativeItemLinks,acquireNativeItemLinkOwner,acquireNativeItemLinkBranch,setNativeItemResource} from '../../src/library/native-item-entity.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { serialize, deserialize } from 'node:v8';
@@ -477,3 +477,44 @@ test('hydration accepts branded map results, ignores raw search columns and appl
 
 async function relationsFixture(t){const schema='native_entity_'+randomUUID().replaceAll('-','').slice(0,20),database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,max:1}),links=new PostgresLinkedChildrenStore({database}),items=new Set();await links.initialize();t.after(async()=>{for(const item of items)releaseNativeItemLinks(item);await links.flushReleases();await links.close();await database.client.query(`DROP SCHEMA "${schema}" CASCADE;DROP SCHEMA "${schema}__mm" CASCADE`);await database.close();});return {links,own:item=>{items.add(item);return item;}};}
 async function linkRows(links,item){const rows=[];for await(const page of links.pages(item.LinkedChildren))rows.push(...page);return rows;}
+
+test('postgres: branch borrowers retain mutable publications while ordinary Folder resources are released', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async t => {
+  const { links, own } = await relationsFixture(t);
+  const item = own(newNativeItemEntity('MediaBrowser.Controller.Entities.Folder'));
+  item.Id = '14600000-0000-0000-0000-000000000001';
+  publishNativeItemLinks(item, await links.withSession(async session => {
+    const writer = await links.createWriter({ session, parentId: item.Id });
+    await writer.append({ ItemId: null, Type: 0, Path: '/original', LibraryItemId: null });
+    return writer.finish();
+  }));
+  const original = item.LinkedChildren, owner = acquireNativeItemLinkOwner(item);
+  const first = acquireNativeItemLinkBranch(item), second = acquireNativeItemLinkBranch(item);
+  let retained = 0, released = 0;
+  setNativeItemResource(item, Symbol('ordinary Folder resource'), {
+    retain() { retained++; return { release() { released++; } }; },
+  });
+  try {
+    owner.release();
+    await links.resourceGraph.collect();
+    assert.equal(retained, 1); assert.equal(released, 1);
+    assert.equal(item.LinkedChildren, original); assert.equal(item.LinkedChildrenLoaded, true);
+    await links.recordResolution(original, 1n, '14600000-0000-0000-0000-000000000002');
+    assert.equal(item.LinkedChildren, original);
+    assert.equal((await linkRows(links, item))[0].ItemId, '14600000-0000-0000-0000-000000000002');
+    publishNativeItemLinks(item, await links.withSession(async session => {
+      const replacement = await links.createWriter({ session, parentId: item.Id });
+      await replacement.append({ ItemId: '14600000-0000-0000-0000-000000000003', Type: 0, Path: null, LibraryItemId: null });
+      return replacement.finish();
+    }));
+    const current = item.LinkedChildren;
+    await links.flushReleases(); assert.equal(original.released, true);
+    first.release(); first.release();
+    assert.equal(item.LinkedChildren, current); assert.equal(current.released, false);
+    assert.equal((await linkRows(links, item))[0].ItemId, '14600000-0000-0000-0000-000000000003');
+    second.release(); second.release(); await links.flushReleases();
+    assert.equal(item.LinkedChildren, EMPTY_NATIVE_LINKS); assert.equal(item.LinkedChildrenLoaded, false);
+    assert.equal(current.released, true); assert.equal(released, 1);
+  } finally { owner.release(); first.release(); second.release(); }
+});

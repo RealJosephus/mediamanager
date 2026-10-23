@@ -5,6 +5,7 @@ import { EMPTY_ID, MIN_DATE, guid, nonemptyId, libraryError } from './records.js
 import { sortName as deriveSortName } from './dto.js';
 import { hasFileProtocol } from './delete-permission.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
+import { cachedFolderChildrenSnapshot, observeFolderChildrenAssignment } from './folder-cache.js';
 
 const EMPTY_STRINGS = Object.freeze([]);
 const EMPTY_GUIDS = Object.freeze([]);
@@ -144,7 +145,7 @@ function defineGetter(item, name, get, enumerable = true) {
 }
 
 function addFolderState(item) {
-  folderStates.set(item, { linkedChildren: EMPTY_NATIVE_LINKS, linkedChildrenLoaded: false, owners: new Set() });
+  folderStates.set(item, { linkedChildren: EMPTY_NATIVE_LINKS, linkedChildrenLoaded: false, owners: new Set(), branches: new Set() });
   Object.defineProperties(item, {
     LinkedChildren: { enumerable: true, configurable: false,
       get: () => folderStates.get(item).linkedChildren,
@@ -154,6 +155,11 @@ function addFolderState(item) {
         state.revisionObserver?.release();
         if (previous !== value && isLinkedChildrenHandle(previous)) previous.store.queueRelease(previous);
         state.linkedChildren = value; state.linkedChildrenLoaded = true;
+        state.linksEvicted = false;
+        if (isLinkedChildrenHandle(value) && value.store.resourceGraph) {
+          associateNativeItemResourceGraph(item, value.store.resourceGraph);
+          if (state.owners.size) attachNativeItemResourceGraph(item, value.store.resourceGraph);
+        }
         observeFolderRevision(item,state);
       } },
     LinkedChildrenLoaded: { enumerable: true, configurable: false,
@@ -578,7 +584,7 @@ export async function restoreNativeItemState(state, options = {}, { linkedChildr
   if (state.repositoryColumns) defineRepositoryColumns(item, state.repositoryColumns);
   if (state.folder) folderStates.set(item, {
     linkedChildren: state.folder.kind === 'null' ? null : state.folder.kind === 'empty' ? EMPTY_NATIVE_LINKS
-      : await linkedChildren.restoreState(state.folder.token, { session }), linkedChildrenLoaded: state.folder.loaded, owners: new Set() });
+      : await linkedChildren.restoreState(state.folder.token, { session }), linkedChildrenLoaded: state.folder.loaded, owners: new Set(), branches: new Set() });
   if(state.folder)observeFolderRevision(item,folderStates.get(item));
   if (state.date) Object.assign(dateStates.get(item), state.date);
   Object.assign(sortStates.get(item), state.sorting, { options });
@@ -633,16 +639,199 @@ export function publishNativeItemLinks(item, handle) {
   if (!folderStates.has(item)) throw new TypeError('Native link assignment requires a Folder.');
   item.LinkedChildren = handle; return item;
 }
+function clearNativeItemLinkBranch(state) {
+  state.revisionObserver?.release(); state.revisionObserver = null;
+  let failure;
+  try { if (isLinkedChildrenHandle(state.linkedChildren)) state.linkedChildren.store.queueRelease(state.linkedChildren); }
+  catch (error) { failure = error; }
+  state.linkedChildren = EMPTY_NATIVE_LINKS; state.linkedChildrenLoaded = false;
+  state.linksEvicted = true;
+  if (failure) throw failure;
+}
 export function releaseNativeItemLinks(item) {
   const state = folderStates.get(item);
   if (!state) return;
-  state.revisionObserver?.release();state.revisionObserver=null;
-  if (isLinkedChildrenHandle(state.linkedChildren)) state.linkedChildren.store.queueRelease(state.linkedChildren);
-  state.linkedChildren = EMPTY_NATIVE_LINKS; state.linkedChildrenLoaded = false;
+  const failures = [];
+  for (const key of state.resources?.keys() ?? []) {
+    try { removeNativeItemResource(item, key); } catch (error) { failures.push(error); }
+  }
+  if (state.branches.size === 0 && !state.base) {
+    try { clearNativeItemLinkBranch(state); } catch (error) { failures.push(error); }
+  }
+  if (failures.length === 1) throw failures[0];
+  if (failures.length) throw new AggregateError(failures, 'Native item resource release failed.');
 }
 export function retainNativeItemLinks(item) {
   const state = folderStates.get(item);
   return state && isLinkedChildrenHandle(state.linkedChildren) ? state.linkedChildren.retain() : EMPTY_NATIVE_LINKS;
+}
+
+/** Restore a SQL-backed branch after its last materialized owner left. Live
+ * assignments remain authoritative; eviction is separate from a native reset. */
+export async function restoreEvictedNativeItemLinks(item, captured, { linkedChildren, session }) {
+  const state = folderStates.get(item);
+  if (!state?.linksEvicted || !captured.folder) return;
+  const folder = captured.folder;
+  const restored = folder.kind === 'null' ? null : folder.kind === 'empty' ? EMPTY_NATIVE_LINKS
+    : await linkedChildren.restoreState(folder.token, { session });
+  if (!state.linksEvicted) {
+    if (isLinkedChildrenHandle(restored)) await linkedChildren.release(restored, { session });
+    return;
+  }
+  state.linkedChildren = restored;
+  state.linkedChildrenLoaded = folder.loaded; state.linksEvicted = false;
+  observeFolderRevision(item, state);
+}
+
+function associateNativeItemResourceGraph(item, graph) {
+  const state = folderStates.get(item);
+  if (!state || state.graph === graph) return state;
+  if (state.base || state.graphRoot) throw new TypeError('An exact Folder cannot belong to two active SQL resource graphs.');
+  const entity = graph.entity(item);
+  state.graph = graph; state.entity = entity;
+  return state;
+}
+
+/** Register the exact object's basic state before registering host caches.
+ * SQL drives pending direct-child preparation, including warm descendants
+ * which have never built a SQL Children or IDs resource. */
+export function attachNativeItemResourceGraph(item, graph) {
+  const state = associateNativeItemResourceGraph(item, graph);
+  if (!state) return null;
+  graph.entity(item); // Validate a fresh admission before starting async work.
+  if (state.base) return state.entity;
+  if (state.owners.size && !state.graphRoot) state.graphRoot = state.entity.retain();
+  const base = { resource: null, dirty: false, linked: false, reference: new WeakRef(item),
+    exact: cachedFolderChildrenSnapshot(item) !== undefined || aggregateStates.get(item)?.virtualChildren.length ? item : null };
+  state.base = base;
+  const refresh = () => {
+    const current = base.reference.deref();
+    base.exact = current && (cachedFolderChildrenSnapshot(current) !== undefined || aggregateStates.get(current)?.virtualChildren.length)
+      ? current : null;
+    if (base.resource) base.resource.refresh(); else base.dirty = true;
+  };
+  const assignment = observeFolderChildrenAssignment(item, refresh);
+  const virtual = observeNativeItemState(item, (_item, field) => { if (field === 'VirtualChildren') refresh(); });
+  base.ready = graph.bind(state.entity, {
+    prepare: resource => {
+      const current = base.exact ?? base.reference.deref();
+      const children = current && cachedFolderChildrenSnapshot(current), extra = current && aggregateStates.get(current)?.virtualChildren;
+      base.exact = current && (children !== undefined || extra?.length) ? current : null;
+      const linked = children !== undefined || Boolean(extra?.length);
+      if (!linked && !base.linked) return;
+      base.linked = linked;
+      return resource.replaceLinks((function* () {
+        // Only this object's direct members are read here. New child bindings
+        // are prepared later by the SQL reachable-pending query.
+        for (const list of [children, extra]) for (const child of list ?? []) {
+          if (folderStates.has(child)) yield attachNativeItemResourceGraph(child, graph);
+        }
+      })());
+    },
+    detach() {
+      assignment.release(); virtual.release();
+      if (state.base === base) state.base = null;
+    },
+    release() {
+      if (!state.base && state.owners.size === 0 && state.branches.size === 0) clearNativeItemLinkBranch(state);
+    },
+  });
+  base.ready.then(resource => {
+    base.resource = resource;
+    if (base.dirty) resource.refresh();
+  }, () => {
+    // SQL failure is retained by the graph's mutation tail and surfaces from
+    // flush/close. Remove only this failed registration's observers.
+    assignment.release(); virtual.release();
+    if (state.base === base) state.base = null;
+  });
+  return state.entity;
+}
+
+/** Run derived resource work through an existing ordinary owner's capability.
+ * A call without such an owner still needs normal graph admission. */
+export function withNativeItemResourceAdmission(item, operation) {
+  const state = folderStates.get(item);
+  return state?.graphRoot ? state.graphRoot.run(operation) : operation();
+}
+
+function detachResourceBinding(state, key, binding) {
+  if (state.resources?.get(key) === binding) state.resources.delete(key);
+  if (binding.detached) return;
+  binding.detached = true; binding.resource.detached?.();
+}
+
+/** The SQL binding owns one physical lease. Ordinary owners and retained query
+ * views supply separate graph roots; an internal cache lease is never a root. */
+export function setNativeItemResource(item, key, resource) {
+  const state = folderStates.get(item);
+  if (!state || typeof key !== 'symbol' || typeof resource?.retain !== 'function'
+    || resource.detached !== undefined && typeof resource.detached !== 'function') {
+    throw new TypeError('A Folder, resource key and retaining resource are required.');
+  }
+  if (state.graph) attachNativeItemResourceGraph(item, state.graph);
+  const lease = state.graph || state.owners.size ? resource.retain() : null;
+  if ((state.graph || state.owners.size) && typeof lease?.release !== 'function') throw new TypeError('An item resource must retain a releasable lease.');
+  try { removeNativeItemResource(item, key); }
+  catch (error) { lease?.release(); throw error; }
+  const binding = { item, resource, lease, detached: false, unbound: false, graphResource: null };
+  (state.resources ??= new Map()).set(key, binding);
+  if (state.graph) {
+    binding.ready = state.graph.bind(state.entity, {
+      detach: () => detachResourceBinding(state, key, binding), release: () => lease.release(),
+    }).then(value => {
+      binding.graphResource = value;
+      if (binding.unbound) value.unbind();
+      return value;
+    }).catch(async error => {
+      const errors = [error];
+      try { detachResourceBinding(state, key, binding); } catch (cleanup) { errors.push(cleanup); }
+      try { await lease.release(); } catch (cleanup) { errors.push(cleanup); }
+      throw errors.length === 1 ? error : new AggregateError(errors, error.message, { cause: error });
+    });
+    binding.ready.catch(() => {}); // Graph tail and the building caller retain the actual failure.
+  } else binding.ready = Promise.resolve();
+  return Object.freeze({ ready: binding.ready, unbind: () => unbindResourceBinding(state, key, binding), retain: () => {
+    if (!binding.graphResource) throw new Error('The SQL native resource binding is not ready.');
+    return binding.graphResource.retain();
+  }, link: (child, options) => {
+    if (!binding.graphResource) throw new Error('The SQL native resource binding is not ready.');
+    const entity = attachNativeItemResourceGraph(child, state.graph);
+    return entity ? binding.graphResource.link(entity, options) : null;
+  } });
+}
+
+export function removeNativeItemResource(item, key) {
+  const state = folderStates.get(item), binding = state?.resources?.get(key);
+  if (!binding) return;
+  unbindResourceBinding(state, key, binding);
+}
+
+function unbindResourceBinding(state, key, binding) {
+  if (binding.unbound) return;
+  try { detachResourceBinding(state, key, binding); }
+  finally {
+    binding.unbound = true;
+    if (state.graph) {
+      binding.graphResource?.unbind();
+    } else binding.lease?.release();
+  }
+}
+
+/** Keep the exact mutable link branch without retaining the Folder's other
+ * resources. A Children edge can therefore borrow links in either direction
+ * without turning its SQL cache resources into an entity-owner cycle. */
+export function acquireNativeItemLinkBranch(item) {
+  const state = folderStates.get(item);
+  if (!state) return Object.freeze({ release() {} });
+  const branch = Symbol('native-item-link-branch');
+  state.branches.add(branch);
+  let released = false;
+  return Object.freeze({ release() {
+    if (released) return;
+    released = true; state.branches.delete(branch);
+    if (state.owners.size === 0 && state.branches.size === 0 && !state.base) clearNativeItemLinkBranch(state);
+  } });
 }
 
 /** Own the live entity branch, not a second frozen revision. Cache eviction
@@ -650,6 +839,27 @@ export function retainNativeItemLinks(item) {
 export function acquireNativeItemLinkOwner(item) {
   const state = folderStates.get(item);
   if (!state) return Object.freeze({ release() {} });
+  if (state.graph) {
+    state.graph.entity(item);
+    if (!state.graphRoot) state.graphRoot = state.entity.retain();
+    attachNativeItemResourceGraph(item, state.graph);
+  } else if (state.owners.size === 0) {
+    const acquired = [];
+    try {
+      for (const binding of state.resources?.values() ?? []) {
+        const lease = binding.resource.retain();
+        if (typeof lease?.release !== 'function') throw new TypeError('An item resource must retain a releasable lease.');
+        binding.lease = lease; acquired.push(binding);
+      }
+    } catch (error) {
+      const failures = [error];
+      for (const binding of acquired) {
+        try { binding.lease.release(); } catch (cleanup) { failures.push(cleanup); }
+        binding.lease = null;
+      }
+      throw failures.length === 1 ? error : new AggregateError(failures, error.message, { cause: error });
+    }
+  }
   const owner = Symbol('native-item-link-owner');
   state.owners.add(owner);
   reportLinkOwnership(item, { phase: 'acquired', owner, count: state.owners.size });
@@ -659,7 +869,10 @@ export function acquireNativeItemLinkOwner(item) {
     released = true;
     state.owners.delete(owner);
     reportLinkOwnership(item, { phase: 'released', owner, count: state.owners.size });
-    if (state.owners.size === 0) releaseNativeItemLinks(item);
+    if (state.owners.size === 0) {
+      if (state.graphRoot) { state.graphRoot.release(); state.graphRoot = null; }
+      else releaseNativeItemLinks(item);
+    }
   } });
 }
 
@@ -701,6 +914,6 @@ export function observeNativeItemName(item, listener) {
 export function observeNativeItemState(item, listener) {
   if (!isNativeItemEntity(item) || typeof listener !== 'function') throw new TypeError('A native entity and field listener are required.');
   let listeners=stateObservers.get(item);if(!listeners)stateObservers.set(item,listeners=new Set());
-  listeners.add(listener);let released=false;
-  return Object.freeze({release(){if(released)return;released=true;listeners.delete(listener);if(!listeners.size)stateObservers.delete(item);}});
+  listeners.add(listener);let released=false;const reference=new WeakRef(item);
+  return Object.freeze({release(){if(released)return;released=true;listeners.delete(listener);const current=reference.deref();if(current&&!listeners.size)stateObservers.delete(current);}});
 }

@@ -7,8 +7,9 @@ import { EventEmitter } from 'node:events';
 import { getNewItemId } from '../core/identity.js';
 import { loadLibrary, mapRecord, dtoId, idKey, sameId, nonemptyId, guid, cleanValue, dateText, dateTicks, libraryError, unsupported, repositoryCleanName, repositoryTopParentId, repositoryValue, repositoryIdPresent, NAME_TYPES, VIDEO_TYPES, MIN_DATE, EMPTY_ID } from './records.js';
 import { visibleItem, visibleLibrary } from './permissions.js';
-import { cachedFolderChildren, collectionFoldersForItem, userRootFolders, userRootItem } from './collection-membership.js';
+import { parentChainForItem, userRootItem } from './collection-membership.js';
 import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
+import { requireNativeList } from './item-relations.js';
 import { parseQuery, resolveOfficialRatingRanges, binaryCompare } from './query.js';
 import { dtoOptions, prefetchPostgresDtoRelations, projectItem, projectUserData, mediaSources } from './dto.js';
 import { sortMediaSources } from './media-versions.js';
@@ -16,10 +17,13 @@ import { selectDefaultTracks } from './media-streams.js';
 import { nativeContainsSubPath, nativePathWithin, sameNativePath } from './native-path.js';
 import { nativeArtistIdentity, nativeGenreIdentity, nativeMusicGenreIdentity, nativeStudioIdentity, nativeUserSubviewIdentity } from './identity.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
-import { newNativeItemEntity, nativeItemDescriptor, isNativeItemEntity, acquireNativeItemLinkOwner, bindNativeItemChannelAccess, bindNativeItemRecordingAccess } from './native-item-entity.js';
+import { newNativeItemEntity, nativeItemDescriptor, nativeItemTypes, isNativeItemEntity, acquireNativeItemLinkOwner, bindNativeItemChannelAccess, bindNativeItemRecordingAccess } from './native-item-entity.js';
 import { BoundedItemCache } from './bounded-item-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { prepareUserRootNavigation } from './user-root-navigation.js';
+import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
+import { nativeTextBytes } from '../database/native-text.js';
+import { nativeTextSql } from '../database/native-text-sql.js';
 import { createPostgresFolderLinksQuery } from './postgres-folder-links-query.js';
 import { createPostgresFolderCollectionCollapse } from './postgres-folder-collection-collapse.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
@@ -33,7 +37,7 @@ import { UserViewService } from './user-view-service.js';
 import { createVirtualPathExpander, createVirtualPathReverser } from './options.js';
 import { nextUpTopParentIds } from './next-up.js';
 import { childCountSourceIds } from './child-counts.js';
-import { postgresParentalRatingContext, preferredMetadataCountry } from './parental-rating.js';
+import { postgresParentalRatingContext, comparisonItemRating, preferredMetadataCountryBeforeFolders } from './parental-rating.js';
 import { onMetadataChanged } from '../metadata/metadata-changed.js';
 import { resolveSeries } from './series-reference.js';
 import { clrTrim } from '../metadata/whitespace.js';
@@ -215,6 +219,7 @@ export class LibraryService extends EventEmitter {
   #operations = new Set();
   #records;
   #recordOwners = new WeakMap();
+  #rootSources = new WeakMap();
   #closing = false;
   #closePromise;
   constructor({ fileSystem, store, linkedChildren, serverId, libraryOptions = {}, programDataPath, dataPath, metadataPath, configuration = {}, expandPath, userRoot, userRootPath, localization, liveTv, externalUrlRegistry, musicBrainzServer, logger = {}, clock = () => new Date(), onError = () => {} }) {
@@ -356,6 +361,7 @@ export class LibraryService extends EventEmitter {
       this.options.userRoot = { Id: guid(id).toUpperCase(), Type: nativeType, Name: rootPaths.basename(rootPath), Path: rootPath, ParentId: EMPTY_ID, IsFolder: true, IsRoot: true, IsLocked: /\[dontfetchmeta\]/i.test(rootPath), SourceType: 'Library', MediaType: 'Unknown', DateCreated: this.clock().toISOString(), DateModified: MIN_DATE, DateLastSaved: MIN_DATE, Data: '{}' };
     }
     const state = await loadLibrary(db, this.options, { baseRows, includeManualLinks, includeFolderLinks, includeLinkGraph });
+    state.library = this;
     const storedRoot = userRootItem(state);
     const liveRoot = storedRoot && this.itemCreation?.getCachedItemById(storedRoot.Id);
     if (liveRoot) {
@@ -432,10 +438,6 @@ export class LibraryService extends EventEmitter {
         itemValues.set(value.Type, value.CleanValue);
       }
     }
-    state.memoryContext = { byId: state.byId, ancestors: state.ancestors,
-      seriesFor: item => resolveSeries(item, state.byId),
-      defaultMetadataCountry: this.options.configuration.MetadataCountryCode,
-      preferredMetadataCountryFor: item => preferredMetadataCountry(item, state, this.options) };
     const peopleLinks = scopedIds.length ? await db.rows('PeopleBaseItemMap', { whereIn: { ItemId: scopedIds } }) : [];
     const peopleIds = [...new Set(peopleLinks.map(link => link.PeopleId))];
     const people = peopleIds.length ? await db.rows('Peoples', { whereIn: { Id: peopleIds } }) : [];
@@ -654,7 +656,7 @@ export class LibraryService extends EventEmitter {
     const scope = this.#stateScopes.getStore();
     const key = user ? idKey(user.Id) : null;
     const prepare = () => prepareUserRootNavigation({ library: this, session: db, state, user,
-      initialItems: () => this.#rootChildOccurrences(state),
+      initialItems: ({ root }) => this.#rootChildSequence(db, state, root),
       filterPage: async items => {
         const pageState = await this.load(db, user, { includeUserData: false,
           baseRows: await loadPostgresItemGraph(db, items.map(item => item.Id)) });
@@ -687,8 +689,48 @@ export class LibraryService extends EventEmitter {
   }
 
   async navigationChildren(state, user) {
-    if (user) await this.#prepareRootNavigation(state.db, user, state);
-    return this.rootChildren(state, user);
+    if (user) {
+      await this.#prepareRootNavigation(state.db, user, state);
+      return this.rootChildren(state, user);
+    }
+    const live = new Map(), result = [], linkedChildren = this.options.linkedChildren;
+    let cohort, winners, failure;
+    try {
+      cohort = await createNativeItemCohort({ linkedChildren, resolveLiveItem: (_id, slot) => live.get(slot)?.deref() });
+      let ordinal = 0n;
+      for await (const item of this.#rootChildSequence(state.db, state, userRootItem(state))) {
+        if (item.Type === 'CollectionFolder' && !visibleLibrary(item, null, this.options.libraryOptions)) continue;
+        state.adoptItem(item);
+        const slot = await cohort.capture(item, { ordinal: ++ordinal });
+        live.set(slot, new WeakRef(item));
+      }
+      await cohort.flush();
+      const source = cohort.orderedPlan(), sql = nativeTextSql(state.db.schemaName);
+      winners = await cohort.view({ session: state.db, plan: {
+        text: `WITH occurrences AS (${source.text}), ranked AS (
+          SELECT min(occurrence."Ordinal") OVER(PARTITION BY ${sql.guidKey('occurrence."Id"')}) AS "Ordinal",
+            occurrence."SlotKey",row_number() OVER(PARTITION BY ${sql.guidKey('occurrence."Id"')}
+              ORDER BY occurrence."Ordinal" DESC) AS rank FROM occurrences occurrence
+        ) SELECT "Ordinal","SlotKey" FROM ranked WHERE rank=1 ORDER BY "Ordinal"`, values: source.values,
+      } });
+      for (let after = 0n;;) {
+        const page = await winners.page({ after, limit: 128 });
+        try {
+          if (!page.entries.length) return result;
+          result.push(...page.entries.map(entry => entry.item));
+          after = page.entries.at(-1).Ordinal;
+        } finally { await page.release(); }
+      }
+    } catch (error) { failure = error; throw error; }
+    finally {
+      const errors = [];
+      for (const release of [() => winners?.release(), () => cohort?.release(), () => linkedChildren?.flushReleases({ session: state.db })]) {
+        try { await release(); } catch (error) { errors.push(error); }
+      }
+      live.clear();
+      if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors,
+        failure?.message ?? 'Anonymous root catalogue cleanup failed.', failure ? { cause: failure } : undefined);
+    }
   }
 
   async #prepareBoxSetRootNavigation(db, user, state, items) {
@@ -697,7 +739,7 @@ export class LibraryService extends EventEmitter {
     if (ready) { state.rootNavigation = { user, frame: ready }; return; }
     for (let offset = 0; offset < items.length; offset += 128) {
       const batch = items.slice(offset, offset + 128);
-      const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = this.#postgresVisibility(state, user);
+      const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = await this.#postgresVisibility(state, user);
       const required = await queryPostgresItemPage(db, { ids: batch.map(item => item.Id), limit: 1 }, {
         userId: user.Id, includeOwnedItems: true, includeAlternateVersions: true,
         resumableMode: 'memory', nativeVisibilityProjections: nativeVisibilityProjections(batch),
@@ -720,9 +762,9 @@ export class LibraryService extends EventEmitter {
       });
       if (required.total > 0) await this.#prepareRootNavigation(db, user, state);
     }
-    const context = this.#postgresVisibility(state, user);
+    const context = await this.#postgresVisibility(state, user);
     return { ...options, visibility: { ...options.visibility,
-      boxSetUserRootIds: context.boxSetUserRootIds, boxSetRootFolders: context.boxSetRootFolders,
+      boxSetUserRootIds: context.boxSetUserRootIds, boxSetRootFoldersPlan: context.boxSetRootFoldersPlan,
       boxSetPathExpansion: context.boxSetPathExpansion } };
   }
 
@@ -749,8 +791,60 @@ export class LibraryService extends EventEmitter {
       .filter(nonemptyId).map(id => [idKey(id), id])).values()];
   }
 
-  #postgresVisibility(state, user) {
+  #rootFolderProjection(source) {
+    if (!source) return Object.freeze({ text: `SELECT NULL::bigint AS "Ordinal",NULL::uuid AS "SlotKey",NULL::bytea AS "Id",NULL::bytea AS "NativeType",
+      NULL::bytea AS "Path",NULL::bytea[] AS "PhysicalLocations",NULL::bytea AS "PreferredCountry",NULL::bytea[] AS "Tags" WHERE FALSE`, values: Object.freeze([]) });
+    const plan = source.pathPlan(), folders = nativeItemTypes.filter(type => nativeItemDescriptor(type).family === 'folder').map(nativeTextBytes);
+    return Object.freeze({ text: `SELECT source.* FROM (${plan.text}) source WHERE source."NativeType"=ANY($${plan.values.length + 1}::bytea[])`,
+      values: Object.freeze([...plan.values, folders]) });
+  }
+
+  async withRootFolderPlan(state, operation) {
+    if (typeof operation !== 'function') throw new TypeError('A root-folder plan consumer is required.');
+    return this.store.run(async session => {
+      const root = userRootItem(state);
+      if (!root) return operation(Object.freeze({ session, plan: this.#rootFolderProjection(),
+        withSlot() { throw new TypeError('The root-folder slot has no admitted source.'); } }));
+      return withPostgresCachedFolderChildren({ session, library: this, item: root }, async source => {
+        await source.flush();
+        return operation(Object.freeze({ session, plan: this.#rootFolderProjection(source),
+          withSlot: (slot, consume) => source.withSlot(slot, consume) }));
+      });
+    });
+  }
+
+  async rootFolderPlan(state) {
+    const root = userRootItem(state);
+    if (!root) return this.#rootFolderProjection();
+    let pending = this.#rootSources.get(state);
+    if (!pending) {
+      pending = (async () => {
+        let source;
+        try {
+          await withPostgresCachedFolderChildren({ session: state.db, library: this, item: root }, current => { source = current.retain(); });
+          const dispose = state.dispose.bind(state);
+          state.dispose = async options => { try { await dispose(options); } finally { await source.release(); } };
+          return source;
+        } catch (error) { await source?.release(); throw error; }
+      })();
+      this.#rootSources.set(state, pending);
+    }
+    const source = await pending;
+    await source.flush();
+    return this.#rootFolderProjection(source);
+  }
+
+  async withRootFolderSlot(state, slot, operation) {
+    if (typeof operation !== 'function') throw new TypeError('A root-folder slot consumer is required.');
+    await this.rootFolderPlan(state);
+    const source = await this.#rootSources.get(state);
+    if (!source) throw new TypeError('The root-folder slot has no admitted source.');
+    return source.withSlot(slot, operation);
+  }
+
+  async #postgresVisibility(state, user) {
     if (!user) return undefined;
+    const foldersPlan = await this.rootFolderPlan(state);
     const policy = user.Policy;
     const libraryFolders = state.items.filter(item => item.Type === 'CollectionFolder');
     const allowedLibraries = state.items
@@ -765,35 +859,94 @@ export class LibraryService extends EventEmitter {
       ...(libraryFolders.length ? { topParentIds, libraryTopParentIds } : {}),
       boxSetUserRootIds: state.rootNavigation?.user === user
         ? state.rootNavigation.frame.items.map(item => item.Id) : [],
-      boxSetRootFolders: userRootFolders(state).map(item => ({ Id: item.Id,
-        Path: item.Path ?? null, PhysicalLocations: item.PhysicalLocations ?? null })),
+      boxSetRootFoldersPlan: foldersPlan,
       boxSetPathExpansion: { appDataPath: this.options.expandPath?.('%AppDataPath%') ?? '%AppDataPath%',
         metadataPath: this.options.expandPath?.('%MetadataPath%') ?? '%MetadataPath%' },
       blockedTags: policy.BlockedTags ?? [],
       allowedTags: policy.AllowedTags ?? [],
       maxRating,
       maxSubRating,
-      ratingContext: postgresParentalRatingContext(state, this.options),
+      ratingContext: postgresParentalRatingContext(this.options, foldersPlan),
       blockUnratedTypes: policy.BlockUnratedItems ?? [],
     };
   }
 
+  async isItemVisible(item, user, state, options = {}) {
+    return this.#postgresStandaloneVisible(state.db, item, user, state, options);
+  }
+
+  async #baseItemVisible(db, item, user, state, {
+    checkStandaloneParents = true, skipRelatedNameCheck = false, skipAllowedTags = false,
+  } = {}) {
+    const policy = user.Policy;
+    if (!policy) throw new TypeError('Library access requires an authoritative user policy.');
+    const hasId = (values, id) => (values ?? []).some(value => sameId(value, id));
+    // These overrides precede BaseItem's parental/tag checks in Native.
+    if (item.Type === 'Channel') {
+      const blocked = policy.BlockedChannels ?? [];
+      if (blocked.length ? hasId(blocked, item.Id)
+        : policy.EnableAllChannels !== true && !hasId(policy.EnabledChannels, item.Id)) return false;
+    }
+    if (item.Type === 'CollectionFolder' && !visibleLibrary(item, user, this.options.libraryOptions)) return false;
+    const parents = parentChainForItem(item, state);
+    let matched;
+    const folders = async () => matched ??= await this.getCollectionFolders(item, state);
+    const hasTags = policy.BlockedTags?.length || policy.AllowedTags?.length;
+    const needsCountry = comparisonItemRating(item, state) != null
+      && !preferredMetadataCountryBeforeFolders(item, state).found;
+    if (hasTags) {
+      // GetInheritedTags consumes own/parent lists before requesting the root
+      // membership, then every matched folder list before checking overlap.
+      for (const source of [item, ...parents]) requireNativeList(source.Tags, 'collection');
+      for (const source of await folders()) requireNativeList(source.Tags, 'collection');
+    } else if (needsCountry) await folders();
+    if (!visibleItem(item, user, state, { ...this.options, query: false,
+      checkStandaloneParents: false, skipRelatedNameCheck: true,
+      skipAllowedTags: skipAllowedTags || item.Type === 'Person', playlistVisibilityChecked: true }, matched ?? [])) return false;
+    if (checkStandaloneParents) {
+      for (const parent of parents) if (!await this.#postgresStandaloneVisible(db, parent, user, state,
+        { checkStandaloneParents: false, skipAllowedTags: true })) return false;
+      if (item.SourceType === 'Channel') {
+        if (!nonemptyId(item.ChannelId)) throw libraryError(400, 'Guid cannot be empty.');
+        const channel = state.byId.get(idKey(item.ChannelId));
+        if (channel?.Type !== 'Channel') throw libraryError(500, 'The source channel is unavailable.');
+        if (!await this.#postgresStandaloneVisible(db, channel, user, state, { checkStandaloneParents: false })) return false;
+      } else {
+        const top = parents.at(-1) ?? item;
+        if (top.Path != null && top.Path !== '') {
+          const collectionFolders = await folders();
+          if (collectionFolders.length) {
+            const blocked = policy.BlockedMediaFolders ?? [];
+            if (blocked.length ? !collectionFolders.some(folder => !hasId(blocked, folder.Id))
+              : policy.EnableAllFolders !== true && !collectionFolders.some(folder => hasId(policy.EnabledFolders, folder.Id))) return false;
+          }
+        }
+      }
+    }
+    const max = user.MaxParentalRatingScore ?? policy.MaxParentalRatingScore ?? policy.MaxParentalRating;
+    if (!skipRelatedNameCheck && item.Type !== 'Person' && NAME_TYPES.has(item.Type)
+      && (policy.EnableAllFolders !== true || max != null || policy.BlockUnratedItems?.length
+        || policy.BlockedTags?.length || policy.AllowedTags?.length)) {
+      if (!state.relatedItems) unsupported('Restricted by-name item visibility requires related item records.');
+      for (const related of state.relatedItems(item)) if (!NAME_TYPES.has(related.Type)
+        && await this.#postgresStandaloneVisible(db, related, user, state)) return true;
+      return false;
+    }
+    return true;
+  }
+
   async #postgresStandaloneVisible(db, item, user, state, {
     checkStandaloneParents = true, skipRelatedNameCheck = false, preparingRoot = false,
+    skipAllowedTags = false, playlistVisibilityChecked = false,
   } = {}) {
     if (!item) return false;
     if (!user) return true;
-    if (item.Type === 'Playlist') {
+    if (item.Type === 'Playlist' && !playlistVisibilityChecked) {
       const dataPath = this.options.dataPath
         ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
       const managed = item.Path && dataPath && nativeContainsSubPath(item.Path, dataPath);
-      if (!managed && !visibleItem(item, user, state, {
-        ...this.options,
-        query: false,
-        checkStandaloneParents,
-        skipRelatedNameCheck,
-        playlistVisibilityChecked: true,
-      })) return false;
+      if (!managed && !await this.#baseItemVisible(db, item, user, state,
+        { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags })) return false;
       return queryPostgresPlaylistAccess(db, item, {
         user,
         dataPath,
@@ -802,7 +955,7 @@ export class LibraryService extends EventEmitter {
       });
     }
     if (item.Type !== 'BoxSet') {
-      return visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents, skipRelatedNameCheck });
+      return this.#baseItemVisible(db, item, user, state, { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags });
     }
     const linked = await db.rows('LinkedChildren', {
       where: { ParentId: item.Id },
@@ -810,10 +963,10 @@ export class LibraryService extends EventEmitter {
       limit: 1,
     });
     if (isLegacyBoxSet(item, linked.length > 0, this.options.programDataPath)) {
-      return visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents, skipRelatedNameCheck });
+      return this.#baseItemVisible(db, item, user, state, { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags });
     }
     if (!preparingRoot) await this.#prepareBoxSetRootNavigation(db, user, state, [item]);
-    const visibility = this.#postgresVisibility(state, user);
+    const visibility = await this.#postgresVisibility(state, user);
     const page = await queryPostgresItemPage(db, { ids: [item.Id], limit: 1 }, {
       userId: user.Id,
       includeOwnedItems: true,
@@ -905,7 +1058,7 @@ export class LibraryService extends EventEmitter {
     }
     if (requests.length) {
       const hideMissing = !(user.DisplayMissingEpisodes ?? user.Configuration?.DisplayMissingEpisodes);
-      const { topParentIds: _ignoredTopParents, ...visibility } = this.#postgresVisibility(state, user) ?? {};
+      const { topParentIds: _ignoredTopParents, ...visibility } = await this.#postgresVisibility(state, user) ?? {};
       const counts = await queryPostgresDtoChildCounts(state.db, requests,
         hideMissing ? { ismissing: false } : {}, {
           userId: user.Id,
@@ -921,6 +1074,7 @@ export class LibraryService extends EventEmitter {
     checkStandaloneParents = false,
   } = {}) {
     if (!user || !items.length) return items;
+    if (checkStandaloneParents) return this.#filterPostgresStandaloneBatch(db, items, user, state);
     const boxSetIds = items.filter(item => item.Type === 'BoxSet').map(item => item.Id);
     const linkTypes = boxSetIds.length ? await queryPostgresLinkTypes(db, boxSetIds) : new Map();
     const modernBoxSets = new Set(items.filter(item => item.Type === 'BoxSet'
@@ -932,7 +1086,7 @@ export class LibraryService extends EventEmitter {
       || ['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)));
     const entityKeys = new Set(entityAccess.map(item => idKey(item.Id)));
     const ordinary = items.filter(item => !modernBoxSets.has(idKey(item.Id)) && !entityKeys.has(idKey(item.Id)));
-    const baseVisibility = this.#postgresVisibility(state, user) ?? {};
+    const baseVisibility = await this.#postgresVisibility(state, user) ?? {};
     const queryVisibleIds = async (candidates, visibility, nameAccessTypes = []) => {
       const result = [];
       for (let offset = 0; offset < candidates.length; offset += 128) {
@@ -946,7 +1100,7 @@ export class LibraryService extends EventEmitter {
           nameAccessTypes,
           requireRelatedNameAccess: nameAccessTypes.length > 0,
           memorySortConfiguration: this.options.configuration,
-          memoryRatingContext: postgresParentalRatingContext(state, this.options),
+          memoryRatingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(state)),
           nativeVisibilityProjections: nativeVisibilityProjections(batch),
           visibility,
         });
@@ -963,8 +1117,8 @@ export class LibraryService extends EventEmitter {
     // DTO batches invoke IsVisible after repository paging. The separate
     // direct-item reader invokes IsVisibleStandalone, including parent/channel
     // access. Neither check changes the repository's count or page window.
-    for (const item of entityAccess) if (visibleItem(item, user, state, {
-      ...this.options, query: false, checkStandaloneParents, skipRelatedNameCheck,
+    for (const item of entityAccess) if (await this.#postgresStandaloneVisible(db, item, user, state, {
+      checkStandaloneParents, skipRelatedNameCheck,
     })) visible.add(idKey(item.Id));
     const modern = items.filter(item => modernBoxSets.has(idKey(item.Id)));
     for (const key of await queryVisibleIds(modern, {
@@ -994,59 +1148,9 @@ export class LibraryService extends EventEmitter {
 
   async #filterPostgresStandaloneBatch(db, items, user, state) {
     if (!user || !items.length) return items;
-    const boxSets = items.filter(item => item.Type === 'BoxSet');
-    const linkTypes = boxSets.length
-      ? await queryPostgresLinkTypes(db, boxSets.map(item => item.Id)) : new Map();
-    const modernBoxSets = boxSets.filter(item => !isLegacyBoxSet(item,
-      linkTypes.has(idKey(item.Id)), this.options.programDataPath));
-    const modernKeys = new Set(modernBoxSets.map(item => idKey(item.Id)));
-    const visible = new Set();
-    const playlists = [];
-    const dataPath = this.options.dataPath
-      ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
-    for (const item of items) {
-      if (modernKeys.has(idKey(item.Id))) continue;
-      if (item.Type === 'Playlist') {
-        const managed = item.Path && dataPath && nativeContainsSubPath(item.Path, dataPath);
-        if (managed || visibleItem(item, user, state, {
-          ...this.options,
-          query: false,
-          checkStandaloneParents: true,
-          playlistVisibilityChecked: true,
-        })) playlists.push(item);
-      } else if (visibleItem(item, user, state, {
-        ...this.options,
-        query: false,
-        checkStandaloneParents: true,
-      })) visible.add(idKey(item.Id));
-    }
-    for (let offset = 0; offset < modernBoxSets.length; offset += 128) {
-      const batch = modernBoxSets.slice(offset, offset + 128);
-      const page = await queryPostgresItemPage(db, { ids: batch.map(item => item.Id) }, {
-        userId: user.Id,
-        includeOwnedItems: true,
-        includeAlternateVersions: true,
-        resumableMode: 'memory',
-        nativeVisibilityProjections: nativeVisibilityProjections(batch),
-        visibility: {
-          ...this.#postgresVisibility(state, user),
-          itemMode: 'standalone',
-          boxSetStandalone: true,
-          boxSetChildRatingMode: 'memory',
-        },
-      });
-      for (const row of page.rows) visible.add(idKey(row.Id));
-    }
-    if (playlists.length) {
-      const access = await queryPostgresPlaylistAccessBatch(db, playlists, {
-        user,
-        dataPath,
-        programDataPath: this.options.programDataPath,
-        visibility: buildPostgresPlaylistVisibility(state.items, user, this.options.libraryOptions),
-      });
-      for (const item of playlists) if (access.get(idKey(item.Id)) === true) visible.add(idKey(item.Id));
-    }
-    return items.filter(item => visible.has(idKey(item.Id)));
+    const selected = [];
+    for (const item of items) if (await this.#postgresStandaloneVisible(db, item, user, state)) selected.push(item);
+    return selected;
   }
 
   async queryItems(input = {}, { user = null, isApiKey = false, fromUserViewChildren = false, embyClient = false } = {}) {
@@ -1068,7 +1172,7 @@ export class LibraryService extends EventEmitter {
     const db = state.db, navigationRows = await loadPostgresNavigationRows(db);
     const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
     const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
-    const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+    const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
     const winners = await queryPostgresCurrentPrograms(db, channels.map(item => item.Id), { rootId: root.Id, userId: user?.Id, visibility });
     state.dtoCurrentPrograms = new Map();
     if (!winners.length) return;
@@ -1087,7 +1191,7 @@ export class LibraryService extends EventEmitter {
       const navigationRows = await loadPostgresNavigationRows(db);
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
-      const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
       const page = await queryPostgresChannels(db, input, { rootId: root.Id, userId: user?.Id, visibility });
       const state = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db, page.rows, navigationRows) });
       const selected = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
@@ -1111,7 +1215,7 @@ export class LibraryService extends EventEmitter {
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       const root = await this.userViews.global('livetv', this.options.localization?.text('HeaderLiveTV') ?? 'Live TV', db, navigation);
       const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-        ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+        ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
       let query = input;
       if (!recommended) {
         const { libraryseriesid, seriestimerid, ...filters } = input;
@@ -1225,7 +1329,7 @@ export class LibraryService extends EventEmitter {
           const candidates = sources.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
           const visible = user ? await this.#filterPostgresStandaloneBatch(db, candidates, user, state)
             : candidates.filter(item => recordingSourceVisibleWithoutUser(item, this.options));
-          for (const source of visible) for (const folder of collectionFoldersForItem(source, state)) {
+          for (const source of visible) for (const folder of await this.getCollectionFolders(source, state)) {
             if (!folders.has(idKey(folder.Id))) folders.set(idKey(folder.Id), folder);
           }
         } finally { await state.dispose({ session: db }); }
@@ -1243,8 +1347,11 @@ export class LibraryService extends EventEmitter {
         const ids = folderIds.slice(offset, offset + 128);
         const state = await this.#loadPostgresItemState(db, ids, user, { navigationRows });
         try {
-          const selected = ids.map(id => state.byId.get(idKey(id))).filter(item => item
-            && visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false }));
+          const selected = [];
+          for (const id of ids) {
+            const item = state.byId.get(idKey(id));
+            if (item && await this.#postgresStandaloneVisible(db, item, user, state, { checkStandaloneParents: false })) selected.push(item);
+          }
           const options = dtoOptions({}, true);
           await this.#prefetchPostgresDtos(selected, state, user, options);
           for (const item of selected) Items.push(await projectItem(item, state, user, options, this.options));
@@ -1260,7 +1367,7 @@ export class LibraryService extends EventEmitter {
       const navigationRows = await loadPostgresNavigationRows(db);
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       const { topParentIds: _topParents, libraryTopParentIds: _libraries,
-        ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+        ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
       const options = dtoOptions(input);
       for (const field of ['candelete', 'candownload', 'displaypreferencesid', 'etag']) options.fields.delete(field);
       if (input.isinprogress === true) options.fields.add('tags');
@@ -1272,8 +1379,11 @@ export class LibraryService extends EventEmitter {
           const page = await query.page({ offset, limit: 128 });
           const state = await this.load(db, user, { baseRows: await loadPostgresPageGraph(db, page.rows, navigationRows) });
           try {
-            const selected = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(item => item
-              && visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false }));
+            const selected = [];
+            for (const row of page.rows) {
+              const item = state.byId.get(idKey(row.Id));
+              if (item && await this.#postgresStandaloneVisible(db, item, user, state, { checkStandaloneParents: false })) selected.push(item);
+            }
             await this.#prefetchPostgresDtos(selected, state, user, options);
             for (const item of selected) Items.push(await projectItem(item, state, user, options, this.options));
           } finally { await state.dispose({ session: db }); }
@@ -1303,7 +1413,7 @@ export class LibraryService extends EventEmitter {
         rootFolders,
         physicalIdsFor: folder => resolvedPhysicalFolderIds(folder, navigation),
       });
-      let visibility = this.#postgresVisibility(navigation, user);
+      let visibility = await this.#postgresVisibility(navigation, user);
       if (visibility && nonemptyId(requestedParentId)) {
         const { topParentIds: _repositoryScope, ...explicitVisibility } = visibility;
         visibility = explicitVisibility;
@@ -1358,7 +1468,7 @@ export class LibraryService extends EventEmitter {
       scope = { topParentIds };
     }
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-      ...visibility } = this.#postgresVisibility(state, user) ?? {};
+      ...visibility } = await this.#postgresVisibility(state, user) ?? {};
     const parent = parentId === undefined ? null : state.byId.get(idKey(parentId));
     return { scope, topParentIds, visibility: user ? visibility : undefined, navigation,
       musicGenreParent: parent?.Type === 'CollectionFolder' && ['music', 'musicvideos'].includes(collectionType(parent)) };
@@ -1392,7 +1502,7 @@ export class LibraryService extends EventEmitter {
       scope = { topParentIds };
     }
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-      ...visibility } = this.#postgresVisibility(state, user) ?? {};
+      ...visibility } = await this.#postgresVisibility(state, user) ?? {};
     return { scope, topParentIds, visibility: user ? visibility : undefined };
   }
 
@@ -1567,7 +1677,7 @@ export class LibraryService extends EventEmitter {
       const parentType = parents.filter(item => isCollection(item) || item.Type === 'UserView')
         .map(item => collectionType(item) || null).find(type => type != null) ?? null;
       const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-        ...visibility } = this.#postgresVisibility(navigation, user);
+        ...visibility } = await this.#postgresVisibility(navigation, user);
       const page = await queryPostgresLatestItems(db, { query, scope, userId: user.Id, visibility,
         collectionType: parentType, groupItems: input.groupItems !== false, limit: input.limit ?? 20 });
       const graphRows = await loadPostgresPageGraph(db, page.rows, navigationGraph);
@@ -1622,10 +1732,10 @@ export class LibraryService extends EventEmitter {
       }
     }
 
-    const topParentIds = seriesKey ? [] : [...nextUpTopParentIds(parents, navigation,
-      folder => resolvedPhysicalFolderIds(folder, navigation), user, this.options)];
+    const topParentIds = seriesKey ? [] : [...await nextUpTopParentIds(parents, navigation,
+      folder => resolvedPhysicalFolderIds(folder, navigation), user, this)];
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-      ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
     const page = await queryPostgresNextUpPage(db, {
       ...(seriesKey ? { seriesKeys: [seriesKey] } : { seriesDiscovery: {
         topParentIds,
@@ -1670,16 +1780,14 @@ export class LibraryService extends EventEmitter {
       let series;
       let mode;
       if (input.seasonId) {
-        if (!target || target.Type !== 'Season' || user && !visibleItem(target, user, navigation,
-          { ...this.options, query: false })) {
+        if (!target || target.Type !== 'Season' || user && !await this.#postgresStandaloneVisible(db, target, user, navigation)) {
           throw Object.assign(libraryError(404, `No season exists with Id ${guid(input.seasonId)}`),
             { showsNotFound: true });
         }
         series = resolveSeries(target, navigation.byId);
         mode = 'season';
       } else {
-        if (!target || target.Type !== 'Series' || user && !visibleItem(target, user, navigation,
-          { ...this.options, query: false })) {
+        if (!target || target.Type !== 'Series' || user && !await this.#postgresStandaloneVisible(db, target, user, navigation)) {
           throw Object.assign(libraryError(404, 'Series not found'), { showsNotFound: true });
         }
         series = target;
@@ -1693,7 +1801,7 @@ export class LibraryService extends EventEmitter {
       }
       const seriesKey = series?.PresentationUniqueKey ?? (series
         ? createPresentationUniqueKey(series, { libraryOptions: this.options.libraryOptions }) : null);
-      let visibility = this.#postgresVisibility(navigation, user);
+      let visibility = await this.#postgresVisibility(navigation, user);
       if (visibility) {
         // Episodes derive their physical series/season scope here. Collection
         // membership inputs belong to standalone BoxSet visibility and are not
@@ -1739,15 +1847,14 @@ export class LibraryService extends EventEmitter {
       const navigationRows = await loadPostgresNavigationRows(db, seriesId);
       const navigation = await this.load(db, user, { includeUserData: false, baseRows: navigationRows });
       const target = navigation.byId.get(idKey(seriesId));
-      if (!target || target.Type !== 'Series' || user && !visibleItem(target, user, navigation,
-        { ...this.options, query: false })) {
+      if (!target || target.Type !== 'Series' || user && !await this.#postgresStandaloneVisible(db, target, user, navigation)) {
         throw Object.assign(libraryError(404, 'Series not found'), { showsNotFound: true });
       }
       const seriesKey = target.PresentationUniqueKey ?? createPresentationUniqueKey(target,
         { libraryOptions: this.options.libraryOptions });
       let isMissing = input.isMissing;
       if (user && !(user.DisplayMissingEpisodes ?? user.Configuration?.DisplayMissingEpisodes)) isMissing = false;
-      let visibility = this.#postgresVisibility(navigation, user);
+      let visibility = await this.#postgresVisibility(navigation, user);
       if (visibility) {
         const { topParentIds: _repositoryScope, ...explicitVisibility } = visibility;
         visibility = explicitVisibility;
@@ -1795,11 +1902,11 @@ export class LibraryService extends EventEmitter {
         const requiresRelatedArtist = source.Type === 'MusicArtist' && (policy.EnableAllFolders !== true
           || maxRating != null || policy.BlockUnratedItems?.length || policy.BlockedTags?.length
           || policy.AllowedTags?.length);
-        if (!visibleItem(source, user, navigation,
-          { ...this.options, query: false, skipRelatedNameCheck: requiresRelatedArtist })) source = null;
+        if (!await this.#postgresStandaloneVisible(db, source, user, navigation,
+          { skipRelatedNameCheck: requiresRelatedArtist })) source = null;
         else if (requiresRelatedArtist && !await hasPostgresVisibleArtistRelation(db, source.Id, {
           userId: user.Id,
-          visibility: this.#postgresVisibility(navigation, user),
+          visibility: await this.#postgresVisibility(navigation, user),
           signal,
         })) source = null;
       }
@@ -1825,11 +1932,11 @@ export class LibraryService extends EventEmitter {
       ? this.options.libraryOptions.get(idKey(id)) ?? this.options.libraryOptions.get(id)
       : this.options.libraryOptions?.[id] ?? this.options.libraryOptions?.[idKey(id)];
     const itemStates = new WeakMap([[source, navigation]]);
-    const foldersFor = item => item.Type === 'CollectionFolder' ? [item]
-      : collectionFoldersForItem(item, itemStates.get(item) ?? navigation);
-    const libraryOptionsFor = item => optionsFor(foldersFor(item)
+    const foldersFor = item => item.Type === 'CollectionFolder' ? Promise.resolve([item])
+      : this.getCollectionFolders(item, itemStates.get(item) ?? navigation);
+    const libraryOptionsFor = async item => optionsFor((await foldersFor(item))
       .find(folder => folder.Type === 'CollectionFolder')?.Id) ?? {};
-    const libraryOptions = libraryOptionsFor(source);
+    const libraryOptions = await libraryOptionsFor(source);
     const typeOptions = (libraryOptions.TypeOptions ?? []).find(options =>
       String(options.Type ?? '').toLowerCase() === source.Type.toLowerCase());
     const providerKey = value => ordinalIgnoreCaseKey(String(value));
@@ -1850,13 +1957,13 @@ export class LibraryService extends EventEmitter {
       // boundary. Besides defining reachability, this preserves creation and
       // refresh side effects of the native user-view lifecycle.
       const views = await this.userViews.views(navigation, user, { includeHidden: true });
-      const reachableKeys = nextUpTopParentIds(views, navigation,
-        folder => resolvedPhysicalFolderIds(folder, navigation), user, this.options);
+      const reachableKeys = await nextUpTopParentIds(views, navigation,
+        folder => resolvedPhysicalFolderIds(folder, navigation), user, this);
       // nextUpTopParentIds exposes normalized comparison keys; SQL compares
       // the persisted GUID spelling and therefore needs the stored ids. Keep
       // collection-configured physical ids even when their Folder row is
       // temporarily absent from this navigation snapshot.
-      const baseVisibility = this.#postgresVisibility(navigation, user);
+      const baseVisibility = await this.#postgresVisibility(navigation, user);
       const spellings = new Map([...navigation.items.map(item => item.Id),
         ...(baseVisibility?.topParentIds ?? [])].map(id => [idKey(id), id]));
       const reachable = [...reachableKeys].map(key => spellings.get(key) ?? guid(key));
@@ -1876,8 +1983,8 @@ export class LibraryService extends EventEmitter {
       return items;
     };
 
-    const presentationKey = item => item.PresentationUniqueKey ?? createPresentationUniqueKey(item,
-      { libraryOptions: libraryOptionsFor(item), collectionFolders: foldersFor(item) });
+    const presentationKey = async item => item.PresentationUniqueKey ?? createPresentationUniqueKey(item,
+      { libraryOptions: await libraryOptionsFor(item), collectionFolders: await foldersFor(item) });
     const localProvider = {
       name: 'Local Genre/Tag', kind: 'local', itemTypes: [source.Type],
       getItems: async (_item, providerQuery, providerSignal) => {
@@ -2012,7 +2119,12 @@ export class LibraryService extends EventEmitter {
       for (const key of ['startindex', 'limit']) if (query[key] < 0) throw libraryError(400, `${key} must not be negative.`);
     }
 
-    const explicitParent = requestedParent(query, navigation);
+    let explicitParent = requestedParent(query, navigation);
+    if (explicitParent && this.itemCreation) {
+      const current = this.itemCreation.getCachedItemById(explicitParent.Id)
+        ?? (nonemptyId(query.parentid) ? await this.itemCreation.getItemById(explicitParent.Id) : null);
+      if (current) explicitParent = this.adoptLiveItem(navigation, current);
+    }
     // The controller may rewrite an IncludeItemTypes=BoxSet/Playlist request
     // to the user root before it performs the access check. Resolve that
     // synchronous dispatch first, then perform its potentially relational
@@ -2089,7 +2201,7 @@ export class LibraryService extends EventEmitter {
     const searchParentId = query.parentid;
     let rootFolders = [];
     const physicalIds = folders => this.#postgresPhysicalIds(folders, navigation);
-    let baseVisibility = this.#postgresVisibility(navigation, user);
+    let baseVisibility = await this.#postgresVisibility(navigation, user);
     const groupTypes = query.includeitemtypes?.map(type => type.toLowerCase()) ?? [];
     const excludedTypes = new Set(query.excludeitemtypes?.map(type => type.toLowerCase()) ?? []);
     const explicitNameTypes = [...NAME_TYPES].filter(nameType => groupTypes.includes(nameType.toLowerCase()));
@@ -2134,7 +2246,7 @@ export class LibraryService extends EventEmitter {
       || dispatch.foldersView || dispatch.defaultViewChildren || dispatch.menuType)) {
       rootFolders = await this.navigationChildren(navigation, user);
     }
-    baseVisibility = this.#postgresVisibility(navigation, user);
+    baseVisibility = await this.#postgresVisibility(navigation, user);
     if (user && repositoryQuery && isUserRoot && !query.ids?.length && !searchScores) {
       // AddUserToQuery obtains named views for an otherwise unscoped user-root
       // repository request. The lazy view creation is observable even when a
@@ -2360,7 +2472,7 @@ export class LibraryService extends EventEmitter {
       collapseCollectionPath: !repositoryQuery && this.options.programDataPath
         ? path.join(this.options.programDataPath, 'data', 'collections') : null,
       memorySortConfiguration: this.options.configuration,
-      memoryRatingContext: postgresParentalRatingContext(navigation, this.options),
+      memoryRatingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(navigation)),
       memoryPresort: boxSetMemoryOrder && user ? boxSetDisplayOrder(parent) : null,
       memorySourceOrder: boxSetMemoryOrder ? 'stored-sort-name' : null,
       memoryFolderPlayback: boxSetMemoryOrder && Boolean(user),
@@ -2414,8 +2526,7 @@ export class LibraryService extends EventEmitter {
       folderCollections = await createPostgresFolderCollectionCollapse({ session: db, library: this,
         source: folderLinks, sourcePlan: postgresQueryOptions.nativeItemsPlan, query: pageQuery,
         options: { ...postgresQueryOptions, visibility }, user,
-        prepareVisibility: (plan, options) => this.#prepareFolderQueryVisibility(db, user, navigation, plan, options),
-        aggregate: navigation.items.find(item => item.Type === 'AggregateFolder' && item.IsRoot) });
+        prepareVisibility: (plan, options) => this.#prepareFolderQueryVisibility(db, user, navigation, plan, options) });
       Object.assign(postgresQueryOptions, { nativeItemsPlan: folderCollections.plan, collapseTypes: null });
       // Full predicates have consumed the source before CollectionManager.
       // Only name predicates are repeated against introduced collections.
@@ -2470,10 +2581,10 @@ export class LibraryService extends EventEmitter {
       ? groupedMediaFolders(await this.navigationChildren(navigation, user), user)
         .filter(folder => collectionType(folder) === 'tvshows')
       : parent ? [parent] : [];
-    const topParentIds = [...nextUpTopParentIds(parents, navigation,
-      folder => resolvedPhysicalFolderIds(folder, navigation), user, this.options)];
+    const topParentIds = [...await nextUpTopParentIds(parents, navigation,
+      folder => resolvedPhysicalFolderIds(folder, navigation), user, this)];
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-      ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+      ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
     const page = await queryPostgresNextUpPage(db, {
       seriesDiscovery: { topParentIds, nextUpDateCutoff: MIN_DATE },
       userId: user.Id,
@@ -2511,7 +2622,7 @@ export class LibraryService extends EventEmitter {
     const page = await queryPostgresUserViewMenuPage(db, query, itemIds, {
       userId: user?.Id,
       memorySortConfiguration: this.options.configuration,
-      memoryRatingContext: postgresParentalRatingContext(navigation, this.options),
+      memoryRatingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(navigation)),
       ...scopeOptions,
       ...(typeof project === 'function' ? { onPlan: plan => project(db, plan) } : {}),
     });
@@ -2546,7 +2657,7 @@ export class LibraryService extends EventEmitter {
       }
     } else sourceScope = { ancestorId: parent?.Id };
 
-    const baseVisibility = this.#postgresVisibility(navigation, user);
+    const baseVisibility = await this.#postgresVisibility(navigation, user);
     let sourceVisibility;
     if (baseVisibility) {
       sourceVisibility = Object.fromEntries(['blockedTags', 'allowedTags', 'maxRating', 'maxSubRating',
@@ -2588,7 +2699,7 @@ export class LibraryService extends EventEmitter {
       itemId: menuItem.Id,
       userId: user?.Id,
       memorySortConfiguration: this.options.configuration,
-      memoryRatingContext: postgresParentalRatingContext(navigation, this.options),
+      memoryRatingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(navigation)),
     });
     const items = [];
     let seedAvailable = true;
@@ -2750,7 +2861,7 @@ export class LibraryService extends EventEmitter {
         .map(folder => folder.Id) };
     }
 
-    let visibility = this.#postgresVisibility(navigation, user);
+    let visibility = await this.#postgresVisibility(navigation, user);
     if (visibility && (hasParent || user.Configuration?.LatestItemsExcludes?.length)) {
       const { topParentIds: _repositoryScope, ...explicitVisibility } = visibility;
       visibility = explicitVisibility;
@@ -2782,7 +2893,7 @@ export class LibraryService extends EventEmitter {
     };
   }
 
-  #rootChildOccurrences(state) {
+  #rootVirtualChildren(state) {
     // CreateRootFolder registers the plug-in at DataPath/playlists using its
     // derived identity. Other stored PlaylistsFolder rows are not virtual
     // children merely because they share an Aggregate parent or path.
@@ -2796,29 +2907,30 @@ export class LibraryService extends EventEmitter {
       && ordinalIgnoreCaseKey(playlist.Path) === ordinalIgnoreCaseKey(playlistPath) ? [playlist] : [];
     const aggregate = state.items.find(item => item.Type === 'AggregateFolder' && item.IsRoot);
     const liveAggregate = aggregate && this.itemCreation?.getCachedItemById(aggregate.Id);
-    const virtual = liveAggregate ? liveAggregate.VirtualChildren : registeredPlaylist;
-    const root = userRootItem(state);
-    const liveRoot = root && (this.itemCreation?.getCachedItemById(root.Id) ?? root);
-    const direct = liveRoot ? cachedFolderChildren(liveRoot, state) : [];
-    return [...direct, ...virtual];
+    return liveAggregate ? liveAggregate.VirtualChildren : registeredPlaylist;
+  }
+
+  async *#rootChildSequence(db, state, root) {
+    let source;
+    try {
+      if (root) await withPostgresCachedFolderChildren({ session: db, library: this, item: root }, current => {
+        source = current.retain();
+      });
+      if (source) for await (const page of source.pages()) yield* page;
+      yield* this.#rootVirtualChildren(state);
+    } finally { await source?.release(); }
   }
 
   rootChildren(state, user) {
-    if (state.rootNavigation?.user === user) return state.rootNavigation.frame.items;
-    const children = new Map();
-    for (const item of this.#rootChildOccurrences(state)) {
-      if (item.Type === 'CollectionFolder' && !visibleLibrary(item, user, this.options.libraryOptions)) continue;
-      if (user && !visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false })) continue;
-      children.set(idKey(item.Id), item);
-    }
-    return [...children.values()];
+    if (state.rootNavigation?.user !== user || !state.rootNavigation) throw new TypeError('User-root navigation requires an admitted root frame.');
+    return state.rootNavigation.frame.items;
   }
 
   async hasVisibleUserViewChild(folder, state, user) {
     const parentIds = folder.Type === 'CollectionFolder'
       ? resolvedPhysicalFolderIds(folder, state) : [folder.Id];
     const { topParentIds: _topParentIds, libraryTopParentIds: _libraryTopParentIds,
-      ...visibility } = this.#postgresVisibility(state, user) ?? {};
+      ...visibility } = await this.#postgresVisibility(state, user) ?? {};
     return queryPostgresUserViewChildPresence(state.db, {
       parentIds,
       userId: user?.Id,
@@ -2834,7 +2946,7 @@ export class LibraryService extends EventEmitter {
     const request = await this.#postgresChildCountRequest(item, state, user);
     if (Object.hasOwn(request, 'count')) return request.count;
     const hideMissing = user && !(user.DisplayMissingEpisodes ?? user.Configuration?.DisplayMissingEpisodes);
-    const { topParentIds: _ignoredTopParents, ...visibility } = this.#postgresVisibility(state, user) ?? {};
+    const { topParentIds: _ignoredTopParents, ...visibility } = await this.#postgresVisibility(state, user) ?? {};
     const counts = await queryPostgresDtoChildCounts(state.db, [request],
       hideMissing ? { ismissing: false } : {}, {
         userId: user?.Id,
@@ -2843,16 +2955,55 @@ export class LibraryService extends EventEmitter {
     return counts.get(key) ?? 0;
   }
 
-  async getCollectionFolders(reference) {
+  async getCollectionFolders(reference, admittedState) {
+    if (admittedState) return this.#collectionFolders(reference, admittedState);
     return this.#runWithStates(async db => {
       const referenceIds = reference?.Id
         ? [reference.Id, reference.ParentId, reference.OwnerId, repositoryTopParentId(reference)].filter(nonemptyId)
         : [];
       const state = await this.#loadPostgresItemState(db, referenceIds, null, { includeUserData: false });
-      try {
-        const item = reference?.Id ? reference : state.byId.get(idKey(reference)) ?? null;
-        return item ? collectionFoldersForItem(item, state).map(value => this.#rememberRecord(value)) : [];
-      } finally { await state.dispose(); }
+      try { return await this.#collectionFolders(reference, state); }
+      finally { await state.dispose({ session: db }); }
+    });
+  }
+
+  async #collectionFolders(reference, state) {
+    const db = state.db;
+    const item = reference?.Id ? reference : state.byId.get(idKey(reference)) ?? null;
+    const root = userRootItem(state);
+    if (!item || !root) return [];
+    let target = item;
+    const seen = new Set();
+    while (target && !seen.has(idKey(target.Id))) {
+      seen.add(idKey(target.Id));
+      const parent = state.byId.get(idKey(target.ParentId));
+      if (parent?.Type === 'AggregateFolder') break;
+      if (parent) { target = parent; continue; }
+      const owner = state.byId.get(idKey(target.OwnerId));
+      if (!owner) break;
+      target = owner;
+    }
+    return await withPostgresCachedFolderChildren({ session: db, library: this, item: root }, async source => {
+      await source.flush();
+      const plan = source.pathPlan(), offset = plan.values.length, sql = nativeTextSql(db.schemaName);
+      const path = `$${offset + 1}::bytea`, span = `COALESCE(${path},decode('','hex'))`;
+      const folders = nativeItemTypes.filter(type => nativeItemDescriptor(type).family === 'folder').map(nativeTextBytes);
+      const values = [...plan.values, target.Path == null ? null : nativeTextBytes(target.Path), folders];
+      const pathMatches = `${sql.ordinalIgnoreCaseKey('source."Path"')} IS NOT DISTINCT FROM ${sql.ordinalIgnoreCaseKey(path)}`;
+      const folderSource = `(SELECT * FROM (${plan.text}) child WHERE child."NativeType"=ANY($${offset + 2}::bytea[])) source`;
+      const invalid = await db.client.query({ text: `SELECT source."Ordinal" FROM ${folderSource}
+        WHERE source."PhysicalLocations" IS NULL AND NOT (${pathMatches}) ORDER BY source."Ordinal" LIMIT 1`, values });
+      if (invalid.rows.length) throw libraryError(500, "Value cannot be null. (Parameter 'source')");
+      const result = [];
+      for (let after = 0n;;) {
+        const rows = (await db.client.query({ text: `SELECT source."Ordinal",source."SlotKey" FROM ${folderSource}
+          WHERE source."Ordinal">$${offset + 3} AND ((${pathMatches}) OR EXISTS(
+            SELECT 1 FROM unnest(source."PhysicalLocations") location WHERE ${sql.ordinalIgnoreCaseKey("COALESCE(location,decode('','hex'))")}=${sql.ordinalIgnoreCaseKey(span)}))
+          ORDER BY source."Ordinal" LIMIT 128`, values: [...values, after] })).rows;
+        if (!rows.length) return result;
+        for (const row of rows) await source.withSlot(row.SlotKey, folder => { state.adoptItem(folder); result.push(this.#rememberRecord(folder)); });
+        after = BigInt(rows.at(-1).Ordinal);
+      }
     });
   }
 
@@ -2871,16 +3022,16 @@ export class LibraryService extends EventEmitter {
       const visible = new Set((await this.#filterPostgresStandaloneBatch(db, candidates, user, state))
         .map(item => idKey(item.Id)));
       for (const key of unique.keys()) standaloneVisibility.set(key, visible.has(key));
-      const isVisible = item => standaloneVisibility.has(idKey(item.Id))
+      const isVisible = async item => standaloneVisibility.has(idKey(item.Id))
         ? standaloneVisibility.get(idKey(item.Id))
-        : visibleItem(item, user, state, { ...this.options, query: false });
-      const translate = (items, includeIfNotFound = false) => {
+        : this.#postgresStandaloneVisible(db, item, user, state);
+      const translate = async (items, includeIfNotFound = false) => {
         const result = [];
         const seen = new Set();
         for (const item of items) {
           let translated = item;
           if (type(item) === 'AggregateFolder') translated = root;
-          else if (!includeIfNotFound && !isVisible(item)) continue;
+          else if (!includeIfNotFound && !await isVisible(item)) continue;
           if (!translated) continue;
           const id = idKey(translated.Id);
           if (!id || seen.has(id)) continue;
@@ -2891,16 +3042,18 @@ export class LibraryService extends EventEmitter {
       };
       const changedParents = [...foldersAddedTo, ...foldersRemovedFrom];
       if (changedParents.some(item => type(item) !== 'AggregateFolder')) await this.#prepareRootNavigation(db, user, state);
-      const collectionFolders = changedParents.some(item => type(item) !== 'AggregateFolder')
-        ? [...new Set(this.rootChildren(state, user).filter(item => item.IsFolder
-          && isVisible(item)).map(item => idKey(item.Id)))]
-        : [];
+      const collectionFolders = [];
+      if (changedParents.some(item => type(item) !== 'AggregateFolder')) {
+        const seen = new Set();
+        for (const item of this.rootChildren(state, user)) if (item.IsFolder && await isVisible(item)
+          && !seen.has(idKey(item.Id))) { seen.add(idKey(item.Id)); collectionFolders.push(idKey(item.Id)); }
+      }
       return {
-        FoldersAddedTo: translate(foldersAddedTo),
-        FoldersRemovedFrom: translate(foldersRemovedFrom),
-        ItemsAdded: translate(itemsAdded),
-        ItemsRemoved: translate(itemsRemoved, true),
-        ItemsUpdated: translate(itemsUpdated),
+        FoldersAddedTo: await translate(foldersAddedTo),
+        FoldersRemovedFrom: await translate(foldersRemovedFrom),
+        ItemsAdded: await translate(itemsAdded),
+        ItemsRemoved: await translate(itemsRemoved, true),
+        ItemsUpdated: await translate(itemsUpdated),
         CollectionFolders: collectionFolders
       };
     });
@@ -2932,7 +3085,7 @@ export class LibraryService extends EventEmitter {
       const permissionItem = state.byId.get(idKey(normalized)) ?? item;
       if (user && permissionItem.Type !== 'UserRootFolder' && !await this.#postgresStandaloneVisible(db, permissionItem, user, state)) return null;
       return { item, canDelete: !checkCanDelete || !user || await canDeleteItem(item.SourceType === 'Channel' ? item : permissionItem, user, {
-        collectionFolders: () => collectionFoldersForItem(permissionItem, state),
+        collectionFolders: () => this.getCollectionFolders(permissionItem, state),
         isActiveRecording: this.options.isActiveRecording,
         channelCanDelete: state.channelCanDelete,
       }) };
@@ -2997,8 +3150,8 @@ export class LibraryService extends EventEmitter {
       }
       const page = await queryPostgresThemeItems(db, item, { extraType: kind === 'songs' ? 8 : 9,
         inheritFromParent, sortBy, sortOrder, userId: user?.Id,
-        visibility: this.#postgresVisibility(initial, user), configuration: this.options.configuration,
-        ratingContext: postgresParentalRatingContext(initial, this.options) });
+        visibility: await this.#postgresVisibility(initial, user), configuration: this.options.configuration,
+        ratingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(initial)) });
       const state = await this.#loadPostgresItemState(db, [page.ownerId, ...page.ids], user);
       const owner = state.byId.get(idKey(page.ownerId)) ?? item;
       const items = page.ids.map(id => state.byId.get(idKey(id))).filter(Boolean);
@@ -3239,7 +3392,7 @@ export class LibraryService extends EventEmitter {
       const topParentIds = views.flatMap(item => queryTopParentIds(item, navigation, user, folders));
       scope = { topParentIds: topParentIds.length ? topParentIds : [randomUUID()] };
     }
-    const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user);
+    const { topParentIds: _topParents, libraryTopParentIds: _libraries, ...visibility } = await this.#postgresVisibility(navigation, user);
     return { userId: user.Id, visibility, scope, configuration: this.options.configuration,
       culture: this.options.localization?.context?.culture ?? 'en-US' };
   }
@@ -3363,7 +3516,7 @@ export class LibraryService extends EventEmitter {
       if (!clrTrim(item.Name ?? '')) item.Name = provider.name;
       if (isNew) {
         const loaded = await metadata.loadContext(item.Id, { draft: item });
-        try { onMetadataChanged(item, loaded.parentalRating(item)); }
+        try { onMetadataChanged(item, await loaded.parentalRating(item)); }
         finally { await loaded.dispose(); }
         await this.itemCreation.createItems([item], null, { creationIntent: 'library-save' });
       }
@@ -3407,7 +3560,7 @@ export class LibraryService extends EventEmitter {
         }
         const navigationRows = await loadPostgresNavigationRows(db);
         const navigation = await this.load(db, user, { baseRows: navigationRows, includeUserData: false });
-        const { topParentIds: _top, libraryTopParentIds: _libraries, ...visibility } = this.#postgresVisibility(navigation, user) ?? {};
+        const { topParentIds: _top, libraryTopParentIds: _libraries, ...visibility } = await this.#postgresVisibility(navigation, user) ?? {};
         const access = { userId: user?.Id, channelPolicy: user?.Policy,
           visibility: user ? { ...visibility, itemMode: 'standalone', scopeTopParentAccess: false } : undefined };
         await catalog.seal(query.IsFavorite != null && !user ? { ...query, IsFavorite: undefined } : query, access);
@@ -3429,7 +3582,7 @@ export class LibraryService extends EventEmitter {
             });
             if (internal) for (const item of items) Items.push(this.#rememberRecord(item));
             else { const options = dtoOptions({}, true); await this.#prefetchPostgresDtos(items, state, user, options);
-              for (const item of items) if (!user || visibleItem(item, user, state, { ...this.options, query: false, checkStandaloneParents: false })) Items.push(await projectItem(item, state, user, options, this.options)); }
+              for (const item of items) if (!user || await this.#postgresStandaloneVisible(db, item, user, state, { checkStandaloneParents: false })) Items.push(await projectItem(item, state, user, options, this.options)); }
           } finally { await state.dispose({ session: db }); }
         }
         return { Items, TotalRecordCount: selected.total, StartIndex: selected.startIndex };

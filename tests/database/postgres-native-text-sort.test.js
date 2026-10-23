@@ -14,6 +14,39 @@ const referenceBytes = await readFile(new URL('native.json', fixtureRoot));
 const reference = JSON.parse(referenceBytes);
 const provenance = JSON.parse(await readFile(new URL('provenance.json', fixtureRoot), 'utf8'));
 
+test('postgres: native path containment uses the correct Windows separator and a complete directory boundary', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async () => {
+  const schema = 'native_path_prefix_' + randomUUID().replaceAll('-', '').slice(0, 16);
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true, max: 1 });
+  const cases = [
+    [String.raw`c:\library\Movies`, String.raw`C:\Library`, true],
+    [String.raw`c:\library`, String.raw`C:\Library`, true],
+    [String.raw`C:\LibrarySibling\Movie`, String.raw`C:\Library`, false],
+    ['C:/Library/Movies', String.raw`C:\Library`, true],
+    [String.raw`C:\Library\Movies`, 'C:\\Library\\', true],
+    [String.raw`C:\Library\..\Other`, String.raw`C:\Library`, false],
+    [String.raw`C:\Library\Movie`, 'C:\\', true],
+    [String.raw`\\server\share\Library\Movie`, String.raw`\\SERVER\SHARE\library`, true],
+    ['/library/Movie', '/library', true],
+    ['/Library/Movie', '/library', false],
+    ['/librarySibling/Movie', '/library', false],
+    ['/library/Movie', '/', true],
+    ['/library/Movie', String.raw`C:\library`, false],
+    [null, '/library', null],
+    ['/library/Movie', null, null],
+  ];
+  try {
+    const sql = nativeTextSql(schema);
+    const result = await database.client.query({ text: `SELECT source.ordinal,${sql.pathWithin('source.value', 'source.parent')} AS matched
+      FROM unnest($1::bytea[],$2::bytea[]) WITH ORDINALITY source(value,parent,ordinal) ORDER BY source.ordinal`,
+    values: [0, 1].map(index => cases.map(row => row[index] == null ? null : nativeTextBytes(row[index]))) });
+    assert.deepEqual(result.rows.map(row => row.matched), cases.map(row => row[2]));
+  } finally {
+    await database.client.query(`DROP SCHEMA "${schema}" CASCADE;DROP SCHEMA "${schema}__mm" CASCADE`); await database.close();
+  }
+});
+
 test('native TEXT sort fixture binds actual getters and comparisons to its recorded inputs', async () => {
   const sha = bytes => createHash('sha256').update(bytes).digest('hex');
   assert.equal(sha(referenceBytes), provenance.nativeSha256);

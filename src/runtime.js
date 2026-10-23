@@ -354,6 +354,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     configuration, optionsStore: libraryOptionsStore }) : undefined;
   const libraryScanHost = topLevelValidation ? new LibraryScanHost({ store, library, itemCreation, metadataScanner,
     topLevelValidation, ignoreRule }) : undefined;
+  library.rootHost = libraryScanHost;
   if (libraryScanHost) rollback.push(() => libraryScanHost.close());
   const musicGenresPostScanTask = itemCreation && metadataScanner
     ? new MusicGenresPostScanTask({ store, library, metadataScanner, logger }) : undefined;

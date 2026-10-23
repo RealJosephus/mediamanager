@@ -10,6 +10,7 @@ import { buildPostgresCollectionRootQuery, buildPostgresCollectionMoviePageQuery
   buildPostgresCollectionBoxSetQuery, createPostgresCollectionMaintenanceSource } from '../../src/library/postgres-collection-maintenance.js';
 import { guid } from '../../src/library/records.js';
 import { nativeTextBytes, decodeNativeTextBytes } from '../../src/database/native-text.js';
+import { recordedInputPath } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 const text = value => value == null ? null : decodeNativeTextBytes(value);
 const nativeId = value => guid(text(value));
@@ -55,7 +56,7 @@ test('Collection post-scan seals the actual task and its controlled dependency b
     ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.name, fixture))), source.sha256, source.name);
   if (provenance.recorder) assert.equal(hash(await readFile(provenance.recorder.filename)), provenance.recorder.sha256);
   for (const source of provenance.sources) {
-    assert.equal(hash(await readFile(path.join('D:/jellyfin', source.path))), source.sha256, source.path);
+    assert.equal(hash(await readFile(recordedInputPath(path.join('D:/jellyfin', source.path), [source.sha256]))), source.sha256, source.path);
     assert.equal(source.designatedSourceMatchesOracleBuildCopy, true);
   }
 });

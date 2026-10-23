@@ -8,10 +8,8 @@ import { ItemUpdateType } from '../metadata/save-manager.js';
 import { defaultLibraryOptions } from './options.js';
 import { nativeDateFromUnixNanoseconds, nativeGuid } from '../users/native.js';
 import { libraryError, mapRecord } from './records.js';
-import { nativeItemDescriptor, newNativeItemEntity } from './native-item-entity.js';
+import { newNativeItemEntity } from './native-item-entity.js';
 import { updateLiveItemRepository } from './live-item-repository.js';
-import { nativeContainsSubPath } from './native-path.js';
-import { nativeFileSystemPathsEqual } from './root-folder-file-data.js';
 import { queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { quoteIdentifier } from '../database/model.js';
 
@@ -44,7 +42,7 @@ export class CollectionService extends EventEmitter {
     linkedChildren, updateRepository, findByPath, onError = () => {} } = {}) {
     super();
     if (!store || !library || !itemCreation || typeof loadContext !== 'function' || typeof loadContext.withContext !== 'function' || !updates || !metadata || !host
-      || typeof host.getCachedChildrenPage !== 'function'
+      || typeof host.withCachedChildren !== 'function'
       || typeof libraryConfiguration?.admitOperation !== 'function'
       || typeof itemCreation.retainItem !== 'function' || typeof itemCreation.withItem !== 'function'
       || ['createFromSession', 'plan', 'recordResolution', 'retain', 'page', 'release', 'flushReleases']
@@ -119,13 +117,7 @@ export class CollectionService extends EventEmitter {
 
   async #findFolder() {
     const root = await this.host.getAggregateFolder();
-    for (let startIndex = 0; ; startIndex += 128) {
-      const { items: children, hasMore } = await this.host.getCachedChildrenPage(root, { startIndex, limit: 128 });
-      const existing = children.find(item => nativeItemDescriptor(item.NativeType).family === 'folder' && (nativeFileSystemPathsEqual(this.collectionsPath, item.Path)
-        || nativeContainsSubPath(this.collectionsPath, item.Path)));
-      if (existing) return await this.itemCreation.getItemById(existing.Id) ?? existing;
-      if (!hasMore) return null;
-    }
+    return this.host.withCachedChildren(root, children => children.firstContainingPath(this.collectionsPath));
   }
 
   async #collectionsFolder(createIfNeeded, admission) {

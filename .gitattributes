@@ -41,6 +41,10 @@ tests/consumer-contracts/fixtures/playlist-layouts/native.json whitespace=cr-at-
 tests/metadata/fixtures/reader-layouts/local-xml-provider-native.json whitespace=cr-at-eol
 tests/**/fixtures/**/*.cs -text
 tests/**/fixtures/**/*.csproj -text
+# Content-addressed evidence must retain its original bytes in every checkout.
+/tests/fixtures/recorded-native/objects/** -text
+# Historical provenance also binds the original recorder bytes.
+/tools/compat/record-collection-post-scan.mjs -text
 /tests/sessions/fixtures/instant-mix/Oracle.csproj -text
 /tests/sessions/fixtures/instant-mix/native.json whitespace=cr-at-eol
 /tests/library/fixtures/music-genre-creation/Oracle.csproj -text

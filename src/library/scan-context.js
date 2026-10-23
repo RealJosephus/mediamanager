@@ -2,7 +2,7 @@ import { defaultLibraryOptions } from './options.js';
 import { idKey } from './records.js';
 import { nativeContainsSubPath, nativeContainingFolderPath } from './native-path.js';
 import { nativeFileSystemPathsEqual } from './root-folder-file-data.js';
-import { parentChainForItem, userRootFolders } from './collection-membership.js';
+import { parentChainForItem } from './collection-membership.js';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { requireNativeList } from './item-relations.js';
 import { clrTrim } from '../metadata/whitespace.js';
@@ -68,7 +68,7 @@ function optionsFor(source, collectionId) {
   return found && typeof found === 'object' && !Array.isArray(found) ? found : defaultLibraryOptions();
 }
 
-function overridesFor(configuration) {
+export function overridesFor(configuration) {
   const entries = configuration.ContentTypes === undefined ? [] : configuration.ContentTypes;
   if (entries === null) return null;
   return immutable(entries.map(entry => entry == null ? null : {
@@ -143,7 +143,7 @@ export function inheritedItemType(item, parents, allFolders, overrides) {
 export function buildScanCollectionContext({ root, collectionFolders = [], libraryOptions = {}, configuration = {}, state } = {}) {
   if (!root || typeof root.Path !== 'string' || !root.Path) throw new TypeError('A physical scan root is required for resolver context.');
   const parents = state ? parentChainForItem(root, state) : [];
-  const allFolders = state ? userRootFolders(state) : collectionFolders;
+  const allFolders = collectionFolders;
   const entries = collectionFolders.map(collection => immutable({
     id: collection.Id,
     nativeType: typeOf(collection),

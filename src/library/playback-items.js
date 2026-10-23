@@ -292,7 +292,7 @@ async function playbackVisibility(database, library, user, planning) {
     allowedTags: policy.AllowedTags ?? [],
     maxRating,
     maxSubRating,
-    ratingContext: postgresParentalRatingContext(state, library.options),
+    ratingContext: postgresParentalRatingContext(library.options, await library.rootFolderPlan(state)),
     blockUnratedTypes: policy.BlockUnratedItems ?? [],
   };
 }

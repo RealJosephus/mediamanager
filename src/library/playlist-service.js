@@ -6,7 +6,6 @@ import { nativeDate, nativeDateFromUnixNanoseconds, nativeGuid, wireGuid } from 
 import { dtoOptions as selectDtoOptions, projectItem, sortName } from './dto.js';
 import { parseQuery } from './query.js';
 import { cleanValue, idKey, libraryError, mapRecord, nonemptyId, sameId, unsupported } from './records.js';
-import { visibleItem } from './permissions.js';
 import { serializeLocalXml } from '../metadata/local-xml.js';
 import { buildPostgresPlaylistVisibility, queryPostgresDeletedUserPlaylistBatch,
   queryPostgresPlaylistAccess, queryPostgresPlaylistAccessBatch,
@@ -132,18 +131,18 @@ export class PlaylistService {
     return this.#own(await this.library.load(db,user,{includeUserData,baseRows,includeManualLinks:false,includeLinkGraph:false}),value=>value.dispose());
   }
 
-  async #expand(itemIds, user, state, { deferRelatedNameAccess = false } = {}) {
+  async #expand(itemIds, user, { deferRelatedNameAccess = false } = {}) {
     const children=await this.#cohort();let ordinal=0n,mediaType=null;
     const links=await this.store.run(async session=>{const writer=await this.linkedChildren.createWriter({session});
     const add=async item=>{await writer.append({ItemId:item.Id,Type:0});await children.capture(item,{ordinal:++ordinal});if(mediaType==null&&item.MediaType&&item.MediaType!=='Unknown')mediaType=item.MediaType;};
     try{
-    for (const value of itemIds) {
-      const localState=await this.library.store.run(async db=>this.library.load(db,user,{includeUserData:false,includeLinkGraph:false,baseRows:await loadPostgresPageGraph(db,await loadPostgresRowsByIds(db,[value]),await loadPostgresNavigationRows(db),{includeManualLinks:false})}));
+    for (const value of itemIds) await this.library.store.run(async db => {
+      const localState=await this.library.load(db,user,{includeUserData:false,includeLinkGraph:false,baseRows:await loadPostgresPageGraph(db,await loadPostgresRowsByIds(db,[value]),await loadPostgresNavigationRows(db),{includeManualLinks:false})});
       try{const item = localState.byId.get(idKey(value));
       const deferredNameAccess = deferRelatedNameAccess && ['MusicArtist', 'MusicGenre'].includes(item?.Type);
-      if (!item || user && !visibleItem(item, user, localState, {
-        ...this.library.options, query: false, skipRelatedNameCheck: deferredNameAccess,
-      })) continue;
+      if (!item || user && !await this.library.isItemVisible(item, user, localState, {
+        skipRelatedNameCheck: deferredNameAccess,
+      })) return;
       let query;
       if (item.Type === 'MusicArtist' || item.Type === 'MusicGenre') {
         query = { Recursive: true, IncludeItemTypes: ['Audio'],
@@ -154,8 +153,8 @@ export class PlaylistService {
           MediaTypes: ['Audio', 'Video'], EnableTotalRecordCount: false };
       } else if (directlyPlayableTypes.has(item.Type)) {
         await add(item);
-        continue;
-      } else if (knownNonPlayableTypes.has(item.Type)) continue;
+        return;
+      } else if (knownNonPlayableTypes.has(item.Type)) return;
       else unsupported(`Playlist expansion for ${item.NativeType ?? item.Type} is not implemented.`);
       for(let start=0;;){const page=await this.library.getItemList({...query,StartIndex:start,Limit:128},{user});
       for (const child of page) {
@@ -165,14 +164,14 @@ export class PlaylistService {
         }
       }
       if(page.length<128)break;start+=page.length;}
-      }finally{await localState.dispose();}
-    }
+      }finally{await localState.dispose({session:db});}
+    });
     return writer.finish();}catch(error){await writer.abort();throw error;}});
     return {links:this.#ownLinks(links),children,count:ordinal,mediaType};
   }
 
-  #visible(playlist, user, state) {
-    return Boolean(user && visibleItem(playlist, user, state, { ...this.library.options, query: false }));
+  async #visible(playlist, user, state) {
+    return Boolean(user && await this.library.isItemVisible(playlist, user, state));
   }
 
   #canEdit(playlist, user) {
@@ -183,7 +182,7 @@ export class PlaylistService {
   async #playlist(db, id, user, { visible = true, includeUserData = false, seedIds = [] } = {}) {
     const state = await this.#state(db, user, { includeUserData, ids: [id] });
     const playlist = state.byId.get(idKey(id));
-    if (!playlist || playlist.Type !== 'Playlist' || visible && !this.#visible(playlist, user, state)) {
+    if (!playlist || playlist.Type !== 'Playlist' || visible && !await this.#visible(playlist, user, state)) {
       throw libraryError(404, 'Playlist not found');
     }
     if (!Array.isArray(playlist.Shares)) throw libraryError(500, 'Invalid Playlist.Shares.');
@@ -213,8 +212,8 @@ export class PlaylistService {
     if (!nativeContainsSubPath(shell.playlist.Path, this.dataPath)) {
       const graph = await loadPostgresPageGraph(db, await loadPostgresRowsByIds(db, [id]), navigationRows);
       const state = await this.library.load(db, user, { baseRows: graph });
-      try{if (!visibleItem(shell.playlist, user, state, {
-        ...this.library.options, query: false, playlistVisibilityChecked: true,
+      try{if (!await this.library.isItemVisible(shell.playlist, user, state, {
+        playlistVisibilityChecked: true,
       })) throw libraryError(404, 'Playlist not found');}finally{await state.dispose();}
     }
     if (!await queryPostgresPlaylistAccess(db, shell.playlist, {
@@ -426,7 +425,9 @@ export class PlaylistService {
       let restore = () => this.fileSystem.rm(candidate, { recursive: true, force: true });
       let committed;
       try {
-        committed = await this.store.transaction(async db => {
+        // Expansion can resolve root navigation and linked children. Keep it
+        // outside the commit transaction under this operation's writer lock.
+        const { state, parent, playable } = await this.store.run(async db => {
           const parentId = nativeGuid(getNewItemId(this.playlistsPath, playlistsFolderNativeType, {
             programDataPath: this.programDataPath,
             enableCaseSensitiveItemIds: this.configuration.EnableCaseSensitiveItemIds
@@ -448,12 +449,15 @@ export class PlaylistService {
             }
             }finally{await selectedState.dispose();}
           }
-          const playable = await this.#expand(itemIds, user, state,
+          const playable = await this.#expand(itemIds, user,
             { deferRelatedNameAccess: true });
           if ((mediaType == null || mediaType === 'Unknown') && playable.count) {
             mediaType = playable.mediaType ?? mediaType;
           }
           if (mediaType == null || mediaType === 'Unknown') mediaType = 'Audio';
+          return { state, parent, playable };
+        });
+        committed = await this.store.transaction(async db => {
           const link = await this.fileSystem.lstat(candidate, { bigint: true });
           if (!link.isDirectory() || link.isSymbolicLink()) throw libraryError(409, 'The playlist path is not a safe directory.');
           const resolved = await this.fileSystem.realpath(candidate);
@@ -548,11 +552,11 @@ export class PlaylistService {
         }
         await this.#edit(id, user, metadata, { target });
       } else {
-        await this.#edit(id, user, async (_playlist, state) => {
-          if (requestedIds == null) return metadata;
-          const expanded = await this.#expand(requestedIds, user, state, { deferRelatedNameAccess: true });
-          return { ...metadata, links:expanded.links,mediaAdded:expanded.count>0n };
-        }, { signal, seedIds: requestedIds ?? [] });
+        const expanded = requestedIds == null ? null
+          : await this.#expand(requestedIds, user, { deferRelatedNameAccess: true });
+        await this.#edit(id, user, expanded
+          ? { ...metadata, links:expanded.links,mediaAdded:expanded.count>0n } : metadata,
+          { signal, seedIds: requestedIds ?? [] });
       }
     });
   }
@@ -643,12 +647,15 @@ export class PlaylistService {
   }
 
   async #add(id, itemIds, { user, position, signal, target } = {}) {
-    const committed = await this.store.transaction(async db => {
-      const nativeItemIds = itemIds.map(nativeGuid);
+    const nativeItemIds = itemIds.map(nativeGuid);
+    const { playlist, state, additions } = await this.store.run(async db => {
       const { playlist, state } = await this.#playlist(db, nativeGuid(id), user, { seedIds: nativeItemIds });
       if (!this.#canEdit(playlist, user)) throw libraryError(403, 'Forbidden');
-      const additions = await this.#expand(nativeItemIds, user, state, { deferRelatedNameAccess: true });
-      if (!additions.count) return null;
+      const additions = await this.#expand(nativeItemIds, user, { deferRelatedNameAccess: true });
+      return { playlist, state, additions };
+    });
+    if (!additions.count) return;
+    const committed = await this.store.transaction(async db => {
       if (target && playlist.Path !== target.plan.identityPath) throw libraryError(409, 'The playlist path changed before saving.');
       const destination = target ?? await this.#writeTarget(playlist);
       const currentLinks=await this.#currentLinks(db,playlist.Id);

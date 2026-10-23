@@ -83,7 +83,7 @@ export class LiveTvGuideService {
     const programs = await service.getPrograms(channel.ExternalId, start, end, { signal });
     const loaded = await this.loadContext(channel.Id, { draft: channel });
     try {
-      await withGuideProgramBatch({ ...this, channel, metadataChanged: item => onMetadataChanged(item, loaded.parentalRating(item)), now: this.now }, async batch => {
+      await withGuideProgramBatch({ ...this, channel, metadataChanged: async item => onMetadataChanged(item, await loaded.parentalRating(item)), now: this.now }, async batch => {
         try {
           for (const info of programs) await batch.consume(info);
           batch.seal();

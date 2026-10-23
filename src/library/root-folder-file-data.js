@@ -23,10 +23,13 @@ export function nativeDirectoryFullName(value) {
   return pathApi(value).resolve(value);
 }
 export function nativeFileSystemPathsEqual(left, right) {
-  if (left == null || right == null || clrTrim(left) === '' || clrTrim(right) === '') return false;
-  left = trimEndingSeparator(left); right = trimEndingSeparator(right);
-  return pathApi(left) === path.win32 && pathApi(right) === path.win32
-    ? ordinalIgnoreCaseKey(left) === ordinalIgnoreCaseKey(right) : left === right;
+  const key = nativeFileSystemPathKey(left);
+  return key !== null && key === nativeFileSystemPathKey(right);
+}
+export function nativeFileSystemPathKey(value) {
+  if (value == null || clrTrim(value) === '') return null;
+  value = trimEndingSeparator(value);
+  return pathApi(value) === path.win32 ? 'windows:' + ordinalIgnoreCaseKey(value) : 'posix:' + value;
 }
 
 export class RootFolderFileData {

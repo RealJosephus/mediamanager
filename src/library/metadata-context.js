@@ -13,7 +13,7 @@ import path from 'node:path';
 import { nativePersonIdentity } from './identity.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
 import { substituteNfoImagePath } from './path-substitution.js';
-import { itemParentalRating } from './parental-rating.js';
+import { itemParentalRating, comparisonItemRating, preferredMetadataCountryBeforeFolders } from './parental-rating.js';
 import { resolveSeries } from './series-reference.js';
 import { createMetadataChildren } from './metadata-children.js';
 import { nativeContainingFolderPath, nativeFileName, nativeFileNameWithoutExtension, nativeContainsSubPath,
@@ -22,7 +22,7 @@ import { nativeItemDescriptor, acquireNativeItemLinkOwner } from './native-item-
 import { attachMetadataSortCache, metadataSortName } from '../metadata/sort-cache.js';
 import { probeFileChanged } from '../storage/probe-lifecycle.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
-import { computeBoxSetLibraryFolderIds } from './collection-membership.js';
+import { computeBoxSetLibraryFolderIds, parentChainForItem } from './collection-membership.js';
 import { getNewItemId } from '../core/identity.js';
 import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
@@ -35,7 +35,8 @@ import { clrTrim } from '../metadata/whitespace.js';
 import { supportsOwnedItems, searchesContainingFolderForExtras } from './owned-items.js';
 import { resolveVideoVersionLinks } from './video-version-relations.js';
 import { VideoVersionDiscovery } from './video-version-discovery.js';
-import { buildScanCollectionContext } from './scan-context.js';
+import { rootCollectionType } from './root-collection-type.js';
+import { configuredItemType, overridesFor } from './scan-context.js';
 import { OwnedExtraDiscovery } from './owned-extra-discovery.js';
 import { detectUdfDiscType } from '../storage/udf-disc-type.js';
 import { stateOwnedFiles, stateIgnoreFileAccess } from './state-owned-files.js';
@@ -422,7 +423,8 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       } catch { return false; }
     };
     Object.assign(context, { findMetadataItemByPath, playlistLibraryRoots, playlistFileExists });
-    const physicalFolders = (enableCache = false) => physicalCollectionFolders(item, state, { enableCache, findByPath: findMetadataItemByPath });
+    const physicalFolders = (enableCache = false) => store.run(session =>
+      physicalCollectionFolders(item, state, { session, enableCache, findByPath: findMetadataItemByPath }));
     const rootFolderResolveArgs = setLocations => rootFileData.resolveArgs(item, setLocations);
     const requiresRefresh = async () => {
       const rebased = rebasedMetadataPath(item, { metadataPath });
@@ -481,13 +483,19 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
         enableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds }),
       localizedText: key => library.options.localization?.text(key) ?? ({ NameSeasonUnknown: 'Season Unknown', NameSeasonNumber: 'Season {0}' }[key] ?? key),
       libraryRuntimeOptions: library.options,
-      parentalRating: (value, drafts) => {
-        if (!drafts) return itemParentalRating(value, state, library.options);
+      parentalRating: async (value, drafts) => {
         // Controller child saves observe the parent entity's edits made so far,
         // including fields that have not reached the parent's repository save.
-        const byId = new Map(state.byId);
-        for (const draft of drafts.values()) byId.set(idKey(draft.Id), draft);
-        return itemParentalRating(value, { ...state, byId, items: state.items.map(entry => byId.get(idKey(entry.Id))) }, library.options);
+        let ratingState = state;
+        if (drafts) {
+          const byId = new Map(state.byId);
+          for (const draft of drafts.values()) byId.set(idKey(draft.Id), draft);
+          ratingState = { ...state, byId, items: state.items.map(entry => byId.get(idKey(entry.Id))) };
+        }
+        if (comparisonItemRating(value, ratingState) == null) return null;
+        const earlier = preferredMetadataCountryBeforeFolders(value, ratingState);
+        return itemParentalRating(value, ratingState, library.options,
+          earlier.found ? [] : await store.run(session => library.getCollectionFolders(value, { ...ratingState, db: session })));
       },
       personIdentity, reloadMetadataContext: loadContext,
       imageAssets: context.imageAssets,
@@ -499,8 +507,22 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       ownedFileExists: (identityPath, nativeType) => exists(access({ Path: identityPath,
         Id: getNewItemId(identityPath, nativeType, { programDataPath: library.options.programDataPath,
           enableCaseSensitiveItemIds: configuration.EnableCaseSensitiveItemIds }) })),
-      getVideoVersionCollectionType: () => parents[0]?.Path ? buildScanCollectionContext({ root: parents[0], state,
-        collectionFolders, libraryOptions: library.options.libraryOptions, configuration }).collectionType : null,
+      getVideoVersionCollectionType: () => parents[0] ? rootCollectionType(library, parents[0], state) : null,
+      getOwnedVideoCollectionType: async (value = loaded.item) => {
+        const configured = (current, inherit = false) => configuredItemType(current, overridesFor(configuration), inherit);
+        const direct = configured(value);
+        if (direct !== null) return direct;
+        const ancestorOverride = configured(value, true);
+        if (ancestorOverride !== null) return ancestorOverride;
+        const rootType = await rootCollectionType(library, value, state);
+        if (rootType !== null) return rootType;
+        let inherited = null;
+        for (const parent of parentChainForItem(value, state)) {
+          const parentType = configured(parent);
+          if (parentType !== null) inherited = parentType;
+        }
+        return inherited;
+      },
       snapshot: (await db.rows('BaseItems', { where: { Id: item.Id } }))[0] };
     // GetUserRootFolder registers a transient singleton without saving it.
     // Its first actual metadata save can insert the canonical root; merely

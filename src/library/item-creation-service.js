@@ -1,7 +1,7 @@
 import { availableParallelism } from 'node:os';
 import { idKey, VIDEO_TYPES, MIN_DATE } from './records.js';
-import { parentChainForItem, userRootFolders } from './collection-membership.js';
-import { topFolderContentType } from './scan-context.js';
+import { parentChainForItem } from './collection-membership.js';
+import { rootCollectionType } from './root-collection-type.js';
 import { invalidateVideoParent } from './video-version-discovery.js';
 import { saveNativeItems } from '../metadata/persistence.js';
 import { itemTopParentId } from './item-save-tuple.js';
@@ -143,7 +143,7 @@ export class ItemCreationService {
       const graphRows = await loadPostgresPageGraph(db, requestedRows, navigationRows);
       state = await this.library.load(db, null, { includeUserData: false, includeLinkGraph: false, baseRows: graphRows });
       const parentFolder = parent?.IsFolder ? parent : null;
-      const parentCollectionType = parent ? topFolderContentType(parent, parentChainForItem(parent, state), userRootFolders(state)) : null;
+      const parentCollectionType = parent ? await rootCollectionType(this.library, parent, state) : null;
       for (const item of items) {
         if (!VIDEO_TYPES.has(item.Type)) continue;
         if (item.LocalAlternateVersions === null) throw Object.assign(new TypeError('A native video version array cannot be null.'),

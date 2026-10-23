@@ -11,11 +11,9 @@ import { projectExternalUrls } from './external-urls.js';
 import { readItemImageRows } from './image-order.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { transliterateSortName } from './transliteration.js';
-import { visibleItem, visiblePerson } from './permissions.js';
 import { mediaVersions, mediaSourceCount, versionChildren, commonVersionPrefix, isFileSource, sourceFileName, mediaSourceName, sortMediaSources } from './media-versions.js';
 import { dtoId, extraTypeCode, idKey, mapRecord, sameId, nonemptyId, NAME_TYPES, VIDEO_TYPES, dateText, dateTicks, MIN_DATE, cleanValue, repositoryCleanName, repositoryValue, unsupported } from './records.js';
 import { collectionType } from './user-view-query.js';
-import { collectionFoldersForItem } from './collection-membership.js';
 import { canDeleteItem, hasFileProtocol } from './delete-permission.js';
 import { substitutePath } from './path-substitution.js';
 import { loadPostgresRowsByIds } from './postgres-library-query.js';
@@ -340,7 +338,8 @@ async function projectPeople(item, state, user, options) {
     checked.add(key);
     // The pinned GetPerson implementation only returns an existing path-derived ID.
     const entity = state.byId.get(byNameId(state, options, 'Person', credit.Name));
-    if (entity?.Type !== 'Person' || !visiblePerson(entity, user, state, options)) continue;
+    if (entity?.Type !== 'Person' || user && !await state.library.isItemVisible(entity, user, state,
+      { checkStandaloneParents: false, skipAllowedTags: true, skipRelatedNameCheck: true })) continue;
     const entityKey = ordinalIgnoreCaseKey(entity.Name);
     if (!entities.has(entityKey)) entities.set(entityKey, entity);
   }
@@ -453,7 +452,7 @@ export async function mediaSources(item, state, user, options, enablePathSubstit
   const prefix = names.length > 1 ? commonVersionPrefix(names) : null;
   let sources = [];
   for (const version of versions) {
-    if (user && !sameId(version.item.Id, item.Id) && !visibleItem(version.item, user, state, { ...options, query: false })) continue;
+    if (user && !sameId(version.item.Id, item.Id) && !await state.library.isItemVisible(version.item, user, state)) continue;
     sources.push(await mediaSource(version.item, item, version.type, prefix, state, user, options, enablePathSubstitution));
   }
   sortMediaSources(sources, dtoId(item.Id));
@@ -644,8 +643,13 @@ export async function projectItem(item, state, user, selected, options) {
     Object.assign(dto, { VideoType: item.VideoType ?? 'VideoFile', Video3DFormat: item.Video3DFormat, IsoType: item.IsoType, ExtraType: extraType(item), AspectRatio: item.AspectRatio });
     if (item.AdditionalParts?.length) dto.PartCount = item.AdditionalParts.length + 1;
     if (has('MediaSourceCount')) {
-      const count = !user || !nonemptyId(item.PrimaryVersionId) && !item.LinkedAlternateVersions?.length && !versionChildren(item, state, 2).length
-        ? mediaSourceCount(item, state) : mediaVersions(item, state).filter(entry => sameId(entry.item.Id, item.Id) || visibleItem(entry.item, user, state, { ...options, query: false })).length;
+      let count;
+      if (!user || !nonemptyId(item.PrimaryVersionId) && !item.LinkedAlternateVersions?.length && !versionChildren(item, state, 2).length) count = mediaSourceCount(item, state);
+      else {
+        count = 0;
+        for (const entry of mediaVersions(item, state)) if (sameId(entry.item.Id, item.Id)
+          || await state.library.isItemVisible(entry.item, user, state)) count++;
+      }
       if (count !== 1) dto.MediaSourceCount = count;
     }
     if (has('Trickplay')) {
@@ -774,7 +778,7 @@ export async function projectItem(item, state, user, selected, options) {
   // Native evaluates AttachBasicFields (including ChannelName) before its
   // virtual CanDelete and user authorization callbacks.
   if (has('CanDelete')) dto.CanDelete = await canDeleteItem(item, user, {
-    collectionFolders: () => collectionFoldersForItem(item, state), isActiveRecording: options.isActiveRecording, precomputedFolders: selected.precomputedDeleteFolders !== false,
+    collectionFolders: options.collectionFolders ?? (() => state.library.getCollectionFolders(item, state)), isActiveRecording: options.isActiveRecording, precomputedFolders: selected.precomputedDeleteFolders !== false,
     channelCanDelete: state.channelCanDelete,
   });
   withNativeFloats(dto, ['CriticRating', 'CommunityRating', 'NormalizationGain', 'AlbumNormalizationGain']);

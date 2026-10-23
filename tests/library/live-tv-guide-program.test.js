@@ -147,7 +147,7 @@ test('guide programs match the actual private native materializer, live mutation
       let item = existing, isNew = null, isUpdated = null, error = null, ratingLookups = 0;
       const before = Date.now();
       try {
-        const value = materializeGuideProgram(info, { existing, channel, metadataChanged(item) {
+        const value = await materializeGuideProgram(info, { existing, channel, metadataChanged(item) {
           const rating = item.CustomRating || item.OfficialRating;
           if (rating) ratingLookups++;
           return onMetadataChanged(item, rating ? { score: 12, subScore: 3 } : null);

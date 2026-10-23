@@ -290,7 +290,7 @@ export class SimilarItemsManager {
       }
       for (const item of items) {
         if (excludeIds.has(context.idKey(item.Id))) continue;
-        const presentationKey = context.presentationKey(item);
+        const presentationKey = await context.presentationKey(item);
         if (excludeKeys.has(context.presentationKeyKey(presentationKey))) continue;
         for (const name of providerNames.values()) {
           const id = providerId(item, name);
@@ -328,7 +328,7 @@ export class SimilarItemsManager {
     const orderedProviders = this.matchingProviders(itemType, typeOptions, additionalProviders);
     const allResults = [];
     const excludeIds = new Set([idKey(item.Id)]);
-    const excludeKeys = new Set([presentationKeyKey(presentationKey(item))]);
+    const excludeKeys = new Set([presentationKeyKey(await presentationKey(item))]);
 
     for (const [providerOrderIndex, provider] of orderedProviders.entries()) {
       if (allResults.length >= requestedLimit || signal?.aborted) break;
@@ -338,7 +338,7 @@ export class SimilarItemsManager {
             excludeItemIds: [...excludeIds], excludeArtistIds };
           const items = await provider.getItems(item, query, signal);
           for (const [position, result] of items.entries()) {
-            const id = idKey(result.Id), key = presentationKeyKey(presentationKey(result));
+            const id = idKey(result.Id), key = presentationKeyKey(await presentationKey(result));
             const newId = !excludeIds.has(id), newKey = !excludeKeys.has(key);
             excludeIds.add(id); excludeKeys.add(key);
             if (newId && newKey) allResults.push({ item: result,

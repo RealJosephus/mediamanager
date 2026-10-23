@@ -38,7 +38,7 @@ function updateImage(item, info, type, urlName) {
 
 /** GuideManager.GetProgram consumes one initialized ProgramInfo. Persistence
  * and bounded SQL ownership belong to the caller, not this field projection. */
-export function materializeGuideProgram(info, { existing = null, channel, now = () => new Date(), metadataChanged } = {}) {
+export async function materializeGuideProgram(info, { existing = null, channel, now = () => new Date(), metadataChanged } = {}) {
   if (!channel || typeof metadataChanged !== 'function') {
     throw new TypeError('Guide program materialization requires its channel and metadata change callback.');
   }
@@ -102,6 +102,6 @@ export function materializeGuideProgram(info, { existing = null, channel, now = 
     item.ProviderIds ??= {};
     setProviderId(item.ProviderIds, 'ProgramEtag', clrTrim(info.Etag)); updated = true;
   }
-  if (isNew || updated) metadataChanged(item);
+  if (isNew || updated) await metadataChanged(item);
   return { item, isNew, isUpdated: !isNew && updated };
 }

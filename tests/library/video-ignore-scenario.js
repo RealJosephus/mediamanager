@@ -12,7 +12,7 @@ export async function runVideoIgnoreScenario(t, dialect, sample) {
   let resolved = null, exception = null;
   try {
     if (sample.operation === 'resolve') resolved = await loaded.videoVersionDiscovery.resolveAlternateVersion(loaded, target, typeName(sample.expectedType),
-      { reportRemoved: (item, parent) => fixture.host.updates.reportItemRemoved(item, parent) });
+      await loaded.getVideoVersionCollectionType(), { reportRemoved: (item, parent) => fixture.host.updates.reportItemRemoved(item, parent) });
     else await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport, {
       signal: cancellation.signal,
       saverOperation: async () => { value.activate(); calls.push({ action: 'saver', id: guid(ids.owner), reason: 2 }); return []; },

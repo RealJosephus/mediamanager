@@ -84,7 +84,7 @@ for (const dialect of ['postgres']) for (const sample of input) {
     let resolved = null, exception = null;
     try {
       if (sample.operation === 'resolve') resolved = await loaded.videoVersionDiscovery.resolveAlternateVersion(loaded, target, typeName(sample.expectedType),
-        { reportRemoved: (item, parent) => fixture.host.updates.reportItemRemoved(item, parent) });
+        await loaded.getVideoVersionCollectionType(), { reportRemoved: (item, parent) => fixture.host.updates.reportItemRemoved(item, parent) });
       else await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport, {
         signal: cancellation.signal,
         saverOperation: async () => { value.activate(); calls.push({ action: 'saver', id: guid(ids.owner), reason: 2 }); return []; },
@@ -206,37 +206,61 @@ for (const dialect of ['postgres']) {
     assert.equal((await fixture.database.rows('MediaStreamInfos', { where: { ItemId: ids.owner } })).length, 1);
     assert.deepEqual(loaded.versionLinks.map(link => nativeGuid(link.ChildId)), [alternateId]);
   });
-  databaseTest('the production single-file resolver inherits configured movie context from the real parent path', async t => {
+  databaseTest('the production single-file resolver inherits the current root collection type from the real parent path', async t => {
     const { fixture, loaded, target } = await setupVersion(t, dialect, 'update-missing-movie-retains-movie-initial-values');
-    fixture.configuration.ContentTypes = [{ Name: path.dirname(target), Value: 'movies' }];
-    assert.equal(loaded.getVideoVersionCollectionType(), 'movies');
-    await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport);
-    const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: nativeGuid(loaded.getNewItemId(target, movieType)) } });
-    assert.equal(alternate.Name, 'Film'); assert.equal(alternate.ProductionYear, 2025);
-    assert.equal(alternate.ParentId, ids.parent); assert.equal(alternate.Size, 16n);
+    const template = (await fixture.database.rows('BaseItems', { where: { Id: ids.parent } }))[0];
+    const userRoot = fixture.library.options.userRoot;
+    await fixture.database.insert('BaseItems', { ...template, Id: userRoot.Id,
+      Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Name: 'User root', Path: userRoot.Path, Data: '{}' });
+    await fixture.database.insert('BaseItems', { ...template, Id: '98C00000-0000-0000-0000-000000000003',
+      Type: 'MediaBrowser.Controller.Entities.CollectionFolder', ParentId: userRoot.Id, Name: 'Movies',
+      Path: path.join(userRoot.Path, 'Movies'),
+      Data: JSON.stringify({ CollectionType: 'movies', PhysicalLocationsList: [path.dirname(target)] }) });
+    await loaded.dispose();
+    const current = await fixture.loadContext(ids.owner);
+    try {
+      assert.equal(await current.getVideoVersionCollectionType(), 'movies');
+      await fixture.host.updates.updateRepository(current, { Item: current.item, Images: null }, ItemUpdateType.MetadataImport);
+      const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: nativeGuid(current.getNewItemId(target, movieType)) } });
+      assert.equal(alternate.Name, 'Film'); assert.equal(alternate.ProductionYear, 2025);
+      assert.equal(alternate.ParentId, ids.parent); assert.equal(alternate.Size, 16n);
+    } finally { await current.dispose(); }
   });
   databaseTest('metadata version discovery reads UDF and preserves disc type only for the resolved native type', async t => {
     const { fixture, loaded, target } = await setupVersion(t, dialect, 'update-missing-movie-retains-movie-initial-values');
-    const imagePath = path.join(path.dirname(target), 'Image Version.img');
-    await fixture.adapter.write('/discovery/Image Version.img', makeUdfImage({ discType: 'BluRay', metadata: true, extended: true }));
-    fixture.configuration.ContentTypes = [{ Name: path.dirname(target), Value: 'movies' }];
-    loaded.item.LocalAlternateVersions = [imagePath];
-    await fixture.host.updates.updateRepository(loaded, { Item: loaded.item, Images: null }, ItemUpdateType.MetadataImport);
-    const alternateId = nativeGuid(loaded.getNewItemId(imagePath, movieType));
-    const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: alternateId } });
-    assert.equal(alternate.Type, movieType); assert.equal(alternate.Path, imagePath);
-    assert.equal(alternate.OwnerId, ids.owner); assert.equal(alternate.PrimaryVersionId, ids.owner);
-    assert.equal(alternate.ParentId, ids.parent);
-    assert.equal(JSON.parse(alternate.Data).VideoType, 'Iso');
-    assert.equal(JSON.parse(alternate.Data).IsoType, 'BluRay');
-    fixture.library.itemCreation.unregisterItem(alternateId);
-    const cold = await fixture.loadContext(alternateId);
-    assert.equal(cold.item.VideoType, 'Iso'); assert.equal(cold.item.IsoType, 'BluRay');
-    await cold.dispose();
-    const part = await loaded.videoVersionDiscovery.resolveAlternateVersion(loaded, imagePath, videoType);
-    assert.equal(part.NativeType, videoType); assert.equal(part.Path, imagePath);
-    assert.equal(part.VideoType, 'Iso');
-    assert.equal(part.IsoType, null, 'native subtype-to-Video coercion copies five fields and excludes IsoType');
+    const template = (await fixture.database.rows('BaseItems', { where: { Id: ids.parent } }))[0];
+    const userRoot = fixture.library.options.userRoot;
+    await fixture.database.insert('BaseItems', { ...template, Id: userRoot.Id,
+      Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Name: 'User root', Path: userRoot.Path, Data: '{}' });
+    await fixture.database.insert('BaseItems', { ...template, Id: '98C00000-0000-0000-0000-000000000003',
+      Type: 'MediaBrowser.Controller.Entities.CollectionFolder', ParentId: userRoot.Id, Name: 'Movies',
+      Path: path.join(userRoot.Path, 'Movies'),
+      Data: JSON.stringify({ CollectionType: 'movies', PhysicalLocationsList: [path.dirname(target)] }) });
+    await loaded.dispose();
+    const current = await fixture.loadContext(ids.owner);
+    try {
+      assert.equal(await current.getVideoVersionCollectionType(), 'movies');
+      const imagePath = path.join(path.dirname(target), 'Image Version.img');
+      await fixture.adapter.write('/discovery/Image Version.img', makeUdfImage({ discType: 'BluRay', metadata: true, extended: true }));
+      current.item.LocalAlternateVersions = [imagePath];
+      await fixture.host.updates.updateRepository(current, { Item: current.item, Images: null }, ItemUpdateType.MetadataImport);
+      const alternateId = nativeGuid(current.getNewItemId(imagePath, movieType));
+      const [alternate] = await fixture.database.rows('BaseItems', { where: { Id: alternateId } });
+      assert.equal(alternate.Type, movieType); assert.equal(alternate.Path, imagePath);
+      assert.equal(alternate.OwnerId, ids.owner); assert.equal(alternate.PrimaryVersionId, ids.owner);
+      assert.equal(alternate.ParentId, ids.parent);
+      assert.equal(JSON.parse(alternate.Data).VideoType, 'Iso');
+      assert.equal(JSON.parse(alternate.Data).IsoType, 'BluRay');
+      fixture.library.itemCreation.unregisterItem(alternateId);
+      const cold = await fixture.loadContext(alternateId);
+      try { assert.equal(cold.item.VideoType, 'Iso'); assert.equal(cold.item.IsoType, 'BluRay'); }
+      finally { await cold.dispose(); }
+      const part = await current.videoVersionDiscovery.resolveAlternateVersion(current, imagePath, videoType,
+        await current.getOwnedVideoCollectionType(current.item));
+      assert.equal(part.NativeType, videoType); assert.equal(part.Path, imagePath);
+      assert.equal(part.VideoType, 'Iso');
+      assert.equal(part.IsoType, null, 'native subtype-to-Video coercion copies five fields and excludes IsoType');
+    } finally { await current.dispose(); }
   });
   databaseTest('the custom image persistence producer saves new versions and their relation before recursive propagation', async t => {
     const { fixture, loaded, target } = await setupVersion(t, dialect, 'update-new-version-inherits-mixed');

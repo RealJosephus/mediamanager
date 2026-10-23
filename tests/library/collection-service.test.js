@@ -8,7 +8,9 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { CollectionService } from '../../src/library/collection-service.js';
 import { LibraryConfigurationService } from '../../src/library/library-configuration-service.js';
-import { newNativeItemEntity, acquireNativeItemLinkOwner } from '../../src/library/native-item-entity.js';
+import { newNativeItemEntity, acquireNativeItemLinkOwner, nativeItemDescriptor } from '../../src/library/native-item-entity.js';
+import { nativeContainsSubPath } from '../../src/library/native-path.js';
+import { nativeFileSystemPathsEqual } from '../../src/library/root-folder-file-data.js';
 import { idKey } from '../../src/library/records.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
@@ -16,6 +18,8 @@ import { PostgresLinkedChildrenStore, EMPTY_NATIVE_LINKS } from '../../src/libra
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 import { readTestLinks, assignTestLinks, captureTestEvent } from './collection-test-consumers.js';
 const pg = { skip: !postgresTestConnectionString };
+const firstContaining = (children, directory) => children.find(item => nativeItemDescriptor(item.NativeType).family === 'folder'
+  && (nativeFileSystemPathsEqual(directory, item.Path) || nativeContainsSubPath(directory, item.Path))) ?? null;
 async function boundary(t, items = new Map(), excluded = []) {
   const database = await createPostgresTestDatabase(null, 'collection_native');
   const store = new DomainStore(database), linkedChildren = new PostgresLinkedChildrenStore({ database });
@@ -145,8 +149,8 @@ async function runSample(t, sample, directory, { dataPath, blockCreate } = {}) {
     && (item.PrimaryVersionId == null || !items.has(guid(item.PrimaryVersionId)))).sort((left, right) => (right.DateCreated ?? '').localeCompare(left.DateCreated ?? ''))[0] ?? null,
   metadata: { queue: (id, options, priority) => trace('queue', { id: guid(id), options: { ...options, ForceSave: options.ForceSave ?? false }, priority: priority === 0 ? 'High' : priority }) },
   localization: { serverCulture: 'en-US', text: () => sample.serverName ?? 'Collections' },
-  host: { getAggregateFolder: async () => root, getCachedChildrenPage: async (_root, { startIndex, limit }) => ({
-    items: children.slice(startIndex, startIndex + limit), hasMore: startIndex + limit <= children.length
+  host: { getAggregateFolder: async () => root, withCachedChildren: async (_root, operation) => operation({
+    firstContainingPath: async directory => firstContaining(children, directory)
   }), invalidateChildren: () => trace('root-invalidate') },
   libraryConfiguration: { admitOperation: () => ({ addVirtualFolder: async (name, type, options, refresh) => {
     trace('library-add', { name, type, options: { PathInfos: options.PathInfos, EnableRealtimeMonitor: options.EnableRealtimeMonitor,
@@ -230,7 +234,7 @@ test('managed collection creation rejects junction traversal', pg, async t => {
   assert.deepEqual(await fs.readdir(external), []);
 });
 
-test('collection folder lookup pages roots and keeps the first matching folder', pg, async t => {
+test('collection folder lookup borrows the host-selected exact cached folder', pg, async t => {
   const program = path.join(os.tmpdir(), 'collection-page-instance'), data = path.join(program, 'data');
   const descendants = Array.from({ length: 129 }, (_, index) => ({ Id: Id(index + 1000), NativeType: 'MediaBrowser.Controller.Entities.Movies.Movie', IsFolder: false, Path: data }));
   descendants.push({ Id: Id(2000), NativeType: 'MediaBrowser.Controller.Entities.Folder', IsFolder: true, Path: path.join(data, 'collections', 'child') });
@@ -241,12 +245,11 @@ test('collection folder lookup pages roots and keeps the first matching folder',
     loadContext: runtime.loadContext, updates: {}, metadata: {},
     libraryConfiguration: { admitOperation() { throw new Error('Read-only lookup must not acquire configuration admission.'); } },
     programDataPath: program, dataPath: data,
-    host: { getAggregateFolder: async () => ({ Id: Id(1) }), getCachedChildrenPage: async (_parent, page) => {
-      requests.push(page); return { items: descendants.slice(page.startIndex, page.startIndex + page.limit),
-        hasMore: page.startIndex + page.limit <= descendants.length };
-    } } });
+    host: { getAggregateFolder: async () => ({ Id: Id(1) }), withCachedChildren: async (_parent, operation) => operation({
+      firstContainingPath: async directory => { requests.push(directory); return firstContaining(descendants, directory); }
+    }) } });
   assert.equal(await service.getCollectionsFolder(false), ancestor);
-  assert.deepEqual(requests, [{ startIndex: 0, limit: 128 }, { startIndex: 128, limit: 128 }]);
+  assert.deepEqual(requests, [path.join(data, 'collections')]);
   await service.close(); await assert.rejects(service.getCollectionsFolder(false), { status: 503 });
 });
 
@@ -267,10 +270,9 @@ async function controlledOwners(t, { gateLookup = false, gatedLibrary, gateScan 
       if (firstLookup && gateLookup) { firstLookup = false; lookupEntered.resolve(); await lookupResume.promise; }
       return root;
     },
-    getCachedChildrenPage: async (_root, { startIndex, limit }) => ({
-      items: children.slice(startIndex, startIndex + limit), hasMore: startIndex + limit <= children.length
-    }),
-    getUserRootFolder: async () => root, withCachedChildren: async (_root, operation) => operation({ firstByPath: async directory => children.find(item => item.Path === directory) ?? null }),
+    getUserRootFolder: async () => root, withCachedChildren: async (_root, operation) => operation({
+      firstByPath: async directory => children.find(item => item.Path === directory) ?? null,
+      firstContainingPath: async directory => firstContaining(children, directory) }),
     invalidateChildren: () => calls.push('invalidate')
   };
   const configuration = new LibraryConfigurationService({fileSystem: testFileSystem,  programDataPath: program, host,

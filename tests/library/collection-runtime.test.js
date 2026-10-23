@@ -8,6 +8,7 @@ import { idKey } from '../../src/library/records.js';
 import { isNativeItemEntity, newNativeItemEntity, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
 import { beforeMetadataRefresh } from '../../src/metadata/before-refresh.js';
 import { readTestLinkIds, assignTestLinks, captureTestEvent } from './collection-test-consumers.js';
+import { setFolderChildren } from '../../src/library/folder-cache.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString,
   postgresTestRow } from '../database/postgres-fixture.js';
@@ -203,6 +204,9 @@ test('postgres: native ancestor collection roots support XML read, restart and d
     Id: parentId, ParentId: aggregate.Id, Type: 'MediaBrowser.Controller.Entities.Folder',
     Path: programDataPath, IsFolder: true, Name: 'Ancestor collections', SortName: 'ancestor collections', Data: '{}',
   }));
+  // Raw repository seeding bypasses LibraryManager.CreateItems' parent.Children = null.
+  // Match that native mutation after startup has already captured the root children.
+  setFolderChildren(aggregate, null);
   const collection = await runtime.collections.create({ Name: 'Ancestor Collection', ItemIdList: [] });
   assert.equal(path.dirname(collection.Path), programDataPath);
   assert.equal(idKey(collection.ParentId), idKey(parentId));
@@ -317,41 +321,92 @@ test('postgres: registered Collection task runs through the post-scan lifecycle 
   assert.equal((await fs.stat(path.join(programDataPath, 'data', 'collections', 'B [boxset]'))).isDirectory(), true);
 });
 
-test('postgres: collection root selection hydrates bounded repository pages in native order', {
+test('postgres: a warm parent preserves unselected child links through source rebuilding and cache publication', {
+  skip: !postgresTestConnectionString, timeout: 60000,
+}, async t => {
+  const { runtime, dataPath } = await setup(t), parent = await runtime.libraryScanHost.getAggregateFolder();
+  const children = movieIds.map((Id, index) => {
+    const child = newNativeItemEntity('MediaBrowser.Controller.Entities.Folder');
+    child.Id = Id; child.Path = path.join(dataPath, 'warm-branch-' + index); return child;
+  });
+  const owners = children.map(child => runtime.itemCreation.retainItem(child));
+  try {
+    for (const [index, child] of children.entries()) await assignTestLinks(runtime, child,
+      [{ ItemId: movieIds[index], Type: 0 }]);
+    setFolderChildren(parent, children);
+    assert.equal(await runtime.libraryScanHost.withCachedChildren(parent,
+      source => source.firstByPath(children[0].Path)), children[0]);
+    for (const owner of owners) owner.release(); owners.length = 0;
+    assert.deepEqual(await readTestLinkIds(children[1]), [idKey(movieIds[1])]);
+    const branch = children[1].LinkedChildren;
+    await runtime.linkedChildren.recordResolution(branch, 1n, movieIds[0]);
+    assert.equal(await runtime.libraryScanHost.withCachedChildren(parent,
+      source => source.firstByPath(children[1].Path)), children[1]);
+    assert.equal(children[1].LinkedChildren, branch);
+    assert.deepEqual(await readTestLinkIds(children[1]), [idKey(movieIds[0])]);
+  } finally {
+    setFolderChildren(parent, null);
+    for (const owner of owners) owner.release();
+    await runtime.linkedChildren.flushOwnedReleases();
+  }
+});
+
+test('postgres: concurrent directory consumers share the exact warm source while it is being captured', {
+  skip: !postgresTestConnectionString, timeout: 60000,
+}, async t => {
+  const { runtime, dataPath } = await setup(t), parent = await runtime.libraryScanHost.getAggregateFolder();
+  const alias = newNativeItemEntity('MediaBrowser.Controller.Entities.Folder');
+  alias.Id = movieIds[0]; alias.Path = path.join(dataPath, 'warm-alias'); alias.Name = 'Unsaved folder alias';
+  const owner = runtime.itemCreation.retainItem(alias);
+  try {
+    setFolderChildren(parent, [alias]);
+    const selected = await Promise.all([0, 1].map(() => runtime.libraryScanHost.withCachedChildren(parent,
+      children => children.firstContainingPath(path.join(alias.Path, 'child')))));
+    assert.equal(selected[0], alias); assert.equal(selected[1], alias);
+    const moved = path.join(dataPath, 'moved-alias'); alias.Path = moved;
+    assert.equal(await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(moved)), alias);
+    assert.equal(await runtime.libraryScanHost.withCachedChildren(parent,
+      children => children.firstByPath(path.join(dataPath, 'warm-alias'))), null);
+  } finally {
+    setFolderChildren(parent, null); owner.release(); await runtime.linkedChildren.flushOwnedReleases();
+  }
+});
+
+test('postgres: collection root selection keeps a bounded SQL snapshot and observes its live selected child', {
   skip: !postgresTestConnectionString,
 }, async t => {
   const { runtime, database } = await setup(t);
-  const parent = await runtime.libraryScanHost.getAggregateFolder(), ids = [];
-  const { items: initial, hasMore: initialHasMore } = await runtime.libraryScanHost.getCachedChildrenPage(parent, { limit: 128 });
-  assert.ok(initial.length < 128);
-  assert.equal(initialHasMore, false);
+  const parent = await runtime.libraryScanHost.getAggregateFolder(), ids = [], target = path.join(runtime.collections.dataPath, 'snapshot-target');
+  assert.equal(await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(target)), null);
   for (let index = 0; index < 260; index++) {
     const Id = `aaaaaaaa-aaaa-aaaa-aaaa-${String(index + 1).padStart(12, '0')}`;
     ids.push(Id);
     await database.insert('BaseItems', postgresTestRow('BaseItems', {
       Id, ParentId: parent.Id, Type: 'MediaBrowser.Controller.Entities.Folder',
-      IsFolder: true, Name: `Paged root ${index}`, SortName: `paged root ${260 - index}`, Data: '{}'
+      IsFolder: true, Path: target, Name: `Paged root ${index}`, SortName: `paged root ${260 - index}`, Data: '{}'
     }));
   }
+  assert.equal(await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(target)), null,
+    'A repository insert must not replace the existing native Children snapshot.');
+  runtime.libraryScanHost.invalidateChildren(parent);
   const projections = [], originalLoad = runtime.library.load.bind(runtime.library);
   runtime.library.load = async (db, user, options) => {
-    projections.push(options.baseRows.filter(row => row.ParentId && idKey(row.ParentId) === idKey(parent.Id)).length);
+    const count = options.baseRows?.filter(row => row.ParentId && idKey(row.ParentId) === idKey(parent.Id)).length;
+    if (count) projections.push({ count, seeded: options.baseRows.filter(row => String(row.Id).startsWith('aaaaaaaa-aaaa-aaaa-aaaa-')).length });
     return originalLoad(db, user, options);
   };
-  const selected = [];
-  for (let startIndex = 0; startIndex < 384; startIndex += 128) {
-    const { items: page, hasMore } = await runtime.libraryScanHost.getCachedChildrenPage(parent, { startIndex, limit: 128 });
-    assert.ok(page.length <= 128); selected.push(...page.map(item => idKey(item.Id)));
-    assert.equal(hasMore, startIndex < 256);
-  }
   const expected = ids.map((Id, index) => ({ Id, SortName: `paged root ${260 - index}` }))
     .sort((left, right) => left.SortName < right.SortName ? -1 : left.SortName > right.SortName ? 1 : 0)
     .map(item => idKey(item.Id));
-  const seededIds = new Set(ids.map(idKey));
-  assert.deepEqual(selected.filter(id => seededIds.has(id)), expected);
-  assert.equal(selected.length, ids.length + initial.length);
-  assert.deepEqual(selected.filter(id => !seededIds.has(id)), initial.map(item => idKey(item.Id)));
-  assert.deepEqual(projections, [128, 128, 4 + initial.length]);
+  const selected = await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(target));
+  assert.equal(idKey(selected.Id), expected[0]);
+  assert.ok(projections.length >= 3 && projections.every(page => page.count <= 128));
+  assert.equal(projections.reduce((sum, page) => sum + page.seeded, 0), 260);
+  const renamed = path.join(runtime.collections.dataPath, 'live-target');
+  selected.Path = renamed;
+  assert.equal(await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(renamed)), selected);
+  assert.equal(idKey((await runtime.libraryScanHost.withCachedChildren(parent, children => children.firstByPath(target))).Id), expected[1]);
+  assert.equal(projections.reduce((sum, page) => sum + page.seeded, 0), 260, 'Directory selection must reuse the captured SQL snapshot.');
 });
 
 test('postgres: collection root lookup continues after a full SQL page contains an unknown native type', {
@@ -380,22 +435,21 @@ test('postgres: collection root lookup continues after a full SQL page contains 
     Id: collectionRootId, ParentId: parent.Id, Type: 'MediaBrowser.Controller.Entities.Folder',
     IsFolder: true, Name: 'Collections', Path: collectionsPath, SortName: '01 collection root', Data: '{}'
   }));
-  const first = await runtime.libraryScanHost.getCachedChildrenPage(parent, { startIndex: 0, limit: 128 });
-  assert.equal(first.items.length, 127);
-  assert.equal(first.hasMore, true);
-  assert.equal(first.items.some(item => idKey(item.Id) === idKey(unknownId)), false);
-  assert.equal(first.items.some(item => idKey(item.Id) === idKey(collectionRootId)), false);
-  const second = await runtime.libraryScanHost.getCachedChildrenPage(parent, { startIndex: 128, limit: 128 });
-  assert.equal(second.items.some(item => idKey(item.Id) === idKey(collectionRootId)), true);
-  assert.equal(second.hasMore, false);
-  const pages = [], original = runtime.libraryScanHost.getCachedChildrenPage.bind(runtime.libraryScanHost);
-  runtime.libraryScanHost.getCachedChildrenPage = async (root, options) => {
-    pages.push(options.startIndex);
-    return original(root, options);
+  // Raw repository seeding bypasses LibraryManager.CreateItems' parent.Children = null.
+  // Reset the aggregate snapshot so this test reaches the complete typed SQL pages.
+  setFolderChildren(parent, null);
+  const projections = [], originalLoad = runtime.library.load.bind(runtime.library);
+  runtime.library.load = async (db, user, options) => {
+    const count = options.baseRows?.filter(row => row.ParentId && idKey(row.ParentId) === idKey(parent.Id)).length;
+    if (count) projections.push(count);
+    return originalLoad(db, user, options);
   };
   const selected = await runtime.collections.getCollectionsFolder(false);
   assert.equal(idKey(selected.Id), idKey(collectionRootId));
-  assert.deepEqual(pages, [0, 128]);
+  assert.ok(projections.length >= 2 && projections.every(count => count <= 128));
+  assert.ok(projections.reduce((sum, count) => sum + count, 0) >= 129);
+  assert.equal(await runtime.libraryScanHost.withCachedChildren(parent,
+    children => children.firstByPath(path.join(dataPath, 'removed-plugin-root'))), null);
 });
 
 test('postgres: collection path references select the latest default-visible item', {

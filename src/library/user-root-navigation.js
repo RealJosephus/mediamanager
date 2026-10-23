@@ -36,7 +36,7 @@ async function cleanup(primary, operations, message) {
     primary?.message ?? message, primary ? { cause: primary } : undefined);
 }
 
-/** initialItems(context) materializes unfiltered raw+virtual occurrences before
+/** initialItems(context) supplies owned raw+virtual occurrences before
  * links resolve. filterPage(items,context) runs only after complete resolution
  * and returns one Boolean per occurrence; identities cannot decide that mask.
  * The returned frame owns its root branch, exact Folder values and winner SQL
@@ -58,7 +58,7 @@ export async function prepareUserRootNavigation({ library, session, state, user,
   const initialOwners = new Map(), folderSlots = new Map();
   const restoringSlot = new AsyncLocalStorage();
   const selected = [], winnerTable = q('mm_user_root_winners_' + randomUUID().replaceAll('-', ''));
-  let rootOperation, resolution, cohort, visible, winners, frameScope, tableAttempted = false, ordinal = 0n;
+  let rootOperation, resolution, cohort, initialView, visible, winners, frameScope, tableAttempted = false, ordinal = 0n;
   const context = { library, root, session, state, user };
   const dropTable = async primary => {
     if (!tableAttempted) return;
@@ -97,10 +97,17 @@ export async function prepareUserRootNavigation({ library, session, state, user,
     frameScope = linkedChildren.admitScope();
     // UserRoot.GetEligibleChildren eagerly materializes Children+Virtual before
     // GetLinkedChildren, but none of its visibility callbacks run yet.
-    const initial = Array.from(await initialItems(context));
-    for (const item of initial) if (isFolder(item) && !initialOwners.has(item)) {
+    const initial = await initialItems(context);
+    if (Array.isArray(initial)) for (const item of initial) if (isFolder(item) && !initialOwners.has(item)) {
       initialOwners.set(item, acquireNativeItemLinkOwner(item));
     }
+    cohort = await createNativeItemCohort({ linkedChildren, resolveLiveItem: id =>
+      folderSlots.get(restoringSlot.getStore())?.item ?? library.itemCreation.getCachedItemById(id) });
+    initialView = await cohort.view({ session, plan: {
+      text: 'SELECT NULL::bigint AS "Ordinal", NULL::uuid AS "SlotKey" WHERE FALSE', values: [],
+    } });
+    let initialOrdinal = 0n;
+    for await (const item of initial) await capture(item, () => initialView.capture(item, { ordinal: ++initialOrdinal }));
     if (root && !root.LinkedChildrenLoaded) {
       const loaded = await linkedChildren.load(session, root.Id);
       // A warm assignment made while cold I/O was pending is authoritative.
@@ -108,8 +115,6 @@ export async function prepareUserRootNavigation({ library, session, state, user,
       else await linkedChildren.release(loaded, { session });
     }
     if (root) rootOperation = linkedChildren.admitHandleOperation(root.LinkedChildren);
-    cohort = await createNativeItemCohort({ linkedChildren, resolveLiveItem: id =>
-      folderSlots.get(restoringSlot.getStore())?.item ?? library.itemCreation.getCachedItemById(id) });
     if (root) {
       const links = rootOperation.handle;
       resolution = await createPostgresLinkedResolutionWorkspace(session, { linksPlan: linkedChildren.plan(links) });
@@ -143,33 +148,35 @@ export async function prepareUserRootNavigation({ library, session, state, user,
         await capture(item, () => visible.capture(item, { ordinal: ordinals[index] }));
       }
     };
-    for (let offset = 0; offset < initial.length; offset += pageSize) await appendPage(initial.slice(offset, offset + pageSize), 'initial');
     const restoreSlot = (view, slot, operation) => restoringSlot.run(slot, () => view.withSlot(slot, operation));
-    const linksPlan = cohort.orderedPlan();
-    for (let after = 0n; ;) {
-      const offset = linksPlan.values.length;
-      const rows = (await session.client.query({ text: `SELECT source."Ordinal",source."SlotKey"
-        FROM (${linksPlan.text}) source WHERE source."Ordinal">$${offset + 1}
-        ORDER BY source."Ordinal" LIMIT ${pageSize}`, values: [...linksPlan.values, after] })).rows;
-      if (!rows.length) break;
-      const pageItems = new Map(), pageOwners = [];
-      let pageFailure;
-      try {
-        // withSlot may reuse a live object only when it was captured into this
-        // exact slot. A same-ID repository object never replaces that branch.
-        for (const row of rows) if (!pageItems.has(row.SlotKey)) {
-          await restoreSlot(cohort, row.SlotKey, item => {
-            pageOwners.push(acquireNativeItemLinkOwner(item));
-            pageItems.set(row.SlotKey, item);
-          });
-        }
-        await appendPage(rows.map(row => pageItems.get(row.SlotKey)), 'linked');
-        after = BigInt(rows.at(-1).Ordinal);
-      } catch (error) { pageFailure = error; throw error; }
-      finally { await cleanup(pageFailure, [
-        ...pageOwners.map(owner => () => owner.release()), () => linkedChildren.flushReleases({ session }),
-      ], 'Root linked page cleanup failed.'); }
-    }
+    const appendView = async (view, source) => {
+      const sourcePlan = view.orderedPlan();
+      for (let after = 0n; ;) {
+        const offset = sourcePlan.values.length;
+        const rows = (await session.client.query({ text: `SELECT source."Ordinal",source."SlotKey"
+          FROM (${sourcePlan.text}) source WHERE source."Ordinal">$${offset + 1}
+          ORDER BY source."Ordinal" LIMIT ${pageSize}`, values: [...sourcePlan.values, after] })).rows;
+        if (!rows.length) break;
+        const pageItems = new Map(), pageOwners = [];
+        let pageFailure;
+        try {
+          // A same-ID repository object never replaces an exact captured slot.
+          for (const row of rows) if (!pageItems.has(row.SlotKey)) {
+            await restoreSlot(view, row.SlotKey, item => {
+              pageOwners.push(acquireNativeItemLinkOwner(item));
+              pageItems.set(row.SlotKey, item);
+            });
+          }
+          await appendPage(rows.map(row => pageItems.get(row.SlotKey)), source);
+          after = BigInt(rows.at(-1).Ordinal);
+        } catch (error) { pageFailure = error; throw error; }
+        finally { await cleanup(pageFailure, [
+          ...pageOwners.map(owner => () => owner.release()), () => linkedChildren.flushReleases({ session }),
+        ], 'Root occurrence page cleanup failed.'); }
+      }
+    };
+    await appendView(initialView, 'initial');
+    await appendView(cohort, 'linked');
     await visible.flush();
     const source = visible.orderedPlan(), sql = nativeTextSql(session.schemaName);
     tableAttempted = true;
@@ -193,9 +200,9 @@ export async function prepareUserRootNavigation({ library, session, state, user,
       }
       after = BigInt(rows.at(-1).Ordinal);
     }
-    await cleanup(undefined, [() => dropTable(), () => visible.release(), () => cohort.release(),
+    await cleanup(undefined, [() => dropTable(), () => visible.release(), () => initialView.release(), () => cohort.release(),
       () => releaseFolders(false), () => linkedChildren.flushReleases({ session })], 'Root preparation cleanup failed.');
-    visible = null; cohort = null;
+    visible = null; initialView = null; cohort = null;
     const items = Object.freeze(selected);
     const pending = new Set();
     let closed = false, closing;
@@ -270,7 +277,7 @@ export async function prepareUserRootNavigation({ library, session, state, user,
   } catch (error) { failure = error; throw error; }
   finally {
     if (failure) await cleanup(failure, [() => dropTable(failure), () => resolution?.dispose(failure),
-      () => winners?.release(), () => visible?.release(), () => cohort?.release(), () => releaseFolders(true),
+      () => winners?.release(), () => visible?.release(), () => initialView?.release(), () => cohort?.release(), () => releaseFolders(true),
       () => rootOperation?.release(), () => rootOwner?.release(), () => linkedChildren.flushReleases({ session }),
       () => frameScope?.release()],
     'Root navigation preparation failed to release its owners.');

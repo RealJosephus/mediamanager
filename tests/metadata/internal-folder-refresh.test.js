@@ -8,8 +8,9 @@ import { beforeMetadataRefresh } from '../../src/metadata/before-refresh.js';
 import { MetadataRefreshHost } from '../../src/metadata/refresh-host.js';
 import { dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
 import { createVirtualPathReverser } from '../../src/library/options.js';
-import { cachedFolderChildren } from '../../src/library/collection-membership.js';
-import { folderChildIds, setFolderChildren, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { setFolderChildren, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
+import { withPostgresCachedFolderChildren } from '../../src/library/postgres-cached-folder-children.js';
 import { markInternalFolderRefresh, internalFolderRefreshFlag, requiresInternalFolderRefresh } from '../../src/metadata/internal-folder-refresh.js';
 import { RootFolderFileData, nativeDirectoryFullName } from '../../src/library/root-folder-file-data.js';
 import { setupChildrenFixture } from './children-fixture.js';
@@ -45,7 +46,7 @@ const expectedResult = result => result.files ? { ...result,
   files: result.files.map(file => ({ ...file, Path: projectFilePath(file.Path, '$STATE') })) } : result;
 function stateProjection(item, stateRoot) {
   return { Name: item.Name, Path: project(item.Path, stateRoot), refreshFlag: internalFolderRefreshFlag(item),
-    cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? folderChildIds(item) == null : null,
+    cacheCleared: ['AggregateFolder', 'UserRootFolder'].includes(item.Type) ? postgresFolderChildIds(item) == null : null,
     locations: ['AggregateFolder', 'CollectionFolder'].includes(item.Type)
       ? projectLocations(item.PhysicalLocationsList, stateRoot, resolvedLocationLists.has(item.PhysicalLocationsList)) : null,
     physicalIds: item.Type === 'CollectionFolder' ? item.PhysicalFolderIds : null };
@@ -127,7 +128,7 @@ for (const dialect of ['postgres']) {
   const options = {};
   for (const sample of edges.input) test(dialect + ': actual internal directory resolve edge ' + sample.name, options, async t => {
     const fixture = await setupChildrenFixture(t, dialect), loaded = await seedSample(fixture, sample), item = loaded.item;
-    if (item.Type === 'AggregateFolder') cachedFolderChildren(item, await fixture.state());
+    if (item.Type === 'AggregateFolder') await fixture.store.run(session => withPostgresCachedFolderChildren({ session, library: fixture.library, item }, () => {}));
     if (Object.hasOwn(sample, 'flag')) markInternalFolderRefresh(item, sample.flag);
     if (sample.locationsNull) item.PhysicalLocationsList = null;
     if (sample.physicalIdsNull) item.PhysicalFolderIds = null;
@@ -153,7 +154,7 @@ for (const dialect of ['postgres']) {
     if (Object.hasOwn(sample, 'flag')) markInternalFolderRefresh(item, sample.flag);
     // The native direct controls explicitly warm only the ID list. Read a real
     // empty repository list here; its nonnull ID list is observable without a private-field injection.
-    if (['AggregateFolder', 'UserRootFolder'].includes(item.Type)) cachedFolderChildren(item, await fixture.state());
+    if (['AggregateFolder', 'UserRootFolder'].includes(item.Type)) await fixture.store.run(session => withPostgresCachedFolderChildren({ session, library: fixture.library, item }, () => {}));
     let actual;
     if (sample.mode === 'before') actual = { changed: beforeMetadataRefresh(item, loaded), state: stateProjection(item, fixture.stateRoot) };
     else {
@@ -175,12 +176,14 @@ for (const dialect of ['postgres']) {
     const childId = '97c00000-0000-0000-0000-000000000010', newId = '97c00000-0000-0000-0000-000000000011';
     const base = (await fixture.database.rows('BaseItems', { where: { Id: id } }))[0];
     await fixture.database.insert('BaseItems', { ...base, Id: childId, Type: typeName('Folder'), ParentId: id, Name: 'Old child', SortName: 'first', Data: '{}' });
-    const state = await fixture.state();
-    const children = () => cachedFolderChildren(item, state).map(value => ({ Id: value.Id, Name: value.Name }));
-    const warm = children();
+    const children = () => fixture.store.run(session => withPostgresCachedFolderChildren({ session, library: fixture.library, item }, async source => {
+      const result = [];
+      for await (const page of source.pages()) result.push(...page.map(value => ({ Id: value.Id, Name: value.Name })));
+      return result;
+    }));
+    const warm = await children();
     await fixture.database.update('BaseItems', { Id: childId }, { Name: 'Changed child' });
     await fixture.database.insert('BaseItems', { ...base, Id: newId, Type: typeName('Folder'), ParentId: id, Name: 'New child', SortName: 'second', Data: '{}' });
-    const current = await fixture.state(); Object.assign(state, { items: current.items, byId: current.byId });
     const observations = [];
     for (const operation of sample.operations) {
       let changed = null;
@@ -190,6 +193,6 @@ for (const dialect of ['postgres']) {
       else if (operation === 'setter') setFolderChildren(item, null);
       observations.push({ operation, changed, state: stateProjection(item, fixture.stateRoot) });
     }
-    compare({ warm, observations, children: children(), state: stateProjection(item, fixture.stateRoot) }, cache.native.results.find(value => value.name === sample.name).result);
+    compare({ warm, observations, children: await children(), state: stateProjection(item, fixture.stateRoot) }, cache.native.results.find(value => value.name === sample.name).result);
   });
 }

@@ -93,7 +93,7 @@ class GuideProgramBatch {
     try {
       const id = guideProgramId(info.Id), prior = (await this.query(`SELECT "SlotKey" FROM ${this.tables.initial} WHERE "Key"=$1`, [idKey(id)])).rows[0];
       const consume = async existing => {
-        const result = materializeGuideProgram(info, { existing, channel: this.channel, now: this.now, metadataChanged: this.metadataChanged });
+        const result = await materializeGuideProgram(info, { existing, channel: this.channel, now: this.now, metadataChanged: this.metadataChanged });
         const slot = await this.cohort.captureSlot(result.item);
         if (result.isNew) await this.newOccurrences.appendSlot(slot, { ordinal: ++this.#counts.new });
         else if (result.isUpdated) await this.updatedOccurrences.appendSlot(slot, { ordinal: ++this.#counts.updated });

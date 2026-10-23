@@ -48,7 +48,7 @@ for (const dialect of ['postgres']) for (const sample of input) {
           SortName: rootIndex >= 0 ? String(rootIndex).padStart(3, '0') : item.Name });
       }
       // The native control materializes explicit null collections before calls.
-      const loaded = await fixture.loadContext(target.Id), state = await fixture.state(), item = loaded.item;
+      const loaded = await fixture.loadContext(target.Id), item = loaded.item;
       if (sample === input[0]) {
         const unknownId = '97d10000-0000-0000-0000-000000000098';
         const unknownPath = 'Z:\\Views\\removed-plugin';
@@ -72,21 +72,33 @@ for (const dialect of ['postgres']) for (const sample of input) {
         assert.match(queries[0], /"PrimaryVersionId" IS NULL OR NOT EXISTS/u);
         assert.match(queries[0], /ORDER BY candidate\."DateCreated" DESC NULLS LAST,[\s\S]*LIMIT 1/u);
       }
-      if (sample.item.PhysicalLocationsList === null) item.PhysicalLocationsList = null;
-      if (sample.item.PhysicalFolderIds === null) item.PhysicalFolderIds = null;
-      const aggregate = state.byId.get(idKey(aggregateId));
-      compare(cachedFolderChildren(aggregate, state).map(child => child.Id.toLowerCase()), sample.rootChildren);
-      const findCalls = [], findByPath = async (path, isFolder) => {
-        findCalls.push({ path, isFolder }); return loaded.findMetadataItemByPath(path, isFolder);
-      };
-      let exception = null, parameterName = null, result;
-      const before = await fixture.database.rows('BaseItems');
-      try {
-        const selected = await physicalCollectionFolders(item, state, { enableCache: sample.enableCache, findByPath });
-        result = { ids: selected.map(folder => folder.Id.toLowerCase()), names: selected.map(folder => folder.Name), findCalls };
-      } catch (error) { exception = error.nativeException ?? error.name; parameterName = error.parameterName ?? null; result = { findCalls }; }
-      const expected = native.results.find(value => value.name === sample.name);
-      compare({ exception, parameterName, result }, { exception: expected.exception, parameterName: expected.parameterName, result: expected.result });
-      compare(await fixture.database.rows('BaseItems'), before);
+      await fixture.store.run(async session => {
+        const state = await fixture.library.load(session, null, { baseRows: await session.rows('BaseItems') });
+        try {
+          if (sample.item.PhysicalLocationsList === null) item.PhysicalLocationsList = null;
+          if (sample.item.PhysicalFolderIds === null) item.PhysicalFolderIds = null;
+          const aggregate = state.byId.get(idKey(aggregateId));
+          compare(cachedFolderChildren(aggregate, state).map(child => child.Id.toLowerCase()), sample.rootChildren);
+          const findCalls = [], findByPath = async (path, isFolder) => {
+            findCalls.push({ path, isFolder }); return loaded.findMetadataItemByPath(path, isFolder);
+          };
+          let exception = null, parameterName = null, result;
+          const before = await session.rows('BaseItems');
+          try {
+            const selected = await physicalCollectionFolders(item, state, { session, enableCache: sample.enableCache, findByPath });
+            result = { ids: selected.map(folder => folder.Id.toLowerCase()), names: selected.map(folder => folder.Name), findCalls };
+          } catch (error) { exception = error.nativeException ?? error.name; parameterName = error.parameterName ?? null; result = { findCalls }; }
+          const expected = native.results.find(value => value.name === sample.name);
+          compare({ exception, parameterName, result }, { exception: expected.exception, parameterName: expected.parameterName, result: expected.result });
+          compare(await session.rows('BaseItems'), before);
+        } finally { await state.dispose({ session }); }
+      });
+      if (sample.name === 'root-direct') {
+        // The retained metadata context outlives its load operation. This
+        // consumer must borrow a current session instead of its old state.db.
+        const selected = await loaded.physicalFolders(false), expected = native.results.find(value => value.name === sample.name).result;
+        compare({ ids: selected.map(folder => folder.Id.toLowerCase()), names: selected.map(folder => folder.Name) },
+          { ids: expected.ids, names: expected.names });
+      }
     });
 }

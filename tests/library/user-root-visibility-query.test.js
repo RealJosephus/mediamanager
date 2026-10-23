@@ -68,8 +68,9 @@ test('root grouping parents require their own IsVisible and retain folder allowe
     MaxParentalRating: 5, BlockUnratedItems: ['Other'] });
   const library = new LibraryService({ store: {}, serverId: id(21), configuration: { MetadataCountryCode: 'US' } });
   t.after(() => library.close());
-  const children = library.rootChildren(state, user);
-  assert.deepEqual(children.map(item => item.Id), [plain.Id, playlists.Id]);
+  assert.throws(() => library.rootChildren(state, user), /requires an admitted root frame/u);
+  assert.deepEqual([collection, highRating, plain, playlists].map(item =>
+    visibleItem(item, user, state, { query: false, checkStandaloneParents: false })), [false, false, true, true]);
 });
 
 test('moviecollection SetUser(null) fails before repository dispatch, while explicit Ids bypass the builder', () => {

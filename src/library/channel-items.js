@@ -97,7 +97,7 @@ export async function materializeChannelItem(info, { provider, channel, parent, 
   if (!info.IsLiveStream && live) { item.Tags = item.Tags.filter(tag => tag == null || !ordinalIgnoreCaseEquals(tag, 'livestream')); force = true; }
   else if (info.IsLiveStream && !live) { item.Tags = [...item.Tags, 'livestream']; force = true; }
   const loaded = await metadata.loadContext(item.Id, { draft: item });
-  try { onMetadataChanged(item, loaded.parentalRating(item)); } finally { await loaded.dispose(); }
+  try { onMetadataChanged(item, await loaded.parentalRating(item)); } finally { await loaded.dispose(); }
   if (isNew) {
     await library.itemCreation.createItems([item], parent, { creationIntent: 'library-save' });
     if (info.People?.length) await metadata.updatePeople(item, info.People);

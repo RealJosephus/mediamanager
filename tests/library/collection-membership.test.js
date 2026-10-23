@@ -1,4 +1,5 @@
 import { testFileSystem } from '../storage/plugin-files.js';
+import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -45,7 +46,9 @@ for(const dialect of dialects)test(`${dialect}: collection membership, standalon
   const db=await PostgresDatabase.open({
     connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true});
   const store=new DomainStore(db);
-  const library=new LibraryService({fileSystem: testFileSystem, store,serverId:'membership-dll-regression',programDataPath:'D:/unused-instance'});
+  const library=new LibraryService({fileSystem: testFileSystem, store,serverId:'membership-dll-regression',programDataPath:'D:/unused-instance',
+    userRoot:row('userRoot','UserRootFolder')});
+  await attachLibraryNavigation(library);
   const cases=[],differences=[];
   const cleanup={libraryClosed:false,databaseClosed:false,schemasRemoved:false};
   try{
@@ -55,11 +58,13 @@ for(const dialect of dialects)test(`${dialect}: collection membership, standalon
       row('movie','Movie',{ParentId:ids.physical,TopParentId:ids.physical,UnratedType:'Movie',Data:'{"VideoType":"VideoFile"}'})])await db.insert('BaseItems',item);
     await db.insert('Users',{...emptyRow('Users'),Id:ids.user,Username:'Readonly',NormalizedUsername:'READONLY',InternalId:1});
     await db.insert('AncestorIds',{ItemId:ids.movie,ParentItemId:ids.physical});
-    for(const expected of fixture.results){
+    for(const expected of fixture.results)await store.run(async database=>{
+      await library.itemCreation.close();
       const user=accountFor(expected.policy);
-      await db.update('BaseItems',{Id:ids.collection},{Tags:expected.policy==='blocked-library-tag'?'blocked-library':'',
+      await database.update('BaseItems',{Id:ids.collection},{Tags:expected.policy==='blocked-library-tag'?'blocked-library':'',
         Data:JSON.stringify({CollectionType:fixture.input.collectionType,PhysicalFolderIds:expected.physicalFolderIds,PhysicalLocationsList:expected.physicalLocations})});
-      const state=await store.run(async database=>library.load(database,user,{includeUserData:false,baseRows:await database.rows('BaseItems')}));
+      const state=await library.load(database,user,{includeUserData:false,baseRows:await database.rows('BaseItems')});
+      try{
       const movie=state.byId.get(idKey(ids.movie)),collection=state.byId.get(idKey(ids.collection));
       const dto=await projectItem(movie,state,user,dtoOptions({fields:['CanDelete'],enableimages:false,enableuserdata:false}),library.options);
       const actual={collectionFolders:collectionFoldersForItem(movie,state).map(item=>item.Id),
@@ -83,9 +88,10 @@ for(const dialect of dialects)test(`${dialect}: collection membership, standalon
         if(access.dto.Id!==ids.movie.replaceAll('-','')||access.dto.CanDelete!==expected.canDelete)differences.push({case:cases.length,field:'itemDto',expected:{Id:ids.movie.replaceAll('-',''),CanDelete:expected.canDelete},actual:access.dto});
       }else if(access.record.status!==404||access.dto.status!==404)differences.push({case:cases.length,field:'itemAccess',expected:404,actual:access});
       cases.push({pathMode:expected.pathMode,storedMode:expected.storedMode,policy:expected.policy,actual,access});
-    }
+      }finally{await state.dispose({session:database});}
+    });
   }finally{
-    await library.close();cleanup.libraryClosed=true;
+    await closeLibraryNavigation(library);cleanup.libraryClosed=true;
     if(dialect==='postgres'){
       await db.client.query(`DROP SCHEMA ${quoteIdentifier(db.schemaName)} CASCADE`);
       await db.client.query(`DROP SCHEMA ${quoteIdentifier(db.controlSchema)} CASCADE`);

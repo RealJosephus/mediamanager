@@ -1,8 +1,8 @@
 import { dateTicks, idKey, nonemptyId, repositoryTopParentId } from './records.js';
-import { visibleItem } from './permissions.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { sortNative } from '../core/native-sort.js';
-import { userRootFolders } from './collection-membership.js';
+import { nativeTextBytes } from '../database/native-text.js';
+import { nativeTextSql } from '../database/native-text-sql.js';
 
 const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 const nullableCompare = (a, b) => a == null ? (b == null ? 0 : -1) : b == null ? 1 : compare(a, b);
@@ -39,12 +39,12 @@ export function airedEpisodeOrder(a, b) {
 
 export const sortAiredEpisodes = episodes => sortNative(episodes, airedEpisodeOrder);
 
-export function nextUpTopParentIds(parents, state, physicalIdsFor, user, permissions) {
+export async function nextUpTopParentIds(parents, state, physicalIdsFor, user, library) {
   // The frozen repository only consumes TopParentIds. LibraryManager's ordinary
   // Folder/Series ancestor fallback therefore activates no series here.
   if (!parents.every(parent => ['CollectionFolder', 'UserView'].includes(parent.Type))) return new Set();
   const seen = new Set();
-  const visit = parent => {
+  const visit = async parent => {
     if (!parent || seen.has(idKey(parent.Id))) return [];
     seen.add(idKey(parent.Id));
     if (parent.Type === 'CollectionFolder') return physicalIdsFor(parent, state) ?? [];
@@ -54,13 +54,26 @@ export function nextUpTopParentIds(parents, state, physicalIdsFor, user, permiss
       if (nonemptyId(reference)) return visit(state.byId.get(idKey(reference)));
       if (parent.ViewType != null && !['movies', 'tvshows']
         .some(type => ordinalIgnoreCaseEquals(parent.ViewType, type))) return [];
-      const grouped = new Set((user.Configuration?.GroupedFolders ?? []).map(idKey));
-      return userRootFolders(state).filter(item => item.Type === 'CollectionFolder' && grouped.has(idKey(item.Id))
-        && (item.CollectionType == null || ordinalIgnoreCaseEquals(item.CollectionType, parent.ViewType))
-        && visibleItem(item, user, state, { ...permissions, query: false })).flatMap(visit);
+      const source = await library.rootFolderPlan(state), offset = source.values.length;
+      const sql = nativeTextSql(state.db.schemaName), result = [];
+      for (let after = 0n;;) {
+        const rows = (await state.db.client.query({ text: `SELECT folder."Ordinal",folder."SlotKey" FROM (${source.text}) folder
+          WHERE folder."Ordinal">$${offset + 1} AND folder."NativeType"=$${offset + 2}::bytea
+            AND ${sql.guidKey('folder."Id"')}=ANY($${offset + 3}::text[]) ORDER BY folder."Ordinal" LIMIT 128`,
+          values: [...source.values, after, nativeTextBytes('MediaBrowser.Controller.Entities.CollectionFolder'),
+            (user.Configuration?.GroupedFolders ?? []).map(idKey)] })).rows;
+        if (!rows.length) return result;
+        for (const row of rows) await library.withRootFolderSlot(state, row.SlotKey, async item => {
+          if ((item.CollectionType == null || ordinalIgnoreCaseEquals(item.CollectionType, parent.ViewType))
+            && await library.isItemVisible(item, user, state)) result.push(...await visit(item));
+        });
+        after = BigInt(rows.at(-1).Ordinal);
+      }
     }
     const top = state.byId.get(idKey(repositoryTopParentId(parent)));
     return top ? [top.Id] : [];
   };
-  return new Set(parents.flatMap(visit).map(idKey));
+  const ids = [];
+  for (const parent of parents) ids.push(...await visit(parent));
+  return new Set(ids.map(idKey));
 }

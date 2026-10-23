@@ -88,7 +88,7 @@ function visiblePlaylist(item, user, state, options) {
 }
 
 export function visibleItem(item, user, state, { libraryOptions, configuration, programDataPath, dataPath, skipAllowedTags = false, query = true,
-  checkStandaloneParents = true, scopeLibraryFolders = true, playlistVisibilityChecked = false, skipRelatedNameCheck = false } = {}) {
+  checkStandaloneParents = true, scopeLibraryFolders = true, playlistVisibilityChecked = false, skipRelatedNameCheck = false } = {}, matchedFolders) {
   if (!user) return true;
   const policy = user.Policy;
   if (!policy) throw new TypeError('Library access requires an authoritative user policy.');
@@ -122,7 +122,7 @@ export function visibleItem(item, user, state, { libraryOptions, configuration, 
   const inherited = (query ? [item,
     ...state.parents.filter(row => sameId(row.ItemId, item.Id)).map(row => state.byId.get(idKey(row.ParentItemId))),
     state.byId.get(idKey(repositoryTopParentId(item))), state.byId.get(idKey(item.SeriesId))]
-    : [item, ...ancestors, ...collectionFoldersForItem(item, state)]).filter(Boolean);
+    : [item, ...ancestors, ...(matchedFolders === undefined ? collectionFoldersForItem(item, state) : matchedFolders)]).filter(Boolean);
   const tags = new Set(inherited.flatMap(parent => query && state.valuesFor ? state.valuesFor(parent, 4) : (parent.Tags ?? []).map(cleanValue)));
   if ((policy.BlockedTags ?? []).filter(tag => tag.trim()).map(cleanValue).some(tag => tags.has(tag))) return false;
   const exemptAllowed = item.Type === 'Person' || (!query && ['UserRootFolder', 'AggregateFolder', 'UserView'].includes(state.byId.get(idKey(item.ParentId))?.Type ?? item.Type));
@@ -132,11 +132,11 @@ export function visibleItem(item, user, state, { libraryOptions, configuration, 
   const withinStoredRating = entry => entry.InheritedParentalRatingValue == null || max == null || entry.InheritedParentalRatingValue < max
     || (entry.InheritedParentalRatingValue === max && (entry.InheritedParentalRatingSubValue ?? 0) <= (sub ?? 0));
   const ratingOptions = { libraryOptions, configuration };
-  const directRating = query ? undefined : itemParentalRating(item, state, ratingOptions);
+  const directRating = query ? undefined : itemParentalRating(item, state, ratingOptions, matchedFolders);
   const withinRating = query ? withinStoredRating : entry => ratingWithinLimit(
     sameId(entry.Id, item.Id) ? directRating : itemParentalRating(entry, state, ratingOptions), max, sub);
   if (!withinRating(item)) return false;
-  if (max != null) {
+  if (query && max != null) {
     const members = state.links.filter(link => sameId(link.ParentId, item.Id) && Number(link.ChildType) === 0);
     if (members.length && !members.some(link => { const child = state.byId.get(idKey(link.ChildId)); return child && withinRating(child); })) return false;
   }

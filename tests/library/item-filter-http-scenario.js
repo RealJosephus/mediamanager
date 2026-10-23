@@ -9,6 +9,8 @@ import pg from 'pg';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { quoteIdentifier, tableDefinition } from '../../src/database/model.js';
 import { cleanValue, EMPTY_ID, idKey } from '../../src/library/records.js';
+import { clearFolderChildIds, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
 import { createRuntime } from '../../src/runtime.js';
 
 const typeNames = {
@@ -511,6 +513,80 @@ async function seed(database, fixture, scenarioName) {
   });
 }
 
+async function prepareSeededRoots(runtime, database, programDataPath) {
+  const host = runtime.libraryScanHost, manager = runtime.itemCreation, links = runtime.linkedChildren;
+  assert.equal(host, runtime.library.rootHost);
+  const previousRoots = [await host.getUserRootFolder(), await host.getAggregateFolder()];
+  const virtualChildren = [...previousRoots[1].VirtualChildren];
+  const previousItems = new Map([...previousRoots, ...virtualChildren].map(item => [idKey(item.Id), item]));
+  const observations = { kind: 'seeded-catalogue-before-first-http', hostRebuilds: 0,
+    roots: [], unregistered: [], releases: [], virtualChildren: [] };
+  const describe = item => ({ Id: item.Id, NativeType: item.NativeType,
+    Path: item.Path, Name: item.Name, ParentId: item.ParentId, IsRoot: item.IsRoot,
+    Data: item.NativeData, repository: item.NativeRepositoryColumns,
+    physicalLocations: { present: item.PhysicalLocations !== undefined, value: item.PhysicalLocations },
+    physicalLocationsList: { present: item.PhysicalLocationsList !== undefined, value: item.PhysicalLocationsList } });
+  for (const root of previousRoots) {
+    const ids = postgresFolderChildIds(root);
+    observations.roots.push({ before: describe(root),
+      childIdsBefore: { present: ids !== null, empty: ids ? await ids.empty() : null } });
+    clearFolderChildIds(root);
+    releaseCachedFolderChildren(root);
+    assert.equal(postgresFolderChildIds(root), null);
+  }
+  // Native records this input with its business process stopped, then starts a
+  // fresh manager. Startup has already read our empty catalogue; discard those
+  // exact receivers once, after every injected row/path and before HTTP reads.
+  await host.close();
+  observations.hostRebuilds++;
+  for (const [key, item] of previousItems) {
+    const registered = manager.getCachedItemById(item.Id);
+    manager.unregisterItem(item.Id);
+    assert.equal(manager.getCachedItemById(item.Id), null);
+    observations.unregistered.push({ Id: item.Id, registered: registered !== null,
+      sameReceiver: registered === item, key });
+  }
+  await links.flushOwnedReleases();
+  observations.releases.push('flushOwnedReleases');
+  await links.flushReleases();
+  observations.releases.push('flushReleases');
+  const roots = [await host.getUserRootFolder(), await host.getAggregateFolder()];
+  for (const [index, root] of roots.entries()) {
+    const previous = previousRoots[index];
+    assert.notEqual(root, previous);
+    assert.equal(idKey(root.Id), idKey(previous.Id));
+    assert.equal(root.NativeType, previous.NativeType);
+    assert.equal(manager.getCachedItemById(root.Id), root);
+    assert.equal(postgresFolderChildIds(root), null);
+    const rows = await database.rows('BaseItems', { where: { Id: root.Id.toUpperCase() } });
+    assert.ok(rows.length <= 1);
+    if (root.Type === 'AggregateFolder') assert.equal(rows.length, 1);
+    const repository = root.NativeRepositoryColumns;
+    if (rows.length) assert.deepEqual(repository, rows[0]);
+    assert.equal(root.NativeData, repository.Data);
+    const canonicalPath = root.Type === 'UserRootFolder'
+      ? path.join(programDataPath, 'root', 'default') : path.join(programDataPath, 'root');
+    assert.equal(root.Path, canonicalPath);
+    Object.assign(observations.roots[index], { after: describe(root),
+      freshReceiver: root !== previous, repositoryRowPresent: rows.length === 1,
+      repositoryReadback: rows[0] ?? null, childIdsAfter: { present: postgresFolderChildIds(root) !== null },
+      canonicalPath: { stored: repository.Path, actual: root.Path,
+        reset: repository.Path !== root.Path } });
+  }
+  for (const item of roots[1].VirtualChildren) {
+    const previous = previousItems.get(idKey(item.Id));
+    if (previous) assert.notEqual(item, previous);
+    assert.equal(manager.getCachedItemById(item.Id), item);
+    const rows = await database.rows('BaseItems', { where: { Id: item.Id.toUpperCase() } });
+    assert.equal(rows.length, 1);
+    assert.deepEqual(item.NativeRepositoryColumns, rows[0]);
+    observations.virtualChildren.push({ ...describe(item), freshReceiver: previous ? item !== previous : null,
+      repositoryReadback: rows[0] });
+  }
+  assert.equal(observations.hostRebuilds, 1);
+  return observations;
+}
+
 function normalizeProblem(value) {
   if (Array.isArray(value)) return value.map(normalizeProblem);
   if (!value || typeof value !== 'object') return value;
@@ -811,6 +887,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     await seed(database, fixture, slug);
     if (prepareScenario) await prepareScenario({ database, programDataPath: programDataDirectory, fixture, user, users: runtime.users,
       storage: runtime.storage, plugins: runtime.plugins });
+    const rootPreparation = await prepareSeededRoots(runtime, database, programDataDirectory);
 
     runtime.server.listen(0, '127.0.0.1');
     await once(runtime.server, 'listening');
@@ -999,7 +1076,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       ? await metadataSnapshot(path.join(programDataDirectory, 'metadata')) : null;
     const filesystemDomainsAfterReads = captureFilesystemDomains ? await instanceFilesystemSnapshot(programDataDirectory, extraFilesystemDomains) : null;
     if (sideEffect && !sideEffect.afterFirst) throw new Error(`Side-effect case not run: ${trackSideEffectCase}.`);
-    result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id, cases, httpCases,
+    result = { dialect, schema: dialect === 'postgres' ? schema : null, programDataDirectory, userId: user.Id, rootPreparation, cases, httpCases,
       beforeReads, afterReads, filesystemBeforeReads, filesystemAfterReads,
       ...(captureStateKeys.length ? { stateBeforeReads, stateAfterReads } : {}),
       ...(warmUserViews ? { warmUserViews } : {}),

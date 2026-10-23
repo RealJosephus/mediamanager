@@ -1,5 +1,5 @@
 import { md5Guid } from '../core/identity.js';
-import { collectionFoldersForItem, parentChainForItem } from './collection-membership.js';
+import { parentChainForItem } from './collection-membership.js';
 import { collectionType } from './user-view-query.js';
 import { dateTicks, dtoId, idKey, VIDEO_TYPES } from './records.js';
 
@@ -39,7 +39,7 @@ export async function imageDisplayParent(current, original, state) {
   let parent = state.byId.get(idKey(displayId)) ?? state.byId.get(idKey(current.OwnerId))
     ?? state.byId.get(idKey(current.ParentId));
   if (!parent && !['UserRootFolder', 'UserView', 'AggregateFolder', 'CollectionFolder', 'Channel'].includes(original.Type)) {
-    parent = collectionFoldersForItem(original, state)[0];
+    parent = (await state.library.getCollectionFolders(original, state))[0];
   }
   return parent;
 }

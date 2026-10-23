@@ -3,8 +3,8 @@ import { loadLocalizationData } from '../core/localization-data.js';
 import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { nativeContainsSubPath } from '../library/native-path.js';
 import { idKey, libraryError, nonemptyId } from '../library/records.js';
-import { visibleItem } from '../library/permissions.js';
-import { cachedFolderChildren, parentChainForItem } from '../library/collection-membership.js';
+import { parentChainForItem } from '../library/collection-membership.js';
+import { rootCollectionType } from '../library/root-collection-type.js';
 import { loadPostgresMetadataRows } from '../library/postgres-library-query.js';
 import { clrTrim } from './whitespace.js';
 
@@ -117,24 +117,13 @@ function configuredType(item, configuration, { inherit = false } = {}) {
   return match && collectionTypes.has(match.Value) ? match.Value : null;
 }
 
-function inheritedType(item, state, configuration) {
-  let top = item;
-  const seen = new Set([idKey(item.Id)]);
-  while (nonemptyId(top.ParentId) && !seen.has(idKey(top.ParentId))) {
-    seen.add(idKey(top.ParentId));
-    const parent = state.byId.get(idKey(top.ParentId));
-    if (!parent || parent.Type === 'AggregateFolder') break;
-    top = parent;
-  }
+async function inheritedType(item, state, configuration, library) {
   const userRoot = state.items.find(candidate => candidate.Type === 'UserRootFolder');
   if (!userRoot) throw capabilityError('Metadata editor content types require the native user root.');
-  for (const folder of cachedFolderChildren(userRoot, state).filter(candidate => collectionFolderTypes.has(candidate.Type))) {
-    const locations = folder.Type === 'CollectionFolder' ? folder.PhysicalLocationsList ?? [] : folder.Path ? [folder.Path] : [];
-    if (!Array.isArray(locations)) throw capabilityError('Metadata editor collection locations are invalid.');
-    if (ordinalIgnoreCaseEquals(folder.Path ?? '', top.Path ?? '') || locations.includes(top.Path)) {
-      const value = collectionType(folder);
-      if (value !== null) return value;
-    }
+  const inherited = await rootCollectionType(library, item, state);
+  if (inherited !== null) {
+    if (!collectionTypes.has(inherited)) throw capabilityError(`Metadata editor content type '${inherited}' is not supported.`);
+    return inherited;
   }
   let value = null;
   for (const parent of parentChainForItem(item, state)) value = configuredType(parent, configuration) ?? value;
@@ -147,10 +136,10 @@ function itemSource(item) {
   return 'Library';
 }
 
-function contentTypeFields(item, state, configuration, localization) {
+async function contentTypeFields(item, state, configuration, localization, library) {
   if (item.IsVirtualItem || collectionFolderTypes.has(item.Type) || ['UserView', 'AggregateFolder', 'LiveTvChannel'].includes(item.Type)
     || itemByNameTypes.has(item.Type) || itemSource(item) !== 'Library') return { ContentTypeOptions: [] };
-  const inherited = inheritedType(item, state, configuration);
+  const inherited = await inheritedType(item, state, configuration, library);
   const configured = configuredType(item, configuration);
   if (inherited !== null && configured === null) return { ContentTypeOptions: [] };
   let options = [
@@ -184,7 +173,7 @@ export class MetadataEditorService {
       });
       try {
       const item = state.byId.get(idKey(itemId));
-      if (!item || user && !visibleItem(item, user, state, { ...this.library.options, query: false })) throw libraryError(404, 'Item not found.');
+      if (!item || user && !await this.library.isItemVisible(item, user, state)) throw libraryError(404, 'Item not found.');
       assertKnownItem(item);
       if (!this.configurationStore) throw capabilityError('Server configuration persistence is unavailable.');
       const folder = containingFolderPath(item);
@@ -206,11 +195,11 @@ export class MetadataEditorService {
       });
       try {
       const item = state.byId.get(idKey(itemId));
-      if (!item || user && !visibleItem(item, user, state, { ...this.library.options, query: false })) {
+      if (!item || user && !await this.library.isItemVisible(item, user, state)) {
         throw libraryError(404, 'Item not found.');
       }
       assertKnownItem(item);
-      const fields = contentTypeFields(item, state, this.configuration, this.localization);
+      const fields = await contentTypeFields(item, state, this.configuration, this.localization, this.library);
       return {
         ParentalRatingOptions: this.localizationData.parentalRatings(this.configuration.MetadataCountryCode || 'US'),
         Countries: structuredClone(this.localizationData.countries),
