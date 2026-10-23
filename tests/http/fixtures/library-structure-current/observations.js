@@ -18,7 +18,7 @@ export function structureNormalizer(row, sample) {
     if (typeof value === 'string') {
       if (!value.includes(row.views)) return value;
       for (const [index, directory] of temporary.entries()) value = value.replaceAll(directory, '{views}/temporary-' + (index + 1));
-      return value.replaceAll(row.views, '{views}').replaceAll('\\', '/');
+      return value.replaceAll(row.views, '{views}').split(path.sep).join('/');
     }
     if (Array.isArray(value)) return value.map(normalize);
     if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, normalize(entry)]));

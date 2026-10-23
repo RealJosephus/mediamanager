@@ -228,7 +228,7 @@ public class Capture {
     }
     public object[] Snapshot() => Directory.EnumerateFileSystemEntries(Views, "*", SearchOption.AllDirectories).Order(StringComparer.Ordinal).Select(filename => {
         var directory = Directory.Exists(filename);
-        return (object)new { path = Path.GetRelativePath(Views, filename).Replace('\\', '/'), kind = directory ? "directory" : "file",
+        return (object)new { path = Path.GetRelativePath(Views, filename).Replace(Path.DirectorySeparatorChar, '/'), kind = directory ? "directory" : "file",
             bytesBase64 = directory ? null : Convert.ToBase64String(File.ReadAllBytes(filename)),
             options = !directory && Path.GetFileName(filename) == "options.xml" ? ReadXml(filename) : null };
     }).ToArray();

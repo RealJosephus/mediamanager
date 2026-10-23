@@ -19,7 +19,8 @@ const absent = error => ['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'not-found', 'n
 const unsafeLink = error => error?.details?.reason === 'link' || error?.cause?.details?.reason === 'link';
 const linkFailure = error => Object.assign(libraryError(501, 'Library configuration must not traverse symbolic links or junctions.'), { cause: error });
 const validLibrarySegment = name => typeof name === 'string' && clrTrim(name) !== ''
-  && !/[\0\\/:]/u.test(name) && name !== '.' && name !== '..' && !/[. ]$/u.test(name);
+  && !name.includes('\0') && path.basename(name) === name && name !== '.' && name !== '..'
+  && (path.sep !== '\\' || !/[. ]$/u.test(name));
 
 /** Native library configuration files are instance state; media existence is
  * observed exclusively through the configured state/VFS asset source. */
@@ -126,8 +127,7 @@ export class LibraryConfigurationService {
     catch (error) { if (absent(error)) return false; throw error; }
   }
   async #virtualDirectory(name) {
-    if (typeof name !== 'string' || clrTrim(name) === '' || /[\0\\/:]/u.test(name)
-      || name === '.' || name === '..' || /[. ]$/u.test(name)) {
+    if (!validLibrarySegment(name)) {
       throw libraryError(404, 'The media collection does not exist.');
     }
     return this.#statePath(path.join(this.root, name));

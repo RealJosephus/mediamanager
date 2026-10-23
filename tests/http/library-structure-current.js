@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, realpath, rm, stat, writeFile } from 'node:fs/promises';
+import { gzipSync, gunzipSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -15,7 +16,41 @@ export const structureInput = JSON.parse(await readFile(new URL('input.json', pr
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, null, 2) + '\n';
 let pending;
+let archiveOutput;
+const fileStateRoots = [];
 export const currentLibraryStructure = () => pending ??= capture();
+
+export async function archiveStructureFiles() {
+  if (!archiveOutput) return;
+  const receipts = [];
+  for (const root of fileStateRoots) {
+    let entries;
+    try { entries = await readdir(root, { recursive: true, withFileTypes: true }); }
+    catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+    // Preserve real host filenames losslessly when artifact transport cannot
+    // carry a colon, backslash or another valid Unix filename character.
+    if (!entries.some(entry => /[\x00-\x1f<>:"\\|?*]/u.test(entry.name))) continue;
+    const role = path.relative(archiveOutput, root).split(path.sep).join('/'), files = [];
+    for (const entry of entries) {
+      assert.ok(entry.isFile() || entry.isDirectory(), 'Only isolated regular file states may be archived.');
+      const filename = path.join(entry.parentPath, entry.name), information = await stat(filename);
+      const bytes = entry.isFile() ? await readFile(filename) : null;
+      files.push({ path: path.relative(root, filename).split(path.sep).join('/'), kind: entry.isDirectory() ? 'directory' : 'file',
+        modified: information.mtime.toISOString(), bytes: bytes?.length ?? null, sha256: bytes ? sha(bytes) : null,
+        bytesBase64: bytes?.toString('base64') ?? null });
+    }
+    files.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
+    const bytes = Buffer.from(json({ schemaVersion: 1, root: role, entries: files }));
+    const filename = path.join(archiveOutput, 'file-state-' + sha(Buffer.from(role)).slice(0, 16) + '.json.gz');
+    await writeFile(filename, gzipSync(bytes), { flag: 'wx' });
+    assert.deepEqual(gunzipSync(await readFile(filename)), bytes, 'The portable archive retains every original path and file byte.');
+    receipts.push({ root: role, entries: files.length, contentSha256: sha(bytes), archive: await describeFile(filename) });
+    assertValidationOutputChild(root);
+    assert.equal(path.relative(await realpath(archiveOutput), await realpath(root)), path.relative(archiveOutput, root));
+    await rm(root, { recursive: true });
+  }
+  await writeFile(path.join(archiveOutput, 'file-state-archives.json'), json({ archives: receipts }), { flag: 'wx' });
+}
 
 async function verifyAssemblies(native, build) {
   const required = ['Jellyfin.Api', 'MediaBrowser.Controller', 'MediaBrowser.Model', 'Emby.Server.Implementations', 'jellyfin'];
@@ -30,6 +65,7 @@ async function capture() {
   const profile = JSON.parse(await readFile(profileUrl, 'utf8'));
   const output = path.join(validationOutputRoot(), 'library-structure-current-' + randomUUID());
   assertValidationOutputChild(output); await mkdir(output);
+  archiveOutput = output;
   const report = { schemaVersion: 1, scope: profile.scope, inputs: [], sourceBindings: [], captures: [],
     nativeExecutionRecorded: false, independentRepeatAgrees: false, actualNativeInstance: false,
     phaseAcceptance: false, releaseAcceptance: false };
@@ -57,6 +93,7 @@ async function capture() {
     const natives = [], projections = [];
     for (let iteration = 1; iteration <= 2; iteration++) {
       const directory = path.join(output, 'native-' + iteration);
+      fileStateRoots.push(path.join(directory, 'states'));
       const record = await recordOracle({ project, output: directory, args: [inputFile, '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await readFile(filename), native = JSON.parse(bytes);
       const capture = { iteration, record, observation: await describeFile(filename), files: [] };
@@ -86,6 +123,7 @@ async function capture() {
     assert.deepEqual(natives[1].markerTypes, natives[0].markerTypes);
     report.nativeExecutionRecorded = true; report.independentRepeatAgrees = true;
     const candidateRoot = path.join(output, 'candidate'); await mkdir(candidateRoot);
+    fileStateRoots.push(candidateRoot);
     const candidates = new Map();
     const recordCandidate = async row => {
       assert.ok(structureInput.cases.some(sample => sample.name === row.name));

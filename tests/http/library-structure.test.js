@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import test, { after } from 'node:test';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { createApplication } from '../../src/http/application.js';
@@ -11,10 +11,11 @@ import { deserializeLibraryOptions } from '../../src/library/options.js';
 import { decodeNativeText } from '../../src/core/native-text.js';
 import { parseCollectionTypeOption } from '../../src/library/collection-type-options.js';
 import { testFileSystem } from '../storage/plugin-files.js';
-import { currentLibraryStructure, structureInput } from './library-structure-current.js';
+import { archiveStructureFiles, currentLibraryStructure, structureInput } from './library-structure-current.js';
 import { projectStructureObservation } from './fixtures/library-structure-current/observations.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+after(archiveStructureFiles);
 const id = 'ca200000000000000000000000000009';
 
 test('library structure executes two current Native MVC, permission, rename and CollectionFolder consumers', async () => {

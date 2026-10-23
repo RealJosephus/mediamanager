@@ -88,7 +88,16 @@ test('postgres: library structure HTTP preserves options, shortcuts, deferred re
   assert.deepEqual(current.LibraryOptions.PathInfos, requested.PathInfos); assert.equal(current.LibraryOptions.Enabled, false);
   await state.reopen();
   assert.deepEqual((await state.list())[0], current);
-  assert.equal((await state.request('/Library/VirtualFolders?name=Renamed', { method: 'DELETE' })).status, 204);
+  const finalName = path.sep === '\\' ? 'Closed lifecycle' : 'Closed lifecycle. ';
+  assert.equal((await state.request('/Library/VirtualFolders/Name?name=Renamed&newName=' + encodeURIComponent(finalName))).status, 204);
+  assert.equal((await state.request('/Library/VirtualFolders/Paths/Update', {
+    body: { Name: finalName, PathInfo: { Path: 'Z:\\Unmapped\\Ignored' } },
+  })).status, 204);
+  const deferred = (await state.list())[0];
+  assert.equal(deferred.Name, finalName); assert.equal(Object.hasOwn(deferred, 'ItemId'), false);
+  await state.runtime.libraryScanLifecycle.validateTopLibraryFolders({ removeRoot: true });
+  assert.deepEqual((await state.list())[0].LibraryOptions, requested);
+  assert.equal((await state.request('/Library/VirtualFolders?name=' + encodeURIComponent(finalName), { method: 'DELETE' })).status, 204);
   assert.deepEqual(await state.list(), []);
   assert.equal((await state.adapter.stat('/Movies/Present.txt')).kind, 'file'); assert.equal((await state.adapter.stat('/Additional/Present.txt')).kind, 'file');
   assert.match(await fs.readFile(path.join(state.configurationDirectoryPath, 'system.xml'), 'utf8'), /preserved/);

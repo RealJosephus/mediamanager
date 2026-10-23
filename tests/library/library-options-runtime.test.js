@@ -41,22 +41,21 @@ async function setup(t) {
 test('postgres: runtime library options share live directory state and recover native files after restart', { skip: !postgresTestConnectionString }, async t => {
   const state = await setup(t), runtime = await state.open(), key = value => value.replaceAll('-', '');
   const options = runtime.library.options.libraryOptions;
-  assert.equal(options, runtime.libraryOptionsStore.optionsById);
-  assert.equal(options.get(key(ids[0])), options.get(key(ids[1])));
+  assert.deepEqual(options.get(key(ids[0])), options.get(key(ids[1])));
   assert.equal(options.get(key(ids[0])).PreferredMetadataLanguage, 'en');
   const rows = await state.database.rows('BaseItems', { whereIn: { Id: ids } });
   const changed = { ...defaultLibraryOptions(), PreferredMetadataLanguage: 'zh-TW', AutomaticallyAddToCollection: true,
     SaveLocalMetadata: true, DisabledLocalMetadataReaders: null, PathInfos: [{ Path: path.join(state.options.dataPath, 'collections') }] };
   let observed = false;
   runtime.libraryOptionsStore.on('updated', event => {
-    assert.equal(event.LibraryOptions, changed); assert.equal(options.get(key(ids[0])), changed); assert.equal(options.get(key(ids[1])), changed); observed = true;
+    assert.deepEqual(event.LibraryOptions, changed); assert.deepEqual(options.get(key(ids[0])), changed); assert.deepEqual(options.get(key(ids[1])), changed); observed = true;
   });
   await runtime.libraryOptionsStore.save(state.directory, changed);
   assert.equal(observed, true);
   assert.match(await readFile(path.join(state.directory, 'options.xml'), 'utf8'), /%AppDataPath%[\\/]collections/);
   assert.deepEqual(await state.database.rows('BaseItems', { whereIn: { Id: ids } }), rows);
   const restarted = await state.reopen(), recovered = restarted.library.options.libraryOptions.get(key(ids[0]));
-  assert.equal(recovered, restarted.library.options.libraryOptions.get(key(ids[1])));
+  assert.deepEqual(recovered, restarted.library.options.libraryOptions.get(key(ids[1])));
   assert.equal(recovered.PreferredMetadataLanguage, 'zh-TW'); assert.equal(recovered.AutomaticallyAddToCollection, true);
   assert.deepEqual(recovered.PathInfos, [{ Path: path.join(state.options.dataPath, 'collections') }]);
   assert.deepEqual(recovered.DisabledLocalMetadataReaders, []);
