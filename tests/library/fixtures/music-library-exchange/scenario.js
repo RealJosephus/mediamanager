@@ -154,7 +154,8 @@ export async function completeSnapshot(database) {
       [...nativeModel.tables.map(table => table.name), '__EFMigrationsHistory', '__EFMigrationsLock'].sort());
     assert.deepEqual(database.database.prepare('SELECT * FROM "__EFMigrationsLock"').all(), []);
   }
-  return { tables, migrationHistory: envelope.history, sqliteSequence: envelope.sqliteSequence,
+  return { tables, migrationHistory: envelope.history.map(row => ({ ...row })),
+    sqliteSequence: envelope.sqliteSequence.map(row => ({ ...row })),
     nativeSchemaFingerprint: envelope.fingerprint };
 }
 export async function installStoppedExport({ root, instanceRoot, exported }) {
