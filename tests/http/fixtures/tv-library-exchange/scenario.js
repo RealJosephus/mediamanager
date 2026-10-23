@@ -101,7 +101,7 @@ function nfoFor(entry) {
   const root = { Series: 'tvshow', Season: 'season', Episode: 'episodedetails' }[entry.type];
   return '<?xml version="1.0" encoding="utf-8"?>\n<' + root + '>\n'
     + element('title', entry.name) + element('plot', entry.overview) + element('genre', input.genre) + element('tag', input.tag)
-    + (entry.type === 'Series' ? element('tvdbid', entry.tvdb) + element('displayorder', 'aired') : '')
+    + (entry.type === 'Series' ? `<uniqueid type="Tvdb">${escapeXml(entry.tvdb)}</uniqueid>` + element('displayorder', 'aired') : '')
     + (entry.type === 'Season' ? element('seasonnumber', entry.number) : '')
     + (entry.type === 'Episode' ? element('season', entry.seasonNumber) + element('episode', entry.number)
       + element('showtitle', input.series.name) : '')

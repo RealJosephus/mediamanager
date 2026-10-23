@@ -11,6 +11,11 @@
 
 The import/save transition is deliberate. The designated Native MetadataService persists a first refresh before selecting local providers, and SeasonNfoSaver accepts MetadataImport when `season.nfo` already exists. Enabling this saver before importing a newly resolved Season can therefore overwrite the input before its reader runs. The separate enabled control preserves the actual behavior; the exchange gate verifies original local metadata import followed by explicitly enabled editing and saving.
 
+The Series input declares its provider identity with `<uniqueid type="Tvdb">`.
+The actual parser accepts that explicit provider without an installed remote
+provider. Every observed Series DTO must retain the declared Tvdb value through
+both first imports and the complete exchange.
+
 The fixture generates a tiny FFV1/PCM MKV with the supplied real FFmpeg. That is input preparation. The actual Native workspace uses `127.0.0.1:5244/d/...` for local media, so the fixture must own that port and only serves four exact private business filenames, including actual Range requests and source digest checks. It fails on an occupied port and never reuses an existing service. Node uses its normal VFS probe bridge. Host ancestors map to a separate empty read-only directory for ignore lookup; the only writable library mapping is the private fixture root.
 
 The JSON report and original Native logs are published with secrets filtered, along with hashes for input, media tools, requests, public results, persisted rows, complete-table snapshots and cleanup. The generated media input and each observed NFO retain their original bytes as base64 in the report. Stage flags derive from completed observations. Native input, runtime and source bindings are checked by `currentNativeReference.finish()`; both PostgreSQL schemas, owned servers and proxy must close before private evidence is removed.

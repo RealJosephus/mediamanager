@@ -197,8 +197,9 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
       'MediaBrowser.Providers/TV/SeriesMetadataService.cs',
       'MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs', 'MediaBrowser.XbmcMetadata/Providers/EpisodeNfoProvider.cs',
       'MediaBrowser.XbmcMetadata/Providers/SeasonNfoProvider.cs',
+      'MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs', 'MediaBrowser.XbmcMetadata/Parsers/SeriesNfoParser.cs',
       'MediaBrowser.XbmcMetadata/Savers/EpisodeNfoSaver.cs',
-      'MediaBrowser.XbmcMetadata/Savers/SeasonNfoSaver.cs']);
+      'MediaBrowser.XbmcMetadata/Savers/SeasonNfoSaver.cs', 'MediaBrowser.XbmcMetadata/Savers/SeriesNfoSaver.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     await current.prepareClone(instanceRoot, nativePort);
     report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
