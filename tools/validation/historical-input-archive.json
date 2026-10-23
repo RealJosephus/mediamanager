@@ -89,7 +89,7 @@
         "tests/core/fixtures/native-charset/provenance.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
           "tests/core/native-charset.test.js"
         ]
@@ -102,7 +102,7 @@
         "tests/core/fixtures/native-json-encoder/provenance.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
           "tests/core/native-json-encoder.test.js"
         ]

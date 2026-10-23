@@ -8,7 +8,6 @@ import { dependencyClosure, inventory } from '../../tools/validation/inventory.j
 import { recordedInputMapPath, recordedInputPath, repositoryRoot } from '../../tools/validation/paths.js';
 
 const consumers = [
-  'tests/core/native-charset.test.js', 'tests/core/native-json-encoder.test.js',
   'tests/library/native-item-cache.test.js', 'tests/library/warm-item-deletion.test.js', 'tests/http/warm-item-deletion.test.js',
 ];
 const entry = (filename, imports = []) => ({ path: filename, test: filename.endsWith('.test.js'), imports,
@@ -223,9 +222,12 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
 });
 
-test('Startup current readers bind neutral scenarios without acquiring the historical recording', async t => {
-  const consumer = 'tests/http/startup.test.js';
-  const manifest = 'tests/http/fixtures/startup/current-profile.json';
+for (const [consumer, fixture, services, archiveId] of [
+  ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup'],
+  ['tests/core/native-charset.test.js', 'tests/core/fixtures/native-charset', ['dotnet', 'jellyfinDll'], 'sealed-charset'],
+  ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
+]) test(`${archiveId} current readers bind scenarios without acquiring the historical recording`, async t => {
+  const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
   assert.deepEqual(contract, { kind: 'current-oracle', manifest, loader: consumer });
   const profileFilename = path.join(repositoryRoot, manifest);
@@ -233,12 +235,11 @@ test('Startup current readers bind neutral scenarios without acquiring the histo
   await assertOracleSourcesProfiled(profile, profileFilename);
   const references = executionManifestReferences(contract, profile, profileFilename);
   assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
-    'tests/Directory.Build.props', 'tests/http/fixtures/startup/current/Oracle.csproj',
-    'tests/http/fixtures/startup/current/Program.cs', 'tests/http/fixtures/startup/input.json',
-  ]);
+    'tests/Directory.Build.props', fixture + '/current/Oracle.csproj', fixture + '/current/Program.cs', fixture + '/input.json',
+  ].sort());
   const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
-  assert.deepEqual(closure.find(value => value.path === consumer).services, ['dotnet', 'jellyfinDll', 'postgres']);
-  const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-startup-current-'));
+  assert.deepEqual(closure.find(value => value.path === consumer).services, services);
+  const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-reader-current-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   for (const directory of ['host', 'shared', 'sdk', 'runtime']) await mkdir(path.join(root, directory));
   const dotnet = path.join(root, process.platform === 'win32' ? 'dotnet.exe' : 'dotnet');
@@ -258,7 +259,7 @@ test('Startup current readers bind neutral scenarios without acquiring the histo
   for (const filename of ['native.json', 'provenance.json', 'Program.cs', 'Oracle.csproj']) {
     assert.ok(!described.includes(path.join(path.dirname(profileFilename), filename)), filename);
   }
-  assert.equal(identity.historicalArchive.profiles.find(value => value.id === 'sealed-startup')?.disposition, 'current-identity');
+  assert.equal(identity.historicalArchive.profiles.find(value => value.id === archiveId)?.disposition, 'current-identity');
 });
 
 test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles without historical execution paths', async t => {
@@ -351,7 +352,7 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
   });
 });
 
-test('the five remaining directory-based seal consumers capture their original sources, runtime pins and local inputs with exact ownership', async () => {
+test('remaining directory-based seal consumers capture their original sources, runtime pins and local inputs with exact ownership', async () => {
   const unrelated = 'tests/core/composite-format.test.js', shared = 'tests/library/warm-fixture-seal.js';
   const dependencies = { entries: [...consumers.map(consumer => {
     const { loader } = executionManifestContract(consumer);
@@ -371,22 +372,13 @@ test('the five remaining directory-based seal consumers capture their original s
       if (pin) assert.ok(input.expectedDigests.includes(pin), filename);
     };
     required(filename);
-    if (consumer === 'tests/core/native-charset.test.js') {
-      required(proof.record.filename, proof.record.sha256);
-      required(proof.repeat.raw.filename, proof.repeat.raw.sha256);
-      required(proof.dotnet.filename, proof.dotnet.sha256);
-      for (const source of proof.upstream.sources) required(source.filename ?? source.path, source.sha256);
-      for (const assembly of proof.loadedAssemblies) required(assembly.filename ?? assembly.path, assembly.sha256);
-      required(path.join(path.dirname(filename), 'native.json'), proof.native.sha256);
-    } else {
+    {
       for (const descriptor of Object.values(proof.files)) required(path.resolve(path.dirname(filename), descriptor.filename), descriptor.sha256);
       required(proof.files.rawRecording.filename, proof.files.rawRecording.sha256);
       required(proof.repeat.filename, proof.repeat.sha256);
       if (contract.kind === 'sealed-warm') {
         for (const descriptor of [proof.jellyfin.sourceCapture, proof.jellyfin.boundBuildAudit,
           ...Object.values(proof.runtime), ...Object.values(proof.repeat.runtime)]) required(descriptor.filename, descriptor.sha256);
-      } else if (contract.kind === 'sealed-json') {
-        for (const descriptor of [proof.jellyfin.assembly, proof.runtime.dotnet, proof.runtime.oracleAssembly]) required(descriptor.filename, descriptor.sha256);
       }
       for (const assembly of proof.assemblies ?? []) required(proof.jellyfin.assemblyDirectory + '/' + assembly.name + '.dll', assembly.sha256);
     }

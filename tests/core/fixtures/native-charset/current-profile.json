@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs for same-run designated Native charset selection and Playlist text decoding.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 4443,
+      "sha256": "ffdf3c1e120090ca7cd4d8dcc667ef4815f068cecdacf96dcad883efd30bf9a9"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 3597,
+      "sha256": "4e8d913c5ed95fcb643718931f3e636677f5a731cabe4851a5daccbf25105111"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 390,
+      "sha256": "bbcb99f31c2d4ecda52035db6144abba0b568f3677515e8a65a8e2a9b7637f16"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}
