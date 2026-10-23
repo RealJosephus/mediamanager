@@ -43,6 +43,9 @@ tests/**/fixtures/**/*.cs -text
 tests/**/fixtures/**/*.csproj -text
 # Content-addressed evidence must retain its original bytes in every checkout.
 /tests/fixtures/recorded-native/objects/** -text
+# Generated recorded-input indexes use one cross-platform byte form.
+/tools/validation/recorded-input-sources.json text eol=lf
+/tools/validation/recorded-inputs.json text eol=lf
 # Historical provenance also binds the original recorder bytes.
 /tools/compat/record-collection-post-scan.mjs -text
 /tests/sessions/fixtures/instant-mix/Oracle.csproj -text
@@ -360,3 +363,7 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/library/fixtures/book-photo-global-runtime/assets/** -text
 /tests/metadata/fixtures/book-epub-runtime/assets/** -text
 /tests/metadata/fixtures/book-opf-current/assets/** -text
+
+# Derived recorded-input manifests use the generator's canonical LF bytes.
+/tests/library/fixtures/library-directory-monitor/required-inputs.json text eol=lf
+/tests/images/fixtures/user-view-collage/required-inputs.json text eol=lf

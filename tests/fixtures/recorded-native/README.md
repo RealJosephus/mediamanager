@@ -1,13 +1,19 @@
 # Portable recording evidence
 
-This directory contains unchanged copies of the exact files required by the
-directory-monitor, UserView-collage and XML prefix recordings. The original native outputs
-and provenance files remain unchanged. The relocation table is
-`tools/validation/recorded-inputs.json`; each original path and SHA-256 pair has
-one exact target and byte count. A missing or conflicting expected digest never
-selects a bundled file. `required-inputs.json` beside the monitor/collage fixtures
-binds their additional helper/source/record inputs and the retained license files;
-the XML entries use explicit execution-manifest contracts for each test consumer.
+This directory contains unchanged copies of sealed inputs used by the recorded
+directory-monitor, UserView-collage, XML prefix, scheduler, splashscreen,
+collection-task and folder-progress evidence. The original native outputs and
+provenance files remain unchanged. `tools/validation/recorded-input-sources.json`
+is the single reviewed packaging plan: every original path and SHA-256 identity
+declares its byte count, consumers, sealed target and tracked acquisition path.
+The plan also declares the exact source-identity order of the two non-empty
+`required-inputs.json` manifests, including the three retained license files.
+
+`tools/validation/recorded-inputs.json` and the monitor/collage
+`required-inputs.json` files are deterministic derived indexes. A missing or
+conflicting expected digest never selects a bundled file. The XML and other
+entries use their existing explicit consumer contracts; this packaging change
+does not broaden those gates.
 
 `recordedInputPath` resolves these files only for reading recording evidence.
 It does not select a runtime or executable. In particular, the Windows
@@ -38,9 +44,19 @@ The .NET host's original `LICENSE-Dotnet.txt` and
 not distribute SDK, operating-system or NuGet runtime binaries or claim a newly
 reproduced build.
 
-`tools/validation/package-recorded-inputs.js` prepares this narrow package from
-the recorded originals, checks every original byte count and digest, and refuses
-to replace existing different package bytes. It runs no oracle or test.
+`tools/validation/package-recorded-inputs.js` regenerates the derived indexes in
+a clean checkout using only the tracked sealed payloads named by the central
+plan. It checks every byte count and digest, scans JSON payloads for
+secret-bearing fields, and refuses to replace different immutable payload bytes.
+It deterministically overwrites only the derived relocation and required-input
+indexes. It does not read the old machine-absolute source locations, invoke Git,
+unpack source archives, run an oracle, or run a test.
+
+This reproducible packaging path proves that the current tracked payloads and
+their indexes agree. It does not claim that every input from every historical
+native execution remains available, nor does it turn old runtime/build internals
+into current product-compatibility requirements. Historical closure gaps remain
+separate from current functional, persistent-format and bidirectional evidence.
 
 `tools/validation/package-jellyfin-source.ps1` prepares the complete source ZIP
 from the receipt-bound source copy, retaining each member's exact recorded hash.
