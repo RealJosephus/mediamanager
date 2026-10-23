@@ -241,6 +241,8 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll'], null, 'input.json', [], ''],
   ['tests/library/movie-similar.test.js', 'tests/library/fixtures/movie-similar',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
+  ['tests/library/postgres-collection-maintenance.test.js', 'tests/library/fixtures/collection-source',
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
   ['tests/core/server-identity.test.js', 'tests/core/fixtures/server-identity',
     ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current-consumer/Program.cs', 'current-consumer/Oracle.csproj',
       'current/FileSharingProbe.cs', 'current/observations.js', '../../native-file-holder.js']],

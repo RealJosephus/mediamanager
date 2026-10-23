@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native collection source selection: independent LibraryManager/repository/SQLite observations, PostgreSQL full persisted rows, ordered roots and 23 Movie pages, plus 20000-row bounded query coverage.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/Validators/CollectionPostScanTask.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Controller/Entities/UserView.cs",
+    "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+    "MediaBrowser.Controller/Entities/BasePluginFolder.cs",
+    "Emby.Server.Implementations/Playlists/PlaylistsFolder.cs",
+    "MediaBrowser.Controller/Entities/Movies/Movie.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/DescendantQueryHelper.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 12741,
+      "sha256": "7caad00b84c4362fd3d7c365d229ebe5ef4ea9e289a1ef7118a6e8014bf5e0a3"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 12331,
+      "sha256": "48ae4c87fd8118eda0599dcd9f492c023b02c13f8ed4eaf8ebdfa1988b71fc24"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1345,
+      "sha256": "85517f503080a223ad02b544898de3832560c3e57bd871a120cb9117687bc3f6"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

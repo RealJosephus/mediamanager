@@ -413,3 +413,5 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/http/fixtures/password-reset-http-current/observations.js text eol=lf
 /tests/http/fixtures/password-reset-http-current/current-profile.json text eol=lf
 /tests/core/native-file-holder.js text eol=lf
+/tests/library/fixtures/collection-source/current/** -text
+/tests/library/fixtures/collection-source/current-profile.json text eol=lf
