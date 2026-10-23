@@ -372,3 +372,7 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/http/fixtures/startup/current-profile.json text eol=lf
 /tests/library/fixtures/collection-playlist-resolution/current/** -text
 /tests/library/fixtures/collection-playlist-resolution/current-profile.json text eol=lf
+/tests/metadata/fixtures/nfo-partial-reader/current/** -text
+/tests/metadata/fixtures/nfo-partial-reader/current-profile.json text eol=lf
+/tests/metadata/fixtures/nfo-scalar-provider/current/** -text
+/tests/metadata/fixtures/nfo-scalar-provider/current-profile.json text eol=lf

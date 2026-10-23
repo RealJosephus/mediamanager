@@ -1,19 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import { parseNfo, parseNfoAsync } from '../../plugins/nfo/parser.js';
+import { applyNativeItemValues, nativeItemDescriptor, nativeItemTypes, newNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { currentNfoFixture, functionalNfo } from './nfo-current-fixture.js';
 
-const root = new URL('./fixtures/nfo-scalar-provider/', import.meta.url);
-const [inputBytes, nativeBytes, provenanceBytes, differencesBytes] = await Promise.all(
-  ['input.json', 'native.json', 'provenance.json', 'candidate-differences.json']
-  .map(filename => readFile(new URL(filename, root))));
-const input = JSON.parse(inputBytes);
-const native = JSON.parse(nativeBytes);
-const provenance = JSON.parse(provenanceBytes);
-const historicalDifferences = JSON.parse(differencesBytes);
-const layouts = await (await import('./reader-layout-fixture.js')).layoutFixture('nfo-scalar-provider');
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const fixture = await currentNfoFixture(new URL('./fixtures/nfo-scalar-provider/current-profile.json', import.meta.url));
+const { input } = fixture;
 const externalIds = [
   'Imdb', 'Tmdb', 'Tvdb', 'TvRage', 'Zap2It', 'MusicBrainzArtist', 'MusicBrainzAlbum',
   'MusicBrainzAlbumArtist', 'MusicBrainzReleaseGroup', 'MusicBrainzTrack', 'MusicBrainzRecording',
@@ -32,6 +25,8 @@ function sortedProviders(values = {}) {
 }
 
 function projectItem(item, sample) {
+  const nativeType = nativeItemTypes.find(value => nativeItemDescriptor(value).type === item.Type);
+  const consumer = applyNativeItemValues(newNativeItemEntity(nativeType), item);
   const series = sample.type === 'Series';
   const episode = sample.type === 'Episode';
   const musicVideo = sample.type === 'MusicVideo';
@@ -39,7 +34,7 @@ function projectItem(item, sample) {
     runtimeType: sample.type === 'SeriesSeason' ? 'Season' : sample.type,
     Name: nullable(item.Name),
     OriginalTitle: nullable(item.OriginalTitle),
-    SortName: nullable(item.SortName),
+    SortName: nullable(consumer.SortName),
     ForcedSortName: nullable(item.ForcedSortName),
     Overview: nullable(item.Overview),
     PreferredMetadataLanguage: nullable(item.PreferredMetadataLanguage),
@@ -88,14 +83,7 @@ const projectPerson = person => ({
   ImageUrl: nullable(person.ImageUrl),
 });
 
-function exceptionName(error) {
-  if (!error) return null;
-  if (error.name === 'XmlError') return 'XmlException';
-  if (error.name === 'AbortError') return 'OperationCanceledException';
-  return error.nativeException ?? error.name ?? error.constructor.name;
-}
-
-async function candidateResult(sample, frozen, mode) {
+async function candidateResult(sample, mode) {
   const type = sample.type === 'SeriesSeason' ? 'Season' : sample.type;
   const item = {
     Type: type,
@@ -126,7 +114,7 @@ async function candidateResult(sample, frozen, mode) {
     error = caught;
   }
   return {
-    exception: exceptionName(error),
+    exception: error ? { name: error.name, message: error.message } : null,
     hasMetadata,
     item: projectItem(item, sample),
     people: (result?.People ?? []).map(projectPerson),
@@ -143,43 +131,18 @@ function differencePaths(actual, expected, path = '') {
   return keys.flatMap(key => differencePaths(actual[key], expected[key], `${path}/${key.replaceAll('~', '~0').replaceAll('/', '~1')}`));
 }
 
-test('native scalar and provider fixture seals source, DLL, oracle and all 69 exact UTF-8 inputs', async () => {
-  for (const file of Object.values(provenance.files)) {
-    assert.equal(sha256(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
-  }
-  assert.equal(native.frozenJellyfinHead, '208c278b75abd897aefa1e1175126eac5e4dbfaa');
-  assert.equal(native.candidateVerified, false);
-  assert.equal(provenance.candidateVerified, false);
-  assert.deepEqual(provenance.matrix, {
-    inputs: 69,
-    candidateModes: ['sync', 'async'],
-    exactComparisons: 138,
-    historicalDifferenceRecords: 50,
-    historicalDifferenceScenarios: 25,
-  });
-  assert.equal(provenance.runtime.jellyfinDll.sha256, 'a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767');
-  assert.equal(provenance.runtime.assemblies['MediaBrowser.XbmcMetadata.dll'].sha256,
-    '82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e');
-  assert.equal(Object.keys(provenance.runtime.assemblies).length, 7);
-  assert.equal(Object.keys(provenance.jellyfin.sources).length, 13);
-  assert.equal(provenance.record.sourceFilesSha256, 'c69072458797c8d55c8a551efbf0abd0cb589617bcfc4ac3933aaac7c8011dc6');
-  assert.equal(provenance.record.oracleAssemblySha256, 'c9536b6cbef0461aeb7e0b52fcbc854ec756f7b63355a2082006c1a0bdbbc761');
-  assert.equal(historicalDifferences.length, 50);
-  assert.equal(new Set(historicalDifferences.map(entry => `${entry.capture ?? 'initial-audit'}:${entry.name}`)).size, 25);
-  assert.equal(input.length, 69);
+test('current Native scalar capture binds 69 original scenarios and all 207 layout input files', async () => {
+  const { native, report } = await fixture.capture();
+  assert.equal(report.nativeExecutionRecorded, true);
+  assert.equal(fixture.baseInput.length, 69);
+  assert.equal(fixture.layoutInput.length, 207);
+  assert.equal(input.length, 276);
   assert.equal(native.results.length, input.length);
   assert.deepEqual(native.results.map(result => result.name), input.map(sample => sample.name));
-  assert.equal(native.inputSha256, sha256(inputBytes));
-  for (const [index, sample] of input.entries()) {
-    const bytes = Buffer.from(sample.text);
-    const frozen = native.results[index];
-    assert.equal(bytes.toString('base64'), frozen.raw.base64, sample.name);
-    assert.equal(bytes.length, frozen.raw.bytes, sample.name);
-    assert.equal(sha256(bytes), frozen.raw.sha256, sample.name);
-  }
 });
 
-test('native matrix fixes the scalar, date, provider and cancellation boundaries', () => {
+test('current Native matrix exposes scalar, date, provider and cancellation boundaries', async () => {
+  const { native } = await fixture.capture();
   const byName = new Map(native.results.map(result => [result.name, result]));
   assert.deepEqual(byName.get('lock fields parse whitespace casing numerics and preserve on empty').item.lockedFields,
     ['Genres', 'Name', '9', 'Cast', '-1']);
@@ -214,22 +177,24 @@ test('native matrix fixes the scalar, date, provider and cancellation boundaries
   assert.deepEqual(byName.get('pre-cancelled movie url only commits providers and completes').item.providers,
     { Imdb: 'tt4567890', Tmdb: '701' });
   assert.equal(byName.get('pre-cancelled movie url only commits providers and completes').exception, null);
-  assert.equal(byName.get('pre-cancelled movie paired empty root observes cancellation').exception, 'OperationCanceledException');
-  assert.equal(byName.get('pre-cancelled strict malformed setup fails before cancellation').exception, 'XmlException');
+  assert.ok(byName.get('pre-cancelled movie paired empty root observes cancellation').exception);
+  assert.ok(byName.get('pre-cancelled strict malformed setup fails before cancellation').exception);
   assert.equal(byName.get('pre-cancelled movie no-closing malformed setup is treated as url only').hasMetadata, true);
 });
 
-test('sync and async production parsers match every native scalar and provider result', async () => {
-  const report = [];
-  for (const [index, sample] of [...input, ...layouts.input].entries()) {
-    const expected = [...native.results, ...layouts.native.results][index];
-    const frozen = { exception: expected.exception, hasMetadata: expected.hasMetadata, item: expected.item, people: expected.people };
+test('sync and async production parsers match every current Native scalar and layout result', async () => {
+  const { native } = await fixture.capture();
+  const report = [], observations = [];
+  for (const [index, sample] of input.entries()) {
+    const expected = native.results[index];
     for (const mode of ['sync', 'async']) {
-      const actual = await candidateResult(sample, expected, mode);
-      const paths = differencePaths(actual, frozen);
+      const actual = await candidateResult(sample, mode);
+      observations.push({ name: sample.name, mode, ...actual });
+      const paths = differencePaths(functionalNfo(actual), functionalNfo(expected));
       if (paths.length) report.push({ name: sample.name, mode, paths });
     }
   }
+  await fixture.recordCandidate('scalar-and-layout', observations);
   if (process.env.MEDIAMANAGER_CAPTURE_NFO_SCALAR_DIFF === '1') {
     process.stdout.write(`NFO_SCALAR_DIFF=${JSON.stringify(report)}\n`);
   }

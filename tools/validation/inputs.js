@@ -32,7 +32,7 @@ const historicalArchiveRootsById = new Map([
 const historicalArchiveIds = new Set(historicalArchiveRootsById.keys());
 const historicalArchiveRoots = new Set([...historicalArchiveRootsById.values()].flat());
 const currentIdentityArchiveIds = new Set(['search-lookup-sources', 'sealed-rating', 'password-reader', 'sealed-startup',
-  'sealed-collection-playlist', 'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto', 'sealed-warm']);
+  'sealed-collection-playlist', 'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto', 'sealed-warm', 'nfo-repeats']);
 
 // These reviewed manifests bind the bytes that their consumers execute or
 // compare. Keep each contract at the actual caller/kind boundary: another kind
@@ -52,14 +52,15 @@ const executionManifests = new Map([
   ['tests/library/native-item-cache.test.js', ['current-oracle', 'tests/library/fixtures/native-item-cache/current-profile.json']],
   ['tests/library/warm-item-deletion.test.js', ['current-oracle', 'tests/library/fixtures/warm-item-deletion/current-profile.json']],
   ['tests/http/warm-item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/warm-item-deletion/current-profile.json']],
+  ['tests/metadata/nfo-partial-reader.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-partial-reader/current-profile.json']],
+  ['tests/metadata/nfo-scalar-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-scalar-provider/current-profile.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
-  ...['local-xml-provider', 'nfo-episode-blocks', 'nfo-scalar-provider']
+  ...['local-xml-provider', 'nfo-episode-blocks']
     .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
 ]);
 const sealedExecutionManifests = new Map([
-  ['tests/plugins/native-repeat.test.js', ['nfo-repeats', 'tests/metadata/fixtures/nfo-partial-reader/repeat.json']],
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
   ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
@@ -186,22 +187,6 @@ export function executionManifestReferences(contract, content, filename) {
   };
   if (contract.kind === 'current-oracle') {
     for (const descriptor of content.inputs) add({ ...descriptor, filename: local(descriptor.filename) });
-  } else if (contract.kind === 'nfo-repeats' || contract.kind === 'nfo-repeat') {
-    add(content.input);
-    for (const record of content.recordings) for (const descriptor of [record.dotnet, record.jellyfinDll,
-      record.oracleAssembly, ...record.sourceFiles, ...record.outputs]) add(descriptor);
-    for (const descriptor of content.outputs) add(descriptor);
-    add({ filename: local('provenance.json') }, { nested: 'nfo-repeat-source' });
-    if (contract.kind === 'nfo-repeats') add({ filename: local('../nfo-scalar-provider/repeat.json') }, { nested: 'nfo-repeat' });
-  } else if (contract.kind === 'nfo-repeat-source') {
-    for (const [filename, sha256] of Object.entries(content.jellyfin.sources)) {
-      for (const root of [content.jellyfin.root, 'D:/mediamanager-validation/20261005/jellyfin-baseline/source']) {
-        add({ filename: path.join(root, filename), sha256 });
-      }
-    }
-    for (const [filename, descriptor] of Object.entries(content.runtime.assemblies)) {
-      add({ ...descriptor, filename: path.join(path.dirname(content.runtime.jellyfinDll.path), filename) });
-    }
   } else if (contract.kind === 'splashscreen-sources') {
     for (const source of content.consumerSources) add(source, { recorded: true });
   } else if (contract.kind === 'collection-task-sources') {

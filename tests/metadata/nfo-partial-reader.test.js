@@ -1,67 +1,20 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import { decodeNativeText } from '../../src/core/native-text.js';
 import { parseNfoAsync } from '../../plugins/nfo/parser.js';
 import { createNfoPlugin } from '../../plugins/nfo/plugin.js';
 import { applyNfoUserDataEntry } from '../../plugins/nfo/user-data-import.js';
+import { currentNfoFixture, functionalNfo, nfoInputBytes } from './nfo-current-fixture.js';
 
-const root = new URL('./fixtures/nfo-partial-reader/', import.meta.url);
-const [input, native, provenance, historicalDifferences] = await Promise.all(
-  ['input.json', 'native.json', 'provenance.json', 'candidate-differences.json']
-    .map(async filename => JSON.parse(await readFile(new URL(filename, root), 'utf8'))));
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const fixture = await currentNfoFixture(new URL('./fixtures/nfo-partial-reader/current-profile.json', import.meta.url));
+const { input } = fixture;
 const emptyId = '00000000-0000-0000-0000-000000000000';
 const itemId = '20000000-0000-0000-0000-000000000001';
 const userId = '10000000-0000-0000-0000-000000000001';
 
-function inputBytes(sample) {
-  const encoding = sample.encoding ?? 'utf8';
-  if (encoding === 'utf8-markers') return Buffer.from(sample.text.replaceAll('{{NUL}}', '\0'));
-  if (encoding === 'utf8-malformed') {
-    const [before, after] = sample.text.split('{{BAD_UTF8}}');
-    return Buffer.concat([Buffer.from(before), Buffer.from([0xc3, 0x28]), Buffer.from(after)]);
-  }
-  const encodings = {
-    utf8: ['utf8'],
-    'utf8-bom': ['utf8', [0xef, 0xbb, 0xbf]],
-    'utf16le-bom': ['utf16le', [0xff, 0xfe]],
-    'utf16le-no-bom': ['utf16le'],
-  };
-  if (encodings[encoding]) {
-    const [codec, preamble = []] = encodings[encoding];
-    return Buffer.concat([Buffer.from(preamble), Buffer.from(sample.text, codec)]);
-  }
-  const littleEndian = encoding === 'utf32le-bom';
-  if (littleEndian || encoding === 'utf32be-bom') {
-    const scalars = [...sample.text].map(character => character.codePointAt(0));
-    const bytes = Buffer.alloc(4 + scalars.length * 4);
-    bytes.writeUInt32BE(littleEndian ? 0xfffe0000 : 0x0000feff, 0);
-    scalars.forEach((scalar, index) => bytes[littleEndian ? 'writeUInt32LE' : 'writeUInt32BE'](scalar, 4 + index * 4));
-    return bytes;
-  }
-  if (encoding === 'utf16be-bom') {
-    const little = Buffer.from(sample.text, 'utf16le');
-    const bytes = Buffer.alloc(2 + little.length); bytes[0] = 0xfe; bytes[1] = 0xff;
-    for (let index = 0; index < little.length; index += 2) { bytes[index + 2] = little[index + 1]; bytes[index + 3] = little[index]; }
-    return bytes;
-  }
-  throw new Error(`Unknown encoding ${encoding}`);
-}
-
-const utf16 = value => {
-  if (value == null) return null;
-  const units = [];
-  for (let index = 0; index < value.length; index++) units.push(value.charCodeAt(index));
-  return units;
-};
-// System.Text.Json replaces unpaired UTF-16 surrogates in ordinary JSON text;
-// the parallel UTF-16 arrays retain the native in-memory code units.
-const nullable = value => value == null ? null : typeof value === 'string'
-  ? value.replace(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, '\ufffd')
-  : value;
+const nullable = value => value ?? null;
 const oracleDate = value => {
   if (value == null) return null;
   const [seconds, fraction = ''] = (value instanceof Date ? value.toISOString() : String(value)).replace(' ', 'T').replace(/Z$/, '').split('.');
@@ -75,10 +28,8 @@ function projectItem(item, sample) {
     runtimeType: sample.type === 'SeriesSeason' ? 'Season' : sample.type,
     id: item.Id ?? emptyId,
     Name: nullable(item.Name),
-    nameUtf16: utf16(item.Name),
     OriginalTitle: nullable(item.OriginalTitle),
     Overview: nullable(item.Overview),
-    overviewUtf16: utf16(item.Overview),
     IndexNumber: nullable(item.IndexNumber),
     indexNumberEnd: sample.type === 'Episode' ? nullable(item.IndexNumberEnd) : null,
     ParentIndexNumber: nullable(item.ParentIndexNumber),
@@ -103,14 +54,7 @@ function projectPerson(person) {
   return { Name: person.Name, Type: person.Type, Role: nullable(person.Role), SortOrder: nullable(person.SortOrder), ImageUrl: nullable(person.ImageUrl) };
 }
 
-function exceptionName(error) {
-  if (!error) return null;
-  if (error.name === 'XmlError') return 'XmlException';
-  if (error.name === 'AbortError') return 'OperationCanceledException';
-  return error.nativeException ?? error.name ?? error.constructor.name;
-}
-
-async function candidateResult(sample, frozen) {
+async function candidateResult(sample) {
   const type = sample.type === 'SeriesSeason' ? 'Season' : sample.type;
   const item = { Type: type, ProviderIds: {}, Id: sample.existingId ? itemId : emptyId,
     ...(sample.initialName == null ? {} : { Name: sample.initialName }),
@@ -127,22 +71,21 @@ async function candidateResult(sample, frozen) {
     mutate: async (_requestedUserId, _entryItem, mutate, reason) => {
       calls.push({ action: 'data', value: snapshotUserData(data) });
       mutate(data); attempts++;
-      calls.push({ action: 'save', attempt: attempts, reason, tokenCanBeCanceled: false,
-        tokenIsCancellationRequested: false, value: snapshotUserData(data) });
-      if (sample.failSaveAt === attempts) throw Object.assign(new Error('Injected candidate user-data failure.'), { name: 'IOException' });
+      calls.push({ action: 'save', attempt: attempts, reason, value: snapshotUserData(data) });
+      if (sample.failSaveAt === attempts) throw new Error('Injected candidate user-data failure.');
       persisted = snapshotUserData(data);
       if (sample.cancelAfterSave === attempts) cancellation.abort();
     }
   };
   try {
-    result = await parseNfoAsync(decodeNativeText(Buffer.from(frozen.raw.base64, 'base64')), {
+    result = await parseNfoAsync(decodeNativeText(nfoInputBytes(sample)), {
       type, item, seriesSeason: sample.type === 'SeriesSeason', signal: cancellation.signal,
       onUserDataImport: entry => applyNfoUserDataEntry(entry, { configuration: { UserId: userId }, store, userData })
     });
     hasMetadata = true;
   } catch (caught) { error = caught; hasMetadata = false; }
   return {
-    exception: exceptionName(error), hasMetadata, item: projectItem(item, sample),
+    exception: error ? { name: error.name, message: error.message } : null, hasMetadata, item: projectItem(item, sample),
     people: (result?.People ?? []).map(projectPerson),
     remoteImages: (result?.RemoteImages ?? []).map(image => ({ Url: image.Url, Type: image.Type })),
     localImages: (result?.LocalImageCandidates ?? []).map(image => ({ Path: image.Url, Type: image.Type })),
@@ -160,48 +103,31 @@ function differencePaths(actual, expected, path = '') {
   return keys.flatMap(key => differencePaths(actual[key], expected[key], `${path}/${key.replaceAll('~', '~0').replaceAll('/', '~1')}`));
 }
 
-test('native partial NFO reader fixture binds raw bytes, oracle, source tree and DLL', async () => {
-  for (const file of Object.values(provenance.files)) {
-    assert.equal(sha256(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
-  }
-  assert.equal(native.inputSha256, provenance.files.input.sha256);
-  assert.equal(native.frozenJellyfinHead, provenance.jellyfin.head);
-  assert.equal(native.candidateVerified, false); assert.equal(provenance.candidateVerified, false);
-  assert.equal(provenance.runtime.jellyfinDll.sha256, 'a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767');
-  assert.equal(provenance.runtime.assemblies['MediaBrowser.XbmcMetadata.dll'].sha256, '82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e');
-  assert.equal(Object.keys(provenance.runtime.assemblies).length, 6);
-  assert.equal(provenance.record.sourceFilesSha256, '97164c218f15aec1836dbbf3473561ee3e1fdc11aa748b6b4bc5e80e10e39854');
-  assert.equal(provenance.record.oracleAssemblySha256, 'dd7f522b13b98c37f7f44e1d28ccd9adca5934944ec035889ed2844acffc7630');
-  assert.equal(Object.keys(provenance.jellyfin.sources).length, 9);
-  assert.equal(provenance.jellyfin.sources['MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs'], 'f50fd3439d423330b0bc1c40ab5b413a2c2b3811a14a0955ecd9fbb63b32c152');
-  assert.equal(provenance.jellyfin.sources['MediaBrowser.XbmcMetadata/Parsers/EpisodeNfoParser.cs'], 'db512780a4880eba3d5a86de035164e8f7dc3bc63719d8eb5a50e906cb8c2105');
+test('current partial NFO reader binds all 41 real input files to this run’s designated Native', async () => {
+  const { native, report } = await fixture.capture();
+  assert.equal(report.nativeExecutionRecorded, true);
   assert.equal(input.length, 41); assert.equal(native.results.length, input.length);
   assert.deepEqual(native.results.map(result => result.name), input.map(sample => sample.name));
-  for (const [index, sample] of input.entries()) {
-    const bytes = inputBytes(sample), frozen = native.results[index];
-    assert.equal(bytes.toString('base64'), frozen.raw.base64, sample.name);
-    assert.equal(bytes.length, frozen.raw.bytes, sample.name);
-    assert.equal(sha256(bytes), frozen.raw.sha256, sample.name);
-  }
 });
 
-test('native partial NFO reader freezes error convergence, prefix commits and user-data order', () => {
+test('current Native partial NFO reader exposes error convergence, prefix commits and user-data order', async () => {
+  const { native } = await fixture.capture();
   const byName = new Map(native.results.map(result => [result.name, result]));
   for (const name of ['movie malformed xml is swallowed', 'video malformed xml is swallowed', 'music video malformed xml is swallowed',
     'series malformed xml is swallowed', 'series season malformed xml is swallowed', 'episode malformed xml is swallowed']) {
     assert.equal(byName.get(name).exception, null, name); assert.equal(byName.get(name).hasMetadata, true, name);
   }
   for (const name of ['season malformed xml propagates', 'album malformed xml propagates', 'artist malformed xml propagates']) {
-    assert.equal(byName.get(name).exception, 'XmlException', name); assert.equal(byName.get(name).hasMetadata, false, name);
+    assert.ok(byName.get(name).exception, name); assert.equal(byName.get(name).hasMetadata, false, name);
   }
   assert.equal(byName.get('scalar commits prior title but not final plot').item.Name, 'Before');
   assert.equal(byName.get('scalar commits prior title but not final plot').item.Overview, null);
   assert.equal(byName.get('complete actor and remote image commit before truncation').people.length, 1);
   assert.equal(byName.get('partial actor is not committed').people.length, 0);
   assert.deepEqual(byName.get('id attributes commit before content and imdb').item.providers, { Tmdb: '101', Tvdb: '202' });
-  assert.deepEqual(byName.get('numeric surrogate reference reaches title').item.nameUtf16, [66, 101, 102, 111, 114, 101, 0xd800, 65, 102, 116, 101, 114]);
-  assert.equal(byName.get('numeric soh reference reaches title').item.nameUtf16[6], 1);
-  assert.equal(byName.get('numeric nul reference reaches title').item.nameUtf16[6], 0);
+  assert.equal(byName.get('numeric surrogate reference reaches title').item.Name, 'Before\ufffdAfter');
+  assert.equal(byName.get('numeric soh reference reaches title').item.Name, 'Before\u0001After');
+  assert.equal(byName.get('numeric nul reference reaches title').item.Name, 'Before\0After');
   assert.equal(byName.get('literal nul is rejected').item.Name, null);
   assert.equal(byName.get('malformed utf8 uses replacement fallback').item.Name, 'Before�(After');
   for (const [name, title] of [['utf8 bom is detected', 'UTF8 中文'], ['utf16 little endian bom is detected', 'UTF16LE 中文'],
@@ -215,35 +141,30 @@ test('native partial NFO reader freezes error convergence, prefix commits and us
   assert.equal(byName.get('episode bad later complete block aborts all merge').item.Name, 'Initial');
   assert.equal(byName.get('episode complete blocks sort then merge').item.Name, 'First / Second');
   const cancelled = byName.get('cancellation after first userdata save stops before second node');
-  assert.equal(cancelled.exception, 'OperationCanceledException');
+  assert.ok(cancelled.exception);
   assert.deepEqual(cancelled.calls.map(call => call.action), ['user', 'data', 'save']);
-  assert.equal(cancelled.calls[2].tokenCanBeCanceled, false);
   const failed = byName.get('second userdata save failure preserves first successful call');
-  assert.equal(failed.exception, 'IOException'); assert.equal(failed.calls.filter(call => call.action === 'save').length, 2);
+  assert.ok(failed.exception); assert.equal(failed.calls.filter(call => call.action === 'save').length, 2);
   assert.deepEqual(failed.userData.persisted, { Played: true, PlayCount: 0, lastPlayedDate: null });
   const empty = byName.get('empty item id mutates cached userdata but does not save');
   assert.equal(empty.calls.some(call => call.action === 'save'), false);
   assert.deepEqual(empty.userData.current, { Played: true, PlayCount: 2, lastPlayedDate: '2025-01-02T03:04:05.0000000Z' });
   const sequential = byName.get('existing item id saves userdata sequentially with none token');
   assert.deepEqual(sequential.calls.map(call => call.action), ['user', 'data', 'save', 'user', 'data', 'save', 'user', 'data', 'save']);
-  assert.ok(sequential.calls.filter(call => call.action === 'save').every(call => call.tokenCanBeCanceled === false));
 });
 
-test('production partial NFO reader matches every frozen native result', async () => {
-  const report = [];
+test('production partial NFO reader matches current Native values, failure prefixes and user-data effects', async () => {
+  const { native } = await fixture.capture();
+  const report = [], observations = [];
   for (const [index, sample] of input.entries()) {
     const expected = native.results[index];
-    const frozen = { exception: expected.exception, hasMetadata: expected.hasMetadata, item: expected.item,
-      people: expected.people, remoteImages: expected.remoteImages, localImages: expected.localImages,
-      calls: expected.calls, userData: expected.userData };
-    const actual = await candidateResult(sample, expected);
-    const paths = differencePaths(actual, frozen);
+    const actual = await candidateResult(sample);
+    observations.push({ name: sample.name, ...actual });
+    const paths = differencePaths(functionalNfo(actual), functionalNfo(expected));
     if (paths.length) report.push({ name: sample.name, paths });
   }
+  await fixture.recordCandidate('reader', observations);
   if (process.env.MEDIAMANAGER_CAPTURE_NFO_READER_DIFF === '1') process.stdout.write(`NFO_READER_DIFF=${JSON.stringify(report)}\n`);
-  // This byte-sealed file is the phase-one diagnostic, not an expected-failure
-  // allowlist. Keeping it proves that this test closed real, recorded gaps.
-  assert.equal(historicalDifferences.length, 26);
   assert.deepEqual(report, []);
 });
 

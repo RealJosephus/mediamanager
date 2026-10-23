@@ -219,7 +219,7 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
 });
 
-for (const [consumer, fixture, services, archiveId, inputPath = 'input.json'] of [
+for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', additionalInputs = []] of [
   ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup'],
   ['tests/core/native-charset.test.js', 'tests/core/fixtures/native-charset', ['dotnet', 'jellyfinDll'], 'sealed-charset'],
   ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
@@ -231,6 +231,10 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json'] of
     ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-warm'],
   ['tests/http/warm-item-deletion.test.js', 'tests/http/fixtures/warm-item-deletion',
     ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-warm'],
+  ['tests/metadata/nfo-partial-reader.test.js', 'tests/metadata/fixtures/nfo-partial-reader',
+    ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json'],
+  ['tests/metadata/nfo-scalar-provider.test.js', 'tests/metadata/fixtures/nfo-scalar-provider',
+    ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json', ['current/layout-input.json']],
 ]) test(`${archiveId} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
@@ -241,6 +245,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json'] of
   const references = executionManifestReferences(contract, profile, profileFilename);
   assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
     'tests/Directory.Build.props', fixture + '/current/Oracle.csproj', fixture + '/current/Program.cs', fixture + '/' + inputPath,
+    ...additionalInputs.map(filename => fixture + '/' + filename),
   ].sort());
   const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
   assert.deepEqual(closure.find(value => value.path === consumer).services, services);

@@ -23,9 +23,10 @@
         "tests/metadata/fixtures/nfo-scalar-provider/repeat.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
-          "tests/plugins/native-repeat.test.js"
+          "tests/metadata/nfo-partial-reader.test.js",
+          "tests/metadata/nfo-scalar-provider.test.js"
         ]
       }
     },

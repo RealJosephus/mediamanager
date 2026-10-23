@@ -1,0 +1,224 @@
+[
+  {
+    "name": "movie malformed xml is swallowed",
+    "type": "Movie",
+    "text": "<movie><title>Before</title><broken></movie>"
+  },
+  {
+    "name": "video malformed xml is swallowed",
+    "type": "Video",
+    "text": "<movie><title>Before</title><broken></movie>"
+  },
+  {
+    "name": "music video malformed xml is swallowed",
+    "type": "MusicVideo",
+    "text": "<musicvideo><title>Before</title><broken></musicvideo>"
+  },
+  {
+    "name": "series malformed xml is swallowed",
+    "type": "Series",
+    "text": "<tvshow><title>Before</title><broken></tvshow>"
+  },
+  {
+    "name": "series season malformed xml is swallowed",
+    "type": "SeriesSeason",
+    "indexNumber": 2,
+    "text": "<tvshow><namedseason number=\"2\">Before</namedseason><broken></tvshow>"
+  },
+  {
+    "name": "episode malformed xml is swallowed",
+    "type": "Episode",
+    "text": "<episodedetails><title>Before</title><broken></episodedetails>"
+  },
+  {
+    "name": "season malformed xml propagates",
+    "type": "Season",
+    "text": "<season><title>Before</title><broken></season>"
+  },
+  {
+    "name": "album malformed xml propagates",
+    "type": "MusicAlbum",
+    "text": "<album><title>Before</title><broken></album>"
+  },
+  {
+    "name": "artist malformed xml propagates",
+    "type": "MusicArtist",
+    "text": "<artist><title>Before</title><broken></artist>"
+  },
+  {
+    "name": "scalar commits prior title but not final plot",
+    "type": "Movie",
+    "text": "<movie><title>Before</title><plot>After</plot><broken"
+  },
+  {
+    "name": "final scalar title is not committed",
+    "type": "Movie",
+    "initialName": "Initial",
+    "text": "<movie><title>Before</title><broken"
+  },
+  {
+    "name": "complete actor and remote image commit before truncation",
+    "type": "Movie",
+    "text": "<movie><actor><name>Complete Actor</name><role>Lead</role><order>7</order></actor><thumb aspect=\"poster\">https://example.test/poster.jpg</thumb><plot>Tail</plot><broken"
+  },
+  {
+    "name": "partial actor is not committed",
+    "type": "Movie",
+    "text": "<movie><actor><name>Partial Actor</name></movie>"
+  },
+  {
+    "name": "id attributes commit before content and imdb",
+    "type": "Movie",
+    "text": "<movie><id TMDB=\"101\" TVDB=\"202\" IMDB=\"tt0000303\"></id><broken"
+  },
+  {
+    "name": "set attribute commits before inner content",
+    "type": "Movie",
+    "text": "<movie><set tmdbcolid=\"404\"><name>Partial Set</name></set><broken"
+  },
+  {
+    "name": "unique id waits for scalar completion",
+    "type": "Movie",
+    "text": "<movie><uniqueid type=\"tmdb\">505</uniqueid><broken"
+  },
+  {
+    "name": "episode no closing block retains parsed prefix",
+    "type": "Episode",
+    "text": "<episodedetails><episode>3</episode><title>Before</title><plot>Tail</plot><broken"
+  },
+  {
+    "name": "episode one complete block ignores trailing partial block",
+    "type": "Episode",
+    "text": "<episodedetails><episode>4</episode><title>Complete</title></episodedetails><episodedetails><episode>5</episode><title>Ignored"
+  },
+  {
+    "name": "episode bad later complete block aborts all merge",
+    "type": "Episode",
+    "initialName": "Initial",
+    "text": "<episodedetails><episode>2</episode><title>Second</title></episodedetails><episodedetails><episode>1</episode><title>Broken</bad></episodedetails>"
+  },
+  {
+    "name": "episode complete blocks sort then merge",
+    "type": "Episode",
+    "text": "<episodedetails><episode>2</episode><title>Second</title><plot>Overview 2</plot></episodedetails><episodedetails><episode>1</episode><title>First</title><plot>Overview 1</plot></episodedetails>"
+  },
+  {
+    "name": "movie undeclared entity is swallowed after prefix",
+    "type": "Movie",
+    "text": "<movie><title>Before</title><plot>&missing;</plot></movie>"
+  },
+  {
+    "name": "season undeclared entity propagates",
+    "type": "Season",
+    "text": "<season><title>Before</title><plot>&missing;</plot></season>"
+  },
+  {
+    "name": "literal nul is rejected",
+    "type": "Movie",
+    "text": "<movie><title>Before{{NUL}}After</title></movie>",
+    "encoding": "utf8-markers"
+  },
+  {
+    "name": "numeric soh reference reaches title",
+    "type": "Movie",
+    "text": "<movie><title>Before&#x1;After</title></movie>"
+  },
+  {
+    "name": "numeric nul reference reaches title",
+    "type": "Movie",
+    "text": "<movie><title>Before&#0;After</title></movie>"
+  },
+  {
+    "name": "numeric surrogate reference reaches title",
+    "type": "Movie",
+    "text": "<movie><title>Before&#xD800;After</title></movie>"
+  },
+  {
+    "name": "numeric value above unicode range is rejected",
+    "type": "Movie",
+    "text": "<movie><title>Before&#x110000;After</title></movie>"
+  },
+  {
+    "name": "malformed utf8 uses replacement fallback",
+    "type": "Movie",
+    "text": "<movie><title>Before{{BAD_UTF8}}After</title></movie>",
+    "encoding": "utf8-malformed"
+  },
+  {
+    "name": "utf8 bom is detected",
+    "type": "Movie",
+    "text": "<movie><title>UTF8 中文</title></movie>",
+    "encoding": "utf8-bom"
+  },
+  {
+    "name": "utf16 little endian bom is detected",
+    "type": "Movie",
+    "text": "<movie><title>UTF16LE 中文</title></movie>",
+    "encoding": "utf16le-bom"
+  },
+  {
+    "name": "utf16 big endian bom is detected",
+    "type": "Movie",
+    "text": "<movie><title>UTF16BE 中文</title></movie>",
+    "encoding": "utf16be-bom"
+  },
+  {
+    "name": "utf32 little endian bom is detected",
+    "type": "Movie",
+    "text": "<movie><title>UTF32LE 中文</title></movie>",
+    "encoding": "utf32le-bom"
+  },
+  {
+    "name": "utf32 big endian bom is detected",
+    "type": "Movie",
+    "text": "<movie><title>UTF32BE 中文</title></movie>",
+    "encoding": "utf32be-bom"
+  },
+  {
+    "name": "utf16 without bom is treated as utf8",
+    "type": "Movie",
+    "text": "<movie><title>No BOM</title></movie>",
+    "encoding": "utf16le-no-bom"
+  },
+  {
+    "name": "xml declaration does not reinterpret decoded text",
+    "type": "Movie",
+    "text": "<?xml version=\"1.0\" encoding=\"utf-16\"?><movie><title>Declaration</title></movie>",
+    "encoding": "utf8"
+  },
+  {
+    "name": "movie trailing provider urls are parsed before body",
+    "type": "Movie",
+    "text": "<movie><title>Body</title></movie> https://www.themoviedb.org/movie/30287 tt12345678"
+  },
+  {
+    "name": "movie provider urls without closing xml skip body",
+    "type": "Movie",
+    "text": "https://www.themoviedb.org/movie/30288 tt87654321"
+  },
+  {
+    "name": "empty item id mutates cached userdata but does not save",
+    "type": "Movie",
+    "text": "<movie><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></movie>"
+  },
+  {
+    "name": "existing item id saves userdata sequentially with none token",
+    "type": "Movie",
+    "existingId": true,
+    "text": "<movie><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></movie>"
+  },
+  {
+    "name": "cancellation after first userdata save stops before second node",
+    "type": "Movie",
+    "existingId": true,
+    "cancelAfterSave": 1,
+    "text": "<movie><watched>true</watched><playcount>2</playcount><title>Not reached</title></movie>"
+  },
+  {
+    "name": "second userdata save failure preserves first successful call",
+    "type": "Movie",
+    "existingId": true,
+    "failSaveAt": 2,
+    "text": "<movie><watched>true</watched><playcount>2</playcount><title>Not reached</title></movie>"
+  }
+]
