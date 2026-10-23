@@ -170,7 +170,7 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
 
     if (dialect === 'postgres') {
       const accessItems = [];
-      for (let index = 0; index < 8; index++) {
+      for (let index = 0; index < 64; index++) {
         const playlistId = `C3333333-3333-3333-3333-${String(index * 2 + 1).padStart(12, '0')}`;
         const boxSetId = `C3333333-3333-3333-3333-${String(index * 2 + 2).padStart(12, '0')}`;
         await database.insert('BaseItems', item(playlistId, 'Playlist', {
@@ -202,7 +202,8 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
         } finally { database.withConnection = withConnection; }
       };
       const singleAccess = await countedUpdate(accessItems.slice(0, 2));
-      const batchAccess = await countedUpdate(accessItems);
+      const batchAccess = await countedUpdate(accessItems.slice(0, 16));
+      const fullPageAccess = await countedUpdate(accessItems);
       const reversedItems = accessItems.toReversed();
       const reversedSingleAccess = await countedUpdate(reversedItems.slice(0, 2));
       const reversedAccess = await countedUpdate(reversedItems);
@@ -210,36 +211,46 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
       const ratedSingleAccess = await countedUpdate(accessItems.slice(0, 2), ratingLimited);
       const ratedFourAccess = await countedUpdate(accessItems.slice(0, 4), ratingLimited);
       const ratedEightAccess = await countedUpdate(accessItems.slice(0, 8), ratingLimited);
-      const ratedBatchAccess = await countedUpdate(accessItems, ratingLimited);
+      const ratedBatchAccess = await countedUpdate(accessItems.slice(0, 16), ratingLimited);
+      const ratedFullPageAccess = await countedUpdate(accessItems, ratingLimited);
       const evidence = path.join(validationOutputRoot(), 'library-changed-statements-' + randomUUID());
       await mkdir(evidence);
-      await writeFile(path.join(evidence, 'queries.json'), JSON.stringify({ singleAccess, batchAccess,
-        reversedSingleAccess, reversedAccess, ratedSingleAccess, ratedFourAccess, ratedEightAccess, ratedBatchAccess }, null, 2) + '\n');
+      await writeFile(path.join(evidence, 'queries.json'), JSON.stringify({ singleAccess, batchAccess, fullPageAccess,
+        reversedSingleAccess, reversedAccess, ratedSingleAccess, ratedFourAccess, ratedEightAccess, ratedBatchAccess, ratedFullPageAccess }, null, 2) + '\n');
       t.diagnostic(JSON.stringify({ scope: 'one visibility page with alternating Playlist and BoxSet',
         single: { items: 2, statements: singleAccess.queryCount },
-        batch: { items: accessItems.length, statements: batchAccess.queryCount },
+        batch: { items: 16, statements: batchAccess.queryCount },
+        fullPage: { items: accessItems.length, statements: fullPageAccess.queryCount },
         reversedSingle: { items: 2, statements: reversedSingleAccess.queryCount },
         reversed: { items: reversedItems.length, statements: reversedAccess.queryCount },
         ratedSingle: { items: 2, statements: ratedSingleAccess.queryCount },
         ratedFour: { items: 4, statements: ratedFourAccess.queryCount },
         ratedEight: { items: 8, statements: ratedEightAccess.queryCount },
-        ratedBatch: { items: accessItems.length, statements: ratedBatchAccess.queryCount } }));
+        ratedBatch: { items: 16, statements: ratedBatchAccess.queryCount },
+        ratedFullPage: { items: accessItems.length, statements: ratedFullPageAccess.queryCount } }));
       assert.deepEqual(singleAccess.result.ItemsAdded, accessItems.slice(0, 2).map(item => dtoId(item.Id)));
-      assert.deepEqual(batchAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)),
+      assert.deepEqual(batchAccess.result.ItemsAdded, accessItems.slice(0, 16).map(item => dtoId(item.Id)),
         'batching visibility retains the complete notification identity sequence');
+      assert.deepEqual(fullPageAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)));
       assert.deepEqual(reversedSingleAccess.result.ItemsAdded, reversedItems.slice(0, 2).map(item => dtoId(item.Id)));
       assert.deepEqual(reversedAccess.result.ItemsAdded, reversedItems.map(item => dtoId(item.Id)),
         'BoxSet-first and Playlist-first pages retain their original notification order');
       assert.deepEqual(ratedSingleAccess.result.ItemsAdded, accessItems.slice(0, 2).map(item => dtoId(item.Id)));
-      assert.deepEqual(ratedBatchAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)),
+      assert.deepEqual(ratedFourAccess.result.ItemsAdded, accessItems.slice(0, 4).map(item => dtoId(item.Id)));
+      assert.deepEqual(ratedEightAccess.result.ItemsAdded, accessItems.slice(0, 8).map(item => dtoId(item.Id)));
+      assert.deepEqual(ratedBatchAccess.result.ItemsAdded, accessItems.slice(0, 16).map(item => dtoId(item.Id)),
         'the empty-playlist parental gate must preserve every eligible notification');
+      assert.deepEqual(ratedFullPageAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)));
       assert.ok(singleAccess.queryCount > 0, 'the batch bound must observe actual PostgreSQL statements');
-      assert.equal(batchAccess.queryCount, singleAccess.queryCount,
-        'LibraryChanged Playlist/BoxSet visibility must use a batch-bounded SQL statement count');
-      assert.equal(reversedAccess.queryCount, reversedSingleAccess.queryCount,
-        'changing the type interleave must not turn one visibility page into per-item SQL');
-      assert.equal(ratedBatchAccess.queryCount, ratedSingleAccess.queryCount,
-        'Playlist parental member visibility must also use a batch-bounded SQL statement count');
+      // Deferred SQL ownership cleanup can finish during a later observation.
+      // A 64-fold input increase must stay below twice the small-page SQL cost,
+      // including that cleanup, so one extra query per item cannot pass.
+      assert.ok(fullPageAccess.queryCount < singleAccess.queryCount * 2,
+        'LibraryChanged visibility must remain bounded across a complete 128-item page');
+      assert.ok(reversedAccess.queryCount < reversedSingleAccess.queryCount * 2,
+        'changing the type interleave must not turn a full visibility page into per-item SQL');
+      assert.ok(ratedFullPageAccess.queryCount < ratedSingleAccess.queryCount * 2,
+        'Playlist parental member visibility must remain bounded across a complete page');
 
       const channelUser = { ...restrictedUser, Policy: { ...restrictedUser.Policy, EnableAllChannels: true } };
       const invalidChannel = mapRecord({ ...item('C4444444-4444-4444-4444-000000000001', 'Folder'),
