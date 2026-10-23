@@ -649,6 +649,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // Reject new setup work before the first asynchronous drain while
       // admitted user/password changes keep their database dependencies.
       const startupClosing = attempt(() => startup.close());
+      // Stop authentication/reset admission before any asynchronous drain.
+      // Already admitted operations retain their user and database dependencies
+      // until these promises settle in the owner drain below.
+      const quickConnectClosing = attempt(() => quickConnect.close());
+      const passwordResetsClosing = attempt(() => passwordResets.close());
       introProviders.close();
       stopStorageObserver();
       // A scheduler worker can be awaiting a metadata provider's cancellation.
@@ -663,8 +668,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // older folder scan; each owner must receive cancellation to release the
       // next layer of that dependency chain.
       await Promise.all([
-        attempt(() => quickConnect.close()),
-        attempt(() => passwordResets.close()),
+        quickConnectClosing,
+        passwordResetsClosing,
         attempt(() => displayPreferences.close()),
         startupClosing,
         attempt(() => liveTvClosing),

@@ -136,18 +136,29 @@ test('postgres: Quick Connect token insertion failure preserves logout and reque
   assert.equal((await state.request('/Users/Me', { token: repeated.body.AccessToken })).status, 401);
 });
 
-test('postgres: runtime closure drains admitted Quick Connect authentication before closing its database dependencies', enabled, async t => {
+test('postgres: runtime closure drains admitted Quick Connect authentication before closing its database dependencies', { ...enabled, timeout: 120_000 }, async t => {
   const state = await setup(t);
   const id = await state.user('Closing');
   const initiated = state.runtime.quickConnect.initiate(device);
   const started = Promise.withResolvers(), release = Promise.withResolvers();
+  const abort = () => { release.resolve(); started.reject(t.signal.reason); };
+  t.signal.addEventListener('abort', abort, { once: true });
+  state.cleanup.push(() => { release.resolve(); t.signal.removeEventListener('abort', abort); });
   const direct = state.runtime.authentication.authenticateDirect.bind(state.runtime.authentication);
   state.runtime.authentication.authenticateDirect = async (...args) => { started.resolve(); await release.promise; return direct(...args); };
-  const approval = state.runtime.quickConnect.authorize(id, initiated.Code); await started.promise;
-  let closed = false; const closing = state.runtime.close().then(() => { closed = true; });
-  await assert.rejects(state.runtime.quickConnect.authorize(id, initiated.Code), { status: 503 });
-  assert.equal(closed, false); release.resolve(); assert.equal(await approval, true); await closing;
-  assert.equal(closed, true); assert.equal(state.runtime.server.listening, false);
+  const approval = state.runtime.quickConnect.authorize(id, initiated.Code);
+  let closed = false, closing;
+  try {
+    await Promise.race([started.promise, approval.then(() => { throw new Error('Authentication completed before its controlled pause.'); })]);
+    closing = state.runtime.close().then(() => { closed = true; });
+    await assert.rejects(state.runtime.quickConnect.authorize(id, initiated.Code), { status: 503 });
+    assert.equal(closed, false); release.resolve(); assert.equal(await approval, true); await closing;
+    assert.equal(closed, true); assert.equal(state.runtime.server.listening, false);
+    const token = state.authenticated.at(-1).AccessToken;
+    await state.reopen();
+    const persisted = await state.request('/Users/Me', { token });
+    assert.equal(persisted.status, 200); assert.equal(persisted.body.Id, id);
+  } finally { release.resolve(); await Promise.allSettled([approval, closing]); }
 });
 
 for (const name of quickConnectInput.directCases) test('postgres: current Native direct-authentication outcome and commit prefix: ' + name, { ...enabled, timeout: 600_000 }, async t => {

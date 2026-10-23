@@ -85,24 +85,40 @@ test('postgres: anonymous password reset persists across runtime restart, preser
   assert.deepEqual(await state.runtime.users.getUser(other.Id), otherBefore);
 });
 
-for (const operation of ['start', 'redeem']) test(`postgres: runtime closure drains admitted password reset ${operation} before releasing PostgreSQL`, enabled, async t => {
+for (const operation of ['start', 'redeem']) test(`postgres: runtime closure drains admitted password reset ${operation} before releasing PostgreSQL`, { ...enabled, timeout: 120_000 }, async t => {
   const state = await setup(t); await state.user('Closing');
   const generated = await state.runtime.passwordResets.start('Closing', true), pin = JSON.parse(await fs.readFile(generated.PinFile)).Pin;
   state.events.length = 0;
   const entered = Promise.withResolvers(), release = Promise.withResolvers();
+  const abort = () => { release.resolve(); entered.reject(t.signal.reason); };
+  t.signal.addEventListener('abort', abort, { once: true });
   const method = operation === 'start' ? 'saveUserSnapshot' : 'changePassword';
   const original = state.runtime.users[method].bind(state.runtime.users);
   state.runtime.users[method] = async (...args) => { entered.resolve(); await release.promise; return original(...args); };
-  state.cleanup.push(() => release.resolve());
+  state.cleanup.push(() => { release.resolve(); t.signal.removeEventListener('abort', abort); });
   const pending = operation === 'start' ? state.runtime.passwordResets.start('Closing', true) : state.runtime.passwordResets.redeem(pin);
-  await entered.promise;
-  let closed = false; const closing = state.runtime.close().then(() => { closed = true; });
-  await assert.rejects(state.runtime.passwordResets.start('Closing', true), { status: 503 });
-  await assert.rejects(state.runtime.passwordResets.redeem(pin), { status: 503 });
-  assert.equal(closed, false); release.resolve(); await pending; await closing;
-  assert.equal(closed, true); assert.equal(state.runtime.server.listening, false);
-  if (operation === 'start') assert.equal(JSON.parse(await fs.readFile(generated.PinFile)).UserName, 'Closing');
-  else { await assert.rejects(fs.stat(generated.PinFile), { code: 'ENOENT' }); assert.deepEqual(state.events, ['Closing']); }
+  let closed = false, closing;
+  try {
+    await Promise.race([entered.promise, pending.then(() => { throw new Error('Password reset completed before its controlled pause.'); })]);
+    closing = state.runtime.close().then(() => { closed = true; });
+    await assert.rejects(state.runtime.passwordResets.start('Closing', true), { status: 503 });
+    await assert.rejects(state.runtime.passwordResets.redeem(pin), { status: 503 });
+    assert.equal(closed, false); release.resolve(); await pending; await closing;
+    assert.equal(closed, true); assert.equal(state.runtime.server.listening, false);
+    let persistedPin = pin;
+    if (operation === 'start') {
+      const file = JSON.parse(await fs.readFile(generated.PinFile));
+      assert.equal(file.UserName, 'Closing'); persistedPin = file.Pin;
+    } else { await assert.rejects(fs.stat(generated.PinFile), { code: 'ENOENT' }); assert.deepEqual(state.events, ['Closing']); }
+    await state.reopen();
+    if (operation === 'start') {
+      const redeemed = await state.request('/Users/ForgotPassword/Pin', { method: 'POST', body: { Pin: persistedPin } });
+      assert.equal(redeemed.status, 200); assert.deepEqual(redeemed.body, { Success: true, UsersReset: ['Closing'] });
+    }
+    const authenticated = await state.request('/Users/AuthenticateByName', { method: 'POST',
+      body: { Username: 'Closing', Pw: persistedPin } });
+    assert.equal(authenticated.status, 200); assert.equal(authenticated.body.User.Name, 'Closing');
+  } finally { release.resolve(); await Promise.allSettled([pending, closing]); }
 });
 
 test('postgres: password reset rejects a junction into another state directory without changing its files or users', enabled, async t => {
