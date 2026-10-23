@@ -3,6 +3,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
@@ -56,6 +57,11 @@ async function capture() {
       assert.equal(record.passed, true); assert.equal(record.build.status, 0); assert.equal(record.process.status, 0);
       assert.equal(record.outputs.find(entry => entry.filename === filename)?.sha256, sha(bytes));
       assert.equal(native.inputSha256, sha(inputBytes));
+      const emptyGuid = '00000000-0000-0000-0000-000000000000';
+      assert.equal(native.emptyAnchorInput.requestedId, emptyGuid);
+      assert.equal(native.emptyAnchorInput.persistedId, emptyGuid);
+      assert.equal(native.emptyAnchorInput.emptyAnchorRowsUpdated, 1);
+      assert.equal(native.rows.find(row => row.Name === 'Empty anchor')?.Id, emptyGuid);
       for (const flag of ['actualLibraryManager', 'actualFolderChildren', 'actualRepository', 'actualSqlite']) assert.equal(native[flag], true, flag);
       assert.deepEqual(native.pages.map(page => page.sample), input.Queries);
       for (const assembly of native.assemblies) {
@@ -73,7 +79,19 @@ async function capture() {
       assert.equal(actual.sha256, sqlite.sha256); assert.equal(supplied.sha256, sqlite.sha256);
       observations.push(native);
     }
-    assert.deepEqual(collectionSourceObservation(observations[1]), collectionSourceObservation(observations[0]));
+    const initial = collectionSourceObservation(observations[0]), repeat = collectionSourceObservation(observations[1]);
+    // Keep the complete column/value/relationship/order comparison and retain
+    // both inputs. TAP only needs a small failure summary, not megabytes of rows.
+    const comparisonFiles = [];
+    for (const [label, observation] of [['initial', initial], ['repeat', repeat]]) {
+      const filename = path.join(output, label + '-comparison.json');
+      await writeFile(filename, json(observation), { flag: 'wx' }); comparisonFiles.push(await describeFile(filename));
+    }
+    const comparison = { passed: isDeepStrictEqual(repeat, initial), files: comparisonFiles,
+      differingSections: Object.keys(initial).filter(section => !isDeepStrictEqual(repeat[section], initial[section])) };
+    await writeFile(path.join(output, 'comparison.json'), json(comparison), { flag: 'wx' });
+    report.comparison = comparison;
+    assert.equal(comparison.passed, true, `Complete current collection source observations differ in ${comparison.differingSections.join(', ')}; see ${path.join(output, 'comparison.json')}.`);
     report.nativeExecutionRecorded = true;
     await mkdir(path.join(output, 'candidate'));
     return { native: observations[0], repeat: observations[1], output, report };

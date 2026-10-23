@@ -60,8 +60,11 @@ BaseItem.LibraryManager = Stub.Make<ILibraryManager>((method, values) => method.
     ? new List<Folder>() : Stub.Forward(manager, method, values));
 Guid Id(int number) => Guid.Parse("cb210000-0000-0000-0000-" + number.ToString("D12"));
 var input = File.ReadAllBytes(args[1]); var specification = JsonSerializer.Deserialize<Input>(input)!;
+Guid generatedEmptyAnchorId;
+int emptyAnchorRowsUpdated;
 using (var context = factory.CreateDbContext()) {
-    context.BaseItems.Add(new BaseItemEntity { Id = Guid.Empty, Type = typeof(Folder).FullName!, Name = "Empty anchor", Data = "{}", TopParentId = Id(2), IsFolder = true });
+    var emptyAnchor = new BaseItemEntity { Id = Guid.Empty, Type = typeof(Folder).FullName!, Name = "Empty anchor", Data = "{}", TopParentId = Id(2), IsFolder = true };
+    context.BaseItems.Add(emptyAnchor);
     foreach (var item in specification.Items) {
         var type = item.Kind == "Movie" ? typeof(Movie).FullName! : item.Kind == "BoxSet" ? typeof(BoxSet).FullName!
             : item.Kind == "PlaylistsFolder" ? typeof(Emby.Server.Implementations.Playlists.PlaylistsFolder).FullName!
@@ -78,6 +81,14 @@ using (var context = factory.CreateDbContext()) {
         Id = Id(10000 + index), Type = typeof(Movie).FullName!, Name = "Page " + index, SortName = index.ToString("D6"),
         ParentId = Id(5), TopParentId = Id(5), MediaType = "Video", Data = JsonSerializer.Serialize(new { TmdbCollectionName = index == 1000 ? "After page" : "" }) });
     context.SaveChanges();
+    // The original fixture explicitly requests a Guid.Empty anchor, while EF
+    // treats that sentinel as a request for a generated key. Persist the actual
+    // input through SQLite, then detach the obsolete tracked key. No manager or
+    // repository result is substituted, and all query inputs remain unchanged.
+    generatedEmptyAnchorId = emptyAnchor.Id;
+    emptyAnchorRowsUpdated = context.Database.ExecuteSqlInterpolated($"UPDATE \"BaseItems\" SET \"Id\" = {Guid.Empty} WHERE \"Id\" = {generatedEmptyAnchorId}");
+    if (emptyAnchorRowsUpdated != 1) throw new InvalidOperationException("The requested empty anchor was not persisted exactly once.");
+    context.Entry(emptyAnchor).State = EntityState.Detached;
     foreach (var item in specification.Items) foreach (var ancestor in item.Ancestors) context.AncestorIds.Add(new AncestorId { ItemId = Id(item.Number), ParentItemId = Id(ancestor), Item = null!, ParentItem = null! });
     for (var index = 0; index < specification.PageMovies; index++) context.AncestorIds.Add(new AncestorId { ItemId = Id(10000 + index), ParentItemId = Id(5), Item = null!, ParentItem = null! });
     foreach (var (link, index) in specification.Links.Select((link, index) => (link, index))) context.LinkedChildren.Add(new LinkedChildEntity {
@@ -103,6 +114,8 @@ foreach (var sample in specification.Queries) {
 var boxes = manager.GetItemList(new InternalItemsQuery { IncludeItemTypes = [BaseItemKind.BoxSet], CollapseBoxSetItems = false, Recursive = true })
     .Select(item => new { item.Id, item.Name }).ToArray();
 using var final = factory.CreateDbContext();
+var persistedEmptyAnchorId = final.BaseItems.AsNoTracking().Single(item => item.Name == "Empty anchor").Id;
+if (persistedEmptyAnchorId != Guid.Empty) throw new InvalidOperationException("The persisted anchor must retain the explicit Guid.Empty input.");
 object[] Snapshot<T>(IEnumerable<T> rows) where T : class {
     var entity = final.Model.FindEntityType(typeof(T))!; var table = StoreObjectIdentifier.Table(entity.GetTableName()!, entity.GetSchema());
     return rows.Select(row => (object)entity.GetProperties().ToDictionary(property => property.GetColumnName(table)!, property => property.PropertyInfo!.GetValue(row))).ToArray();
@@ -111,6 +124,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(value => !value.I
     .OrderBy(value => value.GetName().Name).Select(value => new { name = value.GetName().Name, filename = value.Location, sha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(value.Location))).ToLowerInvariant() }).ToArray();
 File.WriteAllText(args[2], JsonSerializer.Serialize(new { actualLibraryManager = true, actualFolderChildren = true, actualRepository = true,
     actualSqlite = true, applicationPathReversalControlled = true, mediaOpened = false, portOpened = false,
+    emptyAnchorInput = new { requestedId = Guid.Empty, generatedEmptyAnchorId, emptyAnchorRowsUpdated, persistedId = persistedEmptyAnchorId },
     inputSha256 = Convert.ToHexString(SHA256.HashData(input)).ToLowerInvariant(), rootItems, pages, boxes,
     rows = Snapshot(final.BaseItems.AsNoTracking().OrderBy(item => item.Id).ToArray()),
     ancestors = Snapshot(final.AncestorIds.AsNoTracking().OrderBy(item => item.ItemId).ThenBy(item => item.ParentItemId).ToArray()),
