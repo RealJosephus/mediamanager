@@ -5,9 +5,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RequiresJellyfinAssemblies>true</RequiresJellyfinAssemblies>
+    <NativeRuntimeDirectory>$(JellyfinDllDirectory)/runtimes/$(NETCoreSdkRuntimeIdentifier)/native</NativeRuntimeDirectory>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('Windows'))">e_sqlite3.dll</SqliteNativeName>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('Linux'))">libe_sqlite3.so</SqliteNativeName>
+    <SqliteNativeName Condition="$([MSBuild]::IsOSPlatform('OSX'))">libe_sqlite3.dylib</SqliteNativeName>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <Reference Include="$(JellyfinDllDirectory)/*.dll" Exclude="$(JellyfinDllDirectory)/Oracle.dll;$(JellyfinDllDirectory)/e_sqlite3.dll" />
+    <Content Include="$(NativeRuntimeDirectory)/$(SqliteNativeName)" Link="$(SqliteNativeName)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <Target Name="RequirePlatformNativeInputs" BeforeTargets="ResolveReferences">
+    <Error Condition="'$(SqliteNativeName)' == '' Or !Exists('$(NativeRuntimeDirectory)/$(SqliteNativeName)')" Text="The supplied Jellyfin runtime must contain SQLite for the current SDK RID." />
+  </Target>
 </Project>
