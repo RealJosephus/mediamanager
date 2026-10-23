@@ -72,6 +72,7 @@ async function capture() {
   const output = path.join(validationOutputRoot(), 'book-photo-global-current-' + randomUUID());
   assertValidationOutputChild(output); await mkdir(output);
   const report = { schemaVersion: 1, scope: profile.scope, inputSha256: digest(inputBytes), inputs: [], sourceBindings: [], captures: [],
+    photoReplacementTiming: profile.photoReplacementTiming,
     nativeExecutionRecorded: false, independentRepeatMatched: false, phaseAcceptance: false, releaseAcceptance: false };
   try {
     for (const expected of profile.inputs) {
@@ -126,6 +127,12 @@ async function capture() {
         auditSnapshot(sample.observations[0].snapshot);
         for (const observation of sample.observations.slice(1)) {
           auditSnapshot(observation.beforeScan); auditSnapshot(observation.snapshot);
+          for (const mutation of observation.mutations) if (mutation.photoReplacementTiming) {
+            const timing = mutation.photoReplacementTiming;
+            assert.ok(Date.parse(mutation.lastWriteTimeUtc) - Date.parse(timing.previousModified) > 1000,
+              'Actual Native photo replacement crosses the public one-second change window.');
+            assert.ok(Date.parse(timing.waitEndedAt) >= Date.parse(timing.notBefore));
+          }
           assert.equal(observation.succeeded, observation.error === null && observation.scan?.Exception === null);
           assert.ok(Date.parse(observation.scanStartedAt) >= Date.parse(observation.startedAt));
           assert.ok(Date.parse(observation.scanEndedAt) >= Date.parse(observation.scanStartedAt));

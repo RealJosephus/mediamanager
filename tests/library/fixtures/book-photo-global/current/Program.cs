@@ -73,7 +73,8 @@ foreach (var sample in matrix.Cases)
         foreach (var step in sample.Steps)
         {
             var startedAt = DateTime.UtcNow;
-            var mutations = step.Changes.Select(change => ApplyChange(host, change)).ToArray();
+            var mutations = new List<object>();
+            foreach (var change in step.Changes) mutations.Add(await ApplyChange(host, change));
             var beforeScan = Snapshot(host, caseRoot);
             ScanObservation? scan = null; string? error = null;
             var scanStartedAt = DateTime.UtcNow;
@@ -116,10 +117,26 @@ using (var stream = new FileStream(output, FileMode.CreateNew, FileAccess.Write,
     JsonSerializer.Serialize(stream, record, new JsonSerializerOptions { WriteIndented = true });
 Console.WriteLine(JsonSerializer.Serialize(new { cases = results.Count, output }));
 
-object ApplyChange(NativeScanHost host, Change change)
+async Task<object> ApplyChange(NativeScanHost host, Change change)
 {
     var target = CheckedMediaPath(host, change.Path);
     var startedAt = DateTime.UtcNow;
+    object? photoReplacementTiming = null;
+    DateTime? previousModified = null;
+    if (change.Kind == "copy" && new[] { ".jpg", ".jpeg", ".png", ".tiff", ".cr2", ".webp", ".avif" }
+        .Contains(Path.GetExtension(target), StringComparer.OrdinalIgnoreCase) && File.Exists(target))
+    {
+        previousModified = File.GetLastWriteTimeUtc(target);
+        var notBefore = previousModified.Value.AddMilliseconds(1100);
+        var waitStartedAt = DateTime.UtcNow;
+        var waiting = System.Diagnostics.Stopwatch.StartNew();
+        while (DateTime.UtcNow < notBefore)
+        {
+            if (waiting.Elapsed > TimeSpan.FromSeconds(10)) throw new IOException("Real photo replacement time did not become observable.");
+            await Task.Delay(TimeSpan.FromMilliseconds(Math.Clamp((notBefore - DateTime.UtcNow).TotalMilliseconds, 1, 100)));
+        }
+        photoReplacementTiming = new { previousModified, waitStartedAt, notBefore, waitEndedAt = DateTime.UtcNow };
+    }
     switch (change.Kind)
     {
         case "mkdir": Directory.CreateDirectory(target); break;
@@ -145,10 +162,12 @@ object ApplyChange(NativeScanHost host, Change change)
         default: throw new InvalidOperationException("Undeclared input mutation: " + change.Kind);
     }
     var observed = change.Kind == "move-file" ? CheckedMediaPath(host, change.Destination!) : target;
+    if (previousModified is not null && File.GetLastWriteTimeUtc(observed) - previousModified.Value <= TimeSpan.FromSeconds(1))
+        throw new IOException("The actual photo overwrite did not cross the public one-second change window.");
     return new { change.Kind, change.Path, change.Destination, startedAt, endedAt = DateTime.UtcNow,
         exists = File.Exists(observed) || Directory.Exists(observed),
         lastWriteTimeUtc = File.Exists(observed) ? (DateTime?)File.GetLastWriteTimeUtc(observed) : null,
-        sha256 = File.Exists(observed) ? FileHash(observed) : null };
+        sha256 = File.Exists(observed) ? FileHash(observed) : null, photoReplacementTiming };
 }
 static string CheckedMediaPath(NativeScanHost host, string relative)
 {

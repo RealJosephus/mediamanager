@@ -81,8 +81,8 @@
     {
       "role": "oracleSource",
       "filename": "current/Program.cs",
-      "bytes": 14437,
-      "sha256": "cc6ce0df9ed38fad14181a530c6eee1428eade9dcecb35faf4747f346c5f56c9"
+      "bytes": 15747,
+      "sha256": "874a69fdfc70d01dc82214b337876cf58dffb3fc5ad0c0dc1f2413824730bc42"
     },
     {
       "role": "nativeScanHost",
@@ -156,5 +156,11 @@
       "bytes": 1840,
       "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
     }
-  ]
+  ],
+  "photoReplacementTiming": {
+    "condition": "Before overwriting an existing photo, wait for the real clock to pass its previous filesystem mtime plus 1100 milliseconds, then perform the actual write. Preserve previous/new actual mtimes and the waiting interval.",
+    "changeWindowMilliseconds": 1000,
+    "clockPrecisionMarginMilliseconds": 100,
+    "mtimeAssignment": "No past or future timestamp is injected."
+  }
 }

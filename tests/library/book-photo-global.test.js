@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rename, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { setTimeout as delay } from 'node:timers/promises';
 import { createRuntime } from '../../src/runtime.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
@@ -48,6 +49,20 @@ async function applyChanges(changes, { media, metadata }) {
   for (const change of changes) {
     const startedAt = new Date().toISOString();
     const filename = target(change.path), sidecar = /\.(xml|opf)$/iu.test(change.path);
+    let photoReplacementTiming = null;
+    if (change.kind === 'copy' && /\.(jpg|jpeg|png|tiff|cr2|webp|avif)$/iu.test(change.path)) {
+      const previous = await stat(filename).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+      if (previous?.isFile()) {
+        const notBefore = previous.mtimeMs + 1100, deadline = performance.now() + 10_000;
+        photoReplacementTiming = { previousModified: previous.mtime.toISOString(), waitStartedAt: new Date().toISOString(),
+          notBefore: new Date(notBefore).toISOString() };
+        while (Date.now() < notBefore) {
+          assert.ok(performance.now() < deadline, 'Real photo replacement time must become observable.');
+          await delay(Math.min(100, Math.max(1, notBefore - Date.now())));
+        }
+        photoReplacementTiming.waitEndedAt = new Date().toISOString();
+      }
+    }
     if (change.kind === 'mkdir') await mkdir(filename, { recursive: true });
     else if (change.kind === 'remove-directory') await rm(filename, { recursive: true });
     else if (change.kind === 'remove-file') {
@@ -71,10 +86,12 @@ async function applyChanges(changes, { media, metadata }) {
     }
     const observed = change.kind === 'move-file' ? target(change.destination) : filename;
     const details = await stat(observed).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+    if (photoReplacementTiming) assert.ok(details.mtimeMs - Date.parse(photoReplacementTiming.previousModified) > 1000,
+      'The actual photo overwrite must cross the public one-second change window.');
     const sidecarInfo = sidecar && details?.isFile() ? await stat(path.join(metadata, change.path)) : null;
     mutations.push({ kind: change.kind, path: change.path, destination: change.destination ?? null, startedAt,
       endedAt: new Date().toISOString(), exists: details !== null, modified: details?.mtime.toISOString() ?? null,
-      sidecarModified: sidecarInfo?.mtime.toISOString() ?? null,
+      sidecarModified: sidecarInfo?.mtime.toISOString() ?? null, photoReplacementTiming,
       sha256: details?.isFile() ? digest(await readFile(observed)) : null });
   }
   return mutations;
