@@ -63,6 +63,7 @@ const executionManifests = new Map([
   ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],
   ...['configuration-xml', 'configuration-file', 'configuration-runtime']
     .map(kind => [`tests/core/${kind}.test.js`, ['current-oracle', 'tests/core/fixtures/configuration/current-profile.json']]),
+  ['tests/http/api-keys.test.js', ['current-oracle', 'tests/http/fixtures/api-keys/current-profile.json']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/date-roundtrip-current/current-profile.json']],
   ['tests/metadata/playlist-items.test.js', ['current-oracle', 'tests/metadata/fixtures/playlist-items-current/current-profile.json']],
   ...['local-xml-provider', 'nfo-episode-blocks']

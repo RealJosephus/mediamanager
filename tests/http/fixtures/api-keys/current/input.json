@@ -1,0 +1,458 @@
+[
+  {
+    "name": "list-anonymous",
+    "method": "GET",
+    "path": "/Auth/Keys",
+    "identity": "anonymous",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "create-anonymous",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Device",
+    "identity": "anonymous"
+  },
+  {
+    "name": "revoke-anonymous",
+    "method": "DELETE",
+    "path": "/Auth/Keys/first-key",
+    "identity": "anonymous",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "list-regular",
+    "method": "GET",
+    "path": "/Auth/Keys",
+    "identity": "regular",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "create-regular",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Device",
+    "identity": "regular"
+  },
+  {
+    "name": "revoke-regular",
+    "method": "DELETE",
+    "path": "/Auth/Keys/first-key",
+    "identity": "regular",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "list-admin",
+    "method": "GET",
+    "path": "/Auth/Keys",
+    "identity": "admin",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "create-admin",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Device",
+    "identity": "admin"
+  },
+  {
+    "name": "revoke-admin",
+    "method": "DELETE",
+    "path": "/Auth/Keys/first-key",
+    "identity": "admin",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "list-api",
+    "method": "GET",
+    "path": "/Auth/Keys",
+    "identity": "api",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "create-api",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Device",
+    "identity": "api"
+  },
+  {
+    "name": "revoke-api",
+    "method": "DELETE",
+    "path": "/Auth/Keys/first-key",
+    "identity": "api",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "empty-list",
+    "method": "GET",
+    "path": "/Auth/Keys"
+  },
+  {
+    "name": "app-missing",
+    "method": "POST",
+    "path": "/Auth/Keys"
+  },
+  {
+    "name": "app-empty",
+    "method": "POST",
+    "path": "/Auth/Keys?app="
+  },
+  {
+    "name": "app-space",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%20"
+  },
+  {
+    "name": "app-clr-space",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%C2%85%E2%80%83"
+  },
+  {
+    "name": "app-bom",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%EF%BB%BF"
+  },
+  {
+    "name": "app-nul",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%00"
+  },
+  {
+    "name": "app-padded",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%20%20Client%20%20"
+  },
+  {
+    "name": "app-unicode",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%E6%92%AD%E6%94%BE%E5%99%A8%20%F0%9F%8E%AC"
+  },
+  {
+    "name": "app-slash",
+    "method": "POST",
+    "path": "/Auth/Keys?app=a%2Fb"
+  },
+  {
+    "name": "app-percent",
+    "method": "POST",
+    "path": "/Auth/Keys?app=a%252Fb"
+  },
+  {
+    "name": "app-comma",
+    "method": "POST",
+    "path": "/Auth/Keys?app=one%2Ctwo"
+  },
+  {
+    "name": "app-long",
+    "method": "POST",
+    "path": "/Auth/Keys?app=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "name": "app-literal-null",
+    "method": "POST",
+    "path": "/Auth/Keys?app=null"
+  },
+  {
+    "name": "app-tabs",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%09%0D%0A"
+  },
+  {
+    "name": "app-nul-space",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%00%20%00"
+  },
+  {
+    "name": "app-nbsp",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%C2%A0"
+  },
+  {
+    "name": "app-mixed-case",
+    "method": "POST",
+    "path": "/Auth/Keys?APP=Case",
+    "body": "{",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "app-repeated",
+    "method": "POST",
+    "path": "/Auth/Keys?app=First&app=Second",
+    "body": "{",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "app-repeated-empty",
+    "method": "POST",
+    "path": "/Auth/Keys?app=&app=Second",
+    "body": "{",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "app-mixed-repeated",
+    "method": "POST",
+    "path": "/Auth/Keys?APP=First&app=Second",
+    "body": "{",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "app-ignored-body",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Query",
+    "body": "{",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "revoke-unknown",
+    "method": "DELETE",
+    "path": "/Auth/Keys/missing",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-case",
+    "method": "DELETE",
+    "path": "/Auth/Keys/FIRST-KEY",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-padded",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%20first-key%20",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-space",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%20",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-clr-space",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%C2%85",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-bom",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%EF%BB%BF",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-nul",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%00",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-encoded-slash",
+    "method": "DELETE",
+    "path": "/Auth/Keys/a%2Fb",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "revoke-encoded-percent",
+    "method": "DELETE",
+    "path": "/Auth/Keys/a%252Fb",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "get-token-route",
+    "method": "GET",
+    "path": "/Auth/Keys/first-key",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "head-list",
+    "method": "HEAD",
+    "path": "/Auth/Keys",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "put-list",
+    "method": "PUT",
+    "path": "/Auth/Keys?app=Device"
+  },
+  {
+    "name": "delete-no-token",
+    "method": "DELETE",
+    "path": "/Auth/Keys"
+  },
+  {
+    "name": "camel-list",
+    "method": "GET",
+    "path": "/Auth/Keys",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ],
+    "accept": "application/json; profile=\"CamelCase\""
+  },
+  {
+    "name": "insert-failure",
+    "method": "POST",
+    "path": "/Auth/Keys?app=Failed",
+    "fail": "insert",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "delete-failure",
+    "method": "DELETE",
+    "path": "/Auth/Keys/first-key",
+    "fail": "delete",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "no-matching-delete-failure",
+    "method": "DELETE",
+    "path": "/Auth/Keys/no-match",
+    "fail": "delete",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(40,'Last','last-key','2026-01-02 03:04:05.1234567','2026-09-30 11:12:13')",
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(2,'First','first-key','2026-01-01 01:02:03','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "create-list-revoke",
+    "method": "POST",
+    "path": "/Auth/Keys?app=One",
+    "steps": [
+      {
+        "method": "POST",
+        "path": "/Auth/Keys?app=One"
+      },
+      {
+        "method": "POST",
+        "path": "/Auth/Keys?app=Two"
+      },
+      {
+        "path": "/Auth/Keys"
+      },
+      {
+        "method": "DELETE",
+        "path": "/Auth/Keys/{key}",
+        "generated": 0,
+        "uppercase": true
+      },
+      {
+        "path": "/Auth/Keys"
+      },
+      {
+        "method": "DELETE",
+        "path": "/Auth/Keys/{key}",
+        "generated": 0
+      },
+      {
+        "path": "/Auth/Keys"
+      }
+    ]
+  },
+  {
+    "name": "nul-before-anonymous-auth",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%00",
+    "identity": "anonymous"
+  },
+  {
+    "name": "nul-before-regular-auth",
+    "method": "DELETE",
+    "path": "/Auth/Keys/%00",
+    "identity": "regular"
+  },
+  {
+    "name": "nul-unknown-route",
+    "method": "DELETE",
+    "path": "/Unknown/%00",
+    "identity": "anonymous"
+  },
+  {
+    "name": "nul-query-name",
+    "method": "POST",
+    "path": "/Auth/Keys?app=%00",
+    "identity": "anonymous"
+  },
+  {
+    "name": "encoded-slash-lower",
+    "method": "DELETE",
+    "path": "/Auth/Keys/a%2fb",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(3,'Path key','a%2fb','2026-01-02 03:04:05','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "encoded-slash-case",
+    "method": "DELETE",
+    "path": "/Auth/Keys/a%2Fb",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(3,'Path key','a%2fb','2026-01-02 03:04:05','0001-01-01 00:00:00')"
+    ]
+  },
+  {
+    "name": "double-encoded-slash",
+    "method": "DELETE",
+    "path": "/Auth/Keys/a%252fb",
+    "seed": [
+      "INSERT INTO ApiKeys(Id,Name,AccessToken,DateCreated,DateLastActivity) VALUES(3,'Path key','a%2fb','2026-01-02 03:04:05','0001-01-01 00:00:00')"
+    ]
+  }
+]

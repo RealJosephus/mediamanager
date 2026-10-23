@@ -253,6 +253,8 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll'], null, 'current/input.json'],
   ['tests/core/configuration-runtime.test.js', 'tests/core/fixtures/configuration',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
+  ['tests/http/api-keys.test.js', 'tests/http/fixtures/api-keys',
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
   ['tests/metadata/playlist-items.test.js', 'tests/metadata/fixtures/playlist-items-current',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'input.json', [], ''],
   ['tests/metadata/local-xml-provider.test.js', 'tests/metadata/fixtures/local-xml-provider',

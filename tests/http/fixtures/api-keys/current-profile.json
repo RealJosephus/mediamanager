@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native API key HTTP, manager and EF SQLite observations against production PostgreSQL, with independent repetition and complete persisted failure prefixes.",
+  "sourcePaths": [
+    "Jellyfin.Api/Controllers/ApiKeyController.cs",
+    "Jellyfin.Server.Implementations/Security/AuthenticationManager.cs",
+    "Jellyfin.Server.Implementations/Security/AuthorizationContext.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "MediaBrowser.Controller/Security/AuthenticationInfo.cs",
+    "MediaBrowser.Model/Querying/QueryResult.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/Security/ApiKey.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/ModelConfiguration/ApiKeyConfiguration.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 15348,
+      "sha256": "3a6dd6a6bb73295dff50a848d2a4454ff61f47b6b52fc4a8887c84760d1c9824"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 11217,
+      "sha256": "f35dc8f2820df88934e0c5f8d8f1faede46493275a57011bf3f069bc285e88d2"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1391,
+      "sha256": "cda5bb3e961d6e2bf95c9e0bbb4591e3f76d216796804c185243383d78a0283e"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}
