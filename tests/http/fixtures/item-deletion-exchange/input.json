@@ -1,0 +1,12 @@
+{
+  "libraryName": "Deletion exchange photos",
+  "photos": ["Node removal", "Native removal", "Native edit", "Opaque survivor"],
+  "initialOverview": "Native preparation before PostgreSQL takeover.",
+  "continuedOverview": "Native continuation after the Node deletion.",
+  "genres": ["Exchange genre"],
+  "tags": ["Exchange tag", "保留"],
+  "providerIds": { "ExchangeUnknownProvider": "opaque-provider-42" },
+  "lockedFields": ["Name", "Overview"],
+  "opaqueMember": "\"ExchangeUnknown\": { \"integer\": 9223372036854775807, \"date\": \"2026-10-23T01:02:03.1234567Z\", \"empty\": \"\", \"nothing\": null, \"values\": [\"保留\", \"a\\u0000b\"] }",
+  "assetText": "Unknown instance asset retained across both runtime owners.\n"
+}
