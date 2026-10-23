@@ -261,6 +261,8 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
   ['tests/http/collections.test.js', 'tests/http/fixtures/collections',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
+  ['tests/http/library-structure.test.js', 'tests/http/fixtures/library-structure-current',
+    ['dotnet', 'jellyfinDll'], null, 'input.json', ['observations.js'], ''],
   ['tests/http/password-reset.test.js', 'tests/http/fixtures/password-reset-http-current',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'input.json', ['observations.js'], ''],
   ['tests/http/quick-connect.test.js', 'tests/http/fixtures/quick-connect-current',

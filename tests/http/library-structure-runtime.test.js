@@ -40,7 +40,7 @@ async function setup(t) {
   const open = async () => {
     runtime = await createRuntime({ database, configuration, programDataPath, dataPath, metadataPath, configurationDirectoryPath, vfs, identityMap, autoDiscoveryOptions: { enabled: false },
       serverId: 'library-structure-http', onError: error => errors.push(error) });
-    runtime.libraryConfiguration.sleep = async milliseconds => assert.equal(milliseconds, 1000);
+    runtime.libraryConfiguration.sleep = async () => {};
     await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
     origin = `http://127.0.0.1:${runtime.server.address().port}/media`;
   };

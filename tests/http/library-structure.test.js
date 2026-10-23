@@ -2,66 +2,78 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import os from 'node:os';
-import { createHash } from 'node:crypto';
 import { createApplication } from '../../src/http/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { LibraryConfigurationService } from '../../src/library/library-configuration-service.js';
+import { LibraryOptionsStore } from '../../src/library/library-options-store.js';
 import { LibraryScanHost } from '../../src/library/library-scan-host.js';
+import { deserializeLibraryOptions } from '../../src/library/options.js';
+import { decodeNativeText } from '../../src/core/native-text.js';
 import { parseCollectionTypeOption } from '../../src/library/collection-type-options.js';
-import { recordedInputPath } from '../../tools/validation/paths.js';
+import { testFileSystem } from '../storage/plugin-files.js';
+import { currentLibraryStructure, structureInput } from './library-structure-current.js';
+import { projectStructureObservation } from './fixtures/library-structure-current/observations.js';
 
-void JSON.parse(await fs.readFile(new URL('./fixtures/library-structure/required-inputs.json', import.meta.url)));
-const fixture = new URL('./fixtures/library-structure/', import.meta.url);
-const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
-const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const id = 'ca200000000000000000000000000009';
-const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, value]) => [key, noTrace(value)])) : value;
 
-test('library structure native recording binds actual MVC, policy, rename files and CollectionFolder options', async () => {
-  assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await fs.readFile(recordedInputPath(proof.rawRecording, [proof.nativeSha256]))), proof.nativeSha256);
-  assert.equal(native.inputSha256, proof.inputSha256); assert.equal(proof.sourcesStable, true);
-  for (const key of ['actualController','actualBinding','actualPermissionHandlers','actualRenameFiles','actualCollectionFolderOptions','principalControlled','managerControlled']) assert.equal(native[key], true);
-  assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0); assert.equal(proof.phaseAcceptance, false);
-  for (const source of proof.sources) {
-    assert.equal(hash(await fs.readFile(recordedInputPath(path.join('D:/jellyfin', source.filename), [source.sha256]))), source.sha256, source.filename);
-    assert.equal(hash(await fs.readFile(recordedInputPath(path.join(proof.jellyfin.buildSource, source.filename), [source.sha256]))), source.sha256, source.filename);
-  }
-  for (const source of proof.oracleSources) assert.equal(hash(await fs.readFile(source.filename === 'Directory.Build.props'
-    ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.filename, fixture))), source.sha256, source.filename);
-  for (const assembly of proof.assemblies) assert.equal(hash(await fs.readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
-  assert.deepEqual(native.results.map(row => row.name), input.cases.map(row => row.name));
+test('library structure executes two current Native MVC, permission, rename and CollectionFolder consumers', async () => {
+  const captured = await currentLibraryStructure();
+  assert.equal(captured.native.results.length, structureInput.cases.length);
+  assert.equal(captured.repeat.results.length, structureInput.cases.length);
 });
 
-test('public collection type parsing preserves native marker numeric values and excludes internal query types', () => {
+test('public collection type parsing preserves current Native marker values and excludes internal query types', async () => {
+  const { native } = await currentLibraryStructure();
   for (const row of native.markerTypes) assert.equal(parseCollectionTypeOption(row.text), row.value, row.text);
 });
 
-function normalize(value, views) {
-  if (typeof value === 'string') {
-    if (!value.includes('{views}') && (!views || !value.includes(views))) return value;
-    const result = views ? value.replaceAll(views, '{views}') : value;
-    return result.replace(/\{views\}[\\/][a-f0-9]{32}(?=$|[\\/])/gu, '{views}/temporary').replaceAll('\\', '/');
+async function snapshot(views) {
+  const files = [];
+  for (const entry of await fs.readdir(views, { recursive: true, withFileTypes: true })) {
+    const filename = path.join(entry.parentPath, entry.name), directory = entry.isDirectory();
+    const file = { path: path.relative(views, filename).split(path.sep).join('/'), kind: directory ? 'directory' : 'file',
+      bytesBase64: directory ? null : (await fs.readFile(filename)).toString('base64'), options: null };
+    if (!directory && entry.name === 'options.xml') {
+      try { file.options = { accepted: true, value: deserializeLibraryOptions(decodeNativeText(Buffer.from(file.bytesBase64, 'base64'))), error: null }; }
+      catch (error) { file.options = { accepted: false, value: null, error: { name: error.name, message: error.message } }; }
+    }
+    files.push(file);
   }
-  if (Array.isArray(value)) return value.map(entry => normalize(entry, views));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, normalize(entry, views)]));
-  return value;
+  return files.sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
 }
 
-for (const sample of input.cases) test('LibraryStructure native HTTP differential: ' + sample.name, async t => {
-  const calls = [], identity = sample.identity ?? 'admin';
+async function coldOptions(root, directory) {
+  const store = new LibraryOptionsStore({ fileSystem: testFileSystem, programDataPath: root });
+  try { return structuredClone(await store.get(directory)); }
+  finally { await store.close(); }
+}
+
+for (const sample of structureInput.cases) test('LibraryStructure current Native HTTP differential: ' + sample.name, async t => {
+  const captured = await currentLibraryStructure();
+  const root = path.join(captured.candidateRoot, sample.name, 'program'), views = path.join(root, 'root', 'default');
+  await fs.mkdir(views, { recursive: true });
+  for (const file of structureInput.files) {
+    const filename = path.join(views, ...file.path.split('/'));
+    await fs.mkdir(path.dirname(filename), { recursive: true }); await fs.writeFile(filename, Buffer.from(file.bytesBase64, 'base64'), { flag: 'wx' });
+  }
+  const beforeFiles = await snapshot(views), calls = [], events = [], moveAttempts = [], identity = sample.identity ?? 'admin';
+  let savedOptions = null, injectedFailure = null;
   const user = { Id: id, Policy: { IsAdministrator: identity === 'admin', EnableRemoteAccess: sample.remoteDenied !== true }, AccessSchedules: [] };
-  const auth = { IsAuthenticated: identity !== 'anonymous', IsApiKey: identity === 'apiKey', IsAdministrator: ['admin','apiKey'].includes(identity),
-    UserId: ['apiKey','empty'].includes(identity) ? '00000000000000000000000000000000' : id,
-    User: ['apiKey','empty'].includes(identity) ? null : user };
+  const auth = { IsAuthenticated: identity !== 'anonymous', IsApiKey: identity === 'apiKey', IsAdministrator: ['admin', 'apiKey'].includes(identity),
+    UserId: ['apiKey', 'empty'].includes(identity) ? '00000000000000000000000000000000' : id,
+    User: ['apiKey', 'empty'].includes(identity) ? null : user };
   const authentication = new AuthenticationService({ store: {}, users: {}, serverId: 'structure-differential', isLocalNetwork: () => sample.remote !== true });
   authentication.authenticate = async () => auth;
   const trace = (action, value = null) => calls.push({ action, value });
-  const fail = action => { if (sample.fail === action) throw new Error('Controlled ' + action + ' failure.'); };
-  const types = ['movies','tvshows','music','musicvideos','homevideos','boxsets','books','mixed'];
+  const fail = action => { if (sample.fail === action) { injectedFailure = action; throw new Error('Controlled ' + action + ' failure.'); } };
+  const types = ['movies', 'tvshows', 'music', 'musicvideos', 'homevideos', 'boxsets', 'books', 'mixed'];
+  const optionsStore = new LibraryOptionsStore({ fileSystem: testFileSystem, programDataPath: root });
+  optionsStore.on('updated', event => {
+    savedOptions = structuredClone(event.LibraryOptions); events.push({ libraryPath: event.LibraryPath, options: savedOptions });
+    trace('options-updated', savedOptions);
+  });
+  t.after(() => optionsStore.close());
   const service = {
     getVirtualFolders: async refresh => { trace('get', refresh); return []; },
     addVirtualFolder: async (name, type, options, refresh) => { trace('create', { name, collectionType: typeof type === 'string' ? types.indexOf(type) : type, options, refresh }); fail('create'); },
@@ -77,32 +89,36 @@ for (const sample of input.cases) test('LibraryStructure native HTTP differentia
     updateLibraryOptions: async (key, options) => {
       trace('item', key);
       if (sample.missingItem) return false;
-      for (const info of options.PathInfos) { trace('shortcut', { directory: '{views}/Library', info }); fail('shortcut'); }
-      if (options.PathInfos.includes(null)) throw new TypeError('Null media path.');
-      trace('options-updated', options); return true;
+      const directory = path.join(views, 'Library'), current = await optionsStore.bind(key, directory);
+      for (const info of options.PathInfos) {
+        if (current.PathInfos.some(existing => existing.Path === info.Path)) continue;
+        trace('shortcut', { directory, info }); fail('shortcut');
+      }
+      await optionsStore.save(directory, options); return true;
     },
   };
-  let views;
   if (sample.name.startsWith('rename')) {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'structure-rename-')); views = path.join(root, 'root', 'default');
-    for (const name of ['Library','Taken']) { await fs.mkdir(path.join(views, name), { recursive: true }); await fs.writeFile(path.join(views, name, 'movies.collection'), ''); }
     const physicalHost = new LibraryScanHost({ store: {}, library: { validateChildren: async (item, options) => trace('validate-physical', {
       id: item.Id, recursive: options.recursive, refreshChildMetadata: options.refreshChildMetadata, allowRemoveRoot: options.allowRemoveRoot, tokenCanCancel: !!options.signal }) },
       itemCreation: { withItem: async (key, operation) => { trace('item', key); return operation({ Id: key, IsFolder: key.endsWith('12') }); } },
       metadataScanner: { refreshLiveItem: async (item, options) => trace('refresh-physical', { id: item.Id, metadata: options.MetadataRefreshMode,
         image: options.ImageRefreshMode, automated: options.IsAutomated, force: options.ForceSave, tokenCanCancel: !!options.signal }) }, topLevelValidation: { supports: () => false } });
     let moves = 0;
-    const configuration = new LibraryConfigurationService({ programDataPath: root, optionsStore: { clear: async () => {} }, mediaAssets: {},
+    const configuration = new LibraryConfigurationService({ programDataPath: root, optionsStore, mediaAssets: {},
       host: { getUserRootFolder: async () => { trace('user-root'); return {}; }, withCachedChildren: async (_root, operation) => operation({ firstByPath: async () => sample.physicalRoot
-        ? { Type: 'CollectionFolder', PhysicalFolderIds: [12,13,12].map(index => 'ca2000000000000000000' + String(index).padStart(11, '0')) } : null }),
+        ? { Type: 'CollectionFolder', PhysicalFolderIds: [12, 13, 12].map(index => 'ca2000000000000000000' + String(index).padStart(11, '0')) } : null }),
         refreshPhysicalFolders: value => physicalHost.refreshPhysicalFolders(value), clearIgnoreRuleCache: async () => trace('clear-ignore') },
       lifecycle: { validateTopLibraryFolders: async options => trace('validate-top', options.removeRoot) },
       monitor: { stop: async () => { trace('stop'); fail('stop'); }, start: async () => trace('start') },
-      queueLibraryScan: async () => trace('queue'), sleep: async milliseconds => assert.equal(milliseconds, 1000),
-      fileSystem: { ...fs, rename: async (from, to) => { trace('move', { from, to }); fail('move'); if (++moves === 2) fail('move-second'); await fs.rename(from, to); } } });
+      queueLibraryScan: async () => trace('queue'), sleep: async milliseconds => trace('delay', milliseconds),
+      fileSystem: { ...fs, rename: async (from, to) => {
+        trace('move', { from, to }); let succeeded = false, error = null;
+        try { fail('move'); if (++moves === 2) fail('move-second'); await fs.rename(from, to); succeeded = true; }
+        catch (failure) { error = { name: failure.name, message: failure.message }; throw failure; }
+        finally { moveAttempts.push({ from, to, succeeded, error, files: await snapshot(views) }); }
+      } } });
     service.renameVirtualFolder = (...args) => configuration.renameVirtualFolder(...args);
-    service.close = () => configuration.close();
-    t.after(async () => { await configuration.close(); assert.equal(path.dirname(path.resolve(root)), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('structure-rename-')); await fs.rm(root, { recursive: true, force: true }); });
+    service.close = () => configuration.close(); t.after(() => configuration.close());
   }
   const application = await createApplication({ configuration: { IsStartupWizardCompleted: !sample.wizard }, authentication, libraryConfiguration: service });
   await new Promise(resolve => application.server.listen(0, '127.0.0.1', resolve));
@@ -110,25 +126,55 @@ for (const sample of input.cases) test('LibraryStructure native HTTP differentia
   const response = await fetch(`http://127.0.0.1:${application.server.address().port}${sample.path}`, {
     method: sample.method, headers: { Accept: sample.accept ?? 'application/json', ...(sample.body !== undefined && { 'Content-Type': sample.contentType ?? 'application/json' }) }, body: sample.body,
   });
-  const body = await response.text(), expected = native.results.find(row => row.name === sample.name);
-  await service.close?.();
-  assert.equal(response.status, expected.status); assert.equal(response.headers.get('content-type'), expected.contentType);
-  assert.deepEqual((response.headers.get('allow') ?? '').split(',').map(value => value.trim()).sort(), expected.allow.split(',').map(value => value.trim()).sort());
-  // These are paths emitted by the Windows oracle, not paths on this host.
-  const nativeViews = path.win32.join(path.win32.dirname(proof.rawRecording), 'states', sample.name, 'root', 'default');
-  const actualBody = expected.jsonBody != null ? noTrace(JSON.parse(body)) : body;
-  const expectedBody = expected.jsonBody != null ? noTrace(expected.jsonBody) : expected.body;
-  assert.deepEqual(normalize(actualBody, views ?? ''), normalize(expectedBody, nativeViews));
-  const controlledPaths = sample.name.startsWith('path-');
-  const expectedCalls = controlledPaths ? expected.calls.filter(row => !['stop','start','queue'].includes(row.action)) : expected.calls;
-  assert.deepEqual(normalize(calls, views ?? ''), normalize(expectedCalls, nativeViews));
-  if (views) {
-    const moves = calls.filter(row => row.action === 'move');
-    if (moves.length === 2) assert.equal(moves[1].value.from, moves[0].value.to);
-    for (const move of calls.filter(row => row.action === 'move' && row.value.to !== path.join(views, 'Renamed') && row.value.to !== path.join(views, 'Library') && row.value.to !== path.join(views, 'library'))) {
-      assert.equal(path.dirname(move.value.to), views); assert.match(path.basename(move.value.to), /^[a-f0-9]{32}$/u);
-    }
-    const files = (await fs.readdir(views, { recursive: true, withFileTypes: true })).filter(row => row.isFile()).map(row => path.relative(views, path.join(row.parentPath, row.name))).sort();
-    assert.deepEqual(normalize(files.map(value => '{views}/' + value), views).sort(), normalize(expected.files.map(value => '{views}/' + value), nativeViews).sort());
+  const body = await response.text(); let hasJson = false, jsonBody = null;
+  try { jsonBody = JSON.parse(body); hasJson = true; } catch { }
+  await service.close?.(); await optionsStore.close();
+  const optionsRead = sample.path.startsWith('/Library/VirtualFolders/LibraryOptions')
+    ? await coldOptions(root, path.join(views, 'Library')) : null;
+  const actual = { name: sample.name, views, beforeFiles, status: response.status, contentType: response.headers.get('content-type'),
+    allow: response.headers.get('allow') ?? '', body, hasJson, jsonBody, calls, events, savedOptions, optionsRead,
+    injectedFailure, moveAttempts, files: await snapshot(views) };
+  await captured.recordCandidate(actual);
+  const expected = captured.projections[structureInput.cases.indexOf(sample)];
+  assert.deepEqual(projectStructureObservation(actual, sample), expected);
+});
+
+test('library options XML is read by current Native and Node, continued by Native and reopened by Node', async () => {
+  const captured = await currentLibraryStructure(), consumers = [], evidence = [];
+  for (const native of captured.native.results) {
+    const file = native.files.find(entry => entry.path === 'Library/options.xml');
+    if (!file) continue;
+    assert.equal(file.options.accepted, true, native.name);
+    const nativeDirectory = path.join(native.views, 'Library');
+    const nativeBytes = await fs.readFile(path.join(nativeDirectory, 'options.xml'));
+    assert.equal(nativeBytes.toString('base64'), file.bytesBase64, native.name);
+    const nodeReadsNative = await coldOptions(path.dirname(path.dirname(native.views)), nativeDirectory);
+    assert.deepEqual(nodeReadsNative, file.options.value, native.name + ' Native XML to Node');
+    assert.deepEqual(nodeReadsNative, native.optionsRead, native.name + ' Native public cold read');
+    const candidate = captured.candidates.get(native.name); assert.ok(candidate, native.name);
+    const candidateFile = candidate.files.find(entry => entry.path === 'Library/options.xml'); assert.ok(candidateFile, native.name);
+    assert.equal(candidateFile.options.accepted, true, native.name);
+    const directory = path.join(candidate.views, 'Library');
+    assert.equal((await fs.readFile(path.join(directory, 'options.xml'))).toString('base64'), candidateFile.bytesBase64, native.name);
+    consumers.push({ name: native.name, directory });
+    evidence.push({ name: native.name, nodeReadsNative, nodeWritten: candidateFile.options.value, beforeBytes: candidateFile.bytesBase64 });
   }
+  assert.ok(consumers.length > 0, 'Successful options HTTP requests produced real XML.');
+  const returned = await captured.continueOptions(consumers);
+  for (const row of returned.results) {
+    const prior = evidence.find(entry => entry.name === row.name), candidate = captured.candidates.get(row.name);
+    assert.equal(row.beforeBytes, prior.beforeBytes, row.name + ' current Native consumed exact Node-written file');
+    assert.equal(row.read.accepted, true, row.name);
+    assert.deepEqual(row.read.value, prior.nodeWritten, row.name + ' Native XML reader');
+    assert.deepEqual(row.before, prior.nodeWritten, row.name + ' Native CollectionFolder reader');
+    const expectedAfter = { ...prior.nodeWritten, ...structureInput.optionsContinuation };
+    assert.deepEqual(row.after, expectedAfter, row.name + ' complete Native continuation');
+    assert.deepEqual(row.events, [{ libraryPath: row.directory, options: expectedAfter }], row.name + ' public options event');
+    const afterBytes = await fs.readFile(path.join(row.directory, 'options.xml'));
+    assert.equal(afterBytes.toString('base64'), row.afterBytes, row.name);
+    const reopened = await coldOptions(path.dirname(path.dirname(candidate.views)), row.directory);
+    assert.deepEqual(reopened, row.after, row.name + ' fresh Node reads Native continuation');
+    Object.assign(prior, { nativeBefore: row.before, nativeAfter: row.after, reopened, afterBytes: row.afterBytes });
+  }
+  await fs.writeFile(path.join(captured.output, 'options-exchange.json'), JSON.stringify({ actualNativeInstance: false, evidence }, null, 2) + '\n', { flag: 'wx' });
 });
