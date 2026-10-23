@@ -49,10 +49,10 @@ async function fixture(t) {
   t.after(() => new Promise(resolve => { app.server.close(resolve); app.server.closeAllConnections(); }));
   const request = async (route, { method = 'DELETE', role = 'management', body, contentType = 'application/json' } = {}) => {
     const response = await fetch(`http://127.0.0.1:${app.server.address().port}${route}`, { method,
-      headers: { 'X-Fixture-Subject': role, ...(body !== undefined && { 'Content-Type': contentType }) },
+      headers: { Accept: 'application/json', 'X-Fixture-Subject': role, ...(body !== undefined && { 'Content-Type': contentType }) },
       ...(body !== undefined && { body }) });
     const text = await response.text();
-    return { status: response.status, allow: response.headers.get('allow'), text,
+    return { status: response.status, contentType: response.headers.get('content-type'), allow: response.headers.get('allow'), text,
       ...(/json/u.test(response.headers.get('content-type') ?? '') && text && { json: JSON.parse(text) }) };
   };
   return { request, calls, errors };
@@ -67,14 +67,21 @@ test('LiveTvManagement DELETE routes bind string ids and distinguish 400, 404 an
   assert.equal((await current.request('/LiveTv/SeriesTimers/Series-Route')).status, 204);
   assert.equal((await current.request('/LiveTv/Timers/api-key-route', { role: 'apiKey' })).status, 204);
   assert.equal((await current.request('/LiveTv/SeriesTimers/admin-route', { role: 'admin' })).status, 204);
-  assert.equal((await current.request('/LiveTv/Timers/missing')).status, 404);
-  assert.equal((await current.request('/LiveTv/Timers/not-a-guid')).status, 404);
+  for (const route of ['/LiveTv/Timers/missing', '/LiveTv/Timers/not-a-guid', '/LiveTv/SeriesTimers/missing']) {
+    const missing = await current.request(route);
+    assert.equal(missing.status, 404); assert.equal(missing.contentType, 'text/plain');
+    assert.equal(missing.text, 'Error processing request.');
+  }
+  const missingDetail = await current.request('/LiveTv/SeriesTimers/missing', { method: 'GET', role: 'access' });
+  assert.equal(missingDetail.status, 404); assert.equal(missingDetail.contentType, 'application/json; charset=utf-8');
+  assert.equal(missingDetail.json.title, 'Not Found');
   const whitespace = await current.request('/LiveTv/SeriesTimers/%20');
   assert.equal(whitespace.status, 400); assert.deepEqual(whitespace.json.errors.timerId, ['The timerId field is required.']);
   assert.deepEqual(current.calls, [
     { operation: 'timer', id: 'existing' }, { operation: 'series', id: 'Series-Route' },
     { operation: 'timer', id: 'api-key-route' }, { operation: 'series', id: 'admin-route' },
     { operation: 'timer', id: 'missing' }, { operation: 'timer', id: 'not-a-guid' },
+    { operation: 'series', id: 'missing' },
   ]);
 });
 

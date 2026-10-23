@@ -30,8 +30,14 @@ export function registerLiveTvTimerRoutes(add, { liveTvTimers }) {
     return liveTvTimers.getSeriesTimers({ sortBy: queryValue(context.query, 'sortBy'), sortOrder: sortOrder ?? 'Ascending' });
   }, options);
   add('GET', '/LiveTv/SeriesTimers/{timerId}', async context => await liveTvTimers.getSeriesTimer(timerId(context)) ?? notFound(), options);
-  add('DELETE', '/LiveTv/Timers/{timerId}', async context => await liveTvTimers.cancelTimer(timerId(context)) ? noContent() : notFound(), management);
-  add('DELETE', '/LiveTv/SeriesTimers/{timerId}', async context => await liveTvTimers.cancelSeriesTimer(timerId(context)) ? noContent() : notFound(), management);
+  add('DELETE', '/LiveTv/Timers/{timerId}', async context => {
+    if (!await liveTvTimers.cancelTimer(timerId(context))) throw httpError(404, 'The Live TV timer was not found.');
+    return noContent();
+  }, management);
+  add('DELETE', '/LiveTv/SeriesTimers/{timerId}', async context => {
+    if (!await liveTvTimers.cancelSeriesTimer(timerId(context))) throw httpError(404, 'The Live TV series timer was not found.');
+    return noContent();
+  }, management);
   add('POST', '/LiveTv/Timers', () => unavailable('timer creation'),
     body('timer', 'timerInfo', 'MediaBrowser.Model.LiveTv.TimerInfoDto'));
   add('POST', '/LiveTv/Timers/{timerId}', context => { timerId(context); return unavailable('timer update'); },

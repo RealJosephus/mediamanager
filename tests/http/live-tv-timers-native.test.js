@@ -57,6 +57,16 @@ const mutationEventProjection = messages => messages.filter(message => mutationM
 const mutationEnvelopes = messages => messages.filter(message => mutationMessageTypes.has(message.MessageType));
 const stateText = value => value == null ? null : Buffer.from(value, 'hex').toString('utf8');
 
+function assertRequestErrors(observation, label) {
+  if (!observation.runtimeErrors) return;
+  const { response } = observation;
+  // Failure responses are compared in full with Native. Keep their diagnostic
+  // errors with that request instead of treating them as later background work.
+  if (response.status >= 400 && response.contentType === 'text/plain'
+    && response.bodyText === 'Error processing request.') return;
+  assert.deepEqual(observation.runtimeErrors, [], `${label}: a successful or binding response must not hide a runtime failure`);
+}
+
 function assertMutationEnvelopes(type, connections, expectedCount) {
   const recipients = ['allowed', 'manager'].map(role => mutationEnvelopes(connections[role].messages));
   for (const [index, messages] of recipients.entries()) {
@@ -219,14 +229,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
       const response = await request(server, sample.route, { token: tokens[mode] });
       const value = { name: sample.name, mode, request: { method: 'GET', route: sample.route }, response,
         ...(runtimeErrors ? { runtimeErrors: runtimeErrors.slice(errorIndex) } : {}) };
-      if (runtimeErrors && response.status < 500) {
-        // Application middleware reports a thrown domain error before sending
-        // its 400 response. Bind this one request failure exactly; unrelated
-        // background errors must still fail successful and binding responses.
-        const expected = sample.name === 'defaults missing program' && response.status === 400
-          ? [{ name: 'Error', message: "Guid can't be empty. (Parameter 'id')" }] : [];
-        assert.deepEqual(value.runtimeErrors, expected, sample.name + ': only the exact request failure may be reported');
-      }
+      assertRequestErrors(value, sample.name);
       values.push(value);
       await writeFile(path.join(root, `${type}-${populated ? 'populated' : 'empty'}-progress.log`), filterEvidenceJson(value), { flag: 'a' });
     }
@@ -317,7 +320,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
       if (sample.status === 204) {
         assert.equal(response.contentType, null); assert.equal(response.bodyText, '');
       }
-      if (runtimeErrors) assert.deepEqual(observation.runtimeErrors, [], `${type}: ${sample.name} must not hide a runtime failure`);
+      assertRequestErrors(observation, `${type}: ${sample.name}`);
       requests.push(observation);
       await writeFile(path.join(root, `${type}-mutations-progress.log`), filterEvidenceJson(observation), { flag: 'a' });
     };
@@ -609,8 +612,10 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
         assert.equal(sha(Buffer.from(imported[kind].sourceHex, 'hex')), imported[kind].sourceSha256);
       }
       stage.node = await observations('node', fixture.origin, nodeCredentials, populated, stage.nodeErrors);
+      const requestErrors = stage.node.flatMap(value => value.runtimeErrors);
       stage.nodeAfterReads = { database: await fixture.snapshot(), documents: await documentSnapshot(nodeRoot) };
       assert.deepEqual(stage.nodeAfterReads, stage.nodeBeforeReads);
+      assert.deepEqual(stage.nodeErrors, requestErrors, 'Read-only snapshots must not hide background failures.');
       assert.equal(stage.node.length, stage.native.length);
       for (const [index, value] of stage.node.entries()) {
         const expected = stage.native[index]; report.cases.push({ stage: stage.name, name: value.name, mode: value.mode, request: value.request,
@@ -637,6 +642,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
         stage.mutations = { native: nativeMutation,
           node: await runMutations('node', fixture.origin, nodeCredentials, stage.nodeErrors,
             async () => ({ database: await fixture.snapshot(), documents: await documentSnapshot(nodeRoot) })) };
+        requestErrors.push(...stage.mutations.node.requests.flatMap(value => value.runtimeErrors));
         assert.deepEqual(stage.mutations.native.after.database, stage.mutations.native.before.database,
           'Native timer cancellation only persists its timer documents.');
         assert.deepEqual(stage.mutations.node.after.database.tables, stage.mutations.node.before.database.tables,
@@ -664,7 +670,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
           });
         }
         assert.deepEqual(stage.mutations.node.events, stage.mutations.native.events);
-        assert.deepEqual(stage.nodeErrors, [], 'Mutations and WebSocket notification delivery must not hide background failures.');
+        assert.deepEqual(stage.nodeErrors, requestErrors, 'Mutations and WebSocket notification delivery must not hide background failures.');
         const original = await request(fixture.origin, '/LiveTv/Timers', { token: nodeCredentials.allowed });
         await writeDocuments(nodeRoot, { 'timers.json': '[]\n', 'seriestimers.json': '[]\n' });
         const warm = await request(fixture.origin, '/LiveTv/Timers', { token: nodeCredentials.allowed });
@@ -683,6 +689,7 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
           'A restart must reconcile drifted native files from authoritative PostgreSQL source bytes.');
       }
       await fixture.close(); fixture = undefined;
+      assert.deepEqual(stage.nodeErrors, requestErrors, 'Source reconciliation and normal runtime close must not hide background failures.');
       for (const port of new Set(stage.nodePorts)) assert.equal(await portAvailable(port), true, 'Every closed Node listener must be released.');
       report.cleanup.push({ name: 'node-' + stage.name, runtimeClosed: true, postgresSchemaDropped: true, listenerPortsReleased: true });
       assert.ok(stage.nodeShutdownStates.length >= 1);
