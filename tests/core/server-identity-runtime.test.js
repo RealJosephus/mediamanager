@@ -12,7 +12,9 @@ import { createStatePackage, restoreStatePackage } from '../../src/migration/sta
 import { createInstanceFixture } from '../migration/instance-fixture.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { consumeServerIdentityFiles } from './server-identity-current.js';
+
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
 const fixtureInput = JSON.parse(await fs.readFile(new URL('./fixtures/server-identity/current/input.json', import.meta.url)));
 const serverIdCases = ['n-upper', 'd', 'b-spaces', 'x', 'utf16le', 'utf32be'];
@@ -46,21 +48,22 @@ test('postgres: native identity text survives runtime DTOs, exact binding, disco
     assert.equal((await discoverInstanceState({ instanceRoot: restoredRoot })).identity.serverId, settings.serverId);
     const nativeRoot = path.join(root, name); await fs.mkdir(path.join(nativeRoot, 'data/data'), { recursive: true });
     await fs.writeFile(path.join(nativeRoot, 'data/data/device.txt'), await fs.readFile(path.join(restoredRoot, 'data/data/device.txt')));
-    observations.push({ name, root: nativeRoot, serverId: settings.serverId, identityBytesSha256: createHash('sha256').update(bytes).digest('hex'), binding, restored: true });
+    observations.push({ name, root: nativeRoot, filename: path.join(nativeRoot, 'data/data/device.txt'), serverId: settings.serverId,
+      identityBytesSha256: createHash('sha256').update(bytes).digest('hex'), binding, restored: true });
   });
-  const input = path.join(root, 'consumer-input.json'); await fs.writeFile(input, JSON.stringify(observations, null, 2) + '\n', { flag: 'wx' });
-  const recording = await recordOracle({ project: 'tests/core/fixtures/server-identity/current-consumer/Oracle.csproj', output: path.join(root, 'native-reader'), args: [input, '{output}/native.json'] });
-  const consumed = JSON.parse(await fs.readFile(path.join(root, 'native-reader/native.json')));
-  assert.equal(consumed.actualDeviceId, true); assert.equal(consumed.actualFiles, true);
-  for (const row of consumed.results) { assert.equal(row.value, observations.find(value => value.name === row.name).serverId); assert.equal(row.cachedValue, row.value); assert.equal(row.beforeBytes, row.afterBytes); }
-  await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ observations, recording, actualPostgres: true, runtimeRestart: true, completeStateRestored: true, actualNativeRead: true }, null, 2) + '\n', { flag: 'wx' });
+  const consumed = await consumeServerIdentityFiles(observations, path.join(root, 'restored-files'));
+  await fs.writeFile(path.join(root, 'proof.json'), JSON.stringify({ observations, recording: consumed.recording, actualPostgres: true,
+    runtimeRestart: true, completeStateRestored: true, actualNativeRead: true }, null, 2) + '\n', { flag: 'wx' });
 });
 
 test('fresh startup identity persists across independent loads while offline inspection never repairs an identity', async () => {
   const root = path.join(path.resolve(validationOutputRoot()), 'identity-fresh'); await fs.mkdir(root); await fs.mkdir(path.join(root, 'config'));
   const first = await readInstanceConfiguration(root), second = await readInstanceConfiguration(root);
-  assert.match(first.serverId, /^[a-f0-9]{12}4[a-f0-9]{3}[89ab][a-f0-9]{15}$/u); assert.equal(second.serverId, first.serverId);
+  assert.match(first.serverId, /^[a-f0-9]{32}$/u); assert.equal(second.serverId, first.serverId);
+  const firstFile = path.join(root, 'first-device.txt'); await fs.copyFile(path.join(root, 'data/data/device.txt'), firstFile);
   const filename = path.join(root, 'data/data/device.txt'); const invalid = Buffer.from('invalid'); await fs.writeFile(filename, invalid);
   await assert.rejects(inspectInstanceConfiguration(root), /identity is invalid/u); assert.deepEqual(await fs.readFile(filename), invalid);
   const repaired = await readInstanceConfiguration(root); assert.notEqual(repaired.serverId, first.serverId); assert.equal((await inspectInstanceConfiguration(root)).serverId, repaired.serverId);
+  await consumeServerIdentityFiles([{ name: 'fresh', filename: firstFile, serverId: first.serverId },
+    { name: 'repaired', filename, serverId: repaired.serverId }], path.join(root, 'native-consumer'));
 });

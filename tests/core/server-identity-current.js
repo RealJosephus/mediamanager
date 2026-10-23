@@ -18,6 +18,46 @@ const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 let pending;
 export const currentServerIdentity = () => pending ??= capture();
 
+export async function consumeServerIdentityFiles(samples, output) {
+  const { native } = await currentServerIdentity();
+  assertValidationOutputChild(output); await mkdir(output);
+  const inputs = [];
+  for (const sample of samples) {
+    const bytes = await readFile(sample.filename), root = path.join(output, sample.name);
+    assertValidationOutputChild(root);
+    await mkdir(path.join(root, 'data/data'), { recursive: true });
+    const filename = path.join(root, 'data/data/device.txt'); await writeFile(filename, bytes, { flag: 'wx' });
+    inputs.push({ ...sample, root, bytes: bytes.toString('base64'), source: await describeFile(sample.filename), copy: await describeFile(filename) });
+  }
+  const input = path.join(output, 'consumer-input.json');
+  const inputBytes = Buffer.from(JSON.stringify(inputs, null, 2) + '\n'); await writeFile(input, inputBytes, { flag: 'wx' });
+  const directory = path.join(output, 'native-reader');
+  const recording = await recordOracle({ project: fileURLToPath(new URL('current-consumer/Oracle.csproj', fixture)),
+    output: directory, args: [input, '{output}/native.json'] });
+  const filename = path.join(directory, 'native.json'), bytes = await readFile(filename), consumed = JSON.parse(bytes);
+  const proof = { inputs, input: await describeFile(input), recording, output: await describeFile(filename), consumed,
+    actualNativeRead: true, phaseAcceptance: false, releaseAcceptance: false };
+  await writeFile(path.join(output, 'proof.json'), JSON.stringify(proof, null, 2) + '\n', { flag: 'wx' });
+  assert.equal(recording.passed, true); assert.equal(recording.build.status, 0); assert.equal(recording.process.status, 0);
+  assert.equal(recording.outputs.find(entry => entry.filename === filename)?.sha256, sha(bytes));
+  assert.equal(consumed.inputSha256, sha(inputBytes));
+  assert.equal(consumed.actualDeviceId, true); assert.equal(consumed.actualFiles, true);
+  assert.deepEqual(consumed.results.map(row => row.name), samples.map(row => row.name));
+  for (const assembly of consumed.assemblies) {
+    assert.equal((await describeFile(assembly.filename)).sha256, assembly.sha256);
+  }
+  const deviceAssembly = consumed.assemblies.find(entry => path.basename(entry.filename) === 'Emby.Server.Implementations.dll');
+  assert.ok(deviceAssembly);
+  assert.equal(deviceAssembly.sha256, native.assemblies.find(entry => path.basename(entry.filename) === 'Emby.Server.Implementations.dll').sha256);
+  for (const row of consumed.results) {
+    const expected = inputs.find(input => input.name === row.name);
+    assert.equal(row.value, expected.serverId, row.name); assert.equal(row.cachedValue, row.value, row.name);
+    assert.equal(row.reopenedValue, row.value, row.name); assert.equal(row.validGuid, true, row.name);
+    assert.equal(row.beforeBytes, expected.bytes, row.name); assert.equal(row.afterBytes, row.beforeBytes, row.name);
+  }
+  return proof;
+}
+
 async function capture() {
   const profile = JSON.parse(await readFile(new URL('current-profile.json', fixture), 'utf8'));
   const output = path.join(validationOutputRoot(), 'server-identity-current-' + randomUUID());

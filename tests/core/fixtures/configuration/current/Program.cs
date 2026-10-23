@@ -25,11 +25,7 @@ var types = new Dictionary<string, Type> {
     ["tmdb"] = typeof(MediaBrowser.Providers.Plugins.Tmdb.PluginConfiguration),
 };
 var serializer = new MyXmlSerializer();
-if (args[0] == "hold-file") {
-    using var heldFile = File.Open(args[1], FileMode.Open, FileAccess.Read, args[2] == "none" ? FileShare.None : FileShare.Read);
-    Console.WriteLine("READY"); Console.Out.Flush(); Console.ReadLine();
-    return;
-}
+if (args[0] == "hold-file") { FileSharingProbe.Hold(args); return; }
 var consume = args[0] == "consume";
 var inputFile = args[consume ? 1 : 0]; var outputFile = args[consume ? 2 : 1];
 var inputBytes = File.ReadAllBytes(inputFile);
@@ -95,6 +91,7 @@ foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray
     if (sample.TryGetProperty("readOnly", out var readOnly) && readOnly.GetBoolean()) File.SetAttributes(filename, FileAttributes.ReadOnly);
     using var held = sample.TryGetProperty("locked", out var locked) && locked.GetBoolean()
         ? new FileStream(filename, FileMode.Open, FileAccess.Read, sample.TryGetProperty("lockMode", out var lockMode) && lockMode.GetString() == "none" ? FileShare.None : FileShare.Read) : null;
+    var lockBefore = held is null ? null : FileSharingProbe.Access(filename);
     object? value = null, error = null; JsonElement? observed = null;
     try {
         value = consume ? serializer.DeserializeFromFile(type, filename) : plugin
@@ -111,12 +108,14 @@ foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray
             serializer.SerializeToFile(value!, filename);
         }
     } catch (Exception failure) { error = new { type = failure.GetType().Name, message = failure.Message, inner = failure.InnerException?.Message }; }
+    var lockAfter = held is null ? null : FileSharingProbe.Access(filename);
     held?.Dispose();
     var afterBytes = File.Exists(filename) ? Convert.ToBase64String(File.ReadAllBytes(filename)) : null;
     object? reread = null;
     try { if (afterBytes is not null) reread = serializer.DeserializeFromBytes(type, Convert.FromBase64String(afterBytes)); } catch { }
     results.Add(new { name, root = alias, accepted = error is null, value = observed, error,
-        beforeBytes, afterBytes, reread = reread is null ? (JsonElement?)null : JsonSerializer.SerializeToElement(reread, options), afterDirectory = Directory.Exists(filename) });
+        beforeBytes, afterBytes, reread = reread is null ? (JsonElement?)null : JsonSerializer.SerializeToElement(reread, options), afterDirectory = Directory.Exists(filename),
+        fileSharing = held is null ? null : new { mode = sample.TryGetProperty("lockMode", out var sharingMode) ? sharingMode.GetString() : "read", sameProcess = true, before = lockBefore, after = lockAfter } });
     if (File.Exists(filename)) File.SetAttributes(filename, FileAttributes.Normal);
 }
 var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !assembly.IsDynamic && !string.IsNullOrEmpty(assembly.Location)).Select(assembly => new {

@@ -16,8 +16,8 @@
     {
       "role": "oracleSource",
       "filename": "current/Program.cs",
-      "bytes": 2892,
-      "sha256": "5bca78781c55f3722cbc94e02efee900d9eccb9998c11e00d19bff61018da413"
+      "bytes": 3157,
+      "sha256": "ea42137dee9d76b8c86965a2f8c96de0ed95842cc384e12295c6a1332be4a3d9"
     },
     {
       "role": "oracleProject",
@@ -28,8 +28,8 @@
     {
       "role": "consumerSource",
       "filename": "current-consumer/Program.cs",
-      "bytes": 1133,
-      "sha256": "8e67837cadc5ca410d029addeef848f964d221eea5556915824e96d428e70c03"
+      "bytes": 1769,
+      "sha256": "41126c0bf3aed58650170ef75e26c1a984af683862e63965b48e0f92facebb7a"
     },
     {
       "role": "consumerProject",
@@ -42,6 +42,24 @@
       "filename": "../../../Directory.Build.props",
       "bytes": 780,
       "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "fileSharingSource",
+      "filename": "current/FileSharingProbe.cs",
+      "bytes": 1916,
+      "sha256": "a3cdecdda630df59c7086d8b2420d88776169c7271b5f9ab4c8483a39b56da9d"
+    },
+    {
+      "role": "fileSharingHarness",
+      "filename": "../../native-file-holder.js",
+      "bytes": 4935,
+      "sha256": "6e5336f01b045506090b947ef62f33b6c2361f598f0b0d5daa6cbf5b6b5c75b7"
+    },
+    {
+      "role": "functionalObservations",
+      "filename": "current/observations.js",
+      "bytes": 1279,
+      "sha256": "688f8a5e61fdbd71ec136001095b9ecfdff9a2b05b52c8b67fb8702fdadc3560"
     }
   ]
 }

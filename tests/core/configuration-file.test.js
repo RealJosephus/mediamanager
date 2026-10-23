@@ -2,50 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { spawn } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { loadConfigurationFile } from './fixtures/configuration/codecs.js';
 import { parseConfigurationXml, readConfigurationDocument } from './fixtures/configuration/codecs.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
-import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { configurationValue, configurationJson } from './fixtures/configuration/observations.js';
 import { currentConfiguration, configurationProject, input } from './configuration-current.js';
+import { holdNativeFile } from './native-file-holder.js';
 
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-
-async function heldFile(filename, mode, records) {
-  const { record } = await currentConfiguration();
-  const executable = validationExecutable('dotnet');
-  assert.equal(hash(await fs.readFile(executable)), record.dotnet.sha256);
-  assert.equal(hash(await fs.readFile(record.oracleAssembly.filename)), record.oracleAssembly.sha256);
-  const args = [record.oracleAssembly.filename, 'hold-file', filename, mode], child = spawn(executable, args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
-  const row = { pid: child.pid, executable, args, beforeSha256: hash(await fs.readFile(filename)), started: new Date().toISOString() }; records.push(row);
-  const completion = new Promise(resolve => {
-    child.once('error', error => resolve({ error: error.message })); child.once('exit', (code, signal) => resolve({ code, signal }));
-  });
-  let output = '', stderr = '', timer;
-  child.stderr.on('data', bytes => { stderr += bytes; });
-  try {
-    await new Promise((resolve, reject) => {
-      child.stdout.on('data', bytes => { output += bytes; if (output.includes('READY')) resolve(); });
-      child.once('error', reject); child.once('exit', () => reject(new Error('File holder exited before acquiring the lock.')));
-      timer = setTimeout(() => reject(new Error('File holder did not acquire the lock.')), 5000); timer.unref();
-    });
-  } catch (error) { child.kill(); await completion; throw error; }
-  finally { clearTimeout(timer); }
-  return async () => {
-    child.stdin.end('\n');
-    row.completion = await completion; row.completed = new Date().toISOString(); row.stderr = stderr;
-    row.afterSha256 = hash(await fs.readFile(filename));
-    assert.deepEqual(row.completion, { code: 0, signal: null });
-  };
-}
 
 test('configuration helper matches native recovery, canonical write admission and real file sharing, then native cold read', async t => {
-  const { native } = await currentConfiguration();
+  const { native, record } = await currentConfiguration();
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Native configuration cold reads require MEDIAMANAGER_JELLYFIN_DLL and its assembly directory.');
   await fs.access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
   const root = path.join(path.resolve(validationOutputRoot()), 'configuration-files'); await fs.mkdir(root);
@@ -55,15 +25,24 @@ test('configuration helper matches native recovery, canonical write admission an
     const filename = path.join(directory, 'config.xml');
     if (sample.directory) await fs.mkdir(filename); else if (expected.beforeBytes != null) await fs.writeFile(filename, Buffer.from(expected.beforeBytes, 'base64'));
     if (sample.readOnly) await fs.chmod(filename, 0o444);
-    let release, value, error, bytes, reread, coldError;
+    let holder, value, error, bytes, reread, coldError;
+    const lock = sample.locked ? { name: sample.name } : null;
+    if (lock) locks.push(lock);
     try {
-      if (sample.locked) release = await heldFile(filename, sample.lockMode ?? 'read', locks);
+      if (sample.locked) holder = await holdNativeFile({ record, filename, mode: sample.lockMode ?? 'read', receipt: lock });
       try { value = await loadConfigurationFile(filename, sample.root, { processors: native.host.processorCount, rewriteValid: !sample.plugin }); }
       catch (failure) { error = { code: failure.code, message: failure.message }; }
-    } finally { await release?.(); if (sample.readOnly) await fs.chmod(filename, 0o666); }
+      await holder?.inspect();
+    } finally {
+      try { await holder?.release(); }
+      finally {
+        if (lock) await fs.writeFile(path.join(directory, 'lock.json'), configurationJson(lock), { flag: 'wx' });
+        if (sample.readOnly) await fs.chmod(filename, 0o666);
+      }
+    }
     try { bytes = await fs.readFile(filename); reread = parseConfigurationXml(bytes, sample.root, { processors: native.host.processorCount }); }
     catch (failure) { coldError = failure.message; }
-    observations.push({ name: sample.name, accepted: !error, value, error, reread, coldError, afterBytes: bytes?.toString('base64') ?? null });
+    observations.push({ name: sample.name, accepted: !error, value, error, reread, coldError, afterBytes: bytes?.toString('base64') ?? null, nativeFileSharing: expected.fileSharing });
     if (bytes) consumers.push({ name: sample.name, root: sample.root, filename });
     assert.equal(!error, expected.accepted); if (!error) assert.deepEqual(value, configurationValue(expected.value, sample.root));
     assert.deepEqual(reread ?? null, configurationValue(expected.reread, sample.root));

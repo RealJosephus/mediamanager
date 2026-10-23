@@ -14,6 +14,8 @@ import { configurationValue, configurationJson } from './fixtures/configuration/
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { configurationProject } from './configuration-current.js';
 
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+
 function encoded(text, encoding) {
   if (encoding.startsWith('utf-16')) {
     const bytes = Buffer.from(text, 'utf16le'); if (encoding === 'utf-16be') bytes.swap16();
