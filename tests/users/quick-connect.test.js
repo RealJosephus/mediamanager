@@ -21,14 +21,14 @@ test('Quick Connect preserves separate inclusive expiry, repeated retrieval and 
   assert.throws(() => service.connect(expired.Secret), { status: 404 });
   fail = false; await service.authorize(userId, first.Code);
   const authorizedAt = time;
-  assert.equal(service.authenticate(first.Secret), result);
-  assert.equal(service.authenticate(first.Secret), result);
+  assert.deepEqual(service.authenticate(first.Secret), result);
+  assert.deepEqual(service.authenticate(first.Secret), result);
   await assert.rejects(service.authorize(userId, first.Code), { status: 500 });
   assert.equal(calls, 2);
   configuration.QuickConnectAvailable = false;
   assert.throws(() => service.authenticate(first.Secret), { status: 401 });
   configuration.QuickConnectAvailable = true;
-  time = authorizedAt + 600_000; assert.equal(service.authenticate(first.Secret), result);
+  time = authorizedAt + 600_000; assert.deepEqual(service.authenticate(first.Secret), result);
   time++; assert.throws(() => service.authenticate(first.Secret), { status: 404 });
   assert.equal(service.connect(first.Secret).Authenticated, true, 'pending request retains the authorization extension');
   time = authorizedAt + 660_001; assert.throws(() => service.connect(first.Secret), { status: 404 });

@@ -1,16 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import { createRuntime } from '../../src/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { nativeGuid, permissionNames } from '../../src/users/native.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
+import { currentQuickConnect, directAuthenticationObservation, quickConnectInput } from './quick-connect-current.js';
 
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const enabled = { skip: !postgresTestConnectionString };
 const device = { Client: 'Target TV', Device: 'Living room', DeviceId: 'quick-tv', Version: '2.0' };
 const clientHeader = (token, info = device) => ({ Authorization: 'MediaBrowser ' + Object.entries({ ...info, ...(token && { Token: token }) }).map(([key, value]) => `${key}="${encodeURIComponent(value)}"`).join(', ') });
 const password = 'Isolated Quick Connect password';
-const native = JSON.parse(await readFile(new URL('./fixtures/quick-connect/native.json', import.meta.url)));
 
 async function setup(t) {
   let database = await createPostgresTestDatabase(null, 'quick_connect'), runtime;
@@ -150,8 +150,9 @@ test('postgres: runtime closure drains admitted Quick Connect authentication bef
   assert.equal(closed, true); assert.equal(state.runtime.server.listening, false);
 });
 
-for (const expected of native.directResults) test('postgres: actual native direct-authentication outcome and commit prefix: ' + expected.name, enabled, async t => {
-  const state = await setup(t), name = expected.name;
+for (const name of quickConnectInput.directCases) test('postgres: current Native direct-authentication outcome and commit prefix: ' + name, { ...enabled, timeout: 600_000 }, async t => {
+  const currentNative = await currentQuickConnect(), expected = currentNative.native.directResults.find(value => value.name === name);
+  const state = await setup(t);
   const id = await state.user('Direct', name === 'device-denied' ? { EnableAllDevices: false, EnabledDevices: [] } : {});
   const persistedId = nativeGuid(id), client = { DeviceId: 'target-device', Device: 'Target', Client: 'Target app', Version: '1.2' };
   if (['disabled-user', 'remote-denied-user'].includes(name)) {
@@ -183,6 +184,6 @@ for (const expected of native.directResults) test('postgres: actual native direc
   const devices = await state.database.rows('Devices'), current = await state.runtime.users.getUser(id);
   const actual = { name, status, session, deviceCount: devices.length, oldTokenRetained: devices.some(device => device.AccessToken === 'old-token'),
     loginUnchanged: current.LastLoginDate === '1970-01-01 00:00:00', InvalidLoginAttemptCount: current.InvalidLoginAttemptCount };
-  const { calls, error, ...outcome } = expected;
-  assert.deepEqual(actual, outcome);
+  await currentNative.recordComparison({ scope: 'postgres-direct-authentication', name, actual, expected });
+  assert.deepEqual(actual, directAuthenticationObservation(expected));
 });
