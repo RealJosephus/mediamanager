@@ -4,6 +4,8 @@ using System.Text.Json;
 using Jellyfin.Extensions.Json;
 using Jellyfin.Server.Implementations.Item;
 using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.LiveTv;
+using MediaBrowser.Model.Entities;
 using Microsoft.Extensions.Logging.Abstractions;
 
 var inputBytes = File.ReadAllBytes(args[0]);
@@ -11,6 +13,8 @@ var nodeBytes = File.ReadAllBytes(args[1]);
 var neutralOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 var input = JsonSerializer.Deserialize<Sample[]>(inputBytes, neutralOptions) ?? throw new InvalidOperationException("Missing samples.");
 var node = JsonSerializer.Deserialize<NodeInput>(nodeBytes, neutralOptions) ?? throw new InvalidOperationException("Missing Node input.");
+// Video's mapper queries recording state even when only its persisted Data is observed.
+Video.RecordingsManager = new EmptyRecordingsManager();
 var results = new List<object>();
 var items = new List<object>();
 foreach (var sample in input)
@@ -67,4 +71,14 @@ public sealed class Frame {
     public string?[] Values { get; set; } = [];
     public Dictionary<string, string?> Dictionary { get; set; } = new();
     public long Ticks { get; set; }
+}
+
+public sealed class EmptyRecordingsManager : IRecordingsManager {
+    public ActiveRecordingInfo? GetActiveRecordingInfo(string path) => null;
+    public string? GetActiveRecordingPath(string id) => throw new NotSupportedException("Recording path lookup is outside this JSON probe.");
+    public IEnumerable<VirtualFolderInfo> GetRecordingFolders() => throw new NotSupportedException("Recording folders are outside this JSON probe.");
+    public Task CreateRecordingFolders() => throw new NotSupportedException("Recording folders are outside this JSON probe.");
+    public void CancelRecording(string timerId, TimerInfo? timer) => throw new NotSupportedException("Recording cancellation is outside this JSON probe.");
+    public Task RecordStream(ActiveRecordingInfo recordingInfo, BaseItem channel, DateTime recordingEndDate)
+        => throw new NotSupportedException("Recording execution is outside this JSON probe.");
 }
