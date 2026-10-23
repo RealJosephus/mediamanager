@@ -9,6 +9,12 @@ file. The focused Oracle uses strict path, application-host, and user-manager
 controls; it does not reflect the private serialized type or compare CLR,
 assembly, runtime, build-path, or JSON-spelling details.
 
+The current validation output preserves `source-files/` with the three exact
+Node-produced PIN documents, a manifest binding each source digest to the actual
+file consumed, and the Native output and build/run receipts. The provider's
+working PIN files must still be deleted by successful redemption; the separate
+evidence copies are outside its enumeration directories.
+
 `input.json` runs 83 HTTP scenarios (84 requests) through the designated
 UserController, SessionController, MVC binding, authorization and exception
 middleware. Five additional scenarios call the actual UserManager.UpdateUserAsync
