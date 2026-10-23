@@ -415,3 +415,5 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/core/native-file-holder.js text eol=lf
 /tests/library/fixtures/collection-source/current/** -text
 /tests/library/fixtures/collection-source/current-profile.json text eol=lf
+/tests/http/fixtures/collections/current/** -text
+/tests/http/fixtures/collections/current-profile.json text eol=lf
