@@ -54,7 +54,7 @@ const executionManifests = new Map([
   ['tests/http/warm-item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/warm-item-deletion/current-profile.json']],
   ['tests/metadata/nfo-partial-reader.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-partial-reader/current-profile.json']],
   ['tests/metadata/nfo-scalar-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-scalar-provider/current-profile.json']],
-  ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
+  ['tests/consumer-contracts/consumer-readers.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/readers/current-profile.json']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
   ...['local-xml-provider', 'nfo-episode-blocks']
@@ -150,7 +150,8 @@ async function captureHistoricalArchive() {
     errors.push('The current-identity historical profiles differ from the reviewed migration set.');
   }
   const expectedConsumers = new Set([
-    ...[...executionManifests].filter(([, [kind]]) => kind === 'current-oracle').map(([consumer]) => consumer),
+    ...[...executionManifests].filter(([, [kind, manifest]]) => kind === 'current-oracle'
+      && [...historicalArchiveRoots].some(root => path.dirname(root) === path.dirname(manifest))).map(([consumer]) => consumer),
     ...[...sealedExecutionManifests].filter(([, [kind]]) => historicalArchiveIds.has(kind)).map(([consumer]) => consumer),
   ]);
   if (JSON.stringify([...consumers].sort()) !== JSON.stringify([...expectedConsumers].sort())) {

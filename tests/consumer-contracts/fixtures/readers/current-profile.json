@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "fixture": "consumer-readers",
+  "scope": "Same-run designated Native and current Node password, public JSON, task, configuration, playlist and subtitle consumers; component evidence only.",
+  "cases": {
+    "passwords": 2,
+    "tasks": 2,
+    "configurations": 2,
+    "playlists": 6,
+    "subtitles": 590
+  },
+  "sourcePaths": [
+    "Emby.Server.Implementations/Cryptography/CryptographyProvider.cs",
+    "MediaBrowser.Model/Cryptography/PasswordHash.cs",
+    "MediaBrowser.Model/Cryptography/Constants.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+    "MediaBrowser.Model/Tasks/TaskTriggerInfo.cs",
+    "MediaBrowser.Model/Tasks/TaskTriggerInfoType.cs",
+    "MediaBrowser.Model/Tasks/TaskResult.cs",
+    "MediaBrowser.Model/Tasks/TaskCompletionStatus.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEditParser.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleFormatExtensions.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/JsonWriter.cs",
+    "src/Jellyfin.Extensions/StreamExtensions.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonStringConverter.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDefaultStringEnumConverterFactory.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonNullableStructConverterFactory.cs",
+    "Emby.Server.Implementations/Playlists/PlaylistManager.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 151549,
+      "sha256": "ab25bd97940eb90d423a9642e091f87898e6022527cf774833b2374c012c798f"
+    },
+    {
+      "role": "writerScenarios",
+      "filename": "current/writer-input.json",
+      "bytes": 531,
+      "sha256": "5d0b8e1240b8f8603c22432a46abe4bf284997447710965be74294676acbd751"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 10263,
+      "sha256": "bf1822f2563d93bac32fcac39f3ab95089ae287774b36e2d87f4c89c744942a0"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 536,
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

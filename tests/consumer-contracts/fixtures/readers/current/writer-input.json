@@ -1,0 +1,24 @@
+{
+  "playlistRoot": "Z:\\consumer-readers",
+  "children": [
+    {
+      "Type": "Audio",
+      "Path": "SongA.mp3",
+      "Name": "First & <tag>",
+      "Album": "Album 中文",
+      "AlbumArtists": ["A & B"],
+      "Artists": ["Artist"],
+      "RunTimeTicks": "1234560000"
+    },
+    {
+      "Type": "Audio",
+      "Path": "Song B.mp3",
+      "Name": "Title 中文",
+      "Album": "Album 中文",
+      "AlbumArtists": ["A & B"],
+      "Artists": ["Artist"],
+      "RunTimeTicks": "1234560000"
+    }
+  ],
+  "links": [0, 1, 0]
+}

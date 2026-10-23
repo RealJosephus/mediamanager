@@ -1,113 +1,167 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
-import os from 'node:os';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parsePasswordHash, verifyPasswordHash } from '../../src/core/password.js';
 import { stringifyNativeJson, parseLosslessJson, withNativeFloats } from '../../src/core/json.js';
 import { ScheduledTaskFileStore } from '../../src/tasks/scheduled-task-store.js';
-import { ServerConfigurationStore, replaceContentTypes } from '../../src/core/server-configuration-store.js';
+import { ServerConfigurationStore } from '../../src/core/server-configuration-store.js';
+import { readConfigurationFile } from '../../src/core/configuration-file.js';
 import { parsePlaylist } from '../../src/metadata/playlist-items.js';
-import { consumerFixture } from './fixture.js';
+import { currentReaders, publicJsonBoundary, taskId, configurationValues, subtitleObservation, functionalSubtitle } from './current-readers.js';
 import { assertProjectedEqual, observeComparison } from '../comparison-observations.js';
 
-const { input, native } = await consumerFixture('readers');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 
-test('real native password verifier accepts candidate CSPRNG and contained-zero salts in both directions', async () => {
-  assert.equal(native.passwordResults.length, input.passwords.length);
-  for (const result of native.passwordResults) {
-    const sample = input.passwords.find(sample => sample.name === result.name);
+test('current native and Node password verifiers accept fresh CSPRNG and contained-zero salts in both directions', async () => {
+  const { input, candidate, native, recordCandidate } = await currentReaders();
+  assert.equal(native.passwords.length, input.passwords.length);
+  const observations = [];
+  for (const [index, result] of native.passwords.entries()) {
+    const sample = candidate.passwords[index];
     assert.equal(result.canonical, sample.hash); assert.equal(result.hashLength, 64);
     assert.equal(result.verified, true); assert.equal(result.changedPassword, false);
-    assert.equal(await verifyPasswordHash(parsePasswordHash(result.canonical), sample.password), true);
+    const verified = await verifyPasswordHash(parsePasswordHash(result.canonical), sample.password);
+    const changedPassword = await verifyPasswordHash(parsePasswordHash(result.canonical), sample.password + 'x');
+    observations.push({ name: sample.name, verified, changedPassword });
+    assert.equal(verified, true); assert.equal(changedPassword, false);
   }
-  assert.ok(parsePasswordHash(native.nativeZeroHash).salt.includes(0));
-  assert.equal(await verifyPasswordHash(parsePasswordHash(native.nativeZeroHash), native.nativeZeroPassword), true);
-  assert.equal(await verifyPasswordHash(parsePasswordHash(native.nativeZeroHash), native.nativeZeroPassword + 'x'), false);
+  assert.ok(parsePasswordHash(candidate.passwords.find(sample => sample.name === 'node-contained-zero').hash).salt.includes(0));
+  assert.equal(native.nativePasswords.length, 2);
+  for (const sample of native.nativePasswords) {
+    const hash = parsePasswordHash(sample.hash);
+    if (sample.name === 'native-contained-zero') assert.ok(hash.salt.includes(0));
+    const verified = await verifyPasswordHash(hash, sample.password), changedPassword = await verifyPasswordHash(hash, sample.password + 'x');
+    observations.push({ name: sample.name, verified, changedPassword });
+    assert.equal(verified, true); assert.equal(changedPassword, false);
+  }
+  await recordCandidate('passwords', observations);
 });
 
-test('public JSON preserves native Single, Double negative zero, Int64, null, surrogate and date precision semantics', t => {
-  const value = withNativeFloats({ Value: 1.00000006, NegativeZero: -0, NegativeDoubleZero: -0,
-    MinTicks: -(2n ** 63n), MaxTicks: 2n ** 63n - 1n, Date: '2026-10-11T01:02:03.1234567Z', Missing: null,
-    Dictionary: new Map([['Null', null], ['Tmdb', '123']]), Values: [null, '\uD800'], InvalidKey: new Map([['\uD800', '\uD800']]) }, ['Value', 'NegativeZero']);
-  const actual = stringifyNativeJson(value);
-  assertProjectedEqual(t, 'typed public JSON boundary', actual, native.jsonBoundary, parseLosslessJson);
-  const parsed = parseLosslessJson(actual);
+test('current public JSON readers preserve floats, negative zero, Int64, null, surrogate and date precision semantics', async t => {
+  const { candidate, native, recordCandidate } = await currentReaders();
+  const value = publicJsonBoundary(), actual = candidate.jsonBoundary;
+  assertProjectedEqual(t, 'Node public JSON and Native public JSON', actual, native.jsonBoundary, parseLosslessJson);
+  assertProjectedEqual(t, 'Native reads and rewrites current Node public JSON', native.jsonReadBack, actual, parseLosslessJson);
+  const parsed = parseLosslessJson(native.jsonBoundary);
   assert.ok(Object.is(parsed.NegativeZero, -0)); assert.ok(Object.is(parsed.NegativeDoubleZero, -0));
-  assert.equal(parsed.Date, value.Date);
+  assert.equal(parsed.MinTicks, value.MinTicks); assert.equal(parsed.MaxTicks, value.MaxTicks); assert.equal(parsed.Date, value.Date);
+  const rejections = [];
   for (const [index, number] of [NaN, Infinity, -Infinity].entries()) {
     assert.equal(native.nonFinite[index].rejected, true);
-    for (const payload of [number, [number], new Map([['value', number]]), { Value: number }, withNativeFloats({ Value: number }, ['Value'])])
-      assert.throws(() => stringifyNativeJson(payload), TypeError);
-    observeComparison(t, 'non-finite rejection', 'TypeError', native.nonFinite[index]);
-  }
-  assert.throws(() => stringifyNativeJson({ Date: new Date(value.Date) }), /precision/u);
-});
-
-test('actual task DTO read/write retains integer tokens, enum, dates and imported history text', async t => {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'consumer-tasks-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
-  const store = new ScheduledTaskFileStore({ taskId: '97230000000000000000000000000001', programDataPath: path.join(directory, 'data'), configurationDirectoryPath: path.join(directory, 'config') });
-  t.after(() => store.close());
-  for (const expected of native.tasks) {
-    const sample = input.tasks.find(sample => sample.name === expected.name);
-    assertProjectedEqual(t, sample.name + ' native reads candidate file', sample.text, expected.text, parseLosslessJson);
-    if (sample.kind === 'triggers') {
-      await store.saveTriggers(parseLosslessJson(expected.text));
-      const loaded = await store.loadTriggers();
-      assert.equal(loaded[0].TimeOfDayTicks, 9223372036854775807n);
-      assert.equal(loaded[0].DayOfWeek, 'Saturday');
-      assertProjectedEqual(t, sample.name + ' candidate reads native file', await readFile(store.configurationPath, 'utf8'), expected.text, parseLosslessJson);
-    } else {
-      await store.saveHistory(parseLosslessJson(expected.text));
-      assert.deepEqual(await store.loadHistory(), parseLosslessJson(expected.text));
-      assertProjectedEqual(t, sample.name + ' candidate writes imported history', await readFile(store.historyPath, 'utf8'), expected.text, parseLosslessJson);
+    for (const [kind, payload] of [['number', number], ['array', [number]], ['dictionary', new Map([['value', number]])],
+      ['object', { Value: number }], ['float', withNativeFloats({ Value: number }, ['Value'])]]) {
+      let error;
+      try { stringifyNativeJson(payload); } catch (caught) { error = { name: caught.name, message: caught.message }; }
+      rejections.push({ index, kind, rejected: Boolean(error), error });
+      assert.equal(Boolean(error), native.nonFinite[index].rejected, kind);
     }
+    observeComparison(t, 'non-finite rejection diagnostics', rejections.slice(-5), native.nonFinite[index]);
   }
+  assert.throws(() => stringifyNativeJson({ Date: new Date(value.Date) }));
+  await recordCandidate('json', { actual, nativeReadBack: native.jsonReadBack, rejections });
 });
 
-test('actual configuration serializer reads Node changes while unmodeled namespaces and mixed text remain preserved', async t => {
+test('current native task DTOs and Node files retain integer tokens, enum, dates and imported history text', async t => {
+  const { input, candidate, native, output, recordCandidate } = await currentReaders();
+  const directory = path.join(output, 'candidate/native-tasks');
+  const store = new ScheduledTaskFileStore({ taskId, programDataPath: path.join(directory, 'data'),
+    configurationDirectoryPath: path.join(directory, 'config') });
+  const observations = [];
+  try {
+    for (const [index, expected] of native.tasks.entries()) {
+      const sample = candidate.tasks[index], triggers = sample.kind === 'triggers';
+      assert.equal(expected.inputText, sample.text, sample.name + ' Native read the actual candidate file');
+      assertProjectedEqual(t, sample.name + ' current Node persisted values', sample.text, input.tasks[index].text, parseLosslessJson);
+      assertProjectedEqual(t, sample.name + ' native reads candidate file', sample.text, expected.text, parseLosslessJson);
+      const filename = triggers ? store.configurationPath : store.historyPath;
+      await mkdir(path.dirname(filename), { recursive: true });
+      const nativeBytes = await readFile(expected.filename);
+      assert.equal(nativeBytes.toString('utf8'), expected.text);
+      await writeFile(filename, nativeBytes, { flag: 'wx' });
+      const loaded = await store[triggers ? 'loadTriggers' : 'loadHistory']();
+      const loadedText = stringifyNativeJson(loaded);
+      assertProjectedEqual(t, sample.name + ' Node read the Native file', loadedText, expected.text, parseLosslessJson);
+      if (triggers) {
+        const values = parseLosslessJson(loadedText);
+        assert.equal(values[0].TimeOfDayTicks, 9223372036854775807n); assert.equal(values[0].DayOfWeek, 'Saturday');
+      }
+      await store[triggers ? 'saveTriggers' : 'saveHistory'](loaded);
+      const rewritten = await readFile(filename, 'utf8');
+      assertProjectedEqual(t, sample.name + ' candidate writes imported file', rewritten, expected.text, parseLosslessJson);
+      observations.push({ name: sample.name, filename, loaded, rewritten });
+    }
+  } finally { await store.close(); }
+  await recordCandidate('tasks', observations);
+});
+
+test('current configuration readers retain Node changes, unmodeled namespaces and mixed text', async t => {
+  const { input, candidate, native, output, recordCandidate } = await currentReaders();
   const [before, after] = native.configurations;
-  assert.deepEqual(after.unknown, before.unknown);
-  assert.equal(after.unknown.length, 2);
+  assert.equal(before.inputXml, input.configurations[0].xml); assert.equal(after.inputXml, candidate.configurations[1].xml);
+  const unrelatedXml = text => text.replace(/<ContentTypes>[\s\S]*?<\/ContentTypes>/u, '<ContentTypes />');
+  assert.equal(unrelatedXml(after.inputXml), unrelatedXml(before.inputXml), 'the edit retains all unrelated original XML bytes');
+  assert.deepEqual(after.unknown, before.unknown); assert.equal(after.unknown.length, 2);
   assert.deepEqual(after.ContentTypes, input.contentTypes);
   for (const name of ['ServerName', 'UICulture', 'MetadataCountryCode']) assert.equal(after[name], before[name]);
-  // Native serialization drops these unmodeled fields. Retain this counterexample;
-  // a writer of only the known subset would lose actual user configuration.
+  // Keep the serializer's loss of unmodeled data visible in the observations.
   assert.deepEqual(after.nativeRewrittenUnknown, []);
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'consumer-config-'));
-  t.after(() => rm(directory, { recursive: true, force: true }));
+  const parsed = await readConfigurationFile(after.filename, 'server');
+  const nativeRead = structuredClone(configurationValues(parsed));
+  assert.deepEqual(nativeRead, configurationValues(after), 'Node reads the actual Native rewrite');
+  const directory = path.join(output, 'candidate/native-configuration');
+  await mkdir(directory);
   const filename = path.join(directory, 'system.xml');
-  await writeFile(filename, input.configurations[0].xml);
-  const store = new ServerConfigurationStore({ configuration: { ContentTypes: before.ContentTypes }, configurationDirectoryPath: directory });
-  t.after(() => store.close());
-  await store.updateContentTypes(() => input.contentTypes);
-  const saved = await readFile(filename, 'utf8');
-  assert.equal(saved, input.configurations[1].xml);
-  assert.equal(saved, replaceContentTypes(input.configurations[0].xml, input.contentTypes));
+  await writeFile(filename, await readFile(after.filename), { flag: 'wx' });
+  const store = new ServerConfigurationStore({ configuration: parsed, configurationDirectoryPath: directory });
+  try { await store.updateContentTypes(() => before.ContentTypes); }
+  finally { await store.close(); }
+  const reloaded = await readConfigurationFile(filename, 'server');
+  assert.deepEqual(configurationValues(reloaded), configurationValues(before));
   observeComparison(t, 'native configuration resave loses unmodeled elements', after.nativeRewrittenUnknown, after.unknown);
+  await recordCandidate('configuration', { parsed: nativeRead, reloaded: configurationValues(reloaded),
+    nativeRewrite: await readFile(after.filename, 'utf8'), nodeRewrite: await readFile(filename, 'utf8') });
 });
 
-test('actual WPL/ZPL reader and writer preserve entry metadata and Node reads native rewritten sidecars', t => {
+test('current WPL/ZPL writers and both readers retain entry metadata, paths, order and duplicate links', async t => {
+  const { input, candidate, native, recordCandidate } = await currentReaders();
   assert.equal(native.playlists.length, 6);
-  for (const result of native.playlists) {
-    const sample = input.playlists.find(sample => sample.name === result.name);
-    assert.deepEqual(result.reread, result.entries, result.name + ' metadata after native rewrite');
-    const extension = path.extname(sample.path);
+  const entries = values => values.map(value => Object.fromEntries(
+    ['AlbumTitle', 'AlbumArtist', 'Duration', 'TrackTitle', 'TrackArtist', 'Path'].map(name => [name, value[name]])));
+  const observations = [];
+  for (const [index, result] of native.playlists.entries()) {
+    const sample = candidate.playlists[index], extension = path.extname(sample.path);
+    assertProjectedEqual(t, sample.name + ' current writer metadata', result.entries, result.baseline, entries);
+    assertProjectedEqual(t, sample.name + ' native rewrite metadata', result.reread, result.entries, entries);
     const before = parsePlaylist(Buffer.from(sample.bytes, 'base64'), extension);
-    const after = parsePlaylist(Buffer.from(result.rewritten), extension);
-    assertProjectedEqual(t, result.name + ' Node → native → Node paths and duplicates', after, before);
+    const neutral = parsePlaylist(Buffer.from(input.playlists[index].bytes, 'base64'), extension);
+    const nativeBytes = await readFile(result.filename);
+    assert.equal(nativeBytes.toString('utf8'), result.rewritten);
+    const after = parsePlaylist(nativeBytes, extension);
+    assertProjectedEqual(t, sample.name + ' Node → native → Node paths and duplicates', after, before);
+    assert.deepEqual(before, neutral); assert.deepEqual(before, result.entries.map(entry => entry.Path));
     assert.equal(after.length, 3); assert.equal(after[0], after[2]);
+    observations.push({ name: sample.name, before, after });
   }
+  await recordCandidate('playlists', observations);
 });
 
-test('590 newline and allowed WebVTT tail variants preserve actual SubtitleEdit cue values and failures', t => {
+test('590 current subtitle layouts retain cue values and failures through both readers and writers', async t => {
+  const { input, candidate, native, recordCandidate } = await currentReaders();
   assert.equal(native.subtitles.length, 590);
-  const projection = ({ parsed, error }) => ({ parsed, error: error && { type: error.type } });
-  for (const sample of input.subtitles) {
-    const actual = native.subtitles.find(result => result.name === sample.name);
-    const base = native.subtitles.find(result => result.name === sample.originalName + '--crlf');
-    assert.ok(actual); assert.ok(base);
-    assertProjectedEqual(t, sample.name, actual, base, projection);
+  const baselines = new Map(native.subtitles.map(result => [result.name, result.baseline]));
+  const observations = native.subtitles.map((result, index) => ({ name: result.name,
+    reverse: result.baseline.rewritten == null ? null : subtitleObservation(result.baseline.rewritten, input.subtitles[index].format) }));
+  await recordCandidate('subtitle-reverse', observations);
+  for (const [index, sample] of input.subtitles.entries()) {
+    const result = native.subtitles[index], node = candidate.subtitles[index];
+    const base = baselines.get(sample.originalName + '--crlf');
+    assert.ok(base, sample.name);
+    assertProjectedEqual(t, sample.name + ' Native layout values', result.baseline, base, functionalSubtitle);
+    assertProjectedEqual(t, sample.name + ' Node reads input layout', node, result.baseline, functionalSubtitle);
+    if (node.error) { assert.equal(result.node, null, sample.name); continue; }
+    const rewritten = { json: result.baseline.rereadJson, error: result.baseline.error };
+    assertProjectedEqual(t, sample.name + ' Native reads current Node output', result.node, rewritten, functionalSubtitle);
+    assertProjectedEqual(t, sample.name + ' Node reads current Native rewrite', observations[index].reverse, rewritten, functionalSubtitle);
   }
 });

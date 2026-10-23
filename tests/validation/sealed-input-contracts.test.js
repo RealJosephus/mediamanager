@@ -235,7 +235,9 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json'],
   ['tests/metadata/nfo-scalar-provider.test.js', 'tests/metadata/fixtures/nfo-scalar-provider',
     ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json', ['current/layout-input.json']],
-]) test(`${archiveId} current readers bind scenarios without acquiring the historical recording`, async t => {
+  ['tests/consumer-contracts/consumer-readers.test.js', 'tests/consumer-contracts/fixtures/readers',
+    ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/writer-input.json']],
+]) test(`${archiveId ?? fixture} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
   assert.deepEqual(contract, { kind: 'current-oracle', manifest, loader: consumer });
@@ -269,7 +271,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
   for (const filename of ['native.json', 'provenance.json', 'Program.cs', 'Oracle.csproj']) {
     assert.ok(!described.includes(path.join(path.dirname(profileFilename), filename)), filename);
   }
-  assert.equal(identity.historicalArchive.profiles.find(value => value.id === archiveId)?.disposition, 'current-identity');
+  if (archiveId) assert.equal(identity.historicalArchive.profiles.find(value => value.id === archiveId)?.disposition, 'current-identity');
 });
 
 test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles without historical execution paths', async t => {
