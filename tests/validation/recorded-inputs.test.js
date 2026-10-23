@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
 import manifest from '../../tools/validation/recorded-inputs.json' with { type: 'json' };
+import { designatedJellyfinContentDigest, designatedJellyfinDirtyFiles, designatedJellyfinHead,
+  designatedJellyfinSourceFiles, validateDesignatedJellyfinSourceDocuments,
+  verifyDesignatedJellyfinSourcePackage } from '../../tools/validation/designated-jellyfin-source.js';
 import { inventory } from '../../tools/validation/inventory.js';
 import { recordedInput, recordedInputPath, repositoryRoot, validationExecutable, validationPath } from '../../tools/validation/paths.js';
 
@@ -17,13 +20,39 @@ test('the recorded GPL assembly includes its complete designated source and lice
     if (descriptor.bytes != null) assert.equal(bytes.length, descriptor.bytes, name);
     assert.equal(createHash('sha256').update(bytes).digest('hex'), descriptor.sha256, name);
   }
-  const source = JSON.parse(await readFile(new URL(sourcePackage.sourceManifest.path, sourcePackageUrl)));
-  const modifications = JSON.parse(await readFile(new URL(sourcePackage.localModifications.path, sourcePackageUrl)));
-  assert.equal(source.files.length, 2620); assert.equal(sourcePackage.sourceFiles, source.files.length);
-  assert.equal(modifications.entries.length, 20); assert.equal(sourcePackage.localModificationFiles, modifications.entries.length);
-  assert.equal(source.contentDigest, sourcePackage.sourceContentDigest);
-  assert.deepEqual(sourcePackage.excludedSourceFiles, []);
-  assert.equal(sourcePackage.audit.archiveMemberDigestsMatched, true);
+  const verified = await verifyDesignatedJellyfinSourcePackage();
+  assert.equal(verified.package.head, designatedJellyfinHead);
+  assert.equal(verified.manifest.head, designatedJellyfinHead);
+  assert.equal(verified.modifications.head, designatedJellyfinHead);
+  assert.equal(verified.package.sourceContentDigest, designatedJellyfinContentDigest);
+  assert.equal(verified.manifest.contentDigest, designatedJellyfinContentDigest);
+  assert.equal(verified.modifications.sourceContentDigest, designatedJellyfinContentDigest);
+  assert.equal(verified.manifest.files.length, designatedJellyfinSourceFiles);
+  assert.equal(verified.modifications.entries.length, designatedJellyfinDirtyFiles);
+  assert.equal(verified.inputs.length, 5, 'the package and four current source-offer attachments are byte-bound');
+  assert.deepEqual(verified.sourceOffer.map(file => file.path).sort(), [
+    'LICENSE-Jellyfin.txt', 'jellyfin-local-modifications.json',
+    'jellyfin-source-208c278b75ab.zip', 'jellyfin-source-manifest.json',
+  ]);
+});
+
+test('the designated Jellyfin source rejects drift in either direction of every authority link', async () => {
+  const verified = await verifyDesignatedJellyfinSourcePackage();
+  const reject = (mutate, pattern) => {
+    const documents = { sourcePackage: structuredClone(verified.package), manifest: structuredClone(verified.manifest),
+      modifications: structuredClone(verified.modifications) };
+    mutate(documents);
+    assert.throws(() => validateDesignatedJellyfinSourceDocuments(documents), pattern);
+  };
+  reject(documents => { documents.sourcePackage.head = '0'.repeat(40); }, /package identity/u);
+  reject(documents => { documents.sourcePackage.archive.sha256 = '0'.repeat(64); }, /archive descriptor/u);
+  reject(documents => { documents.manifest.head = '0'.repeat(40); }, /manifest identity/u);
+  reject(documents => { documents.manifest.files[0].sha256 = '0'.repeat(64); }, /aggregate source identity/u);
+  reject(documents => { [documents.manifest.files[0], documents.manifest.files[1]] =
+    [documents.manifest.files[1], documents.manifest.files[0]]; }, /declared order/u);
+  reject(documents => { documents.modifications.entries[0].sourceDescriptor.sha256 = '0'.repeat(64); }, /not bound/u);
+  reject(documents => { documents.modifications.entries.pop(); }, /ledger identity/u);
+  reject(documents => { documents.modifications.entries.at(-1).status = ' M'; }, /not bound/u);
 });
 
 test('recorded inputs require the exact original path and one consistent recorded digest', () => {
