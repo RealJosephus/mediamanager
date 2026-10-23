@@ -61,7 +61,8 @@ test('runtime closes every resource after an actual HLS cache initialization fai
 
   const closed = [];
   const resources = [
-    ['liveTv', runtime.liveTv, 'close'], ['recordingFolders', runtime.liveTvRecordingFolders, 'close'],
+    ['liveTv', runtime.liveTv, 'close'], ['liveTvTimers', runtime.liveTvTimers, 'close'],
+    ['recordingFolders', runtime.liveTvRecordingFolders, 'close'],
     ['splashscreen', runtime.splashscreen, 'close'],
     ['branding', runtime.branding, 'close'],
     ['libraryConfiguration', runtime.libraryConfiguration, 'close'],
@@ -71,11 +72,14 @@ test('runtime closes every resource after an actual HLS cache initialization fai
     ['images', runtime.images, 'close'], ['imageProcessor', runtime.imageProcessor, 'close'], ['extraction', runtime.extraction, 'close'],
     ['remux', runtime.remux, 'close'], ['probe', runtime.probe, 'close'], ['sessions', runtime.sessions, 'close'], ['plugins', runtime.plugins, 'close'], ['store', runtime.store, 'close'],
   ];
+  const timerError = new Error('Synthetic poisoned Live TV timer persistence owner.');
   const processorError = new Error('Synthetic error after the image processor released its resources.');
   for (const [name, resource, method] of resources) {
     const original = resource[method].bind(resource);
     resource[method] = async (...args) => {
       closed.push(name); await original(...args);
+      if (name === 'recordingFolders') await new Promise(resolve => setImmediate(resolve));
+      if (name === 'liveTvTimers') throw timerError;
       if (name === 'imageProcessor') throw processorError;
     };
   }
@@ -87,7 +91,8 @@ test('runtime closes every resource after an actual HLS cache initialization fai
   ]);
   await assert.rejects(closing, error => {
     expectedCloseError = error;
-    assert.ok(error instanceof AggregateError); assert.deepEqual(error.errors, [initializeError, processorError]); return true;
+    assert.ok(error instanceof AggregateError);
+    assert.deepEqual(error.errors, [timerError, initializeError, processorError]); return true;
   });
   assert.deepEqual([...new Set(closed)].sort(), resources.map(([name]) => name).sort());
   assert.ok(closed.indexOf('libraryConfiguration') < closed.indexOf('recordingFolders'),

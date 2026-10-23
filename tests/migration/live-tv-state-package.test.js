@@ -14,6 +14,7 @@ import { createStatePackage, restoreStatePackage, verifyStatePackage } from '../
 import { liveTvStateKey } from '../../src/library/live-tv-state.js';
 import { initializeLiveTvState } from '../../src/database/live-tv-state-import.js';
 import { queryPostgresProgramRecordingInfo } from '../../src/library/postgres-live-tv-state-query.js';
+import { LiveTvTimersService } from '../../src/library/live-tv-timers-service.js';
 import { idKey } from '../../src/library/records.js';
 import { currentNativeSqliteInputs } from '../../tools/validation/current-native-sqlite-inputs.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -58,10 +59,26 @@ test('current native state package binds saved Live TV documents to PostgreSQL a
       ExternalId: program.externalId, ExternalSeriesId: program.externalSeriesId,
     }));
     assert.equal(await database.transaction(db => initializeLiveTvState(db, { dataPath: path.dirname(liveTvPath) })), true);
-    const originalState = await database.getState(liveTvStateKey), before = await databaseDigest(database);
+    const importedState = await database.getState(liveTvStateKey);
     const lookup = db => queryPostgresProgramRecordingInfo(db, sample.programs.map(program => program.id));
     const project = values => sample.programs.map(program => ({ id: idKey(program.id), ...values.get(idKey(program.id)) }));
-    const originalLinks = project(await database.transaction(lookup));
+    const importedLinks = project(await database.transaction(lookup));
+    const importedDocument = JSON.parse(importedState), externalId = row => Buffer.from(row.id, 'hex').toString('utf8');
+    const mutation = new LiveTvTimersService({
+      store: { serializeWrites: operation => operation(database) }, serverId: 'state-package-mutation',
+      dataPath: path.dirname(liveTvPath), loadProgramDtos: async () => new Map(),
+    });
+    const linked = importedDocument.timers.rows.find(row => externalId(row) === 'timer-A');
+    const unlinked = importedDocument.timers.rows.find(row => externalId(row) === 'program-b');
+    assert.ok(linked && unlinked);
+    assert.equal(await mutation.cancelTimer(linked.internalId), true);
+    assert.equal(await mutation.cancelTimer(unlinked.internalId), true);
+    await mutation.close();
+    const authoritativeState = await database.getState(liveTvStateKey), before = await databaseDigest(database);
+    const authoritativeDocuments = await Promise.all(documents.map(([filename]) => readFile(path.join(liveTvPath, filename))));
+    const authoritativeLinks = project(await database.transaction(lookup));
+    assert.notEqual(authoritativeState, importedState);
+    assert.notDeepEqual(authoritativeLinks, importedLinks);
     const capture = async name => {
       const instanceState = await discoverInstanceState({ instanceRoot: cloned.instanceRoot });
       return createStatePackage({ database, instanceState, destination: path.join(directory, name),
@@ -72,16 +89,16 @@ test('current native state package binds saved Live TV documents to PostgreSQL a
     const manifest = await capture('package');
     assert.equal(manifest.source.database.liveTvState.files.length, 2);
     assert.deepEqual(manifest.source.database.liveTvState.files.map(file => ({ bytes: file.bytes, sha256: file.sha256 })),
-      documents.map(([, text]) => ({ bytes: Buffer.byteLength(text), sha256: hash(text) })));
+      authoritativeDocuments.map(bytes => ({ bytes: bytes.length, sha256: hash(bytes) })));
     await verifyStatePackage(path.join(directory, 'package'));
     const returned = await restoreStatePackage(path.join(directory, 'package'), path.join(directory, 'restored'));
     const returnedState = await discoverInstanceState({ instanceRoot: returned.destination });
     restored = new SqliteDatabase(returnedState.paths.sqlite, { readOnly: true, requireMigrationHistory: true });
     assert.deepEqual(await databaseDigest(restored), manifest.database.tables);
     const returnedDocuments = [];
-    for (const [filename, text] of documents) {
+    for (const [index, [filename]] of documents.entries()) {
       const actual = await readFile(path.join(returnedState.paths.programData, 'data/livetv', filename));
-      assert.deepEqual(actual, Buffer.from(text));
+      assert.deepEqual(actual, authoritativeDocuments[index]);
       returnedDocuments.push(actual.toString('utf8'));
     }
     reimported = await createPostgresTestDatabase(null, 'tv_returned');
@@ -91,8 +108,8 @@ test('current native state package binds saved Live TV documents to PostgreSQL a
     assert.equal(await reimported.transaction(db => initializeLiveTvState(db, {
       dataPath: path.join(returnedState.paths.programData, 'data'),
     })), true);
-    assert.equal(await reimported.getState(liveTvStateKey), originalState);
-    assert.deepEqual(project(await reimported.transaction(lookup)), originalLinks);
+    assert.equal(await reimported.getState(liveTvStateKey), authoritativeState);
+    assert.deepEqual(project(await reimported.transaction(lookup)), authoritativeLinks);
     restored.close(); restored = undefined;
 
     const nativeInput = { documents: returnedDocuments.map((text, index) => ({ text,
@@ -107,21 +124,25 @@ test('current native state package binds saved Live TV documents to PostgreSQL a
     assert.equal(native.recordingExecutorsStarted, false);
     assert.equal(native.inputSha256, hash(inputBytes));
     assert.equal(native.lookups[0].error, undefined);
-    assert.deepEqual(native.lookups[0].items, originalLinks);
+    assert.deepEqual(native.lookups[0].items, authoritativeLinks);
 
     const timerFile = path.join(liveTvPath, 'timers.json');
     await writeFile(timerFile, '[]');
     assert.equal(await database.transaction(db => initializeLiveTvState(db, { dataPath: path.dirname(liveTvPath) })), false);
-    assert.deepEqual(project(await database.transaction(lookup)), originalLinks);
+    assert.deepEqual(project(await database.transaction(lookup)), authoritativeLinks);
+    assert.deepEqual(await readFile(timerFile), authoritativeDocuments[0],
+      'startup reconciliation restores the PostgreSQL-authoritative source after an interrupted publication');
+    await writeFile(timerFile, '[]');
     await assert.rejects(capture('edited-source'), /native file differs from PostgreSQL Live TV state/u);
+    await writeFile(timerFile, authoritativeDocuments[0]);
     await unlink(timerFile);
     await assert.rejects(capture('deleted-source'), /native file differs from PostgreSQL Live TV state/u);
-    await writeFile(timerFile, documents[0][1]);
-    const corrupt = JSON.parse(originalState);
+    await writeFile(timerFile, authoritativeDocuments[0]);
+    const corrupt = JSON.parse(authoritativeState);
     corrupt.timers.sourceSha256 = 'f'.repeat(64);
     await database.setState(liveTvStateKey, json(corrupt));
     await assert.rejects(capture('invalid-state'), /invalid native exchange documents/u);
-    await database.setState(liveTvStateKey, originalState);
+    await database.setState(liveTvStateKey, authoritativeState);
 
     // Missing native files are a distinct saved state. A file appearing after
     // that import cannot silently become the exported authority either.
@@ -133,17 +154,21 @@ test('current native state package binds saved Live TV documents to PostgreSQL a
     await verifyStatePackage(path.join(directory, 'absent-documents'));
     await writeFile(timerFile, '[]');
     await assert.rejects(capture('unexpected-source'), /native file differs from PostgreSQL Live TV state/u);
-    for (const [filename, text] of documents) await writeFile(path.join(liveTvPath, filename), text);
-    await database.setState(liveTvStateKey, originalState);
-    assert.equal(await database.getState(liveTvStateKey), originalState);
-    assert.deepEqual(project(await database.transaction(lookup)), originalLinks);
+    for (const [index, [filename]] of documents.entries()) {
+      await writeFile(path.join(liveTvPath, filename), authoritativeDocuments[index]);
+    }
+    await database.setState(liveTvStateKey, authoritativeState);
+    assert.equal(await database.getState(liveTvStateKey), authoritativeState);
+    assert.deepEqual(project(await database.transaction(lookup)), authoritativeLinks);
     assert.deepEqual(await databaseDigest(database), before);
     report.input = { sqliteSha256: supplied.receipt.input.sha256, bindings: supplied.inputs,
       build: supplied.initialization.build, nativeInputSha256: hash(inputBytes) };
     report.comparison = { passed: true, releaseAcceptance: false, liveTvState: manifest.source.database.liveTvState,
-      rawDocumentsPreserved: true, completeNativeDatabasePreserved: true, reimportedLinks: originalLinks,
+      rawDocumentsPreserved: true, completeNativeDatabasePreserved: true, reimportedLinks: authoritativeLinks,
+      nodeCancellationCaptured: true, nodeCancellationReimported: true,
       nativeReaderDocuments: native.documents.length, nativeReaderLinks: native.lookups[0].items.length,
-      changedAndDeletedSourcesRejected: true, invalidPostgresSourceDigestRejected: true,
+      changedSourceReconciled: true, changedSourceRejected: true, deletedSourceRejected: true,
+      invalidPostgresSourceDigestRejected: true,
       absentDocumentsPreserved: true, unexpectedSourceRejected: true,
       postgresSourceUnchanged: true, recordingExecutorsStarted: false };
   } catch (error) { failure = error; report.error = { message: error.message, stack: error.stack }; }

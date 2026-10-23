@@ -204,9 +204,6 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const expandPath = programDataPath ? createVirtualPathExpander({ programDataPath, dataPath, metadataPath }) : undefined;
   const externalUrlConfiguration = await loadExternalUrlConfiguration({ programDataPath, onError });
   const library = new LibraryService({ fileSystem, store, linkedChildren, serverId, programDataPath, dataPath, metadataPath, configuration, libraryOptions, localization, liveTv, expandPath, logger, onError, ...externalUrlConfiguration });
-  const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, onError,
-    loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
-    loadProgram: id => library.loadLiveTvTimerProgram(id) });
   rollback.push(() => library.close());
   const channels = new ChannelService({ plugins, library, users, getMetadata: () => metadata, cachePath, onError });
   library.channels = channels;
@@ -240,6 +237,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const userData = new UserDataService({ store, library, users, configuration });
   const sessions = new SessionService({ store, library, userData, users, serverId, configuration, onError });
   rollback.push(() => sessions.close());
+  const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, users, sessions, dataPath, onError,
+    loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
+    loadProgram: id => library.loadLiveTvTimerProgram(id) });
+  rollback.push(() => liveTvTimers.close());
   const syncPlay = new SyncPlayService({ sessions, users, library, onError });
   rollback.push(() => syncPlay.close());
   const devices = new DeviceService({ store, users, sessions });
@@ -628,6 +629,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const mediaSourcesClosing = Promise.allSettled([publicStreamsClosing]).then(() => liveTvMediaSources?.close());
       const tunerClosing = Promise.allSettled([mediaSourcesClosing]).then(() => liveTvTuners?.close());
       const sourcesClosing = liveTvSources?.close();
+      // A poisoned mutation owner can reject immediately. Attach the aggregate
+      // handler before another close phase yields so the fatal remains part of
+      // this runtime close instead of becoming an unhandled rejection.
+      const timerMutationsClosing = attempt(() => liveTvTimers.close());
       // Freeze save admission before cancelling metadata. Each already queued
       // save synchronously reserved its recording-folder dependencies; those
       // reservations can finish their own reads and follow-up saves.
@@ -674,6 +679,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => publicStreamsClosing),
         attempt(() => liveProbeClosing),
         attempt(() => sourcesClosing),
+        timerMutationsClosing,
         attempt(() => channelsClosing),
         attempt(async () => {
           await Promise.allSettled([guideClosing, guideImagesClosing, sourcesClosing]);

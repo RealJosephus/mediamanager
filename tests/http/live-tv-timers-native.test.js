@@ -3,10 +3,13 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { cp, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
+import { setTimeout as delay } from 'node:timers/promises';
 import path from 'node:path';
+import { WebSocket } from 'ws';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { parseLosslessJson } from '../../src/core/json.js';
 import { dateTicks } from '../../src/library/records.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { createTimerRuntime, databaseFilename, documentSnapshot, guid, idKey, itemIdentity, makeDocuments,
@@ -40,9 +43,54 @@ const guidForms = n => {
   const d = guid(n).toLowerCase(), raw = idKey(n);
   return [raw, d, '{' + d + '}', '(' + d + ')', `{0x${raw.slice(0,8)},0x${raw.slice(8,12)},0x${raw.slice(12,16)},{${raw.slice(16).match(/../gu).map(value => '0x' + value).join(',')}}}`];
 };
+const mutationMessageTypes = new Set(['TimerCancelled', 'SeriesTimerCancelled']);
+const sourceDocument = (snapshot, filename) => JSON.parse(Buffer.from(snapshot[filename].base64, 'base64').toString('utf8'));
+const sourceDocuments = snapshot => Object.fromEntries(['timers.json', 'seriestimers.json'].map(filename => [filename,
+  Buffer.from(snapshot[filename].base64, 'base64').toString('utf8')]));
+const mutationDocumentProjection = snapshot => ({
+  timers: sourceDocument(snapshot, 'timers.json').map(value => ({ Id: value.Id ?? null,
+    SeriesTimerId: value.SeriesTimerId ?? null, Status: value.Status, IsManual: value.IsManual ?? false })),
+  seriesTimers: sourceDocument(snapshot, 'seriestimers.json').map(value => ({ Id: value.Id ?? null })),
+});
+const mutationEventProjection = messages => messages.filter(message => mutationMessageTypes.has(message.MessageType))
+  .map(message => ({ MessageType: message.MessageType, Data: message.Data }));
+const mutationEnvelopes = messages => messages.filter(message => mutationMessageTypes.has(message.MessageType));
+const stateText = value => value == null ? null : Buffer.from(value, 'hex').toString('utf8');
+
+function assertMutationEnvelopes(type, connections, expectedCount) {
+  const recipients = ['allowed', 'manager'].map(role => mutationEnvelopes(connections[role].messages));
+  for (const [index, messages] of recipients.entries()) {
+    const role = ['allowed', 'manager'][index];
+    assert.equal(messages.length, expectedCount, `${type}: ${role} cancellation envelope count`);
+    for (const message of messages) {
+      assert.deepEqual(Object.keys(message).toSorted(), ['Data', 'MessageId', 'MessageType']);
+      assert.match(message.MessageId, /^[0-9a-f]{32}$/u);
+    }
+    assert.equal(new Set(messages.map(message => message.MessageId)).size, messages.length,
+      `${type}: each cancellation notification has a fresh MessageId`);
+  }
+  assert.deepEqual(recipients[0].map(message => message.MessageId), recipients[1].map(message => message.MessageId),
+    `${type}: one public MessageId is shared by all target sessions for each notification`);
+  return Object.fromEntries(Object.entries(connections).map(([role, connection]) => [role,
+    mutationEnvelopes(connection.messages)]));
+}
+
+function assertNodeTimerAuthority(database, documents) {
+  const state = JSON.parse(database.liveTvNativeState);
+  for (const [kind, filename] of [['timers', 'timers.json'], ['seriesTimers', 'seriestimers.json']]) {
+    const bytes = Buffer.from(state[kind].sourceHex, 'hex'), values = JSON.parse(bytes.toString('utf8'));
+    assert.equal(state[kind].issue, null);
+    assert.equal(sha(bytes), state[kind].sourceSha256);
+    assert.equal(state[kind].sourceSha256, documents[filename].sha256);
+    assert.equal(bytes.toString('base64'), documents[filename].base64);
+    assert.equal(state[kind].rows.length, values.length);
+    assert.deepEqual(state[kind].rows.map(row => stateText(row.id)), values.map(value => value.Id ?? null));
+    if (kind === 'timers') assert.deepEqual(state[kind].rows.map(row => row.status), values.map(value => value.Status));
+  }
+}
 
 test('saved timers, series timers and defaults match real native HTTP with fresh first-import PostgreSQL state', {
-  skip: !enabled, timeout: 540000,
+  skip: !enabled, timeout: 720000,
 }, async () => {
   const output = await createPrivateFilterOutput(path.join(validationOutputRoot(), 'live-tv-timers-http-' + randomUUID()));
   output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES);
@@ -50,8 +98,9 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
   const root = await realpath(output.root), referenceRoot = path.join(root, 'reference'), port = await unusedPort(), origin = `http://127.0.0.1:${port}`;
   const clock = Math.floor(Date.now() / 3600000) * 3600000;
   const report = { inputSha256: sha(inputBytes), clock: new Date(clock).toISOString(), stages: [], cases: [], differences: [], cleanup: [] };
-  let current, native, fixture, failure, liveRootId, guide;
+  let current, native, fixture, takeoverFixture, failure, liveRootId, guide;
   const nativeCredentials = {};
+  const openSockets = new Set();
   const request = async (server, route, { token, body, method = 'GET' } = {}) => {
     const response = await fetch(server + route, { method, signal: AbortSignal.timeout(20000), headers: {
       Authorization: authorization(token), Accept: 'application/json', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
@@ -62,12 +111,57 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
     return { status: response.status, contentType: response.headers.get('content-type'), bodyText,
       ...(bodyJson === undefined ? {} : { bodyJson }) };
   };
+  const nextSocketMessage = async (connection, predicate, timeoutMs = 20000) => {
+    const deadline = Date.now() + timeoutMs;
+    do {
+      const index = connection.messages.findIndex(predicate);
+      if (index >= 0) return connection.messages.splice(index, 1)[0];
+      if (connection.errors.length) throw connection.errors[0];
+      await delay(10);
+    } while (Date.now() < deadline);
+    throw new Error(`Missing ${connection.label} WebSocket message.`);
+  };
+  const connectSocket = async (server, token, label) => {
+    const socket = new WebSocket(server.replace(/^http/u, 'ws') + `/socket?ApiKey=${encodeURIComponent(token)}`);
+    const connection = { label, socket, messages: [], errors: [] };
+    openSockets.add(connection);
+    socket.on('message', bytes => {
+      try { connection.messages.push(parseLosslessJson(bytes.toString())); }
+      catch (error) { connection.errors.push(error); }
+    });
+    socket.on('error', error => connection.errors.push(error));
+    await new Promise((resolve, reject) => {
+      const opened = () => { socket.off('error', failed); resolve(); };
+      const failed = error => { socket.off('open', opened); reject(error); };
+      socket.once('open', opened); socket.once('error', failed);
+    });
+    connection.handshake = await nextSocketMessage(connection, message => message.MessageType === 'ForceKeepAlive');
+    return connection;
+  };
+  const closeSocket = async connection => {
+    if (!openSockets.delete(connection) || connection.socket.readyState === WebSocket.CLOSED) return;
+    const closed = new Promise(resolve => connection.socket.once('close', () => resolve(true)));
+    if (connection.socket.readyState === WebSocket.OPEN) connection.socket.close();
+    const graceful = await Promise.race([closed, delay(2000).then(() => false)]);
+    if (!graceful) { connection.socket.terminate(); await closed; }
+  };
+  const waitForMutationEvents = async (connection, count) => {
+    const deadline = Date.now() + 20000;
+    while (mutationEventProjection(connection.messages).length < count) {
+      if (connection.errors.length) throw connection.errors[0];
+      assert.ok(Date.now() < deadline, `Missing ${connection.label} cancellation events.`);
+      await delay(10);
+    }
+  };
   const collect = (name, action) => { try { action(); } catch (error) { report.differences.push({ name, message: error.message }); } };
   const nativeSnapshot = async () => ({ database: sqliteSnapshot(referenceRoot), documents: await documentSnapshot(referenceRoot) });
   const credentials = async (server, administratorToken, label, existing) => {
     const result = {}, password = randomUUID(); output.addSecret(password);
-    for (const [role, policy] of [['allowed', { EnableLiveTvAccess: true }], ['denied', { EnableLiveTvAccess: false }],
-      ['admin', { IsAdministrator: true, EnableLiveTvAccess: false }]]) {
+    for (const [role, policy] of [['allowed', { EnableLiveTvAccess: true, EnableLiveTvManagement: false }],
+      ['manager', { EnableLiveTvAccess: true, EnableLiveTvManagement: true }],
+      ['management', { EnableLiveTvAccess: false, EnableLiveTvManagement: true }],
+      ['denied', { EnableLiveTvAccess: false, EnableLiveTvManagement: false }],
+      ['admin', { IsAdministrator: true, EnableLiveTvAccess: false, EnableLiveTvManagement: false }]]) {
       const username = `Timers_${label}_${role}_${randomUUID().slice(0,8)}`;
       const created = await request(server, '/Users/New', { token: administratorToken, method: 'POST', body: { Name: username, Password: password } });
       assert.equal(created.status, 200);
@@ -138,6 +232,293 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
     }
     return values;
   };
+  const mutationSamples = {
+    rejected: [
+      { name: 'anonymous timer cancellation', mode: 'anonymous', route: '/LiveTv/Timers/' + timerIdentity('unlinked'), status: 401 },
+      { name: 'invalid timer cancellation', mode: 'invalid', route: '/LiveTv/Timers/' + timerIdentity('unlinked'), status: 401 },
+      { name: 'access-only timer cancellation', mode: 'allowed', route: '/LiveTv/Timers/' + timerIdentity('unlinked'), status: 403 },
+      { name: 'denied timer cancellation', mode: 'denied', route: '/LiveTv/Timers/' + timerIdentity('unlinked'), status: 403 },
+      { name: 'unknown timer cancellation', mode: 'management', route: '/LiveTv/Timers/not-a-guid', status: 404 },
+      { name: 'whitespace series cancellation', mode: 'manager', route: '/LiveTv/SeriesTimers/%20', status: 400 },
+      { name: 'completed timer cancellation', mode: 'management', route: '/LiveTv/Timers/' + timerIdentity('completed-series'), status: 404 },
+      { name: 'missing series cancellation', mode: 'manager', route: '/LiveTv/SeriesTimers/' + '0'.repeat(32), status: 404 },
+    ],
+    accepted: [
+      { name: 'administrator repeats cancelled timer', mode: 'admin', route: '/LiveTv/Timers/' + timerIdentity('cancelled'), status: 204 },
+      { name: 'API key repeats cancelled timer', mode: 'apiKey', route: '/LiveTv/Timers/' + timerIdentity('cancelled'), status: 204 },
+      { name: 'management-only user cancels unlinked timer', mode: 'management', route: '/LiveTv/Timers/' + timerIdentity('unlinked'),
+        status: 204, notifications: 1 },
+      { name: 'manager cancels linked timer', mode: 'manager', route: '/LiveTv/Timers/' + timerIdentity('new-one'),
+        status: 204, notifications: 1 },
+      { name: 'manager cancels series and every child', mode: 'manager',
+        route: '/LiveTv/SeriesTimers/' + timerIdentity('series-ten').toUpperCase(), status: 204, notifications: 4 },
+    ],
+  };
+  const expectedMutationEvents = [
+    { MessageType: 'TimerCancelled', Data: { Id: 'unlinked' } },
+    { MessageType: 'TimerCancelled', Data: { Id: 'new-one' } },
+    { MessageType: 'TimerCancelled', Data: { Id: 'active-two' } },
+    { MessageType: 'TimerCancelled', Data: { Id: 'error' } },
+    { MessageType: 'TimerCancelled', Data: { Id: 'completed-series' } },
+    { MessageType: 'SeriesTimerCancelled', Data: { Id: timerIdentity('series-ten').toUpperCase() } },
+  ];
+  const postMutationRoutes = [
+    '/LiveTv/Timers', '/LiveTv/SeriesTimers',
+    '/LiveTv/Timers/' + timerIdentity('new-one'), '/LiveTv/Timers/' + timerIdentity('cancelled'),
+    '/LiveTv/Timers/' + timerIdentity('unlinked'), '/LiveTv/Timers/' + timerIdentity('active-two'),
+    '/LiveTv/Timers/' + timerIdentity('error'), '/LiveTv/Timers/' + timerIdentity('completed-series'),
+    '/LiveTv/Timers/' + timerIdentity('cancelled-series'),
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-ten'),
+  ];
+  const expectedPostMutationDocuments = {
+    timers: [
+      { Id: 'new-one', SeriesTimerId: 'series-two', Status: 'Cancelled', IsManual: true },
+      { Id: 'conflicted', SeriesTimerId: null, Status: 'ConflictedOk', IsManual: false },
+      { Id: 'cancelled', SeriesTimerId: 'series-two', Status: 'Cancelled', IsManual: true },
+      { Id: 'completed', SeriesTimerId: null, Status: 'Completed', IsManual: false },
+    ],
+    seriesTimers: [{ Id: 'series-two' }, { Id: 'series-zero-two' }, { Id: 'series-empty-days' }],
+  };
+  const continuationRoutes = [
+    '/LiveTv/Timers', '/LiveTv/SeriesTimers',
+    '/LiveTv/Timers/' + timerIdentity('new-one'), '/LiveTv/Timers/' + timerIdentity('cancelled'),
+    '/LiveTv/Timers/' + timerIdentity('conflicted'), '/LiveTv/Timers/' + timerIdentity('completed'),
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-two'),
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-zero-two'),
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-empty-days'),
+  ];
+  const nodeExportRoutes = [
+    '/LiveTv/Timers', '/LiveTv/SeriesTimers',
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-zero-two'),
+    '/LiveTv/SeriesTimers/' + timerIdentity('series-two'),
+  ];
+  const expectedNodeExportDocuments = {
+    timers: expectedPostMutationDocuments.timers,
+    seriesTimers: [{ Id: 'series-two' }, { Id: 'series-empty-days' }],
+  };
+  const expectedContinuationDocuments = {
+    timers: [
+      { Id: 'conflicted', SeriesTimerId: null, Status: 'ConflictedOk', IsManual: false },
+      { Id: 'completed', SeriesTimerId: null, Status: 'Completed', IsManual: false },
+    ],
+    seriesTimers: [{ Id: 'series-empty-days' }],
+  };
+  const runMutations = async (type, server, tokens, runtimeErrors, capture) => {
+    const roles = ['allowed', 'manager', 'management', 'denied', 'admin', 'apiKey'];
+    const connections = Object.fromEntries(await Promise.all(roles.map(async role => [role,
+      await connectSocket(server, tokens[role], `${type}:${role}`)])));
+    const before = await capture(), requests = [];
+    const observe = async sample => {
+      const errorIndex = runtimeErrors?.length ?? 0;
+      const response = await request(server, sample.route, { token: tokens[sample.mode], method: 'DELETE' });
+      const observation = { name: sample.name, mode: sample.mode, request: { method: 'DELETE', route: sample.route }, response,
+        ...(runtimeErrors ? { runtimeErrors: runtimeErrors.slice(errorIndex) } : {}) };
+      assert.equal(response.status, sample.status, `${type}: ${sample.name}`);
+      if (sample.status === 204) {
+        assert.equal(response.contentType, null); assert.equal(response.bodyText, '');
+      }
+      if (runtimeErrors) assert.deepEqual(observation.runtimeErrors, [], `${type}: ${sample.name} must not hide a runtime failure`);
+      requests.push(observation);
+      await writeFile(path.join(root, `${type}-mutations-progress.log`), filterEvidenceJson(observation), { flag: 'a' });
+    };
+    try {
+      for (const sample of mutationSamples.rejected) await observe(sample);
+      const afterRejected = await capture();
+      assert.deepEqual(afterRejected, before, `${type}: rejected and missing cancellations cannot change durable state`);
+      let notificationCount = 0;
+      for (const sample of mutationSamples.accepted) {
+        await observe(sample); notificationCount += sample.notifications ?? 0;
+        if (sample.notifications) await Promise.all(['allowed', 'manager'].map(role => waitForMutationEvents(connections[role], notificationCount)));
+      }
+      assert.equal(notificationCount, expectedMutationEvents.length);
+      await delay(100);
+      const events = Object.fromEntries(roles.map(role => [role, mutationEventProjection(connections[role].messages)]));
+      assert.deepEqual(events.allowed, expectedMutationEvents, `${type}: LiveTvAccess recipient event order and data`);
+      assert.deepEqual(events.manager, expectedMutationEvents, `${type}: management recipient with LiveTvAccess event order and data`);
+      for (const role of ['management', 'denied', 'admin', 'apiKey']) {
+        assert.deepEqual(events[role], [], `${type}: ${role} without explicit LiveTvAccess cannot receive timer events`);
+      }
+      for (const connection of Object.values(connections)) {
+        assert.deepEqual(connection.errors, []);
+        assert.equal(connection.socket.readyState, WebSocket.OPEN,
+          `${connection.label} must remain connected through the recipient-visibility observation`);
+      }
+      const envelopes = assertMutationEnvelopes(type, connections, expectedMutationEvents.length);
+      const reads = [];
+      for (const route of postMutationRoutes) reads.push({ request: { method: 'GET', route },
+        response: await request(server, route, { token: tokens.allowed }) });
+      return { before, afterRejected, after: await capture(), requests, reads, events, envelopes,
+        handshakes: Object.fromEntries(roles.map(role => [role, connections[role].handshake])) };
+    } finally { await Promise.all(Object.values(connections).map(closeSocket)); }
+  };
+  const runNativeMutationTakeover = async nativeMutation => {
+    const takeoverRoot = path.join(root, 'node-native-mutation-takeover'), errors = [], shutdownStates = [];
+    takeoverFixture = await createTimerRuntime({ sourceRoot: referenceRoot, root: takeoverRoot,
+      serverId: current.preparation.nativeServerId, errors, documents: sourceDocuments(nativeMutation.after.documents),
+      shutdownStates, reservedPorts: [port, Number(new URL(fixture.origin).port)] });
+    const takeoverPort = Number(new URL(takeoverFixture.origin).port);
+    const imported = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(imported.documents, nativeMutation.after.documents,
+      'A fresh Node runtime must consume the actual Native-mutated timer files without rewriting them.');
+    assertNodeTimerAuthority(imported.database, imported.documents);
+    assert.deepEqual(mutationDocumentProjection(imported.documents), expectedPostMutationDocuments);
+    assert.deepEqual(errors, [], 'Native-mutated files must initialize a fresh PostgreSQL runtime without background failures.');
+
+    const password = randomUUID(); output.addSecret(password);
+    const user = await takeoverFixture.application.users.createUser({ Name: 'TimersTakeover_' + randomUUID(), Password: password });
+    await takeoverFixture.application.users.updatePolicy(user.Id, {
+      ...(await takeoverFixture.application.users.getUser(user.Id)).Policy,
+      IsAdministrator: false, EnableLiveTvAccess: true, EnableLiveTvManagement: true,
+    });
+    const login = await request(takeoverFixture.origin, '/Users/AuthenticateByName', { method: 'POST',
+      body: { Username: user.Name, Pw: password } });
+    assert.equal(login.status, 200); output.addSecret(login.bodyJson.AccessToken);
+    const beforeReads = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) }, reads = [];
+    for (const route of postMutationRoutes) reads.push({ request: { method: 'GET', route },
+      response: await request(takeoverFixture.origin, route, { token: login.bodyJson.AccessToken }) });
+    assert.equal(reads.length, nativeMutation.reads.length);
+    for (const [index, value] of reads.entries()) {
+      const expected = nativeMutation.reads[index];
+      report.cases.push({ stage: 'native-mutation-fresh-pg', request: value.request,
+        native: expected.response, node: value.response });
+      collect('native-mutation-fresh-pg: ' + value.request.route, () => {
+        assert.deepEqual(value.request, expected.request); assert.deepEqual(wire(value.response), wire(expected.response));
+      });
+    }
+    const afterReads = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(afterReads, beforeReads, 'Fresh-PG reads of Native-mutated state must remain read-only.');
+    assert.deepEqual(errors, [], 'Fresh-PG Native takeover reads must not hide background failures.');
+    const mutationRoute = '/LiveTv/SeriesTimers/' + timerIdentity('series-zero-two');
+    const mutationResponse = await request(takeoverFixture.origin, mutationRoute, {
+      token: login.bodyJson.AccessToken, method: 'DELETE',
+    });
+    assert.equal(mutationResponse.status, 204); assert.equal(mutationResponse.contentType, null);
+    assert.equal(mutationResponse.bodyText, '');
+    const afterMutation = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(afterMutation.database.tables, afterReads.database.tables,
+      'The PG2 cancellation must mutate only PostgreSQL timer authority and its published files.');
+    assert.notEqual(afterMutation.database.liveTvNativeState, afterReads.database.liveTvNativeState,
+      'PG2 must commit its cancellation to PostgreSQL authority.');
+    assert.deepEqual(afterMutation.documents['timers.json'], nativeMutation.after.documents['timers.json']);
+    assert.notEqual(afterMutation.documents['seriestimers.json'].sha256,
+      nativeMutation.after.documents['seriestimers.json'].sha256,
+      'PG2 must publish its series timer deletion before exporting state back to Native.');
+    assertNodeTimerAuthority(afterMutation.database, afterMutation.documents);
+    assert.deepEqual(mutationDocumentProjection(afterMutation.documents), expectedNodeExportDocuments);
+    const mutationReads = [];
+    for (const route of nodeExportRoutes) mutationReads.push({ request: { method: 'GET', route },
+      response: await request(takeoverFixture.origin, route, { token: login.bodyJson.AccessToken }) });
+    const afterMutationReads = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(afterMutationReads, afterMutation, 'PG2 post-mutation reads must remain read-only.');
+    assert.deepEqual(errors, [], 'PG2 cancellation and reads must not hide background failures.');
+    await takeoverFixture.close(); takeoverFixture = undefined;
+    assert.deepEqual(errors, [], 'The normal PG2 close must drain cancellation notifications without failures.');
+    assert.equal(await portAvailable(takeoverPort), true, 'The Native-mutation takeover listener must be released.');
+    assert.equal(shutdownStates.length, 1);
+    assert.deepEqual(shutdownStates[0], afterMutationReads);
+    const exportedDocuments = await documentSnapshot(takeoverRoot);
+    assert.deepEqual(exportedDocuments, shutdownStates[0].documents,
+      'The stopped PG2 runtime must leave its authoritative export on disk.');
+    assert.notDeepEqual(exportedDocuments, nativeMutation.after.documents,
+      'The normal Node shutdown must export the PG2 cancellation, not its unchanged Native input.');
+    report.cleanup.push({ name: 'node-native-mutation-takeover', runtimeClosed: true,
+      postgresSchemaDropped: true, listenerPortsReleased: true });
+    return { imported, beforeReads, afterReads, reads, errors, shutdownStates,
+      mutation: { request: { method: 'DELETE', route: mutationRoute }, response: mutationResponse,
+        after: afterMutation, reads: mutationReads, afterReads: afterMutationReads },
+      exportedDocuments, port: takeoverPort };
+  };
+  const runNativeContinuation = async nodeTakeover => {
+    await writeDocuments(referenceRoot, sourceDocuments(nodeTakeover.exportedDocuments));
+    const restored = await documentSnapshot(referenceRoot);
+    assert.deepEqual(restored, nodeTakeover.exportedDocuments,
+      'Actual Native must start from the exact timer bytes exported by the closed Node runtime.');
+    native = current.start({ referenceRoot, outputRoot: root, label: 'reference-node-export-continuation', origin });
+    await native.ready();
+    const before = await nativeSnapshot();
+    assert.deepEqual(before.documents, nodeTakeover.exportedDocuments);
+    assert.deepEqual(mutationDocumentProjection(before.documents), expectedNodeExportDocuments);
+    const importedReads = [];
+    for (const readRoute of nodeExportRoutes) importedReads.push({ request: { method: 'GET', route: readRoute },
+      response: await request(origin, readRoute, { token: nativeCredentials.allowed }) });
+    assert.equal(importedReads.length, nodeTakeover.mutation.reads.length);
+    for (const [index, value] of importedReads.entries()) {
+      const expected = nodeTakeover.mutation.reads[index];
+      report.cases.push({ stage: 'node-export-native-continuation', request: value.request,
+        native: value.response, node: expected.response });
+      collect('node-export-native-continuation: ' + value.request.route, () => {
+        assert.deepEqual(value.request, expected.request); assert.deepEqual(wire(value.response), wire(expected.response));
+      });
+    }
+    assert.deepEqual(await nativeSnapshot(), before, 'Native reads of the Node-mutated export must remain read-only.');
+    const route = '/LiveTv/SeriesTimers/' + timerIdentity('series-two');
+    const response = await request(origin, route, { token: nativeCredentials.manager, method: 'DELETE' });
+    assert.equal(response.status, 204); assert.equal(response.contentType, null); assert.equal(response.bodyText, '');
+    const after = await nativeSnapshot();
+    assert.deepEqual(after.database, before.database,
+      'The continued Native cancellation must mutate timer files without changing SQLite business tables.');
+    for (const filename of ['timers.json', 'seriestimers.json']) {
+      assert.notEqual(after.documents[filename].sha256, before.documents[filename].sha256,
+        `Continued Native cancellation must publish ${filename}.`);
+    }
+    assert.deepEqual(mutationDocumentProjection(after.documents), expectedContinuationDocuments);
+    const reads = [];
+    for (const readRoute of continuationRoutes) reads.push({ request: { method: 'GET', route: readRoute },
+      response: await request(origin, readRoute, { token: nativeCredentials.allowed }) });
+    await stopNative('native-node-export-continuation');
+    const afterShutdown = await nativeSnapshot();
+    assert.deepEqual(afterShutdown, after,
+      'A clean Native shutdown must preserve the continuation cancellation output.');
+    return { restored, before, importedReads, request: { method: 'DELETE', route }, response, after, reads, afterShutdown };
+  };
+  const runContinuationTakeover = async nativeContinuation => {
+    const takeoverRoot = path.join(root, 'node-native-continuation-takeover'), errors = [], shutdownStates = [];
+    takeoverFixture = await createTimerRuntime({ sourceRoot: referenceRoot, root: takeoverRoot,
+      serverId: current.preparation.nativeServerId, errors,
+      documents: sourceDocuments(nativeContinuation.afterShutdown.documents), shutdownStates,
+      reservedPorts: [port, Number(new URL(fixture.origin).port)] });
+    const takeoverPort = Number(new URL(takeoverFixture.origin).port);
+    const imported = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(imported.documents, nativeContinuation.afterShutdown.documents,
+      'A third absent-state PostgreSQL schema must retain the exact continued-Native timer files.');
+    assertNodeTimerAuthority(imported.database, imported.documents);
+    assert.deepEqual(mutationDocumentProjection(imported.documents), expectedContinuationDocuments);
+    assert.deepEqual(errors, [], 'Continued-Native files must initialize a fresh PostgreSQL runtime without background failures.');
+
+    const password = randomUUID(); output.addSecret(password);
+    const user = await takeoverFixture.application.users.createUser({
+      Name: 'TimersContinuationTakeover_' + randomUUID(), Password: password,
+    });
+    await takeoverFixture.application.users.updatePolicy(user.Id, {
+      ...(await takeoverFixture.application.users.getUser(user.Id)).Policy,
+      IsAdministrator: false, EnableLiveTvAccess: true, EnableLiveTvManagement: false,
+    });
+    const login = await request(takeoverFixture.origin, '/Users/AuthenticateByName', { method: 'POST',
+      body: { Username: user.Name, Pw: password } });
+    assert.equal(login.status, 200); output.addSecret(login.bodyJson.AccessToken);
+    const beforeReads = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) }, reads = [];
+    for (const route of continuationRoutes) reads.push({ request: { method: 'GET', route },
+      response: await request(takeoverFixture.origin, route, { token: login.bodyJson.AccessToken }) });
+    assert.equal(reads.length, nativeContinuation.reads.length);
+    for (const [index, value] of reads.entries()) {
+      const expected = nativeContinuation.reads[index];
+      report.cases.push({ stage: 'continued-native-fresh-pg', request: value.request,
+        native: expected.response, node: value.response });
+      collect('continued-native-fresh-pg: ' + value.request.route, () => {
+        assert.deepEqual(value.request, expected.request); assert.deepEqual(wire(value.response), wire(expected.response));
+      });
+    }
+    const afterReads = { database: await takeoverFixture.snapshot(), documents: await documentSnapshot(takeoverRoot) };
+    assert.deepEqual(afterReads, beforeReads, 'Fresh-PG reads of continued-Native state must remain read-only.');
+    assert.deepEqual(errors, [], 'Fresh-PG continued-Native reads must not hide background failures.');
+    await takeoverFixture.close(); takeoverFixture = undefined;
+    assert.deepEqual(errors, [], 'The normal PG3 close must complete without background failures.');
+    assert.equal(await portAvailable(takeoverPort), true, 'The continued-Native takeover listener must be released.');
+    assert.equal(shutdownStates.length, 1); assert.deepEqual(shutdownStates[0], afterReads);
+    report.cleanup.push({ name: 'node-native-continuation-takeover', runtimeClosed: true,
+      postgresSchemaDropped: true, listenerPortsReleased: true });
+    return { imported, beforeReads, afterReads, reads, errors, shutdownStates, port: takeoverPort };
+  };
   const stopNative = async label => {
     if (!native) return;
     const process = await native.stop(async () => (await request(origin, '/System/Shutdown', { token: current.accessToken, method: 'POST' })).status,
@@ -148,11 +529,21 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
   try {
     current = await currentNativeReference(); output.addSecret(current.accessToken); report.input = current.preparation;
     report.sourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/LiveTvController.cs',
+      'Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs',
+      'Jellyfin.Api/Auth/UserPermissionPolicy/UserPermissionHandler.cs',
       'src/Jellyfin.LiveTv/LiveTvManager.cs', 'src/Jellyfin.LiveTv/DefaultLiveTvService.cs',
       'src/Jellyfin.LiveTv/Timers/TimerManager.cs', 'src/Jellyfin.LiveTv/Timers/SeriesTimerManager.cs',
-      'src/Jellyfin.LiveTv/LiveTvDtoService.cs', 'Emby.Server.Implementations/Dto/DtoService.cs',
+      'src/Jellyfin.LiveTv/LiveTvDtoService.cs', 'src/Jellyfin.LiveTv/Recordings/RecordingNotifier.cs',
+      'Emby.Server.Implementations/Dto/DtoService.cs', 'Emby.Server.Implementations/HttpServer/WebSocketConnection.cs',
+      'Emby.Server.Implementations/Session/SessionManager.cs', 'Emby.Server.Implementations/Session/WebSocketController.cs',
+      'src/Jellyfin.Extensions/Json/JsonDefaults.cs', 'src/Jellyfin.Extensions/Json/Converters/JsonGuidConverter.cs',
+      'Jellyfin.Data/UserEntityExtensions.cs',
       'MediaBrowser.Model/LiveTv/BaseTimerInfoDto.cs', 'MediaBrowser.Model/LiveTv/TimerInfoDto.cs', 'MediaBrowser.Model/LiveTv/SeriesTimerInfoDto.cs',
-      'MediaBrowser.Controller/LiveTv/TimerInfo.cs', 'MediaBrowser.Controller/LiveTv/SeriesTimerInfo.cs',
+      'MediaBrowser.Controller/LiveTv/TimerInfo.cs', 'MediaBrowser.Controller/LiveTv/SeriesTimerInfo.cs', 'MediaBrowser.Controller/LiveTv/TimerEventInfo.cs',
+      'MediaBrowser.Controller/Net/WebSocketMessages/OutboundWebSocketMessage.cs',
+      'MediaBrowser.Controller/Net/WebSocketMessages/OutboundWebSocketMessageOfT.cs',
+      'MediaBrowser.Controller/Net/WebSocketMessages/Outbound/TimerCancelledMessage.cs',
+      'MediaBrowser.Controller/Net/WebSocketMessages/Outbound/SeriesTimerCancelledMessage.cs',
       'MediaBrowser.Controller/LiveTv/LiveTvChannel.cs', 'MediaBrowser.Controller/LiveTv/LiveTvProgram.cs']);
     await cp(current.sourceRoot, referenceRoot, { recursive: true, filter: filename => !path.relative(current.sourceRoot, filename).replaceAll('\\', '/').startsWith('log/') });
     await mkdir(path.join(referenceRoot, 'log'), { recursive: true }); await current.prepareClone(referenceRoot, port);
@@ -231,16 +622,53 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
       }
       if (populated) {
         const rows = stage.native.find(item => item.name === 'authorization /LiveTv/Timers' && item.mode === 'allowed').response.bodyJson;
-        assert.equal(rows.TotalRecordCount, input.timers.length - 1); assert.equal(rows.StartIndex, 0);
+        assert.equal(rows.TotalRecordCount, input.timers.filter(item => item.Status !== 'Completed').length); assert.equal(rows.StartIndex, 0);
         assert.ok(rows.Items.every(item => item.Status !== 'Completed'));
         const newTimer = rows.Items.find(item => item.ExternalId === 'new-one');
         assert.equal(newTimer.Id, timerIdentity('new-one')); assert.equal(newTimer.ChannelId, guide.channelIds[0]);
         assert.equal(newTimer.ProgramInfo.Id, guide.programIds[0]); assert.ok(newTimer.ChannelPrimaryImageTag);
         assert.ok(newTimer.ProgramInfo.ParentThumbImageTag); assert.ok(newTimer.ProgramInfo.ParentPrimaryImageTag);
+        const nativeMutation = await runMutations('native', origin, nativeCredentials, undefined, nativeSnapshot);
+        await stopNative('native-populated'); stage.nativeAfterShutdown = await nativeSnapshot();
+        assert.deepEqual(stage.nativeAfterShutdown, nativeMutation.after);
+        stage.nativeMutationTakeover = await runNativeMutationTakeover(nativeMutation);
+        stage.nativeContinuation = await runNativeContinuation(stage.nativeMutationTakeover);
+        stage.nativeContinuationTakeover = await runContinuationTakeover(stage.nativeContinuation);
+        stage.mutations = { native: nativeMutation,
+          node: await runMutations('node', fixture.origin, nodeCredentials, stage.nodeErrors,
+            async () => ({ database: await fixture.snapshot(), documents: await documentSnapshot(nodeRoot) })) };
+        assert.deepEqual(stage.mutations.native.after.database, stage.mutations.native.before.database,
+          'Native timer cancellation only persists its timer documents.');
+        assert.deepEqual(stage.mutations.node.after.database.tables, stage.mutations.node.before.database.tables,
+          'Node timer cancellation only persists its PostgreSQL control state and timer documents.');
+        assertNodeTimerAuthority(stage.mutations.node.after.database, stage.mutations.node.after.documents);
+        assert.deepEqual(mutationDocumentProjection(stage.mutations.native.after.documents), expectedPostMutationDocuments);
+        assert.deepEqual(mutationDocumentProjection(stage.mutations.node.after.documents), expectedPostMutationDocuments);
+        assert.equal(stage.mutations.node.requests.length, stage.mutations.native.requests.length);
+        for (const [index, value] of stage.mutations.node.requests.entries()) {
+          const expected = stage.mutations.native.requests[index];
+          report.cases.push({ stage: 'mutations', name: value.name, mode: value.mode, request: value.request,
+            native: expected.response, node: value.response });
+          collect('mutations: ' + value.name + ':' + value.mode, () => {
+            assert.equal(value.name, expected.name); assert.equal(value.mode, expected.mode);
+            assert.deepEqual(value.request, expected.request); assert.deepEqual(wire(value.response), wire(expected.response));
+          });
+        }
+        assert.equal(stage.mutations.node.reads.length, stage.mutations.native.reads.length);
+        for (const [index, value] of stage.mutations.node.reads.entries()) {
+          const expected = stage.mutations.native.reads[index];
+          report.cases.push({ stage: 'post-mutation-read', request: value.request,
+            native: expected.response, node: value.response });
+          collect('post-mutation-read: ' + value.request.route, () => {
+            assert.deepEqual(value.request, expected.request); assert.deepEqual(wire(value.response), wire(expected.response));
+          });
+        }
+        assert.deepEqual(stage.mutations.node.events, stage.mutations.native.events);
+        assert.deepEqual(stage.nodeErrors, [], 'Mutations and WebSocket notification delivery must not hide background failures.');
         const original = await request(fixture.origin, '/LiveTv/Timers', { token: nodeCredentials.allowed });
         await writeDocuments(nodeRoot, { 'timers.json': '[]\n', 'seriestimers.json': '[]\n' });
         const warm = await request(fixture.origin, '/LiveTv/Timers', { token: nodeCredentials.allowed });
-        assert.deepEqual(wire(warm), wire(original)); assert.deepEqual(await fixture.snapshot(), stage.nodeBeforeReads.database);
+        assert.deepEqual(wire(warm), wire(original)); assert.deepEqual(await fixture.snapshot(), stage.mutations.node.after.database);
         stage.sourceMutation = { original, warm, changedDocuments: await documentSnapshot(nodeRoot), stateUnchanged: true };
         for (const filename of ['timers.json', 'seriestimers.json']) {
           assert.notEqual(stage.sourceMutation.changedDocuments[filename].sha256, stage.nodeBeforeReads.documents[filename].sha256);
@@ -249,27 +677,33 @@ test('saved timers, series timers and defaults match real native HTTP with fresh
         await fixture.restart();
         stage.nodePorts.push(Number(new URL(fixture.origin).port));
         const cold = await request(fixture.origin, '/LiveTv/Timers', { token: nodeCredentials.allowed });
-        assert.deepEqual(wire(cold), wire(original)); assert.deepEqual(await fixture.snapshot(), stage.nodeBeforeReads.database);
-        stage.sourceMutation.cold = cold;
-        await stopNative('native-populated'); stage.nativeAfterShutdown = await nativeSnapshot();
-        assert.deepEqual(stage.nativeAfterShutdown, stage.nativeAfterReads);
+        assert.deepEqual(wire(cold), wire(original)); assert.deepEqual(await fixture.snapshot(), stage.mutations.node.after.database);
+        stage.sourceMutation.cold = cold; stage.sourceMutation.reconciledDocuments = await documentSnapshot(nodeRoot);
+        assert.deepEqual(stage.sourceMutation.reconciledDocuments, stage.mutations.node.after.documents,
+          'A restart must reconcile drifted native files from authoritative PostgreSQL source bytes.');
       }
       await fixture.close(); fixture = undefined;
       for (const port of new Set(stage.nodePorts)) assert.equal(await portAvailable(port), true, 'Every closed Node listener must be released.');
       report.cleanup.push({ name: 'node-' + stage.name, runtimeClosed: true, postgresSchemaDropped: true, listenerPortsReleased: true });
       assert.ok(stage.nodeShutdownStates.length >= 1);
-      for (const state of stage.nodeShutdownStates) assert.deepEqual(state.database, stage.nodeBeforeReads.database);
+      for (const state of stage.nodeShutdownStates) assert.deepEqual(state.database,
+        populated ? stage.mutations.node.after.database : stage.nodeBeforeReads.database);
       if (!populated) assert.deepEqual(stage.nodeShutdownStates[0].documents, stage.nodeBeforeReads.documents);
-      else for (const state of stage.nodeShutdownStates) assert.deepEqual(state.documents, stage.sourceMutation.changedDocuments);
+      else {
+        assert.deepEqual(stage.nodeShutdownStates[0].documents, stage.sourceMutation.changedDocuments);
+        for (const state of stage.nodeShutdownStates.slice(1)) assert.deepEqual(state.documents, stage.sourceMutation.reconciledDocuments);
+      }
     }
     assert.deepEqual(report.differences, []);
   } catch (error) { failure = error; report.failure = { name: error.name, message: error.message, stack: error.stack }; }
   finally {
+    for (const connection of [...openSockets]) try { await closeSocket(connection); } catch (error) { failure ??= error; }
     if (native) try { await stopNative('native-finally'); } catch (error) { failure ??= error; }
+    if (takeoverFixture) try { await takeoverFixture.close(); } catch (error) { failure ??= error; }
     if (fixture) try { await fixture.close(); } catch (error) { failure ??= error; }
     if (current) try { await current.finish(); report.cleanup.push({ name: 'protected-inputs', unchanged: true }); } catch (error) { failure ??= error; report.inputVerificationFailure = error.message; }
     report.passed = !failure; report.phaseAcceptance = false; report.releaseAcceptance = false;
-    report.boundary = 'Actual designated native HTTP and fresh PostgreSQL runtime HTTP. No production CLI import, tuner/listing/recording execution, state-package success after source mutation, pixels or complete Live TV acceptance.';
+    report.boundary = 'Actual designated native HTTP/WebSocket DELETE cancellation, fresh PostgreSQL runtime HTTP/WebSocket cancellation, and a Native-to-PG2-Node-deletion-to-Native-deletion-to-PG3 continuation through exact timer files, clean shutdowns and absent-state PostgreSQL imports. POST create/update recorder boundaries, production CLI import, tuner/listing/recording execution, state-package success after source mutation, pixels and complete Live TV acceptance are outside this fixture.';
     await writeFile(path.join(root, 'report.json'), filterEvidenceJson(report));
     await output.publishAndClose();
   }

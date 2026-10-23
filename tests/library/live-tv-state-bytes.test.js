@@ -71,6 +71,13 @@ test('native saved timer bytes preserve lazy string decoding and PostgreSQL reco
         assert.equal(nativeLookup.error, undefined);
         assert.deepEqual(items, nativeLookup.items, sample.name);
         assert.equal(await database.getState(liveTvStateKey), before);
+        for (const [, filename] of sources) await writeFile(path.join(dataPath, 'livetv', filename), '[]');
+        assert.equal(await database.transaction(db => initializeLiveTvState(db, { dataPath })), false);
+        for (const [, filename, hex] of sources) {
+          assert.equal((await readFile(path.join(dataPath, 'livetv', filename))).toString('hex'), hex,
+            'PostgreSQL source bytes reconcile file drift on startup.');
+        }
+        assert.equal(await database.getState(liveTvStateKey), before);
       } catch (error) { differences.push({ name: sample.name, message: error.message }); }
       observations.push({ name: sample.name, kind: sample.kind, rawSha256: hash(Buffer.from(sample.bytesHex, 'hex')),
         issue, nativeReaderError: expected.error, entries: decoded?.entries.map(project), items });
