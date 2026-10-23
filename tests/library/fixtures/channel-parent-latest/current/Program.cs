@@ -160,10 +160,11 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
                 action = new { value = true };
             } else if (kind == "played") {
                 using var seedData = factory.CreateDbContext();
+                var persistedUser = seedData.Users.Single(value => value.Id == user.Id);
                 foreach (var externalId in step.GetProperty("externalIds").EnumerateArray()) {
-                    var raw = seedData.BaseItems.AsNoTracking().Single(value => value.ExternalId == externalId.GetString());
+                    var raw = seedData.BaseItems.Single(value => value.ExternalId == externalId.GetString());
                     var item = manager.GetItemById(raw.Id)!; playedIds.Add(item.Id);
-                    foreach (var key in item.GetUserDataKeys()) seedData.UserData.Add(new UserData { UserId = user.Id, ItemId = item.Id,
+                    foreach (var key in item.GetUserDataKeys()) seedData.UserData.Add(new UserData { UserId = user.Id, User = persistedUser, ItemId = item.Id, Item = raw,
                         CustomDataKey = key, Played = true, PlayCount = 1, PlaybackPositionTicks = 0 });
                 }
                 seedData.SaveChanges(); action = new { value = true };
