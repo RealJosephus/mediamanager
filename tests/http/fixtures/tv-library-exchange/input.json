@@ -1,0 +1,20 @@
+{
+  "libraryName": "TV exchange",
+  "series": { "key": "series", "directory": "Exchange Show (2026)", "name": "Exchange Series", "overview": "Local series metadata & 中文", "tvdb": "990026" },
+  "seasons": [
+    { "key": "specials", "directory": "Specials", "name": "Specials", "number": 0, "overview": "Local specials metadata" },
+    { "key": "season1", "directory": "Season 1", "name": "Season 1", "number": 1, "overview": "Local season metadata" }
+  ],
+  "episodes": [
+    { "key": "episode2", "season": "season1", "filename": "Exchange Show S01E02.mkv", "name": "Second episode", "number": 2, "overview": "Second local episode" },
+    { "key": "special1", "season": "specials", "filename": "Exchange Show S00E01.mkv", "name": "Special episode", "number": 1, "overview": "Special local episode" },
+    { "key": "episode1", "season": "season1", "filename": "Exchange Show S01E01.mkv", "name": "First episode", "number": 1, "overview": "First local episode" }
+  ],
+  "continuedEpisode": { "key": "episode3", "season": "season1", "filename": "Exchange Show S01E03.mkv", "name": "Native added episode", "number": 3, "overview": "Native continuation scan" },
+  "genre": "Drama",
+  "tag": "TV exchange",
+  "unknownNfoText": "Unknown extension & 保留",
+  "nodeOverview": "Node edit & 保留",
+  "nativeReadOverview": "Native reads the Node NFO & 中文",
+  "nativeSeasonOverview": "Native season edit & 中文"
+}
