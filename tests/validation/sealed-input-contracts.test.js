@@ -87,7 +87,7 @@ test('metadata search uses a tracked current profile and same-run Native referen
   assert.ok(!identity.entries.some(value => /(?:mediamanager-validation|[\\/]\.tools[\\/]dotnet|[\\/]jellyfin[\\/]MediaBrowser\.)/iu.test(value.filename)));
   for (const filename of ['native.json', 'provenance.json']) {
     const historical = path.join(path.dirname(profileFilename), filename);
-    assert.ok(!identity.entries.flatMap(describedPaths).includes(historical));
+    assert.ok(!identity.entries.flatMap(value => describedPaths(value)).includes(historical));
   }
   const archiveProfile = identity.historicalArchive.profiles.find(value => value.id === 'search-lookup-sources');
   assert.equal(archiveProfile?.disposition, 'current-identity');
@@ -153,7 +153,7 @@ test('parental-rating core and PostgreSQL consumers share one tracked current Na
       .test(value.filename)));
     for (const filename of ['native.json', 'provenance.json']) {
       const historical = path.join(path.dirname(profileFilename), filename);
-      assert.ok(!identity.entries.flatMap(describedPaths).includes(historical));
+      assert.ok(!identity.entries.flatMap(value => describedPaths(value)).includes(historical));
     }
     const archiveProfile = identity.historicalArchive.profiles.find(value => value.id === 'sealed-rating');
     assert.equal(archiveProfile?.disposition, 'current-identity');
@@ -216,7 +216,7 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
     .test(value.filename)));
   const historical = ['consumer.json', 'provenance.json', 'native.json', 'input.json', 'required-inputs.json',
     'Program.cs', 'Oracle.csproj', 'observations.js'].map(filename => path.join(path.dirname(profileFilename), filename));
-  const described = identity.entries.flatMap(describedPaths);
+  const described = identity.entries.flatMap(value => describedPaths(value));
   for (const filename of historical) assert.ok(!described.includes(filename), filename);
   const archiveProfile = identity.historicalArchive.profiles.find(value => value.id === 'password-reader');
   assert.equal(archiveProfile?.disposition, 'current-identity');
@@ -304,7 +304,7 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
     assert.ok(!identity.entries.some(value => /(?:mediamanager-validation|[\\/]\.tools[\\/]dotnet)/iu.test(value.filename)));
     for (const filename of ['native.json', 'provenance.json']) {
       const historical = path.join(path.dirname(profileFilename), filename);
-      assert.ok(!identity.entries.flatMap(describedPaths).includes(historical));
+      assert.ok(!identity.entries.flatMap(value => describedPaths(value)).includes(historical));
     }
     const historicalId = expected.consumer.startsWith('tests/http/') ? 'sealed-http-delete' : 'sealed-delete-dto';
     const archiveProfile = identity.historicalArchive.profiles.find(value => value.id === historicalId);

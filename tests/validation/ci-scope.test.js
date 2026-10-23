@@ -108,7 +108,7 @@ test('shared reader manifests require only the called layout and retain ownershi
     'sharing the loader must not promote an uncalled kind to required');
 });
 
-test('input capture wires the real consumer manifest to required ownership while leaving ordinary history and DTO paths optional', async t => {
+test('input capture binds the real consumer manifest without including unread history or DTO paths', async t => {
   const consumer = 'tests/consumer-contracts/consumer-readers.test.js', contract = executionManifestContract(consumer);
   const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-execution-inputs-'));
@@ -127,9 +127,7 @@ test('input capture wires the real consumer manifest to required ownership while
     assert.ok(original.requiredReasons.length > 0 && original.requiredReasons.every(reason => reason.startsWith(consumer + ':')));
     assert.deepEqual(original.expectedDigests, [file.sha256]);
   }
-  const optional = identity.entries.find(input => input.filename === history);
-  assert.equal(optional?.required, false);
-  assert.deepEqual(optional.requiredReasons, []);
+  assert.ok(!identity.entries.some(input => input.filename === history), 'unread history is outside current release inputs');
   assert.ok(!identity.entries.some(input => input.filename === dtoPath));
   assert.ok(!identity.entries.some(input => input.required && input.filename.includes('20261012-r23-date-roundtrip')),
     'an uncalled kind in the shared loader stays outside required execution inputs');

@@ -95,7 +95,10 @@ test('schema-2 protected input receipts are rejected without a compatibility pat
   } });
   assert.deepEqual(calls, [true]);
   assert.equal(result.strictPairAcceptance, false);
-  assert.match(result.errors.join('\n'), /current release input identity is invalid/u);
+  assert.equal(result.executed, false);
+  assert.deepEqual(result.rounds, []);
+  assert.equal(result.frozen.verified, false);
+  assert.match(result.frozen.errors.join('\n'), /current release input identity is invalid/u);
 });
 
 test('missing shared full inputs stop before either execution without reducing the full scope', async t => {
