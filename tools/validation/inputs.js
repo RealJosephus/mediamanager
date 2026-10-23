@@ -58,10 +58,13 @@ const executionManifests = new Map([
   ['tests/metadata/local-xml-stream.test.js', ['current-oracle', 'tests/metadata/fixtures/local-xml-save-current/current-profile.json']],
   ['tests/library/channel-parent-latest-native.test.js', ['current-oracle', 'tests/library/fixtures/channel-parent-latest/current-profile.json']],
   ['tests/library/movie-similar.test.js', ['current-oracle', 'tests/library/fixtures/movie-similar/current-profile.json']],
+  ['tests/core/server-identity.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
+  ['tests/core/server-identity-runtime.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
+  ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
-  ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
+  ['tests/metadata/playlist-items.test.js', ['current-oracle', 'tests/metadata/fixtures/playlist-items-current/current-profile.json']],
   ...['local-xml-provider', 'nfo-episode-blocks']
-    .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
+    .map(kind => [`tests/metadata/${kind}.test.js`, ['current-oracle', `tests/metadata/fixtures/${kind}/current-profile.json`]]),
 ]);
 const sealedExecutionManifests = new Map([
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],

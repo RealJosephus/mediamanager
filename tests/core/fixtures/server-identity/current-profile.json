@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native DeviceId lifecycle, independent generated identity observations and restored Node identity readback through actual files.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Devices/DeviceId.cs",
+    "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
+    "Emby.Server.Implementations/ServerApplicationPaths.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 2902,
+      "sha256": "89319125677621ddd9672b194abf2b7282aa7fd5f2e2cec57050398a65304cfe"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 2892,
+      "sha256": "5bca78781c55f3722cbc94e02efee900d9eccb9998c11e00d19bff61018da413"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 495,
+      "sha256": "5ed92a85e7848b44ffe00822e8ca6fd3246e71ababbc9474ab2228381c82fa8b"
+    },
+    {
+      "role": "consumerSource",
+      "filename": "current-consumer/Program.cs",
+      "bytes": 1133,
+      "sha256": "8e67837cadc5ca410d029addeef848f964d221eea5556915824e96d428e70c03"
+    },
+    {
+      "role": "consumerProject",
+      "filename": "current-consumer/Oracle.csproj",
+      "bytes": 495,
+      "sha256": "5ed92a85e7848b44ffe00822e8ca6fd3246e71ababbc9474ab2228381c82fa8b"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

@@ -7,28 +7,21 @@ import { spawn } from 'node:child_process';
 import { ServerIdentity, readServerIdentity, isServerIdentity } from '../../src/core/server-identity.js';
 import { validationOutputRoot, validationExecutable } from '../../tools/validation/paths.js';
 import { identityObservation } from './fixtures/server-identity/observations.js';
+import { currentServerIdentity, input } from './server-identity-current.js';
 
-void JSON.parse(await fs.readFile(new URL('./fixtures/server-identity/required-inputs.json', import.meta.url)));
-const fixture = new URL('./fixtures/server-identity/', import.meta.url);
-const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(name => fs.readFile(new URL(name, fixture))));
-const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes), hash = bytes => createHash('sha256').update(bytes).digest('hex');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
 test('server identity evidence binds real DeviceId, files, source and independent generated-ID observations', async () => {
-  assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(hash(await fs.readFile(proof.rawRecording)), proof.nativeSha256); assert.equal(native.inputSha256, proof.inputSha256);
-  assert.equal(native.actualDeviceId, true); assert.equal(native.actualFiles, true); assert.equal(proof.sourcesStable, true);
-  assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0);
-  for (const row of proof.sources) for (const root of ['D:/jellyfin', proof.buildSource]) assert.equal(hash(await fs.readFile(path.join(root, row.filename))), row.sha256);
-  for (const row of [...proof.oracleSources, ...proof.assemblies, proof.dotnet, proof.oracleAssembly]) assert.equal(hash(await fs.readFile(row.filename)), row.sha256);
-  assert.equal(hash(await fs.readFile(proof.repeat.filename)), proof.repeat.sha256); assert.equal(hash(await fs.readFile(proof.repeat.comparison)), proof.repeat.comparisonSha256);
-  assert.deepEqual(native.results.map(identityObservation), JSON.parse(await fs.readFile(proof.repeat.filename)).results.map(identityObservation));
+  const { native, repeat, report } = await currentServerIdentity();
+  assert.equal(report.nativeExecutionRecorded, true);
+  assert.deepEqual(native.results.map(identityObservation), repeat.results.map(identityObservation));
 });
 
 async function lockFile(filename, mode) {
-  // A relocated recording is evidence only; execute the original helper after
-  // verifying its actual bytes, not a path chosen by the recording map.
-  assert.equal(hash(await fs.readFile(proof.oracleAssembly.filename)), proof.oracleAssembly.sha256);
-  const child = spawn(validationExecutable('dotnet'), [proof.oracleAssembly.filename, 'hold-file', filename, mode], { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+  const { record } = await currentServerIdentity();
+  assert.equal(hash(await fs.readFile(record.oracleAssembly.filename)), record.oracleAssembly.sha256);
+  const child = spawn(validationExecutable('dotnet'), [record.oracleAssembly.filename, 'hold-file', filename, mode], { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
   const completion = new Promise(resolve => { child.once('exit', (code, signal) => resolve({ code, signal })); child.once('error', error => resolve({ error: error.message })); });
   let stdout = '', stderr = '', timer;
   child.stderr.on('data', bytes => { stderr += bytes; });
@@ -41,6 +34,7 @@ async function lockFile(filename, mode) {
 }
 
 for (const sample of input) test('native server identity lifecycle: ' + sample.name, async () => {
+  const { native } = await currentServerIdentity();
   const root = path.join(path.resolve(validationOutputRoot()), 'identity-' + sample.name); await fs.mkdir(root);
   const filename = path.join(root, 'device.txt'); if (sample.bytes != null) await fs.writeFile(filename, Buffer.from(sample.bytes, 'base64'));
   if (sample.directory) await fs.mkdir(filename); if (sample.readOnly) await fs.chmod(filename, 0o444);

@@ -59,21 +59,18 @@ test('CI full forwards the strict full profile and refuses every form of selecti
     ['--output', 'output', '--concurrency', '1', '--', ownPath]);
 });
 
-test('reviewed consumer records bind original source bytes and native runtime inputs without promoting ordinary DTO paths', () => {
+test('reviewed current consumers bind executable inputs without promoting ordinary DTO paths', () => {
   const consumer = executionManifestContract('tests/metadata/playlist-items.test.js');
-  assert.equal(consumer.argument, 'playlist-layouts');
+  assert.equal(consumer.kind, 'current-oracle');
   assert.equal(executionManifestContract('tests/playback/http-native.test.js'), null, 'playback records its current reader oracle instead of executing the historical recording');
-  assert.equal(executionManifestContract('tests/metadata/playlist-items.test.js').argument, 'playlist-layouts');
-  assert.equal(executionManifestContract('tests/consumer-contracts/date-roundtrip.test.js').argument, 'date-roundtrip');
   assert.equal(executionManifestContract(ownPath), null, 'ordinary fixtures do not acquire an execution contract');
   const filename = path.join(repositoryRoot, consumer.manifest), sha256 = digest('sealed bytes');
-  const source = 'D:/mediamanager-validation/consumer/input.json', record = 'D:/mediamanager-validation/consumer/record.json';
   const references = executionManifestReferences(consumer, {
-    files: [{ filename: 'input.json', source, sha256 }], references: [{ filename: record, sha256 }],
+    inputs: [{ filename: 'input.json', sha256, bytes: 12 }],
     unusedHistory: { filename: 'D:/unread-history.json', sha256 }, Path: 'Z:\\Media\\movie.mkv',
   }, filename);
-  assert.deepEqual(references, [{ filename: path.join(path.dirname(filename), 'input.json'), sha256 },
-    { filename: source, sha256 }, { filename: record, sha256, nested: 'consumer-record' }]);
+  assert.deepEqual(references, [{ filename: path.join(path.dirname(filename), 'input.json'), sha256, bytes: 12 }]);
+  const record = 'D:/mediamanager-validation/consumer/record.json';
   const sourceFile = { filename: 'D:/jellyfin/Reader.cs', sha256 }, dotnet = { filename: 'D:/tools/dotnet.exe', sha256 };
   const jellyfinDll = { filename: 'D:/native/jellyfin.dll', sha256 }, oracleAssembly = { filename: 'D:/oracle/Oracle.dll', sha256 };
   const recordReferences = executionManifestReferences({ kind: 'consumer-record' }, {
@@ -83,26 +80,22 @@ test('reviewed consumer records bind original source bytes and native runtime in
   assert.deepEqual(executionManifestReferences({ kind: 'consumer-native' }, { assemblies: [jellyfinDll, { name: 'no location' }] }, record), [jellyfinDll]);
 });
 
-test('shared reader manifests require only the called layout and retain ownership at the actual consumer', async () => {
+test('current reader profiles retain required-input ownership at the actual consumer', async () => {
   const consumer = 'tests/metadata/nfo-episode-blocks.test.js', sibling = 'tests/metadata/local-xml-provider.test.js';
   const contract = executionManifestContract(consumer), siblingContract = executionManifestContract(sibling);
-  assert.equal(executionManifestContract('tests/metadata/local-xml-provider.test.js').argument, 'local-xml-provider');
-  assert.equal(contract.manifest, siblingContract.manifest);
+  assert.equal(contract.kind, 'current-oracle'); assert.equal(siblingContract.kind, 'current-oracle');
+  assert.notEqual(contract.manifest, siblingContract.manifest);
   const sha256 = digest('reader record'), filename = path.join(repositoryRoot, contract.manifest);
-  const record = { kind: contract.argument, filename: 'D:\\recordings\\episode\\record.json', sha256 };
-  const unrelated = { kind: siblingContract.argument, filename: 'D:\\recordings\\scalar\\record.json', sha256 };
-  const files = [contract.argument, siblingContract.argument].flatMap(kind => ['input', 'native', 'comparison']
-    .map(suffix => ({ filename: `${kind}-${suffix}.json`, sha256 })));
-  const references = executionManifestReferences(contract, { records: [record, unrelated], files }, filename);
-  assert.equal(references.length, 4);
-  assert.deepEqual(references[0], { ...record, nested: 'reader-record' });
-  assert.ok(references.slice(1).every(reference => path.basename(reference.filename).startsWith(contract.argument + '-')));
-  assert.ok(!references.some(reference => reference.filename === unrelated.filename));
-  const dependencies = { entries: [entry(consumer, { imports: [contract.loader] }), entry(sibling, { imports: [contract.loader] }),
-    entry(contract.loader, { test: false })] };
+  const record = { filename: 'current/input.json', sha256 };
+  const unrelated = { filename: 'D:/recordings/scalar/record.json', sha256 };
+  const references = executionManifestReferences(contract, { inputs: [record], unusedHistory: unrelated }, filename);
+  assert.deepEqual(references, [{ ...record, filename: path.resolve(path.dirname(filename), record.filename) }]);
+  const loader = 'tests/metadata/xml-reader-current-fixture.js';
+  const dependencies = { entries: [entry(consumer, { imports: [loader] }), entry(sibling, { imports: [loader] }),
+    entry(loader, { test: false })] };
   const classification = await classify({ dependencies, tracked: new Set(dependencies.entries.map(value => value.path)), environment: {} });
-  const reason = `${consumer}:execution-manifest:${record.filename}`;
-  assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename: path.resolve(repositoryRoot, record.filename),
+  const reason = `${consumer}:execution-manifest:${filename}`;
+  assert.deepEqual(applyInputIdentity(classification, { entries: [{ filename: references[0].filename,
     required: true, available: false, reasons: [reason], requiredReasons: [reason] }] }, new Set()), []);
   assert.deepEqual(classification.records.map(value => [value.path, value.selected]), [[consumer, false], [sibling, true]],
     'sharing the loader must not promote an uncalled kind to required');
@@ -116,21 +109,20 @@ test('input capture binds the real consumer manifest without including unread hi
   const history = path.join(root, 'unread-history.bin'), dtoPath = path.join(root, 'movie.mkv');
   const ordinary = path.join(root, 'ordinary.json');
   await writeFile(ordinary, JSON.stringify({ historical: { filename: history, sha256: digest('unread bytes') }, Path: dtoPath }));
-  const dependencies = { entries: [entry(consumer, { imports: [contract.loader] }),
-    entry(contract.loader, { test: false, fixtureReferences: [description(ordinary)] })] };
+  const dependencies = { entries: [entry(consumer, { fixtureReferences: [description(ordinary)] })] };
   const identity = await captureInputIdentity({ selected: [consumer], dependencies, environment: {},
     preflight: { ready: true, services: [], tools: [] } });
   const manifest = JSON.parse(await readFile(path.join(repositoryRoot, contract.manifest), 'utf8'));
-  for (const file of manifest.files) {
-    const original = identity.entries.find(input => input.filename === path.resolve(repositoryRoot, file.source));
-    assert.ok(original?.required, 'the real loader directly reads each historical source');
+  for (const file of manifest.inputs) {
+    const original = identity.entries.find(input => input.filename === path.resolve(path.dirname(path.join(repositoryRoot, contract.manifest)), file.filename));
+    assert.ok(original?.required, 'the current profile binds every actual execution input');
     assert.ok(original.requiredReasons.length > 0 && original.requiredReasons.every(reason => reason.startsWith(consumer + ':')));
     assert.deepEqual(original.expectedDigests, [file.sha256]);
   }
   assert.ok(!identity.entries.some(input => input.filename === history), 'unread history is outside current release inputs');
   assert.ok(!identity.entries.some(input => input.filename === dtoPath));
   assert.ok(!identity.entries.some(input => input.required && input.filename.includes('20261012-r23-date-roundtrip')),
-    'an uncalled kind in the shared loader stays outside required execution inputs');
+    'historical date recordings stay outside the current playlist input profile');
 });
 
 test('by-name execution inputs distinguish full selected recordings from the files actually read in other kinds', () => {

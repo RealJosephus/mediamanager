@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "fixture": "local-xml-provider",
+  "scope": "Same-run designated Native XML/NFO readers over physical input files and current Node consumers; public values, failure prefixes and callback outcomes only.",
+  "baseCases": 46,
+  "layoutCases": 135,
+  "groups": {
+    "providerCases": 10,
+    "mergeCases": 6,
+    "pipelineCases": 5
+  },
+  "sourcePaths": [
+    "MediaBrowser.LocalMetadata/BaseXmlProvider.cs",
+    "MediaBrowser.LocalMetadata/Parsers/BaseItemXmlParser.cs",
+    "MediaBrowser.LocalMetadata/Parsers/BoxSetXmlParser.cs",
+    "MediaBrowser.LocalMetadata/Parsers/PlaylistXmlParser.cs",
+    "MediaBrowser.LocalMetadata/Providers/BoxSetXmlProvider.cs",
+    "MediaBrowser.LocalMetadata/Providers/PlaylistXmlProvider.cs",
+    "MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+    "MediaBrowser.LocalMetadata/Savers/PlaylistXmlSaver.cs",
+    "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs",
+    "MediaBrowser.Providers/BoxSets/BoxSetMetadataService.cs",
+    "MediaBrowser.Providers/Playlists/PlaylistMetadataService.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "MediaBrowser.Controller/Providers/MetadataResult.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+    "MediaBrowser.Controller/Playlists/Playlist.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 12202,
+      "sha256": "eb57b89abe0fb9c45de844acf8dc6834a4755b6e5a1f30ed62ee87ac3ffb75ba"
+    },
+    {
+      "role": "layouts",
+      "filename": "current/layout-input.json",
+      "bytes": 31340,
+      "sha256": "8867ace407217ae713c6926d47c0fea0211109cbc829a97f2ce3b62c74704027"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 15605,
+      "sha256": "e13a82a9397e39b1da082430a8a1cf9699e22f63ccee49df72b1f4329befb37a"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 536,
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "layoutRelations",
+      "filename": "current/layout-comparison.json",
+      "bytes": 34785,
+      "sha256": "2df267f3746d1aaa59722a020b33489ff65c0b91c84be61a8582f93b8de7bf97"
+    }
+  ]
+}

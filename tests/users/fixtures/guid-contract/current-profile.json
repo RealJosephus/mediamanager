@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "fixture": "guid-contract",
+  "scope": "Same-run designated Native Guid.Parse, JSON GUID converters, actual Playlist/UserView mapper and final PostgreSQL owner/access consumers with bidirectional typed Data; component evidence only.",
+  "sourcePaths": [
+    "src/Jellyfin.Extensions/Json/Converters/JsonGuidConverter.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonNullableGuidConverter.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "MediaBrowser.Controller/Playlists/Playlist.cs",
+    "MediaBrowser.Controller/Entities/UserView.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/BaseItemEntity.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 5197,
+      "sha256": "5f9ce74920857bb866ac15ae155cf2337991ccfd127ddc7985d10a74482f8d4d"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 6688,
+      "sha256": "db0f2fece3532a40048d35ca4ae0f4345132fd6bc6efd48b049d2ddf83fa39ed"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 481,
+      "sha256": "f5e169931660ecc1d4ffc5e33bfd89ddd1f338da096ef00c6a910e416a732b3f"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

@@ -387,3 +387,12 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/library/fixtures/channel-parent-latest/current-profile.json text eol=lf
 /tests/library/fixtures/movie-similar/current/** -text
 /tests/library/fixtures/movie-similar/current-profile.json text eol=lf
+/tests/core/fixtures/server-identity/current/** -text
+/tests/core/fixtures/server-identity/current-consumer/** -text
+/tests/core/fixtures/server-identity/current-profile.json text eol=lf
+/tests/metadata/fixtures/playlist-items-current/** -text
+/tests/metadata/fixtures/playlist-items-current/current-profile.json text eol=lf
+/tests/metadata/fixtures/local-xml-provider/current-profile.json text eol=lf
+/tests/metadata/fixtures/nfo-episode-blocks/current-profile.json text eol=lf
+/tests/users/fixtures/guid-contract/current/** -text
+/tests/users/fixtures/guid-contract/current-profile.json text eol=lf

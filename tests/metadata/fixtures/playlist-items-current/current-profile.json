@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "fixture": "playlist-items",
+  "scope": "Current designated Native playlist file consumers, metadata merge and persisted mapper values, plus actual Node-to-Native-to-Node file reads. Controlled lookup and component evidence only.",
+  "cases": {
+    "providerCases": 61,
+    "mergeCases": 15,
+    "writerCases": 9
+  },
+  "sourcePaths": [
+    "MediaBrowser.Providers/Playlists/PlaylistItemsProvider.cs",
+    "MediaBrowser.Providers/Playlists/PlaylistMetadataService.cs",
+    "MediaBrowser.Controller/Playlists/Playlist.cs",
+    "Emby.Server.Implementations/Playlists/PlaylistManager.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "c226f816ff97a2a88a680764b8f3016607f24c7b48aac6f1a2c3216d5c030de5",
+      "bytes": 26319,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "cff019fdcd96d259eeeb02627b9cbab240bf2171243756f21f4f237da067665a",
+      "bytes": 18422,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f",
+      "bytes": 536,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    }
+  ]
+}

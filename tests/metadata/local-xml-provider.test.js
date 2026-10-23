@@ -1,10 +1,9 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test, { before, after, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, readdir, mkdtemp, mkdir, writeFile, rm, symlink } from 'node:fs/promises';
+import { readdir, mkdtemp, mkdir, writeFile, rm, symlink } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { createHash } from 'node:crypto';
 import { decodeNativeText } from '../../src/core/native-text.js';
 import { newNativeItemEntity, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
 import { createLocalXmlPlugin, localXmlSavePath } from '../../src/metadata/local-xml.js';
@@ -12,11 +11,12 @@ import { fetchLocalXml } from '../../src/metadata/local-xml-parser.js';
 import { mergeMetadata } from '../../src/metadata/merge.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { createStateRelations } from '../library/deletion-fixture.js';
+import { currentXmlReaderFixture, functionalXmlReader } from './xml-reader-current-fixture.js';
+import { assertProjectedEqual } from '../comparison-observations.js';
 
-const fixture = new URL('./fixtures/local-xml-provider/', import.meta.url);
-const input = JSON.parse(await readFile(new URL('input.json', fixture)));
-const native = JSON.parse(await readFile(new URL('native.json', fixture)));
-const provenance = JSON.parse(await readFile(new URL('provenance.json', fixture)));
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+const fixture = await currentXmlReaderFixture(new URL('./fixtures/local-xml-provider/current-profile.json', import.meta.url));
+const { input, baseInput, layoutInput } = fixture;
 // One actual relation repository serves the complete neutral fixture, with
 // every case relinquishing its entities before the next case starts.
 let database, linkedChildren, stateRoot, spoolRoot;
@@ -107,50 +107,43 @@ async function seeded(type, seed) {
   }
   return { Item: value, People: [{ Name: 'Old Person' }] };
 }
-const errorType = error => error?.nativeException ?? (error?.name === 'XmlError' ? 'XmlException'
-  : error?.name === 'AbortError' ? 'OperationCanceledException' : error?.name);
-const layouts = await (await import('./reader-layout-fixture.js')).layoutFixture('local-xml-provider');
-test('local XML oracle seals bind every input and recorded result', async () => {
-  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-  assert.equal(provenance.jellyfin.commit, '208c278b75abd897aefa1e1175126eac5e4dbfaa');
-  assert.equal(provenance.files.native.sha256, '3051ccd13e3ccb3af2252615290852f45829b39198edf0c72dfc1d4d99f68c7c');
-  for (const name of ['input', 'native', 'oracle', 'project']) {
-    const file = provenance.files[name];
-    assert.equal(sha(await readFile(new URL(file.filename, fixture))), file.sha256);
-  }
-  assert.equal(native.candidateVerified, false);
-  assert.equal(provenance.candidateVerified, false);
-  assert.equal(native.inputSha256, provenance.files.input.sha256);
-  assert.deepEqual(native.assemblies, provenance.assemblies);
-  assert.deepEqual(provenance.counts, { parserCases: 46, parserResults: 92, providerCases: 10, mergeCases: 6, pipelineCases: 5 });
-  assert.equal(input.parserCases.length, 46);
-  assert.equal(native.parserResults.length, 92);
-  for (const [inputs, results, count] of [[input.providerCases, native.providerResults, 10],
-    [input.mergeCases, native.mergeResults, 6], [input.pipelineCases, native.pipelineResults, 5]]) {
-    assert.equal(inputs.length, count); assert.equal(results.length, count);
-    assert.deepEqual(inputs.map(value => value.name), results.map(value => value.name));
-  }
-  assert.equal(new Set(native.parserResults.map(value => `${value.type}/${value.name}`)).size, 92);
-  assert.equal(provenance.repeat.rawSha256, provenance.files.rawRecording.sha256);
-  assert.equal(provenance.repeat.projectionEqual, true); assert.equal(provenance.repeat.byteEqual, true);
+const errorObservation = error => ({ name: error.name, nativeException: error.nativeException, message: error.message });
+test('current local XML consumers bind all parser, provider, merge and layout inputs', async () => {
+  const { native, report } = await fixture.capture();
+  assert.equal(report.nativeExecutionRecorded, true);
+  assert.equal(baseInput.parserCases.length, 46); assert.equal(layoutInput.parserCases.length, 135);
+  assert.equal(native.parserResults.length, 362);
+  assert.equal(native.providerResults.length, 10); assert.equal(native.mergeResults.length, 6);
+  assert.equal(native.pipelineResults.length, 5);
+  await fixture.compareLayouts();
 });
-for (const expected of [...native.parserResults, ...layouts.native.parserResults]) test(`native local XML parser: ${expected.type}/${expected.name}`, async () => {
-  const sample = [...input.parserCases, ...layouts.input.parserCases].find(value => value.name === expected.name);
-  const result = await seeded(expected.type, sample.seed);
+for (const [index, sample] of input.parserCases.entries()) for (const type of ['BoxSet', 'Playlist']) test(`current native local XML parser: ${type}/${sample.name}`, async t => {
+  const { native } = await fixture.capture();
+  const expected = native.parserResults.find(value => value.name === sample.name && value.type === type);
+  let bytes, missingFileError;
+  try { bytes = await fixture.readNativeInput(expected.file); }
+  catch (failure) {
+    if (expected.file.exists || failure.code !== 'ENOENT') throw failure;
+    missingFileError = failure;
+  }
+  const result = await seeded(type, sample.seed);
   let error = null;
   try {
     await linkedChildren.withSession(session => fetchLocalXml(async () => {
-      if (sample.xml == null) throw Object.assign(new Error('Missing neutral file.'), { nativeException: 'FileNotFoundException' });
-      return sample.bytes ? decodeNativeText(Buffer.from(sample.bytes, 'base64')) : sample.xml;
-    }, { type: expected.type, result, externalIdInfos: sample.externalIds,
+      if (missingFileError) throw missingFileError;
+      return decodeNativeText(bytes);
+    }, { type, result, externalIdInfos: sample.externalIds,
       signal: sample.cancelled ? AbortSignal.abort() : undefined, linkedChildren, session }));
-  } catch (failure) { error = errorType(failure); }
-  assert.equal(error, expected.error);
-  assert.deepEqual(await projectLocalXmlResult(result), expected.result);
+  } catch (failure) { error = errorObservation(failure); }
+  const actual = { error, result: await projectLocalXmlResult(result) };
+  await fixture.recordCandidate(`parser-${index}-${type}`, { name: sample.name, type, file: expected.file, ...actual });
+  assertProjectedEqual(t, sample.name + '/' + type, actual, expected, functionalXmlReader);
 });
 
-for (const expected of native.providerResults) test(`native local XML provider: ${expected.name}`, async () => {
-  const sample = input.providerCases.find(value => value.name === expected.name);
+for (const [index, sample] of input.providerCases.entries()) test(`current native local XML provider: ${sample.name}`, async t => {
+  const { native } = await fixture.capture();
+  const expected = native.providerResults[index];
+  const bytes = expected.file.exists ? await fixture.readNativeInput(expected.file) : null;
   const value = item(sample.type); value.Path = `Z:\\Fixture\\${sample.path}`;
   const context = { accessPath: `/fixture/${sample.path}`, signal: sample.cancelled ? AbortSignal.abort() : undefined };
   const target = `/fixture/${expected.path}`;
@@ -159,24 +152,25 @@ for (const expected of native.providerResults) test(`native local XML provider: 
     async stat(filename) {
       if (filename === context.accessPath && sample.kind !== 'absent') return { kind: sample.kind };
       if (filename === target && sample.xmlDirectory) return { kind: 'directory' };
-      if (filename === target && sample.xml) return { kind: 'file', modified: '2026-10-10T02:03:04.0000000Z' };
+      if (filename === target && sample.xml) return { kind: 'file', modified: expected.modified };
       return missing();
     },
     async openRead(filename) {
       assert.equal(filename, target);
-      return { stream: (async function* () { yield Buffer.from(sample.xml); })(), async close() {} };
+      return { stream: (async function* () { yield bytes; })(), async close() {} };
     }
   };
   const offsets = { '-1': '2026-10-10T02:03:03.9999999Z', '1': '2026-10-10T02:03:04.0000001Z' };
   value.DateLastSaved = sample.xml ? offsets[sample.savedOffsetTicks] ?? '2026-10-10T02:03:04Z' : '0001-01-01 00:00:00';
   const provider = createLocalXmlPlugin({fileSystem: testFileSystem,  vfs, linkedChildren, spoolRoot }).providers.find(entry => entry.id === `${sample.type}XmlProvider`);
   let actual = null, error = null;
-  assert.equal(await provider.hasChanged(value, context), expected.changed);
+  const changed = await provider.hasChanged(value, context);
   try { const result = await provider.getMetadata(value, context); track(result.Item); actual = { HasMetadata: result.HasMetadata,
     item: result.Item ? await projectLocalXmlResult(result) : null, Name: provider.name, Order: provider.order }; }
-  catch (failure) { error = errorType(failure); }
-  assert.equal(error, expected.error);
-  assert.deepEqual(actual, expected.result);
+  catch (failure) { error = errorObservation(failure); }
+  await fixture.recordCandidate(`provider-${index}`, { name: sample.name, file: expected.file, changed, error, result: actual });
+  assert.equal(changed, expected.changed);
+  assertProjectedEqual(t, sample.name, { error, result: actual }, expected, functionalXmlReader);
 });
 
 test('local XML reader confines state-local files and does not use a media filesystem fallback', async t => {
@@ -199,15 +193,19 @@ test('local XML reader confines state-local files and does not use a media files
 });
 
 for (const [index, sample] of input.mergeCases.entries()) test(`native BoxSet XML merge: ${sample.name}`, async () => {
+  const { native } = await fixture.capture();
   const links = entries => entries.map(entry => ({ Type: 'Manual', ItemId: entry.id ?? null, Path: entry.path ?? null, LibraryItemId: null }));
   const source = item('BoxSet'); await assignLinks(source, links(sample.source));
   const target = item('BoxSet'); target.Path = sample.managed ? 'Z:\\State\\data\\Set' : 'Z:\\External\\Set';
   await assignLinks(target, links(sample.target));
   const result = { Item: target, People: null };
-  assert.deepEqual(await projectLocalXmlResult(result), native.mergeResults[index].before);
+  const before = await projectLocalXmlResult(result);
   await mergeMetadata({ Item: source, People: null }, result, { replaceData: sample.replaceData,
     mergeMetadataSettings: sample.mergeSettings, dataPath: 'Z:\\State\\data', linkedChildren });
-  assert.deepEqual(await projectLocalXmlResult(result), native.mergeResults[index].after);
+  const after = await projectLocalXmlResult(result);
+  await fixture.recordCandidate(`merge-${index}`, { name: sample.name, before, after });
+  assert.deepEqual(before, native.mergeResults[index].before);
+  assert.deepEqual(after, native.mergeResults[index].after);
 });
 
 test('XML provider retains its fresh item after post-stat I/O failure and propagates permission errors', async () => {
@@ -219,7 +217,7 @@ test('XML provider retains its fresh item after post-stat I/O failure and propag
   assert.equal(result.HasMetadata, false);
   assert.equal(result.Item.Type, 'BoxSet'); assert.deepEqual(result.People, []);
   failure = Object.assign(new Error('Forbidden'), { code: 'permission-denied' });
-  await assert.rejects(provider.getMetadata(value, { accessPath: '/fixture/Set' }), error => error === failure);
+  await assert.rejects(provider.getMetadata(value, { accessPath: '/fixture/Set' }), { code: 'permission-denied' });
 });
 
 test('unknown XML names do not access inherited JavaScript mapping properties', async () => {
@@ -227,10 +225,13 @@ test('unknown XML names do not access inherited JavaScript mapping properties', 
     + '<toString>Ignored</toString><__proto__>Ignored</__proto__></Item>', { type: 'Playlist', linkedChildren, session }));
   track(result.Item);
   assert.equal(result.HasMetadata, true);
-  assert.deepEqual(Object.keys(result.Item).sort(), Object.keys(item('Playlist')).sort());
+  const empty = await linkedChildren.withSession(session => fetchLocalXml(async () => '<Item />', { type: 'Playlist', linkedChildren, session }));
+  track(empty.Item);
+  assert.deepEqual(await projectLocalXmlResult(result), await projectLocalXmlResult(empty));
 });
 
 for (const [index, sample] of input.pipelineCases.entries()) test(`native local XML merge pipeline: ${sample.name}`, async () => {
+  const { native } = await fixture.capture();
   const links = entries => entries.map(entry => ({ Type: 'Manual', ItemId: entry.id ?? null, Path: entry.path ?? null, LibraryItemId: null }));
   const source = { Item: item(sample.type), People: null };
   const target = { Item: item(sample.type), People: null };
@@ -240,9 +241,13 @@ for (const [index, sample] of input.pipelineCases.entries()) test(`native local 
   target.Item.Path = temp.Item.Path = 'Z:\\External\\LogicalPlaylist';
   const expected = native.pipelineResults[index];
   await mergeMetadata(source, temp, { mergeMetadataSettings: true, dataPath: 'Z:\\State\\data', linkedChildren });
-  assert.deepEqual(await linksFor(temp.Item), expected.afterLocal);
+  const afterLocal = await linksFor(temp.Item);
   await mergeMetadata(target, temp, { linkedChildren });
-  assert.deepEqual(await linksFor(temp.Item), expected.afterExisting);
+  const afterExisting = await linksFor(temp.Item);
   await mergeMetadata(temp, target, { replaceData: sample.replaceData, mergeMetadataSettings: true, dataPath: 'Z:\\State\\data', linkedChildren });
-  assert.deepEqual(await linksFor(target.Item), expected.afterFinal);
+  const afterFinal = await linksFor(target.Item);
+  await fixture.recordCandidate(`pipeline-${index}`, { name: sample.name, afterLocal, afterExisting, afterFinal });
+  assert.deepEqual(afterLocal, expected.afterLocal);
+  assert.deepEqual(afterExisting, expected.afterExisting);
+  assert.deepEqual(afterFinal, expected.afterFinal);
 });

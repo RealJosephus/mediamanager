@@ -1,73 +1,98 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { nativeGuid } from '../../src/users/native.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
+import { nativeTextBytes } from '../../src/database/native-text.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { recordedInputPath } from '../../tools/validation/paths.js';
-void JSON.parse(await readFile(new URL('./fixtures/guid-contract/required-inputs.json', import.meta.url)));
-const fixture = new URL('./fixtures/guid-contract/', import.meta.url);
-const [inputBytes, nativeBytes, proofBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json']
-  .map(name => readFile(new URL(name, fixture))));
-const input = JSON.parse(inputBytes), native = JSON.parse(nativeBytes), proof = JSON.parse(proofBytes);
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+import { currentGuidContract, functional, input, playlistType, readCandidate, recordCandidate,
+  userViewType } from './native-guid-current-fixture.js';
+
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+const emptyGuid = '00000000000000000000000000000000';
+const errorRecord = error => ({ name: error.name, message: error.message, code: error.code });
+
+function parseGuid(value) {
+  try { return { success: true, value: nativeGuid(value).toLowerCase(), failure: null }; }
+  catch (error) { return { success: false, value: null, failure: errorRecord(error) }; }
+}
 
 test('GUID contract binds actual System.Guid.Parse and Jellyfin JSON converters', async () => {
-  assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(native.inputSha256, proof.inputSha256); assert.equal(native.actualGuidParse, true);
+  const { native, report, candidate } = await currentGuidContract();
+  assert.equal(native.actualGuidParse, true);
   assert.equal(native.actualJsonGuidConverter, true); assert.equal(native.actualJsonDefaults, true);
+  assert.equal(native.actualBaseItemMapper, true); assert.equal(report.nativeExecutionRecorded, true);
   assert.equal(native.mediaOpened, false); assert.equal(native.portOpened, false);
   assert.deepEqual(native.cases.map(row => ({ Name: row.Name, Value: row.value })), input.Cases);
-  assert.equal(proof.build.status, 0); assert.equal(proof.process.status, 0);
-  assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
-  assert.equal(hash(await readFile(recordedInputPath(proof.rawRecording.filename, [proof.nativeSha256]))), proof.nativeSha256);
-  assert.equal(hash(await readFile(recordedInputPath(proof.oracleAssembly.filename, [proof.oracleAssembly.sha256]))), proof.oracleAssembly.sha256);
-  for (const source of proof.oracleSources) assert.equal(hash(await readFile(source.name === 'Directory.Build.props'
-    ? new URL('../Directory.Build.props', import.meta.url) : new URL(source.name, fixture))), source.sha256);
-  for (const source of proof.sources) for (const root of ['D:/jellyfin', proof.buildSource]) {
-    assert.equal(hash(await readFile(recordedInputPath(path.join(root, source.path), [source.sha256]))), source.sha256);
-  }
-  for (const assembly of proof.assemblies) assert.equal(hash(await readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
-  for (const assembly of proof.matchingLibraryAssemblies) assert.equal(hash(await readFile(recordedInputPath(assembly.filename, [assembly.sha256]))), assembly.sha256, assembly.name);
-  assert.ok(proof.assemblies.some(row => row.name === 'System.Private.CoreLib'));
-  assert.ok(proof.matchingLibraryAssemblies.some(row => row.name === 'Jellyfin.Extensions'));
+  assert.deepEqual(candidate.cases.map(row => ({ Name: row.Name, Value: row.value })), input.Cases);
+  assert.equal(native.cases.length, 43);
+  assert.equal(report.capture.record.build.status, 0); assert.equal(report.capture.record.process.status, 0);
+  assert.equal(report.phaseAcceptance, false); assert.equal(report.releaseAcceptance, false);
 });
 
-test('nativeGuid follows actual Guid.Parse whitespace and X UInt32/byte grammar', () => {
-  for (const sample of native.cases) {
-    if (!sample.guidParse.supported) continue;
-    if (sample.guidParse.success) assert.equal(nativeGuid(sample.value).toLowerCase(), sample.guidParse.value, sample.Name);
-    else assert.throws(() => nativeGuid(sample.value), sample.Name);
-  }
-});
-
-test('postgres: typed JSON GUID gate and key follow actual JSON GuidConverter results',
-  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
-    const db = await createPostgresTestDatabase(t, 'guid_contract');
-    const safeData = q(db.schemaName) + '.' + q('mm_safe_native_item_data');
-    const guidKey = q(db.schemaName) + '.' + q('mm_native_json_guid_key');
-    for (const sample of native.cases) {
-      const source = JSON.stringify({ OwnerUserId: sample.value });
-      if (sample.jsonGuid.failure?.type === 'FormatException') {
-        await assert.rejects(db.client.query('SELECT ' + safeData + '($1,$2)',
-          ['MediaBrowser.Controller.Playlists.Playlist', source]), error => error.code === 'MM001', sample.Name);
-      } else {
-        const document = (await db.client.query('SELECT ' + safeData + '($1,$2) AS value',
-          ['MediaBrowser.Controller.Playlists.Playlist', source])).rows[0].value;
-        assert.deepEqual(document, sample.jsonGuid.success ? JSON.parse(source) : {}, sample.Name);
-      }
-      if (typeof sample.value !== 'string' && sample.value !== null) continue;
-      if (sample.jsonGuid.success) {
-        const key = (await db.client.query('SELECT ' + guidKey + '($1::json) AS value',
-          [JSON.stringify(sample.value)])).rows[0].value;
-        assert.equal(key, sample.jsonGuid.value.replaceAll('-', ''), sample.Name);
-      } else await assert.rejects(db.client.query('SELECT ' + guidKey + '($1::json)',
-        [JSON.stringify(sample.value)]), error => error.code === 'MM001', sample.Name);
+test('nativeGuid follows actual Guid.Parse whitespace and X UInt32/byte grammar', async () => {
+  const { native, candidate } = await currentGuidContract();
+  const comparisons = native.cases.map((sample, index) => ({
+    Name: sample.Name, parse: sample.guidParse.supported ? parseGuid(sample.value) : null,
+    consumers: [[playlistType, 'playlist'], [userViewType, 'userView']].map(([nativeType, key]) => {
+      const expected = sample[key];
+      return { nativeType, key, expected, original: candidate.cases[index][key], nodeToNative: native.nodeReads[index][key],
+        nativeToNode: expected.success ? readCandidate(nativeType, expected.canonicalJson) : null };
+    }),
+  }));
+  await recordCandidate('node-functional-comparisons', comparisons);
+  for (const [index, row] of comparisons.entries()) {
+    const sample = native.cases[index];
+    if (sample.guidParse.supported) assert.deepEqual(functional(row.parse), functional(sample.guidParse), row.Name + ': Guid.Parse');
+    for (const consumer of row.consumers) {
+      const label = row.Name + ': ' + consumer.key;
+      assert.deepEqual(functional(consumer.original), functional(consumer.expected), label + ' original Data');
+      if (!consumer.expected.success) continue;
+      const canonical = { success: true, value: consumer.expected.canonicalValue };
+      assert.equal(consumer.nodeToNative.supported, true, label + ' Node serialized Data was read');
+      assert.deepEqual(functional(consumer.nodeToNative), canonical, label + ' Node -> Native');
+      assert.deepEqual(functional(consumer.nativeToNode), canonical, label + ' Native -> Node');
     }
-    const jsonNull = native.cases.find(row => row.value === null);
-    assert.equal(jsonNull.guidParse.success, false);
-    assert.equal(jsonNull.jsonGuid.value, '00000000-0000-0000-0000-000000000000');
-    assert.equal(jsonNull.nullableJsonGuid.value, null);
-  });
+  }
+});
+
+test('postgres: typed JSON GUID gate and key follow actual JSON GuidConverter results', async t => {
+  const { native, candidate } = await currentGuidContract();
+  const db = await createPostgresTestDatabase(t, 'guid_contract');
+  const safeData = q(db.schemaName) + '.' + q('mm_safe_native_item_data');
+  const guidKey = q(db.schemaName) + '.' + q('mm_native_json_guid_key');
+  const query = `SELECT COALESCE(${guidKey}(data->'OwnerUserId'), $3::text) AS owner,
+    COALESCE((data->>'OpenAccess')::boolean, false) AS "openAccess"
+    FROM (SELECT ${safeData}($1::bytea, $2::bytea) AS data) AS source`;
+  async function readPlaylist(data) {
+    try {
+      const result = await db.client.query(query, [nativeTextBytes(playlistType), nativeTextBytes(data), emptyGuid]);
+      const row = result.rows[0];
+      return { success: true, value: { owner: row.owner, openAccess: row.openAccess }, failure: null };
+    } catch (error) { return { success: false, value: null, failure: errorRecord(error) }; }
+  }
+  const observations = [];
+  for (const [index, sample] of native.cases.entries()) {
+    const actual = candidate.cases[index];
+    observations.push({ Name: sample.Name, original: await readPlaylist(actual.data),
+      fromNode: actual.playlist.success ? await readPlaylist(actual.playlist.serializedData) : null,
+      fromNative: sample.playlist.success ? await readPlaylist(sample.playlist.canonicalJson) : null });
+  }
+  await recordCandidate('postgres-final-playlist', { schemaName: db.schemaName, query, observations });
+  for (const [index, row] of observations.entries()) {
+    const expected = native.cases[index].playlist;
+    assert.deepEqual(functional(row.original), functional(expected), row.Name + ': original Data');
+    if (expected.success) {
+      const canonical = { success: true, value: expected.canonicalValue };
+      assert.ok(row.fromNode, row.Name + ': Node serialization succeeded');
+      assert.deepEqual(functional(row.fromNode), canonical, row.Name + ': Node serialized Data');
+      assert.deepEqual(functional(row.fromNative), canonical, row.Name + ': Native serialized Data');
+    }
+  }
+  const jsonNull = native.cases.find(row => row.value === null);
+  assert.equal(jsonNull.guidParse.success, false);
+  assert.equal(jsonNull.jsonGuid.success, true); assert.equal(jsonNull.nullableJsonGuid.success, true);
+  assert.equal(jsonNull.jsonGuid.value, '00000000-0000-0000-0000-000000000000');
+  assert.equal(jsonNull.nullableJsonGuid.value, null); assert.equal(jsonNull.nullableJsonGuid.rereadValue, null);
+  assert.deepEqual(jsonNull.playlist.value, { owner: emptyGuid, openAccess: true });
+  assert.equal(jsonNull.userView.value.userId, null); assert.equal(jsonNull.userView.canonicalValue.userId, null);
+});

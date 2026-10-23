@@ -14,7 +14,7 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 
-const fixtureInput = JSON.parse(await fs.readFile(new URL('./fixtures/server-identity/input.json', import.meta.url)));
+const fixtureInput = JSON.parse(await fs.readFile(new URL('./fixtures/server-identity/current/input.json', import.meta.url)));
 const serverIdCases = ['n-upper', 'd', 'b-spaces', 'x', 'utf16le', 'utf32be'];
 
 test('postgres: native identity text survives runtime DTOs, exact binding, discovery, restart and complete state restoration', { skip: !postgresTestConnectionString }, async t => {
@@ -49,7 +49,7 @@ test('postgres: native identity text survives runtime DTOs, exact binding, disco
     observations.push({ name, root: nativeRoot, serverId: settings.serverId, identityBytesSha256: createHash('sha256').update(bytes).digest('hex'), binding, restored: true });
   });
   const input = path.join(root, 'consumer-input.json'); await fs.writeFile(input, JSON.stringify(observations, null, 2) + '\n', { flag: 'wx' });
-  const recording = await recordOracle({ project: 'tests/core/fixtures/server-identity/consumer/Oracle.csproj', output: path.join(root, 'native-reader'), args: [input, '{output}/native.json'] });
+  const recording = await recordOracle({ project: 'tests/core/fixtures/server-identity/current-consumer/Oracle.csproj', output: path.join(root, 'native-reader'), args: [input, '{output}/native.json'] });
   const consumed = JSON.parse(await fs.readFile(path.join(root, 'native-reader/native.json')));
   assert.equal(consumed.actualDeviceId, true); assert.equal(consumed.actualFiles, true);
   for (const row of consumed.results) { assert.equal(row.value, observations.find(value => value.name === row.name).serverId); assert.equal(row.cachedValue, row.value); assert.equal(row.beforeBytes, row.afterBytes); }
