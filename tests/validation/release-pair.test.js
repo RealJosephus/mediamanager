@@ -6,6 +6,7 @@ import path from 'node:path';
 import { ciExecutionArguments, ciProfile } from '../../tools/ci/scope.js';
 import { aggregateReleasePairs, releasePairEnabled, runReleasePair, validateReleasePairEnvironment, verifyReleasePair } from '../../tools/ci/release-pair.js';
 import { actualRunnerResult, capturedRunnerProvenance, capturedRunnerShape, fixtureHash, fixtureHead, fixtureScope, saveFixture, writePlatformFixture, writeRunnerFixture } from './release-pair-fixture.js';
+import { currentInputDigest } from '../../tools/validation/input-receipt.js';
 
 const workspace = async t => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-release-pair-'));
@@ -53,24 +54,62 @@ test('one frozen preflight and two fresh full outputs use the same inputs and pr
   const output = await workspace(t), scope = fixtureScope(), calls = [];
   const result = await runReleasePair({ scope, output, expectedHead: fixtureHead, execute: async (directory, options) => {
     calls.push([path.basename(directory), options.preflightOnly]);
-    return writeRunnerFixture(directory, scope, options);
+    const archiveRevision = calls.length;
+    return writeRunnerFixture(directory, scope, { ...options, change: files => {
+      for (const name of ['inputs-before.json', 'inputs-after.json']) if (files[name]) {
+        files[name].historicalArchiveComplete = archiveRevision % 2 === 0;
+        files[name].historicalArchive = { ...files[name].historicalArchive, auditStatus: `diagnostic-${archiveRevision}-${name}` };
+      }
+      const resultReceipt = files['result.json'];
+      resultReceipt.historicalArchiveComplete = archiveRevision % 2 !== 0;
+      resultReceipt.historicalArchive = { auditStatus: `result-diagnostic-${archiveRevision}-before` };
+      if (Object.hasOwn(resultReceipt, 'historicalArchiveCompleteAfter')) {
+        resultReceipt.historicalArchiveCompleteAfter = archiveRevision % 2 === 0;
+        resultReceipt.historicalArchiveAfter = { auditStatus: `result-diagnostic-${archiveRevision}-after` };
+      }
+    } });
   } });
   assert.equal(result.strictPairAcceptance, true);
   assert.equal(result.releaseAcceptance, false);
   assert.equal(result.productAcceptance, false);
   assert.equal(result.productionScaleAcceptance, false);
   assert.deepEqual(calls, [['release-pair-preflight', true], ['strict-full-1', false], ['strict-full-2', false]]);
-  assert.equal(result.rounds[0].inputEntriesSha256, result.rounds[1].inputEntriesSha256);
+  assert.equal(result.rounds[0].currentInputEntriesSha256, result.rounds[1].currentInputEntriesSha256);
   assert.equal(result.rounds[0].candidateEntriesSha256, result.frozen.candidateEntriesSha256);
-  for (const index of [1, 2]) assert.match(await readFile(path.join(output, `strict-full-${index}`, 'test.tap'), 'utf8'), /# pass 2/u);
+  for (const index of [1, 2]) {
+    assert.match(await readFile(path.join(output, `strict-full-${index}`, 'test.tap'), 'utf8'), /# pass 2/u);
+    const receipt = JSON.parse(await readFile(path.join(output, `strict-full-${index}`, 'result.json'), 'utf8'));
+    for (const oldName of ['inputEntriesSha256', 'inputEntriesSha256After', 'inputUnchanged']) {
+      assert.equal(Object.hasOwn(receipt, oldName), false, `schema-3 synthetic result excludes ${oldName}`);
+    }
+  }
   assert.equal((await verifyReleasePair(output, scope, fixtureHead)).strictPairAcceptance, true);
+});
+
+test('schema-2 protected input receipts are rejected without a compatibility path', async t => {
+  const output = await workspace(t), scope = fixtureScope(), calls = [];
+  const result = await runReleasePair({ scope, output, expectedHead: fixtureHead, execute: async (directory, options) => {
+    calls.push(options.preflightOnly);
+    return writeRunnerFixture(directory, scope, { ...options,
+      change: files => { files['inputs-before.json'].schemaVersion = 2; } });
+  } });
+  assert.deepEqual(calls, [true]);
+  assert.equal(result.strictPairAcceptance, false);
+  assert.match(result.errors.join('\n'), /current release input identity is invalid/u);
 });
 
 test('missing shared full inputs stop before either execution without reducing the full scope', async t => {
   const output = await workspace(t), scope = fixtureScope(), calls = [];
   const result = await runReleasePair({ scope, output, expectedHead: fixtureHead, execute: async (directory, options) => {
     calls.push(options.preflightOnly);
-    return writeRunnerFixture(directory, scope, { ...options, change: files => { files['inputs-before.json'].ready = false; } });
+    return writeRunnerFixture(directory, scope, { ...options, change: files => {
+      const input = files['inputs-before.json'], entry = input.entries[0];
+      Object.assign(entry, { available: false });
+      for (const name of ['kind', 'bytes', 'sha256']) delete entry[name];
+      input.currentReleaseInputReady = false;
+      input.entriesSha256 = currentInputDigest(input);
+      files['result.json'].currentInputEntriesSha256 = input.entriesSha256;
+    } });
   } });
   assert.deepEqual(calls, [true]);
   assert.equal(result.strictPairAcceptance, false);
@@ -112,7 +151,7 @@ test('individually successful second rounds with replaced inputs or changed cand
     } });
     assert.equal(result.rounds[1].verified, true, 'Each isolated full receipt can pass while the pair changes inputs.');
     assert.equal(result.strictPairAcceptance, false);
-    assert.match(result.errors.join('\n'), /changed the frozen candidate or protected inputs/u);
+    assert.match(result.errors.join('\n'), /changed the frozen candidate or protected current release inputs/u);
     assert.equal((await verifyReleasePair(output, scope, fixtureHead)).strictPairAcceptance, false);
   });
 });

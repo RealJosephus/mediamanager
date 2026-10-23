@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { validCurrentInputReceipt } from '../validation/input-receipt.js';
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const equal = (left, right) => JSON.stringify(left) === JSON.stringify(right);
@@ -53,12 +54,6 @@ async function bundle(output, preflightOnly) {
   return { files, evidence, errors };
 }
 
-function inputDigest(input) {
-  if (input?.schemaVersion !== 2 || !Array.isArray(input.entries)) return null;
-  const { schemaVersion, scope, entriesSha256, ...identity } = input;
-  return hash(JSON.stringify(identity));
-}
-
 function candidateValid(candidate, expectedHead) {
   return candidate?.head === expectedHead && equal(candidate.status, []) && Array.isArray(candidate.entries)
     && candidate.entries.length > 0 && candidate.entriesSha256 === hash(JSON.stringify(candidate.entries));
@@ -72,8 +67,9 @@ export async function inspectReleaseEvidence(output, scope, expectedHead, { pref
     && equal(result.selected, scope.selected) && equal(result.notSelected, []) && equal(result.missingTests, []), 'The strict full scope is incomplete or changed.');
   check(result?.candidatePreparationStable === true && equal(result.inventoryDifferences, []) && result.preflight?.ready === true, 'Preparation did not preserve a ready candidate.');
   check(candidateValid(candidate, expectedHead) && result?.candidateEntriesSha256 === candidate?.entriesSha256, 'The candidate is not the exact clean workflow head.');
-  check(input?.ready === true && input.preflightReady === true && validDigest(input.entriesSha256)
-    && inputDigest(input) === input.entriesSha256 && result?.inputEntriesSha256 === input.entriesSha256, 'The protected input identity is invalid or unavailable.');
+  check(input?.currentReleaseInputReady === true && input.preflightReady === true && validDigest(input.entriesSha256)
+    && validCurrentInputReceipt(input) && result?.currentInputEntriesSha256 === input.entriesSha256,
+  'The protected current release input identity is invalid or unavailable.');
   if (preflightOnly) {
     check(result?.executed === false && result.outcome === 'incomplete' && !execution?.timedOut && !execution?.cancelled
       && (!execution || execution.exitCode === 2), 'The shared preflight did not finish normally without executing tests.');
@@ -83,9 +79,10 @@ export async function inspectReleaseEvidence(output, scope, expectedHead, { pref
       && (!execution || execution.exitCode === 0 && !execution.timedOut && !execution.cancelled), 'The strict full execution did not pass.');
     check(result?.candidateUnchanged === true && candidateValid(candidateAfter, expectedHead) && equal(candidate, candidateAfter)
       && equal(result?.inventoryDifferencesAfter, []), 'The candidate changed during execution.');
-    check(result?.inputUnchanged === true && result.preflightAfter?.ready === true && inputAfter?.ready === true
-      && inputDigest(inputAfter) === inputAfter.entriesSha256 && input?.entriesSha256 === inputAfter.entriesSha256
-      && result.inputEntriesSha256After === inputAfter.entriesSha256, 'Protected inputs changed during execution.');
+    check(result?.currentInputUnchanged === true && result.preflightAfter?.ready === true
+      && inputAfter?.currentReleaseInputReady === true && validCurrentInputReceipt(inputAfter)
+      && input?.entriesSha256 === inputAfter.entriesSha256
+      && result.currentInputEntriesSha256After === inputAfter.entriesSha256, 'Protected current release inputs changed during execution.');
     const registrations = files['test-registrations.json'];
     check(result?.registrationComplete === true && registrations?.missing?.length === 0 && Array.isArray(registrations?.files)
       && registrations.files.length === scope.selected.length && registrations.files.every(item => item.registrations > 0)
@@ -106,18 +103,18 @@ export async function inspectReleaseEvidence(output, scope, expectedHead, { pref
   return { output, preflightOnly, verified: errors.length === 0, errors, evidence,
     executed: result?.executed === true, outcome: result?.outcome ?? 'incomplete',
     candidateHead: candidate?.head ?? null, candidateEntriesSha256: candidate?.entriesSha256 ?? null,
-    inputEntriesSha256: input?.entriesSha256 ?? null, counts: result?.counts ?? null };
+    currentInputEntriesSha256: input?.entriesSha256 ?? null, counts: result?.counts ?? null };
 }
 
 function sameFrozenInputs(frozen, round) {
   return frozen.candidateHead === round.candidateHead && frozen.candidateEntriesSha256 === round.candidateEntriesSha256
-    && frozen.inputEntriesSha256 === round.inputEntriesSha256;
+    && frozen.currentInputEntriesSha256 === round.currentInputEntriesSha256;
 }
 
 function pairResult(scope, frozen, rounds, errors) {
   const verified = errors.length === 0 && frozen?.verified === true && rounds.length === 2
     && rounds.every(round => round.verified && sameFrozenInputs(frozen, round));
-  return { schemaVersion: 1, mode: 'release-pair', acceptanceScope: 'Two independent strict full runs on one platform using the same frozen candidate and protected inputs.',
+  return { schemaVersion: 1, mode: 'release-pair', acceptanceScope: 'Two independent strict full runs on one platform using the same frozen candidate and protected current release inputs.',
     platform: scope.platform, outcome: verified ? 'passed' : 'incomplete', executed: rounds.some(round => round.executed),
     strictPairAcceptance: verified, releaseAcceptance: false, phaseAcceptance: false,
     productAcceptance: false, productionScaleAcceptance: false, unmetPrerequisites,
@@ -132,7 +129,7 @@ export async function runReleasePair({ scope, output, expectedHead, execute, log
   try {
     if (!errors.length) {
       const preflightOutput = path.join(output, 'release-pair-preflight');
-      log('Freezing shared candidate and protected inputs without executing tests.');
+      log('Freezing shared candidate and protected current release inputs without executing tests.');
       const execution = await execute(preflightOutput, { preflightOnly: true });
       frozen = { execution, ...await inspectReleaseEvidence(preflightOutput, scope, expectedHead, { preflightOnly: true, execution }) };
       await save(path.join(output, 'release-pair-frozen.json'), frozen);
@@ -144,7 +141,7 @@ export async function runReleasePair({ scope, output, expectedHead, execute, log
         const round = await inspectReleaseEvidence(strictOutput, scope, expectedHead, { execution });
         rounds.push({ index, execution, ...round });
         if (!round.verified) errors.push(`Strict full run ${index} is incomplete or failed.`);
-        if (!sameFrozenInputs(frozen, round)) errors.push(`Strict full run ${index} changed the frozen candidate or protected inputs.`);
+        if (!sameFrozenInputs(frozen, round)) errors.push(`Strict full run ${index} changed the frozen candidate or protected current release inputs.`);
       }
     }
   } catch (error) { errors.push(`Pair execution stopped: ${error.code ?? error.name}`); }
@@ -162,7 +159,7 @@ export async function verifyReleasePair(output, scope, expectedHead) {
   if (!frozen.verified) errors.push('Shared preflight evidence is incomplete.');
   for (const round of rounds) {
     if (!round.verified) errors.push(`Strict full run ${round.index} evidence is incomplete.`);
-    if (!sameFrozenInputs(frozen, round)) errors.push(`Strict full run ${round.index} differs from the frozen inputs.`);
+    if (!sameFrozenInputs(frozen, round)) errors.push(`Strict full run ${round.index} differs from the frozen current release inputs.`);
   }
   const recorded = JSON.parse(await readFile(path.join(output, 'release-pair.json'), 'utf8'));
   const frozenReceipt = JSON.parse(await readFile(path.join(output, 'release-pair-frozen.json'), 'utf8'));
@@ -209,7 +206,7 @@ export async function aggregateReleasePairs({ artifacts, expectedHead, runId, at
     } catch (error) { errors.push(`${os}: evidence unavailable (${error.code ?? error.name}).`); }
   }
   if (platforms.length === 3 && !platforms.every(item => item.selectionSha256 === platforms[0].selectionSha256)) errors.push('The discovered full test sets differ across platforms.');
-  return { schemaVersion: 1, mode: 'release-pair', acceptanceScope: 'Two strict full runs per platform, with the same frozen candidate and protected inputs within each Windows/Linux/macOS runner.',
+  return { schemaVersion: 1, mode: 'release-pair', acceptanceScope: 'Two strict full runs per platform, with the same frozen candidate and protected current release inputs within each Windows/Linux/macOS runner.',
     headSha: expectedHead, runId, attempt, outcome: errors.length ? 'incomplete' : 'passed',
     strictPairAcceptance: errors.length === 0 && platforms.length === 3, releaseAcceptance: false,
     phaseAcceptance: false, productAcceptance: false, productionScaleAcceptance: false,

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs used to record the current designated Native precomputed CanDelete observation in the same validation run.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 157,
+      "sha256": "86785ff2adda02a1872e162fcfd950b6abe5c479ae30e7196aef8f72bd0a95a8"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 3831,
+      "sha256": "d2c3081bbd18c96a36bc1e905ea23124ab2d792ac4f6354f318b684850fe847e"
+    },
+    {
+      "role": "oracleControls",
+      "filename": "Controls.cs",
+      "bytes": 17349,
+      "sha256": "489b5c6e3d143e5636d67ecf0e33ee14ac0da4e21c89fbbcec1c3169c2fec920"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "CurrentOracle.csproj",
+      "bytes": 521,
+      "sha256": "ad7c21addb3efbf94756e05cc1877d8f41a19afc3c777d682689221a20f0e2db"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

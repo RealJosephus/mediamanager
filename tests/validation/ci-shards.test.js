@@ -36,10 +36,12 @@ test('Actions summary stays below the upload limit while full diagnostics stay i
     impact: { mode: 'allavailable', fallbackReasons: Array(5000).fill({ code: 'global-change', detail: 'x'.repeat(1000) }) },
     excluded: Array.from({ length: 600 }, (_, index) => ({ path: `tests/${index}.test.js`,
       reasons: Array(100).fill({ code: 'input-not-shipped', filename: 'x'.repeat(1000) }) })),
-    infrastructureErrors: Array(5000).fill({ code: 'input-unavailable', filename: 'x'.repeat(1000) }) };
+    infrastructureErrors: Array(5000).fill({ code: 'input-unavailable', filename: 'x'.repeat(1000) }),
+    currentReleaseInputReady: true, historicalArchiveComplete: false };
   const summary = ciSummary(scope, { outcome: 'incomplete' });
   assert.ok(Buffer.byteLength(summary) < 256 * 1024);
   assert.match(summary, /scope.json/u);
+  assert.match(summary, /Historical archive complete: \*\*false\*\* \(diagnostic only/u);
 });
 
 test('native oracle declares its DLL dependency even when the environment is passed as a parameter', () => {

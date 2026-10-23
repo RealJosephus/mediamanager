@@ -25,7 +25,7 @@ test('validation cannot report success for missing, duplicate, failing or incomp
   }
   assert.equal(successfulRun(0, { ...counts, tests: 0, pass: 0 }), false);
   assert.equal(successfulRun(0, { ...counts, tests: 4 }), false);
-  const stable = { candidateUnchanged: true, inputUnchanged: true, preflightReady: true };
+  const stable = { candidateUnchanged: true, currentInputUnchanged: true, currentReleaseInputReady: true };
   assert.equal(resultOutcome(0, counts, { ...stable, scopeComplete: true }), 'passed');
   assert.equal(resultOutcome(0, counts, { ...stable, scopeComplete: false }), 'incomplete');
   assert.equal(resultOutcome(0, counts, { ...stable, scopeComplete: true, registrationComplete: false }), 'incomplete');

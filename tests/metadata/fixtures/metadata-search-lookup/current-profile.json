@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked inputs used to record the current designated Native metadata lookup result in the same validation run.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 3471,
+      "sha256": "a655b639bc67eaca9f5194c1d4b5f5c76bd2db26ce67e61a6d0a71946b69bb38"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 8414,
+      "sha256": "429917ebdd9e76a3ed3eeca5be56fea985755ebda206f29889894824195b2516"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "ascii-compact",
+    "UserId": "ce210000-0000-0000-0000-000000000001",
+    "UserName": "Alpha",
+    "EnteredUsername": "Alpha",
+    "CompactPin": true
+  },
+  {
+    "Name": "entered-name-case",
+    "UserId": "ce210000-0000-0000-0000-000000000002",
+    "UserName": "CaseName",
+    "EnteredUsername": "casename",
+    "CompactPin": false
+  },
+  {
+    "Name": "unicode",
+    "UserId": "ce210000-0000-0000-0000-000000000003",
+    "UserName": "ß中文 café",
+    "EnteredUsername": "unicode-alias",
+    "CompactPin": true
+  }
+]

@@ -573,13 +573,13 @@ test('CI attributes a recursive required input to every required consumer while 
   assert.ok(classification.records.every(record => record.selected));
   const identity = await captureInputIdentity({ dependencies, selected, environment: {},
     preflight: { ready: true, services: [], tools: [] } });
-  assert.equal(identity.schemaVersion, 2);
+  assert.equal(identity.schemaVersion, 3);
   const absent = identity.entries.find(input => input.filename === missing);
   assert.ok(absent?.required);
   for (const consumer of [ownPath, otherPath]) {
     assert.ok(absent.requiredReasons.some(reason => reason.startsWith(consumer + ':')), `recursive required ownership retained for ${consumer}`);
   }
-  assert.ok(absent.reasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'optional history remains in the input audit');
+  assert.ok(!absent.reasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'optional history is outside current release inputs');
   assert.ok(!absent.requiredReasons.some(reason => reason.startsWith(unrelatedPath + ':')), 'an unrelated requirement must not promote optional ownership');
   assert.deepEqual(applyInputIdentity(classification, { entries: [absent] }, tracked), []);
   assert.deepEqual(classification.records.map(record => record.selected), [false, false, true]);

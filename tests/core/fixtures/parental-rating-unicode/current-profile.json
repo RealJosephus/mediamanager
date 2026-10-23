@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs used to record the current designated Native parental-rating observation in the same validation run.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 9403,
+      "sha256": "b6961ff6d4a342f8d96aec670513c5e3e51bb3b7c5ea0e2e6dfca2804151d59d"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 3062,
+      "sha256": "9fa7ff47b71d93ffc64c5b15a56ff265b86c0ad79e1f92c1792d30dc87b9e8a0"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

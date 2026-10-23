@@ -1,9 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createApplication } from '../../src/http/application.js';
 import { canDeleteItem } from '../../src/library/delete-permission.js';
 import { visibleItem } from '../../src/library/permissions.js';
@@ -11,26 +8,31 @@ import { parentChainForItem } from '../../src/library/collection-membership.js';
 import { idKey, nonemptyId } from '../../src/library/records.js';
 import { normalizeDeletionRecording } from './fixtures/item-deletion/normalize.js';
 import { assertProjectedEqual, publicJsonBody } from '../comparison-observations.js';
-import { root, input, native, provenance, fixtureId, entities, userFor, permissionOptions, stateFor, visibilityOptions } from './item-deletion-fixture.js';
+import { input, recordCurrentItemDeletionOnce } from './item-deletion-fixture.js';
+import { fixtureId, entities, userFor, permissionOptions, stateFor, visibilityOptions } from './item-deletion-state.js';
 
-test('Item DELETE native recording seals request inputs, driver and two independent captures', async () => {
-  const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-  for (const file of Object.values(provenance.files)) assert.equal(sha(await readFile(path.resolve(fileURLToPath(root), file.filename))), file.sha256, file.filename);
-  assert.equal(provenance.candidateVerified, false);
-  assert.equal(native.inputSha256, provenance.files.input.sha256);
-  const first = JSON.parse(await readFile(provenance.files.rawRecording.filename, 'utf8'));
-  const repeat = JSON.parse(await readFile(provenance.repeat.filename, 'utf8'));
-  assert.deepEqual(normalizeDeletionRecording(first), native);
-  assert.deepEqual(normalizeDeletionRecording(repeat), native);
-  assert.equal(sha(await readFile(provenance.repeat.filename)), provenance.repeat.rawSha256);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
+const currentOptions = { skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 240000 };
+
+test('Item DELETE records the current designated Native HTTP and permission observation', currentOptions, async () => {
+  const { inputBytes, input: currentInput, native } = await recordCurrentItemDeletionOnce();
+  assert.equal(native.inputSha256, createHash('sha256').update(inputBytes).digest('hex'));
+  assert.deepEqual(currentInput, input);
   assert.equal(native.results.length, input.cases.length);
   assert.deepEqual(native.results.map(row => row.name), input.cases.map(row => row.name));
-  for (const assembly of provenance.assemblies)
-    assert.equal(sha(await readFile(path.join(provenance.jellyfin.assemblyDirectory, assembly.name + '.dll'))), assembly.sha256, assembly.name);
+  assert.deepEqual(native.permissionMatrix.map(row => row.policy), input.permissionPolicies);
+  const expectedIds = entities().map(item => idKey(item.Id)).sort();
+  for (const matrix of native.permissionMatrix) {
+    assert.deepEqual(matrix.items.map(item => item.id).sort(), expectedIds);
+  }
 });
-for (const matrix of native.permissionMatrix) {
-  test('typed deletion permission matches native with and without user: ' + matrix.policy, async () => {
-    const items = entities(), state = stateFor(items), user = userFor({ policy: matrix.policy });
+
+for (const policy of input.permissionPolicies) {
+  test('typed deletion permission matches current Native with and without user: ' + policy, currentOptions, async () => {
+    const { native } = await recordCurrentItemDeletionOnce();
+    const matrix = native.permissionMatrix.find(row => row.policy === policy);
+    assert.ok(matrix, policy);
+    const items = entities(), state = stateFor(items), user = userFor({ policy });
     for (const expected of matrix.items) {
       const item = state.byId.get(expected.id);
       assert.ok(item);
@@ -40,8 +42,11 @@ for (const matrix of native.permissionMatrix) {
   });
 }
 for (const sample of input.cases) {
-  test('Item DELETE actual controller/binding differential: ' + sample.name, async t => {
-    const expected = native.results.find(row => row.name === sample.name), items = new Map(entities().map(item => [idKey(item.Id), item]));
+  test('Item DELETE actual controller/binding differential: ' + sample.name, currentOptions, async t => {
+    const { native } = await recordCurrentItemDeletionOnce();
+    const expected = native.results.find(row => row.name === sample.name);
+    assert.ok(expected, sample.name);
+    const items = new Map(entities().map(item => [idKey(item.Id), item]));
     const calls = [], committed = [], user = userFor(sample);
     const userId = sample.claim === 'empty' ? fixtureId(0) : sample.claim === 'absent' ? undefined
       : sample.claim === 'missing' ? fixtureId(92) : user.Id;

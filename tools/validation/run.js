@@ -70,9 +70,9 @@ export function successfulRun(exitCode, counts) {
 }
 
 export function resultOutcome(exitCode, counts, {
-  candidateUnchanged, inputUnchanged, preflightReady, scopeComplete = true, registrationComplete = true,
+  candidateUnchanged, currentInputUnchanged, currentReleaseInputReady, scopeComplete = true, registrationComplete = true,
 }) {
-  if (!candidateUnchanged || !inputUnchanged || !preflightReady || !scopeComplete || !registrationComplete) return 'incomplete';
+  if (!candidateUnchanged || !currentInputUnchanged || !currentReleaseInputReady || !scopeComplete || !registrationComplete) return 'incomplete';
   return successfulRun(exitCode, counts) ? 'passed' : 'failed';
 }
 
@@ -263,12 +263,14 @@ export async function main(argv = process.argv.slice(2)) {
     timezone: environment.TZ || Intl.DateTimeFormat().resolvedOptions().timeZone,
     configuration: Object.fromEntries(Object.entries(environment).filter(([key]) => key === 'TZ' || key.startsWith('MEDIAMANAGER_'))
       .map(([key, value]) => [key, /(?:PASSWORD|TOKEN|SECRET|POSTGRES)/u.test(key) ? { configured: Boolean(value) } : value])),
-    candidateEntriesSha256: candidate.entriesSha256, inputEntriesSha256: inputIdentity.entriesSha256, preflight: inputs };
+    candidateEntriesSha256: candidate.entriesSha256, currentInputEntriesSha256: inputIdentity.entriesSha256,
+    historicalArchiveComplete: inputIdentity.historicalArchiveComplete, historicalArchive: inputIdentity.historicalArchive,
+    preflight: inputs };
   const save = (name, value) => writeFile(path.join(output, name), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
   await save('inventory.json', dependencies);
   await save('candidate.json', candidate);
   await save('inputs-before.json', inputIdentity);
-  if (!options.preflightOnly && inputs.ready && inputIdentity.ready && scopeComplete) {
+  if (!options.preflightOnly && inputIdentity.currentReleaseInputReady && scopeComplete) {
     const registrationOutput = path.join(output, 'test-registrations.json');
     const args = ['--test', `--test-reporter=${registrationReporterUrl}`, `--test-concurrency=${options.concurrency}`, ...selected];
     record.command = { executable: process.execPath, args };
@@ -311,17 +313,21 @@ export async function main(argv = process.argv.slice(2)) {
       && sameCandidate(candidateBeforeAfterInventory, after) && record.inventoryDifferencesAfter.length === 0;
     await save('candidate-after.json', after);
     await save('inputs-after.json', inputsAfter);
-    record.inputUnchanged = inputsUnchanged(inputIdentity, inputsAfter);
-    record.inputEntriesSha256After = inputsAfter.entriesSha256;
+    record.currentInputUnchanged = inputsUnchanged(inputIdentity, inputsAfter);
+    record.currentInputEntriesSha256After = inputsAfter.entriesSha256;
+    record.historicalArchiveCompleteAfter = inputsAfter.historicalArchiveComplete;
+    record.historicalArchiveAfter = inputsAfter.historicalArchive;
     record.scopeComplete &&= record.registrationComplete;
     record.outcome = resultOutcome(code, counts, { candidateUnchanged: record.candidateUnchanged,
-      inputUnchanged: record.inputUnchanged, preflightReady: record.preflightAfter.ready && inputsAfter.ready,
+      currentInputUnchanged: record.currentInputUnchanged, currentReleaseInputReady: inputsAfter.currentReleaseInputReady,
       scopeComplete: record.scopeComplete, registrationComplete: record.registrationComplete });
   }
   record.finishedAt = new Date().toISOString();
   await save('result.json', record);
   console.log(JSON.stringify({ output, outcome: record.outcome, executed: record.executed, counts: record.counts,
-    selected: selected.length, notSelected: record.notSelected.length, preflightReady: inputs.ready && inputIdentity.ready }, null, 2));
+    selected: selected.length, notSelected: record.notSelected.length,
+    currentReleaseInputReady: inputIdentity.currentReleaseInputReady,
+    historicalArchiveComplete: inputIdentity.historicalArchiveComplete }, null, 2));
   return record.outcome === 'passed' ? 0 : 2;
 }
 

@@ -11,9 +11,10 @@ export function ciSummary(scope, result) {
     `Outcome: **${result.outcome}**. ${scope.releasePair
       ? `Strict full pair acceptance on this platform: **${result.strictPairAcceptance === true}**. The cross-platform aggregation must verify all three artifacts; release acceptance remains false.`
       : scope.profile === 'full'
-      ? 'The strict full profile retains every discovered test. Release acceptance still requires two independent runs of the same candidate and inputs.'
+      ? 'The strict full profile retains every discovered test. Release acceptance still requires two independent runs of the same candidate and current release inputs.'
       : 'This is an explicit available-input subset; release full-profile acceptance remains separate.'}`, '',
-    'All selected tests retain the strict zero-failure, zero-skip, registration and unchanged-input gates. Test failures never change selection.', '',
+    `Current release inputs ready: **${scope.currentReleaseInputReady === true}**. Historical archive complete: **${scope.historicalArchiveComplete === true}** (diagnostic only; it never changes selection, outcome, or release-pair acceptance).`, '',
+    'All selected tests retain the strict zero-failure, zero-skip, registration and unchanged-current-input gates. Test failures never change selection.', '',
     '### Excluded files', '', '| Test | Dependency or scope reason |', '| --- | --- |'];
   for (const record of scope.excluded) lines.push(`| ${record.path} | ${[...new Set(record.reasons.map(reason =>
     [reason.code, reason.service ?? reason.tool].filter(Boolean).join(': ')))].join(', ').slice(0, 300).replaceAll('|', '\\|')} |`);
@@ -24,7 +25,7 @@ export function ciSummary(scope, result) {
     lines.push('', '### Independent strict full runs', '', '| Run | Verified | Passed tests | Evidence directory |', '| --- | --- | --- | --- |');
     for (const round of result.rounds ?? []) lines.push(`| ${round.index} | ${round.verified} | ${round.counts?.pass ?? 'Unavailable'} | strict-full-${round.index} |`);
     if (!result.rounds?.length) lines.push('| None | false | 0 | Shared input preflight did not complete |');
-    lines.push('', 'The same protected input identity is required across the preflight and both runs. Product and production-scale acceptance remain separate.');
+    lines.push('', 'The same protected current release input identity is required across the preflight and both runs. Historical archive diagnostics are excluded. Product and production-scale acceptance remain separate.');
   }
   lines.push('', 'Complete dependency ownership, paths and errors are preserved in the scope.json artifact.');
   return lines.join('\n') + '\n';

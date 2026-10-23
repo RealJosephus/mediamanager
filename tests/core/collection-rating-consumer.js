@@ -11,6 +11,7 @@ import { idKey } from '../../src/library/records.js';
 import { createNativeItemCohort } from '../../src/library/native-item-cohort.js';
 import { metadataChildSequence } from '../../src/library/metadata-child-sequence.js';
 import { updateMetadataFromChildren } from '../../src/metadata/children-metadata.js';
+import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 const collectionId = 'cf100000-0000-0000-0000-000000999999';
@@ -39,8 +40,10 @@ export async function verifyChildMetadataRatingConsumer(t, samples, nativePair) 
         try { await cohort.capture(child, { ordinal: BigInt(index + 1) }); }
         finally { childOwner.release(); await linkedChildren.flushReleases(); }
       }
-      await updateMetadataFromChildren(item, sequence, true, 0, { defaultCountry: 'US' });
-      assert.equal(item.OfficialRating, nativePair(sample).OfficialRating, sample.Name);
+      const updateType = await updateMetadataFromChildren(item, sequence, true, 0, { defaultCountry: 'US' });
+      const expected = nativePair(sample);
+      assert.equal(item.OfficialRating, expected.OfficialRating, sample.Name);
+      assert.equal(updateType !== ItemUpdateType.None, expected.Changed, `${sample.Name} changed`);
     } finally {
       await sequence.close(); owner.release(); await linkedChildren.flushReleases();
     }

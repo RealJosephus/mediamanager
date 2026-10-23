@@ -5,6 +5,7 @@ import { lstat, mkdir, mkdtemp, readFile, readdir, readlink, realpath, rm, stat,
 import path from 'node:path';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { captureInputIdentity, inputsUnchanged } from '../../tools/validation/inputs.js';
+import { currentInputDigest } from '../../tools/validation/input-receipt.js';
 import { resultOutcome } from '../../tools/validation/run.js';
 import { repositoryRoot, validationPath } from '../../tools/validation/paths.js';
 import { collageFontFiles } from '../../src/images/font-collection.js';
@@ -15,7 +16,9 @@ import { applyInputIdentity, classify } from '../../tools/ci/scope.js';
 import '../../src/images/user-view-collage.js';
 
 const counts = { tests: 1, suites: 0, pass: 1, fail: 0, cancelled: 0, skipped: 0, todo: 0 };
-const outcome = inputUnchanged => resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged, preflightReady: true });
+const outcome = currentInputUnchanged => resultOutcome(0, counts, {
+  candidateUnchanged: true, currentInputUnchanged, currentReleaseInputReady: true,
+});
 
 async function temporaryInputs(t) {
   const root = path.resolve(repositoryRoot, '.test-output');
@@ -45,13 +48,31 @@ test('shared fixture roots keep nested execution pins with their actual file or 
   const capture = overrides => captureInputIdentity({ selected: [consumer], dependencies: { entries: [entry(overrides)] },
     environment: {}, preflight: { ready: true, services: [], tools: [] } });
   const shared = await capture({ fixtureReferences: [{ filename: used }] });
-  assert.equal(shared.ready, true);
+  assert.equal(shared.schemaVersion, 3);
+  assert.equal(shared.currentReleaseInputReady, true);
+  assert.equal(Object.hasOwn(shared, 'ready'), false);
+  assert.ok(shared.entries.every(input => input.required === true));
+  assert.equal(typeof shared.historicalArchiveComplete, 'boolean');
+  assert.equal(shared.historicalArchive.auditStatus, 'valid');
+  const archiveOnly = structuredClone(shared);
+  archiveOnly.historicalArchiveComplete = !shared.historicalArchiveComplete;
+  archiveOnly.historicalArchive = { ...archiveOnly.historicalArchive, auditStatus: 'changed-diagnostic' };
+  assert.equal(inputsUnchanged(shared, archiveOnly), true, 'archive diagnostics are outside the current release input identity');
+  assert.equal(inputsUnchanged(shared, { ...shared, schemaVersion: 2 }), false, 'schema-2 receipts are not accepted through a compatibility path');
+  assert.equal(inputsUnchanged(shared, { ...shared, ready: true }), false, 'schema-3 receipts reject the retired ready alias');
+  assert.equal(inputsUnchanged(shared, { ...shared, futureCurrentInput: 'unhashed' }), false,
+    'unknown receipt fields require a schema and canonical projection change');
+  const contradictory = structuredClone(shared);
+  contradictory.entries[0].invalidExpectedDigest = true;
+  assert.equal(currentInputDigest(contradictory), null, 'invalid expected-digest markers cannot retain current readiness');
+  assert.equal(currentInputDigest({ ...shared, entries: [], currentReleaseInputReady: true }), null,
+    'an empty protected current input set is never release-ready');
   assert.equal(shared.entries.some(input => input.filename === missing && input.required), false,
     'a sibling file does not acquire a nested fixture consumer\'s original execution inputs');
   const direct = await capture({ fixtureReferences: [{ filename: manifest }] });
   const tree = await capture({ declaredReferences: [{ filename: directory, required: true, dynamic: false, kind: 'directory', available: true }] });
   for (const identity of [direct, tree]) {
-    assert.equal(identity.ready, false);
+    assert.equal(identity.currentReleaseInputReady, false);
     const required = identity.entries.find(input => input.filename === missing);
     assert.equal(required.required, true);
     assert.ok(required.requiredReasons.every(reason => reason.startsWith(consumer + ':')));
@@ -155,7 +176,7 @@ test('CI binds the entire verified dotnet installation, including reference pack
     preflight: { ready: true, tools: [{ name: 'dotnet', executable, available: true }],
       services: [{ name: 'dotnet', filename: executable, available: true }] } };
   const before = await captureInputIdentity(options), installed = before.entries.find(entry => entry.filename === root);
-  assert.equal(before.ready, true);
+  assert.equal(before.currentReleaseInputReady, true);
   assert.equal(installed.kind, 'directory'); assert.equal(installed.required, true); assert.equal(installed.available, true);
   assert.ok(installed.requiredReasons.includes('runtime:dotnet-installation'));
   assert.ok(installed.entries.some(entry => entry.name === 'packs'));
@@ -288,12 +309,12 @@ test('validation follows JSON fixture provenance and binds external dynamic inpu
     declaredReferences: [], fixtureReferences: [{ ...await describeFile(manifest) }] }] },
   preflight: { ready: true, tools: [], services: [] }, environment: { MEDIAMANAGER_VALIDATION_INPUT_ROOT: external } };
   const before = await captureInputIdentity(options);
-  assert.equal(before.ready, true, 'a provenance-only missing contract is recorded without inventing a mandatory read');
-  assert.ok(before.entries.some(entry => entry.filename === path.dirname(summary)));
+  assert.equal(before.currentReleaseInputReady, true, 'a provenance-only missing contract does not become a current release input');
+  assert.equal(before.entries.some(entry => entry.filename === path.dirname(summary)), false);
   await writeFile(summary, '{"observed":false}');
-  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'incomplete');
+  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'passed');
   await rm(summary);
-  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'incomplete');
+  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'passed');
 });
 
 test('validation binds absolute prepared inputs and source chains without treating DTO media paths as inputs', async t => {
@@ -311,21 +332,22 @@ test('validation binds absolute prepared inputs and source chains without treati
   await writeFile(bootstrap, JSON.stringify({ sourceDatabase: database, bootstrapScript: { path: script, sha256: 'a'.repeat(64) } }));
   await writeFile(path.join(recording, 'native-contract.json'), '{"cases":[]}');
   await writeFile(manifest, JSON.stringify({ sourceEvidence: '.agent-docs/evidence/recording/native-contract.json' }));
-  await writeFile(provenance, JSON.stringify({ preparedInputs: [{ kind: 'nativeReferencePreparation', path: bootstrap, sha256: 'b'.repeat(64) }],
+  await writeFile(provenance, JSON.stringify({ preparedInputs: [{ kind: 'nativeReferencePreparation', path: bootstrap,
+    sha256: 'b'.repeat(64), required: true }],
     items: [{ Path: mediaPath, path: mediaPath }] }));
   const options = { selected: ['tests/controlled.test.js'], dependencies: { entries: [{ path: 'tests/controlled.test.js',
     declaredReferences: [], fixtureReferences: [{ ...await describeFile(manifest) }] }] },
   preflight: { ready: true, tools: [], services: [] }, environment: { MEDIAMANAGER_VALIDATION_INPUT_ROOT: evidence } };
   const before = await captureInputIdentity(options);
-  assert.ok(before.entries.some(entry => entry.filename === database));
-  assert.ok(before.entries.some(entry => entry.filename === script));
+  assert.equal(before.entries.some(entry => entry.filename === database), false);
+  assert.equal(before.entries.some(entry => entry.filename === script), false);
   assert.equal(before.entries.some(entry => entry.filename === mediaPath), false);
-  assert.equal(before.ready, true);
+  assert.equal(before.currentReleaseInputReady, true);
   await writeFile(database, 'native database changed');
-  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'incomplete');
+  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'passed');
   await writeFile(database, 'native database before');
   await writeFile(script, 'bootstrap implementation changed');
-  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'incomplete');
+  assert.equal(outcome(inputsUnchanged(before, await captureInputIdentity(options))), 'passed');
 });
 
 test('validation rejects missing or changed required helper inputs before execution', async t => {
@@ -339,18 +361,19 @@ test('validation rejects missing or changed required helper inputs before execut
     declaredReferences: [], fixtureReferences: [await describeFile(manifest)] }] },
   preflight: { ready: true, tools: [], services: [] }, environment: {} };
   const missing = await captureInputIdentity(options);
-  assert.equal(missing.ready, false, 'a dynamic required helper must exist before the runner executes tests');
+  assert.equal(missing.currentReleaseInputReady, false, 'a dynamic required helper must exist before the runner executes tests');
   assert.equal(missing.entries.find(entry => entry.filename === helper).required, true);
   await writeFile(helper, original);
   const valid = await captureInputIdentity(options);
-  assert.equal(valid.ready, true, 'missing historical source descriptions remain optional');
+  assert.equal(valid.currentReleaseInputReady, true, 'missing historical source descriptions remain optional');
   assert.equal(valid.entries.find(entry => entry.filename === helper).expectedDigestMatched, true);
   await writeFile(helper, 'different native helper');
   const changed = await captureInputIdentity(options), unchanged = await captureInputIdentity(options);
   assert.equal(inputsUnchanged(changed, unchanged), true, 'stable bytes do not prove that the pinned helper was used');
-  assert.equal(changed.ready, false);
+  assert.equal(changed.currentReleaseInputReady, false);
   assert.equal(changed.entries.find(entry => entry.filename === helper).expectedDigestMatched, false);
-  assert.equal(resultOutcome(0, counts, { candidateUnchanged: true, inputUnchanged: true, preflightReady: changed.ready }), 'incomplete');
+  assert.equal(resultOutcome(0, counts, { candidateUnchanged: true, currentInputUnchanged: true,
+    currentReleaseInputReady: changed.currentReleaseInputReady }), 'incomplete');
 });
 
 test('validation preserves required pins across duplicate and transitive manifest references', async t => {
@@ -368,14 +391,14 @@ test('validation preserves required pins across duplicate and transitive manifes
     declaredReferences: [], fixtureReferences: [await describeFile(manifest)] }] },
   preflight: { ready: true, tools: [], services: [] }, environment: {} };
   const valid = await captureInputIdentity(options), entry = valid.entries.find(entry => entry.filename === helper);
-  assert.equal(valid.ready, true); assert.equal(entry.required, true);
+  assert.equal(valid.currentReleaseInputReady, true); assert.equal(entry.required, true);
   assert.deepEqual(entry.expectedDigests, [digest], 'optional descriptions cannot downgrade or add mandatory pins');
   content.conflict = { filename: helper, sha256: 'c'.repeat(64), required: true };
   await writeFile(helperManifest, JSON.stringify(content));
   await writeFile(manifest, JSON.stringify({ helperManifest: { filename: helperManifest,
     sha256: createHash('sha256').update(await readFile(helperManifest)).digest('hex'), required: true } }));
   const conflicting = await captureInputIdentity(options);
-  assert.equal(conflicting.ready, false, 'every required pin must agree with the bytes used');
+  assert.equal(conflicting.currentReleaseInputReady, false, 'every required pin must agree with the bytes used');
   assert.equal(conflicting.entries.find(entry => entry.filename === helper).expectedDigests.length, 2);
 });
 
@@ -396,19 +419,19 @@ test('validation rejects malformed explicit required pins while ignoring ordinar
       historical: { filename: path.join(helpers, 'missing.cs'), sha256: 'historical malformed description' },
       items: [{ Path: mediaPath, required: true }, { path: mediaPath, required: true }] }));
     const identity = await captureInputIdentity(options), entry = identity.entries.find(value => value.filename === helper);
-    assert.equal(identity.ready, false); assert.equal(entry.required, true);
+    assert.equal(identity.currentReleaseInputReady, false); assert.equal(entry.required, true);
     assert.equal(entry.invalidExpectedDigest, true); assert.equal(entry.expectedDigestMatched, false);
     assert.equal(identity.entries.some(value => value.filename === mediaPath), false);
   }
   await writeFile(manifest, JSON.stringify({ helper: { filename: helper, entriesSha256: 'invalid', required: true } }));
-  assert.equal((await captureInputIdentity(options)).ready, false);
+  assert.equal((await captureInputIdentity(options)).currentReleaseInputReady, false);
   for (const secondary of ['', 'b'.repeat(64)]) {
     await writeFile(manifest, JSON.stringify({ helper: { filename: helper, sha256: validDigest,
       entriesSha256: secondary, required: true } }));
-    assert.equal((await captureInputIdentity(options)).ready, false, 'a valid first pin cannot hide another invalid or conflicting declaration');
+    assert.equal((await captureInputIdentity(options)).currentReleaseInputReady, false, 'a valid first pin cannot hide another invalid or conflicting declaration');
   }
   await writeFile(manifest, JSON.stringify({ items: [{ Path: mediaPath, required: true }, { path: mediaPath, required: true }],
     historical: { filename: path.join(helpers, 'missing.cs'), sha256: 'historical malformed description' } }));
   const ordinary = await captureInputIdentity(options);
-  assert.equal(ordinary.ready, true); assert.equal(ordinary.entries.some(value => value.filename === mediaPath), false);
+  assert.equal(ordinary.currentReleaseInputReady, true); assert.equal(ordinary.entries.some(value => value.filename === mediaPath), false);
 });

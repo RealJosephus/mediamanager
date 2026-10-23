@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "scope": "Historical archive inventory only. Archive completeness is diagnostic and must not affect current release inputs, readiness, outcome, or release-pair acceptance.",
+  "profiles": [
+    {
+      "id": "search-lookup-sources",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/metadata/fixtures/metadata-search-lookup/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "current-identity",
+        "consumers": [
+          "tests/metadata/search-lookup.test.js"
+        ]
+      }
+    },
+    {
+      "id": "nfo-repeats",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/metadata/fixtures/nfo-partial-reader/repeat.json",
+        "tests/metadata/fixtures/nfo-scalar-provider/repeat.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/plugins/native-repeat.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-rating",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/core/fixtures/parental-rating-unicode/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "current-identity",
+        "consumers": [
+          "tests/core/parental-rating-unicode.test.js",
+          "tests/database/postgres-rating-unicode.test.js"
+        ]
+      }
+    },
+    {
+      "id": "password-reader",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/http/fixtures/password-reset/consumer.json"
+      ],
+      "currentExecution": {
+        "disposition": "current-identity",
+        "consumers": [
+          "tests/http/password-reset-consumer.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-startup",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/http/fixtures/startup/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/http/startup.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-collection-playlist",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/library/fixtures/collection-playlist-resolution/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/library/collection-playlist-resolution.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-charset",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/core/fixtures/native-charset/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/core/native-charset.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-json",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/core/fixtures/native-json-encoder/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/core/native-json-encoder.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-http-delete",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/http/fixtures/item-deletion/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "current-identity",
+        "consumers": [
+          "tests/http/item-deletion.test.js",
+          "tests/http/item-deletion-postgres.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-delete-dto",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/library/fixtures/delete-dto-permission/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "current-identity",
+        "consumers": [
+          "tests/library/delete-dto-permission.test.js"
+        ]
+      }
+    },
+    {
+      "id": "sealed-warm",
+      "archiveStatus": "incomplete",
+      "roots": [
+        "tests/library/fixtures/native-item-cache/provenance.json",
+        "tests/library/fixtures/warm-item-deletion/provenance.json",
+        "tests/http/fixtures/warm-item-deletion/provenance.json"
+      ],
+      "currentExecution": {
+        "disposition": "historical-seal",
+        "consumers": [
+          "tests/library/native-item-cache.test.js",
+          "tests/library/warm-item-deletion.test.js",
+          "tests/http/warm-item-deletion.test.js"
+        ]
+      }
+    }
+  ]
+}

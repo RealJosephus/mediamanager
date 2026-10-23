@@ -111,7 +111,10 @@ export async function main(argv = process.argv.slice(2)) {
     provisionedServices: provisionedServicesFor(environment), provisionedTools, discovered: classification.records.map(record => record.path),
     selected: classification.records.filter(record => record.selected).map(record => record.path),
     excluded: classification.records.filter(record => !record.selected),
-    records: classification.records, infrastructureErrors, inputEntriesSha256: identity?.entriesSha256 ?? null };
+    records: classification.records, infrastructureErrors, currentInputEntriesSha256: identity?.entriesSha256 ?? null,
+    currentReleaseInputReady: identity?.currentReleaseInputReady ?? null,
+    historicalArchiveComplete: identity?.historicalArchiveComplete ?? null,
+    historicalArchive: identity?.historicalArchive ?? null };
   scope.selectionSha256 = sha256(JSON.stringify(scope.selected));
   await save(path.join(output, 'inputs-plan.json'), identity);
   const scopeFile = path.join(output, 'scope.json'); await save(scopeFile, scope);

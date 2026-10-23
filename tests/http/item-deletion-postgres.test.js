@@ -9,11 +9,14 @@ import { postgresTestRow } from '../database/postgres-fixture.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { normalizeDeletionRecording } from './fixtures/item-deletion/normalize.js';
 import { assertProjectedEqual, publicJsonBody } from '../comparison-observations.js';
-import { input, native, fixtureId, entities, userFor } from './item-deletion-fixture.js';
+import { input, recordCurrentItemDeletionOnce } from './item-deletion-fixture.js';
+import { fixtureId, entities, userFor } from './item-deletion-state.js';
 
+export const requiredValidationServices = ['postgres', 'dotnet', 'jellyfinDll'];
 test('postgres: Item DELETE controller matrix uses production bounded lookup and permission with controlled SQL deletion', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES || !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 300000,
 }, async t => {
+  const { native } = await recordCurrentItemDeletionOnce();
   const fixture = await setupChildrenFixture(t);
   fixture.library.options.userRoot = { Id: fixtureId(1) };
   const creator = new ItemCreationService(fixture); fixture.library.itemCreation = creator;
@@ -67,6 +70,7 @@ test('postgres: Item DELETE controller matrix uses production bounded lookup and
       }
     });
     const expected = native.results.find(row => row.name === sample.name);
+    assert.ok(expected, sample.name);
     const response = await fetch('http://127.0.0.1:' + application.server.address().port + expected.requestPath, {
       method: 'DELETE', headers: { Accept: sample.accept ?? 'application/json' },
     });

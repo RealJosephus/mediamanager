@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { setupChildrenFixture } from './children-fixture.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { recordCurrentOracleOnce } from '../helpers/current-oracle.js';
 
-const root = new URL('./fixtures/metadata-search-lookup/', import.meta.url);
-const input = JSON.parse(await readFile(new URL('input.json', root), 'utf8'));
-const native = JSON.parse(await readFile(new URL('native.json', root), 'utf8'));
+export const requiredValidationServices = ['postgres', 'dotnet', 'jellyfinDll'];
+const current = () => recordCurrentOracleOnce({ owner: import.meta.url, label: 'metadata-search-lookup',
+  project: 'tests/metadata/fixtures/metadata-search-lookup/Oracle.csproj',
+  input: 'tests/metadata/fixtures/metadata-search-lookup/input.json' });
 const nativeType = type => `MediaBrowser.Controller.Entities.${type === 'Movie' ? 'Movies' : 'TV'}.${type}`;
 const targetId = 'E1000000-0000-0000-0000-000000000001';
 const overviewFor = info => {
@@ -17,32 +17,20 @@ const overviewFor = info => {
   return `${info.Name ?? '<null>'}|${info.Year ?? '<null>'}|${info.IsAutomated}|${ids?.[key] ?? '<none>'}`;
 };
 
-test('metadata lookup oracle binds actual native services, source and provider consumer projections', async () => {
-  const provenance = JSON.parse(await readFile(new URL('provenance.json', root), 'utf8'));
-  for (const [name, entry] of Object.entries(provenance.files)) {
-    const file = name === 'buildProperties' ? new URL('../Directory.Build.props', import.meta.url) : new URL(entry.filename, root);
-    assert.equal(createHash('sha256').update(await readFile(file)).digest('hex'), entry.sha256);
-  }
-  assert.equal(provenance.oracle.passed, true);
-  assert.equal(provenance.oracle.jellyfinDll.sha256, 'a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767');
-  for (const source of provenance.sources) {
-    const filename = path.resolve(process.env.MEDIAMANAGER_JELLYFIN_SOURCE ?? 'D:/jellyfin',
-      source.filename.slice('D:/jellyfin/'.length));
-    assert.equal(createHash('sha256').update(await readFile(filename)).digest('hex'), source.sha256);
-  }
-  const recordBytes = await readFile(provenance.oracle.record.filename);
-  assert.equal(createHash('sha256').update(recordBytes).digest('hex'), provenance.oracle.record.sha256);
-  const record = JSON.parse(recordBytes);
-  assert.equal(record.passed, true);
-  assert.equal(record.sourceFilesSha256, provenance.oracle.sourceFilesSha256);
-  if (native.sourceFilesSha256 !== undefined) assert.equal(native.sourceFilesSha256, record.sourceFilesSha256);
-  assert.equal(native.inputSha256, provenance.files.input.sha256);
+test('metadata lookup oracle records current native provider consumer projections', {
+  skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 180000,
+}, async () => {
+  const { inputBytes, input, native } = await current();
+  assert.equal(native.inputSha256, createHash('sha256').update(inputBytes).digest('hex'));
   assert.equal(input.length, 15);
   assert.deepEqual(native.results.map(entry => entry.name), input.map(entry => entry.name));
   assert.ok(native.results.every(entry => entry.lookups.length === 1 && entry.Overview === overviewFor(entry.lookups[0])));
 });
 
-test('PostgreSQL metadata refresh sends native identify and automated lookup inputs and persists provider results', async t => {
+test('PostgreSQL metadata refresh sends current native identify and automated lookup inputs and persists provider results', {
+  skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 240000,
+}, async t => {
+  const { input, native } = await current();
   const fixture = await setupChildrenFixture(t);
   for (const scenario of input) await t.test(scenario.name, async () => {
     const Id = await fixture.seed({ target: 'target', items: [{ key: 'target', Id: targetId, type: scenario.type,

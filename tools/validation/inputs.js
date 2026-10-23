@@ -11,13 +11,39 @@ import { currentNativeSqliteInputs } from './current-native-sqlite-inputs.js';
 import { jellyfinWebInputs } from './jellyfin-web-inputs.js';
 import { embyWebInputs } from './emby-web-inputs.js';
 import { browserInputs } from './browser-inputs.js';
+import { currentEntriesReady, currentInputDigest, currentInputSchemaVersion, validCurrentInputReceipt } from './input-receipt.js';
 
 const isDigest = value => typeof value === 'string' && /^[a-f0-9]{64}$/iu.test(value);
+const historicalArchiveLedger = path.join(repositoryRoot, 'tools/validation/historical-input-archive.json');
+const historicalArchiveRootsById = new Map([
+  ['search-lookup-sources', ['tests/metadata/fixtures/metadata-search-lookup/provenance.json']],
+  ['nfo-repeats', ['tests/metadata/fixtures/nfo-partial-reader/repeat.json', 'tests/metadata/fixtures/nfo-scalar-provider/repeat.json']],
+  ['sealed-rating', ['tests/core/fixtures/parental-rating-unicode/provenance.json']],
+  ['password-reader', ['tests/http/fixtures/password-reset/consumer.json']],
+  ['sealed-startup', ['tests/http/fixtures/startup/provenance.json']],
+  ['sealed-collection-playlist', ['tests/library/fixtures/collection-playlist-resolution/provenance.json']],
+  ['sealed-charset', ['tests/core/fixtures/native-charset/provenance.json']],
+  ['sealed-json', ['tests/core/fixtures/native-json-encoder/provenance.json']],
+  ['sealed-http-delete', ['tests/http/fixtures/item-deletion/provenance.json']],
+  ['sealed-delete-dto', ['tests/library/fixtures/delete-dto-permission/provenance.json']],
+  ['sealed-warm', ['tests/library/fixtures/native-item-cache/provenance.json',
+    'tests/library/fixtures/warm-item-deletion/provenance.json', 'tests/http/fixtures/warm-item-deletion/provenance.json']],
+]);
+const historicalArchiveIds = new Set(historicalArchiveRootsById.keys());
+const historicalArchiveRoots = new Set([...historicalArchiveRootsById.values()].flat());
+const currentIdentityArchiveIds = new Set(['search-lookup-sources', 'sealed-rating', 'password-reader', 'sealed-http-delete', 'sealed-delete-dto']);
 
-// These loaders read historical descriptors as bytes, rather than merely
-// quoting provenance. Keep their reviewed execution contract at the actual
-// caller/kind boundary: another kind imported by the shared loader is optional.
+// These reviewed manifests bind the bytes that their consumers execute or
+// compare. Keep each contract at the actual caller/kind boundary: another kind
+// imported by a shared loader is optional.
 const executionManifests = new Map([
+  ['tests/metadata/search-lookup.test.js', ['current-oracle', 'tests/metadata/fixtures/metadata-search-lookup/current-profile.json']],
+  ['tests/core/parental-rating-unicode.test.js', ['current-oracle', 'tests/core/fixtures/parental-rating-unicode/current-profile.json']],
+  ['tests/database/postgres-rating-unicode.test.js', ['current-oracle', 'tests/core/fixtures/parental-rating-unicode/current-profile.json']],
+  ['tests/http/password-reset-consumer.test.js', ['current-oracle', 'tests/http/fixtures/password-reset/current-profile.json']],
+  ['tests/http/item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
+  ['tests/http/item-deletion-postgres.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
+  ['tests/library/delete-dto-permission.test.js', ['current-oracle', 'tests/library/fixtures/delete-dto-permission/current-profile.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
@@ -25,10 +51,7 @@ const executionManifests = new Map([
     .map(kind => [`tests/metadata/${kind}.test.js`, ['reader-layout', kind]]),
 ]);
 const sealedExecutionManifests = new Map([
-  ['tests/metadata/search-lookup.test.js', ['search-lookup-sources', 'tests/metadata/fixtures/metadata-search-lookup/provenance.json']],
   ['tests/plugins/native-repeat.test.js', ['nfo-repeats', 'tests/metadata/fixtures/nfo-partial-reader/repeat.json']],
-  ['tests/core/parental-rating-unicode.test.js', ['sealed-rating', 'tests/core/fixtures/parental-rating-unicode/provenance.json']],
-  ['tests/http/password-reset-consumer.test.js', ['password-reader', 'tests/http/fixtures/password-reset/consumer.json']],
   ['tests/http/startup.test.js', ['sealed-startup', 'tests/http/fixtures/startup/provenance.json']],
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
@@ -36,8 +59,6 @@ const sealedExecutionManifests = new Map([
   ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
   ['tests/core/native-charset.test.js', ['sealed-charset', 'tests/core/fixtures/native-charset/provenance.json']],
   ['tests/core/native-json-encoder.test.js', ['sealed-json', 'tests/core/fixtures/native-json-encoder/provenance.json']],
-  ['tests/http/item-deletion.test.js', ['sealed-http-delete', 'tests/http/fixtures/item-deletion/provenance.json']],
-  ['tests/library/delete-dto-permission.test.js', ['sealed-delete-dto', 'tests/library/fixtures/delete-dto-permission/provenance.json']],
   ['tests/library/native-item-cache.test.js', ['sealed-warm', 'tests/library/fixtures/native-item-cache/provenance.json']],
   ['tests/library/warm-item-deletion.test.js', ['sealed-warm', 'tests/library/fixtures/warm-item-deletion/provenance.json']],
   ['tests/http/warm-item-deletion.test.js', ['sealed-warm', 'tests/http/fixtures/warm-item-deletion/provenance.json']],
@@ -52,12 +73,107 @@ export function executionManifestContract(consumer) {
   const contract = executionManifests.get(consumer);
   if (!contract) return null;
   const [kind, argument] = contract;
+  if (kind === 'current-oracle') return { kind, manifest: argument, loader: consumer };
   return { kind, ...(argument ? { argument } : {}),
     loader: kind === 'consumer' ? 'tests/consumer-contracts/fixture.js'
       : kind === 'reader-layout' ? 'tests/metadata/reader-layout-fixture.js' : 'tests/library/native-byname-filter-inputs.js',
     manifest: kind === 'consumer' ? `tests/consumer-contracts/fixtures/${argument}/provenance.json`
       : kind === 'reader-layout' ? 'tests/metadata/fixtures/reader-layouts/provenance.json'
         : 'tests/library/fixtures/native-byname-filter-inputs/binding.json' };
+}
+
+async function captureHistoricalArchive() {
+  const errors = [];
+  let bytes, ledger;
+  try {
+    bytes = await readFile(historicalArchiveLedger);
+    ledger = JSON.parse(bytes.toString('utf8'));
+  } catch (error) {
+    return { complete: false, receipt: { ledger: path.relative(repositoryRoot, historicalArchiveLedger).replaceAll('\\', '/'),
+      ledgerSha256: bytes ? sha256(bytes) : null, auditStatus: 'invalid', profiles: [], errors: [error.code ?? error.name] } };
+  }
+  const profiles = Array.isArray(ledger.profiles) ? ledger.profiles : [];
+  const ids = new Set(), roots = new Map(), consumers = new Set();
+  if (ledger.schemaVersion !== 1 || profiles.length !== 11) errors.push('The historical archive ledger must contain exactly 11 schema-1 profiles.');
+  for (const profile of profiles) {
+    if (typeof profile?.id !== 'string' || ids.has(profile.id)) errors.push(`Invalid or duplicate historical profile: ${profile?.id ?? '<missing>'}.`);
+    else ids.add(profile.id);
+    if (!['complete', 'incomplete'].includes(profile?.archiveStatus)) errors.push(`Invalid archive status: ${profile?.id ?? '<missing>'}.`);
+    const disposition = profile?.currentExecution?.disposition;
+    if (!['current-identity', 'historical-seal'].includes(disposition)) errors.push(`Invalid current execution disposition: ${profile?.id ?? '<missing>'}.`);
+    const profileRoots = Array.isArray(profile?.roots) ? profile.roots : [];
+    const profileConsumers = Array.isArray(profile?.currentExecution?.consumers) ? profile.currentExecution.consumers : [];
+    if (!profileRoots.length || !profileConsumers.length) errors.push(`Historical profile is missing roots or consumers: ${profile?.id ?? '<missing>'}.`);
+    const expectedRoots = historicalArchiveRootsById.get(profile?.id);
+    if (!expectedRoots || JSON.stringify([...profileRoots].sort()) !== JSON.stringify([...expectedRoots].sort())) {
+      errors.push(`Historical profile roots differ from the reviewed inventory: ${profile?.id ?? '<missing>'}.`);
+    }
+    for (const root of profileRoots) {
+      const normalized = typeof root === 'string' ? root.replaceAll('\\', '/') : '';
+      if (typeof root !== 'string' || !normalized || path.isAbsolute(root) || normalized.split('/').includes('..')
+        || !normalized.endsWith('.json') || roots.has(normalized)) {
+        errors.push(`Invalid or duplicate historical root: ${normalized || '<missing>'}.`); continue;
+      }
+      roots.set(normalized, profile.id);
+      try {
+        const filename = path.join(repositoryRoot, normalized), info = await lstat(filename);
+        if (!info.isFile() || info.isSymbolicLink()) throw new Error('NotRegularFile');
+        JSON.parse(await readFile(filename, 'utf8'));
+      }
+      catch (error) { errors.push(`Historical root is unavailable or invalid: ${normalized} (${error.code ?? error.name}).`); }
+    }
+    for (const consumer of profileConsumers) {
+      if (typeof consumer !== 'string' || consumers.has(consumer)) errors.push(`Invalid or duplicate historical consumer: ${consumer ?? '<missing>'}.`);
+      else consumers.add(consumer);
+      const contract = typeof consumer === 'string' ? executionManifestContract(consumer) : null;
+      if (!contract || disposition === 'historical-seal' && (contract.kind !== profile.id || !profileRoots.includes(contract.manifest))
+        || disposition === 'current-identity' && (contract.kind !== 'current-oracle' || profileRoots.includes(contract.manifest)
+          || !profileRoots.some(root => path.dirname(root) === path.dirname(contract.manifest)))) {
+        errors.push(`Historical/current execution mapping is inconsistent: ${consumer ?? '<missing>'}.`);
+      }
+      if (typeof consumer === 'string') try {
+        const info = await lstat(path.join(repositoryRoot, consumer));
+        if (!info.isFile() || info.isSymbolicLink()) errors.push(`Historical consumer is not a regular file: ${consumer}.`);
+      } catch (error) { errors.push(`Historical consumer is unavailable: ${consumer} (${error.code ?? error.name}).`); }
+    }
+  }
+  if (JSON.stringify([...ids].sort()) !== JSON.stringify([...historicalArchiveIds].sort())) {
+    errors.push('The historical archive profile inventory differs from the reviewed all-repository set.');
+  }
+  if (JSON.stringify([...roots.keys()].sort()) !== JSON.stringify([...historicalArchiveRoots].sort())) {
+    errors.push('The historical archive root inventory differs from the reviewed all-repository set.');
+  }
+  const dispositionIds = new Set(profiles.filter(profile => profile?.currentExecution?.disposition === 'current-identity')
+    .map(profile => profile.id));
+  if (JSON.stringify([...dispositionIds].sort()) !== JSON.stringify([...currentIdentityArchiveIds].sort())) {
+    errors.push('The current-identity historical profiles differ from the reviewed migration set.');
+  }
+  const expectedConsumers = new Set([
+    ...[...executionManifests].filter(([, [kind]]) => kind === 'current-oracle').map(([consumer]) => consumer),
+    ...[...sealedExecutionManifests].filter(([, [kind]]) => historicalArchiveIds.has(kind)).map(([consumer]) => consumer),
+  ]);
+  if (JSON.stringify([...consumers].sort()) !== JSON.stringify([...expectedConsumers].sort())) {
+    errors.push('The historical archive consumers differ from the current execution-contract inventory.');
+  }
+  for (const [consumer, [kind, manifest]] of sealedExecutionManifests) {
+    if (roots.has(manifest) && (!consumers.has(consumer) || roots.get(manifest) !== kind)) {
+      errors.push(`Historical execution contract is absent from the ledger: ${consumer}.`);
+    }
+  }
+  const profileSummary = profiles.map(profile => ({ id: profile.id, archiveStatus: profile.archiveStatus,
+    disposition: profile.currentExecution?.disposition })).sort((left, right) => left.id.localeCompare(right.id));
+  const auditStatus = errors.length ? 'invalid' : 'valid';
+  return { complete: auditStatus === 'valid' && profiles.every(profile => profile.archiveStatus === 'complete'),
+    receipt: { ledger: path.relative(repositoryRoot, historicalArchiveLedger).replaceAll('\\', '/'), ledgerSha256: sha256(bytes),
+      auditStatus, profiles: profileSummary, ...(errors.length ? { errors } : {}) } };
+}
+
+async function captureHistoricalArchiveSafely() {
+  try { return await captureHistoricalArchive(); }
+  catch (error) {
+    return { complete: false, receipt: { ledger: path.relative(repositoryRoot, historicalArchiveLedger).replaceAll('\\', '/'),
+      ledgerSha256: null, auditStatus: 'invalid', profiles: [], errors: [error.code ?? error.name] } };
+  }
 }
 
 // Export the descriptor projection so changes to the loader contracts can be
@@ -68,14 +184,8 @@ export function executionManifestReferences(contract, content, filename) {
     if (!descriptor || typeof descriptor.filename !== 'string') throw new Error('Invalid execution input descriptor.');
     references.push({ ...descriptor, ...options });
   };
-  if (contract.kind === 'search-lookup-sources') {
-    for (const [name, descriptor] of Object.entries(content.files)) {
-      add({ ...descriptor, filename: name === 'buildProperties'
-        ? path.resolve(repositoryRoot, 'tests/Directory.Build.props') : local(descriptor.filename) });
-    }
-    for (const source of content.sources) add({ filename: path.resolve(process.env.MEDIAMANAGER_JELLYFIN_SOURCE ?? 'D:/jellyfin',
-      source.filename.slice('D:/jellyfin/'.length)), sha256: source.sha256 });
-    add(content.oracle.record);
+  if (contract.kind === 'current-oracle') {
+    for (const descriptor of content.inputs) add({ ...descriptor, filename: local(descriptor.filename) });
   } else if (contract.kind === 'nfo-repeats' || contract.kind === 'nfo-repeat') {
     add(content.input);
     for (const record of content.recordings) for (const descriptor of [record.dotnet, record.jellyfinDll,
@@ -92,18 +202,6 @@ export function executionManifestReferences(contract, content, filename) {
     for (const [filename, descriptor] of Object.entries(content.runtime.assemblies)) {
       add({ ...descriptor, filename: path.join(path.dirname(content.runtime.jellyfinDll.path), filename) });
     }
-  } else if (contract.kind === 'sealed-rating') {
-    for (const descriptor of [content.rawRecording, content.oracleAssembly]) add(descriptor);
-    for (const source of content.sources) for (const name of ['designated', 'isolated']) add({ ...source[name], sha256: source.sha256 });
-    for (const assembly of content.actualLoadedAssemblies) add({ filename: assembly.Filename, sha256: assembly.Sha256 });
-  } else if (contract.kind === 'password-reader') {
-    add({ filename: content.rawReading, sha256: content.readingSha256 }, { nested: 'password-reading' });
-    add({ filename: content.manifest, sha256: content.manifestSha256 }, { nested: 'password-manifest' });
-    for (const descriptor of [...content.producerSources, ...content.sources]) add(descriptor);
-  } else if (contract.kind === 'password-reading') {
-    for (const descriptor of content.assemblies) add(descriptor);
-  } else if (contract.kind === 'password-manifest') {
-    for (const row of content) add(row.source);
   } else if (contract.kind === 'sealed-startup') {
     add({ filename: content.rawRecording, sha256: content.nativeSha256 });
     add(content.repeat);
@@ -149,21 +247,18 @@ export function executionManifestReferences(contract, content, filename) {
       content.repeat.record, content.repeat.raw, content.repeat.models]) {
       add({ ...descriptor, filename: descriptor.filename ?? descriptor.path });
     }
-  } else if (['sealed-json', 'sealed-http-delete', 'sealed-delete-dto', 'sealed-warm'].includes(contract.kind)) {
+  } else if (['sealed-json', 'sealed-warm'].includes(contract.kind)) {
     // Match the seal's two real reads: path.resolve(fixtureRoot, filename)
     // followed by the raw original filename. Foreign-platform paths are not
     // silently relocated into the current checkout or recorded-input map.
     for (const file of Object.values(content.files)) add({ ...file, filename: local(file.filename) });
     add(content.files.rawRecording);
-    add({ filename: content.repeat.filename, sha256: contract.kind === 'sealed-http-delete' ? content.repeat.rawSha256 : content.repeat.sha256 });
+    add({ filename: content.repeat.filename, sha256: content.repeat.sha256 });
     if (contract.kind === 'sealed-json') {
       for (const descriptor of [content.jellyfin.assembly, content.runtime.dotnet, content.runtime.oracleAssembly]) add(descriptor);
     } else {
-      if (contract.kind === 'sealed-delete-dto') add({ filename: content.sourceControl.path, sha256: content.sourceControl.sha256 });
-      if (contract.kind === 'sealed-warm') {
-        for (const descriptor of [content.jellyfin.sourceCapture, content.jellyfin.boundBuildAudit,
-          ...Object.values(content.runtime), ...Object.values(content.repeat.runtime)]) add(descriptor);
-      }
+      for (const descriptor of [content.jellyfin.sourceCapture, content.jellyfin.boundBuildAudit,
+        ...Object.values(content.runtime), ...Object.values(content.repeat.runtime)]) add(descriptor);
       for (const assembly of content.assemblies) add({ filename: `${content.jellyfin.assemblyDirectory}/${assembly.name}.dll`, sha256: assembly.sha256 });
     }
   } else if (contract.kind === 'consumer') {
@@ -216,12 +311,17 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const targets = new Map();
   const add = (filename, reason, required = true, expectedDigests = [], invalidDigest = false) => {
     const absolute = path.resolve(repositoryRoot, filename);
+    if (absolute === historicalArchiveLedger) return;
     if (!targets.has(absolute)) targets.set(absolute, { reasons: new Set(), requiredReasons: new Set(), expectedDigests: new Set() });
     targets.get(absolute).reasons.add(reason);
-    if (required) targets.get(absolute).requiredReasons.add(reason);
-    targets.get(absolute).invalidDigest ||= invalidDigest;
-    for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
+    if (required) {
+      targets.get(absolute).requiredReasons.add(reason);
+      targets.get(absolute).invalidDigest ||= invalidDigest;
+      for (const digest of expectedDigests) targets.get(absolute).expectedDigests.add(digest);
+    }
   };
+  const executionPinned = filename => [...(targets.get(path.resolve(repositoryRoot, filename))?.requiredReasons ?? [])]
+    .some(reason => /:execution-manifest(?::|$)/u.test(reason));
   if (closure.some(entry => entry.path === 'src/images/user-view-collage.js')) {
     for (const filename of collageFontFiles()) add(filename, 'runtime:collage-system-font');
   }
@@ -330,10 +430,12 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     const references = new Map();
     const reference = (target, descriptor) => {
       const previous = references.get(target), expectedDigests = new Set(previous?.expectedDigests ?? []);
-      if (descriptor.required) for (const digest of descriptor.expectedDigests ?? []) expectedDigests.add(digest.toLowerCase());
-      references.set(target, { ...descriptor, required: descriptor.required || previous?.required === true,
-        siblingDirectory: descriptor.siblingDirectory || previous?.siblingDirectory === true,
-        invalidDigest: descriptor.invalidDigest || previous?.invalidDigest === true, expectedDigests });
+      const required = descriptor.required === true;
+      if (required) for (const digest of descriptor.expectedDigests ?? []) expectedDigests.add(digest.toLowerCase());
+      references.set(target, { logical: required || previous?.required !== true ? descriptor.logical : previous.logical,
+        required: required || previous?.required === true,
+        siblingDirectory: (required && descriptor.siblingDirectory === true) || previous?.siblingDirectory === true,
+        invalidDigest: (required && descriptor.invalidDigest === true) || previous?.invalidDigest === true, expectedDigests });
     };
     function visit(value, key, owner) {
       if (typeof value === 'string') {
@@ -358,7 +460,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
           const absolute = path.isAbsolute(value) || /^[A-Za-z]:[\\/]/u.test(value);
           if (!/[\r\n]/u.test(value) && (((hashBound || requiredPin) && (absolute || workspaceInput)) || (workspaceInput && (sourcePath || initializedRoot)))) {
             // Explicit hash-bound/source descriptors are inputs; ordinary DTO Path values are business data.
-            if (mapped) add(recordedInputMapPath, `${reason}:recorded-input-map`);
+            if (mapped) add(recordedInputMapPath, `${reason}:recorded-input-map`, owner?.required === true);
             reference(target, { logical: value, siblingDirectory: false, required: owner?.required === true,
               expectedDigests: [...declaredDigests.filter(isDigest), ...(mapped ? [mapped.sha256] : [])], invalidDigest });
           }
@@ -370,9 +472,12 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
     visit(content);
     for (const [target, { logical, siblingDirectory, required, expectedDigests, invalidDigest }] of [...references].sort(([left], [right]) => left.localeCompare(right))) {
       add(target, `${reason}:manifest-reference:${logical}`, required, expectedDigests, invalidDigest);
+      // Optional provenance is archive description, not an ancestry through
+      // which nested `required: true` fields can re-enter current inputs.
+      if (!required) continue;
       const description = await describeFile(target, { recursive: false });
-      // Historical provenance paths remain descriptive unless a consumer
-      // explicitly declares the hash-bound input required for execution.
+      // A required dynamic manifest may own sibling references without making
+      // the directory itself a separately protected current input.
       if (siblingDirectory && (description.kind === 'file' || path.extname(target))) {
         add(path.dirname(target), `${reason}:manifest-reference-directory`, false);
         await bindDirectoryManifests(path.dirname(target), reason, true);
@@ -428,7 +533,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       if (!reference.dynamic) {
         add(reference.filename, `${entry.path}:${reference.logicalPath}`);
         // A fixture's manifest may reference sibling files whose paths are constructed dynamically.
-        if (reference.kind === 'file' && !sharedSourceResource(reference.filename)) {
+        if (reference.kind === 'file' && !sharedSourceResource(reference.filename) && !executionPinned(reference.filename)) {
           add(path.dirname(reference.filename), `${entry.path}:fixture-directory`);
           await bindDirectoryManifests(path.dirname(reference.filename), entry.path, true);
         }
@@ -445,7 +550,7 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
       // A direct source resource read binds that file. Its directory can also
       // hold unrelated generated resources with their own required provenance.
       // An explicitly read manifest still binds its descriptors below.
-      if (!sharedSourceResource(fixture.filename)) {
+      if (!sharedSourceResource(fixture.filename) && !executionPinned(fixture.filename)) {
         add(path.dirname(fixture.filename), `${entry.path}:local-fixture-directory`);
         await bindDirectoryManifests(path.dirname(fixture.filename), entry.path, true);
       }
@@ -515,10 +620,12 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const entries = [];
   const browserRoot = typeof environment.PLAYWRIGHT_BROWSERS_PATH === 'string' ? path.resolve(environment.PLAYWRIGHT_BROWSERS_PATH) : null;
   for (const [filename, { reasons, requiredReasons, expectedDigests, invalidDigest }] of [...targets].sort(([left], [right]) => left.localeCompare(right))) {
+    if (!requiredReasons.size) continue;
     const description = await describeFile(filename, { workspaceLinks: filename === path.join(repositoryRoot, 'node_modules'),
       containedLinks: filename === browserRoot && reasons.has('runtime:browser') ? browserRoot : undefined });
     const expected = [...expectedDigests].sort();
-    entries.push({ reasons: [...reasons].sort(), requiredReasons: [...requiredReasons].sort(), required: requiredReasons.size > 0, ...description,
+    const currentReasons = [...requiredReasons].sort();
+    entries.push({ reasons: currentReasons, requiredReasons: currentReasons, required: true, ...description,
       ...(invalidDigest ? { invalidExpectedDigest: true } : {}),
       ...(expected.length || invalidDigest ? { expectedDigests: expected,
         expectedDigestMatched: !invalidDigest && expected.every(digest => digest === (description.sha256 ?? description.entriesSha256)) } : {}) });
@@ -527,10 +634,15 @@ export async function captureInputIdentity({ selected, dependencies, preflight, 
   const tools = preflight.tools.map(({ name, executable, available, version, errorCode }) => ({
     name, executable, available, version, ...(errorCode ? { errorCode } : {}),
   }));
-  const identity = { entries, services, tools, ...(systemFonts ? { systemFonts } : {}), preflightReady: preflight.ready,
-    ready: entries.filter(entry => entry.required).every(entry => entry.available && entry.expectedDigestMatched !== false) && preflight.ready };
-  return { schemaVersion: 2, scope: 'Selected tests and their transitive local src/test/tool imports: imported local data files, declared/local fixture inputs, fixture siblings, transitive JSON provenance/hash-bound/source descriptors, configured native/runtime dependencies, Node modules and tool executables; service availability/version. Explicit required descriptors must exist and match every declared digest before execution. Required ownership is recorded per reason; optional consumers of the same file do not inherit another consumer\'s requirement. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
-    ...identity, entriesSha256: sha256(JSON.stringify(identity)) };
+  const identity = { schemaVersion: currentInputSchemaVersion,
+    scope: 'Current release inputs for selected tests: required transitive local src/test/tool imports, imported local data files, declared/local fixture inputs, dynamic fixture siblings, explicitly required transitive JSON descriptors, configured native/runtime dependencies, Node modules and tool executables, plus service availability/version. Optional historical provenance is excluded and reported separately. Required ownership is recorded per reason. Ordinary DTO paths are not interpreted as dependencies. Dynamic reads outside these inputs require separate evidence.',
+    entries, services, tools, ...(systemFonts ? { systemFonts } : {}), preflightReady: preflight.ready,
+    currentReleaseInputReady: currentEntriesReady(entries, preflight.ready) };
+  identity.entriesSha256 = currentInputDigest(identity);
+  const archive = await captureHistoricalArchiveSafely();
+  return { ...identity, historicalArchiveComplete: archive.complete, historicalArchive: archive.receipt };
 }
 
-export function inputsUnchanged(before, after) { return before.entriesSha256 === after.entriesSha256; }
+export function inputsUnchanged(before, after) {
+  return validCurrentInputReceipt(before) && validCurrentInputReceipt(after) && before.entriesSha256 === after.entriesSha256;
+}
