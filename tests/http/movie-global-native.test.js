@@ -5,7 +5,8 @@ import path from 'node:path';
 import { captureMovieGlobal, json } from './fixtures/movie-global-native/capture.js';
 import { runMovieCandidate } from './fixtures/movie-global-native/candidate.js';
 import { assertAggregatePhysicalLocationSet, differences, normalizeAggregatePhysicalLocations,
-  projectMovieRun, stabilizeMovieEventProjection } from './fixtures/movie-global-native/projection.js';
+  projectMovieRun, stabilizeConcurrentBoxSetEventOrder,
+  stabilizeMovieEventProjection } from './fixtures/movie-global-native/projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
@@ -32,7 +33,7 @@ test('Movie projection preserves AggregateFolder Path and normalizes only additi
     normalizeAggregatePhysicalLocations(node, collection), 'CollectionFolder location order remains significant.');
 });
 
-test('Movie projection stabilizes only the live BoxSet MetadataEdit event sample', () => {
+test('Movie projection stabilizes only mutable fields on the live BoxSet MetadataEdit event sample', () => {
   const stable = { phase: 'created', action: 'updated', id: 'boxset',
     type: 'MediaBrowser.Controller.Entities.Movies.BoxSet', path: '$CASE/program/data/collections/fixture',
     parent: null, updateReason: 16, ParentId: 'collections', OwnerId: '$EMPTY', IsFolder: true };
@@ -40,12 +41,12 @@ test('Movie projection stabilizes only the live BoxSet MetadataEdit event sample
     tmdbCollectionName: null, Overview: null, RunTimeTicks: null, ProviderIds: {}, IsLocked: false,
     DateCreated: 'created', DateModified: 'event-clock', DateLastSaved: 'saved', DateLastRefreshed: 'refreshed' };
   const duringRefresh = { ...beforeRefresh, Genres: ['Scan Original Genre'],
-    Studios: ['Scan Fixture Studio', ''], DateModified: { ticks: '0' } };
+    Studios: ['Scan Fixture Studio', ''], DateCreated: 'shifted-created', DateModified: { ticks: '0' },
+    DateLastSaved: 'shifted-saved', DateLastRefreshed: 'shifted-refreshed' };
   assert.deepEqual(stabilizeMovieEventProjection(beforeRefresh), stabilizeMovieEventProjection(duringRefresh));
   assert.deepEqual(Object.keys(stabilizeMovieEventProjection(beforeRefresh)), [
     'phase', 'action', 'id', 'type', 'path', 'parent', 'updateReason', 'ParentId', 'OwnerId', 'IsFolder',
-    'Name', 'tmdbCollectionName', 'Overview', 'RunTimeTicks', 'ProviderIds', 'IsLocked',
-    'DateCreated', 'DateLastSaved', 'DateLastRefreshed']);
+    'Name', 'tmdbCollectionName', 'Overview', 'RunTimeTicks', 'ProviderIds', 'IsLocked']);
   assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, id: 'different' }),
     stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit identity remains strict.');
   assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, Name: 'different' }),
@@ -66,6 +67,28 @@ test('Movie projection stabilizes only the live BoxSet MetadataEdit event sample
     assert.notDeepEqual(stabilizeMovieEventProjection(later),
       stabilizeMovieEventProjection({ ...later, Genres: ['different'] }),
       'Only the observed created-phase updated callback may stabilize its raced fields.');
+  }
+});
+
+test('Movie projection canonicalizes only the exact concurrent BoxSet refresh callback cohort', () => {
+  const event = (updateReason, extra = {}) => ({ phase: 'created', action: 'updated',
+    type: 'MediaBrowser.Controller.Entities.Movies.BoxSet', updateReason, marker: String(updateReason), ...extra });
+  const added = event(0, { action: 'added' }), image = event(9);
+  const expected = [added, event(16), event(2), event(19), image];
+  for (const reasons of [[16, 2, 19], [16, 19, 2], [2, 16, 19], [2, 19, 16], [19, 16, 2], [19, 2, 16]]) {
+    assert.deepEqual(stabilizeConcurrentBoxSetEventOrder([added, ...reasons.map(reason => event(reason)), image]), expected);
+  }
+  const unrelated = [added, image];
+  assert.equal(stabilizeConcurrentBoxSetEventOrder(unrelated), unrelated,
+    'Unrelated events are returned without cohort normalization.');
+  assert.throws(() => stabilizeConcurrentBoxSetEventOrder([event(16), event(2)]), /exactly the observed callback cohort/u);
+  assert.throws(() => stabilizeConcurrentBoxSetEventOrder([event(16), event(2), event(2)]), /each reason exactly once/u);
+  assert.throws(() => stabilizeConcurrentBoxSetEventOrder([event(16), event(9), event(2), event(19)]), /must not cross/u);
+  for (const changed of [{ phase: 'updated' }, { action: 'added' },
+    { type: 'MediaBrowser.Controller.Entities.Movies.Movie' }]) {
+    const events = [event(16, changed), event(2, changed), event(19, changed)];
+    assert.equal(stabilizeConcurrentBoxSetEventOrder(events), events,
+      'Other phases, actions and item types retain their observed order.');
   }
 });
 

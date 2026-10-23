@@ -89,8 +89,8 @@ test('postgres: music genre maintenance refreshes actual state metadata once acr
   library.on('ItemAdded', ({ Item }) => additions.push(guid(Item.Id)));
   const task = runtime.musicGenresPostScanTask;
   task.logger = { error(error) { throw error; } };
-  const refresh = runtime.metadataScanner.refreshItem.bind(runtime.metadataScanner), refreshedIds = [];
-  runtime.metadataScanner.refreshItem = (reference, options) => { refreshedIds.push(guid(reference)); return refresh(reference, options); };
+  const refresh = runtime.metadataScanner.refreshLiveItem.bind(runtime.metadataScanner), refreshedIds = [];
+  runtime.metadataScanner.refreshLiveItem = (item, options) => { refreshedIds.push(guid(item.Id)); return refresh(item, options); };
   const before = (await database.rows('BaseItems', { where: { Id: rock.Id } }))[0];
   await task.run();
   assert.deepEqual(additions, [guid(jazz.Id)]);
@@ -149,7 +149,7 @@ test('postgres: music genre maintenance keeps names and initial IDs in SQL with 
     return operation(db);
   }, options);
   const refreshed = [], progress = [];
-  await new MusicGenresPostScanTask({ store, library, metadataScanner: { refreshItem: async reference => refreshed.push(reference) } })
+  await new MusicGenresPostScanTask({ store, library, metadataScanner: { refreshLiveItem: async item => refreshed.push(item.Id) } })
     .run({ reportProgress: value => progress.push(value) });
   assert.equal(refreshed.length, 225);
   assert.equal(new Set(refreshed).size, 225);
@@ -199,10 +199,11 @@ for (const recording of native.results) test('postgres: native music genre post-
     if (sample.failLookup?.includes(name)) throw new Error('Controlled lookup failure');
     const item = await lookup(name); returned.set(idKey(item.Id), item); return item;
   };
-  const metadataScanner = { async refreshItem(reference, options) {
-    const item = returned.get(idKey(reference)), bound = metadataScanOptions(options);
+  const metadataScanner = { async refreshLiveItem(item, options) {
+    assert.equal(item, returned.get(idKey(item.Id)), 'New music-genre metadata refresh keeps the live lookup instance.');
+    const bound = metadataScanOptions(options);
     const modes = ['None', 'ValidationOnly', 'Default', 'FullRefresh'];
-    calls.push({ action: 'refresh', id: guid(reference), name: item.Name,
+    calls.push({ action: 'refresh', id: guid(item.Id), name: item.Name,
       metadataMode: modes.indexOf(bound.MetadataRefreshMode), imageMode: modes.indexOf(bound.ImageRefreshMode),
       IsAutomated: bound.IsAutomated, ForceSave: bound.ForceSave, ReplaceAllMetadata: bound.ReplaceAllMetadata,
       ReplaceAllImages: bound.ReplaceAllImages, RemoveOldMetadata: bound.RemoveOldMetadata });

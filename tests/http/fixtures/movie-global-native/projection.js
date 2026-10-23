@@ -43,13 +43,41 @@ export function isConcurrentBoxSetMetadataEditEvent(value) {
     && value.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet' && Number(value.updateReason) === 16;
 }
 
-/** One observed native MetadataEdit callback raced the BoxSet refresh for
- * Genres, Studios and DateModified. Keep every other event field exact; later
- * events and SQL/XML retain the complete state for these three fields too. */
+/** One observed native MetadataEdit callback races the BoxSet refresh. Its
+ * mutable collections and clocks can reflect either side of the refresh; later
+ * events and SQL/XML retain the complete state while all static fields remain
+ * exact here. Do not bind its clocks before projecting them away. */
 export function stabilizeMovieEventProjection(value) {
   if (!isConcurrentBoxSetMetadataEditEvent(value)) return value;
-  const { Genres: ignoredGenres, Studios: ignoredStudios, DateModified: ignoredDateModified, ...projected } = value;
+  const { Genres: ignoredGenres, Studios: ignoredStudios, DateCreated: ignoredDateCreated,
+    DateModified: ignoredDateModified, DateLastSaved: ignoredDateLastSaved,
+    DateLastRefreshed: ignoredDateLastRefreshed, ...projected } = value;
   return projected;
+}
+
+const concurrentBoxSetRefreshReasons = [16, 2, 19];
+
+/** Native dispatches this exact created-phase BoxSet callback cohort from
+ * concurrent continuations. Canonicalize only those three contiguous callbacks;
+ * added, image-update and every other event retain their observed order. */
+export function stabilizeConcurrentBoxSetEventOrder(values) {
+  const indices = values.map((value, index) => ({ value, index })).filter(({ value }) =>
+    value.phase === 'created' && value.action === 'updated'
+    && value.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet'
+    && concurrentBoxSetRefreshReasons.includes(Number(value.updateReason))).map(({ index }) => index);
+  if (!indices.length) return values;
+  assert.equal(indices.length, concurrentBoxSetRefreshReasons.length,
+    'The controlled created-phase BoxSet refresh must emit exactly the observed callback cohort.');
+  assert.equal(indices.at(-1) - indices[0], concurrentBoxSetRefreshReasons.length - 1,
+    'The concurrent BoxSet callback cohort must not cross an unrelated event.');
+  const byReason = new Map(indices.map(index => [Number(values[index].updateReason), values[index]]));
+  assert.equal(byReason.size, concurrentBoxSetRefreshReasons.length,
+    'The concurrent BoxSet callback cohort must contain each reason exactly once.');
+  for (const reason of concurrentBoxSetRefreshReasons) assert.ok(byReason.has(reason),
+    'The concurrent BoxSet callback cohort is missing update reason ' + reason + '.');
+  const result = [...values];
+  concurrentBoxSetRefreshReasons.forEach((reason, offset) => { result[indices[0] + offset] = byReason.get(reason); });
+  return result;
 }
 
 /** Full raw snapshots stay intact. These bindings are independently checked in
@@ -248,7 +276,7 @@ export function projectMovieRun(record, specification) {
     if (concurrentEdit) assert.equal(++concurrentBoxSetEditEvents, 1,
       'Only the single observed created-phase BoxSet MetadataEdit callback may stabilize raced fields.');
     for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']) {
-      if (concurrentEdit && field === 'DateModified') continue;
+      if (concurrentEdit) continue;
       event[field] = eventDate(item[field], logical, field, entry.phase);
     }
     (events[logical] ??= []).push(stabilizeMovieEventProjection(event));
@@ -391,7 +419,8 @@ export function projectMovieRun(record, specification) {
   }
   assert.ok(BigInt(record.updateInput.elapsedTicks) > BigInt(record.updateInput.toleranceTicks));
   return { stages, scanOutcomes, queued, registrationOrder,
-    events: Object.fromEntries(Object.entries(events).sort(([a], [b]) => compare(a, b))),
+    events: Object.fromEntries(Object.entries(events).sort(([a], [b]) => compare(a, b))
+      .map(([logical, values]) => [logical, stabilizeConcurrentBoxSetEventOrder(values)])),
     bindings: { items: Object.fromEntries(logicalById), itemValues: Object.fromEntries(valueById), clocks: clockBindings,
       actualExternalCleanup: { calls: cleanups.length, completed: cleanups.length, failures: 0,
         observation: 'Each actual service invocation retains before/after extracted path existence, real file bytes/SHA and the complete four affected SQL tables in the unmodified raw trace. No nonexistent-path premise bypasses the service.' },

@@ -341,7 +341,13 @@ async function compareComposition(t, scenarioFile) {
   };
   const refreshLive = runtime.metadataScanner.refreshLiveItem.bind(runtime.metadataScanner);
   runtime.metadataScanner.refreshLiveItem = async (item, options) => {
-    assert.equal(options.signal, controller.signal, 'Artist live refresh carries the global scan signal.');
+    const id = idKey(item.Id);
+    assert.equal(options.signal, controller.signal, 'Post-scan live refresh carries the global scan signal.');
+    if (cancelling && events.some(event => event.action === 'added' && event.id === id && event.name === sample.seed.Studio)) {
+      cancelRequests.push({ id, channel: 'metadata-before' });
+      controller.abort();
+    }
+    // Forward even after abort: the real refresh lifecycle decides the outcome.
     const result = await refreshLive(item, options); metadata.push(idKey(item.Id)); return result;
   };
   errors.length = 0;

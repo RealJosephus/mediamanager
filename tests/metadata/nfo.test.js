@@ -133,6 +133,14 @@ test('NFO saver retains custom tags and other provider IDs, writes actual stream
   assert.equal(parseNfo(xml).Item.Name, '中文 & title');
 });
 
+test('NFO saver writes native self-closing art when no primary or backdrop image exists', async () => {
+  const xml = (await serializeNfo({ Type: 'Movie', Name: 'No artwork' }, {
+    fileSystem: testFileSystem, images: [{ Type: 'Thumb', Path: '/ignored.jpg' }],
+  })).toString('utf8');
+  assert.match(xml, /\r\n  <art \/>\r\n/u);
+  assert.doesNotMatch(xml, /<art>\s*<\/art>/u);
+});
+
 test('NFO saver preserves and orders empty native collection values', async () => {
   const bytes = await serializeNfo({ Type: 'Movie', Name: 'Movie', Studios: ['Scan Fixture Studio', '', null] },
     { fileSystem: testFileSystem });

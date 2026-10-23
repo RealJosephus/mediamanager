@@ -14,8 +14,8 @@ const cancellation = error => error?.name === 'AbortError' || error?.code === 'c
  * JavaScript lists. New lookups do not extend the initial refresh baseline. */
 export class MusicGenresPostScanTask {
   constructor({ store, library, metadataScanner, logger = { error() {} } }) {
-    if (!store || typeof library?.getMusicGenre !== 'function' || typeof metadataScanner?.refreshItem !== 'function') {
-      throw new TypeError('Music genre maintenance requires persistence, lookup and metadata refresh.');
+    if (!store || typeof library?.getMusicGenre !== 'function' || typeof metadataScanner?.refreshLiveItem !== 'function') {
+      throw new TypeError('Music genre maintenance requires persistence, lookup and live metadata refresh.');
     }
     Object.assign(this, { store, library, metadataScanner, logger });
     this.name = 'MusicGenres';
@@ -54,7 +54,7 @@ export class MusicGenresPostScanTask {
               const item = await this.library.getMusicGenre(row.Name == null ? null : decodeNativeTextBytes(row.Name));
               const exists = (await db.client.query({ text: `SELECT EXISTS (
                 SELECT 1 FROM ${initial} WHERE "Id" = $1) AS "Present"`, values: [idKey(item.Id)] })).rows[0].Present;
-              if (!exists) await this.metadataScanner.refreshItem(item.Id, { signal });
+              if (!exists) await this.metadataScanner.refreshLiveItem(item, { signal });
             } catch (error) {
               if (cancellation(error)) throw error;
               this.logger.error(error, `Error refreshing ${row.Name == null ? row.Name : decodeNativeTextBytes(row.Name)}`);

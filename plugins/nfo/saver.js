@@ -66,7 +66,15 @@ export async function serializeNfo(item, {fileSystem, spoolRoot, configuration, 
     const tag = key.toLowerCase() + 'id'; written.add(key); used.add(tag);
     if (/^[\p{L}_][\p{L}\p{N}_.:-]*$/u.test(tag)) element(tag, item.ProviderIds[key]);
   }
-  if (options.SaveImagePathsInNfo) group('art', () => { const primary = images.find((image) => image.Type === 'Primary'); if (primary) element('poster', substituteImagePath(primary.Path), 2); for (const image of images.filter((image) => image.Type === 'Backdrop').sort((a, b) => a.Path.localeCompare(b.Path))) element('fanart', substituteImagePath(image.Path), 2); });
+  if (options.SaveImagePathsInNfo) {
+    const primary = images.find((image) => image.Type === 'Primary');
+    const backdrops = images.filter((image) => image.Type === 'Backdrop').sort((a, b) => a.Path.localeCompare(b.Path));
+    if (!primary && !backdrops.length) element('art', '');
+    else group('art', () => {
+      if (primary) element('poster', substituteImagePath(primary.Path), 2);
+      for (const image of backdrops) element('fanart', substituteImagePath(image.Path), 2);
+    });
+  }
   if (options.UserId?.trim() && userData && !item.IsFolder) {
     element('isuserfavorite', userData.IsFavorite === true); element('userrating', userData.Rating); element('playcount', userData.PlayCount ?? 0); element('watched', userData.Played === true);
     if (userData.LastPlayedDate) element('lastplayed', stamp(userData.LastPlayedDate));

@@ -19,7 +19,7 @@ class ByNamePostScanTask {
   constructor(kind, { store, library, metadataScanner, logger = {} }) {
     const descriptor = descriptors[kind];
     if (!store || typeof library?.[descriptor.lookup] !== 'function' || typeof library?.deleteQueryItemsUnsafeFast !== 'function'
-      || typeof metadataScanner?.refreshItem !== 'function') throw new TypeError('By-name maintenance requires lookup, refresh and batch deletion.');
+      || typeof metadataScanner?.refreshLiveItem !== 'function') throw new TypeError('By-name maintenance requires lookup, live refresh and batch deletion.');
     Object.assign(this, { kind, store, library, metadataScanner, logger, descriptor, name: descriptor.name });
   }
 
@@ -66,7 +66,7 @@ class ByNamePostScanTask {
               const item = existing ?? await this.library[this.descriptor.lookup](decodeNativeTextBytes(row.Name));
               const present = (await db.client.query({ text: `SELECT EXISTS (SELECT 1 FROM ${initial} WHERE "Id" = $1) AS "Present"`,
                 values: [idKey(item.Id)] })).rows[0].Present;
-              if (!present) await this.metadataScanner.refreshItem(item.Id, { signal });
+              if (!present) await this.metadataScanner.refreshLiveItem(item, { signal });
             } catch (error) {
               if (cancellation(error)) throw error;
               this.logger.error?.(error, `Error refreshing ${row.Name == null ? row.Name : decodeNativeTextBytes(row.Name)}`);

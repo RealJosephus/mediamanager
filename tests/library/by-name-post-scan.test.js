@@ -144,9 +144,10 @@ for (const recording of native.results) test(`postgres: native ${recording.kind}
     if (sample.FailExternal && item.Name === 'DeadSecond') throw new Error('Controlled external failure');
     return deleteFiles(item);
   };
-  const metadataScanner = { async refreshItem(reference, options) {
-    const item = returned.get(idKey(reference)), bound = metadataScanOptions(options), modes = ['None', 'ValidationOnly', 'Default', 'FullRefresh'];
-    calls.push({ action: 'refresh', id: guid(reference), name: item.Name,
+  const metadataScanner = { async refreshLiveItem(item, options) {
+    assert.equal(item, returned.get(idKey(item.Id)), 'New by-name metadata refresh keeps the live lookup instance.');
+    const bound = metadataScanOptions(options), modes = ['None', 'ValidationOnly', 'Default', 'FullRefresh'];
+    calls.push({ action: 'refresh', id: guid(item.Id), name: item.Name,
       metadataMode: modes.indexOf(bound.MetadataRefreshMode), imageMode: modes.indexOf(bound.ImageRefreshMode),
       IsAutomated: bound.IsAutomated, ForceSave: bound.ForceSave, ReplaceAllMetadata: bound.ReplaceAllMetadata,
       ReplaceAllImages: bound.ReplaceAllImages, RemoveOldMetadata: bound.RemoveOldMetadata });
@@ -255,7 +256,7 @@ for (const kind of Object.keys(classes)) test(`postgres: ${kind} maintenance bou
       if (sql.includes('by-name-maintenance-page')) pages.push(result.rows.length);
       return result;
     };
-    try { await new classes[kind]({ store, library, metadataScanner: { refreshItem: async reference => refreshed.push(reference) } }).run(); }
+    try { await new classes[kind]({ store, library, metadataScanner: { refreshLiveItem: async item => refreshed.push(item.Id) } }).run(); }
     finally { db.client.query = query; }
     assert.deepEqual((await query("SELECT relname FROM pg_class WHERE relnamespace = pg_my_temp_schema() AND relname LIKE 'mm_%'")).rows, []);
   });
@@ -299,8 +300,8 @@ test('postgres: runtime registers Genre, MusicGenre and Studio maintenance and s
   }
   const ids = [identities.Genre('Rock', runtime.library.options).Id, nativeMusicGenreIdentity('Jazz', runtime.library.options).Id,
     identities.Studio('Studio', runtime.library.options).Id];
-  const calls = [], refresh = runtime.metadataScanner.refreshItem.bind(runtime.metadataScanner);
-  runtime.metadataScanner.refreshItem = (reference, options) => { calls.push('refresh:' + guid(reference)); return refresh(reference, options); };
+  const calls = [], refresh = runtime.metadataScanner.refreshLiveItem.bind(runtime.metadataScanner);
+  runtime.metadataScanner.refreshLiveItem = (item, options) => { calls.push('refresh:' + guid(item.Id)); return refresh(item, options); };
   for (const task of registered) {
     task.logger = { error(error) { throw error; } }; const run = task.run.bind(task);
     task.run = options => { calls.push(task.name); return run(options); };
