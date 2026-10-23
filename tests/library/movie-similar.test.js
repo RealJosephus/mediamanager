@@ -1,167 +1,51 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID, createHash } from 'node:crypto';
-import { readFile, mkdtemp, rm, lstat, realpath } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
-import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
 import { localGenreTagSimilarQuery, queryPostgresLocalSimilarRows, queryPostgresMovieSimilarRows } from '../../src/library/postgres-similar-items-query.js';
-import { buildPostgresItemPageQuery } from '../../src/database/postgres-item-query.js';
+import { queryPostgresItemPage } from '../../src/database/postgres-item-query.js';
 import { createTmdbMovieSimilarProvider } from '../../plugins/tmdb/similar.js';
 import { TmdbClient } from '../../plugins/tmdb/client.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
-import { exportCurrentSqlite, transferDatabase } from '../../src/migration/database-transfer.js';
+import { databaseDigest, exportCurrentSqlite, transferDatabase } from '../../src/migration/database-transfer.js';
 import { mapRecord } from '../../src/library/records.js';
 import { nativeTextBytes } from '../../src/database/native-text.js';
-import { captureReferenceInput } from '../../tools/compat/reference-inputs.js';
+import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { blank, currentMovieSimilar, id, input, recordCandidate, seedCandidate, typeNames } from './movie-similar-current-fixture.js';
 
-const provenanceUrl = new URL('./fixtures/movie-similar/provenance.json', import.meta.url);
-const root = new URL('./', provenanceUrl);
-const input = JSON.parse(await readFile(new URL('input.json', root), 'utf8'));
-const native = JSON.parse(await readFile(new URL('native.json', root), 'utf8'));
-const provenance = JSON.parse(await readFile(provenanceUrl, 'utf8'));
-const id = value => `14000000-0000-0000-0000-${String(value).padStart(12, '0')}`;
-const blank = table => Object.fromEntries(tableDefinition(table).columns.filter(column => !column.generated).map(column => {
-  const type = column.clrType.replace('?', '');
-  return [column.name, type === 'DateTime' ? '2026-10-09 00:00:00' : column.nullable ? null
-    : type === 'bool' ? false : column.type === 'TEXT' ? '' : ['long', 'uint'].includes(type) ? 0n : 0];
-}));
-const typeNames = { Movie: 'MediaBrowser.Controller.Entities.Movies.Movie', Trailer: 'MediaBrowser.Controller.Entities.Trailer',
-  Series: 'MediaBrowser.Controller.Entities.TV.Series', LiveTvProgram: 'MediaBrowser.Controller.LiveTv.LiveTvProgram' };
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
-async function verifyFile(entry) {
-  assert.equal(entry.required, true, entry.filename);
-  const filename = path.resolve(entry.filename);
-  const [metadata, resolved, bytes] = await Promise.all([lstat(filename), realpath(filename), readFile(filename)]);
-  assert.ok(metadata.isFile() && !metadata.isSymbolicLink(), filename);
-  assert.equal(resolved, filename, filename);
-  assert.equal(metadata.size, bytes.length, filename);
-  assert.equal(bytes.length, entry.bytes, entry.filename);
-  assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.sha256, entry.filename);
-}
-
-test('movie Similar oracle seals the designated source build, actual new execution and retained history', async () => {
-  assert.equal(provenance.kind, 'new-designated-source-movie-similar-oracle');
-  assert.equal(provenance.candidateVerified, false);
-  assert.equal(provenance.native.sha256, 'c0b3eb54a893fcbed67805ad96ee4c6f93b550274511cfd6d07d28192971541f');
-  assert.equal(provenance.jellyfinDll.sha256, '474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26');
-  assert.equal(provenance.native.sha256, provenance.raw.sha256);
-  const files = new Map();
-  for (const entry of provenance.requiredInputs) {
-    const filename = path.resolve(entry.filename);
-    assert.equal(files.has(filename), false, 'Required file declarations must be unique.');
-    files.set(filename, entry);
-    await verifyFile(entry);
-  }
-  const declared = entry => {
-    const actual = files.get(path.resolve(entry.filename));
-    assert.ok(actual, entry.filename);
-    assert.equal(actual.sha256, entry.sha256, entry.filename);
-    assert.equal(actual.bytes, entry.bytes, entry.filename);
-  };
-  for (const entry of [provenance.record, provenance.raw, provenance.native, provenance.dotnet, provenance.jellyfinDll,
-    provenance.sourceBuildReceipt, provenance.executionReceipt, provenance.inputSnapshots.before,
-    provenance.inputSnapshots.after, provenance.historical.snapshot, ...provenance.files, ...provenance.resolution,
-    ...provenance.jellyfin.sources]) declared(entry);
-  assert.equal(provenance.requiredDirectories.length, 2);
-  for (const entry of provenance.requiredDirectories) {
-    assert.equal(entry.required, true);
-    const actual = await captureReferenceInput(entry.path);
-    assert.equal(actual.entriesSha256, entry.entriesSha256, entry.path);
-  }
-  assert.equal(native.candidateVerified, false);
-  assert.match(native.boundary, /Actual pinned MovieSimilarItemsProvider with concrete BaseItemRepository and EF Core SQLite/u);
-  assert.equal(provenance.jellyfin.commit, '208c278b75abd897aefa1e1175126eac5e4dbfaa');
-  const build = JSON.parse(await readFile(provenance.sourceBuildReceipt.filename, 'utf8'));
-  assert.equal(build.passed, true); assert.equal(build.fullBuildInputClosure, true);
-  assert.equal(build.buildIdentity.head, provenance.jellyfin.commit);
-  assert.equal(build.buildIdentity.contentDigest, provenance.jellyfin.contentDigest);
-  assert.equal(build.buildIdentity.nativeDll.sha256, provenance.jellyfinDll.sha256);
-  const execution = JSON.parse(await readFile(provenance.executionReceipt.filename, 'utf8'));
-  assert.equal(execution.passed, true); assert.equal(execution.inputsUnchanged, true);
-  assert.equal(execution.sourceContentDigest, provenance.jellyfin.contentDigest);
-  assert.equal(execution.sourceFilesVerified, build.copiedSourceFilesVerified);
-  assert.equal(execution.nativeDll.sha256, provenance.jellyfinDll.sha256);
-  assert.equal(execution.historicalExecutionRestored, false);
-  const [before, after] = await Promise.all([provenance.inputSnapshots.before, provenance.inputSnapshots.after]
-    .map(entry => readFile(entry.filename, 'utf8').then(JSON.parse)));
-  assert.deepEqual(after, before, 'The native attempt retained its exact source, runtime and SDK input trees.');
-  assert.deepEqual(provenance.requiredDirectories.map(entry => [entry.path, entry.entriesSha256]),
-    [before.runtime, before.dotnet].map(entry => [entry.filename, entry.entriesSha256]));
-  for (const entry of [...native.assemblies, native.nativeSqlite]) {
-    const actual = files.get(path.resolve(entry.path));
-    assert.ok(actual, entry.path);
-    assert.equal(actual.sha256, entry.sha256, entry.path);
-    if (entry.bytes !== undefined) assert.equal(actual.bytes, entry.bytes, entry.path);
-  }
-  const history = JSON.parse(await readFile(provenance.historical.snapshot.filename, 'utf8'));
-  assert.equal(history.oldProvenanceSha256, '57bf53eb3a6f8d963cbeab510339cdbf04061ef52028678aca162a232ceecfeb');
-  assert.equal(provenance.historical.executionRestored, false);
-  assert.equal(history.sources.length, 16);
-  assert.deepEqual(provenance.jellyfin.sources.map(entry => entry.name), history.sources.map(entry => entry.name));
-  for (const entry of [...history.files, ...history.sources]) declared(entry);
-  const oldNative = history.files.find(entry => path.basename(entry.original) === 'native.json');
-  assert.ok(oldNative);
-  assert.equal(oldNative.sha256, 'bf9949376bb9c599fc1fe44c6061a88c2a4a264bc06d01847873dacc6f3870fb');
-  const previous = JSON.parse(await readFile(oldNative.filename, 'utf8'));
-  for (const field of ['inputSha256', 'results', 'liveTv', 'tmdbMovie']) assert.deepEqual(native[field], previous[field], field);
-  const record = JSON.parse(await readFile(provenance.record.filename, 'utf8'));
-  assert.equal(record.passed, true); assert.equal(record.build.status, 0); assert.equal(record.process.status, 0);
-  assert.equal(native.inputSha256, provenance.files.find(entry => entry.filename.endsWith('input.json')).sha256);
+test('movie Similar records this run’s designated Native providers and concrete repository', async () => {
+  const { native, report } = await currentMovieSimilar();
+  assert.equal(report.nativeExecutionRecorded, true);
   assert.equal(native.results.length, input.cases.length);
+  assert.equal(native.results.length, 14);
+  for (const result of native.results) assert.equal(result.failed, result.name === 'userless-candidates-throw-before-access', result.name);
+  assert.equal(native.liveTv.length, 4);
+  assert.equal(native.tmdbMovie.cases.length, input.tmdb.cases.length);
 });
 
-test('relational identifier scopes bind parameters and preserve native IsMovie type semantics', () => {
-  const database = { dialect: 'postgres', schemaName: 'movie_shape' };
-  const plan = buildPostgresItemPageQuery(database, { includeitemtypes: ['Movie', 'LiveTvProgram'], ismovie: true }, {
-    itemIdsPlan: { text: 'SELECT "Id" FROM "other" WHERE "Name" = $1', values: ['bound-name'] },
-  });
-  assert.match(plan.text, /requested_item_ids AS/u);
-  assert.ok(plan.values.includes('bound-name'));
-  assert.doesNotMatch(plan.text, /i\."IsMovie" IS TRUE/u);
-  const program = buildPostgresItemPageQuery(database, { includeitemtypes: ['LiveTvProgram'], ismovie: true });
-  assert.match(program.text, /i\."IsMovie" IS TRUE/u);
-  const negative = buildPostgresItemPageQuery(database, { includeitemtypes: ['Movie'], ismovie: false });
-  assert.match(negative.text, /i\."IsMovie" IS FALSE/u);
-  assert.throws(() => buildPostgresItemPageQuery(database, {}, { itemIdsPlan: { text: '', values: [] } }), /identifier/u);
+test('relational identifier scopes preserve actual Native IsMovie type results on PostgreSQL', async t => {
+  const { native } = await currentMovieSimilar();
+  const db = await createPostgresTestDatabase(t, 'movie_scope'); await seedCandidate(db);
+  for (const [index, scenario] of input.identifierScopes.entries()) {
+    const selected = await queryPostgresItemPage(db, { includeitemtypes: scenario.types, ismovie: scenario.isMovie }, {
+      itemIdsPlan: { text: `SELECT "Id" FROM ${q(db.schemaName)}."BaseItems" WHERE "Id" IN (${scenario.ids.map((_, index) => '$' + (index + 1)).join(', ')})`,
+        values: scenario.ids.map(value => nativeTextBytes(id(value))) },
+    });
+    const actual = selected.rows.map(row => ({ id: row.Id, name: row.Name, sortName: mapRecord(row).SortName }));
+    await recordCandidate(scenario.name, actual);
+    assert.deepEqual(actual, native.identifierScopes[index].selected, scenario.name);
+  }
+  await assert.rejects(queryPostgresItemPage(db, {}, { itemIdsPlan: { text: '', values: [] } }));
 });
 
 test('Movie/Trailer weighted Similar matches actual native provider on real PostgreSQL', async t => {
-  assert.ok(process.env.MEDIAMANAGER_TEST_POSTGRES, 'A real PostgreSQL instance is required; this test must not skip.');
-  const schema = `movie_similar_${randomUUID().replaceAll('-', '').slice(0, 16)}`;
-  const db = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
-  t.after(async () => {
-    await db.client.query(`DROP SCHEMA ${q(schema)} CASCADE`);
-    await db.client.query(`DROP SCHEMA ${q(schema + '__mm')} CASCADE`);
-    await db.close();
-  });
-  for (const key of [80, 81]) await db.insert('Users', {
-    ...blank('Users'), Id: id(key), Username: `movie-${key}`, NormalizedUsername: `MOVIE-${key}`,
-  });
-  for (const row of input.items) await db.insert('BaseItems', {
-    ...blank('BaseItems'), Id: id(row.id), Type: typeNames[row.type], Data: '{}',
-    Name: row.name, CleanName: row.name, SortName: `reverse-${String(1000 - row.id).padStart(4, '0')}`,
-    PresentationUniqueKey: Object.hasOwn(row, 'puk') ? row.puk : `puk-${row.id}`,
-    TopParentId: id(row.top ?? 90), PrimaryVersionId: row.primary ? id(row.primary) : null,
-    OwnerId: row.owner ? id(row.owner) : null, ExtraType: row.extraType ?? null,
-    IsMovie: row.isMovie ?? true, IsFolder: row.type === 'Series', MediaType: 'Video',
-  });
-  for (const value of input.values) {
-    await db.insert('ItemValues', { ItemValueId: id(value.id), Type: value.type, Value: value.value, CleanValue: value.clean });
-    for (const item of value.items) await db.insert('ItemValuesMap', { ItemId: id(item), ItemValueId: id(value.id) });
-  }
-  for (const person of input.people) {
-    await db.insert('Peoples', { Id: id(person.id), Name: person.name, PersonType: person.type });
-    for (const [list, rows] of [[0, person.items], [1, person.duplicateItems ?? []]]) {
-      for (const item of rows) await db.insert('PeopleBaseItemMap', {
-        ItemId: id(item), PeopleId: id(person.id), ListOrder: list, SortOrder: list, Role: `role-${list}`,
-      });
-    }
-  }
-  for (const key of input.played) await db.insert('UserData', {
-    ...blank('UserData'), ItemId: id(key), UserId: id(80), CustomDataKey: `puk-${key}`, Played: true, PlayCount: 1,
-  });
+  const { native } = await currentMovieSimilar();
+  const db = await createPostgresTestDatabase(t, 'movie_similar'), schema = db.schemaName;
+  await seedCandidate(db);
   const actualRows = db.rows.bind(db), hydration = [];
   db.rows = async (name, options = {}) => {
     if (name === 'BaseItems') {
@@ -180,13 +64,17 @@ test('Movie/Trailer weighted Similar matches actual native provider on real Post
       userId: scenario.user ? id(scenario.playedUser ? 80 : 81) : undefined,
       visibility: scenario.user && scenario.access !== false ? { topParentIds: [id(90)] } : undefined,
     };
-    if (expected.error) {
-      assert.equal(expected.parameter, 'user');
-      await assert.rejects(queryPostgresMovieSimilarRows(db, options), /requires a user/u);
-    } else {
-      const rows = await queryPostgresMovieSimilarRows(db, options);
-      assert.deepEqual(rows.map(row => row.Id), expected.ids, scenario.name);
-      assert.deepEqual(rows.map(row => row.Name), expected.items, scenario.name);
+    let rows, failure;
+    try { rows = await queryPostgresMovieSimilarRows(db, options); } catch (error) { failure = error; }
+    const actual = { failed: Boolean(failure), ...(rows ? { ids: rows.map(row => row.Id),
+      items: rows.map(row => row.Name), sortNames: rows.map(row => mapRecord(row).SortName) } : {}),
+    ...(failure ? { diagnostic: { name: failure.name, message: failure.message } } : {}) };
+    await recordCandidate(scenario.name, actual);
+    assert.equal(actual.failed, expected.failed, scenario.name);
+    if (!expected.failed) {
+      assert.deepEqual(actual.ids, expected.ids, scenario.name);
+      assert.deepEqual(actual.items, expected.items, scenario.name);
+      assert.deepEqual(actual.sortNames, expected.sortNames, scenario.name);
       assert.ok(hydration.length === hydrationStart || hydration.at(-1) <= (scenario.limit ?? 50));
     }
   }
@@ -223,7 +111,8 @@ test('Movie/Trailer weighted Similar matches actual native provider on real Post
   const explain = await query({ ...weightedPlan, text: 'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ' + weightedPlan.text });
   const plan = explain.rows[0]['QUERY PLAN'][0];
   assert.equal(plan.Plan['Actual Rows'], 3);
-  assert.match(JSON.stringify(plan), /mm_runtime_item_values_map|IX_ItemValuesMap/u, 'weighted matching uses indexed relationships');
+  await recordCandidate('large-catalogue', { candidates: 20000, selected: selected.map(row => ({ id: row.Id,
+    name: row.Name, sortName: mapRecord(row).SortName })), hydrated: hydration.at(-1), plan });
   t.diagnostic(`20,000-candidate weighted query: ${plan['Execution Time']} ms, 3 SQL result rows and 3 hydrated rows.`);
 });
 
@@ -243,46 +132,57 @@ test('TMDb Movie Similar retains Int32 gating, pagination, cancellation and empt
   assert.equal(calls.length, 2);
 });
 
-test('Live TV queries match actual native type branches, overfetch and unmapped Program behavior', async () => {
+test('Live TV Similar returns actual Native type, metadata, count and bounded membership results', async t => {
+  const { native } = await currentMovieSimilar();
+  const db = await createPostgresTestDatabase(t, 'movie_live_tv'); await seedCandidate(db);
   const program = mapRecord({ ...blank('BaseItems'), Id: id(999), Type: typeNames.LiveTvProgram,
     Data: '{"IsMovie":false,"IsSeries":true}', IsMovie: true, IsSeries: false,
     EpisodeTitle: 'Stored episode', IsRepeat: true });
   assert.equal(program.IsMovie, true); assert.equal(program.IsSeries, false);
   assert.equal(program.EpisodeTitle, 'Stored episode'); assert.equal(program.IsRepeat, true);
-  const scenarios = [
-    { IsMovie: true, IsSeries: true, enableExternalContent: true },
-    { IsMovie: true, IsSeries: false, enableExternalContent: false },
-    { IsMovie: false, IsSeries: true, enableExternalContent: true },
-    { IsMovie: false, IsSeries: false, enableExternalContent: true },
-  ];
-  for (const [index, scenario] of scenarios.entries()) {
+  const projected = rows => rows.map(row => {
+    const item = mapRecord(row);
+    return { id: row.Id, name: item.Name, type: item.Type === 'LiveTvProgram' ? 'Program' : item.Type,
+      sortName: item.SortName, genres: item.Genres, tags: item.Tags };
+  });
+  const byId = values => [...values].sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
+  for (const [index, scenario] of input.liveTv.cases.entries()) {
     const expected = native.liveTv[index];
-    const query = localGenreTagSimilarQuery({ Type: 'LiveTvProgram', Genres: ['Drama'], Tags: ['Epic'], ...scenario },
-      { limit: 7, excludeItemIds: [id(999)] }, scenario);
-    assert.deepEqual(query.includeItemTypes, expected.includeItemTypes, expected.name);
-    assert.deepEqual(query.genres, expected.genres, expected.name);
-    assert.deepEqual(query.tags, expected.tags, expected.name);
-    assert.equal(query.limit, expected.preparedLimit, expected.name);
-    assert.equal(expected.IsMovie, null); assert.equal(expected.IsPlayed, null);
-    assert.deepEqual(expected.order, [{ key: 'Random', direction: 'Ascending' }]);
-    if (query.matchNoItems) assert.deepEqual(await queryPostgresLocalSimilarRows({ dialect: 'postgres' }, query), []);
+    const source = { Type: 'LiveTvProgram', Genres: input.liveTv.genres, Tags: input.liveTv.tags,
+      IsMovie: scenario.isMovie, IsSeries: scenario.isSeries };
+    const select = async limit => projected(await queryPostgresLocalSimilarRows(db,
+      { ...localGenreTagSimilarQuery(source, { limit, excludeItemIds: [input.liveTv.sourceId, ...input.liveTv.exclude].map(id) },
+        { enableExternalContent: scenario.external }), userId: id(80) }));
+    let pool, selected, failure;
+    try { pool = await select(input.liveTv.poolLimit); selected = await select(input.liveTv.limit); } catch (error) { failure = error; }
+    const actual = { failed: Boolean(failure), pool, selected,
+      ...(failure ? { diagnostic: { name: failure.name, message: failure.message } } : {}) };
+    await recordCandidate('live-tv-' + scenario.name, actual);
+    assert.equal(expected.failed, false, scenario.name + ': the declared Native query must execute.');
+    assert.equal(actual.failed, expected.failed, scenario.name);
+    if (scenario.isMovie) assert.ok(expected.pool.length > input.liveTv.limit,
+      scenario.name + ': the declared catalogue must exercise limited selection.');
+    if (!scenario.isMovie && scenario.isSeries) assert.ok(expected.pool.length > 0,
+      scenario.name + ': the declared catalogue must exercise Series results.');
+    assert.deepEqual(byId(pool), byId(expected.pool), scenario.name + ': complete eligible content');
+    assert.equal(selected.length, expected.selected.length, scenario.name + ': actual provider limit/count');
+    assert.equal(new Set(selected.map(item => item.id)).size, selected.length);
+    for (const item of [...selected, ...expected.selected]) {
+      assert.deepEqual(item, pool.find(value => value.id === item.id), scenario.name + ': random result membership and metadata');
+    }
   }
 });
 
 test('TMDb Movie Similar references and transport requests match actual native TMDbLib provider', async t => {
+  const { native } = await currentMovieSimilar();
   let mode = 'success'; const requests = [];
   const client = new TmdbClient({ baseUrl: 'http://tmdb.invalid/3/', apiKey: 'oracle-key',
-    configuration: { SimilarItemsCacheDays: 2 }, fetch: async request => {
+    configuration: { SimilarItemsCacheDays: input.tmdb.cacheDays }, fetch: async request => {
       requests.push(request.toString());
-      if (request.pathname.endsWith('/configuration')) return Response.json({ images: {
-        base_url: 'http://images.invalid/', secure_base_url: 'https://images.invalid/',
-        backdrop_sizes: ['original'], logo_sizes: ['original'], poster_sizes: ['original'],
-        profile_sizes: ['original'], still_sizes: ['original'],
-      }, change_keys: [] });
+      if (request.pathname.endsWith('/configuration')) return Response.json(input.tmdb.configuration);
       if (mode === 'failure') throw new Error('Controlled movie transport failure');
-      return Response.json(mode === 'empty' ? { page: 1, results: [], total_pages: 3 }
-        : request.searchParams.get('page') === '2' ? { page: 2, results: [{ id: 33, title: 'Third' }], total_pages: 2 }
-          : { page: 1, results: [{ id: 31, title: 'First' }, { id: 32, title: 'Second' }], total_pages: 2 });
+      return Response.json(mode === 'empty' ? input.tmdb.emptyPage
+        : request.searchParams.get('page') === '2' ? input.tmdb.secondPage : input.tmdb.firstPage);
     } });
   t.after(() => client.close());
   const provider = createTmdbMovieSimilarProvider({ client });
@@ -291,28 +191,26 @@ test('TMDb Movie Similar references and transport requests match actual native T
     const url = new URL(text);
     return { origin: url.origin, path: url.pathname, query: [...url.searchParams].sort(([left], [right]) => left.localeCompare(right)) };
   };
-  for (const expected of native.tmdbMovie.cases) {
-    mode = expected.mode; requests.length = 0;
+  for (const [index, scenario] of input.tmdb.cases.entries()) {
+    const expected = native.tmdbMovie.cases[index];
+    mode = scenario.mode; requests.length = 0;
     const references = [];
-    for await (const reference of provider.getReferences({ ProviderIds: expected.value ? { Tmdb: expected.value } : {} }, {})) {
+    const cancellation = new AbortController(); if (scenario.cancelled) cancellation.abort();
+    for await (const reference of provider.getReferences({ ProviderIds: scenario.value ? { Tmdb: scenario.value } : {} }, {}, cancellation.signal)) {
       references.push(reference);
     }
+    await recordCandidate('tmdb-' + scenario.name, { references, requests });
     assert.deepEqual(references, expected.references, expected.name);
     assert.deepEqual(requests.map(requestShape), expected.requests.map(requestShape), expected.name);
   }
 });
 
 test('ItemValues native insertion order survives SQLite/PostgreSQL exchange and runtime reinsertion', async t => {
-  assert.ok(process.env.MEDIAMANAGER_TEST_POSTGRES, 'A real PostgreSQL instance is required.');
-  const schema = `movie_value_order_${randomUUID().replaceAll('-', '').slice(0, 14)}`;
-  const db = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  const db = await createPostgresTestDatabase(t, 'movie_value');
   const sqlite = new SqliteDatabase(':memory:', { create: true });
   const directory = await mkdtemp(path.join(tmpdir(), 'mediamanager-movie-value-order-'));
   t.after(async () => {
     sqlite.close();
-    await db.client.query(`DROP SCHEMA ${q(schema)} CASCADE`);
-    await db.client.query(`DROP SCHEMA ${q(schema + '__mm')} CASCADE`);
-    await db.close();
     await rm(directory, { recursive: true, force: true });
   });
   const value = number => ({ ItemValueId: id(number), Type: 2, Value: `Value ${number}`, CleanValue: 'same-clean-value' });
@@ -328,11 +226,21 @@ test('ItemValues native insertion order survives SQLite/PostgreSQL exchange and 
   const before = await db.relationRowsInInsertionOrder('ItemValues', { limit: 10 });
   assert.deepEqual(before.rows.map(row => row.ItemValueId), [990, 991, 989].map(id));
   await db.preflight();
+  const completeBefore = await databaseDigest(db);
   const output = path.join(directory, 'current.sqlite');
   await exportCurrentSqlite(db, output, { batchSize: 1, testOnlyAllowSyntheticEnvelope: true });
   const exported = new SqliteDatabase(output);
   try {
     const after = await exported.relationRowsInInsertionOrder('ItemValues', { limit: 10 });
     assert.deepEqual(after.rows, before.rows);
+    const completeExport = await databaseDigest(exported);
+    assert.deepEqual(completeExport, completeBefore);
+    const returned = await createPostgresTestDatabase(t, 'movie_returned');
+    await transferDatabase(exported, returned, { instanceBinding, batchSize: 1 });
+    const completeReturned = await databaseDigest(returned);
+    const returnedValues = await returned.relationRowsInInsertionOrder('ItemValues', { limit: 10 });
+    assert.deepEqual(completeReturned, completeBefore); assert.deepEqual(returnedValues.rows, before.rows);
+    await recordCandidate('item-values-exchange', { before: before.rows, after: after.rows, returned: returnedValues.rows,
+      completeBefore, completeExport, completeReturned });
   } finally { exported.close(); }
 });

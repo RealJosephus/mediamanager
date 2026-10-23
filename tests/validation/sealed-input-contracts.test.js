@@ -239,6 +239,8 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/writer-input.json']],
   ['tests/metadata/local-xml-stream.test.js', 'tests/metadata/fixtures/local-xml-save-current',
     ['dotnet', 'jellyfinDll'], null, 'input.json', [], ''],
+  ['tests/library/movie-similar.test.js', 'tests/library/fixtures/movie-similar',
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
 ]) test(`${archiveId ?? fixture} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);

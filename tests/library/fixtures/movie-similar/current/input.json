@@ -1,0 +1,927 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": 1,
+      "name": "source",
+      "type": "Movie"
+    },
+    {
+      "id": 2,
+      "name": "director",
+      "type": "Movie"
+    },
+    {
+      "id": 3,
+      "name": "actor-two-roles",
+      "type": "Movie"
+    },
+    {
+      "id": 4,
+      "name": "genre-tag-studio",
+      "type": "Movie"
+    },
+    {
+      "id": 5,
+      "name": "actor",
+      "type": "Movie"
+    },
+    {
+      "id": 6,
+      "name": "guest-star",
+      "type": "Movie"
+    },
+    {
+      "id": 7,
+      "name": "writer-not-scored",
+      "type": "Movie"
+    },
+    {
+      "id": 8,
+      "name": "duplicate-clean-value",
+      "type": "Movie"
+    },
+    {
+      "id": 9,
+      "name": "clean-value-case-sensitive",
+      "type": "Movie"
+    },
+    {
+      "id": 10,
+      "name": "trailer",
+      "type": "Trailer",
+      "owner": 1,
+      "extraType": 2
+    },
+    {
+      "id": 11,
+      "name": "non-movie-program",
+      "type": "LiveTvProgram",
+      "isMovie": false
+    },
+    {
+      "id": 12,
+      "name": "wrong-type-high-score",
+      "type": "Series"
+    },
+    {
+      "id": 13,
+      "name": "owned-not-extra",
+      "type": "Movie",
+      "owner": 1
+    },
+    {
+      "id": 14,
+      "name": "hidden-alternate",
+      "type": "Movie",
+      "primary": 2
+    },
+    {
+      "id": 15,
+      "name": "orphan-alternate",
+      "type": "Movie",
+      "primary": 99,
+      "puk": "version-pair"
+    },
+    {
+      "id": 16,
+      "name": "primary-representative",
+      "type": "Movie",
+      "puk": "version-pair"
+    },
+    {
+      "id": 17,
+      "name": "upper-presentation-key",
+      "type": "Movie",
+      "puk": "CASE-KEY"
+    },
+    {
+      "id": 18,
+      "name": "lower-presentation-key",
+      "type": "Movie",
+      "puk": "case-key"
+    },
+    {
+      "id": 19,
+      "name": "null-key-first",
+      "type": "Movie",
+      "puk": null
+    },
+    {
+      "id": 20,
+      "name": "null-key-second",
+      "type": "Movie",
+      "puk": null
+    },
+    {
+      "id": 21,
+      "name": "no-source-values",
+      "type": "Trailer"
+    },
+    {
+      "id": 22,
+      "name": "different-top-alternate",
+      "type": "Movie",
+      "primary": 2,
+      "top": 91
+    },
+    {
+      "id": 100,
+      "name": "shortlist-source",
+      "type": "Movie"
+    },
+    {
+      "id": 101,
+      "name": "shortlist-denied-one",
+      "type": "Movie",
+      "top": 91
+    },
+    {
+      "id": 102,
+      "name": "shortlist-denied-two",
+      "type": "Movie",
+      "top": 91
+    },
+    {
+      "id": 103,
+      "name": "shortlist-denied-three",
+      "type": "Movie",
+      "top": 91
+    },
+    {
+      "id": 104,
+      "name": "shortlist-visible-lower",
+      "type": "Movie"
+    },
+    {
+      "id": 105,
+      "name": "shortlist-visible-last",
+      "type": "Movie"
+    },
+    {
+      "id": 110,
+      "name": "trailer-source",
+      "type": "Trailer"
+    },
+    {
+      "id": 200,
+      "name": "multi-key-source",
+      "type": "Movie"
+    },
+    {
+      "id": 201,
+      "name": "first-id-later-key",
+      "type": "Movie"
+    },
+    {
+      "id": 202,
+      "name": "second-id-later-key",
+      "type": "Movie"
+    },
+    {
+      "id": 203,
+      "name": "third-id-later-key",
+      "type": "Movie"
+    },
+    {
+      "id": 204,
+      "name": "first-native-key-first",
+      "type": "Movie"
+    },
+    {
+      "id": 205,
+      "name": "first-native-key-second",
+      "type": "Movie"
+    },
+    {
+      "id": 206,
+      "name": "first-native-key-third",
+      "type": "Movie"
+    }
+  ],
+  "values": [
+    {
+      "id": 901,
+      "type": 2,
+      "value": "Drama",
+      "clean": "drama",
+      "items": [
+        1,
+        4,
+        8,
+        10,
+        11,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        110
+      ]
+    },
+    {
+      "id": 902,
+      "type": 2,
+      "value": "Drama duplicate",
+      "clean": "drama",
+      "items": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": 903,
+      "type": 2,
+      "value": "DRAMA",
+      "clean": "DRAMA",
+      "items": [
+        9
+      ]
+    },
+    {
+      "id": 904,
+      "type": 4,
+      "value": "Epic",
+      "clean": "epic",
+      "items": [
+        1,
+        4,
+        110
+      ]
+    },
+    {
+      "id": 905,
+      "type": 3,
+      "value": "Studio",
+      "clean": "studio",
+      "items": [
+        1,
+        4,
+        110
+      ]
+    },
+    {
+      "id": 906,
+      "type": 2,
+      "value": "Only shortlist",
+      "clean": "shortlist",
+      "items": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105
+      ]
+    },
+    {
+      "id": 907,
+      "type": 4,
+      "value": "Shortlist tag",
+      "clean": "shortlist-tag",
+      "items": [
+        100,
+        101,
+        102,
+        103,
+        104
+      ]
+    },
+    {
+      "id": 908,
+      "type": 3,
+      "value": "Shortlist studio",
+      "clean": "shortlist-studio",
+      "items": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "id": 941,
+      "type": 2,
+      "value": "B key first",
+      "clean": "b-key",
+      "items": [
+        200,
+        204,
+        205,
+        206
+      ]
+    },
+    {
+      "id": 942,
+      "type": 2,
+      "value": "A key later",
+      "clean": "a-key",
+      "items": [
+        200,
+        201,
+        202,
+        203
+      ]
+    }
+  ],
+  "people": [
+    {
+      "id": 801,
+      "name": "Director",
+      "type": "Director",
+      "items": [
+        1,
+        2,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "id": 802,
+      "name": "Actor",
+      "type": "Actor",
+      "items": [
+        1,
+        3,
+        5
+      ],
+      "duplicateItems": [
+        1,
+        3
+      ]
+    },
+    {
+      "id": 803,
+      "name": "Guest",
+      "type": "GuestStar",
+      "items": [
+        1,
+        6
+      ]
+    },
+    {
+      "id": 804,
+      "name": "Writer",
+      "type": "Writer",
+      "items": [
+        1,
+        7
+      ]
+    },
+    {
+      "id": 805,
+      "name": "Lowercase director",
+      "type": "director",
+      "items": [
+        1,
+        7
+      ]
+    }
+  ],
+  "played": [
+    14
+  ],
+  "cases": [
+    {
+      "name": "all-weight-dimensions-and-native-ties",
+      "source": 1,
+      "limit": 50,
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "external-content-disabled",
+      "source": 1,
+      "limit": 50,
+      "external": false,
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "played-and-top-parent-access",
+      "source": 1,
+      "limit": 50,
+      "user": true,
+      "playedUser": true
+    },
+    {
+      "name": "played-alternate-propagates-to-siblings",
+      "source": 1,
+      "limit": 50,
+      "user": true,
+      "playedUser": true,
+      "access": false
+    },
+    {
+      "name": "shortlist-before-access-no-refill",
+      "source": 100,
+      "limit": 1,
+      "user": true
+    },
+    {
+      "name": "shortlist-widened-by-limit",
+      "source": 100,
+      "limit": 2,
+      "user": true
+    },
+    {
+      "name": "exclusion-after-shortlist-no-refill",
+      "source": 100,
+      "limit": 1,
+      "exclude": [
+        101,
+        102,
+        103
+      ],
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "trailer-uses-weighted-movie-provider",
+      "source": 110,
+      "limit": 50,
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "no-source-dimensions",
+      "source": 21,
+      "limit": 50
+    },
+    {
+      "name": "default-limit",
+      "source": 1,
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "zero-limit",
+      "source": 1,
+      "limit": 0
+    },
+    {
+      "name": "userless-candidates-throw-before-access",
+      "source": 1,
+      "limit": 50
+    },
+    {
+      "name": "native-key-insertion-order-before-shortlist",
+      "source": 200,
+      "limit": 1,
+      "user": true,
+      "access": false
+    },
+    {
+      "name": "native-key-scores-then-access-order",
+      "source": 200,
+      "limit": 50,
+      "user": true,
+      "access": false
+    }
+  ],
+  "liveTv": {
+    "sourceId": 999,
+    "genres": [
+      "Live Drama"
+    ],
+    "tags": [
+      "Live Epic"
+    ],
+    "limit": 7,
+    "poolLimit": 50,
+    "exclude": [
+      300
+    ],
+    "items": [
+      {
+        "id": 300,
+        "name": "Live candidate 300",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 301,
+        "name": "Live candidate 301",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 302,
+        "name": "Live candidate 302",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 303,
+        "name": "Live candidate 303",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 304,
+        "name": "Live candidate 304",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 305,
+        "name": "Live candidate 305",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 306,
+        "name": "Live candidate 306",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 307,
+        "name": "Live candidate 307",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 308,
+        "name": "Live candidate 308",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 309,
+        "name": "Live candidate 309",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 310,
+        "name": "Live candidate 310",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 311,
+        "name": "Live candidate 311",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 312,
+        "name": "Live candidate 312",
+        "type": "Trailer",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 313,
+        "name": "Live candidate 313",
+        "type": "LiveTvProgram",
+        "isMovie": false,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 314,
+        "name": "Live candidate 314",
+        "type": "Series",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 315,
+        "name": "Live candidate 315",
+        "type": "Series",
+        "isMovie": true,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 316,
+        "name": "Live candidate 316",
+        "type": "Movie",
+        "isMovie": false,
+        "genres": [
+          "Live Drama"
+        ],
+        "tags": []
+      },
+      {
+        "id": 317,
+        "name": "Live candidate 317",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [],
+        "tags": [
+          "Live Epic"
+        ]
+      },
+      {
+        "id": 318,
+        "name": "Live candidate 318",
+        "type": "Movie",
+        "isMovie": true,
+        "genres": [],
+        "tags": []
+      }
+    ],
+    "values": [
+      {
+        "id": 970,
+        "type": 2,
+        "value": "Live Drama",
+        "clean": "live drama",
+        "items": [
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309,
+          310,
+          311,
+          312,
+          313,
+          314,
+          315,
+          316
+        ]
+      },
+      {
+        "id": 971,
+        "type": 4,
+        "value": "Live Epic",
+        "clean": "live epic",
+        "items": [
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          309,
+          310,
+          311,
+          312,
+          313,
+          314,
+          315,
+          317
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "name": "movie-takes-precedence",
+        "isMovie": true,
+        "isSeries": true,
+        "external": true
+      },
+      {
+        "name": "movie-without-external-content",
+        "isMovie": true,
+        "isSeries": false,
+        "external": false
+      },
+      {
+        "name": "series-program",
+        "isMovie": false,
+        "isSeries": true,
+        "external": true
+      },
+      {
+        "name": "other-program",
+        "isMovie": false,
+        "isSeries": false,
+        "external": true
+      }
+    ]
+  },
+  "tmdb": {
+    "cacheDays": 2,
+    "configuration": {
+      "images": {
+        "base_url": "http://images.invalid/",
+        "secure_base_url": "https://images.invalid/",
+        "backdrop_sizes": [
+          "original"
+        ],
+        "logo_sizes": [
+          "original"
+        ],
+        "poster_sizes": [
+          "original"
+        ],
+        "profile_sizes": [
+          "original"
+        ],
+        "still_sizes": [
+          "original"
+        ]
+      },
+      "change_keys": []
+    },
+    "firstPage": {
+      "page": 1,
+      "results": [
+        {
+          "id": 31,
+          "title": "First"
+        },
+        {
+          "id": 32,
+          "title": "Second"
+        }
+      ],
+      "total_pages": 2
+    },
+    "secondPage": {
+      "page": 2,
+      "results": [
+        {
+          "id": 33,
+          "title": "Third"
+        }
+      ],
+      "total_pages": 2
+    },
+    "emptyPage": {
+      "page": 1,
+      "results": [],
+      "total_pages": 3
+    },
+    "cases": [
+      {
+        "name": "valid-pages",
+        "value": " +17 ",
+        "mode": "success"
+      },
+      {
+        "name": "Int32-overflow",
+        "value": "2147483648",
+        "mode": "success"
+      },
+      {
+        "name": "missing-id",
+        "value": "",
+        "mode": "success"
+      },
+      {
+        "name": "empty-page-stop",
+        "value": "17",
+        "mode": "empty"
+      },
+      {
+        "name": "transport-failure",
+        "value": "17",
+        "mode": "failure"
+      },
+      {
+        "name": "cancelled-before-request",
+        "value": "17",
+        "mode": "success",
+        "cancelled": true
+      }
+    ]
+  },
+  "inputIdentity": "Current Native movie similarity component, original 14 weighted scenarios plus separately declared functional LiveTV catalog and controlled TMDB cancellation.",
+  "identifierScopes": [
+    {
+      "name": "mixed-movie-and-program",
+      "ids": [
+        2,
+        11,
+        316
+      ],
+      "types": [
+        "Movie",
+        "LiveTvProgram"
+      ],
+      "isMovie": true
+    },
+    {
+      "name": "program-movie-only",
+      "ids": [
+        2,
+        11,
+        316
+      ],
+      "types": [
+        "LiveTvProgram"
+      ],
+      "isMovie": true
+    },
+    {
+      "name": "movie-negative-stored-flag",
+      "ids": [
+        2,
+        11,
+        316
+      ],
+      "types": [
+        "Movie"
+      ],
+      "isMovie": false
+    }
+  ]
+}

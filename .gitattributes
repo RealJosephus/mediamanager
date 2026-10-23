@@ -385,3 +385,5 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/local-xml-prefix-seal.history.js -text
 /tests/library/fixtures/channel-parent-latest/input.js text eol=lf
 /tests/library/fixtures/channel-parent-latest/current-profile.json text eol=lf
+/tests/library/fixtures/movie-similar/current/** -text
+/tests/library/fixtures/movie-similar/current-profile.json text eol=lf
