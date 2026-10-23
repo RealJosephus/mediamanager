@@ -407,3 +407,8 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/http/fixtures/quick-connect-current/Direct.cs text eol=lf
 /tests/http/fixtures/quick-connect-current/Oracle.csproj text eol=lf
 /tests/http/fixtures/quick-connect-current/current-profile.json text eol=lf
+/tests/http/fixtures/password-reset-http-current/input.json text eol=lf
+/tests/http/fixtures/password-reset-http-current/Program.cs text eol=lf
+/tests/http/fixtures/password-reset-http-current/Oracle.csproj text eol=lf
+/tests/http/fixtures/password-reset-http-current/observations.js text eol=lf
+/tests/http/fixtures/password-reset-http-current/current-profile.json text eol=lf

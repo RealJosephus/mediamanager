@@ -64,6 +64,7 @@ const executionManifests = new Map([
   ...['configuration-xml', 'configuration-file', 'configuration-runtime']
     .map(kind => [`tests/core/${kind}.test.js`, ['current-oracle', 'tests/core/fixtures/configuration/current-profile.json']]),
   ['tests/http/api-keys.test.js', ['current-oracle', 'tests/http/fixtures/api-keys/current-profile.json']],
+  ['tests/http/password-reset.test.js', ['current-oracle', 'tests/http/fixtures/password-reset-http-current/current-profile.json']],
   ...['quick-connect', 'quick-connect-runtime']
     .map(kind => [`tests/http/${kind}.test.js`, ['current-oracle', 'tests/http/fixtures/quick-connect-current/current-profile.json']]),
   ['tests/consumer-contracts/date-roundtrip.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/date-roundtrip-current/current-profile.json']],

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { allowedMethods, projectResetObservation } from './fixtures/password-reset/observations.js';
+import { allowedMethods, projectResetObservation } from './fixtures/password-reset-http-current/observations.js';
 
 test('password reset HTTP observations compare Allow as a case-sensitive method set', () => {
   assert.deepEqual(allowedMethods('DELETE, GET, POST'), allowedMethods('POST, GET, DELETE'));
