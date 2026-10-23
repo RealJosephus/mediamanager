@@ -11,7 +11,13 @@
     "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
     "src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs",
     "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/ValueConverters/DateTimeKindValueConverter.cs",
-    "Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs"
+    "Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs",
+    "Emby.Server.Implementations/EntryPoints/UserDataChangeNotifier.cs",
+    "Emby.Server.Implementations/Session/SessionManager.cs",
+    "Emby.Server.Implementations/Session/SessionWebSocketListener.cs",
+    "Emby.Server.Implementations/HttpServer/WebSocketManager.cs",
+    "Jellyfin.Api/Helpers/RequestHelpers.cs",
+    "Jellyfin.Api/Middleware/WebSocketHandlerMiddleware.cs"
   ],
   "inputs": [
     {

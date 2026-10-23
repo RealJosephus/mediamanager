@@ -6,6 +6,8 @@ import { copyFile, cp, mkdir, readFile, realpath, writeFile } from 'node:fs/prom
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
+import { isDeepStrictEqual } from 'node:util';
+import { WebSocket } from 'ws';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { describeFile } from '../../tools/validation/inventory.js';
@@ -76,11 +78,11 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
   await mkdir(output.root);
   const root = await realpath(output.root), instanceRoot = path.join(root, 'instance');
   const nativePort = await unusedPort(), nativeOrigin = `http://127.0.0.1:${nativePort}`;
-  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], cleanup: [], errors: [], zones: [],
+  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], notifications: [], cleanup: [], errors: [], zones: [],
     nativeTimezone: oracle.timezone, snapshots: {}, phaseAcceptance: false, releaseAcceptance: false,
     fullInstanceVerified: false, completeLibraryVerified: false,
     scope: 'Eight actual scanned Photos provide UserData targets. Current Native HTTP and three separate Node timezone processes write full 100ns dates; complete SQLite/PostgreSQL transfers, cold reads and actual Native continuation are verified. This does not establish arbitrary libraries, a complete state package or release acceptance.' };
-  let current, native, node, database, returnedDatabase, sqlite, failure, token, ids;
+  let current, native, node, database, returnedDatabase, sqlite, failure, token, ids, notifications;
   let safeToRemove = true;
   const request = async (origin, route, { method = 'GET', body } = {}) => {
     const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(30000),
@@ -102,13 +104,93 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
       assert.ok(Date.now() < deadline, 'Scheduled workers must stop before ownership transfer.'); await delay(100);
     }
   };
+  const startNativeNotifications = async label => {
+    assert.equal(notifications, undefined);
+    const observation = { label, userId: current.userId, opened: false, messages: [], errors: [], batches: [] };
+    report.notifications.push(observation);
+    const socket = new WebSocket(nativeOrigin.replace(/^http/u, 'ws') + '/socket?deviceId=fixture-oracle', {
+      headers: { Authorization: `MediaBrowser Client="CompatibilityValidation", Device="IsolatedReference", DeviceId="fixture-oracle", Version="1.0", Token="${token}"` },
+      handshakeTimeout: 10000,
+    });
+    const listeners = new Set(), changed = () => { for (const listener of listeners) listener(); };
+    const closed = new Promise(resolve => socket.once('close', (code, reason) => {
+      observation.close = { code, reason: reason.toString(), at: new Date().toISOString() }; changed(); resolve();
+    }));
+    notifications = { socket, observation, closed, waitFor: (predicate, description) => new Promise((resolve, reject) => {
+      let timeout;
+      const done = error => { clearTimeout(timeout); listeners.delete(inspect); error ? reject(error) : resolve(); };
+      const inspect = () => {
+        try {
+          if (observation.errors.length) return done(new Error(label + ': ' + observation.errors[0].message));
+          if (predicate()) return done();
+          if (observation.close) return done(new Error(label + ' closed before ' + description));
+        } catch (error) { done(error); }
+      };
+      listeners.add(inspect);
+      timeout = setTimeout(() => done(new Error(label + ' did not receive ' + description + ' within 30 seconds.')), 30000);
+      inspect();
+    }) };
+    socket.on('open', () => { observation.opened = true; changed(); });
+    socket.on('error', error => { observation.errors.push({ name: error.name, message: error.message }); changed(); });
+    socket.on('message', bytes => {
+      const raw = bytes.toString(), entry = { receivedAt: new Date().toISOString(), raw }; observation.messages.push(entry);
+      try {
+        entry.message = JSON.parse(raw);
+        if (entry.message.MessageType === 'ForceKeepAlive' && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ MessageType: 'KeepAlive' }));
+        }
+      } catch (error) { observation.errors.push({ name: error.name, message: error.message }); }
+      changed();
+    });
+    await notifications.waitFor(() => observation.opened
+      && observation.messages.some(entry => entry.message?.MessageType === 'ForceKeepAlive'), 'authenticated session readiness');
+  };
+  const drainNativeNotifications = async (start, expected) => {
+    const active = notifications, batch = { messageStart: start, expected, observed: [], complete: false };
+    active.observation.batches.push(batch);
+    const expectedById = new Map(expected.map(value => [idKey(value.ItemId), { ...value, ItemId: idKey(value.ItemId) }]));
+    await active.waitFor(() => {
+      const latest = new Map();
+      for (const entry of active.observation.messages.slice(start)) {
+        const message = entry.message;
+        if (message?.MessageType !== 'UserDataChanged' || idKey(message.Data?.UserId ?? '') !== idKey(current.userId)) continue;
+        for (const value of message.Data.UserDataList ?? []) {
+          const id = idKey(value.ItemId ?? '');
+          if (expectedById.has(id)) latest.set(id, { ...publicUserData(value), ItemId: id });
+        }
+      }
+      batch.observed = ids.filter(id => latest.has(id)).map(id => latest.get(id));
+      return expectedById.size === input.cases.length
+        && [...expectedById].every(([id, expectedValue]) => isDeepStrictEqual(latest.get(id), expectedValue));
+    }, 'UserDataChanged for every final saved item value');
+    batch.complete = true;
+  };
+  const stopNativeNotifications = async () => {
+    if (!notifications) return;
+    const closing = notifications; let timeout, forced = false;
+    const waitClosed = milliseconds => Promise.race([closing.closed.then(() => true), new Promise(resolve => {
+      timeout = setTimeout(() => resolve(false), milliseconds);
+    })]).finally(() => clearTimeout(timeout));
+    if (closing.socket.readyState === WebSocket.OPEN) closing.socket.close(1000, 'Date notifications consumed');
+    else if (closing.socket.readyState === WebSocket.CONNECTING) { forced = true; closing.socket.terminate(); }
+    let stopped = await waitClosed(10000);
+    if (!stopped) { forced = true; closing.socket.terminate(); stopped = await waitClosed(5000); }
+    report.cleanup.push({ name: closing.observation.label + '-websocket', stopped, forced,
+      close: closing.observation.close, errors: closing.observation.errors });
+    safeToRemove &&= stopped; if (stopped) notifications = undefined;
+    assert.ok(stopped && !forced && closing.observation.close?.code === 1000
+      && closing.observation.errors.length === 0, 'The Native notification reader must close normally.');
+  };
   const stopNative = async label => {
-    if (!native) return;
+    let notificationFailure;
+    try { await stopNativeNotifications(); } catch (error) { notificationFailure = error; }
+    if (!native) { if (notificationFailure) throw notificationFailure; return; }
     const result = await native.stop(async () => (await request(nativeOrigin, '/System/Shutdown', { method: 'POST' })).status,
       () => portAvailable(nativePort));
     report.cleanup.push({ name: label, ...result }); safeToRemove &&= result.pidGone;
     if (result.pidGone) native = undefined;
     assert.ok(result.cleanShutdown && result.pidGone && result.portAvailable, label);
+    if (notificationFailure) throw notificationFailure;
   };
   const startNode = async (target, zone, label) => {
     const stdout = openSync(path.join(root, label + '-stdout.log'), 'wx');
@@ -179,6 +261,8 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
     return observations;
   };
   const writeDates = async (origin, field, playCount, favorite) => {
+    if (origin === nativeOrigin) assert.ok(notifications, 'Native writes require an authenticated notification reader.');
+    const notificationStart = origin === nativeOrigin ? notifications.observation.messages.length : undefined;
     const result = [];
     for (const [index, id] of ids.entries()) {
       const response = await request(origin, '/UserItems/' + id + '/UserData', { method: 'POST',
@@ -187,6 +271,7 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
       result.push(publicUserData(response.bodyJson));
     }
     assert.deepEqual(await readUserData(origin, result, 'immediate persisted reads'), result);
+    if (notificationStart !== undefined) await drainNativeNotifications(notificationStart, result);
     return result;
   };
   const rows = async (target, expected) => {
@@ -245,6 +330,7 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
       return idKey(found[0].Id);
     });
     assert.equal(new Set(ids).size, input.cases.length); report.identities = listed.bodyJson.Items;
+    await startNativeNotifications('native-initial');
     report.nativeInitial = await writeDates(nativeOrigin, 'input', 7, false);
     for (const [index, observation] of oracle.observations.entries()) {
       assert.equal(report.nativeInitial[index].LastPlayedDate, canonicalUtc(observation.wire));
@@ -315,6 +401,7 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
       native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-' + zone.name, origin: nativeOrigin });
       await native.ready(); await idleTasks(nativeOrigin);
       branch.nativeImportedReads = await readUserData(nativeOrigin, branch.nodeWrites, 'Native reads Node-persisted UTC dates');
+      await startNativeNotifications('native-' + zone.name);
       branch.nativeContinued = await writeDates(nativeOrigin, 'continued', 42, true);
       for (const [index, value] of branch.nativeContinued.entries()) assert.deepEqual(value, { ...branch.nodeWrites[index],
         PlayCount: 42, IsFavorite: true, LastPlayedDate: canonicalUtc(input.cases[index].continued) });
@@ -363,8 +450,11 @@ async function runExchange({ input, inputBytes, inputFilename, oracle, outputRoo
       sourceBindings: report.sourceBindings, actualNativeHttp: Boolean(report.nativeInitial && report.zones.length === input.zones.length
         && report.zones.every(zone => zone.nativeContinued?.length === input.cases.length)),
       productionPostgresRuntime: Boolean(report.zones.length === input.zones.length && report.zones.every(zone => zone.freshNodeReads)),
+      nativeNotificationsConsumed: report.notifications.length === input.zones.length + 1
+        && report.notifications.every(value => value.batches.length === 1 && value.batches[0].complete
+          && value.batches[0].observed.length === input.cases.length && value.close?.code === 1000 && value.errors.length === 0),
       completeLibraryVerified: false, fullInstanceVerified: false, phaseAcceptance: false }, secrets));
-    if (native || node) safeToRemove = false;
+    if (native || node || notifications) safeToRemove = false;
     if (safeToRemove) await attempt(() => output.publishAndClose());
     else {
       await mkdir(destination); await writeFile(path.join(destination, 'report.json'), filterEvidenceJson({ ...report, privateRootRetained: true }, secrets));

@@ -12,7 +12,14 @@ Native component records actual `JsonDefaults`, `UpdateUserItemDataDto` and
 UTC value and complete precision are verified through real HTTP and persistence.
 
 Native creates a real photo library and scans eight files to obtain the UserData
-targets. It writes each date through HTTP and stops. For each declared Node
+targets. Before every Native write batch, an actual authenticated WebSocket
+reader connects using the initialized user's device. After HTTP write/readback,
+it consumes `UserDataChanged` for all eight item IDs with their complete final
+public UserData values, retaining raw messages. It closes the socket normally
+before requesting Native shutdown. Scheduled-task idleness alone does not
+establish completion of these asynchronous notifications; no fixed delay or
+abnormal-exit exemption substitutes for receipt of the saved values.
+For each declared Node
 timezone (UTC, Taipei and Shanghai), the test imports the complete SQLite into a
 fresh PostgreSQL schema and starts the production entry point in a separate
 process with `TZ` explicitly supplied. HTTP reads the original Native state,
