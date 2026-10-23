@@ -15,6 +15,25 @@ function ticks(text) {
 
 const subtitleError = (message, status = 400) => Object.assign(new Error(message), { status });
 
+function webVttMapMilliseconds(line) {
+  if (!/^X-TIMESTAMP-MAP=/iu.test(line) || !/MPEGTS:/iu.test(line)) return null;
+  const compact = line.replaceAll(' ', '');
+  const local = /LOCAL:([\d:.]*)/iu.exec(compact)?.[1] ?? '';
+  const parts = local.split(/[:.]/u);
+  if (parts.length === 3) parts.unshift('0');
+  let localMilliseconds = 0;
+  if (parts.length === 4) {
+    if (parts.some(value => !/^\d+$/u.test(value) || Number(value) > 2147483647)) {
+      throw subtitleError('The WebVTT timestamp map is invalid.');
+    }
+    localMilliseconds = ((Number(parts[0]) * 60 + Number(parts[1])) * 60 + Number(parts[2])) * 1000 + Number(parts[3]);
+  }
+  const media = /MPEGTS:(\d+)/iu.exec(compact);
+  if (!media || BigInt(media[1]) > 9223372036854775807n) return 0;
+  const seconds = Number(media[1]) / 90000 - localMilliseconds / 1000;
+  return seconds > 0 && seconds < 90000 ? seconds * 1000 : 0;
+}
+
 // ASS/SSA is intentionally limited to the grammar covered by the frozen native
 // oracle. Valid features outside this subset fail instead of being approximated.
 function assTicks(value) {
@@ -133,6 +152,7 @@ export function convertSubtitle(text, inputFormat, outputFormat, { startPosition
   const lines = text.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/);
   const cues = ['ass', 'ssa'].includes(inputFormat) ? assCues(text, inputFormat) : [];
   const header = ['WEBVTT'];
+  let mappedMilliseconds = 0;
   if (inputFormat === 'vtt' && lines[0].startsWith('WEBVTT')) header[0] = lines[0];
   for (let index = 0; !['ass', 'ssa'].includes(inputFormat) && index < lines.length; index++) {
     if (inputFormat === 'vtt' && /^(?:NOTE|STYLE|REGION)(?: |$)/.test(lines[index]) && !lines[index - 1]) {
@@ -141,10 +161,19 @@ export function convertSubtitle(text, inputFormat, outputFormat, { startPosition
       if (!cues.length) header.push(block.join('\r\n'));
       continue;
     }
+    if (inputFormat === 'vtt' && index > 0) {
+      const mapped = webVttMapMilliseconds(lines[index]);
+      if (mapped !== null) { mappedMilliseconds = mapped; continue; }
+    }
     const time = /^\s*(\S+)\s+-->\s+(\S+)(?:\s+.*)?$/.exec(lines[index]);
     if (!time) continue;
-    const start = ticks(time[1]), end = ticks(time[2]);
+    let start = ticks(time[1]), end = ticks(time[2]);
     if (start === null || end === null) continue;
+    if (mappedMilliseconds) {
+      // Apply the media clock before selecting the playback window or relocating cues.
+      start = BigInt(Math.trunc((Number(start) / 10000 + mappedMilliseconds) * 10000));
+      end = BigInt(Math.trunc((Number(end) / 10000 + mappedMilliseconds) * 10000));
+    }
     const number = inputFormat === 'srt' && /^[+-]?\d+$/.test(lines[index - 1]?.trim()) ? Number(lines[index - 1].trim()) : cues.length + 1;
     const content = [];
     while (++index < lines.length && lines[index].trim()) content.push(inputFormat === 'vtt' ? lines[index].trim() : lines[index].replaceAll('\0', ' ').trimEnd());

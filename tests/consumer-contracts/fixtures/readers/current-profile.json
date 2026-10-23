@@ -7,7 +7,8 @@
     "tasks": 2,
     "configurations": 2,
     "playlists": 6,
-    "subtitles": 590
+    "subtitles": 590,
+    "subtitleTimeMaps": 10
   },
   "sourcePaths": [
     "Emby.Server.Implementations/Cryptography/CryptographyProvider.cs",
@@ -45,10 +46,16 @@
       "sha256": "5d0b8e1240b8f8603c22432a46abe4bf284997447710965be74294676acbd751"
     },
     {
+      "role": "subtitleTimeMaps",
+      "filename": "current/timestamp-map-input.json",
+      "bytes": 3669,
+      "sha256": "0e9ad9b0f6e7b6388a5b72ec46ef5764cd1004b4f76875a3990f61aaa9316981"
+    },
+    {
       "role": "oracleSource",
       "filename": "current/Program.cs",
-      "bytes": 10263,
-      "sha256": "bf1822f2563d93bac32fcac39f3ab95089ae287774b36e2d87f4c89c744942a0"
+      "bytes": 11664,
+      "sha256": "6a79058d1f05a1bdecdffa1a4df99bbb5fd5a05dc8aedde8a3814798918c0028"
     },
     {
       "role": "oracleProject",

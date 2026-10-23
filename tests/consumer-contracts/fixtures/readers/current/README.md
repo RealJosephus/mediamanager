@@ -6,6 +6,11 @@ and 590 subtitle layouts. The public JSON boundary additionally covers Single
 and Double negative zero, Int64 endpoints, seven-digit dates, null dictionary
 values, surrogate replacement, and non-finite rejection.
 
+`timestamp-map-input.json` adds ten neutral WebVTT scenarios alongside the
+unchanged 590 layouts: nonzero and short LOCAL values, case and space variants,
+later segment maps, map text inside a NOTE, zero/negative/out-of-range offsets,
+submillisecond media clocks, and preserved or relocated playback windows.
+
 `current-readers.js` verifies the profile files and the designated same-job Native
 build, including its source offer and runtime closure. Its source bindings name
 the relevant Jellyfin consumers; the full source manifest binds the remaining
@@ -43,6 +48,11 @@ for executing those consumers.
   reads that Native output. Only CRLF/LF/CR representation is normalized while
   retaining line order and empty lines. Cue IDs, times, text, markup and failure
   outcomes remain strict. Runtime exception names and messages are diagnostic.
+  The additional time-map inputs also pass through the designated Native
+  `SubtitleEncoder.FilterEvents` with the same start/end and preservation
+  options as Node. Both sides write the resulting cues and read the other
+  side's output. This checks that mapping occurs before clipping or relocation
+  and is applied exactly once when the rewritten subtitle is read again.
 
 The output directory is `consumer-readers-current-*` under the isolated
 validation root. It retains `capture-report.json`, `consumer-input.json`, the

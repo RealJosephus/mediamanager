@@ -10,8 +10,10 @@ coverage and receipt layout.
 The root `input.json`, `native.json`, `binding.json`, `provenance.json`,
 `Program.cs`, and `Oracle.csproj` retain their original bytes and recording scope.
 The historical loader's external recording paths are not dependencies of this
-current consumer. The current neutral input is an exact copy of the original
-input; it contains no expected Native observations.
+current consumer. The current neutral `input.json` is an exact copy of the
+original input. The additional `current/timestamp-map-input.json` supplies ten
+time-map and playback-window scenarios. Neither contains expected Native
+observations.
 
 Neither a component recording nor a successful component comparison grants
 phase or release acceptance. Those decisions require the complete Actions scope

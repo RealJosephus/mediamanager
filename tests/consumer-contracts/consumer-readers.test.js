@@ -146,13 +146,17 @@ test('current WPL/ZPL writers and both readers retain entry metadata, paths, ord
   await recordCandidate('playlists', observations);
 });
 
-test('590 current subtitle layouts retain cue values and failures through both readers and writers', async t => {
+test('590 current subtitle layouts and timestamp maps retain cue values and failures through both readers and writers', async t => {
   const { input, candidate, native, recordCandidate } = await currentReaders();
   assert.equal(native.subtitles.length, 590);
   const baselines = new Map(native.subtitles.map(result => [result.name, result.baseline]));
   const observations = native.subtitles.map((result, index) => ({ name: result.name,
     reverse: result.baseline.rewritten == null ? null : subtitleObservation(result.baseline.rewritten, input.subtitles[index].format) }));
   await recordCandidate('subtitle-reverse', observations);
+  assert.equal(native.subtitleTimeMaps.length, 10);
+  const mappedObservations = native.subtitleTimeMaps.map((result, index) => ({ name: result.name,
+    reverse: result.baseline.rewritten == null ? null : subtitleObservation(result.baseline.rewritten, input.subtitleTimeMaps[index].format) }));
+  await recordCandidate('subtitle-time-map-reverse', mappedObservations);
   for (const [index, sample] of input.subtitles.entries()) {
     const result = native.subtitles[index], node = candidate.subtitles[index];
     const base = baselines.get(sample.originalName + '--crlf');
@@ -163,5 +167,13 @@ test('590 current subtitle layouts retain cue values and failures through both r
     const rewritten = { json: result.baseline.rereadJson, error: result.baseline.error };
     assertProjectedEqual(t, sample.name + ' Native reads current Node output', result.node, rewritten, functionalSubtitle);
     assertProjectedEqual(t, sample.name + ' Node reads current Native rewrite', observations[index].reverse, rewritten, functionalSubtitle);
+  }
+  for (const [index, sample] of input.subtitleTimeMaps.entries()) {
+    const result = native.subtitleTimeMaps[index], node = candidate.subtitleTimeMaps[index];
+    assert.equal(result.baseline.error, null, sample.name);
+    assertProjectedEqual(t, sample.name + ' mapped playback window', node, result.baseline, functionalSubtitle);
+    const rewritten = { json: result.baseline.rereadJson, error: result.baseline.error };
+    assertProjectedEqual(t, sample.name + ' Native reads mapped Node output', result.node, rewritten, functionalSubtitle);
+    assertProjectedEqual(t, sample.name + ' Node reads mapped Native output', mappedObservations[index].reverse, rewritten, functionalSubtitle);
   }
 });

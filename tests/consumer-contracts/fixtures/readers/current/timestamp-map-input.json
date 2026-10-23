@@ -1,0 +1,62 @@
+[
+  {
+    "name": "local-first-nonzero",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=LOCAL:00:00:05.250,MPEGTS:1800000\r\n\r\n00:00:01.125 --> 00:00:03.375\r\nLocal origin\r\n"
+  },
+  {
+    "name": "lowercase-spaces-short-local",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\nx-timestamp-map=local:00:05.250, mpegts:1800000\n\n00:00:01.125 --> 00:00:03.375\nShort local origin\n"
+  },
+  {
+    "name": "subsequent-segment-map",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nFirst segment\r\n\r\nWEBVTT\r\nX-TIMESTAMP-MAP=LOCAL:00:00:00.000,MPEGTS:1800000\r\n\r\n00:00:04.000 --> 00:00:06.000\r\nSecond segment\r\n"
+  },
+  {
+    "name": "note-map-does-not-replace-active-map",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\nNOTE timing example\r\nX-TIMESTAMP-MAP=MPEGTS:1800000,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nOnly the active header applies\r\n"
+  },
+  {
+    "name": "zero-offset-resets-prior-map",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nMapped cue\r\n\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:10.000\r\n\r\n00:00:04.000 --> 00:00:06.000\r\nZero offset cue\r\n"
+  },
+  {
+    "name": "negative-offset-ignored",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\rX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:20.000\r\r00:00:21.000 --> 00:00:23.000\rNegative offset guard\r"
+  },
+  {
+    "name": "twenty-five-hour-offset-ignored",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:8100000000,LOCAL:00:00:00.000\n\n00:00:01.000 --> 00:00:03.000\nTimescale guard\n"
+  },
+  {
+    "name": "fractional-media-clock-ticks",
+    "format": "vtt",
+    "options": { "startPositionTicks": "0", "endPositionTicks": "0", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900001,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nSubmillisecond media clock\r\n"
+  },
+  {
+    "name": "mapped-window-relative",
+    "format": "vtt",
+    "options": { "startPositionTicks": "120000000", "endPositionTicks": "140000000", "copyTimestamps": false },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:00.000 --> 00:00:00.500\r\nBefore window\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nOverlaps start\r\n\r\n00:00:04.000 --> 00:00:06.000\r\nStarts at end\r\n\r\n00:00:07.000 --> 00:00:09.000\r\nAfter window\r\n"
+  },
+  {
+    "name": "mapped-window-preserved",
+    "format": "vtt",
+    "options": { "startPositionTicks": "120000000", "endPositionTicks": "140000000", "copyTimestamps": true },
+    "text": "WEBVTT\r\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:00.000 --> 00:00:00.500\r\nBefore window\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nOverlaps start\r\n\r\n00:00:04.000 --> 00:00:06.000\r\nStarts at end\r\n\r\n00:00:07.000 --> 00:00:09.000\r\nAfter window\r\n"
+  }
+]

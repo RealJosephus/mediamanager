@@ -1,5 +1,6 @@
 // Current consumer observations against the designated runtime assemblies.
 using System.Globalization;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -40,12 +41,20 @@ var nativePasswords = new[] {
 };
 
 var parser = new SubtitleEditParser(NullLogger<SubtitleEditParser>.Instance);
-object ReadSubtitle(string text, string format) {
+using var encoder = new SubtitleEncoder(NullLogger<SubtitleEncoder>.Instance, null!, null!, null!, null!, parser, null!, null!);
+var filterEvents = typeof(SubtitleEncoder).GetMethod("FilterEvents", BindingFlags.Instance | BindingFlags.NonPublic)!;
+object ReadSubtitle(string text, string format, JsonElement? conversion = null) {
     string? json = null, rewritten = null, rereadJson = null;
     object? error = null;
     try {
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(text));
         var subtitle = parser.Parse(stream, format);
+        if (conversion is { } settings) {
+            filterEvents.Invoke(encoder, new object[] { subtitle,
+                long.Parse(settings.GetProperty("startPositionTicks").GetString()!, CultureInfo.InvariantCulture),
+                long.Parse(settings.GetProperty("endPositionTicks").GetString()!, CultureInfo.InvariantCulture),
+                settings.GetProperty("copyTimestamps").GetBoolean() });
+        }
         json = new JsonWriter().ToText(subtitle, "untitled");
         SubtitleFormat writer = format == "srt" ? new SubRip() : new WebVTT();
         rewritten = writer.ToText(subtitle, "untitled");
@@ -60,6 +69,15 @@ var subtitles = candidate.GetProperty("subtitles").EnumerateArray().Select((samp
     var rewritten = sample.GetProperty("rewritten");
     return new { name = sample.GetProperty("name").GetString(),
         baseline = ReadSubtitle(neutralSubtitles[index].GetProperty("text").GetString()!, format),
+        node = rewritten.ValueKind == JsonValueKind.Null ? null : ReadSubtitle(rewritten.GetString()!, format) };
+}).ToArray();
+var neutralTimeMaps = input.GetProperty("subtitleTimeMaps").EnumerateArray().ToArray();
+var subtitleTimeMaps = candidate.GetProperty("subtitleTimeMaps").EnumerateArray().Select((sample, index) => {
+    var format = sample.GetProperty("format").GetString()!;
+    var neutral = neutralTimeMaps[index];
+    var rewritten = sample.GetProperty("rewritten");
+    return new { name = sample.GetProperty("name").GetString(),
+        baseline = ReadSubtitle(neutral.GetProperty("text").GetString()!, format, neutral.GetProperty("options")),
         node = rewritten.ValueKind == JsonValueKind.Null ? null : ReadSubtitle(rewritten.GetString()!, format) };
 }).ToArray();
 
@@ -138,7 +156,7 @@ var nonFinite = new[] { float.NaN, float.PositiveInfinity, float.NegativeInfinit
     catch (Exception error) { return new { rejected = true, type = error.GetType().Name, message = error.Message }; }
 }).ToArray();
 var result = new { actualExecution = true, inputSha256 = Convert.ToHexString(SHA256.HashData(inputBytes)).ToLowerInvariant(),
-    timezone = TimeZoneInfo.Local.Id, passwords, nativePasswords, subtitles, configurations, tasks, playlists,
+    timezone = TimeZoneInfo.Local.Id, passwords, nativePasswords, subtitles, subtitleTimeMaps, configurations, tasks, playlists,
     jsonBoundary, jsonReadBack, nonFinite,
     assemblies = new[] { typeof(PasswordHash).Assembly, typeof(CryptographyProvider).Assembly, typeof(SubtitleEditParser).Assembly,
         typeof(SubtitleFormat).Assembly, typeof(JsonDefaults).Assembly, typeof(WplContent).Assembly }.Distinct().Select(assembly => new {

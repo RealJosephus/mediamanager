@@ -30,10 +30,10 @@ export function publicJsonBoundary() {
     InvalidKey: new Map([['\uD800', '\uD800']]) }, ['Value', 'NegativeZero']);
 }
 
-export function subtitleObservation(text, format) {
+export function subtitleObservation(text, format, options = { copyTimestamps: true }) {
   try {
-    return { json: convertSubtitle(text, format, 'json', { copyTimestamps: true }),
-      rewritten: convertSubtitle(text, format, format, { copyTimestamps: true }), error: null };
+    return { json: convertSubtitle(text, format, 'json', options),
+      rewritten: convertSubtitle(text, format, format, options), error: null };
   } catch (error) { return { json: null, rewritten: null, error: errorObservation(error) }; }
 }
 
@@ -49,7 +49,7 @@ export function configurationValues(value) {
 async function prepareCandidate(input, writerInput, output) {
   const root = path.join(output, 'candidate');
   await mkdir(root);
-  const candidate = { passwords: [], tasks: [], configurations: [], playlists: [], subtitles: [],
+  const candidate = { passwords: [], tasks: [], configurations: [], playlists: [], subtitles: [], subtitleTimeMaps: [],
     jsonBoundary: stringifyNativeJson(publicJsonBoundary()) };
   for (const sample of input.passwords) {
     let hash;
@@ -94,6 +94,8 @@ async function prepareCandidate(input, writerInput, output) {
   }
   for (const sample of input.subtitles) candidate.subtitles.push({ name: sample.name, format: sample.format,
     originalName: sample.originalName, ...subtitleObservation(sample.text, sample.format) });
+  for (const sample of input.subtitleTimeMaps) candidate.subtitleTimeMaps.push({ name: sample.name, format: sample.format,
+    options: sample.options, ...subtitleObservation(sample.text, sample.format, sample.options) });
   return candidate;
 }
 
@@ -117,7 +119,8 @@ async function captureCurrentReaders() {
       report.inputs.push({ role: expected.role, ...actual });
     }
     const readInput = async role => JSON.parse(await readFile(new URL(profile.inputs.find(entry => entry.role === role).filename, profileUrl), 'utf8'));
-    const input = await readInput('scenarios'), writerInput = await readInput('writerScenarios');
+    const input = { ...await readInput('scenarios'), subtitleTimeMaps: await readInput('subtitleTimeMaps') };
+    const writerInput = await readInput('writerScenarios');
     for (const [kind, count] of Object.entries(profile.cases)) {
       assert.equal(input[kind].length, count, kind);
       assert.equal(new Set(input[kind].map(sample => sample.name)).size, count, kind + ' distinct names');
@@ -150,7 +153,7 @@ async function captureCurrentReaders() {
       const bound = await describeFile(path.join(build.runtime, assembly.name + '.dll'));
       assert.equal(bound.available, true, assembly.name); assert.equal(bound.sha256, assembly.sha256, assembly.name);
     }
-    for (const kind of ['passwords', 'tasks', 'configurations', 'playlists', 'subtitles']) {
+    for (const kind of ['passwords', 'tasks', 'configurations', 'playlists', 'subtitles', 'subtitleTimeMaps']) {
       assert.deepEqual(native[kind].map(result => result.name), candidate[kind].map(sample => sample.name), kind);
     }
     report.nativeExecutionRecorded = true;

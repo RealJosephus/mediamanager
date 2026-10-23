@@ -236,7 +236,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
   ['tests/metadata/nfo-scalar-provider.test.js', 'tests/metadata/fixtures/nfo-scalar-provider',
     ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json', ['current/layout-input.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', 'tests/consumer-contracts/fixtures/readers',
-    ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/writer-input.json']],
+    ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/writer-input.json', 'current/timestamp-map-input.json']],
   ['tests/metadata/local-xml-stream.test.js', 'tests/metadata/fixtures/local-xml-save-current',
     ['dotnet', 'jellyfinDll'], null, 'input.json', [], ''],
   ['tests/library/movie-similar.test.js', 'tests/library/fixtures/movie-similar',
