@@ -110,7 +110,10 @@ export class ServerConfigurationStore {
       // SaveConfiguration. A persistence failure keeps this live value.
       const render = change(), filename = path.join(this.directory, name);
       const before = await this.#read(filename);
-      if (process.platform === 'win32' && !(before.mode & 0o200)) throw failure('EACCES', 'Native configuration is read-only.', 500);
+      // Renaming a temporary file can replace a read-only target on Unix.
+      // Require the same existing-file write access as the native XML writer.
+      const writable = await this.fileSystem.open(filename, 'r+');
+      await writable.close();
       const xml = decodeNativeText(before.bytes).replace(/^(<\?xml\b[^?]*\bencoding\s*=\s*)(["'])[^"']+\2/iu, '$1$2utf-8$2');
       const bytes = Buffer.from(render(xml));
       const temporary = path.join(this.directory, `.${name}.${randomUUID()}.tmp`);

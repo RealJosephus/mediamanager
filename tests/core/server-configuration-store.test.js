@@ -51,6 +51,18 @@ test('failed atomic replacement leaves old disk bytes and the native new live co
   assert.deepEqual(await fs.readdir(directory), ['system.xml']);
 });
 
+test('a read-only configuration keeps its bytes while the failed save retains the new live value', async t => {
+  const { store, configuration, filename, directory } = await setup(t);
+  const next = [{ Name: 'Next', Value: 'tvshows' }];
+  await fs.chmod(filename, 0o444);
+  try {
+    await assert.rejects(store.updateContentTypes(() => next), error => ['EACCES', 'EPERM'].includes(error.code));
+    assert.deepEqual(configuration.ContentTypes, next);
+    assert.equal(await fs.readFile(filename, 'utf8'), original);
+    assert.deepEqual(await fs.readdir(directory), ['system.xml']);
+  } finally { await fs.chmod(filename, 0o666); }
+});
+
 test('competing configuration bytes are preserved and reject the stale replacement', async t => {
   let count = 0, filename;
   const external = original.replace('Old', 'External');

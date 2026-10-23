@@ -19,6 +19,7 @@ import { recordCurrentOracleOnce } from '../helpers/current-oracle.js';
 import { projectStartupObservation, startupTables } from './fixtures/startup/observations.js';
 
 const fixture = new URL('./fixtures/startup/', import.meta.url);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const inputBytes = await fs.readFile(new URL('input.json', fixture)), input = JSON.parse(inputBytes);
 const enabled = { skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_JELLYFIN_DLL }, diskInputs = [];
 const currentStartup = (label = 'startup-current') => recordCurrentOracleOnce({ owner: import.meta.url, label,
