@@ -734,31 +734,58 @@ export class LibraryService extends EventEmitter {
   }
 
   async #prepareBoxSetRootNavigation(db, user, state, items) {
-    if (!user || !items.length || state.rootNavigation?.user === user) return;
+    if (!user || !items.length) return undefined;
     const ready = this.#stateScopes.getStore()?.readyRootFrames.get(idKey(user.Id));
-    if (ready) { state.rootNavigation = { user, frame: ready }; return; }
-    for (let offset = 0; offset < items.length; offset += 128) {
-      const batch = items.slice(offset, offset + 128);
-      const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = await this.#postgresVisibility(state, user);
-      const required = await queryPostgresItemPage(db, { ids: batch.map(item => item.Id), limit: 1 }, {
-        userId: user.Id, includeOwnedItems: true, includeAlternateVersions: true,
-        resumableMode: 'memory', nativeVisibilityProjections: nativeVisibilityProjections(batch),
-        visibility: { ...visibility, itemMode: 'standalone', boxSetStandalone: true,
-          boxSetRootLookupOnly: true, boxSetChildRatingMode: 'memory' },
-      });
-      if (required.total > 0) { await this.#prepareRootNavigation(db, user, state); return; }
+    if (ready) state.rootNavigation = { user, frame: ready };
+    const policy = user.Policy;
+    const parentalFolders = policy.BlockedTags?.length || policy.AllowedTags?.length
+      || items.some(item => comparisonItemRating(item, state) != null
+        && !preferredMetadataCountryBeforeFolders(item, state).found);
+    let context = parentalFolders ? await this.#postgresVisibility(state, user)
+      : this.#postgresVisibilityContext(state, user, this.#rootFolderProjection());
+    const requiresLookup = async target => {
+      for (let offset = 0; offset < items.length; offset += 128) {
+        const batch = items.slice(offset, offset + 128);
+        const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = context;
+        const required = await queryPostgresItemPage(db, { ids: batch.map(item => item.Id), limit: 1 }, {
+          userId: user.Id, includeOwnedItems: true, includeAlternateVersions: true,
+          resumableMode: 'memory', nativeVisibilityProjections: nativeVisibilityProjections(batch),
+          visibility: { ...visibility, itemMode: 'standalone', boxSetStandalone: true,
+            boxSetRootLookup: target, boxSetChildRatingMode: 'memory' },
+        });
+        if (required.total > 0) return true;
+      }
+      return false;
+    };
+    // Own/parent country and an empty tag policy need no root catalogue. SQL
+    // first checks parental access, raw links and explicit empty membership.
+    if (!parentalFolders) {
+      if (!await requiresLookup('folders')) return context;
+      context = await this.#postgresVisibility(state, user);
     }
+    if (state.rootNavigation?.user !== user && await requiresLookup('children')) {
+      await this.#prepareRootNavigation(db, user, state);
+      context = await this.#postgresVisibility(state, user);
+    }
+    return context;
   }
 
   async #prepareFolderQueryVisibility(db, user, state, plan, options) {
+    return this.#prepareBoxSetQueryVisibility(db, user, state,
+      { includeitemtypes: ['BoxSet'], limit: 1 }, { ...options, scope: {}, nativeItemsPlan: plan });
+  }
+
+  async #prepareBoxSetQueryVisibility(db, user, state, query, options) {
     if (!user || !options.visibility?.boxSetStandalone) return options;
+    if (query.includeitemtypes?.length && !query.includeitemtypes.some(type => type.toLowerCase() === 'boxset')) return options;
     if (state.rootNavigation?.user !== user) {
       const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = options.visibility;
-      const required = await queryPostgresItemPage(db, { includeitemtypes: ['BoxSet'], limit: 1 }, {
-        ...options, scope: {}, nativeItemsPlan: plan, collapseTypes: null, includeOwnedItems: true,
+      const required = await queryPostgresItemPage(db, { ...query, includeitemtypes: ['BoxSet'],
+        startindex: 0, limit: 1, enabletotalrecordcount: true, sortby: [], sortorder: [] }, {
+        ...options, collapseTypes: null, includeOwnedItems: true,
         includeAlternateVersions: true, groupByPresentationKey: false,
         visibility: { ...visibility, itemMode: 'standalone', scopeTopParentAccess: false,
-          boxSetRootLookupOnly: true, boxSetChildRatingMode: 'memory' },
+          boxSetRootLookup: 'children', boxSetChildRatingMode: 'memory' },
       });
       if (required.total > 0) await this.#prepareRootNavigation(db, user, state);
     }
@@ -844,7 +871,10 @@ export class LibraryService extends EventEmitter {
 
   async #postgresVisibility(state, user) {
     if (!user) return undefined;
-    const foldersPlan = await this.rootFolderPlan(state);
+    return this.#postgresVisibilityContext(state, user, await this.rootFolderPlan(state));
+  }
+
+  #postgresVisibilityContext(state, user, foldersPlan) {
     const policy = user.Policy;
     const libraryFolders = state.items.filter(item => item.Type === 'CollectionFolder');
     const allowedLibraries = state.items
@@ -965,8 +995,8 @@ export class LibraryService extends EventEmitter {
     if (isLegacyBoxSet(item, linked.length > 0, this.options.programDataPath)) {
       return this.#baseItemVisible(db, item, user, state, { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags });
     }
-    if (!preparingRoot) await this.#prepareBoxSetRootNavigation(db, user, state, [item]);
-    const visibility = await this.#postgresVisibility(state, user);
+    const visibility = preparingRoot ? await this.#postgresVisibility(state, user)
+      : await this.#prepareBoxSetRootNavigation(db, user, state, [item]);
     const page = await queryPostgresItemPage(db, { ids: [item.Id], limit: 1 }, {
       userId: user.Id,
       includeOwnedItems: true,
@@ -1080,13 +1110,13 @@ export class LibraryService extends EventEmitter {
     const modernBoxSets = new Set(items.filter(item => item.Type === 'BoxSet'
       && !isLegacyBoxSet(item, linkTypes.has(idKey(item.Id)), this.options.programDataPath))
       .map(item => idKey(item.Id)));
-    if (modernBoxSets.size) await this.#prepareBoxSetRootNavigation(db, user, state,
-      items.filter(item => modernBoxSets.has(idKey(item.Id))));
+    const modernVisibility = modernBoxSets.size ? await this.#prepareBoxSetRootNavigation(db, user, state,
+      items.filter(item => modernBoxSets.has(idKey(item.Id)))) : undefined;
     const entityAccess = items.filter(item => !modernBoxSets.has(idKey(item.Id)) && (item.SourceType === 'Channel'
       || ['LiveTvChannel', 'LiveTvProgram'].includes(item.Type)));
     const entityKeys = new Set(entityAccess.map(item => idKey(item.Id)));
     const ordinary = items.filter(item => !modernBoxSets.has(idKey(item.Id)) && !entityKeys.has(idKey(item.Id)));
-    const baseVisibility = await this.#postgresVisibility(state, user) ?? {};
+    const baseVisibility = ordinary.length ? await this.#postgresVisibility(state, user) : undefined;
     const queryVisibleIds = async (candidates, visibility, nameAccessTypes = []) => {
       const result = [];
       for (let offset = 0; offset < candidates.length; offset += 128) {
@@ -1100,7 +1130,7 @@ export class LibraryService extends EventEmitter {
           nameAccessTypes,
           requireRelatedNameAccess: nameAccessTypes.length > 0,
           memorySortConfiguration: this.options.configuration,
-          memoryRatingContext: postgresParentalRatingContext(this.options, await this.rootFolderPlan(state)),
+          memoryRatingContext: visibility.ratingContext,
           nativeVisibilityProjections: nativeVisibilityProjections(batch),
           visibility,
         });
@@ -1122,7 +1152,7 @@ export class LibraryService extends EventEmitter {
     })) visible.add(idKey(item.Id));
     const modern = items.filter(item => modernBoxSets.has(idKey(item.Id)));
     for (const key of await queryVisibleIds(modern, {
-      ...baseVisibility,
+      ...modernVisibility,
       itemMode: 'standalone',
       boxSetStandalone: true,
       boxSetChildRatingMode: 'memory',
@@ -2493,6 +2523,12 @@ export class LibraryService extends EventEmitter {
         includeOwnedItems: true, includeAlternateVersions: true, groupByPresentationKey: false,
         memorySourceOrder: 'occurrence', memoryFolderPlayback: Boolean(user), memoryUserViewFilter: true });
       pageQuery = nativeUserViewFilterQuery(query, Boolean(user));
+    } else {
+      // Repository and post-filter branches also evaluate BoxSet.IsVisible.
+      // Derive membership in SQL first, then acquire actual visible root
+      // children only when a matching linked BoxSet consumes that source.
+      Object.assign(postgresQueryOptions, await this.#prepareBoxSetQueryVisibility(db,
+        user, navigation, pageQuery, postgresQueryOptions));
     }
     const leadingEmptyMemorySelector = !repositoryQuery
       ? ['studioids', 'genreids'].find(key => query[key]?.length && !nonemptyId(query[key][0]))

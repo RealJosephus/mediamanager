@@ -7,6 +7,7 @@ import { withPostgresNativeQueryJitOff } from '../../src/database/postgres-nativ
 import { queryPostgresItemPage } from '../../src/database/postgres-item-query.js';
 import { createPostgresNativeItemQueryProjection } from '../../src/library/postgres-native-item-query-projection.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from './postgres-fixture.js';
 
@@ -14,6 +15,77 @@ export const requiredValidationServices = ['postgres'];
 const text = value => typeof value === 'string' ? value : value?.text ?? '';
 const setting = async session => (await session.client.query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
 const set = (session, value, local = false) => session.client.query("SELECT set_config('jit', $1, $2) AS jit", [value, local]);
+
+pgCase('native cache reachability restores JIT before preparing or releasing resources on its max=1 pool', async (database, report) => {
+  for (const original of ['on', 'off']) {
+    const links = new PostgresLinkedChildrenStore({ database });
+    await links.initialize();
+    const relations = links.relationDatabase, graph = links.resourceGraph;
+    const baseline = await links.withSession(setting), query = database.client.query;
+    const marks = [], callbacks = [];
+    let owner;
+    try {
+      await links.withSession(session => set(session, original));
+      database.client.query = async (...args) => {
+        if (text(args[0]).startsWith('WITH RECURSIVE reachable')) {
+          const during = (await query("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
+          marks.push(during); report.observations.push({ original, during });
+        }
+        return query(...args);
+      };
+      const entity = graph.entity({}); owner = entity.retain();
+      const observe = async phase => {
+        const state = await links.withSession(setting);
+        assert.deepEqual(state, { jit: original, pid: baseline.pid }); callbacks.push(phase);
+      };
+      await graph.bind(entity, { prepare: () => observe('prepare'), detach() { callbacks.push('detach'); },
+        release: () => observe('release') });
+      await graph.collect(); assert.deepEqual(callbacks, ['prepare']);
+      owner.release(); await graph.collect();
+      assert.deepEqual(callbacks, ['prepare', 'detach', 'release']);
+      assert.ok(marks.length >= 2);
+      assert.ok(marks.every(state => state.jit === 'off' && state.pid === baseline.pid));
+      assert.deepEqual(await links.withSession(setting), { jit: original, pid: baseline.pid });
+    } finally {
+      owner?.release(); database.client.query = query;
+      try { await graph.close(); }
+      finally {
+        try { await links.withSession(session => set(session, baseline.jit)); }
+        finally { await links.close(); }
+      }
+    }
+  }
+});
+
+pgCase('BoxSet root lookup and repository visibility queries borrow and restore the native JIT setting', async (database, report) => {
+  await database.withConnection(async session => {
+    const baseline = await setting(session), originalQuery = session.client.query;
+    let fail = false;
+    session.client.query = async (...args) => {
+      if (text(args[0]).startsWith('WITH RECURSIVE')) {
+        const during = (await originalQuery("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
+        report.observations.push({ fail, during });
+        assert.deepEqual(during, { jit: 'off', pid: baseline.pid });
+        if (fail) return originalQuery('SELECT 1 / 0');
+      }
+      return originalQuery(...args);
+    };
+    try {
+      for (const original of ['on', 'off']) for (const lookup of [true, false]) {
+        await set(session, original); fail = false;
+        const visibility = { boxSetStandalone: true, boxSetRootFolders: [],
+          boxSetPathExpansion: { appDataPath: '', metadataPath: '' }, maxRating: 6,
+          ...(lookup ? { boxSetRootLookup: 'children' } : { boxSetUserRootIds: [] }) };
+        const page = await queryPostgresItemPage(session, { includeitemtypes: ['BoxSet'], limit: 1 }, { visibility });
+        assert.deepEqual(page.rows, []); assert.equal(page.total, 0);
+        assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
+        fail = true;
+        await assert.rejects(queryPostgresItemPage(session, { includeitemtypes: ['BoxSet'], limit: 1 }, { visibility }), { code: '22012' });
+        assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
+      }
+    } finally { session.client.query = originalQuery; await set(session, baseline.jit); }
+  });
+});
 const errorInfo = error => ({ name: error?.name, message: error?.message, code: error?.code, stack: error?.stack });
 async function within(promise, label) {
   let timer;

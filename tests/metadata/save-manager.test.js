@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+import { randomUUID } from 'node:crypto';
 import { ItemUpdateType, isSaverEnabled, saveMetadata } from '../../src/metadata/save-manager.js';
+import { createLocalXmlProviders } from '../../src/metadata/local-xml-provider.js';
+import { dateTicks } from '../../src/library/records.js';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 const saver = { id: 'fixture', name: 'Nfo', getSavePath: () => '/fixture.nfo', isEnabledFor: () => true, save: async () => ({ changed: false }) };
 
@@ -40,4 +47,44 @@ test('savers keep their access path for availability and report a distinct ident
   });
   assert.equal(outcomes.length, 1); assert.equal(outcomes[0].error, undefined);
   assert.deepEqual(events, [['begin', identity], ['save'], ['complete', identity, false]]);
+});
+
+test('a completed local metadata write does not invalidate its own default saved clock', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'metadata-save-clock-'));
+  t.after(async () => {
+    assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
+    assert.ok(path.basename(directory).startsWith('metadata-save-clock-'));
+    await fs.rm(directory, { recursive: true, force: true });
+  });
+  const filename = path.join(directory, 'collection.xml');
+  const item = { Type: 'BoxSet', Path: directory, SaveLocalMetadata: true, DateLastSaved: '0001-01-01T00:00:00Z' };
+  const provider = createLocalXmlProviders({ fileSystem: fs,
+    savePath: () => filename }).find(value => value.id === 'BoxSetXmlProvider');
+  const context = { localRoot: directory, localPath: directory };
+  const observations = [], report = { observations, complete: false, nativeExecutedByThisTest: false,
+    scope: 'Actual saveMetadata default clock, real private file writes and real BoxSetXmlProvider.HasChanged; no mocked clock, timestamp rounding or metadata parser replacement.' };
+  const output = path.join(validationOutputRoot(), 'metadata-save-clock-' + randomUUID() + '.json');
+  assertValidationOutputChild(output);
+  try {
+    for (let index = 0; index < 32; index++) {
+      const bytes = Buffer.from('<Item><LocalTitle>Clock ' + index + '</LocalTitle></Item>');
+      const outcomes = await saveMetadata(item, ItemUpdateType.MetadataEdit, [{
+        id: 'controlled-real-file-write', name: 'Emby Xml', isEnabledFor: () => true,
+        getSavePath: () => filename, save: async () => { await fs.writeFile(filename, bytes); return { changed: true }; },
+      }], { includeDisabled: true });
+      assert.equal(outcomes.length, 1); assert.equal(outcomes[0].error, undefined);
+      const info = await fs.stat(filename, { bigint: true });
+      const changed = await provider.hasChanged(item, context);
+      const observation = { index, saved: item.DateLastSaved, modifiedUnixNanoseconds: info.mtimeNs.toString(), changed };
+      observations.push(observation);
+      assert.equal(changed, false, JSON.stringify(observation));
+      assert.ok(dateTicks(item.DateLastSaved) >= info.mtimeNs / 100n + 621355968000000000n);
+      assert.deepEqual(await fs.readFile(filename), bytes);
+    }
+    const externalTime = new Date(Number((dateTicks(item.DateLastSaved) - 621355968000000000n) / 10000n) + 1000);
+    await fs.utimes(filename, externalTime, externalTime);
+    report.externalChangeDetected = await provider.hasChanged(item, context);
+    assert.equal(report.externalChangeDetected, true, 'An actual later sidecar change must remain visible.');
+    report.complete = true;
+  } finally { await fs.writeFile(output, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' }); }
 });

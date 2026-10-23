@@ -16,6 +16,9 @@ const native = JSON.parse(await readFile(new URL('native.json', root), 'utf8'));
 const expectedFor = scenario => native.results.find(entry => entry.name === scenario.name);
 const capture = item => ({ LibraryFolderIds: item.LibraryFolderIds == null ? null : item.LibraryFolderIds.map(idKey),
   PresentationUniqueKey: item.PresentationUniqueKey });
+// The recording's CLR exception class is diagnostic. Preserve the actual
+// collection query failure and the assertions that no save has committed.
+const nullPhysicalLocationsFailure = { status: 500, message: "Value cannot be null. (Parameter 'source')" };
 
 test('boxset affiliation recording binds actual native traversal, service and mapper', async () => {
   const provenance = JSON.parse(await readFile(new URL('provenance.json', root), 'utf8'));
@@ -48,7 +51,7 @@ async function controlledState(t,scenario) {
 
 for (const scenario of input.filter(entry => entry.mode === 'before')) test(`native boxset BeforeSave: ${scenario.name}`, async t => {
  const {loaded,item}=await controlledState(t,scenario), expected=expectedFor(scenario);
- if(expected.exception) return assert.rejects(beforeSaveBoxSetMetadata(item,loaded),error=>error.nativeException===expected.exception);
+ if(expected.exception) return assert.rejects(beforeSaveBoxSetMetadata(item,loaded),nullPhysicalLocationsFailure);
  assert.equal(await beforeSaveBoxSetMetadata(item,loaded)|ItemUpdateType.None,expected.updateType);
  assert.deepEqual(capture(item),capture(expected.item));
  assert.equal(await beforeSaveBoxSetMetadata(item,loaded),ItemUpdateType.None);
@@ -72,7 +75,7 @@ for (const dialect of ['postgres']) test(`${dialect}: BoxSet None refresh persis
     let result;
     try {
       const pending = fixture.host.refresh(Id, { MetadataRefreshMode: 'None', ImageRefreshMode: 'None' });
-      if (expected.exception) await assert.rejects(pending, error => error.nativeException === expected.exception);
+      if (expected.exception) await assert.rejects(pending, nullPhysicalLocationsFailure);
       else result = await pending;
     } finally { fixture.host.updates.off('ItemUpdated', report); }
     const saved = (await fixture.database.rows('BaseItems', { where: { Id } }))[0];

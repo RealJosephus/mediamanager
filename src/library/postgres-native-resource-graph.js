@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { quoteIdentifier as q } from '../database/model.js';
+import { withPostgresNativeQueryJitOff } from '../database/postgres-native-query-jit.js';
 
 /** Ownership metadata only. Catalogue values and native item identities never
  * enter this graph. An entity token identifies one exact JavaScript object. */
@@ -256,10 +257,12 @@ class PostgresNativeResourceGraph {
       if (tail !== this.#tail) continue;
       if (this.#fatal) return;
       const epoch = this.#epoch;
-      const pending = await this.#scope.run(async db => (await db.client.query(`${this.#reachability()}
+      // Recursive ownership marks borrow JIT only while SQL owns the relation
+      // connection. Preparation and release callbacks may need that same pool.
+      const pending = await this.#scope.run(db => withPostgresNativeQueryJitOff(db, async owner => (await owner.client.query(`${this.#reachability()}
         SELECT resource.id FROM ${this.tables.resources} resource WHERE NOT resource.prepared
         AND EXISTS(SELECT 1 FROM reachable live WHERE live.kind=1 AND live.id=resource.id)
-        ORDER BY resource.id LIMIT 128`)).rows);
+        ORDER BY resource.id LIMIT 128`)).rows));
       if (epoch !== this.#epoch) continue;
       if (pending.length) {
         for (const row of pending) {
@@ -277,7 +280,8 @@ class PostgresNativeResourceGraph {
         continue;
       }
       // Returning from run releases the relation connection before callbacks.
-      const rows = await this.#scope.run(async db => (await db.client.query(this.#unreachable())).rows);
+      const rows = await this.#scope.run(db => withPostgresNativeQueryJitOff(db,
+        async owner => (await owner.client.query(this.#unreachable())).rows));
       if (epoch !== this.#epoch) continue;
       if (!rows.length) {
         await this.#pruneEntities();

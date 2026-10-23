@@ -30,17 +30,17 @@ An earlier matching raw folder cannot hide a later mismatching folder whose
 PhysicalLocations is null. Own parental denial, no links, and explicit empty
 membership retain their earlier short circuits.
 
-The internal `visibility.boxSetRootLookupOnly: true` query mode is accepted only
-with `boxSetStandalone: true`. It returns only BoxSets which pass their own
-parental checks, have raw links and have a complete nonempty stored/live/derived
-membership. It reuses the same membership expression and raw-folder error order.
-This preflight does not consume `boxSetUserRootIds`, which may be omitted, and
-does not run the child parental checks that follow native root access. A caller
-uses these rows to decide whether to prepare the real root navigation frame,
-then runs the normal full visibility query. False or omitted keeps the existing
-full contract, including mandatory observed root identities. The test retains
+The internal `visibility.boxSetRootLookup` accepts `folders` or `children`, only
+with `boxSetStandalone: true`. Both apply own parental access and require raw
+links before inspecting membership. `folders` returns unknown or nonempty
+membership without deriving it or consuming the raw root-folder source.
+`children` uses the complete stored/live/derived membership and raw-folder error
+order to decide whether to prepare the actual visible root navigation frame.
+Neither lookup consumes `boxSetUserRootIds`, which may be omitted, or runs the
+child parental checks that follow native root access. Omission selects complete
+visibility, including mandatory observed root identities. The test retains
 own-denied, no-link, typed-empty, derived-empty, child-denied, explicit-null and
-late-null-source controls for the two distinct query purposes.
+late-null-source controls for each applicable lookup and the full query.
 
 `boxSetPathExpansion` has exactly the two string fields `appDataPath` and
 `metadataPath`, obtained from the actual expander applied to `%AppDataPath%`

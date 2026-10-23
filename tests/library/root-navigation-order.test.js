@@ -13,6 +13,8 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 import { testFileSystem } from '../storage/plugin-files.js';
 import { attachLibraryNavigation, closeLibraryNavigation } from './navigation-fixture.js';
+import { cachedFolderChildrenSnapshot } from '../../src/library/folder-cache.js';
+import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
 
 export const requiredValidationServices = ['postgres'];
 const id = number => `d12f0000-0000-0000-0000-${String(number).padStart(12, '0')}`;
@@ -148,5 +150,139 @@ test('real PostgreSQL root navigation preserves controller and BoxSet early-retu
     report.error = failure ? describeError(failure) : null;
     await writeFile(path.join(output, 'report.json'), stringifyNativeJson(report) + '\n');
     if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors, failure?.message ?? 'Root order fixture cleanup failed.', failure ? { cause: failure } : undefined);
+  }
+});
+
+// Each prefix owns a fresh database, relation runtime and exact root receiver.
+// An earlier country fallback must not prepare Children for a later BoxSet.
+const coldBoxSetPrefixes = [
+  { name: 'own-country parental denial', rating: 'R', links: true, membership: 'nonempty', outcome: 'denied', rootReads: 0 },
+  { name: 'own-country allowed empty links', rating: 'G', links: false, membership: 'nonempty', outcome: 'visible', rootReads: 0 },
+  { name: 'own-country allowed typed empty membership', rating: 'G', links: true, membership: 'empty', outcome: 'visible', rootReads: 0 },
+  { name: 'own-country allowed nonempty membership', rating: 'G', links: true, membership: 'nonempty', outcome: 'root-error', rootReads: 1 },
+];
+
+for (const control of coldBoxSetPrefixes) test(`real PostgreSQL cold modern BoxSet ${control.name} preserves Native root consumption`, {
+  skip: !postgresTestConnectionString, timeout: 180000,
+}, async () => {
+  const output = path.join(validationOutputRoot(), 'root-navigation-cold-boxset-' + randomUUID());
+  await mkdir(output, { recursive: true });
+  const report = { schemaVersion: 1, nativeExecutedByThisTest: false, phaseAcceptance: false, releaseAcceptance: false,
+    control, sourceBindings: [
+      { path: 'MediaBrowser.Controller/Entities/Movies/BoxSet.cs', lines: '50-65,155-202,233-247',
+        consumer: 'A path below DataPath is modern even with no links; own parental access precedes empty links, empty membership and user root navigation.' },
+      { path: 'MediaBrowser.Controller/Entities/BaseItem.cs', lines: '1806-1834,1865-1913,1951-1958',
+        consumer: 'Empty tag policy and an explicit own country evaluate parental access without collection folders or UserRoot.Children.' },
+      { path: 'MediaBrowser.Controller/Entities/Folder.cs', lines: '138-141,283-287',
+        consumer: 'Children is a separate cold LoadChildren cache; a null linked relation is consumed only by later linked navigation.' },
+      { path: 'MediaBrowser.Controller/Entities/UserRootFolder.cs', lines: '55-67',
+        consumer: 'The first Children load also captures child identities; a new receiver must start with neither cache.' },
+    ], observations: {}, cleanup: {} };
+  let database, root, library, liveRoot, rootOwner, originalPlan, failure;
+  let nullRootPlans = 0;
+  try {
+    database = await createPostgresTestDatabase(null, 'cold_boxset');
+    root = await mkdtemp(path.join(os.tmpdir(), 'mm-root-cold-boxset-'));
+    const media = path.join(root, 'media'), data = path.join(root, 'data'), metadata = path.join(root, 'metadata');
+    const boxPath = path.join(data, 'collections', 'cold');
+    for (const directory of [media, data, metadata]) await mkdir(directory);
+    // Native IsLegacyBoxSet reads Path and raw link length first. The empty-link
+    // control must remain below this exact DataPath instead of entering Folder.
+    assert.ok(boxPath.startsWith(data + path.sep));
+    const rootRow = row(1, 'UserRootFolder', { Data: '{"IsRoot":true}', Path: path.join(root, 'root', 'default') });
+    const libraryFolderIds = control.membership === 'empty' ? [] : [id(10)];
+    await database.insertBatch('BaseItems', [rootRow,
+      row(2, 'AggregateFolder', { Data: '{"IsRoot":true}', Path: path.join(root, 'physical-root') }),
+      row(10, 'CollectionFolder', { ParentId: id(1), Path: path.join(root, 'root', 'default', 'Movies'),
+        PreferredMetadataCountryCode: 'US', Data: JSON.stringify({ CollectionType: 'movies', PhysicalLocationsList: [media] }) }),
+      row(12, 'Folder', { ParentId: id(2), TopParentId: id(12), Path: media }),
+      row(20, 'Movie', { ParentId: id(12), TopParentId: id(12), Path: path.join(media, 'member.mkv'), PreferredMetadataCountryCode: 'US' }),
+      row(100, 'BoxSet', { Path: boxPath, PreferredMetadataCountryCode: 'US', OfficialRating: control.rating,
+        InheritedParentalRatingValue: control.rating === 'R' ? 21 : 0,
+        Data: JSON.stringify({ LibraryFolderIds: libraryFolderIds }) }),
+    ]);
+    if (control.links) await database.insertBatch('LinkedChildren', [
+      { ParentId: id(100), ChildId: id(20), ChildType: 0, SortOrder: 0 },
+    ]);
+    library = new LibraryService({ store: new DomainStore(database), serverId: 'cold-boxset-order', fileSystem: testFileSystem,
+      programDataPath: root, dataPath: data, metadataPath: metadata, userRoot: rootRow,
+      configuration: { MetadataCountryCode: 'US', CacheSize: 64 } });
+    await attachLibraryNavigation(library);
+    liveRoot = await library.itemCreation.getItemById(id(1));
+    rootOwner = library.itemCreation.retainItem(liveRoot);
+    // A real nullable live property is authoritative over the persisted empty
+    // relation. The observing wrapper delegates to the actual SQL link reader.
+    liveRoot.LinkedChildren = null;
+    await library.options.linkedChildren.flushReleases();
+    const links = library.options.linkedChildren;
+    originalPlan = links.plan;
+    links.plan = function (handle) { if (handle === null) nullRootPlans++; return originalPlan.call(this, handle); };
+    const user = { Id: id(900), Username: 'Cold BoxSet reader', MaxParentalRatingScore: 5, MaxParentalRatingSubScore: null,
+      Configuration: {}, Policy: { EnableAllFolders: true, BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
+    const snapshot = async () => ({
+      rows: await database.rows('BaseItems', { orderBy: [{ column: 'Id', direction: 'ASC' }] }),
+      links: await database.rows('LinkedChildren', { orderBy: [{ column: 'ParentId', direction: 'ASC' }, { column: 'SortOrder', direction: 'ASC' }] }),
+      files: await files(root),
+    });
+    const cacheState = async () => ({ ...(await database.client.query(`SELECT
+      (SELECT count(*) FROM ${q(links.schemaName)}.item_states)::integer AS states,
+      (SELECT count(*) FROM ${q(links.schemaName)}.item_cohorts)::integer AS cohorts,
+      (SELECT count(*) FROM ${q(links.schemaName)}.folder_child_ids)::integer AS "childIds"`)).rows[0],
+      assignedChildren: cachedFolderChildrenSnapshot(liveRoot) !== undefined,
+      childIdCache: postgresFolderChildIds(liveRoot) !== null,
+    });
+    const before = await snapshot();
+    report.fixture = { databaseSchema: database.schemaName, relationSchema: links.schemaName, rootId: liveRoot.Id,
+      boxPath, dataPath: data, preferredCountry: 'US', libraryFolderIds, rawLinkCount: control.links ? 1 : 0,
+      rootLinkedChildren: liveRoot.LinkedChildren };
+    report.observations.before = { cache: await cacheState(), nullRootPlans };
+    assert.deepEqual(report.observations.before, { cache: { states: 0, cohorts: 0, childIds: 0,
+      assignedChildren: false, childIdCache: false }, nullRootPlans: 0 }, 'Each BoxSet prefix starts before any actual root Children consumption.');
+
+    let visibleItem, operationError;
+    try { visibleItem = await library.getItemRecord(id(100), { user }); }
+    catch (error) { operationError = error; }
+    // Preserve actual observations before asserting the cold-prefix contract so
+    // a red run still publishes the unwanted cache population and exact error.
+    report.observations.after = { cache: await cacheState(), nullRootPlans,
+      returnedId: visibleItem?.Id ?? null, error: operationError ? describeError(operationError) : null };
+    report.observations.persistedAndFilesUnchanged = false;
+    assert.equal(library.itemCreation.getCachedItemById(id(1)), liveRoot);
+    assert.equal(liveRoot.LinkedChildren, null);
+    assert.deepEqual(await snapshot(), before, 'Only the actual root cache may change; persisted input and private files stay unchanged.');
+    report.observations.persistedAndFilesUnchanged = true;
+    if (control.outcome === 'visible') {
+      if (operationError) throw operationError;
+      assert.equal(idKey(visibleItem.Id), idKey(id(100)));
+    } else if (control.outcome === 'denied') {
+      assert.ok(operationError, 'Own parental denial must reject the real item read.');
+      assert.equal(operationError.status, 404);
+      assert.equal(operationError.message, 'Item not found.');
+    } else {
+      assert.ok(operationError, 'Nonempty membership must reach the real null root relation.');
+      assert.equal(operationError.status, 500);
+      assert.equal(operationError.nativeException, 'NullReferenceException');
+    }
+    assert.equal(nullRootPlans, control.rootReads);
+    assert.deepEqual(report.observations.after.cache, control.rootReads === 0
+      ? { states: 0, cohorts: 0, childIds: 0, assignedChildren: false, childIdCache: false }
+      : { states: 1, cohorts: 1, childIds: 1, assignedChildren: false, childIdCache: true },
+    'Only the nonempty-membership positive control consumes and caches the exact root Children.');
+    report.nativePrefixPreserved = true;
+  } catch (error) { failure = error; throw error; }
+  finally {
+    const errors = [], attempt = async (name, operation) => { try { await operation(); report.cleanup[name] = true; } catch (error) { errors.push(error); report.cleanup[name] = describeError(error); } };
+    if (originalPlan) library.options.linkedChildren.plan = originalPlan;
+    rootOwner?.release();
+    await attempt('libraryAndOwnedNavigationClosed', () => closeLibraryNavigation(library));
+    await attempt('postgresSchemaAndConnectionClosed', () => dropPostgresTestDatabase(database));
+    if (root) await attempt('privateStateRemoved', async () => {
+      assert.equal(path.dirname(path.resolve(root)), path.resolve(os.tmpdir()));
+      assert.ok(path.basename(root).startsWith('mm-root-cold-boxset-'));
+      await rm(root, { recursive: true, force: false });
+    });
+    report.error = failure ? describeError(failure) : null;
+    await writeFile(path.join(output, 'report.json'), stringifyNativeJson(report) + '\n');
+    if (errors.length) throw new AggregateError(failure ? [failure, ...errors] : errors, failure?.message ?? 'Cold BoxSet order fixture cleanup failed.', failure ? { cause: failure } : undefined);
   }
 });

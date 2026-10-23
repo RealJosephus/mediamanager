@@ -2,6 +2,8 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
@@ -16,6 +18,7 @@ import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.j
 import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
 import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
 import { createFolderValidationScanFixture } from '../helpers/folder-validation-scan-fixture.js';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 const compare = (actual, expected) => assert.deepEqual(actual, expected);
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -90,10 +93,39 @@ for (const fixture of fixtures) for (const sample of fixture.input) {
     compare(await capture(() => projection(current.item, current.state, current.options, sample)), expected);
   });
 }
-async function databaseFor(t, dialect) {
+function createScanJournal(name) {
+  const directory = validationOutputRoot(); mkdirSync(directory, { recursive: true });
+  const filename = path.join(directory, 'native-scan-context-' + randomUUID() + '.jsonl');
+  assertValidationOutputChild(filename);
+  writeFileSync(filename, JSON.stringify({ name, scope: 'Actual operation entry and settlement; no forced release, timeout replacement or changed functional expectation.' }) + '\n', { flag: 'wx' });
+  let sequence = 0;
+  const pending = new Map();
+  const record = value => appendFileSync(filename, JSON.stringify({ ...value, time: new Date().toISOString() }) + '\n');
+  const observe = (owner, method, label) => {
+    const original = owner?.[method]; if (typeof original !== 'function') return;
+    owner[method] = function (...args) {
+      const id = ++sequence, entry = { id, label, stack: new Error('Actual operation acquisition').stack,
+        ...(label === 'database.query' ? { sql: typeof args[0] === 'string' ? args[0] : args[0]?.text } : {}) };
+      pending.set(id, entry); record({ phase: 'start', ...entry });
+      const settled = (phase, error) => {
+        pending.delete(id); record({ id, label, phase, pending: [...pending.keys()],
+          ...(error ? { error: { name: error.name, code: error.code, message: error.message } } : {}) });
+      };
+      try {
+        const value = original.apply(this, args);
+        if (!value?.then) { settled('settled'); return value; }
+        return value.then(result => { settled('settled'); return result; }, error => { settled('failed', error); throw error; });
+      } catch (error) { settled('failed', error); throw error; }
+    };
+  };
+  return { observe, record };
+}
+async function databaseFor(t, dialect, journal) {
   const schema = 'native_scan_context_' + randomUUID().replaceAll('-', '').slice(0, 16);
   const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
   const store = new DomainStore(database);
+  journal?.observe(database.client, 'query', 'database.query');
+  journal?.observe(store, 'close', 'store.close');
   t.after(async () => { if (dialect === 'postgres') { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); } await store.close(); });
   return { database, store };
 }
@@ -130,7 +162,8 @@ for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 
   test(dialect + ': Folder validation receives frozen native ordered context ' + name,
     { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
       const fixture = fixtures[0], sample = fixture.input.find(value => value.name === name), native = fixture.native.results.find(value => value.name === name);
-      const { database, store } = await databaseFor(t, dialect), current = controlledState(sample); await seed(database, current);
+      const journal = createScanJournal(name);
+      const { database, store } = await databaseFor(t, dialect, journal), current = controlledState(sample); await seed(database, current);
       const registry = new StorageRegistry(); registry.registerType('memory', options => new MemoryStorageAdapter(options));
       const adapter = await registry.createInstance('library', 'memory', {}), vfs = new VirtualFileSystem(registry);
       vfs.mount({ path: '/library', instanceId: 'library', capabilities: {} }); await adapter.write('/Film.mkv', Buffer.from('native context control'));
@@ -141,10 +174,17 @@ for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 
           country: collectionContext.libraryOptions.MetadataCountryCode ?? null, type: collectionContext.collectionType }); return null; } };
       const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
       const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
+      journal.observe(library, 'load', 'library.load'); journal.observe(library, 'close', 'library.close');
+      journal.observe(lifecycleFixture, 'close', 'lifecycle.close');
+      journal.observe(lifecycleFixture.linkedChildren, 'close', 'linkedChildren.close');
+      journal.observe(lifecycleFixture.linkedChildren.resourceGraph, 'close', 'resourceGraph.close');
       const errors = [];
       const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
         ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [current.item.Path] }),
         programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
+      journal.observe(validationFixture.validation, 'validateChildren', 'validation.validateChildren');
+      journal.observe(validationFixture.itemCreation, 'withItem', 'itemCreation.withItem');
+      journal.observe(validationFixture, 'close', 'validation.close');
       t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
       const receipt = await validationFixture.itemCreation.withItem(current.item.Id, parent =>
         validationFixture.validation.validateChildren(parent, { refreshChildMetadata: false }));

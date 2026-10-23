@@ -1,3 +1,4 @@
+import { setTimeout as delay } from 'node:timers/promises';
 import { assertVideoRepositoryPath, copyLocalAlternateMetadata, localAlternateVersionIds, loadLocalAlternateContext } from './video-repository.js';
 import { cloneNativeItemEntity, releaseNativeItemLinks } from '../library/native-item-entity.js';
 
@@ -64,6 +65,11 @@ export async function saveMetadata(item, updateType, savers, { now = () => new D
       if (path != null) monitor.reportFileSystemChangeBeginning?.(path);
       // The baseline intentionally uses CancellationToken.None in this manager entry point.
       const result = await saver.save(item, { ...context, signal: undefined });
+      // File timestamps retain submillisecond precision. Reading a truncated
+      // wall clock in the write's own tick would mark this very save changed.
+      // Wait for a real clock transition; preserve file times and comparisons.
+      const completedTick = Date.now();
+      do { await delay(1); } while (Date.now() === completedTick);
       item.DateLastSaved = now(); outcomes.push({ saver: saver.id, result });
     } catch (error) { logger.error(error, 'Error in metadata saver'); outcomes.push({ saver: saver.id, error }); }
     finally { if (path != null) monitor.reportFileSystemChangeComplete?.(path, false); }

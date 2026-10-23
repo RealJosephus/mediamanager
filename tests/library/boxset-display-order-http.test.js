@@ -57,7 +57,8 @@ for (const dialect of ['postgres']) {
               ? BigInt(row[column.name]) : row[column.name]]));
           const data = { ...(item.data ?? {}) };
           if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds.map(id => itemPath(fixture.items.find(value => value.id === id)));
-          await database.update('BaseItems', { Id: item.id }, { ...values, Path: itemPath(item), Data: JSON.stringify(data) });
+          assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() },
+            { ...values, Path: itemPath(item), Data: JSON.stringify(data) }), 1n, item.key);
         }
         for (const data of fixture.userData) {
           const item = fixture.items.find(row => row.key === data.itemKey);

@@ -149,6 +149,10 @@ export async function setupChildrenFixture(t) {
       for (const [SortOrder, child] of (definition.links ?? []).entries()) await database.insert('LinkedChildren', { ParentId: definition.Id, SortOrder, ChildType: 0, ChildId: definitions.find(item => item.key === child).Id });
       for (const ancestor of definition.ancestors ?? []) await database.insert('AncestorIds', { ItemId: definition.Id, ParentItemId: definitions.find(item => item.key === ancestor).Id });
     }
+    // The native controls explicitly assign their declared UserRoot to the
+    // library manager. Do not retain a generated or previous scenario's root.
+    const declaredRoot = definitions.find(definition => definition.type === 'UserRootFolder');
+    library.options.userRoot = declaredRoot ? { Id: declaredRoot.Id } : undefined;
     return definitions.find(item => item.key === scenario.target).Id;
   };
   const state = () => store.run(async db => {

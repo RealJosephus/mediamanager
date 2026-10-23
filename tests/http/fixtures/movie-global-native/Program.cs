@@ -1,11 +1,14 @@
 using System.Diagnostics;
+using System.Collections.Concurrent;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Jellyfin.Data.Enums;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
+using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Configuration;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +31,19 @@ foreach (var file in new[] { input.Database, input.Media })
     if (bytes.LongLength != file.Bytes || Hash(bytes) != file.Sha256) throw new IOException("Bound input changed: " + file.Filename);
 }
 var startedAt = DateTime.UtcNow;
+var timeZone = new { id = TimeZoneInfo.Local.Id, offsetMinutes = (int)TimeZoneInfo.Local.GetUtcOffset(startedAt).TotalMinutes };
+if (timeZone.offsetMinutes != specification.LocalTimezoneOffsetMinutes) throw new IOException("The actual local timezone differs from the neutral input.");
 var observations = new List<object>();
+var sqliteName = OperatingSystem.IsWindows() ? "e_sqlite3.dll" : OperatingSystem.IsMacOS() ? "libe_sqlite3.dylib" : "libe_sqlite3.so";
+var sqliteFilename = Path.Combine(AppContext.BaseDirectory, sqliteName);
+var sqliteHandle = NativeLibrary.Load(sqliteFilename);
+var sqliteResolutions = new ConcurrentQueue<string>();
+NativeLibrary.SetDllImportResolver(typeof(SQLitePCL.SQLite3Provider_e_sqlite3).Assembly, (name, _, _) =>
+{
+    if (name != "e_sqlite3") return IntPtr.Zero;
+    sqliteResolutions.Enqueue(name);
+    return sqliteHandle;
+});
 object? registration = null, updateInput = null;
 NativeScanHost? host = null;
 Exception? failure = null;
@@ -51,7 +66,16 @@ try
     registration = MovieProviders.Install(host, input.Ffmpeg);
     foreach (var name in specification.Movies)
     {
-        File.Copy(input.Media.Filename, host.MediaPath(name + ".mkv"));
+        var target = host.MediaPath(name + ".mkv");
+        File.Copy(input.Media.Filename, target);
+        var attributesBefore = File.GetAttributes(target);
+        File.SetAttributes(target, attributesBefore & ~FileAttributes.ReadOnly);
+        if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(target, File.GetUnixFileMode(target) | UnixFileMode.UserWrite);
+        var copiedBytes = File.ReadAllBytes(target);
+        if (copiedBytes.LongLength != input.Media.Bytes || Hash(copiedBytes) != input.Media.Sha256)
+            throw new IOException("The writable business media clone changed the frozen input bytes.");
+        host.Add("controlled-media-copy", new { filename = target, attributesBefore, attributesAfter = File.GetAttributes(target),
+            bytes = copiedBytes.LongLength, sha256 = Hash(copiedBytes), protectedSource = input.Media.Filename });
         File.WriteAllText(host.MediaPath(name + ".nfo"), Nfo(name, specification.OriginalGenre, false), new UTF8Encoding(false));
     }
     host.Add("input-files-ready", new { at = DateTime.UtcNow, files = Files(host) });
@@ -91,7 +115,7 @@ finally
     var record = new
     {
         schemaVersion = 1, actualExecution = true, inputSha256 = Hash(inputBytes), input.Database, input.Media,
-        root = caseRoot, startedAt, endedAt = DateTime.UtcNow, registration, observations, updateInput,
+        root = caseRoot, startedAt, endedAt = DateTime.UtcNow, timeZone, registration, observations, updateInput,
         input.ClockWindowStart,
         process = new { pid = Environment.ProcessId, startedAt = Process.GetCurrentProcess().StartTime.ToUniversalTime(),
             entryAssembly = typeof(BoundInput).Assembly.Location },
@@ -104,10 +128,12 @@ finally
         assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !assembly.IsDynamic && !string.IsNullOrEmpty(assembly.Location))
             .Select(assembly => new { assembly.FullName, filename = assembly.Location, bytes = new FileInfo(assembly.Location).Length,
                 sha256 = Hash(File.ReadAllBytes(assembly.Location)) }).ToArray(),
-        nativeModules = Process.GetCurrentProcess().Modules.Cast<ProcessModule>()
-            .Where(module => module.ModuleName.Contains("sqlite", StringComparison.OrdinalIgnoreCase))
-            .Select(module => new { module.ModuleName, filename = module.FileName,
-                bytes = new FileInfo(module.FileName).Length, sha256 = Hash(File.ReadAllBytes(module.FileName)) }).ToArray()
+        nativeModules = sqliteResolutions.IsEmpty ? [] : new[] { new { ModuleName = sqliteName, filename = sqliteFilename,
+            bytes = new FileInfo(sqliteFilename).Length, sha256 = Hash(File.ReadAllBytes(sqliteFilename)),
+            loadedBy = "NativeLibrary.Load", resolvedBy = "SetDllImportResolver", importName = "e_sqlite3",
+            providerAssembly = typeof(SQLitePCL.SQLite3Provider_e_sqlite3).Assembly.Location,
+            handle = sqliteHandle.ToInt64(), export = NativeLibrary.GetExport(sqliteHandle, "sqlite3_libversion").ToInt64(),
+            resolverRequests = sqliteResolutions.Count, resolvedNames = sqliteResolutions.ToArray() } }
     };
     using var stream = new FileStream(output, FileMode.CreateNew, FileAccess.Write, FileShare.None);
     JsonSerializer.Serialize(stream, record, new JsonSerializerOptions { WriteIndented = true });
@@ -122,8 +148,20 @@ async Task Scan(string phase)
     var scan = await host.RunAsync();
     observations.Add(new { phase, boundary = "global-returned", startedAt = before, endedAt = DateTime.UtcNow,
         status = scan.Exception is null ? "completed" : "failed", scanRunning = scan.ScanRunning,
-        scan.Exception, scan.ExceptionMessage, queue = host.QueueState(), snapshot = Snapshot(host) });
+        scan.Exception, scan.ExceptionMessage, queue = host.QueueState(), snapshot = Snapshot(host, true) });
     await host.DrainMetadataQueueAsync();
+    if (phase == "created" && scan.Exception is null)
+    {
+        if (specification.ExplicitMovieSaveUpdateReason != (int)ItemUpdateType.MetadataEdit)
+            throw new IOException("The neutral explicit Movie save must use MetadataEdit.");
+        foreach (var movieName in specification.Movies)
+        {
+            var item = Movies(host).Single(value => value.Path == host.MediaPath(movieName + ".mkv"));
+            host.Add("explicit-movie-save-begin", new { item = host.Item(item), updateReason = specification.ExplicitMovieSaveUpdateReason });
+            await host.Manager.UpdateItemAsync(item, item.GetParent(), ItemUpdateType.MetadataEdit, CancellationToken.None);
+            host.Add("explicit-movie-save-completed", new { item = host.Item(item), updateReason = specification.ExplicitMovieSaveUpdateReason });
+        }
+    }
     observations.Add(new { phase, boundary = "metadata-drained", startedAt = before, endedAt = DateTime.UtcNow,
         status = scan.Exception is null ? "completed" : "failed", scanRunning = host.Manager.IsScanRunning,
         scan.Exception, scan.ExceptionMessage, queue = host.QueueState(), snapshot = Snapshot(host) });
@@ -135,7 +173,7 @@ string Nfo(string title, string genre, bool locked) => "<movie><title>" + title 
     + "</studio><custom keep=\"true\">retained</custom></movie>";
 static Movie[] Movies(NativeScanHost value) => value.Manager.GetItemList(new InternalItemsQuery
     { IncludeItemTypes = [BaseItemKind.Movie], Recursive = true }).OfType<Movie>().ToArray();
-object Snapshot(NativeScanHost value)
+object Snapshot(NativeScanHost value, bool concurrentWriters = false)
 {
     var sql = JsonSerializer.SerializeToElement(value.SnapshotSql());
     var actual = sql.GetProperty("tables").EnumerateArray().Select(entry => entry.GetString()!).ToArray();
@@ -148,17 +186,27 @@ object Snapshot(NativeScanHost value)
     var mediaFiles = Directory.EnumerateFiles(value.MediaRoot, "*.mkv", SearchOption.AllDirectories).Order(StringComparer.Ordinal)
         .Select(filename => new { path = Path.GetRelativePath(value.CaseRoot, filename).Replace('\\', '/'),
             bytes = new FileInfo(filename).Length, sha256 = Hash(File.ReadAllBytes(filename)) }).ToArray();
-    return new { sql = sql.GetProperty("result"), tables = actual, sqliteSequence = sequence, files = Files(value), mediaFiles };
+    return new { sql = sql.GetProperty("result"), tables = actual, sqliteSequence = sequence,
+        files = Files(value, concurrentWriters), mediaFiles, concurrentWriters };
 }
-static object[] Files(NativeScanHost value) => Directory.EnumerateFiles(value.CaseRoot, "*", SearchOption.AllDirectories)
+static object[] Files(NativeScanHost value, bool concurrentWriters = false) => Directory.EnumerateFiles(value.CaseRoot, "*", SearchOption.AllDirectories)
     .Where(filename => filename.EndsWith(".nfo", StringComparison.OrdinalIgnoreCase)
         || filename.EndsWith("collection.xml", StringComparison.OrdinalIgnoreCase))
     .Order(StringComparer.Ordinal).Select(filename =>
     {
-        var bytes = File.ReadAllBytes(filename);
-        return (object)new { path = Path.GetRelativePath(value.CaseRoot, filename).Replace('\\', '/'), filename,
-            bytes = bytes.Length, sha256 = Hash(bytes), text = Encoding.UTF8.GetString(bytes),
-            lastWriteTimeUtc = File.GetLastWriteTimeUtc(filename) };
+        var relative = Path.GetRelativePath(value.CaseRoot, filename).Replace('\\', '/');
+        try
+        {
+            var bytes = File.ReadAllBytes(filename);
+            return (object)new { path = relative, filename, bytes = bytes.Length, sha256 = Hash(bytes),
+                text = Encoding.UTF8.GetString(bytes), lastWriteTimeUtc = File.GetLastWriteTimeUtc(filename) };
+        }
+        catch (IOException error) when (concurrentWriters)
+        {
+            // The global-returned boundary can overlap an actual queued saver.
+            // Preserve this raw diagnostic; never retry or call it drained.
+            return new { path = relative, filename, readError = error.ToString() };
+        }
     }).ToArray();
 static string Hash(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
 
@@ -178,6 +226,7 @@ public sealed class FileBinding
 }
 public sealed class Specification
 {
+    public int LocalTimezoneOffsetMinutes { get; set; }
     public string Name { get; set; } = "";
     public string Culture { get; set; } = "en-US";
     public string[] Movies { get; set; } = [];
@@ -189,4 +238,5 @@ public sealed class Specification
     public string Studio { get; set; } = "";
     public int NfoChangeToleranceMs { get; set; }
     public int NfoChangeWaitMs { get; set; }
+    public int ExplicitMovieSaveUpdateReason { get; set; }
 }

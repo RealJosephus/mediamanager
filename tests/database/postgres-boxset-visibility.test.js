@@ -59,13 +59,13 @@ test('native visibility input has complete nullable fields, canonical unique ide
   const { boxSetUserRootIds: _omitted, ...incomplete } = options().visibility;
   assert.throws(() => buildPostgresItemPageQuery(database, query, { visibility: incomplete }), /actual visible user-root/u);
   assert.doesNotThrow(() => buildPostgresItemPageQuery(database, query, {
-    visibility: { ...incomplete, boxSetRootLookupOnly: true },
+    visibility: { ...incomplete, boxSetRootLookup: 'children' },
   }));
   assert.throws(() => buildPostgresItemPageQuery(database, query, {
-    visibility: { boxSetRootLookupOnly: true },
+    visibility: { boxSetRootLookup: 'children' },
   }), /requires standalone BoxSet/u);
-  for (const value of [null, 0, 'true']) assert.throws(() => buildPostgresItemPageQuery(database, query,
-    options({ boxSetRootLookupOnly: value })), /must be boolean/u);
+  for (const value of [null, 0, true, false, 'true']) assert.throws(() => buildPostgresItemPageQuery(database, query,
+    options({ boxSetRootLookup: value })), /must be folders or children/u);
   assert.throws(() => buildPostgresItemPageQuery(database, query,
     options({ boxSetPathExpansion: { appDataPath: '/data' } })), /complete typed appDataPath/u);
   assert.doesNotThrow(() => buildPostgresItemPageQuery(database, query, options({
@@ -82,6 +82,7 @@ test('real PostgreSQL BoxSet visibility preserves stored/live null, empty and ex
   const observations = [];
   const sourceBindings = [
     { path: 'MediaBrowser.Controller/Entities/Movies/BoxSet.cs', consumer: 'IsVisible: IsParentalAllowed, LinkedChildren, nullable LibraryFolderIds, GetChildren(user,true), then child parental access' },
+    { path: 'Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs', consumer: 'BuildMaxParentalRatingFilter checks manual member inherited ratings independently of later standalone library membership' },
     { path: 'MediaBrowser.Controller/Entities/BaseItem.cs', consumer: 'IsParentalAllowed and CustomRatingForComparison/OfficialRatingForComparison' },
     { path: 'Emby.Server.Implementations/Localization/LocalizationManager.cs', consumer: 'GetSingleRatingScore converts string zero to numeric score zero; unknown custom ratings do not fall back to the official rating' },
     { path: 'MediaBrowser.Controller/Entities/Folder.cs', consumer: 'GetChildren(user,true) produces the supplied actual user-root identities' },
@@ -149,31 +150,54 @@ test('real PostgreSQL BoxSet visibility preserves stored/live null, empty and ex
     assert.deepEqual(actual, expected.map(idKey), name); return result;
   };
   try {
+    await observe('standalone empty membership bypasses its own later child rating consumer', [105], [id(105)], {
+      visibility: { maxRating: 5, boxSetChildRatingMode: 'memory' },
+    });
+    await observe('repository member rating remains required before standalone empty membership', [105], [], {
+      visibility: { maxRating: 5, boxSetChildRatingMode: 'both' },
+    });
+    const folders = await observe('raw-folder lookup keeps unknown membership unresolved after the own parental and link prefix',
+      [20, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 122],
+      [100, 102, 103, 104, 106, 107, 110, 122].map(id), {
+        visibility: { maxRating: 5, boxSetRootLookup: 'folders', boxSetUserRootIds: undefined,
+          boxSetRootFolders: [{ Id: id(10), Path: '/different', PhysicalLocations: null }] },
+      });
+    assert.equal(folders.total, 8);
+    await observe('raw-folder lookup rejects own rating before considering unknown membership', [100], [], {
+      live: [projection(id(100), { OfficialRating: 'R' })],
+      visibility: { maxRating: 5, boxSetRootLookup: 'folders', boxSetUserRootIds: undefined,
+        boxSetRootFolders: [{ Id: id(10), Path: '/different', PhysicalLocations: null }] },
+    });
+    await observe('raw-folder lookup skips empty links and explicit empty membership without reading raw folders', [100, 109], [], {
+      live: [projection(id(100), { LibraryFolderIds: [] }), projection(id(109), { LibraryFolderIds: [id(11)] })],
+      visibility: { maxRating: 5, boxSetRootLookup: 'folders', boxSetUserRootIds: undefined,
+        boxSetRootFolders: [{ Id: id(10), Path: '/different', PhysicalLocations: null }] },
+    });
     const lookup = await observe('root lookup preflight returns only own-allowed nonempty memberships with raw links',
       [20, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 122],
       [100, 102, 103, 104, 106, 110, 122].map(id), {
-        visibility: { maxRating: 5, boxSetRootLookupOnly: true, boxSetUserRootIds: undefined },
+        visibility: { maxRating: 5, boxSetRootLookup: 'children', boxSetUserRootIds: undefined },
       });
     assert.equal(lookup.total, 7);
     await observe('root lookup preflight does not consume user-root identities or later child parental checks', [106], [id(106)], {
-      visibility: { maxRating: 5, boxSetChildRatingMode: 'both', boxSetRootLookupOnly: true,
+      visibility: { maxRating: 5, boxSetChildRatingMode: 'both', boxSetRootLookup: 'children',
         boxSetUserRootIds: ['not-an-observed-root-guid'] },
     });
     await observe('own parental denial precedes null raw-root source in lookup preflight', [100], [], {
       live: [projection(id(100), { OfficialRating: 'R' })],
-      visibility: { maxRating: 5, boxSetRootLookupOnly: true, boxSetUserRootIds: undefined,
+      visibility: { maxRating: 5, boxSetRootLookup: 'children', boxSetUserRootIds: undefined,
         boxSetRootFolders: [{ Id: id(10), Path: '/different', PhysicalLocations: null }] },
     });
     await observe('no raw links and typed empty membership avoid root lookup and null source', [100, 109], [], {
       live: [projection(id(100), { LibraryFolderIds: [] }), projection(id(109), { LibraryFolderIds: [id(11)] })],
-      visibility: { maxRating: 5, boxSetRootLookupOnly: true, boxSetUserRootIds: undefined,
+      visibility: { maxRating: 5, boxSetRootLookup: 'children', boxSetUserRootIds: undefined,
         boxSetRootFolders: [{ Id: id(10), Path: '/different', PhysicalLocations: null }] },
     });
     await observe('live null membership still derives a nonempty lookup before root access', [103], [id(103)], {
-      live: [projection(id(103))], visibility: { boxSetRootLookupOnly: true, boxSetUserRootIds: undefined },
+      live: [projection(id(103))], visibility: { boxSetRootLookup: 'children', boxSetUserRootIds: undefined },
     });
     await assert.rejects(queryPostgresItemPage(database, { ids: [id(100)], limit: 1 }, options({
-      boxSetRootLookupOnly: true, boxSetUserRootIds: undefined,
+      boxSetRootLookup: 'children', boxSetUserRootIds: undefined,
       boxSetRootFolders: [{ Id: id(10), Path: '/media/A', PhysicalLocations: [] },
         { Id: id(11), Path: '/different', PhysicalLocations: null }],
     })), error => error.status === 400 && error.nativeException === 'ArgumentNullException' && error.parameterName === 'source');

@@ -28,6 +28,7 @@ export function projectMovieRun(record, specification) {
   // Its preparation window therefore precedes either independent runtime.
   const started = dateTicks(native ? record.ClockWindowStart : record.clockWindowStart), ended = dateTicks(record.endedAt);
   assert.ok(started <= dateTicks(record.startedAt));
+  assert.equal(record.timeZone.offsetMinutes, specification.localTimezoneOffsetMinutes);
   const clockFields = new Set(specification.projectionPolicy.clockColumns.map(value => value.split('.')[1]));
   const rooted = value => {
     if (typeof value !== 'string') return value;
@@ -66,14 +67,40 @@ export function projectMovieRun(record, specification) {
     if (id === empty) return '$EMPTY';
     return logicalById.get(id) ?? valueById.get(id) ?? value;
   };
+  const xmlCreated = new Map();
+  for (const entry of record.trace ?? []) if (entry.action === 'added'
+    && entry.detail.item.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet') {
+    const item = entry.detail.item, logical = identity(item.id), seed = dateTicks(item.DateCreated);
+    assert.ok(seed >= started && seed <= ended, 'The actual collection creation must lie in its real run window.');
+    const derived = seed / 10000000n * 10000000n + BigInt(record.timeZone.offsetMinutes) * 600000000n;
+    assert.equal(xmlCreated.has(logical), false, 'The controlled collection must have one actual Added seed.');
+    xmlCreated.set(logical, { seed, value: item.DateCreated, derived });
+  }
+  const xmlCreatedClock = (ticks, logical, field, phase) => {
+    const binding = field === 'DateCreated' ? xmlCreated.get(logical) : null;
+    if (!binding || ticks === binding.seed) return null;
+    assert.equal(ticks, binding.derived, 'Collection Added may apply the actual local XML/AssumeUniversal transform exactly once.');
+    assert.ok(record.trace.some(entry => entry.action === 'local-reader-completed'
+      && entry.detail.provider.endsWith('BoxSetXmlProvider') && entry.detail.HasMetadata
+      && rooted(entry.detail.Path) === logical.slice(logical.indexOf('|') + 1)
+      && dateTicks(entry.detail.DateCreated) === ticks), 'The shifted clock must be returned by the actual XML parser.');
+    const token = '$XMLADDED|' + clock(binding.value, logical, field, phase);
+    if (!clockBindings.some(entry => entry.token === token)) clockBindings.push({ token, ticks: ticks.toString(),
+      sourceTicks: binding.seed.toString(), localOffsetMinutes: record.timeZone.offsetMinutes, firstPhase: phase,
+      transform: 'ToLocalTime second precision -> XML Added -> AssumeUniversal|AdjustToUniversal', logical, field });
+    return token;
+  };
   const clock = (value, logical, field, phase) => {
     if (value == null) return value;
     const ticks = dateTicks(value), serialized = ticks.toString();
     if (ticks === 0n) return { ticks: '0' };
+    const xmlClock = xmlCreatedClock(ticks, logical, field, phase);
+    if (xmlClock !== null) return xmlClock;
     assert.ok(ticks >= started && ticks <= ended, 'A projected clock is outside its actual run window: ' + logical + ':' + field);
     const fieldKey = logical + '|' + field;
     const clockKey = fieldKey + '|' + serialized;
-    if (previousByField.has(fieldKey)) assert.ok(ticks >= previousByField.get(fieldKey), 'This input did not backdate clocks.');
+    if (previousByField.has(fieldKey)) assert.ok(ticks >= previousByField.get(fieldKey),
+      'A clock moved backwards within one owner/field role: ' + fieldKey + ' in ' + phase);
     previousByField.set(fieldKey, ticks);
     if (!clockByTicks.has(clockKey)) {
       const token = '$CLOCK|' + fieldKey + '|' + phase;
@@ -90,7 +117,8 @@ export function projectMovieRun(record, specification) {
     return rooted(value);
   };
   const data = (value, logical, phase, field) => {
-    if (Array.isArray(value)) return value.map(entry => data(entry, logical, phase, field));
+    if (Array.isArray(value)) return value.map((entry, index) => data(entry,
+      logical + '|' + field + '[' + index + ']', phase, field));
     if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort()
       .map(name => [name, data(value[name], logical, phase, name)]));
     return text(value, logical, field, phase);
@@ -153,6 +181,8 @@ export function projectMovieRun(record, specification) {
     const ticks = dateTicks(value), serialized = ticks.toString();
     const clockKey = logical + '|' + field + '|' + serialized;
     if (ticks === 0n) return { ticks: '0' };
+    const xmlClock = xmlCreatedClock(ticks, logical, field, phase);
+    if (xmlClock !== null) return xmlClock;
     assert.ok(ticks >= started && ticks <= ended, 'An Item event clock is outside the actual run window.');
     if (clockByTicks.has(clockKey)) return clockByTicks.get(clockKey);
     if (!eventClockByTicks.has(clockKey)) {
@@ -232,6 +262,19 @@ export function projectMovieRun(record, specification) {
     'The actual Movie NFO saver must execute.');
   assert.ok(rawTrace.some(entry => entry.action === 'local-saver-completed' && entry.detail.saver.endsWith('BoxSetXmlSaver')),
     'The actual BoxSet XML saver must execute.');
+  const explicitSaves = rawTrace.filter(entry => entry.action === 'explicit-movie-save-completed');
+  assert.equal(explicitSaves.length, specification.movies.length);
+  assert.deepEqual(explicitSaves.map(entry => rooted(entry.detail.item.path)),
+    specification.movies.map(name => '$CASE/media/' + name + '.mkv'));
+  for (const entry of explicitSaves) {
+    assert.equal(entry.phase, 'created'); assert.equal(Number(entry.detail.updateReason), specification.explicitMovieSaveUpdateReason);
+    const begins = rawTrace.filter(value => value.action === 'explicit-movie-save-begin'
+      && key(value.detail.item.id) === key(entry.detail.item.id));
+    assert.equal(begins.length, 1); assert.ok(Number(begins[0].ordinal) < Number(entry.ordinal));
+    assert.ok(rawTrace.some(value => value.action === 'local-saver-completed' && value.detail.saver.endsWith('MovieNfoSaver')
+      && key(value.detail.itemId) === key(entry.detail.item.id) && Number(value.ordinal) > Number(begins[0].ordinal)
+      && Number(value.ordinal) < Number(entry.ordinal)), 'Each explicit Movie save must execute the actual NFO saver.');
+  }
   const registered = record.registration.postScanTasks;
   let registrationOrder;
   if (native) {
@@ -336,7 +379,10 @@ export function projectMovieRun(record, specification) {
       const row = movieAt(snapshot, name); assert.ok(row, title);
       assert.equal(row.Type, 'MediaBrowser.Controller.Entities.Movies.Movie'); assert.equal(row.Name, title);
       assert.equal(row.Overview, specification.overview); assert.equal(Number(row.IsLocked), Number(locked));
-      assert.equal(row.Genres, genre); assert.equal(row.Studios, specification.studio);
+      assert.equal(row.Genres, genre);
+      // The actual stored empty Studios column hydrates as [""]; merging
+      // retains that entry beside the sidecar studio. ItemValues omits it.
+      assert.equal(row.Studios, specification.studio + '|');
       assert.equal(parseLosslessJson(row.Data).TmdbCollectionName, specification.collectionName);
       assert.ok(BigInt(row.RunTimeTicks) > 0n);
       assert.ok(snapshot.sql.MediaStreamInfos.some(stream => key(stream.ItemId) === key(row.Id)

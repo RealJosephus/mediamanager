@@ -513,7 +513,7 @@ public sealed class NativeScanHost : IAsyncDisposable
         return new { tables,result };
     }
 
-    private object Item(BaseItem item)=>new { id=item.Id,type=item.GetType().FullName,item.Name,path=item.Path,relativePath=Relative(item.Path),
+    internal object Item(BaseItem item)=>new { id=item.Id,type=item.GetType().FullName,item.Name,path=item.Path,relativePath=Relative(item.Path),
         item.ParentId,item.OwnerId,item.IsFolder,isRoot=(item as Folder)?.IsRoot,item.DateCreated,item.DateModified,item.DateLastSaved,item.DateLastRefreshed,
         physicalLocations=(item as Folder)?.PhysicalLocations.ToArray(),
         Genres=item.Genres.ToArray(), Studios=item.Studios.ToArray(), tmdbCollectionName=(item as Movie)?.TmdbCollectionName,

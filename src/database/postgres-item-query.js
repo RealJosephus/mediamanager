@@ -1350,17 +1350,17 @@ export function buildPostgresItemPageQuery(database, query, {
     if (!visibility || typeof visibility !== 'object' || Array.isArray(visibility)) throw new TypeError('visibility must be an object.');
     const allowedVisibilityKeys = new Set(['topParentIds', 'libraryTopParentIds', 'ratingContext',
       'blockedTags', 'allowedTags', 'maxRating', 'maxSubRating', 'blockUnratedTypes', 'boxSetStandalone',
-      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetRootLookupOnly', 'boxSetUserRootIds', 'boxSetRootFolders', 'boxSetRootFoldersPlan', 'boxSetPathExpansion', 'itemMode',
+      'boxSetTopParentExempt', 'boxSetChildRatingMode', 'boxSetRootLookup', 'boxSetUserRootIds', 'boxSetRootFolders', 'boxSetRootFoldersPlan', 'boxSetPathExpansion', 'itemMode',
       'scopeTopParentAccess']);
     const unknown = Object.keys(visibility).filter(key => !allowedVisibilityKeys.has(key));
     if (unknown.length) throw new TypeError(`Unknown visibility option: ${unknown.join(', ')}`);
     const visibilityPredicateStart = predicates.length, ownParentalPredicates = [];
     const parentalPredicate = expression => { ownParentalPredicates.push(expression); predicates.push(expression); };
-    if (visibility.boxSetRootLookupOnly !== undefined && typeof visibility.boxSetRootLookupOnly !== 'boolean') {
-      throw new TypeError('visibility.boxSetRootLookupOnly must be boolean.');
+    if (visibility.boxSetRootLookup !== undefined && !['folders', 'children'].includes(visibility.boxSetRootLookup)) {
+      throw new TypeError('visibility.boxSetRootLookup must be folders or children.');
     }
-    const boxSetRootLookupOnly = visibility.boxSetRootLookupOnly === true;
-    if (boxSetRootLookupOnly && visibility.boxSetStandalone !== true) {
+    const boxSetLookupOnly = visibility.boxSetRootLookup !== undefined;
+    if (boxSetLookupOnly && visibility.boxSetStandalone !== true) {
       throw new TypeError('BoxSet root lookup preflight requires standalone BoxSet visibility.');
     }
     if (visibility.boxSetChildRatingMode != null
@@ -1377,7 +1377,7 @@ export function buildPostgresItemPageQuery(database, query, {
     const standaloneItemVisibility = visibility.itemMode === 'standalone';
     let standaloneMembershipIsEmpty = null;
     if (visibility.boxSetUserRootIds !== undefined) validateStringArray(visibility.boxSetUserRootIds, 'visibility.boxSetUserRootIds');
-    if (visibility.boxSetStandalone && !boxSetRootLookupOnly && visibility.boxSetUserRootIds === undefined) {
+    if (visibility.boxSetStandalone && !boxSetLookupOnly && visibility.boxSetUserRootIds === undefined) {
       throw new TypeError('Standalone BoxSet visibility requires the actual visible user-root child identities.');
     }
     if (visibility.boxSetRootFolders !== undefined && (!Array.isArray(visibility.boxSetRootFolders)
@@ -1433,26 +1433,27 @@ export function buildPostgresItemPageQuery(database, query, {
       if (valueNameTypes.length) relatedNames.push(`(${leafType('i')} = ANY(${bindTextArray(valueNameTypes, 'visibility value name types')}) AND ${valueRelated})`);
       let boxSetAccess = '';
       if (visibility.boxSetStandalone) {
-        const userRootIds = boxSetRootLookupOnly ? null
+        const userRootIds = boxSetLookupOnly ? null
           : bindTextArray(visibility.boxSetUserRootIds.map(wireGuid), 'visibility.boxSetUserRootIds');
         const libraryFolderIds = `NULLIF(${visibilityColumn('i', 'LibraryFolderIds', `NULLIF((${safeNativeItemData('i')} -> 'LibraryFolderIds')::jsonb,'null'::jsonb)`)}, 'null'::jsonb)`;
-        const pathKeyHex = value => value === null ? null : Buffer.from(ordinalIgnoreCaseKey(value), 'utf16le').swap16().toString('hex');
-        const pathKeySql = expression => `encode(${sql.ordinalIgnoreCaseKey(expression)},'hex')`;
-        const rootFolders = visibility.boxSetRootFoldersPlan === undefined
-          ? bind(JSON.stringify(visibility.boxSetRootFolders.map(folder => ({ Id: wireGuid(folder.Id),
-            Path: pathKeyHex(folder.Path), PhysicalLocations: folder.PhysicalLocations?.map(pathKeyHex) ?? null }))))
-          : `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        const deriveMembership = () => {
+          const pathKeyHex = value => value === null ? null : Buffer.from(ordinalIgnoreCaseKey(value), 'utf16le').swap16().toString('hex');
+          const pathKeySql = expression => `encode(${sql.ordinalIgnoreCaseKey(expression)},'hex')`;
+          const rootFolders = visibility.boxSetRootFoldersPlan === undefined
+            ? bind(JSON.stringify(visibility.boxSetRootFolders.map(folder => ({ Id: wireGuid(folder.Id),
+              Path: pathKeyHex(folder.Path), PhysicalLocations: folder.PhysicalLocations?.map(pathKeyHex) ?? null }))))
+            : `(SELECT COALESCE(jsonb_agg(jsonb_build_object(
               'Id',replace(${sql.guidLower('root_folder."Id"')},'-',''),
               'Path',${pathKeySql('root_folder."Path"')},
               'PhysicalLocations',${folderArrayJson('root_folder."PhysicalLocations"', pathKeySql)}
             ) ORDER BY root_folder."Ordinal"),'[]'::jsonb)
             FROM (${bindFolderPlan(visibility.boxSetRootFoldersPlan, 'visibility.boxSetRootFoldersPlan')}) root_folder)`;
-        const expansion = visibility.boxSetPathExpansion ?? { appDataPath: '%AppDataPath%', metadataPath: '%MetadataPath%' };
-        const pathExpansion = bind(JSON.stringify([pathKeyHex(expansion.appDataPath), pathKeyHex(expansion.metadataPath)]));
-        const terminalPathKey = runtimeTextKey(postgresExpandedPathKeyFunctionName, `terminal."Path",${pathExpansion}::jsonb`);
-        // Keep each recursive edge lookup parameterized by its current node;
-        // flattening it scans the complete link relation for every candidate.
-        const derivedMembership = `(WITH RECURSIVE box_node("Id") AS (
+          const expansion = visibility.boxSetPathExpansion ?? { appDataPath: '%AppDataPath%', metadataPath: '%MetadataPath%' };
+          const pathExpansion = bind(JSON.stringify([pathKeyHex(expansion.appDataPath), pathKeyHex(expansion.metadataPath)]));
+          const terminalPathKey = runtimeTextKey(postgresExpandedPathKeyFunctionName, `terminal."Path",${pathExpansion}::jsonb`);
+          // Keep each recursive edge lookup parameterized by its current node;
+          // flattening it scans the complete link relation for every candidate.
+          return `(WITH RECURSIVE box_node("Id") AS (
           SELECT i."Id" UNION
           SELECT nested."Id" FROM box_node node CROSS JOIN LATERAL (
             SELECT edge."ChildId" FROM ${links} edge
@@ -1489,16 +1490,21 @@ export function buildPostgresItemPageQuery(database, query, {
           `jsonb_build_array(encode(${terminalPathKey},'hex'),folder."Document"->'Path',folder."Document"->'PhysicalLocations')`)}
           THEN folder."Document"->>'Id' END),NULL)
           FROM box_roots terminal CROSS JOIN jsonb_array_elements(${rootFolders}::jsonb) folder("Document"))`;
+        };
+        const derivedMembership = visibility.boxSetRootLookup === 'folders' ? null : deriveMembership();
         // Aggregating every raw-folder comparison before intersecting user IDs
         // preserves source-null failures even for an inaccessible raw folder.
         standaloneMembershipIsEmpty = `CASE WHEN ${libraryFolderIds} IS NULL
           THEN COALESCE(cardinality(${derivedMembership}),0)=0
           ELSE jsonb_array_length(${libraryFolderIds})=0 END`;
-        if (boxSetRootLookupOnly) {
-          // Native calls GetChildren(user,true) only after own parental access,
-          // nonempty raw links and complete nonempty folder membership. Root
-          // identities and the later child parental checks are not consumed.
-          boxSetAccess = ` OR (${leafType('i')} = 'BoxSet' AND CASE WHEN NOT EXISTS (SELECT 1 FROM ${links} direct_link WHERE ${nativeTextSql(database.schemaName).guidLower("direct_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}) THEN FALSE ELSE NOT (${standaloneMembershipIsEmpty}) END)`;
+        if (boxSetLookupOnly) {
+          // Raw folders are needed only for an allowed linked BoxSet whose
+          // membership is unknown or nonempty. Visible root children follow
+          // only after the complete membership has actually been derived.
+          const needsFolders = `CASE WHEN ${libraryFolderIds} IS NULL THEN TRUE
+            ELSE jsonb_array_length(${libraryFolderIds})>0 END`;
+          const needed = visibility.boxSetRootLookup === 'folders' ? needsFolders : `NOT (${standaloneMembershipIsEmpty})`;
+          boxSetAccess = ` OR (${leafType('i')} = 'BoxSet' AND CASE WHEN NOT EXISTS (SELECT 1 FROM ${links} direct_link WHERE ${nativeTextSql(database.schemaName).guidLower("direct_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}) THEN FALSE ELSE ${needed} END)`;
         } else {
           const membershipAllowed = `CASE WHEN ${libraryFolderIds} IS NULL
             THEN (SELECT COALESCE(cardinality(membership."Ids"),0)=0 OR membership."Ids" && ${userRootIds}
@@ -1605,13 +1611,23 @@ export function buildPostgresItemPageQuery(database, query, {
       } else {
         parentalPredicate(`(i."InheritedParentalRatingValue" IS NULL OR i."InheritedParentalRatingValue" < ${bind(visibility.maxRating)} OR (i."InheritedParentalRatingValue" = ${bind(visibility.maxRating)} AND COALESCE(i."InheritedParentalRatingSubValue", 0) <= ${bind(visibility.maxSubRating ?? 0)}))`);
       }
-      if (!boxSetRootLookupOnly && ['repository', 'both'].includes(visibility.boxSetChildRatingMode)) {
+      if (!boxSetLookupOnly && ['repository', 'both'].includes(visibility.boxSetChildRatingMode)) {
         const childMax = bind(visibility.maxRating), childSub = bind(visibility.maxSubRating ?? 0);
-        const bypassStandaloneRating = visibility.boxSetStandalone && standaloneMembershipIsEmpty
-          ? ` OR (${standaloneMembershipIsEmpty})` : '';
-        predicates.push(`(${leafType('i')} <> 'BoxSet' OR NOT EXISTS (SELECT 1 FROM ${links} rating_link WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_link."ChildType" = 0)${bypassStandaloneRating} OR EXISTS (SELECT 1 FROM ${links} rating_link JOIN ${baseItems} rating_child ON ${nativeTextSql(database.schemaName).guidLower("rating_child.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ChildId\"")} WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_link."ChildType" = 0 AND (rating_child."InheritedParentalRatingValue" IS NULL OR rating_child."InheritedParentalRatingValue" < ${childMax} OR (rating_child."InheritedParentalRatingValue" = ${childMax} AND COALESCE(rating_child."InheritedParentalRatingSubValue", 0) <= ${childSub}))))`);
+        // The repository's manual-member rating filter precedes standalone
+        // BoxSet.IsVisible. Empty library membership only bypasses the latter.
+        predicates.push(`(${leafType('i')} <> 'BoxSet' OR NOT EXISTS (
+          SELECT 1 FROM ${links} rating_link
+          WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}
+            AND rating_link."ChildType" = 0) OR EXISTS (
+          SELECT 1 FROM ${links} rating_link JOIN ${baseItems} rating_child
+            ON ${nativeTextSql(database.schemaName).guidLower("rating_child.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ChildId\"")}
+          WHERE ${nativeTextSql(database.schemaName).guidLower("rating_link.\"ParentId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}
+            AND rating_link."ChildType" = 0 AND (rating_child."InheritedParentalRatingValue" IS NULL
+              OR rating_child."InheritedParentalRatingValue" < ${childMax}
+              OR (rating_child."InheritedParentalRatingValue" = ${childMax}
+                AND COALESCE(rating_child."InheritedParentalRatingSubValue", 0) <= ${childSub}))))`);
       }
-      if (!boxSetRootLookupOnly && ['memory', 'both'].includes(visibility.boxSetChildRatingMode)) {
+      if (!boxSetLookupOnly && ['memory', 'both'].includes(visibility.boxSetChildRatingMode)) {
         const rawRating = `(WITH RECURSIVE rating_display_chain("Id", "ParentId", "SeasonId", "SeriesId", "Type", "CustomRating", "OfficialRating", "Depth", "Seen") AS (
           SELECT rating_child."Id", rating_child."ParentId", rating_child."SeasonId", rating_child."SeriesId",
             rating_child."Type", ${visibilityColumn('rating_child', 'CustomRating')}, ${visibilityColumn('rating_child', 'OfficialRating')}, 0,
@@ -1690,7 +1706,7 @@ export function buildPostgresItemPageQuery(database, query, {
       const completeVisibility = predicates.splice(visibilityPredicateStart);
       // PostgreSQL may reorder AND terms. Native BoxSet checks its own
       // parental access before touching LibraryFolderIds or raw root folders.
-      const parentalGate = boxSetRootLookupOnly
+      const parentalGate = boxSetLookupOnly
         ? `${leafType('i')}='BoxSet' AND (${ownParentalPredicates.join(' AND ') || 'TRUE'})`
         : `${leafType('i')}<>'BoxSet' OR (${ownParentalPredicates.join(' AND ') || 'TRUE'})`;
       predicates.push(`CASE WHEN ${parentalGate}
@@ -2157,7 +2173,9 @@ export async function queryPostgresItemPage(database, query, options = {}) {
     };
   };
   const projectionCount = options.nativeVisibilityProjections?.length ?? 0;
-  return options.nativeItemsPlan || projectionCount > 0
+  // Repository BoxSet visibility and its lazy-root probe also contain the
+  // native relational visibility expressions, without a live-item source.
+  return options.nativeItemsPlan || projectionCount > 0 || options.visibility?.boxSetStandalone === true
     ? withPostgresNativeQueryJitOff(database, execute)
     : execute(database);
 }

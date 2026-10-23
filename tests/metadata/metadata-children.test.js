@@ -56,6 +56,37 @@ const cleanupScenario = { target: 'box', items: [
   { key: 'movie', type: 'Movie', Id: 'fc170000-0000-0000-0000-000000000002', Path: 'Z:\\ChildSelection\\Cleanup\\Movie.mkv' },
 ] };
 
+test('postgres: physical metadata child publication retains an existing BoxSet member sequence', async t => {
+  const fixture = await setupChildrenFixture(t);
+  const ids = { root: 'fc230000-0000-0000-0000-000000000001', box: 'fc230000-0000-0000-0000-000000000002',
+    first: 'fc230000-0000-0000-0000-000000000003', second: 'fc230000-0000-0000-0000-000000000004' };
+  await fixture.seed({ target: 'root', items: [
+    { key: 'root', type: 'Folder', Id: ids.root, Path: 'Z:\\ChildSelection\\Publication' },
+    { key: 'box', type: 'BoxSet', Id: ids.box, Path: 'Z:\\ChildSelection\\Publication\\Box', parent: 'root', links: ['first', 'second'] },
+    { key: 'first', type: 'Movie', Id: ids.first, Path: 'Z:\\ChildSelection\\First.mkv' },
+    { key: 'second', type: 'Movie', Id: ids.second, Path: 'Z:\\ChildSelection\\Second.mkv' },
+  ] });
+  const before = await fixture.database.rows('LinkedChildren');
+  const parent = await fixture.library.itemCreation.getItemById(ids.root);
+  const source = createMetadataChildren(fixture), physical = await source.physical(parent);
+  try {
+    let boxes = 0;
+    for await (const page of physical.pages()) for (const child of page) {
+      assert.equal(idKey(child.Id), idKey(ids.box)); boxes++;
+      fixture.library.itemCreation.registerItem(child);
+      const cached = await fixture.library.itemCreation.getItemById(ids.box);
+      const members = await source.children(cached);
+      try {
+        const actual = [];
+        for await (const values of members.pages()) for (const member of values) actual.push(idKey(member.Id));
+        assert.deepEqual(actual, [idKey(ids.first), idKey(ids.second)]);
+      } finally { await members.close(); }
+    }
+    assert.equal(boxes, 1);
+  } finally { await physical.close(); }
+  assert.deepEqual(await fixture.database.rows('LinkedChildren'), before);
+});
+
 test('postgres: explicit Playlist Children overrides its empty cold loader and an empty cache excludes stored rows', async t => {
   const fixture = await setupChildrenFixture(t);
   const parentId = 'fc180000-0000-0000-0000-000000000001', childId = 'fc180000-0000-0000-0000-000000000002';

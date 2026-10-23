@@ -2,9 +2,11 @@
   "schemaVersion": 1,
   "name": "Movie global NFO probe collections lifecycle",
   "culture": "en-US",
-  "serverId": "movie-global-scan-oracle",
+  "localTimezoneOffsetMinutes": 480,
+  "serverId": "fca96afba7c24cf39be0fbd1bce0096a",
   "nfoChangeToleranceMs": 60000,
   "nfoChangeWaitMs": 60001,
+  "explicitMovieSaveUpdateReason": 16,
   "collectionName": "Scan Fixture Collection",
   "originalGenre": "Scan Original Genre",
   "changedGenre": "Scan Changed Genre",
@@ -69,7 +71,8 @@
     "Direct real LibraryManager global entry and real Node complete-scan entry; this fixture does not exercise HTTP authorization or a running full native server.",
     "New input preparation clears only the 31 domain tables on a new supplied SQLite byte copy, preserving all DDL, EF tables/history and sqlite_sequence. Preparation is not a native/candidate business operation.",
     "Directory monitoring is a controlled native host boundary. Both media and application-state files are real isolated files. Actual scan, NFO/XML read/save, probe and collection tasks are not substituted.",
-    "Both executors receive an already configured empty Movies library via native CollectionFolder.SaveLibraryOptions or the production Node options serializer before the business global scans. No additional candidate-only AddVirtualFolder operation is inserted."
+    "Both executors receive an already configured empty Movies library via native CollectionFolder.SaveLibraryOptions or the production Node options serializer before the business global scans. No additional candidate-only AddVirtualFolder operation is inserted.",
+    "After the created global scan and actual metadata worker drain, both executors explicitly save each declared Movie with MetadataEdit through their actual repository/saver entry point before the stable created snapshot. Local-only global import does not by itself require a Movie NFO saver call. The same two explicit saves, complete events, files and persisted state are required on both sides."
   ],
   "projectionPolicy": {
     "rawEvidence": "All 33 tables, sqlite_sequence, real XML/NFO, Item events and queue boundaries are saved without projection.",
@@ -83,7 +86,7 @@
       "BaseItems.DateLastRefreshed",
       "BaseItems.DateLastMediaAdded"
     ],
-    "clockRules": "Each non-minimum clock value must fall within the actual common-input-preparation-to-run-end UTC window (file copies can preserve the generated asset timestamp, so the preparation lower bound is carried in the frozen input). For each logical item plus named clock field, use one bijection from distinct actual 100ns values to first-observed-phase tokens across all stages and persisted Data aliases. Repeated values retain tokens; new values, backwards progression, null and minimum remain distinguishable. Coincidental equal ticks of unrelated clock roles are not an identity contract. Actual Item event clocks use the same role bindings and ordered extra tokens for intermediate values. The NFO update separately proves actual DateLastSaved plus >60000ms, with no clock override or timestamp backdating. All other Date fields remain exact.",
+    "clockRules": "Ordinary non-minimum clock values must fall within the actual common-input-preparation-to-run-end UTC window. For each logical owner plus named clock field, retain one bijection from distinct actual 100ns values to first-observed-phase tokens across stages and that owner's persisted Data aliases. Nested typed array elements have separate property/index owner roles: a root's VirtualChildren[0].DateLastSaved is not the root's own column clock. Repeated values retain tokens; new values, backwards progression within one role, null and minimum remain distinct. BoxSet DateCreated additionally permits exactly one real ToLocalTime/second-precision XML Added/AssumeUniversal transformation from its actual Added event seed; the seed must lie in the ordinary window, the actual timezone must match the neutral offset, and the actual XML provider must have returned the exact derived value. That transform has its own retained token and never permits repeated timezone shifts. Actual Item event clocks reuse their role bindings and ordered extra tokens for intermediate values. The NFO update separately proves actual DateLastSaved plus >60000ms, without clock override or backdating. Every other Date field remains exact.",
     "data": "Every Data property is retained; only declared rooted paths, mapped identities and explicitly listed clock properties may be projected. Raw Data text remains in all-table receipts.",
     "eventOrder": "The entire raw cumulative ordinal stream, including initialization and cleanup, is preserved. Business phase Item events are compared per logical item without dropping multiplicity, order, reasons, Genres, Studios or TmdbCollectionName; setup and close events remain raw diagnostics. Cross-item asynchronous interleaving is diagnostic.",
     "postScanTasks": "Every native registration must equal the real CoreAppHost exported type order; Node names must match actual task constructor types. In each phase actual task begin/completion sequence must follow that side's registrations. Cross-runtime order equality alone is not required: all persisted/XML/Item-event/queue effects still must agree, and actual differing orders are reported."
@@ -91,13 +94,13 @@
   "releaseAcceptance": false,
   "queuePolicy": {
     "expectedAdmissions": {
-      "created": 1,
+      "created": 2,
       "updated": 0,
       "deleted": 0
     },
-    "correlation": "The actual native QueueRefresh admission is joined to RefreshSingleItem by target identity plus the unmodified DirectoryService object reference, retained by the real MetadataRefreshOptions copy constructor. Candidate ALS joins real queuedRefresh to its actual metadataScanner call. This one-request input must remain unambiguous; duplicates or missing starts/completions fail.",
+    "correlation": "The two created admissions are actual collection creation and member addition with distinct ForceSave options. Native joins QueueRefresh to RefreshSingleItem by target plus the unmodified DirectoryService reference retained by the real options copy. Candidate matches actual target and effective options, then ALS joins queuedRefresh to metadataScanner. Duplicate semantic signatures or missing starts/completions fail.",
     "comparison": "Compare original per-item request order, effective native option defaults, priority, actual metadata start/completed Item values, failure count, one-to-one admitted/started/completed/drained counts and partial order. Admission-returned may precede or follow start. No positive deduplication input is claimed; every admitted request must execute once.",
     "completionBoundary": "Native has no public full-item queue completion event. The metadata callback is observed directly; full worker completion, including real Folder.ValidateChildren, is acknowledged only after the actual native queue lock reports empty and processing=false. Node additionally saves its real per-item worker completion. The common compared boundary is admitted -> metadata-started -> metadata-completed -> whole-worker-drained. No invented per-item completion timestamp.",
-    "globalReturn": "All six raw global-returned/drained snapshots retain 33 tables, actual scan outcome and original queue state. Success/status is compared at both boundaries; persisted state/XML and empty real queue are compared at drained boundaries. Exact cross-item async interleaving and transient global-returned backlog are diagnostic; per-request partial order and failure/drain obligations are gates."
+    "globalReturn": "All six raw global-returned/drained snapshots retain 33 tables, actual scan outcome and original queue state. A concurrent global-returned sidecar read preserves either actual bytes or its actual IOException without retry; it is never relabeled as a drained snapshot. Every stable file read after causal real-worker drain must succeed. Success/status is compared at both boundaries; complete persisted state/XML and empty real queue are compared at drained boundaries. Cross-item async interleaving and transient global-returned backlog are diagnostic; per-request partial order and failure/drain obligations are gates."
   }
 }

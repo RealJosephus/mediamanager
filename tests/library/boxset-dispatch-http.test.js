@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { appendFileSync } from 'node:fs';
 import test from 'node:test';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 const fixtureUrl = new URL('./fixtures/boxset-dispatch/input.json', import.meta.url);
 const fixture = JSON.parse(await readFile(fixtureUrl, 'utf8'));
@@ -57,12 +59,27 @@ if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('
 for (const dialect of dialects) {
   test(`${dialect}: collection scope, restricted users and UserViews match 158 frozen HTTP responses`, {
     skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
-  }, async () => {
+  }, async t => {
     const actual = await recordItemFilterCandidate({
       dialect, fixture: { ...fixture, cases }, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
       scenarioName: 'boxset-dispatch', fields: 'SortName', captureOrder: true, captureStartIndex: true,
-      captureSortNames: true, trackFilesystem: true,
+      captureSortNames: true, captureResponseBodies: true, trackFilesystem: true,
       configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false },
+      prepareInstance: async ({ database }) => {
+        const output = path.join(validationOutputRoot(), 'boxset-dispatch-sql-' + randomUUID() + '.jsonl');
+        assertValidationOutputChild(output); await mkdir(path.dirname(output), { recursive: true });
+        const query = database.client.query;
+        let sequence = 0;
+        const record = value => appendFileSync(output, JSON.stringify({ ...value, time: new Date().toISOString() }) + '\n');
+        database.client.query = async (...args) => {
+          const id = ++sequence, text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
+          record({ id, phase: 'start', sql: text.slice(0, 512), sqlSha256: sha256(Buffer.from(text)),
+            stack: new Error('Actual SQL dispatch').stack });
+          try { const value = await query(...args); record({ id, phase: 'settled' }); return value; }
+          catch (error) { record({ id, phase: 'failed', error: { name: error.name, code: error.code, message: error.message } }); throw error; }
+        };
+        t.after(() => { database.client.query = query; });
+      },
       prepareScenario: async ({ database, programDataPath }) => {
         const paths = {
           userRoot: path.join(programDataPath, 'root/default'), physicalA: path.join(programDataPath, 'library-content/A'),
@@ -81,9 +98,9 @@ for (const dialect of dialects) {
           const data = { ...(item.data ?? {}) };
           if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds
             .map(id => itemPath(fixture.items.find(child => child.id === id)));
-          await database.update('BaseItems', { Id: item.id }, {
+          assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() }, {
             Path: itemPath(item), Data: JSON.stringify(data), CommunityRating: native.CommunityRating,
-          });
+          }), 1n, item.key);
         }
       },
     });
@@ -120,8 +137,11 @@ for (const dialect of dialects) {
     assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true, portReleased: true,
       postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true });
-    if (process.env.MEDIAMANAGER_BOXSET_DISPATCH_EVIDENCE) {
-      const output = path.resolve(process.env.MEDIAMANAGER_BOXSET_DISPATCH_EVIDENCE);
+    {
+      const output = process.env.MEDIAMANAGER_BOXSET_DISPATCH_EVIDENCE
+        ? path.resolve(process.env.MEDIAMANAGER_BOXSET_DISPATCH_EVIDENCE)
+        : path.join(validationOutputRoot(), 'boxset-dispatch-http-' + dialect + '-' + randomUUID());
+      if (!process.env.MEDIAMANAGER_BOXSET_DISPATCH_EVIDENCE) assertValidationOutputChild(output);
       await mkdir(output, { recursive: true });
       await writeFile(path.join(output, `${dialect}.json`), JSON.stringify(actual, null, 2) + '\n', { flag: 'wx' });
       await writeFile(path.join(output, `${dialect}-comparison.json`), JSON.stringify({

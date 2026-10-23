@@ -5,6 +5,7 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { inspect } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { CollectionService } from '../../src/library/collection-service.js';
 import { LibraryConfigurationService } from '../../src/library/library-configuration-service.js';
@@ -69,7 +70,7 @@ const ratingScore = value => {
   return score === undefined ? null : { score, subScore: 0 };
 };
 const project = async item => ({ id: guid(item.Id), name: item.Name, path: item.Path, parentId: guid(item.ParentId),
-  isLocked: item.IsLocked, providerIds: item.ProviderIds, officialRating: item.OfficialRating,
+  isLocked: item.IsLocked, providerIds: item.ProviderIds == null ? item.ProviderIds : { ...item.ProviderIds }, officialRating: item.OfficialRating,
   links: (await readTestLinks(item) ?? []).map(link => ({ itemId: guid(link.ItemId), type: link.Type ?? 0,
     path: link.Path ?? null, libraryItemId: link.LibraryItemId ?? null })) });
 
@@ -161,7 +162,7 @@ async function runSample(t, sample, directory, { dataPath, blockCreate } = {}) {
   service.on('CollectionCreated', ({ Collection }) => capturedTrace('created-event', project(Collection)));
   service.on('ItemsAddedToCollection', ({ Items }) => capturedTrace('added-event', captureTestEvent(Items)));
   service.on('ItemsRemovedFromCollection', ({ Items }) => capturedTrace('removed-event', captureTestEvent(Items)));
-  let failed = false, foundFolder = null;
+  let failed = false, foundFolder = null, operationError;
   try {
     const ids = (sample.ids ?? []).map(Id), collectionId = Id(sample.collectionId ?? 100);
     if (sample.operation === 'create') await service.create({ Name: sample.name === undefined ? 'Collection' : sample.name,
@@ -169,12 +170,12 @@ async function runSample(t, sample, directory, { dataPath, blockCreate } = {}) {
     else if (sample.operation === 'add') await service.add(collectionId, ids);
     else if (sample.operation === 'remove') await service.remove(collectionId, ids);
     else foundFolder = await service.getCollectionsFolder(sample.createIfNeeded === true) !== null;
-  } catch { failed = true; }
+  } catch (error) { failed = true; operationError = error; }
   await Promise.all(pending); await service.close();
   const directories = (await fs.readdir(program, { recursive: true, withFileTypes: true })).filter(entry => entry.isDirectory())
     .map(entry => path.relative(program, path.join(entry.parentPath, entry.name)).replaceAll('\\', '/')).sort();
   return { result: { key: sample.key, failed, foundFolder, calls,
-    collection: collection?.LinkedChildren != null ? await project(collection) : null, directories }, service, collection, program, data };
+    collection: collection?.LinkedChildren != null ? await project(collection) : null, directories }, service, collection, program, data, operationError };
 }
 
 test('collection manager fixture binds actual source and loaded assemblies', async () => {
@@ -202,12 +203,13 @@ for (const sample of input) test(`CollectionManager differential: ${sample.key}`
   t.after(() => { assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir())); assert.ok(path.basename(directory).startsWith('collection-manager-'));
     return fs.rm(directory, { recursive: true, force: true }); });
   const expected = native.results.find(result => result.key === sample.key);
-  const { result, program, collection } = await runSample(t, sample, directory);
+  const { result, program, collection, operationError } = await runSample(t, sample, directory);
   const expectedProgram = expected.collection?.path.slice(0, expected.collection.path.indexOf('\\program') + '\\program'.length)
     ?? native.results.find(result => result.key === 'create-empty').collection.path.replace('create-empty', sample.key).split('\\data')[0];
   const { exception: _exception, timestamps: _timestamps, pathQueries: _pathQueries, ...contract } = expected;
   contract.directories = contract.directories.map(value => value.replaceAll('\\', '/'));
-  assert.deepEqual(normalize(result, program, collection?.Id ?? Id(100)), normalize(contract, expectedProgram, Id(100)));
+  assert.deepEqual(normalize(result, program, collection?.Id ?? Id(100)), normalize(contract, expectedProgram, Id(100)),
+    operationError ? 'Candidate operation failed: ' + inspect(operationError, { depth: 8 }) : undefined);
 });
 
 test('managed collections support a declared external data root', pg, async t => {

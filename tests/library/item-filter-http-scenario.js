@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { createHash, randomUUID } from 'node:crypto';
 import { createServer } from 'node:net';
-import { mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { appendFileSync } from 'node:fs';
+import { appendFile, mkdir, mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import pg from 'pg';
@@ -12,6 +13,7 @@ import { cleanValue, EMPTY_ID, idKey } from '../../src/library/records.js';
 import { clearFolderChildIds, releaseCachedFolderChildren } from '../../src/library/folder-cache.js';
 import { postgresFolderChildIds } from '../../src/library/postgres-folder-child-ids.js';
 import { createRuntime } from '../../src/runtime.js';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 
 const typeNames = {
   Video: 'MediaBrowser.Controller.Entities.Video',
@@ -523,9 +525,11 @@ async function prepareSeededRoots(runtime, database, programDataPath) {
     roots: [], unregistered: [], releases: [], virtualChildren: [] };
   const describe = item => ({ Id: item.Id, NativeType: item.NativeType,
     Path: item.Path, Name: item.Name, ParentId: item.ParentId, IsRoot: item.IsRoot,
-    Data: item.NativeData, repository: item.NativeRepositoryColumns,
-    physicalLocations: { present: item.PhysicalLocations !== undefined, value: item.PhysicalLocations },
-    physicalLocationsList: { present: item.PhysicalLocationsList !== undefined, value: item.PhysicalLocationsList } });
+    Data: item.NativeData, repository: { ...item.NativeRepositoryColumns },
+    physicalLocations: { present: item.PhysicalLocations !== undefined,
+      value: item.PhysicalLocations == null ? item.PhysicalLocations : [...item.PhysicalLocations] },
+    physicalLocationsList: { present: item.PhysicalLocationsList !== undefined,
+      value: item.PhysicalLocationsList == null ? item.PhysicalLocationsList : [...item.PhysicalLocationsList] } });
   for (const root of previousRoots) {
     const ids = postgresFolderChildIds(root);
     observations.roots.push({ before: describe(root),
@@ -850,6 +854,28 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
   let port;
   let result;
   let scenarioError;
+  let currentCase = null;
+  const requestHistory = [];
+  const failureFile = path.join(validationOutputRoot(), 'item-filter-failure-' + schema + '.jsonl');
+  assertValidationOutputChild(failureFile);
+  const describeError = (error, seen = new Set()) => {
+    if (error == null || typeof error !== 'object') return { message: String(error) };
+    if (seen.has(error)) return { repeatedReference: true };
+    seen.add(error);
+    const redact = text => typeof text === 'string' && connectionString ? text.replaceAll(connectionString, '[fixture-secret]') : text;
+    return { name: error.name, code: error.code, message: redact(error.message), stack: redact(error.stack),
+      ...(error.cause === undefined ? {} : { cause: describeError(error.cause, seen) }),
+      ...(Array.isArray(error.errors) ? { errors: error.errors.map(value => describeError(value, seen)) } : {}) };
+  };
+  const preserveFailure = async phase => {
+    try {
+      await mkdir(path.dirname(failureFile), { recursive: true });
+      await appendFile(failureFile, JSON.stringify({ phase, scenarioName, schema, currentCase, requestHistory,
+        error: describeError(scenarioError), cleanup, scope: 'Actual failure/cause chain and request progress only; no retry or changed expectation.' }) + '\n');
+    } catch (error) {
+      scenarioError = new AggregateError([scenarioError, error], 'Could not preserve the original HTTP scenario failure.');
+    }
+  };
   let programDataDirectory;
   const cleanup = { runtimeClosed: false, databaseClosed: false, portReleased: false,
     postgresSchemasRemoved: false };
@@ -867,6 +893,24 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       programDataPath: programDataDirectory,
       onError: error => runtimeErrors.push({ name: error.name, message: error.message }),
     });
+    const closeFile = path.join(validationOutputRoot(), 'item-filter-close-' + schema + '.jsonl');
+    assertValidationOutputChild(closeFile); await mkdir(path.dirname(closeFile), { recursive: true });
+    const recordClose = value => appendFileSync(closeFile, JSON.stringify({ ...value, time: new Date().toISOString(),
+      scope: 'Actual owner close entry and settlement only; no timeout, retry or forced release.' }) + '\n');
+    const observedOwners = new Set([runtime.server]);
+    for (const [name, owner] of [...Object.entries(runtime), ['resourceGraph', runtime.linkedChildren?.resourceGraph]]) {
+      if (!owner || typeof owner !== 'object' || typeof owner.close !== 'function' || observedOwners.has(owner)) continue;
+      observedOwners.add(owner);
+      const close = owner.close;
+      owner.close = function (...args) {
+        recordClose({ owner: name, phase: 'start' });
+        try {
+          return Promise.resolve(close.apply(this, args)).then(value => {
+            recordClose({ owner: name, phase: 'settled' }); return value;
+          }, error => { recordClose({ owner: name, phase: 'failed', error: describeError(error) }); throw error; });
+        } catch (error) { recordClose({ owner: name, phase: 'failed', error: describeError(error) }); throw error; }
+      };
+    }
     if (captureEndpointStages || captureShutdownState) {
       const closeStore = runtime.store.close.bind(runtime.store);
       runtime.store.close = async () => {
@@ -894,6 +938,11 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     port = runtime.server.address().port;
     const origin = `http://127.0.0.1:${port}`;
     const request = async (route, { method = 'GET', token, body } = {}) => {
+      const description = new URL(route, origin);
+      for (const key of description.searchParams.keys()) if (/^(?:api_key|access_token|accesstoken|token)$/iu.test(key))
+        description.searchParams.set(key, '[fixture-secret]');
+      const observed = { case: currentCase, method, route: description.pathname + description.search, completed: false };
+      requestHistory.push(observed);
       const response = await fetch(origin + route, {
         method,
         signal: AbortSignal.timeout(requestTimeoutMs),
@@ -905,6 +954,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
         body: body === undefined ? undefined : JSON.stringify(body),
       });
       const bodyText = await response.text();
+      observed.completed = true; observed.status = response.status;
       let parsed;
       try { parsed = bodyText === '' ? null : JSON.parse(bodyText); }
       catch { parsed = undefined; }
@@ -956,6 +1006,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
     const sideEffect = trackSideEffectCase == null ? null : {};
     let httpCases = 0;
     for (const testCase of fixture.cases) {
+      currentCase = testCase.name;
       const endpoints = testCase.endpoints ?? ['items', 'legacy'];
       if (prepareCase) await prepareCase({ testCase, runtime, database, user });
       let policyReadback;
@@ -1085,6 +1136,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       sideEffect, caseStages, runtimeErrors, handledExpectedRuntimeErrors, cleanup };
   } catch (error) {
     scenarioError = error;
+    await preserveFailure('operation-failed');
   } finally {
     try {
       if (runtime) await runtime.close();
@@ -1114,7 +1166,7 @@ export async function recordItemFilterCandidate({ dialect, fixture, connectionSt
       } catch (error) { scenarioError ??= error; }
     }
   }
-  if (scenarioError) throw scenarioError;
+  if (scenarioError) { await preserveFailure('cleanup-finished'); throw scenarioError; }
   return result;
 }
 

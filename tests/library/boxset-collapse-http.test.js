@@ -68,14 +68,15 @@ for (const dialect of dialects) {
           const collectionPath = path.join(programDataPath, 'data', 'collections');
           for (const item of fixture.items) {
             if (item.key === 'collections' || item.type === 'BoxSet') {
-              await database.update('BaseItems', { Id: item.id }, {
+              assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() }, {
                 Path: item.key === 'collections' ? collectionPath : path.join(collectionPath, item.key),
-              });
+              }), 1n, item.key);
             }
             // The reference clones native Movie/Folder templates. Retain the
             // recorded rating column because it participates in the sort matrix.
             const nativeRow = nativeStages.before.database.baseItems.find(row => idKey(row.Id) === idKey(item.id));
-            if (nativeRow) await database.update('BaseItems', { Id: item.id }, { CommunityRating: nativeRow.CommunityRating });
+            if (nativeRow) assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() },
+              { CommunityRating: nativeRow.CommunityRating }), 1n, item.key);
           }
         },
       });

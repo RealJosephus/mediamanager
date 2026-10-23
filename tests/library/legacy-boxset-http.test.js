@@ -91,10 +91,10 @@ for (const dialect of dialects) {
           const data = { ...(item.data ?? {}) };
           if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds
             .map(id => itemPath(fixture.items.find(child => child.id === id)));
-          await database.update('BaseItems', { Id: item.id }, {
+          assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() }, {
             Path: itemPath(item), Data: JSON.stringify(data), CommunityRating: native.CommunityRating,
             PremiereDate: item.premiereDate ?? null, ProductionYear: item.productionYear ?? null,
-          });
+          }), 1n, item.key);
         }
       },
     });

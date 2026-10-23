@@ -56,7 +56,7 @@ for (const dialect of dialects) test(`${dialect}: tvnextup matches 53 complete n
       trackUserData: true, trackFilesystem: true, captureEndpointStages: true, captureFilesystemDomains: true,
       configuration: { EnableGroupingMoviesIntoCollections: false, EnableGroupingShowsIntoCollections: false, DisplaySpecialsWithinSeasons: true },
       prepareScenario: async ({ database, programDataPath, user }) => {
-        const paths = { userRoot: path.join(programDataPath, 'root/default'), playlists: path.join(programDataPath, 'playlists') };
+        const paths = { userRoot: path.join(programDataPath, 'root/default'), playlists: path.join(programDataPath, 'data/playlists') };
         for (const letter of ['A', 'B', 'T', 'K', 'M']) {
           paths['physical' + letter] = path.join(programDataPath, 'library-content', letter);
           paths['library' + letter] = path.join(programDataPath, 'root/default', 'Library ' + letter);
@@ -78,11 +78,13 @@ for (const dialect of dialects) test(`${dialect}: tvnextup matches 53 complete n
           if (data.UserId) data.UserId = user.Id;
           if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds
             .map(id => itemPath(fixture.items.find(child => child.id === id)));
-          await database.update('BaseItems', { Id: item.id }, { ...values, Path: itemPath(item), Data: JSON.stringify(data) });
+          assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() },
+            { ...values, Path: itemPath(item), Data: JSON.stringify(data) }), 1n, item.key);
         }
         for (const stream of fixture.mediaStreams ?? []) {
           const item = fixture.items.find(row => row.key === stream.itemKey);
-          await database.update('MediaStreamInfos', { ItemId: item.id, StreamIndex: stream.index ?? 0 }, { Width: stream.width ?? null });
+          assert.equal(await database.update('MediaStreamInfos', { ItemId: item.id.toUpperCase(), StreamIndex: stream.index ?? 0 },
+            { Width: stream.width ?? null }), 1n, item.key);
         }
         for (const data of fixture.userData) {
           const item = fixture.items.find(row => row.key === data.itemKey);

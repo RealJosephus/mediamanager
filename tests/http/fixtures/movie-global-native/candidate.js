@@ -1,20 +1,18 @@
 import assert from 'node:assert/strict';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { copyFile, lstat, mkdir, readFile, readdir, stat, writeFile, unlink } from 'node:fs/promises';
+import { chmod, copyFile, lstat, mkdir, readFile, readdir, stat, writeFile, unlink } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import path from 'node:path';
 import { nativeModel } from '../../../../src/database/model.js';
+import { decodeNativeTextBytes } from '../../../../src/database/native-text.js';
 import { dateTicks } from '../../../../src/library/records.js';
 import { SqliteDatabase } from '../../../../src/database/sqlite.js';
 import { transferDatabase, exportCurrentSqlite } from '../../../../src/migration/database-transfer.js';
 import { createRuntime } from '../../../../src/runtime.js';
 import { defaultLibraryOptions } from '../../../../src/library/options.js';
+import { ItemUpdateType } from '../../../../src/metadata/save-manager.js';
 import { serializeLibraryOptions } from '../../../../src/library/library-options-store.js';
-import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../../../src/storage/index.js';
-import { MemoryStorageAdapter } from '../../../../src/storage/testing/memory-adapter.js';
-import { LocalAdapter } from '../../../../plugins/local/adapter.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../../../database/postgres-fixture.js';
-import { knownAncestorIgnoreIdentityMap } from '../../../library/ignore-namespace-fixture.js';
 import { json, sha } from './capture.js';
 import { describeFile } from '../../../../tools/validation/inventory.js';
 
@@ -39,9 +37,10 @@ export async function runMovieCandidate(capture) {
     inputSha256: capture.report.boundInput.sha256, inputDatabaseSha256: bound.database.sha256,
     media: bound.media,
     preparationExecutedAsBusiness: false, releaseAcceptance: false, cleanup: {} };
+  report.timeZone = { id: Intl.DateTimeFormat().resolvedOptions().timeZone, offsetMinutes: -new Date().getTimezoneOffset() };
+  assert.equal(report.timeZone.offsetMinutes, specification.localTimezoneOffsetMinutes);
   let database, runtime, source, phase = 'initialization', ordinal = 0, activeQueued = 0, activeBatches = 0, cleanupSequence = 0, failure;
   const queuedContext = new AsyncLocalStorage(), requests = [];
-  const registry = new StorageRegistry();
   const trace = (action, detail) => report.trace.push({ ordinal: ++ordinal, phase, action, detail,
     scanRunning: runtime?.libraryScanLifecycle.isScanRunning ?? false });
   const queue = () => { const queued = [...runtime.metadata.getRefreshQueue()];
@@ -51,7 +50,9 @@ export async function runMovieCandidate(capture) {
   const options = { ...defaultLibraryOptions(), SaveLocalMetadata: true, MetadataSavers: ['Nfo'], AutomaticallyAddToCollection: true,
     EnableRealtimeMonitor: false, EnableInternetProviders: false,
     TypeOptions: ['Movie', 'BoxSet', 'Genre', 'MusicGenre', 'Studio', 'Folder', 'CollectionFolder']
-      .map(Type => ({ Type, MetadataFetchers: [], ImageFetchers: [] })), PathInfos: [{ Path: media }] };
+      .map(Type => ({ Type, MetadataFetchers: [], MetadataFetcherOrder: [], ImageFetchers: [],
+        ImageFetcherOrder: [], ImageOptions: [], SimilarItemProviders: [], SimilarItemProviderOrder: [] })),
+    PathInfos: [{ Path: media }] };
   try {
     await mkdir(root); await mkdir(media); await mkdir(program);
     // Both executors receive an already configured empty Movies library. Native
@@ -64,8 +65,9 @@ export async function runMovieCandidate(capture) {
     await writeFile(path.join(virtual, 'location-00.mblink'), media);
     database = await createPostgresTestDatabase(null, 'movie_global');
     report.postgresSchema = database.schemaName;
+    const style = process.platform === 'win32' ? 'windows' : 'posix', caseSensitive = process.platform !== 'win32';
     const mountContract = { mounts: [{ mountId: 'movie-global', identityRoot: root, accessRoot: '/case',
-      pathStyle: process.platform === 'win32' ? 'windows' : 'posix', caseSensitive: process.platform !== 'win32', returnPolicy: 'required' }] };
+      pathStyle: style, caseSensitive, returnPolicy: 'required' }] };
     // Opening SQLite read-only can still create WAL/SHM companions. Give PG's
     // importer its own exact clone, keeping the frozen common input unopened.
     const sourceClone = path.join(root, 'initial-native.db'); await copyFile(bound.database.filename, sourceClone);
@@ -75,21 +77,34 @@ export async function runMovieCandidate(capture) {
       originIdentityDigest: bound.database.sha256 }, portableMountContract: mountContract });
     source.close(); source = undefined;
     assert.equal(sha(await readFile(sourceClone)), bound.database.sha256);
-    registry.registerType('case-local', configuration => LocalAdapter.open(configuration));
-    registry.registerType('empty-ancestors', () => new MemoryStorageAdapter());
-    await registry.createInstance('case', 'case-local', { root, writable: true });
-    const vfs = new VirtualFileSystem(registry);
-    vfs.mount({ path: '/case', instanceId: 'case', capabilities: { create: true, replace: true, mkdir: true,
-      delete: true, rename: true, atomicReplace: true } });
-    const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: root, accessRoot: '/case',
-      style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Actual isolated Movie input and application state.' });
+    // Use the production plugin/storage bootstrap with the exact imported
+    // portable mapping. Only the declared empty ignore ancestors project to a
+    // separate private empty directory; no host ancestor is read.
+    const ancestors = path.join(root, 'empty-ignore-ancestors'); await mkdir(ancestors);
+    const storageFilename = path.join(root, 'storage.json');
+    await writeFile(storageFilename, json({
+      instances: [{ id: 'case', type: 'local', config: { root, writable: true } },
+        { id: 'empty-ancestors', type: 'local', config: { root: ancestors, writable: false } }],
+      mounts: [{ path: '/case', instanceId: 'case', capabilities: { create: true, replace: true,
+        mkdir: true, delete: true, rename: true, atomicReplace: true } },
+        { path: '/known-ignore-ancestors', instanceId: 'empty-ancestors', capabilities: {} }],
+      prefixes: [{ identityRoot: root, accessRoot: '/case', style, caseSensitive, purpose: 'library',
+        returnAccess: 'Actual isolated Movie input and application state.' }],
+      ignorePrefixes: [{ identityRoot: path.parse(root).root, accessRoot: '/known-ignore-ancestors', style,
+        caseSensitive, returnAccess: 'Declared empty ancestors of the isolated Movie scenario.' }],
+    }));
+    report.storageConfiguration = await describeFile(storageFilename);
     runtime = await createRuntime({ database, programDataPath: program, configurationDirectoryPath: path.join(program, 'config'),
-      serverId: specification.serverId, portableMountContract: mountContract, vfs, identityMap,
-      ignoreIdentityMap: await knownAncestorIgnoreIdentityMap({ registry, vfs, identityMap,
-        identityRoots: [root], adapterType: 'empty-ancestors' }),
+      serverId: specification.serverId, portableMountContract: mountContract, storageConfiguration: storageFilename,
       configuration: { UICulture: specification.culture, IsStartupWizardCompleted: true, LibraryScanFanoutConcurrency: 1,
         MetadataCountryCode: 'US', PreferredMetadataLanguage: 'en', EnableCaseSensitiveItemIds: true },
       probeOptions: { ffprobePath: bound.ffprobe }, onError: error => report.errors.push({ phase, ...errorRecord(error) }) });
+    const savedClock = runtime.metadataUpdates.now;
+    runtime.metadataUpdates.now = function () {
+      const value = savedClock.call(this);
+      trace('repository-save-clock', { value, highResolutionUnixMilliseconds: performance.timeOrigin + performance.now() });
+      return value;
+    };
     for (const [name, action] of [['ItemAdded', 'added'], ['ItemUpdated', 'updated'], ['ItemRemoved', 'removed']]) {
       runtime.library.on(name, event => trace(action, { item: itemEvent(event.Item), parent: event.Parent?.Id ?? null,
         updateReason: event.UpdateReason ?? 0 }));
@@ -108,54 +123,73 @@ export async function runMovieCandidate(capture) {
         }
       };
     }
-    const observedProviders = new Set();
-    for (const extension of runtime.metadata.registry.plugins()) for (const provider of extension.providers) {
-      if (!['MovieNfoProvider', 'MovieNfoSaver', 'BoxSetXmlProvider', 'BoxSetXmlSaver'].includes(provider.id)) continue;
-      observedProviders.add(provider.id);
-      if (provider.getMetadata) {
-        const actual = provider.getMetadata;
-        provider.getMetadata = async function (item, ...args) {
+    const observedIds = ['MovieNfoProvider', 'MovieNfoSaver', 'BoxSetXmlProvider', 'BoxSetXmlSaver'];
+    const declaredIds = runtime.metadata.registry.plugins().flatMap(extension => extension.providers)
+      .filter(provider => observedIds.includes(provider.id)).map(provider => provider.id);
+    assert.deepEqual(declaredIds.sort(), [...observedIds].sort());
+    const observeProvider = provider => observedIds.includes(provider.id) ? new Proxy(provider, {
+      get(target, key) {
+        const actual = Reflect.get(target, key, target);
+        if (typeof actual !== 'function') return actual;
+        if (key === 'getMetadata') return async function (item, ...args) {
           trace('local-reader-begin', { provider: provider.id, Path: item.Path });
-          const result = await actual.call(this, item, ...args), metadata = result.Item;
+          const result = await actual.call(target, item, ...args), metadata = result.Item;
           trace('local-reader-completed', { provider: provider.id, Path: item.Path, HasMetadata: result.HasMetadata,
-            Name: metadata?.Name ?? null, Genres: metadata?.Genres ? [...metadata.Genres] : null,
+            Name: metadata?.Name ?? null, DateCreated: metadata?.DateCreated ?? null,
+            Genres: metadata?.Genres ? [...metadata.Genres] : null,
             Studios: metadata?.Studios ? [...metadata.Studios] : null, tmdbCollectionName: metadata?.TmdbCollectionName ?? null });
           return result;
         };
-      }
-      if (provider.hasChanged) {
-        const actual = provider.hasChanged;
-        provider.hasChanged = async function (item, ...args) {
-          const changed = await actual.call(this, item, ...args);
+        if (key === 'hasChanged') return async function (item, ...args) {
+          const changed = await actual.call(target, item, ...args);
           trace('local-reader-change-check', { provider: provider.id, itemId: item.Id, Path: item.Path, DateLastSaved: item.DateLastSaved, changed });
           return changed;
         };
-      }
-      if (provider.prepareSave) {
-        const actual = provider.prepareSave;
-        provider.prepareSave = async function (item, ...args) {
+        if (key === 'prepareSave') return async function (item, ...args) {
           trace('local-saver-prepare-begin', { saver: provider.id, itemId: item.Id, Path: item.Path });
-          const prepared = await actual.call(this, item, ...args), apply = prepared.apply;
+          const prepared = await actual.call(target, item, ...args);
           trace('local-saver-prepare-completed', { saver: provider.id, itemId: item.Id, Path: item.Path, path: prepared.path, changed: prepared.changed });
-          prepared.apply = async function (...values) {
-            trace('local-saver-begin', { saver: provider.id, itemId: item.Id, Path: item.Path, filename: prepared.path });
-            const result = await apply.apply(this, values);
-            trace('local-saver-completed', { saver: provider.id, itemId: item.Id, Path: item.Path, result }); return result;
-          };
-          return prepared;
+          return new Proxy(prepared, { get(resource, property) {
+            const value = Reflect.get(resource, property, resource);
+            if (property !== 'apply') return value;
+            return async function (...values) {
+              trace('local-saver-begin', { saver: provider.id, itemId: item.Id, Path: item.Path, filename: prepared.path });
+              const result = await value.apply(resource, values);
+              trace('local-saver-completed', { saver: provider.id, itemId: item.Id, Path: item.Path, result }); return result;
+            };
+          } });
         };
-      }
-      if (provider.save) {
-        const actual = provider.save;
-        provider.save = async function (item, ...args) {
+        if (key === 'save') return async function (item, ...args) {
           trace('local-saver-begin', { saver: provider.id, itemId: item.Id, Path: item.Path });
-          const result = await actual.call(this, item, ...args);
+          const result = await actual.call(target, item, ...args);
           trace('local-saver-completed', { saver: provider.id, itemId: item.Id, Path: item.Path, result }); return result;
         };
+        return actual;
       }
-    }
-    assert.deepEqual([...observedProviders].sort(), ['MovieNfoProvider', 'MovieNfoSaver', 'BoxSetXmlProvider', 'BoxSetXmlSaver'].sort());
-    report.observedLocalImplementations = [...observedProviders];
+    }) : provider;
+    const discover = runtime.metadata.registry.discover;
+    runtime.metadata.registry.discover = function (...args) {
+      return discover.apply(this, args).map(observeProvider);
+    };
+    report.observedLocalImplementations = declaredIds;
+    const query = database.client.query;
+    database.client.query = async function (...args) {
+      const text = typeof args[0] === 'string' ? args[0] : args[0]?.text ?? '';
+      const result = await query.apply(this, args);
+      const requests = /UPDATE "(mm_collection_requests_[a-f0-9]{32})" request SET "Addition" = NOT EXISTS/u.exec(text);
+      const initial = /FROM "(mm_link_resolution_raw_[a-f0-9]{32})" initial/u.exec(text);
+      if (requests && initial) {
+        const raw = await query.call(this, `SELECT "Ordinal", "ItemId", "Type", "Path", "LibraryItemId", "ResolvedId"
+          FROM "${initial[1]}" ORDER BY "Ordinal" LIMIT 128`);
+        const requested = await query.call(this, `SELECT "Ordinal", "Id", "ResolvedId", "Addition"
+          FROM "${requests[1]}" ORDER BY "Ordinal" LIMIT 128`);
+        const decode = row => Object.fromEntries(Object.entries(row).map(([key, value]) =>
+          [key, value instanceof Uint8Array ? decodeNativeTextBytes(value) : value]));
+        trace('collection-membership-observed', { raw: raw.rows.map(decode), requests: requested.rows.map(decode),
+          scope: 'Actual post-resolution TEMP rows after Addition selection; observation only, on the owning checked-out session.' });
+      }
+      return result;
+    };
     const refresh = runtime.metadata.refresh;
     runtime.metadata.refresh = async function (...args) {
       trace('metadata-begin', { reference: typeof args[0] === 'string' ? args[0] : args[0]?.Id, options: refreshOptions(args[1]) });
@@ -174,7 +208,7 @@ export async function runMovieCandidate(capture) {
     const admit = runtime.metadata.queue;
     runtime.metadata.queue = function (...args) {
       const reference = typeof args[0] === 'string' ? args[0] : args[0]?.Id;
-      const request = { id: requests.length + 1, itemId: reference, phase, Started: 0, Completed: 0, Failed: 0,
+      const request = { id: requests.length + 1, itemId: reference, options: refreshOptions(args[1]), phase, Started: 0, Completed: 0, Failed: 0,
         workerStarted: 0, workerCompleted: 0, workerFailed: 0, drained: false }; requests.push(request);
       trace('queue-admission-begin', { requestId: request.id, itemId: reference, options: refreshOptions(args[1]), priority: args[2] ?? 0, queue: queue() });
       const task = admit.apply(this, args); trace('queue-admission-returned', { requestId: request.id, itemId: reference, queue: queue() });
@@ -185,8 +219,10 @@ export async function runMovieCandidate(capture) {
     const queuedRefresh = runtime.metadata.queuedRefresh;
     runtime.metadata.queuedRefresh = async function (...args) {
       const id = String(typeof args[0] === 'string' ? args[0] : args[0].Id).replaceAll('-', '').toLowerCase();
-      const admitted = requests.filter(request => !request.workerStarted && String(request.itemId).replaceAll('-', '').toLowerCase() === id);
-      assert.equal(admitted.length, 1, 'This single-request input must have an unambiguous actual queue correlation.');
+      const signature = JSON.stringify(refreshOptions(args[1]));
+      const admitted = requests.filter(request => !request.workerStarted && String(request.itemId).replaceAll('-', '').toLowerCase() === id
+        && JSON.stringify(request.options) === signature);
+      assert.equal(admitted.length, 1, 'The actual target and refresh options must identify one admitted request.');
       const request = admitted[0]; request.workerStarted++; activeQueued++;
       trace('queue-worker-start', { requestId: request.id, itemId: request.itemId });
       try {
@@ -233,7 +269,14 @@ export async function runMovieCandidate(capture) {
     }
     await runtime.plugins.setEnabled('tmdb', false);
     for (const name of specification.movies) {
-      await copyFile(bound.media.filename, path.join(media, name + '.mkv'));
+      const filename = path.join(media, name + '.mkv');
+      await copyFile(bound.media.filename, filename);
+      const modeBefore = (await stat(filename)).mode;
+      await chmod(filename, 0o644);
+      const copied = await describeFile(filename);
+      assert.equal(copied.sha256, bound.media.sha256); assert.equal(copied.bytes, bound.media.bytes);
+      trace('controlled-media-copy', { filename, modeBefore, modeAfter: (await stat(filename)).mode,
+        bytes: copied.bytes, sha256: copied.sha256, protectedSource: bound.media.filename });
       await writeFile(path.join(media, name + '.nfo'), nfo(name, specification.originalGenre, false));
     }
     trace('input-files-ready', { at: new Date().toISOString(), files: await files(root) });
@@ -245,7 +288,7 @@ export async function runMovieCandidate(capture) {
       await new Promise(resolve => setTimeout(resolve, 20));
     const beforeWrite = new Date().toISOString(), filename = path.join(media, 'First.nfo');
     await writeFile(filename, nfo('Updated First', specification.changedGenre, true));
-    const observed = await vfs.stat('/case/media/First.nfo'), elapsedTicks = dateTicks(observed.modified) - saved;
+    const observed = await runtime.storage.vfs.stat('/case/media/First.nfo'), elapsedTicks = dateTicks(observed.modified) - saved;
     report.updateInput = { originalItemId: first.Id, saved: first.DateLastSaved, beforeWrite,
       observedModified: observed.modified, elapsedTicks, toleranceTicks: tolerance, text: await readFile(filename, 'utf8') };
     assert.ok(elapsedTicks > tolerance, 'The actual NFO write must exceed the original one-minute tolerance.');
@@ -261,7 +304,11 @@ export async function runMovieCandidate(capture) {
     await close('runtime', () => runtime?.close());
     await close('source', () => source?.close());
     await close('postgresDropped', () => dropPostgresTestDatabase(database));
-    await close('storage', () => registry.close());
+    await close('storage', async () => {
+      if (!runtime) return;
+      report.cleanup.storageAfterClose = runtime.storage.status();
+      assert.equal(report.cleanup.storageAfterClose.every(instance => instance.available === false), true);
+    });
     await close('frozenInputUnchanged', async () => {
       for (const file of [bound.database, bound.media]) assert.equal(sha(await readFile(file.filename)), file.sha256);
     });
@@ -343,6 +390,19 @@ export async function runMovieCandidate(capture) {
     }
     trace('queue-drain-completed', queue());
     assert.deepEqual(queue(), { queued: [], processing: false });
+    if (phase === 'created' && !scanFailure) {
+      assert.equal(specification.explicitMovieSaveUpdateReason, ItemUpdateType.MetadataEdit);
+      for (const movieName of specification.movies) {
+        const rows = await runtime.store.run(db => db.rows('BaseItems', { where: { Path: path.join(media, movieName + '.mkv') } }));
+        assert.equal(rows.length, 1);
+        await runtime.metadata.loadContext.withContext(rows[0].Id, {}, async loaded => {
+          trace('explicit-movie-save-begin', { item: itemEvent(loaded.item), updateReason: specification.explicitMovieSaveUpdateReason });
+          await runtime.metadataUpdates.updateRepository(loaded, { Item: loaded.item, Images: loaded.context.images },
+            specification.explicitMovieSaveUpdateReason);
+          trace('explicit-movie-save-completed', { item: itemEvent(loaded.item), updateReason: specification.explicitMovieSaveUpdateReason });
+        });
+      }
+    }
     report.observations.push({ phase, boundary: 'metadata-drained', startedAt, endedAt: new Date().toISOString(),
       status: scanFailure ? 'failed' : 'completed', scanRunning: runtime.libraryScanLifecycle.isScanRunning,
       Exception: scanFailure?.name ?? null, ExceptionMessage: scanFailure?.message ?? null, queue: queue(),

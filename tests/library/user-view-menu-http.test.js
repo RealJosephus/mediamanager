@@ -73,7 +73,7 @@ for (const dialect of dialects) {
           const controlState = await users.getUser(control.Id);
           await users.updatePolicy(control.Id, { ...controlState.Policy, IsAdministrator: true });
           assert.equal((await database.rows('Permissions')).filter(row => row.Kind === 0 && row.Value).length, 2);
-          const paths = { userRoot: path.join(programDataPath, 'root/default'), playlists: path.join(programDataPath, 'playlists') };
+          const paths = { userRoot: path.join(programDataPath, 'root/default'), playlists: path.join(programDataPath, 'data/playlists') };
           for (const letter of ['A', 'B', 'T', 'K', 'M']) {
             paths['physical' + letter] = path.join(programDataPath, 'library-content', letter);
             paths['library' + letter] = path.join(programDataPath, 'root/default', 'Library ' + letter);

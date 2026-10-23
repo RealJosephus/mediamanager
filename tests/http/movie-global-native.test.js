@@ -34,7 +34,8 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
         assert.deepEqual(record.trace.filter(value => value.action === 'log' && ['Error', 'Critical'].includes(value.detail.level)), [],
           'Caught native dependency/task errors must not become false expected output.');
         assert.deepEqual(record.releasedResources, ['scheduler', 'provider', 'media-encoder', 'image-processor',
-          'recordings-manager', 'plugins', 'services', 'cache-and-tokens']);
+          'media-source-manager', 'recordings-manager', 'plugins', 'services', 'cache-and-tokens']);
+        assert.equal(record.registration.mediaSourceManager, 'Emby.Server.Implementations.Library.MediaSourceManager');
         assert.equal(record.registration.recordingsManager, 'Jellyfin.LiveTv.Recordings.RecordingsManager');
         assert.equal(record.registration.recordingInitialState.timers, 0);
         assert.equal(record.registration.recordingInitialState.seriesTimers, 0);
@@ -45,6 +46,10 @@ test('two independent actual Movie global scans match PG create, timed NFO updat
         assert.equal(recordingResults.length, recordingReads.length);
         assert.equal(recordingResults.every(value => value.detail.hasActiveRecording === false), true);
         assert.deepEqual(record.trace.filter(value => value.action === 'recording-active-query-failed'), []);
+      }
+      for (const observation of record.observations.filter(value => value.boundary === 'metadata-drained')) {
+        assert.equal(observation.snapshot.files.some(file => Object.hasOwn(file, 'readError')), false,
+          'Stable snapshots follow actual worker completion and must read every sidecar successfully.');
       }
       try { report.projections[name] = projectMovieRun(record, specification); }
       catch (error) { report.projections[name] = { failure: { name: error.name, message: error.message, stack: error.stack } }; }

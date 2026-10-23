@@ -57,7 +57,10 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
         const rows = (await session.client.query(`SELECT * FROM ${selected} WHERE "Ordinal">$1 ORDER BY "Ordinal" LIMIT 128`, [after])).rows;
         if (!rows.length) return;
         const baseRows = rows.map(row => Object.fromEntries(columns.map(column => [column.name, decodeValue(column, row[column.name], 'postgres')])));
-        const state = await library.load(session, null, { baseRows, includeManualLinks: false, includeFolderLinks: false, includeLinkGraph: false });
+        // These repository instances can be refreshed and published into the
+        // live item cache. Preserve each Folder's actual member relation so
+        // publication cannot replace it with the constructor's empty value.
+        const state = await library.load(session, null, { baseRows, includeManualLinks: false, includeFolderLinks: true, includeLinkGraph: false });
         let rowFailure;
         try {
           for (const row of rows) {

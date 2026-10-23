@@ -72,17 +72,6 @@ public static class MovieProviders
         var unusedSubtitleEncoder = ForwardProxy.Make<ISubtitleEncoder>((method, values) => ForwardProxy.Unused(method));
         var unusedLyrics = ForwardProxy.Make<ILyricManager>((method, values) => ForwardProxy.Unused(method));
         var attachments = new MediaAttachmentRepository(host.Factory);
-        var mediaSources = ForwardProxy.Make<IMediaSourceManager>((method, values) => method.Name switch
-        {
-            "GetPathProtocol" => MediaProtocol.File,
-            "GetMediaStreams" => host.Streams.GetMediaStreams(values![0] is Guid id
-                ? new MediaStreamQuery { ItemId = id } : (MediaStreamQuery)values[0]!),
-            "GetMediaAttachments" => attachments.GetMediaAttachments(values![0] is Guid id
-                ? new MediaAttachmentQuery { ItemId = id } : (MediaAttachmentQuery)values[0]!),
-            _ => ForwardProxy.Unused(method)
-        });
-        MediaBrowser.Controller.Entities.BaseItem.MediaSourceManager = mediaSources;
-
         var encoderConfiguration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
             { [MediaBrowser.Controller.Extensions.ConfigurationExtensions.FfmpegPathKey] = ffmpeg }).Build();
         var encoder = new MediaEncoder(logs.CreateLogger<MediaEncoder>(), configuration, files, unusedBluray,
@@ -93,6 +82,12 @@ public static class MovieProviders
         var observedEncoder = ForwardProxy.Make<IMediaEncoder>((method, values) => method.Name == "GetMediaInfo"
             ? Probe((MediaInfoRequest)values![0]!, (CancellationToken)values[1]!)
             : ForwardProxy.Forward(encoder, method, values));
+        var mediaSources = new MediaSourceManager(host.AppHost, host.Repository, host.Paths, host.Localization,
+            unusedUsers, manager, logs.CreateLogger<MediaSourceManager>(), files, unusedUserData,
+            observedEncoder, host.DirectoryService, host.Streams, attachments);
+        mediaSources.AddParts([]);
+        host.Own("media-source-manager", mediaSources);
+        MediaBrowser.Controller.Entities.BaseItem.MediaSourceManager = mediaSources;
         // ApplicationHost.SetStaticProperties installs this service for every
         // Video. Real persistence asks SourceType/GetUserDataKeys even before
         // the Movie's metadata providers run. Use the actual recording manager;
@@ -208,6 +203,7 @@ public static class MovieProviders
             postScanTasks = tasks.Select(value => value.GetType().FullName).ToArray(),
             discoveredPostScanTypes = host.PostScanTaskTypes.Select(type => type.AssemblyQualifiedName).ToArray(),
             collectionManager = collections.GetType().FullName, encoder = encoder.GetType().FullName,
+            mediaSourceManager = mediaSources.GetType().FullName,
             recordingsManager = recordings.GetType().FullName, recordingInitialState,
             recordingDependencies = new[] { timers.GetType().FullName, seriesTimers.GetType().FullName,
                 recordingMetadata.GetType().FullName, recordingStreams.GetType().FullName },
@@ -262,7 +258,8 @@ public static class MovieProviders
             var result = await actual.GetMetadata(info, directory, token);
             var item = result.Item;
             host.Add("local-reader-completed", new { provider = actual.GetType().FullName, info.Path, result.HasMetadata,
-                Name = item?.Name, Genres = item?.Genres.ToArray(), Studios = item?.Studios.ToArray(),
+                Name = item?.Name, DateCreated = item?.DateCreated, DateCreatedKind = item?.DateCreated.Kind.ToString(),
+                Genres = item?.Genres.ToArray(), Studios = item?.Studios.ToArray(),
                 tmdbCollectionName = (item as MediaBrowser.Controller.Entities.Movies.Movie)?.TmdbCollectionName });
             return result;
         }

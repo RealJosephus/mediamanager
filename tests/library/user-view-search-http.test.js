@@ -75,7 +75,8 @@ for (const dialect of ['postgres']) test(`${dialect}: 18 actual UserView SearchP
           const data = JSON.parse(row.Data ?? '{}');
           if (item.type === 'CollectionFolder') data.PhysicalLocationsList = data.PhysicalFolderIds
             .map(id => itemPath(fixture.items.find(row => idKey(row.id) === idKey(id))));
-          await database.update('BaseItems', { Id: item.id }, { ...values, Path: itemPath(item), Data: JSON.stringify(data) });
+          assert.equal(await database.update('BaseItems', { Id: item.id.toUpperCase() },
+            { ...values, Path: itemPath(item), Data: JSON.stringify(data) }), 1n, item.key);
         }
         assert.deepEqual(fixture.userData, []);
       } });
