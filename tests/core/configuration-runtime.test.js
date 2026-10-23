@@ -12,6 +12,7 @@ import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { configurationValue, configurationJson } from './fixtures/configuration/observations.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
+import { configurationProject } from './configuration-current.js';
 
 function encoded(text, encoding) {
   if (encoding.startsWith('utf-16')) {
@@ -72,7 +73,7 @@ test('postgres: all Unicode configuration encodings feed the real runtime, persi
     }
   });
   const inputFile = path.join(output, 'native-input.json'); await fs.writeFile(inputFile, configurationJson(consumers), { flag: 'wx' });
-  const recording = await recordOracle({ project: 'tests/core/fixtures/configuration/Oracle.csproj', output: path.join(output, 'native-continuation'), args: ['consume', inputFile, '{output}/native.json'] });
+  const recording = await recordOracle({ project: configurationProject, output: path.join(output, 'native-continuation'), args: ['consume', inputFile, '{output}/native.json'] });
   const returned = parseLosslessJson((await fs.readFile(path.join(output, 'native-continuation', 'native.json'))).toString('utf8'));
   await fs.writeFile(path.join(output, 'proof.json'), configurationJson({ recording, observations, actualNativeReadAndWrite: true }), { flag: 'wx' });
   assert.equal(returned.actualXmlSerializer, true); assert.equal(returned.actualContinuedWrite, true); assert.equal(returned.results.length, 28);

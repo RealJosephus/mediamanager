@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native XML configuration defaults, decoding, helper recovery, independent repeat and actual Node-written XML readback and Native continuation.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
+    "Jellyfin.Server/Helpers/StartupHelpers.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+    "MediaBrowser.Model/Configuration/BaseApplicationConfiguration.cs",
+    "MediaBrowser.Common/Net/NetworkConfiguration.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptions.cs",
+    "MediaBrowser.Model/Configuration/MetadataOptions.cs",
+    "MediaBrowser.Model/Configuration/TrickplayOptions.cs",
+    "MediaBrowser.Model/Configuration/MetadataConfiguration.cs",
+    "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/Configuration/PluginConfiguration.cs",
+    "MediaBrowser.Common/Plugins/BasePluginOfT.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/Plugin.cs",
+    "MediaBrowser.Model/Branding/BrandingOptions.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 339010,
+      "sha256": "dd2202f147bb589a234e564015f157f823c6a301dca44b5a4d2f01e3c4080b41"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 11099,
+      "sha256": "cc3a494485d12f43b5aa5d201ae22fe0cdd60fd612af132208a9c7138ddf5282"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

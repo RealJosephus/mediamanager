@@ -61,7 +61,9 @@ const executionManifests = new Map([
   ['tests/core/server-identity.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/core/server-identity-runtime.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],
-  ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
+  ...['configuration-xml', 'configuration-file', 'configuration-runtime']
+    .map(kind => [`tests/core/${kind}.test.js`, ['current-oracle', 'tests/core/fixtures/configuration/current-profile.json']]),
+  ['tests/consumer-contracts/date-roundtrip.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/date-roundtrip-current/current-profile.json']],
   ['tests/metadata/playlist-items.test.js', ['current-oracle', 'tests/metadata/fixtures/playlist-items-current/current-profile.json']],
   ...['local-xml-provider', 'nfo-episode-blocks']
     .map(kind => [`tests/metadata/${kind}.test.js`, ['current-oracle', `tests/metadata/fixtures/${kind}/current-profile.json`]]),

@@ -10,18 +10,18 @@ import { parseLosslessJson } from '../../src/core/json.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
 import { configurationValue, configurationJson } from './fixtures/configuration/observations.js';
+import { currentConfiguration, configurationProject, input } from './configuration-current.js';
 
 
-const fixture = new URL('./fixtures/configuration/', import.meta.url);
-const input = JSON.parse(await fs.readFile(new URL('input.json', fixture))), native = parseLosslessJson((await fs.readFile(new URL('native.json', fixture))).toString('utf8'));
-const proof = JSON.parse(await fs.readFile(new URL('provenance.json', fixture)));
+export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
 async function heldFile(filename, mode, records) {
+  const { record } = await currentConfiguration();
   const executable = validationExecutable('dotnet');
-  assert.equal(hash(await fs.readFile(executable)), proof.dotnet.sha256);
-  assert.equal(hash(await fs.readFile(proof.oracleAssembly.filename)), proof.oracleAssembly.sha256);
-  const args = [proof.oracleAssembly.filename, 'hold-file', filename, mode], child = spawn(executable, args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+  assert.equal(hash(await fs.readFile(executable)), record.dotnet.sha256);
+  assert.equal(hash(await fs.readFile(record.oracleAssembly.filename)), record.oracleAssembly.sha256);
+  const args = [record.oracleAssembly.filename, 'hold-file', filename, mode], child = spawn(executable, args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
   const row = { pid: child.pid, executable, args, beforeSha256: hash(await fs.readFile(filename)), started: new Date().toISOString() }; records.push(row);
   const completion = new Promise(resolve => {
     child.once('error', error => resolve({ error: error.message })); child.once('exit', (code, signal) => resolve({ code, signal }));
@@ -45,6 +45,7 @@ async function heldFile(filename, mode, records) {
 }
 
 test('configuration helper matches native recovery, canonical write admission and real file sharing, then native cold read', async t => {
+  const { native } = await currentConfiguration();
   assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'Native configuration cold reads require MEDIAMANAGER_JELLYFIN_DLL and its assembly directory.');
   await fs.access(process.env.MEDIAMANAGER_JELLYFIN_DLL);
   const root = path.join(path.resolve(validationOutputRoot()), 'configuration-files'); await fs.mkdir(root);
@@ -72,7 +73,7 @@ test('configuration helper matches native recovery, canonical write admission an
   await fs.writeFile(path.join(root, 'observations.json'), configurationJson(observations), { flag: 'wx' });
   await fs.writeFile(path.join(root, 'locked-processes.json'), configurationJson(locks), { flag: 'wx' });
   const consumerInput = path.join(root, 'consumer-input.json'); await fs.writeFile(consumerInput, configurationJson(consumers), { flag: 'wx' });
-  const recording = await recordOracle({ project: 'tests/core/fixtures/configuration/Oracle.csproj', output: path.join(root, 'native-reader'),
+  const recording = await recordOracle({ project: configurationProject, output: path.join(root, 'native-reader'),
     args: ['consume', consumerInput, '{output}/native.json'] });
   const returned = parseLosslessJson((await fs.readFile(path.join(root, 'native-reader', 'native.json'))).toString('utf8'));
   const comparison = returned.results.map(row => {

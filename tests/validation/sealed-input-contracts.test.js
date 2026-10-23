@@ -247,12 +247,21 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json', ['current-consumer/Program.cs', 'current-consumer/Oracle.csproj']],
   ['tests/users/native-guid-contract.test.js', 'tests/users/fixtures/guid-contract',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
+  ['tests/core/configuration-xml.test.js', 'tests/core/fixtures/configuration',
+    ['dotnet', 'jellyfinDll'], null, 'current/input.json'],
+  ['tests/core/configuration-file.test.js', 'tests/core/fixtures/configuration',
+    ['dotnet', 'jellyfinDll'], null, 'current/input.json'],
+  ['tests/core/configuration-runtime.test.js', 'tests/core/fixtures/configuration',
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
   ['tests/metadata/playlist-items.test.js', 'tests/metadata/fixtures/playlist-items-current',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'input.json', [], ''],
   ['tests/metadata/local-xml-provider.test.js', 'tests/metadata/fixtures/local-xml-provider',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json', ['current/layout-input.json', 'current/layout-comparison.json']],
   ['tests/metadata/nfo-episode-blocks.test.js', 'tests/metadata/fixtures/nfo-episode-blocks',
     ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/layout-input.json', 'current/layout-comparison.json']],
+  ['tests/consumer-contracts/date-roundtrip.test.js', 'tests/consumer-contracts/fixtures/date-roundtrip-current',
+    ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'], null, 'input.json',
+    ['node-host.js', 'scenario.js', '../../../images/fixtures/processor/single.png'], ''],
 ]) test(`${archiveId ?? fixture} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
@@ -264,7 +273,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
   assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
     'tests/Directory.Build.props', fixture + '/' + oraclePath + 'Oracle.csproj', fixture + '/' + oraclePath + 'Program.cs', fixture + '/' + inputPath,
     ...additionalInputs.map(filename => fixture + '/' + filename),
-  ].sort());
+  ].map(filename => path.posix.normalize(filename)).sort());
   const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
   assert.deepEqual(closure.find(value => value.path === consumer).services, services);
   const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-reader-current-'));

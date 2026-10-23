@@ -396,3 +396,7 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/nfo-episode-blocks/current-profile.json text eol=lf
 /tests/users/fixtures/guid-contract/current/** -text
 /tests/users/fixtures/guid-contract/current-profile.json text eol=lf
+/tests/core/fixtures/configuration/current/** -text
+/tests/core/fixtures/configuration/current-profile.json text eol=lf
+/tests/consumer-contracts/fixtures/date-roundtrip-current/** -text
+/tests/consumer-contracts/fixtures/date-roundtrip-current/current-profile.json text eol=lf
