@@ -7,9 +7,6 @@ import { captureInputIdentity, executionManifestContract, executionManifestRefer
 import { dependencyClosure, inventory } from '../../tools/validation/inventory.js';
 import { recordedInputMapPath, recordedInputPath, repositoryRoot } from '../../tools/validation/paths.js';
 
-const consumers = [
-  'tests/library/native-item-cache.test.js', 'tests/library/warm-item-deletion.test.js', 'tests/http/warm-item-deletion.test.js',
-];
 const entry = (filename, imports = []) => ({ path: filename, test: filename.endsWith('.test.js'), imports,
   importedFiles: [], declaredReferences: [], fixtureReferences: [], services: [], tools: [], unresolvedImports: [] });
 
@@ -228,6 +225,12 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json'] of
   ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
   ['tests/library/collection-playlist-resolution.test.js', 'tests/library/fixtures/collection-playlist-resolution',
     ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-collection-playlist', 'current/input.json'],
+  ['tests/library/native-item-cache.test.js', 'tests/library/fixtures/native-item-cache',
+    ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-warm'],
+  ['tests/library/warm-item-deletion.test.js', 'tests/library/fixtures/warm-item-deletion',
+    ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-warm'],
+  ['tests/http/warm-item-deletion.test.js', 'tests/http/fixtures/warm-item-deletion',
+    ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-warm'],
 ]) test(`${archiveId} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
@@ -352,39 +355,6 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
     assert.equal(archiveProfile?.disposition, 'current-identity');
     assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
   });
-});
-
-test('remaining directory-based seal consumers capture their original sources, runtime pins and local inputs with exact ownership', async () => {
-  const unrelated = 'tests/core/composite-format.test.js', shared = 'tests/library/warm-fixture-seal.js';
-  const dependencies = { entries: [...consumers.map(consumer => {
-    const { loader } = executionManifestContract(consumer);
-    return entry(consumer, loader === consumer ? [] : [loader]);
-  }), entry(shared), entry(unrelated, [shared])] };
-  const identity = await captureInputIdentity({ selected: [...consumers, unrelated], dependencies, environment: {},
-    preflight: { ready: true, services: [], tools: [] } });
-  for (const consumer of consumers) {
-    const contract = executionManifestContract(consumer), filename = path.join(repositoryRoot, contract.manifest);
-    const proof = JSON.parse(await readFile(filename, 'utf8'));
-    const required = (filename, pin) => {
-      const input = identity.entries.find(value => value.filename === path.resolve(repositoryRoot, filename));
-      assert.ok(input?.required, filename);
-      assert.ok(input.requiredReasons.some(reason => reason.startsWith(consumer + ':')), consumer + ': ' + filename);
-      assert.ok(!input.requiredReasons.some(reason => reason.startsWith(unrelated + ':') || reason.startsWith(shared + ':')),
-        'importing the warm loader does not require another caller\'s recording');
-      if (pin) assert.ok(input.expectedDigests.includes(pin), filename);
-    };
-    required(filename);
-    {
-      for (const descriptor of Object.values(proof.files)) required(path.resolve(path.dirname(filename), descriptor.filename), descriptor.sha256);
-      required(proof.files.rawRecording.filename, proof.files.rawRecording.sha256);
-      required(proof.repeat.filename, proof.repeat.sha256);
-      if (contract.kind === 'sealed-warm') {
-        for (const descriptor of [proof.jellyfin.sourceCapture, proof.jellyfin.boundBuildAudit,
-          ...Object.values(proof.runtime), ...Object.values(proof.repeat.runtime)]) required(descriptor.filename, descriptor.sha256);
-      }
-      for (const assembly of proof.assemblies ?? []) required(proof.jellyfin.assemblyDirectory + '/' + assembly.name + '.dll', assembly.sha256);
-    }
-  }
 });
 
 test('XML replay owns relocated byte and source pins while the historical seal alone requires every original assembly', async () => {

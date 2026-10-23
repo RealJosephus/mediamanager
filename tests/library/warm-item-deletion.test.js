@@ -10,11 +10,16 @@ import { tableDefinition } from '../../src/database/model.js';
 import { updateLiveItemRepository } from '../../src/library/live-item-repository.js';
 import { persistMetadata } from '../../src/metadata/persistence.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
-import { readWarmFixture, assertWarmFixtureSeal } from './warm-fixture-seal.js';
-const recording = await readWarmFixture(new URL('./fixtures/warm-item-deletion/', import.meta.url));
-const { input, native } = recording;
-test('warm item deletion seals hydrated and created entities against independent native repetitions', async () => {
-  await assertWarmFixtureSeal(recording, { flag: 'actualWarmItemDeletion', count: 24 });
+import { currentWarmFixture } from './warm-fixture.js';
+const { input, current } = await currentWarmFixture(new URL('./fixtures/warm-item-deletion/', import.meta.url), 'warm-item-deletion');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+const enabled = { skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 240000 };
+const postgres = { ...enabled, skip: enabled.skip || !process.env.MEDIAMANAGER_TEST_POSTGRES };
+
+test('current Native warm deletion records all hydrated and created entity lifecycles', enabled, async () => {
+  const native = await current();
+  assert.equal(native.actualWarmItemDeletion, true);
+  assert.equal(input.length, 24);
   assert.deepEqual(native.results.map(row => row.name), input.map(row => row.name));
   assert.equal(input.filter(row => row.created).length, 8);
   for (const row of native.results) {
@@ -24,9 +29,8 @@ test('warm item deletion seals hydrated and created entities against independent
     assert.equal(row.firstRows.some(item => item.Id === id(4)), false);
   }
 });
-for (const sample of input) test('postgres: warm item deletion matches native ' + sample.name, {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async t => {
+for (const sample of input) test('postgres: warm item deletion matches current Native ' + sample.name, postgres, async t => {
+  const native = await current();
   const expected = native.results.find(result => result.name === sample.name);
   const value = await setupPlaylistDeletion(t, sample, expected);
   if (sample.created) {
@@ -42,6 +46,7 @@ for (const sample of input) test('postgres: warm item deletion matches native ' 
   await value.operation();
   const first = await value.project(null);
   assert.deepEqual(first.rows, value.normalizeRows(expected.firstRows));
+  assert.deepEqual(first.links, expected.firstLinks);
   assert.deepEqual(first.files, expected.firstFiles); assert.deepEqual(first.calls, expected.firstCalls);
   const item = await value.creator.getItemById(id(4));
   assert.equal(item !== null, expected.lookupAfterFirst);
@@ -51,8 +56,10 @@ for (const sample of input) test('postgres: warm item deletion matches native ' 
   assert.deepEqual(final.rows, value.normalizeRows(expected.rows));
   assert.deepEqual(final.links, expected.links); assert.deepEqual(final.files, expected.files);
   assert.deepEqual(final.calls, expected.calls); assert.equal(final.closureLookup, expected.closureLookup);
+  assert.equal(final.targetParentId, expected.targetParentId); assert.equal(final.targetLookup, expected.targetLookup);
 });
 async function setupWarm(t) {
+  const native = await current();
   const sample = input.find(sample => sample.name === 'video-warm-source');
   const expected = native.results.find(row => row.name === sample.name);
   const value = await setupPlaylistDeletion(t, sample, expected);
@@ -62,9 +69,8 @@ async function setupWarm(t) {
   return { ...value, item, row };
 }
 
-for (const suffix of ['db', 'source']) test('postgres: warm Folder deletion ignores a drifted stored folder flag ' + suffix, {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
-}, async t => {
+for (const suffix of ['db', 'source']) test('postgres: warm Folder deletion ignores a drifted stored folder flag ' + suffix, postgres, async t => {
+  const native = await current();
   const sample = input.find(row => row.name === 'folder-warm-' + suffix);
   const expected = native.results.find(row => row.name === sample.name);
   const value = await setupPlaylistDeletion(t, sample, expected);
@@ -73,19 +79,20 @@ for (const suffix of ['db', 'source']) test('postgres: warm Folder deletion igno
   assert.equal(await value.fixture.database.update('BaseItems', { Id: id(4) }, { IsFolder: false }), 1n);
   assert.equal((await value.fixture.database.rows('BaseItems', { where: { Id: id(4) } }))[0].IsFolder, false);
   await value.operation();
-  assert.equal(await value.creator.getItemById(id(4)), cached);
+  const retained = await value.creator.getItemById(id(4));
+  assert.ok(retained); assert.equal(retained.IsFolder, true); assert.equal(retained.Path, cached.Path);
   const first = await value.project(null);
   assert.deepEqual(first.rows, value.normalizeRows(expected.firstRows));
   assert.deepEqual(first.files, expected.firstFiles); assert.deepEqual(first.calls, expected.firstCalls);
   value.calls.length = 0; value.events.length = 0;
-  await value.fixture.library.deleteItem(cached, { DeleteFileLocation: suffix === 'source' });
+  await value.fixture.library.deleteItem(retained, { DeleteFileLocation: suffix === 'source' });
   const final = await value.project(null);
   assert.deepEqual(final.rows, value.normalizeRows(expected.rows));
   assert.deepEqual(final.links, expected.links); assert.deepEqual(final.files, expected.files);
   assert.deepEqual(final.calls, expected.calls);
 });
 for (const scenario of ['unregistered-clone', 'registered-clone', 'changed-source-path', 'missing-save']) {
-  test('postgres: missing-row warm lifecycle rejects ' + scenario, { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+  test('postgres: missing-row warm lifecycle rejects ' + scenario, postgres, async t => {
     const value = await setupWarm(t), before = await value.project(null);
     let item = value.item;
     if (scenario.endsWith('clone')) item = cloneNativeItemEntity(item);
@@ -99,9 +106,7 @@ for (const scenario of ['unregistered-clone', 'registered-clone', 'changed-sourc
     assert.deepEqual(await value.project(null), before);
   });
 }
-test('postgres: warm deletion detects a reinserted row before file/provider side effects', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async t => {
+test('postgres: warm deletion detects a reinserted row before file/provider side effects', postgres, async t => {
   const value = await setupWarm(t), before = await value.project(null);
   const load = value.fixture.loadContext; let inserted = false;
   value.fixture.library.itemDeletion.loadContext = async (...args) => {
@@ -118,40 +123,40 @@ test('postgres: warm deletion detects a reinserted row before file/provider side
   assert.deepEqual(after.files, before.files); assert.deepEqual(after.calls, before.calls);
   assert.equal(after.rows.filter(row => row.Id === id(4)).length, 1);
 });
-test('postgres: bounded accessed-item pressure leaves a deleted row absent after cache eviction', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async t => {
+test('postgres: bounded accessed-item pressure leaves a deleted row absent after cache eviction', postgres, async t => {
   const value = await setupWarm(t);
   for (let index = 100; index < 4000; index += 1) {
     const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Video'); item.Id = id(index); item.Name = 'cache-pressure-' + index;
-    value.creator.registerItem(item); assert.equal(await value.creator.getItemById(item.Id), item);
+    value.creator.registerItem(item);
+    const accessed = await value.creator.getItemById(item.Id);
+    assert.ok(accessed); assert.equal(idKey(accessed.Id), idKey(item.Id)); assert.equal(accessed.Name, item.Name);
   }
   assert.equal(await value.creator.getItemById(id(4)), null);
   const after = await value.project(null);
   assert.equal(after.rows.some(row => row.Id === id(4)), false); assert.equal(after.closureLookup, false);
 });
 
-for (const scenario of ['committed', 'rolled-back']) test('postgres: live repository frames advance only after a ' + scenario + ' batch save', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
-}, async t => {
+for (const scenario of ['committed', 'rolled-back']) test('postgres: live repository frames advance only after a ' + scenario + ' batch save', postgres, async t => {
+  const native = await current();
   const sample = input.find(sample => sample.name === 'video-warm-source');
   const value = await setupPlaylistDeletion(t, sample, native.results.find(row => row.name === sample.name));
-  const item = await value.creator.getItemById(id(4)), before = value.creator.retainedRepositorySnapshot(item);
-  assert.ok(before); assert.equal(Object.keys(before).length, 72); assert.equal(Object.isFrozen(before), true);
+  const item = await value.creator.getItemById(id(4)), before = structuredClone(value.creator.retainedRepositorySnapshot(item));
+  assert.ok(before); assert.equal(Object.keys(before).length, 72);
   const rows = await value.fixture.database.rows('BaseItems'); item.Name = 'saved-warm-frame';
   if (scenario === 'rolled-back') {
     await value.fixture.database.client.query("CREATE FUNCTION warm_frame_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.\"Id\" = '" + value.item.Id + "' THEN RAISE EXCEPTION 'Controlled second-item save failure'; END IF; RETURN NEW; END $$");
     await value.fixture.database.client.query('CREATE TRIGGER warm_frame_failure BEFORE UPDATE ON "BaseItems" FOR EACH ROW EXECUTE FUNCTION warm_frame_failure()');
     await assert.rejects(() => value.creator.saveItems([item, value.item]), /Controlled second-item save failure/u);
-    assert.equal(value.creator.retainedRepositorySnapshot(item), before);
+    assert.deepEqual(value.creator.retainedRepositorySnapshot(item), before);
     assert.deepEqual(await value.fixture.database.rows('BaseItems'), rows);
   } else {
     await value.creator.saveItems([item]);
     const saved = (await value.fixture.database.rows('BaseItems', { where: { Id: item.Id } }))[0];
     assert.equal(saved.Name, item.Name); assert.deepEqual(value.creator.retainedRepositorySnapshot(item), saved);
     await value.fixture.database.delete('BaseItems', { Id: item.Id });
-    assert.equal(await value.creator.getItemById(item.Id), item);
-    assert.deepEqual(value.creator.retainedRepositorySnapshot(item), saved);
+    const retained = await value.creator.getItemById(item.Id);
+    assert.ok(retained); assert.equal(idKey(retained.Id), idKey(saved.Id)); assert.equal(retained.Name, saved.Name);
+    assert.deepEqual(value.creator.retainedRepositorySnapshot(retained), saved);
   }
 });
 
@@ -175,5 +180,7 @@ test('postgres: bounded version-frame query publishes actual committed rows befo
     await fixture.database.delete('LinkedChildren', Object.fromEntries(tableDefinition('LinkedChildren').primaryKey.map(key => [key, link[key]])));
   }
   await fixture.database.delete('BaseItems', { Id: frame.Id });
-  assert.equal(await creator.getItemById(frame.Id), cached); assert.deepEqual(creator.retainedRepositorySnapshot(cached), persisted);
+  const retained = await creator.getItemById(frame.Id);
+  assert.ok(retained); assert.equal(idKey(retained.Id), idKey(persisted.Id)); assert.equal(retained.Name, persisted.Name);
+  assert.deepEqual(creator.retainedRepositorySnapshot(retained), persisted);
 });

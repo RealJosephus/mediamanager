@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs for same-run designated Native item cache and deletion consumers.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 2835,
+      "sha256": "b8411dc8389a59e3c159c87a5b416ca8cd6ee0b823be7a992d43b230e53f8d79"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 25236,
+      "sha256": "5e0c0f1ef673357d3712cbbf09f4a109836c537441c633fcaf1a4ae4468ae922"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1428,
+      "sha256": "b7f921d77f02ceb7a8215637fb6668547e703c3d9f74ab5c6b0b6aa036acbca4"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ const historicalArchiveRootsById = new Map([
 const historicalArchiveIds = new Set(historicalArchiveRootsById.keys());
 const historicalArchiveRoots = new Set([...historicalArchiveRootsById.values()].flat());
 const currentIdentityArchiveIds = new Set(['search-lookup-sources', 'sealed-rating', 'password-reader', 'sealed-startup',
-  'sealed-collection-playlist', 'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto']);
+  'sealed-collection-playlist', 'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto', 'sealed-warm']);
 
 // These reviewed manifests bind the bytes that their consumers execute or
 // compare. Keep each contract at the actual caller/kind boundary: another kind
@@ -49,6 +49,9 @@ const executionManifests = new Map([
   ['tests/http/item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
   ['tests/http/item-deletion-postgres.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
   ['tests/library/delete-dto-permission.test.js', ['current-oracle', 'tests/library/fixtures/delete-dto-permission/current-profile.json']],
+  ['tests/library/native-item-cache.test.js', ['current-oracle', 'tests/library/fixtures/native-item-cache/current-profile.json']],
+  ['tests/library/warm-item-deletion.test.js', ['current-oracle', 'tests/library/fixtures/warm-item-deletion/current-profile.json']],
+  ['tests/http/warm-item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/warm-item-deletion/current-profile.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', ['consumer', 'readers']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
@@ -60,17 +63,13 @@ const sealedExecutionManifests = new Map([
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
   ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
-  ['tests/library/native-item-cache.test.js', ['sealed-warm', 'tests/library/fixtures/native-item-cache/provenance.json']],
-  ['tests/library/warm-item-deletion.test.js', ['sealed-warm', 'tests/library/fixtures/warm-item-deletion/provenance.json']],
-  ['tests/http/warm-item-deletion.test.js', ['sealed-warm', 'tests/http/fixtures/warm-item-deletion/provenance.json']],
   ['tests/metadata/local-xml-stream.test.js', ['sealed-xml-prefix', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
   ['tests/metadata/local-xml-prefix-seal.test.js', ['sealed-xml-prefix-history', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
 ]);
 
 export function executionManifestContract(consumer) {
   const sealed = sealedExecutionManifests.get(consumer);
-  if (sealed) return { kind: sealed[0], manifest: sealed[1], loader: sealed[0] === 'sealed-warm'
-    ? 'tests/library/warm-fixture-seal.js' : consumer };
+  if (sealed) return { kind: sealed[0], manifest: sealed[1], loader: consumer };
   const contract = executionManifests.get(consumer);
   if (!contract) return null;
   const [kind, argument] = contract;
@@ -226,16 +225,6 @@ export function executionManifestReferences(contract, content, filename) {
     if (contract.kind === 'sealed-xml-prefix-history') {
       for (const assembly of content.loadedAssemblies) add(assembly, { recorded: true });
     }
-  } else if (contract.kind === 'sealed-warm') {
-    // Match the seal's two real reads: path.resolve(fixtureRoot, filename)
-    // followed by the raw original filename. Foreign-platform paths are not
-    // silently relocated into the current checkout or recorded-input map.
-    for (const file of Object.values(content.files)) add({ ...file, filename: local(file.filename) });
-    add(content.files.rawRecording);
-    add({ filename: content.repeat.filename, sha256: content.repeat.sha256 });
-    for (const descriptor of [content.jellyfin.sourceCapture, content.jellyfin.boundBuildAudit,
-      ...Object.values(content.runtime), ...Object.values(content.repeat.runtime)]) add(descriptor);
-    for (const assembly of content.assemblies) add({ filename: `${content.jellyfin.assemblyDirectory}/${assembly.name}.dll`, sha256: assembly.sha256 });
   } else if (contract.kind === 'consumer') {
     for (const file of content.files) {
       add({ filename: local(file.filename), sha256: file.sha256 }, file.filename === 'native.json' ? { nested: 'consumer-native' } : {});

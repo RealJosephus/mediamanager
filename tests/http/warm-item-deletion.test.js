@@ -4,23 +4,29 @@ import { setupPlaylistDeletion, playlistDeletionId as id } from '../library/play
 import { createApplication } from '../../src/http/application.js';
 import { guid } from '../../src/library/records.js';
 import { normalizeDeletionRecording } from './fixtures/warm-item-deletion/normalize.js';
-import { readWarmFixture, assertWarmFixtureSeal } from '../library/warm-fixture-seal.js';
-const recording = await readWarmFixture(new URL('./fixtures/warm-item-deletion/', import.meta.url));
-const { input, native } = recording;
-test('warm item DELETE seals actual native MVC/core/persistence with trace-only normalization', async () => {
-  await assertWarmFixtureSeal(recording, { flag: 'actualPersistenceOnlySecondDeleteHttp', count: 16, http: true });
+import { currentWarmFixture } from '../library/warm-fixture.js';
+const { input, current } = await currentWarmFixture(new URL('./fixtures/warm-item-deletion/', import.meta.url), 'http-warm-item-deletion');
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+const enabled = { skip: !process.env.MEDIAMANAGER_JELLYFIN_DLL, timeout: 240000 };
+
+test('current Native warm DELETE records every single/batch MVC and persistence scenario', enabled, async () => {
+  const native = await current();
+  assert.equal(native.actualPersistenceOnlySecondDeleteHttp, true);
+  assert.equal(input.length, 16);
   assert.deepEqual(native.results.map(row => row.name), input.map(row => row.name));
   assert.equal(native.results.filter(row => row.status === 204).length, 6);
   assert.equal(native.results.filter(row => row.status === 404).length, 10);
 });
-for (const sample of input) test('postgres: HTTP after persistence-only deletion matches native ' + sample.name, {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
+for (const sample of input) test('postgres: HTTP after persistence-only deletion matches current Native ' + sample.name, {
+  ...enabled, skip: enabled.skip || !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const native = normalizeDeletionRecording(await current());
   const expected = native.results.find(result => result.name === sample.name);
   const value = await setupPlaylistDeletion(t, sample, expected);
   await value.operation();
   const first = await value.project(null);
   assert.deepEqual(first.rows, value.normalizeRows(expected.firstRows));
+  assert.deepEqual(first.links, expected.firstLinks);
   assert.deepEqual(first.files, expected.firstFiles); assert.deepEqual(first.calls, expected.firstCalls);
   assert.equal(await value.creator.getItemById(id(4)) !== null, expected.lookupAfterFirst);
   value.calls.length = 0; value.events.length = 0;
@@ -50,4 +56,5 @@ for (const sample of input) test('postgres: HTTP after persistence-only deletion
   assert.deepEqual(final.rows, value.normalizeRows(expected.rows)); assert.deepEqual(final.files, expected.files);
   assert.deepEqual(final.links, expected.links); assert.deepEqual(final.calls, expected.calls);
   assert.equal(final.closureLookup, expected.closureLookup);
+  assert.equal(final.targetParentId, expected.targetParentId); assert.equal(final.targetLookup, expected.targetLookup);
 });

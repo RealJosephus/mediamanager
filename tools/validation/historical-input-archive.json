@@ -144,7 +144,7 @@
         "tests/http/fixtures/warm-item-deletion/provenance.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
           "tests/library/native-item-cache.test.js",
           "tests/library/warm-item-deletion.test.js",
