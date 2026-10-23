@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import { tableDefinition } from '../../src/database/model.js';
 import { mapRecord } from '../../src/library/records.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const ids = Object.fromEntries([
   'root', 'firstCollection', 'firstFolder', 'secondCollection', 'secondFolder', 'hiddenCollection', 'hiddenFolder',
@@ -179,13 +182,14 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
         accessItems.push(await library.getItemRecord(playlistId), await library.getItemRecord(boxSetId));
       }
       const countedUpdate = async (candidates, user = restrictedUser) => {
-        let queryCount = 0;
+        const statements = [];
         const withConnection = database.withConnection;
         database.withConnection = function countQueries(operation, options) {
           return withConnection.call(this, async session => {
             const query = session.client.query;
             session.client.query = async function countedQuery(...args) {
-              queryCount += 1;
+              const queryInput = args[0];
+              statements.push(typeof queryInput === 'string' ? queryInput : queryInput.text);
               return query.apply(this, args);
             };
             try { return await operation(session); }
@@ -194,7 +198,7 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
         };
         try {
           const result = await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user });
-          return { queryCount, result };
+          return { queryCount: statements.length, statements, result };
         } finally { database.withConnection = withConnection; }
       };
       const singleAccess = await countedUpdate(accessItems.slice(0, 2));
@@ -204,13 +208,21 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
       const reversedAccess = await countedUpdate(reversedItems);
       const ratingLimited = { ...restrictedUser, MaxParentalRatingScore: 10, MaxParentalRatingSubScore: 0 };
       const ratedSingleAccess = await countedUpdate(accessItems.slice(0, 2), ratingLimited);
+      const ratedFourAccess = await countedUpdate(accessItems.slice(0, 4), ratingLimited);
+      const ratedEightAccess = await countedUpdate(accessItems.slice(0, 8), ratingLimited);
       const ratedBatchAccess = await countedUpdate(accessItems, ratingLimited);
+      const evidence = path.join(validationOutputRoot(), 'library-changed-statements-' + randomUUID());
+      await mkdir(evidence);
+      await writeFile(path.join(evidence, 'queries.json'), JSON.stringify({ singleAccess, batchAccess,
+        reversedSingleAccess, reversedAccess, ratedSingleAccess, ratedFourAccess, ratedEightAccess, ratedBatchAccess }, null, 2) + '\n');
       t.diagnostic(JSON.stringify({ scope: 'one visibility page with alternating Playlist and BoxSet',
         single: { items: 2, statements: singleAccess.queryCount },
         batch: { items: accessItems.length, statements: batchAccess.queryCount },
         reversedSingle: { items: 2, statements: reversedSingleAccess.queryCount },
         reversed: { items: reversedItems.length, statements: reversedAccess.queryCount },
         ratedSingle: { items: 2, statements: ratedSingleAccess.queryCount },
+        ratedFour: { items: 4, statements: ratedFourAccess.queryCount },
+        ratedEight: { items: 8, statements: ratedEightAccess.queryCount },
         ratedBatch: { items: accessItems.length, statements: ratedBatchAccess.queryCount } }));
       assert.deepEqual(singleAccess.result.ItemsAdded, accessItems.slice(0, 2).map(item => dtoId(item.Id)));
       assert.deepEqual(batchAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)),
