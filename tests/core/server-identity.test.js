@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { ServerIdentity, readServerIdentity, isServerIdentity } from '../../src/core/server-identity.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
-import { identityObservation } from './fixtures/server-identity/current/observations.js';
+import { identityObservation, identityFileAccessObservation } from './fixtures/server-identity/current/observations.js';
 import { consumeServerIdentityFiles, currentServerIdentity, input } from './server-identity-current.js';
 import { holdNativeFile } from './native-file-holder.js';
 
@@ -17,6 +17,8 @@ test('server identity evidence binds real DeviceId, files, source and independen
   const { native, repeat, report } = await currentServerIdentity();
   assert.equal(report.nativeExecutionRecorded, true);
   assert.deepEqual(native.results.map(identityObservation), repeat.results.map(identityObservation));
+  assert.deepEqual(native.results.filter(row => row.accessibleControl).map(row => identityObservation(row.accessibleControl)),
+    repeat.results.filter(row => row.accessibleControl).map(row => identityObservation(row.accessibleControl)));
 });
 
 for (const sample of input) test('native server identity lifecycle: ' + sample.name, async () => {
@@ -49,8 +51,16 @@ for (const sample of input) test('native server identity lifecycle: ' + sample.n
     assert.equal(nativeRead.value, expected.reopenedValue);
   }
   if (reopenedBytes != null) nodeFiles.push({ name: sample.name, filename, serverId: reopenedValue });
-  await fs.writeFile(path.join(root, 'observation.json'), JSON.stringify({ actual, expected, errors, lock, nativeRead }, null, 2) + '\n', { flag: 'wx' });
-  assert.deepEqual(identityObservation(actual), identityObservation(expected));
+  const admission = lock ? lock.nodeAccess.find(value => value.phase === 'before-operation') : null;
+  const proof = { actual, expected, errors, lock, nativeRead, admission };
+  try {
+    if (admission) {
+      proof.functionalAccess = identityFileAccessObservation(actual, admission, expected.accessibleControl, errors);
+      const nativeAccess = expected.fileSharing.before;
+      proof.nativeFunctionalAccess = identityFileAccessObservation(expected,
+        { read: nativeAccess.read, write: nativeAccess.sharedWrite }, expected.accessibleControl);
+    } else assert.deepEqual(identityObservation(actual), identityObservation(expected));
+  } finally { await fs.writeFile(path.join(root, 'observation.json'), JSON.stringify(proof, null, 2) + '\n', { flag: 'wx' }); }
   if (reopenedBytes != null) assert.equal(await readServerIdentity(root), reopenedValue);
 });
 

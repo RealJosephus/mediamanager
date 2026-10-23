@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scope": "Current designated Native XML configuration defaults, decoding, helper recovery, independent repeat and actual Node-written XML readback and Native continuation.",
+  "scope": "Current designated Native XML configuration defaults, decoding, helper recovery, held-file access with independent controls and complete bidirectional file reads and continuation.",
   "sourcePaths": [
     "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
     "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
@@ -30,8 +30,8 @@
     {
       "role": "oracleSource",
       "filename": "current/Program.cs",
-      "bytes": 11286,
-      "sha256": "3355b264bbeecbff328d916e12df79af8603e7d924b7e9bc447ac474a50bc478"
+      "bytes": 12330,
+      "sha256": "cabad02c51c781409351914a76a84533f6e423d84e28abfff3bfe8d71b598f32"
     },
     {
       "role": "oracleProject",

@@ -64,11 +64,10 @@ var roots = types.ToDictionary(pair => pair.Key, pair => new { type = Describe(p
     element = pair.Value.GetCustomAttribute<XmlRootAttribute>()?.ElementName is string element && element.Length > 0 ? element : pair.Value.Name,
     defaults = JsonSerializer.SerializeToElement(Activator.CreateInstance(pair.Value), options) });
 int Depth(Type type) => type.BaseType is null ? 0 : 1 + Depth(type.BaseType);
-var results = new List<object>();
-foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray()) {
+object Observe(JsonElement sample, string directory, bool applyLock) {
     var alias = sample.GetProperty("root").GetString()!; var type = types[alias];
     var name = sample.GetProperty("name").GetString()!;
-    var directory = Path.Combine(root, results.Count.ToString()); Directory.CreateDirectory(directory);
+    Directory.CreateDirectory(directory);
     var plugin = sample.TryGetProperty("plugin", out var pluginLoad) && pluginLoad.GetBoolean();
     var paths = plugin ? new ServerApplicationPaths(directory, Path.Combine(directory, "log"), Path.Combine(directory, "config"), Path.Combine(directory, "cache"), Path.Combine(directory, "web")) : null;
     var filename = consume ? Path.GetFullPath(sample.GetProperty("filename").GetString()!) : plugin
@@ -89,7 +88,16 @@ foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray
     }
     var beforeBytes = File.Exists(filename) ? Convert.ToBase64String(File.ReadAllBytes(filename)) : null;
     if (sample.TryGetProperty("readOnly", out var readOnly) && readOnly.GetBoolean()) File.SetAttributes(filename, FileAttributes.ReadOnly);
-    using var held = sample.TryGetProperty("locked", out var locked) && locked.GetBoolean()
+    var hasLock = sample.TryGetProperty("locked", out var locked) && locked.GetBoolean();
+    object? inputRead = null;
+    if (hasLock) {
+        JsonElement? inputValue = null; object? inputError = null;
+        try { inputValue = JsonSerializer.SerializeToElement(serializer.DeserializeFromBytes(type, Convert.FromBase64String(beforeBytes!)), options); }
+        catch (Exception failure) { inputError = new { type = failure.GetType().Name, message = failure.Message }; }
+        inputRead = new { accepted = inputError is null, value = inputValue, error = inputError };
+    }
+    var accessibleControl = applyLock && hasLock ? Observe(sample, Path.Combine(directory, "accessible-control"), false) : null;
+    using var held = applyLock && hasLock
         ? new FileStream(filename, FileMode.Open, FileAccess.Read, sample.TryGetProperty("lockMode", out var lockMode) && lockMode.GetString() == "none" ? FileShare.None : FileShare.Read) : null;
     var lockBefore = held is null ? null : FileSharingProbe.Access(filename);
     object? value = null, error = null; JsonElement? observed = null;
@@ -111,13 +119,18 @@ foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray
     var lockAfter = held is null ? null : FileSharingProbe.Access(filename);
     held?.Dispose();
     var afterBytes = File.Exists(filename) ? Convert.ToBase64String(File.ReadAllBytes(filename)) : null;
-    object? reread = null;
-    try { if (afterBytes is not null) reread = serializer.DeserializeFromBytes(type, Convert.FromBase64String(afterBytes)); } catch { }
-    results.Add(new { name, root = alias, accepted = error is null, value = observed, error,
-        beforeBytes, afterBytes, reread = reread is null ? (JsonElement?)null : JsonSerializer.SerializeToElement(reread, options), afterDirectory = Directory.Exists(filename),
-        fileSharing = held is null ? null : new { mode = sample.TryGetProperty("lockMode", out var sharingMode) ? sharingMode.GetString() : "read", sameProcess = true, before = lockBefore, after = lockAfter } });
+    object? reread = null, rereadError = null; bool? rereadAccepted = null;
+    try { if (afterBytes is not null) { reread = serializer.DeserializeFromBytes(type, Convert.FromBase64String(afterBytes)); rereadAccepted = true; } }
+    catch (Exception failure) { rereadAccepted = false; rereadError = new { type = failure.GetType().Name, message = failure.Message }; }
+    var result = new { name, root = alias, filename, accepted = error is null, value = observed, error, inputRead, accessibleControl,
+        beforeBytes, afterBytes, rereadAccepted, rereadError, reread = reread is null ? (JsonElement?)null : JsonSerializer.SerializeToElement(reread, options), afterDirectory = Directory.Exists(filename),
+        fileSharing = held is null ? null : new { mode = sample.TryGetProperty("lockMode", out var sharingMode) ? sharingMode.GetString() : "read", sameProcess = true, before = lockBefore, after = lockAfter } };
     if (File.Exists(filename)) File.SetAttributes(filename, FileAttributes.Normal);
+    return result;
 }
+var results = new List<object>();
+foreach (var sample in JsonDocument.Parse(inputBytes).RootElement.EnumerateArray())
+    results.Add(Observe(sample, Path.Combine(root, results.Count.ToString()), true));
 var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => !assembly.IsDynamic && !string.IsNullOrEmpty(assembly.Location)).Select(assembly => new {
     name = assembly.GetName().Name, filename = assembly.Location, sha256 = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(assembly.Location))) }).OrderBy(row => row.name).ToArray();
 File.WriteAllText(outputFile, JsonSerializer.Serialize(new { inputSha256 = Convert.ToHexStringLower(SHA256.HashData(inputBytes)),

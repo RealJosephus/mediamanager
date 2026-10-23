@@ -9,12 +9,20 @@ requested and received path and mode, explicit ready/inspect/release messages,
 process exit, and actual Native and Node read/write access while the holder is
 alive. The Native capture records its same-process access separately.
 
+Each held-file input also executes against an independent accessible Native file.
+Read and write access are recorded before the identity operation starts. Those
+admissions and the accessible control determine whether the original identity is
+read, a generated identity is committed, or the original bytes remain after a
+refused write. Both runtimes retain their actual held-file results. A cached
+generated identity from a refused write must be replaced by the persisted identity
+when a fresh owner opens the released file.
+
 Generated IDs retain their public N format, persistence, cached value and reopened
 identity relationships. Node reads the actual Native-generated file, and Native
 reads every readable Node file after generation, repair and lock release. Existing
-identity text and unchanged file bytes remain exact. Errors and access traces are
-diagnostic; the assertions concern the resulting identity and file state. The
-runtime identity test separately checks actual PostgreSQL binding, public DTOs,
+identity text and unchanged file bytes remain exact. Error details and access
+traces retain diagnostics; real refused writes, identities and file states are
+asserted. The runtime identity test separately checks actual PostgreSQL binding, public DTOs,
 restart, complete state restoration and Native reads of restored, fresh and
 repaired files.
 

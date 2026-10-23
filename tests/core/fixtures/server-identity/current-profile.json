@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "scope": "Current designated Native DeviceId lifecycle, independent generated identity observations and restored Node identity readback through actual files.",
+  "scope": "Current designated Native DeviceId lifecycle, held-file access and independent accessible controls, persisted identities and bidirectional cold readers.",
   "sourcePaths": [
     "Emby.Server.Implementations/Devices/DeviceId.cs",
     "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
@@ -16,8 +16,8 @@
     {
       "role": "oracleSource",
       "filename": "current/Program.cs",
-      "bytes": 3157,
-      "sha256": "ea42137dee9d76b8c86965a2f8c96de0ed95842cc384e12295c6a1332be4a3d9"
+      "bytes": 3462,
+      "sha256": "76c98eaba255e7092dce3431b40849c47bfa3cd950cfffa3f90512a11c2aad48"
     },
     {
       "role": "oracleProject",
@@ -58,8 +58,8 @@
     {
       "role": "functionalObservations",
       "filename": "current/observations.js",
-      "bytes": 1279,
-      "sha256": "688f8a5e61fdbd71ec136001095b9ecfdff9a2b05b52c8b67fb8702fdadc3560"
+      "bytes": 3466,
+      "sha256": "677c2d84a467be30391ba5ff459e21f69e22fa04d3d385573de9aa095c3e1685"
     }
   ]
 }
