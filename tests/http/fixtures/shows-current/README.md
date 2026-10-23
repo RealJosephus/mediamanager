@@ -16,6 +16,13 @@ The optional ChannelInfo assertion compares complete ordinary DTOs by identity
 for local Similar requests, whose native contract uses a fresh Random order.
 It preserves every DTO field and the complete count/paging envelope.
 
+Two additional controller scenarios select SeasonUserData, RefreshState and
+ExtraIds. These declared fields have no producer in the designated DtoService.
+The PostgreSQL HTTP consumer compares complete responses with and without them
+for Upcoming, NextUp, Episodes, Seasons and Similar; Episodes and Seasons also
+compare the same-run controller's selected identities and paging envelope.
+The concrete DTO no-op is covered by item-collections-current and dto-details.
+
 The same four tests retain all original controller, binder, repository, provider,
 cache, cancellation and PostgreSQL HTTP assertions. Only execution-clock cache
 expiry and per-build assembly locations/Oracle identity are projected when

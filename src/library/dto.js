@@ -27,7 +27,9 @@ export const itemFields = ['CanDelete', 'CanDownload', 'Chapters', 'Trickplay', 
   'ProductionLocations', 'ProductionYear', 'ProviderIds', 'PrimaryImageAspectRatio', 'RecursiveItemCount', 'Settings',
   'SortName', 'SpecialEpisodeNumbers', 'Studios', 'Taglines', 'Tags', 'RemoteTrailers', 'MediaStreams',
   'DateLastRefreshed', 'DateLastSaved', 'EnableMediaSourceDisplay', 'Width', 'Height', 'LocalTrailerCount', 'IsHD',
-  'SpecialFeatureCount', 'AirTime', 'SeriesStudio', 'ChannelInfo', 'ChannelImage'];
+  'SpecialFeatureCount', 'AirTime', 'SeriesStudio', 'ChannelInfo', 'ChannelImage',
+  // Declared public fields without a producer in the designated DtoService.
+  'SeasonUserData', 'RefreshState', 'ExtraIds'];
 const fieldSet = new Set(itemFields.map(field => field.toLowerCase()));
 const channelNumberFormat = new Intl.NumberFormat('en-US', { useGrouping: false, minimumIntegerDigits: 10,
   minimumFractionDigits: 5, maximumFractionDigits: 5, roundingMode: 'halfExpand' });

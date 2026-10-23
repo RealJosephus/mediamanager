@@ -79,6 +79,9 @@ async function compare(db, library) {
           if (source[key] != null) state.byId.get(idKey(source.Id))[key] = Math.fround(source[key]);
       }
       const dto = JSON.parse(stringifyNativeJson(await projectItem(item, state, user, dtoOptions({ fields: selected, enableuserdata: false }), options)));
+      const withUnusedFields = JSON.parse(stringifyNativeJson(await projectItem(item, state, user,
+        dtoOptions({ fields: [...selected, 'SeasonUserData', 'RefreshState', 'ExtraIds'], enableuserdata: false }), options)));
+      assert.deepEqual(withUnusedFields, dto, entry.name + ': declared fields without producers preserve the complete DTO.');
       const keys = entry.kind === 'people' ? ['People', 'ImageBlurHashes'] : entry.kind === 'names' ? ['GenreItems', 'Studios'] : [...floatFields, 'AlbumId'];
       const pick = value => Object.fromEntries(keys.filter(key => Object.hasOwn(value, key)).map(key => [key, value[key]]));
       assert.deepEqual(pick(dto), pick(entry.kind === 'people' ? { ...expected, People: expected.persistedPeople } : expected), entry.name);

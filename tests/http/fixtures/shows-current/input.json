@@ -17,6 +17,16 @@
     "endpoint": "episodes"
   },
   {
+    "name": "episodes accept fields without DTO consumers",
+    "endpoint": "episodes",
+    "fields": ["SeasonUserData", "RefreshState", "ExtraIds"]
+  },
+  {
+    "name": "seasons accept fields without DTO consumers",
+    "endpoint": "seasons",
+    "fields": ["SeasonUserData", "RefreshState", "ExtraIds"]
+  },
+  {
     "name": "series episodes include missing episodes from user preference",
     "endpoint": "episodes",
     "displayMissing": true

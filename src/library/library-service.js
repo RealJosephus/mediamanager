@@ -3203,9 +3203,7 @@ export class LibraryService extends EventEmitter {
     if (!user) throw libraryError(401, 'Unauthorized');
     const normalized = guid(id);
     if (!nonemptyId(normalized)) throw libraryError(400, "Guid can't be empty (Parameter 'id')");
-    // These declared ItemFields have no consumer in the designated DtoService.
-    const selectedFields = fields.filter(value => typeof value === 'string'
-      && !['seasonuserdata', 'refreshstate', 'extraids'].includes(value.toLowerCase()));
+    const selectedFields = fields.filter(value => typeof value === 'string');
     return this.#runWithStates(async db => {
       const initial = await this.#loadPostgresItemState(db, [normalized], user);
       const target = this.itemCreation?.getCachedItemById(normalized) ?? initial.byId.get(idKey(normalized));

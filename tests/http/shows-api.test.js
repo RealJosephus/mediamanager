@@ -881,6 +881,29 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
     }
     return selected;
   };
+  for (const [route, nativeName] of [
+    ['/Shows/Upcoming'], ['/Shows/NextUp'],
+    [`/Shows/${ids.series}/Episodes`, 'episodes accept fields without DTO consumers'],
+    [`/Shows/${ids.series}/Seasons`, 'seasons accept fields without DTO consumers'],
+    [`/Shows/${ids.series}/Similar`],
+  ]) {
+    const plainResponse = await fixture.request(route + '?EnableImages=false');
+    assert.equal(plainResponse.status, 200, route);
+    const plain = await plainResponse.json();
+    const selectedResponse = await fixture.request(route + '?EnableImages=false&Fields=SeasonUserData,RefreshState,ExtraIds');
+    assert.equal(selectedResponse.status, 200, route);
+    const selected = await selectedResponse.json();
+    const comparable = value => route.endsWith('/Similar')
+      ? { ...value, Items: [...value.Items].sort((a, b) => a.Id.localeCompare(b.Id)) } : value;
+    assert.deepEqual(comparable(selected), comparable(plain), route + ': declared fields without producers preserve the complete response.');
+    if (nativeName) {
+      const expected = nativeResult(nativeName);
+      assert.equal(expected.status, 200);
+      assert.deepEqual(selected.Items.map(item => item.Id), expected.items.map(key => idKey(ids[key])));
+      assert.equal(selected.TotalRecordCount, expected.totalRecordCount);
+      assert.equal(selected.StartIndex, expected.startIndex);
+    }
+  }
   assert.equal((await fixture.request('/Shows/Upcoming', null)).status, 401);
   assert.equal((await fixture.request('/Shows/NextUp', null)).status, 401);
   assert.equal((await fixture.request(`/Shows/${ids.series}/Episodes`, null)).status, 401);
