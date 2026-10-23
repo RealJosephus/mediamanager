@@ -12,9 +12,9 @@ import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { transferDatabase, exportCurrentSqlite } from '../../src/migration/database-transfer.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
-import { assertFiles, assertPersisted, changeNodeNfoForNative, completeSnapshot, configureStorage, databaseFilename,
+import { assertFiles, assertPersisted, captureDeclaredFiles, changeNodeNfoForNative, completeSnapshot, configureStorage, databaseFilename, fileSnapshot,
   idKey, input, inputBytes, installStoppedExport, materialize, portAvailable, prepareMedia,
-  removeSyntheticPreparation, sha, stoppedDatabase, unusedPort } from './fixtures/tv-library-exchange/scenario.js';
+  removeSyntheticPreparation, restoreDeclaredNfoInputs, sha, stoppedDatabase, unusedPort } from './fixtures/tv-library-exchange/scenario.js';
 import { startMediaProxy } from './fixtures/tv-library-exchange/media-proxy.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
@@ -41,10 +41,11 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
   await mkdir(output.root);
   const root = await realpath(output.root), instanceRoot = path.join(root, 'instance');
   const nativePort = await unusedPort(), nativeOrigin = `http://127.0.0.1:${nativePort}`;
-  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], snapshots: {}, cleanup: [], errors: [],
+  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], snapshots: {}, nativeImportControls: [], cleanup: [], errors: [],
     phaseAcceptance: false, releaseAcceptance: false, completeLibraryVerified: false, fullInstanceVerified: false,
     scope: 'One ordinary physical Series, Specials and Season 1, three initial MKV Episodes and a fourth added by actual Native. Real Node scan, local NFO read/write, real probing, cold PG reads, public Shows order, complete 31-business/2-EF-table exchange and fresh-PG reimport. No remote provider, virtual season, mixed-version, all-type or production-scale claim.' };
   let current, native, runtime, database, returnedDatabase, sqlite, proxy, failure, safeToRemove = true;
+  const controlReferences = [];
   let token, nodeOrigin, media, ids = {};
   const request = async (origin, route, { method = 'GET', body } = {}) => {
     const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(30000),
@@ -82,6 +83,24 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
       assert.ok(Date.now() < deadline, 'The actual registered RefreshLibrary task must complete a new execution.');
       await delay(100);
     }
+  };
+  const quietNativeTasks = async () => {
+    for (const task of await idleTasks(nativeOrigin)) assert.equal((await request(nativeOrigin,
+      '/ScheduledTasks/' + task.Id + '/Triggers', { method: 'POST', body: [] })).status, 204);
+    const quiet = await request(nativeOrigin, '/ScheduledTasks'); assert.equal(quiet.status, 200);
+    assert.ok(quiet.bodyJson.length && quiet.bodyJson.every(task => task.Triggers.length === 0));
+  };
+  const enableNfoSavers = async origin => {
+    const before = await request(origin, '/Library/VirtualFolders'); assert.equal(before.status, 200);
+    const matches = before.bodyJson.filter(folder => folder.Name === input.libraryName && folder.Locations.includes(media.root));
+    assert.equal(matches.length, 1);
+    const folder = matches[0]; assert.deepEqual(folder.LibraryOptions.MetadataSavers, []);
+    assert.equal((await request(origin, '/Library/VirtualFolders/LibraryOptions', { method: 'POST',
+      body: { Id: folder.ItemId, LibraryOptions: { ...folder.LibraryOptions, SaveLocalMetadata: true, MetadataSavers: ['Nfo'] } } })).status, 204);
+    const after = await request(origin, '/Library/VirtualFolders'); assert.equal(after.status, 200);
+    const updated = after.bodyJson.find(value => idKey(value.ItemId) === idKey(folder.ItemId));
+    assert.deepEqual(updated.LibraryOptions.MetadataSavers, ['Nfo']);
+    return { before: folder, after: updated };
   };
   const stopNative = async label => {
     if (!native) return;
@@ -174,7 +193,10 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
       'Emby.Server.Implementations/Library/Resolvers/TV/EpisodeResolver.cs',
       'MediaBrowser.Controller/Entities/TV/Series.cs', 'MediaBrowser.Controller/Entities/TV/Season.cs',
       'MediaBrowser.Controller/Entities/TV/Episode.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs',
+      'MediaBrowser.Providers/Manager/MetadataService.cs', 'MediaBrowser.Providers/Manager/ProviderManager.cs',
+      'MediaBrowser.Providers/TV/SeriesMetadataService.cs',
       'MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs', 'MediaBrowser.XbmcMetadata/Providers/EpisodeNfoProvider.cs',
+      'MediaBrowser.XbmcMetadata/Providers/SeasonNfoProvider.cs',
       'MediaBrowser.XbmcMetadata/Savers/EpisodeNfoSaver.cs',
       'MediaBrowser.XbmcMetadata/Savers/SeasonNfoSaver.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
@@ -185,12 +207,9 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
     report.mountContract = await configureStorage(root);
     native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-empty-library', origin: nativeOrigin });
     await native.ready();
-    for (const task of await idleTasks(nativeOrigin)) assert.equal((await request(nativeOrigin,
-      '/ScheduledTasks/' + task.Id + '/Triggers', { method: 'POST', body: [] })).status, 204);
-    const quiet = await request(nativeOrigin, '/ScheduledTasks'); assert.equal(quiet.status, 200);
-    assert.ok(quiet.bodyJson.length && quiet.bodyJson.every(task => task.Triggers.length === 0));
+    await quietNativeTasks();
     const options = { Enabled: true, EnableRealtimeMonitor: false, EnableInternetProviders: false,
-      SaveLocalMetadata: true, MetadataSavers: ['Nfo'], AutomaticRefreshIntervalDays: 0, EnableEmbeddedEpisodeInfos: false,
+      SaveLocalMetadata: true, MetadataSavers: [], AutomaticRefreshIntervalDays: 0, EnableEmbeddedEpisodeInfos: false,
       EnableChapterImageExtraction: false, ExtractChapterImagesDuringLibraryScan: false,
       EnableTrickplayImageExtraction: false, ExtractTrickplayImagesDuringLibraryScan: false,
       SeasonZeroDisplayName: 'Specials', PathInfos: [{ Path: media.root }],
@@ -215,10 +234,65 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
     report.snapshots.postgresEmpty = await completeSnapshot(database);
     assert.deepEqual(report.snapshots.postgresEmpty, report.snapshots.nativeEmpty);
     await materialize(media); report.filesInput = await assertFiles(media);
+    for (const saversBeforeImport of [false, true]) {
+      const label = saversBeforeImport ? 'native-import-savers-enabled' : 'native-import-savers-disabled';
+      const referenceRoot = path.join(root, label), reference = await currentNativeReference();
+      const owner = { reference, finished: false }; controlReferences.push(owner);
+      assert.equal(reference.preparation.buildIdentitySha256, current.preparation.buildIdentitySha256);
+      assert.equal(reference.accessToken, token);
+      const control = { label, referenceRoot, origin: nativeOrigin, saversBeforeImport, preparation: reference.preparation,
+        scope: 'Independent current Native first-import lifecycle control; no rows from this clone enter the exchange chain.' };
+      report.nativeImportControls.push(control);
+      await cp(reference.sourceRoot, referenceRoot, { recursive: true, force: false, errorOnExist: true });
+      control.clone = { sourceRoot: reference.sourceRoot, sourceDatabase: await fileSnapshot(reference.sourceDatabase),
+        copiedDatabase: await fileSnapshot(databaseFilename(referenceRoot)) };
+      assert.deepEqual(control.clone.copiedDatabase, control.clone.sourceDatabase);
+      await reference.prepareClone(referenceRoot, nativePort);
+      control.syntheticPreparation = removeSyntheticPreparation(referenceRoot);
+      native = reference.start({ referenceRoot, outputRoot: root, label, origin: nativeOrigin });
+      await native.ready(); await quietNativeTasks();
+      assert.equal((await request(nativeOrigin, '/Library/VirtualFolders?name=' + encodeURIComponent(input.libraryName)
+        + '&collectionType=tvshows&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: options } })).status, 204);
+      if (saversBeforeImport) control.saverConfiguration = await enableNfoSavers(nativeOrigin);
+      control.scan = await scan(nativeOrigin);
+      control.filesBeforeReads = await captureDeclaredFiles(media);
+      if (!saversBeforeImport) {
+        control.observed = await observe(nativeOrigin);
+      } else {
+        const list = await request(nativeOrigin, '/Items?Recursive=true&IncludeItemTypes=Series,Season,Episode&Fields=Path');
+        assert.equal(list.status, 200); control.items = {};
+        for (const entry of media.definitions) {
+          const matches = list.bodyJson.Items.filter(item => item.Path === entry.path);
+          assert.equal(matches.length, 1);
+          const detail = await request(nativeOrigin, '/Items/' + matches[0].Id); assert.equal(detail.status, 200);
+          control.items[entry.key] = detail.bodyJson;
+        }
+      }
+      await stopNative(label);
+      control.files = saversBeforeImport ? await captureDeclaredFiles(media) : await assertFiles(media);
+      if (saversBeforeImport) {
+        control.sidecarChanges = control.files.map((file, index) => ({ key: file.key,
+          changed: file.nfo.sha256 !== report.filesInput[index].nfo.sha256,
+          declaredInput: report.filesInput[index].nfo.sha256, observed: file.nfo.sha256 }));
+      } else assert.deepEqual(control.files, report.filesInput,
+        'Reading declared local metadata with savers disabled retains its complete original bytes.');
+      await reference.finish(); owner.finished = true; control.inputsUnchanged = true;
+    }
+    report.controlNfoRestoration = await restoreDeclaredNfoInputs(media, report.filesInput);
+    assert.deepEqual(await assertFiles(media), report.filesInput);
+    report.mainEmptyAfterControls = await fileSnapshot(databaseFilename(instanceRoot));
+    assert.equal(report.mainEmptyAfterControls.sha256, report.instanceBinding.originIdentityDigest,
+      'Independent Native controls cannot change the stopped empty instance used by the exchange.');
     await startNode(database);
     report.nodeScan = await scan(nodeOrigin);
+    report.nodeFilesBeforeReads = await captureDeclaredFiles(media);
     report.nodeScanned = await observe(nodeOrigin);
+    assert.deepEqual(report.nodeScanned, report.nativeImportControls[0].observed,
+      'The same declared files and saver-disabled Native/Node first scans must return the same public TV graph.');
+    report.nodeScannedFiles = await assertFiles(media);
+    assert.deepEqual(report.nodeScannedFiles, report.filesInput);
     report.nodeRowsScanned = await assertPersisted(database, media, ids);
+    report.nodeSaverConfiguration = await enableNfoSavers(nodeOrigin);
     await editOverview(nodeOrigin, 'episode1', input.nodeOverview);
     const nodeOverviews = { episode1: input.nodeOverview };
     report.nodeEdited = await observe(nodeOrigin, { overviews: nodeOverviews });
@@ -302,6 +376,9 @@ test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite 
       assert.ok(proxy.report.closed && released); proxy = undefined;
     });
     await attempt(() => current?.finish());
+    for (const owner of controlReferences) if (!owner.finished) await attempt(async () => {
+      await owner.reference.finish(); owner.finished = true;
+    });
     report.passed = !failure;
     await writeFile(path.join(root, 'report.json'), filterEvidenceJson(report, secrets));
     await writeFile(path.join(root, 'provenance.json'), filterEvidenceJson({ inputSha256: sha(inputBytes),

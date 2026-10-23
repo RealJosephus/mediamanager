@@ -116,6 +116,33 @@ export async function materialize(media, continuation = false) {
     await writeFile(entry.nfo, nfoFor(entry), { flag: 'wx' });
   }
 }
+export async function captureDeclaredFiles(media) {
+  const result = [];
+  for (const entry of media.definitions) {
+    const source = entry.type === 'Episode' ? await fileSnapshot(entry.path) : null;
+    if (source) assert.deepEqual(source, media.file, 'Native controls must retain every complete media source.');
+    const filename = ownedPath(media.root, entry.nfo), snapshot = await fileSnapshot(filename), bytes = await readFile(filename);
+    result.push({ key: entry.key, path: entry.path, source,
+      nfo: { path: filename, ...snapshot, sourceBytesBase64: bytes.toString('base64') } });
+  }
+  return result;
+}
+export async function restoreDeclaredNfoInputs(media, originals) {
+  assert.deepEqual(originals.map(entry => entry.key), media.definitions.map(entry => entry.key));
+  const restored = [];
+  for (const [index, entry] of media.definitions.entries()) {
+    const original = originals[index], filename = ownedPath(media.root, entry.nfo);
+    assert.equal(original.path, entry.path);
+    const bytes = Buffer.from(original.nfo.sourceBytesBase64, 'base64');
+    assert.equal(bytes.length, original.nfo.bytes); assert.equal(sha(bytes), original.nfo.sha256);
+    const before = await fileSnapshot(filename);
+    await writeFile(filename, bytes);
+    const after = await fileSnapshot(filename);
+    assert.deepEqual(after, { bytes: original.nfo.bytes, sha256: original.nfo.sha256 });
+    restored.push({ key: entry.key, filename, before, restored: after });
+  }
+  return restored;
+}
 export async function assertFiles(media, { continued = false, overviews = {} } = {}) {
   const entries = continued ? [...media.definitions, media.continued] : media.definitions, result = [];
   for (const entry of entries) {
