@@ -222,10 +222,12 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
 });
 
-for (const [consumer, fixture, services, archiveId] of [
+for (const [consumer, fixture, services, archiveId, inputPath = 'input.json'] of [
   ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup'],
   ['tests/core/native-charset.test.js', 'tests/core/fixtures/native-charset', ['dotnet', 'jellyfinDll'], 'sealed-charset'],
   ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
+  ['tests/library/collection-playlist-resolution.test.js', 'tests/library/fixtures/collection-playlist-resolution',
+    ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-collection-playlist', 'current/input.json'],
 ]) test(`${archiveId} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
@@ -235,7 +237,7 @@ for (const [consumer, fixture, services, archiveId] of [
   await assertOracleSourcesProfiled(profile, profileFilename);
   const references = executionManifestReferences(contract, profile, profileFilename);
   assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
-    'tests/Directory.Build.props', fixture + '/current/Oracle.csproj', fixture + '/current/Program.cs', fixture + '/input.json',
+    'tests/Directory.Build.props', fixture + '/current/Oracle.csproj', fixture + '/current/Program.cs', fixture + '/' + inputPath,
   ].sort());
   const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
   assert.deepEqual(closure.find(value => value.path === consumer).services, services);

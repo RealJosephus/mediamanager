@@ -7,8 +7,8 @@ import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
 
-// Neutral input construction and production assembly only. Historical native
-// output and source seals are owned by collection-playlist-resolution.test.js.
+// Shared neutral controls and production runtime assembly. The resolution
+// fixture's current capture records designated Native execution evidence.
 export const parentId = '15000000-0000-0000-0000-000000000099';
 export const subjectId = index => `15000000-0000-0000-0000-${String(index).padStart(12, '0')}`;
 export const created = '2026-10-09T01:02:03.0000000Z', modified = '2026-10-09T02:03:04.0000000Z';

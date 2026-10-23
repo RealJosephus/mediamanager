@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "scope": "Same-run designated Native Collection/Playlist resolution, real media files, PostgreSQL persistence and cold identity consumers; component evidence only.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/Resolvers/Movies/BoxSetResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/PlaylistResolver.cs",
+    "Emby.Server.Implementations/Library/ResolverHelper.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+    "MediaBrowser.Controller/Resolvers/ItemResolver.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+    "MediaBrowser.Controller/Playlists/Playlist.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/BaseItemEntity.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 4187,
+      "sha256": "9b3cba926c5a538b9f30fe4dd292222c8502aa75a0bcdd90c792f4527727785f"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 14532,
+      "sha256": "a4b84e06f9264f6f086f38dd752dd667e64cb8f42e229d0db3081e5be9f74fac"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1428,
+      "sha256": "7fff485c9dbf9c7342dc4f1ff5135d85fe7c4ce93e87b774a12c24376d7ffc04"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

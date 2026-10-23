@@ -32,7 +32,7 @@ const historicalArchiveRootsById = new Map([
 const historicalArchiveIds = new Set(historicalArchiveRootsById.keys());
 const historicalArchiveRoots = new Set([...historicalArchiveRootsById.values()].flat());
 const currentIdentityArchiveIds = new Set(['search-lookup-sources', 'sealed-rating', 'password-reader', 'sealed-startup',
-  'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto']);
+  'sealed-collection-playlist', 'sealed-charset', 'sealed-json', 'sealed-http-delete', 'sealed-delete-dto']);
 
 // These reviewed manifests bind the bytes that their consumers execute or
 // compare. Keep each contract at the actual caller/kind boundary: another kind
@@ -45,6 +45,7 @@ const executionManifests = new Map([
   ['tests/http/startup.test.js', ['current-oracle', 'tests/http/fixtures/startup/current-profile.json']],
   ['tests/core/native-charset.test.js', ['current-oracle', 'tests/core/fixtures/native-charset/current-profile.json']],
   ['tests/core/native-json-encoder.test.js', ['current-oracle', 'tests/core/fixtures/native-json-encoder/current-profile.json']],
+  ['tests/library/collection-playlist-resolution.test.js', ['current-oracle', 'tests/library/fixtures/collection-playlist-resolution/current-profile.json']],
   ['tests/http/item-deletion.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
   ['tests/http/item-deletion-postgres.test.js', ['current-oracle', 'tests/http/fixtures/item-deletion/current-profile.json']],
   ['tests/library/delete-dto-permission.test.js', ['current-oracle', 'tests/library/fixtures/delete-dto-permission/current-profile.json']],
@@ -57,7 +58,6 @@ const executionManifests = new Map([
 const sealedExecutionManifests = new Map([
   ['tests/plugins/native-repeat.test.js', ['nfo-repeats', 'tests/metadata/fixtures/nfo-partial-reader/repeat.json']],
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
-  ['tests/library/collection-playlist-resolution.test.js', ['sealed-collection-playlist', 'tests/library/fixtures/collection-playlist-resolution/provenance.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
   ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
   ['tests/library/native-item-cache.test.js', ['sealed-warm', 'tests/library/fixtures/native-item-cache/provenance.json']],
@@ -210,12 +210,6 @@ export function executionManifestReferences(contract, content, filename) {
     for (const source of content.sources) add({ filename: path.join('D:/jellyfin', source.path), sha256: source.sha256 }, { recorded: true });
   } else if (contract.kind === 'folder-progress-sources') {
     for (const source of content.sourceFiles) add(source, { recorded: true });
-  } else if (contract.kind === 'sealed-collection-playlist') {
-    add({ filename: content.jellyfin.source });
-    for (const descriptor of [content.record, content.raw, content.native, content.dotnet, content.jellyfinDll,
-      ...content.files, ...content.jellyfin.sources, ...content.resolution]) {
-      add({ ...descriptor, filename: descriptor.filename ?? descriptor.path });
-    }
   } else if (contract.kind === 'conflict') {
     add(content.independentNativeAudit);
     for (const recording of content.recordings) {

@@ -76,7 +76,7 @@
         "tests/library/fixtures/collection-playlist-resolution/provenance.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
           "tests/library/collection-playlist-resolution.test.js"
         ]

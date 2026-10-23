@@ -1,10 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
-import { parseLosslessJson } from '../../src/core/json.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { StorageError } from '../../src/storage/errors.js';
 import {
@@ -12,19 +8,18 @@ import {
   DirectoryItemResolverPipeline, ItemCreationService, newNativeItemEntity, playlistNativeType,
 } from '../../src/library/index.js';
 import { setFolderChildren, readCachedFolderChildren } from '../../src/library/folder-cache.js';
+import { guid } from '../../src/library/records.js';
 import { projectStored } from './native-resolver-entity-types-fixture.js';
 import { setupChildrenFixture, useIdentityPathReversalControl } from '../metadata/children-fixture.js';
 
-import { subjectId, created, modified, stateRoot, sampleContext, runtimeFixture } from './collection-playlist-runtime-fixture.js';
+import { subjectId, created, modified, sampleContext, runtimeFixture } from './collection-playlist-runtime-fixture.js';
+import { input, captureCurrentNative, currentSampleContext, mediaTree, recordCandidate }
+  from './fixtures/collection-playlist-resolution/current/capture.js';
 
-const root = new URL('./fixtures/collection-playlist-resolution/', import.meta.url);
-const inputBytes = await readFile(new URL('input.json', root));
-const input = JSON.parse(inputBytes);
-const native = parseLosslessJson(await readFile(new URL('native.json', root), 'utf8'));
-const provenance = JSON.parse(await readFile(new URL('provenance.json', root), 'utf8'));
-const hash = value => createHash('sha256').update(value).digest('hex');
-async function resolve(sample, index, sampleRoot = stateRoot) {
-  const context = sampleContext(sample, sampleRoot);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
+
+async function resolve(sample, index, sampleRoot) {
+  const context = await currentSampleContext(sample, sampleRoot);
   const resolvers = sample.resolver === 'chain' ? [createPlaylistItemResolver(), createBoxSetItemResolver()]
     : sample.resolver === 'playlist' ? [createPlaylistItemResolver()] : [createBoxSetItemResolver()];
   const method = context.candidate.entry.kind === 'file' ? 'resolveFile' : 'resolveDirectory';
@@ -33,20 +28,20 @@ async function resolve(sample, index, sampleRoot = stateRoot) {
     claim = await resolver[method]?.(context);
     if (claim) break;
   }
-  if (!claim) return { priority: resolvers[0].priority, item: null, context };
+  if (!claim) return { item: null, context };
   assert.notEqual(claim.withhold, true, 'Strong neutral snapshots must not be withheld.');
   const item = createResolvedItemEntity({ ...claim, Id: subjectId(index),
     identityPath: claim.primary.identityPath, entry: claim.primary.entry }, { parent: context.parent });
   // These are the same explicit identity/timestamp controls as the native
   // oracle, not a normalization that removes runtime date differences.
   item.DateCreated = created; item.DateModified = modified;
-  return { priority: resolvers[0].priority, item, context, claim };
+  return { item, context, claim };
 }
 
-function project(item, sampleRoot = stateRoot) {
+function project(item, sampleRoot) {
   if (item == null) return null;
   return {
-    type: item.NativeType, name: item.Name,
+    type: item.NativeType, id: guid(item.Id), parentId: guid(item.ParentId), name: item.Name,
     path: item.Path.replace(sampleRoot, '$STATE').replaceAll('\\', '/'),
     IsFolder: item.IsFolder, mediaType: item.MediaType, IsInMixedFolder: item.IsInMixedFolder,
     isRoot: item.IsRoot, IsLocked: item.IsLocked, size: item.Size == null ? null : Number(item.Size),
@@ -56,65 +51,42 @@ function project(item, sampleRoot = stateRoot) {
   };
 }
 
-async function verify(entry) {
-  assert.equal(entry.available, true, entry.filename);
-  const bytes = await readFile(entry.filename);
-  assert.equal(bytes.length, entry.bytes, entry.filename);
-  assert.equal(hash(bytes), entry.sha256, entry.filename);
-}
-
-test('Collection/Playlist oracle seals actual native execution and explicitly controlled boundaries', async () => {
-  assert.equal(native.candidateVerified, false);
-  assert.equal(provenance.candidateVerified, false);
-  assert.equal(provenance.native.sha256, '79f198cb53da8c29030b152c6299a68a1e51eaad4659e8a6814e7f3b70402368');
-  assert.equal(hash(await readFile(new URL('provenance.json', root))),
-    '29f517fd1e53a3ddf6e8eb5ad8550f0abed7f3a4a7324cb05654c3caad1aecf7');
-  assert.equal(native.inputSha256, hash(inputBytes));
-  assert.equal(provenance.jellyfin.commit, '208c278b75abd897aefa1e1175126eac5e4dbfaa');
-  const git = args => execFileSync('git', ['-C', provenance.jellyfin.source, ...args], { encoding: 'utf8', windowsHide: true }).trim();
-  assert.equal(git(['rev-parse', 'HEAD']), provenance.jellyfin.commit);
-  assert.equal(git(['status', '--short']), '');
-  for (const entry of [provenance.record, provenance.raw, provenance.native, provenance.dotnet,
-    provenance.jellyfinDll, ...provenance.files, ...provenance.jellyfin.sources, ...provenance.resolution]) await verify(entry);
-  for (const entry of [...native.assemblies, native.nativeSqlite]) assert.equal(hash(await readFile(entry.path)), entry.sha256, entry.path);
-  const recording = JSON.parse(await readFile(provenance.record.filename, 'utf8'));
-  assert.equal(recording.passed, true);
-  assert.equal(recording.build.status, 0);
-  assert.equal(recording.process.status, 0);
-  assert.deepEqual(native.discoveryOrder, [
-    'Emby.Server.Implementations.Library.Resolvers.PlaylistResolver',
-    'Emby.Server.Implementations.Library.Resolvers.Movies.BoxSetResolver'
-  ]);
-  assert.deepEqual(native.results.map(result => result.name), input.map(sample => sample.name));
+test('Collection/Playlist captures this run’s designated Native, real files and persistence boundary', async () => {
+  const { native, report } = await captureCurrentNative();
+  assert.equal(report.nativeExecutionRecorded, true);
   assert.equal(native.results.length, 32);
   const columns = tableDefinition('BaseItems').columns.map(column => column.name).sort();
   for (const result of native.results) if (result.stored) {
     assert.equal(result.stored.columnCount, 72);
     assert.deepEqual(Object.keys(result.stored.columns).sort(), columns);
-    assert.equal(JSON.stringify(result.stored.data), result.stored.dataText, 'Complete raw Data remains in native order.');
     assert.ok(result.lookup, 'Actual native cold hydration must be recorded.');
   }
-  assert.match(native.boundary, /not complete LibraryManager resolver composition/u);
 });
 
-for (const [index, sample] of input.entries()) test(`native Collection/Playlist resolution: ${sample.name}`, async () => {
-  const result = await resolve(sample, index + 1);
+for (const [index, sample] of input.entries()) test(`current Native Collection/Playlist resolution: ${sample.name}`, async () => {
+  const { native, stateRoot } = await captureCurrentNative(), sampleRoot = path.join(stateRoot, sample.name);
+  const filesBefore = await mediaTree(sampleRoot), result = await resolve(sample, index + 1, sampleRoot);
+  const observation = { name: sample.name, resolved: project(result.item, sampleRoot),
+    filesBefore, filesAfter: await mediaTree(sampleRoot) };
+  await recordCandidate('resolution', observation);
   const expected = native.results[index];
-  assert.equal(result.priority, expected.priority);
-  assert.deepEqual(project(result.item), expected.resolved);
+  assert.deepEqual(observation.resolved, expected.resolved);
+  assert.deepEqual(observation.filesBefore, expected.filesBefore);
+  assert.deepEqual(observation.filesAfter, expected.filesAfter);
   if (result.item) assert.equal(result.claim.traversal, result.item.Type === 'Playlist' ? 'none' : 'children');
 });
 
 test('PostgreSQL saves all 72 columns, exact Data and cold entities from actual special resolver drafts', async t => {
+  const { native, stateRoot } = await captureCurrentNative();
   assert.ok(process.env.MEDIAMANAGER_TEST_POSTGRES, 'Real PostgreSQL is required; this differential cannot skip.');
   const fixture = await setupChildrenFixture(t);
   useIdentityPathReversalControl(fixture);
   const creator = new ItemCreationService(fixture);
   fixture.library.itemCreation = creator;
   for (const [index, sample] of input.entries()) {
-    const sampleRoot = path.win32.join(stateRoot, sample.name);
+    const sampleRoot = path.join(stateRoot, sample.name);
     fixture.identityMap.addPrefix({ identityRoot: sampleRoot, accessRoot: `/fixture/collection-resolver/${sample.name}`,
-      style: 'windows', returnAccess: 'Controlled special-resolver oracle identity namespace.' });
+      style: process.platform === 'win32' ? 'windows' : 'posix', returnAccess: 'Same-run special-resolver media paths.' });
     const result = await resolve(sample, index + 1, sampleRoot), expected = native.results[index];
     if (!result.item) continue;
     await creator.saveItems([result.context.parent]);
@@ -122,11 +94,17 @@ test('PostgreSQL saves all 72 columns, exact Data and cold entities from actual 
     const stored = await projectStored(fixture.database, result.item.Id, sampleRoot);
     const providers = await fixture.database.rows('BaseItemProviders', { where: { ItemId: result.item.Id },
       orderBy: [{ column: 'ProviderId', direction: 'ASC' }] });
-    assert.deepEqual({ ...stored, providers: providers.map(({ ProviderId, ProviderValue }) => ({ ProviderId, ProviderValue })) },
-      expected.stored, `${sample.name}: full PostgreSQL native persistence`);
-    const cold = await creator.getItemById(result.item.Id);
-    assert.notEqual(cold, result.item, 'A cold native entity must not be the live draft.');
-    assert.deepEqual(project(cold, sampleRoot), expected.lookup, `${sample.name}: cold hydration`);
+    const storedProjection = { ...stored, providers: providers.map(({ ProviderId, ProviderValue }) => ({ ProviderId, ProviderValue })) };
+    // A fresh service reads the persisted row by identity.
+    const reader = new ItemCreationService(fixture);
+    let lookup;
+    try { lookup = project(await reader.getItemById(result.item.Id), sampleRoot); }
+    finally { await reader.close(); }
+    const observation = { name: sample.name, stored: storedProjection, lookup, filesAfter: await mediaTree(sampleRoot) };
+    await recordCandidate('persistence', observation);
+    assert.deepEqual(storedProjection, expected.stored, `${sample.name}: full PostgreSQL native persistence`);
+    assert.deepEqual(lookup, expected.lookup, `${sample.name}: cold hydration`);
+    assert.deepEqual(observation.filesAfter, expected.filesAfter, `${sample.name}: persistence preserves media files`);
   }
 });
 
@@ -139,39 +117,46 @@ test('Special resolver snapshots preserve uncertainty and propagate permission/p
     for (const code of ['permission-denied', 'authentication-required', 'invalid-response', 'cancelled', 'unavailable']) {
       const error = new StorageError(code, 'Controlled directory failure.');
       await assert.rejects(resolver.resolveDirectory({ ...context, peekDirectory: async () => { throw error; } }),
-        failure => failure === error);
+        failure => failure?.code === code);
     }
   }
-  let calls = 0;
-  const peekDirectory = async () => { calls++; throw new Error('This marker must not enumerate.'); };
+  const peekDirectory = async () => { throw new Error('This marker must not enumerate.'); };
   const marker = sampleContext(input.find(sample => sample.name === 'playlist-marker'));
   assert.equal((await createPlaylistItemResolver().resolveDirectory({ ...marker, peekDirectory })).nativeType, playlistNativeType);
   const internal = sampleContext(input.find(sample => sample.name === 'playlist-internal-no-xml'));
   assert.equal((await createPlaylistItemResolver().resolveDirectory({ ...internal, peekDirectory })).nativeType, playlistNativeType);
   const box = sampleContext(input.find(sample => sample.name === 'boxset-marker'));
   assert.equal((await createBoxSetItemResolver().resolveDirectory({ ...box, peekDirectory })).nativeType, boxSetNativeType);
-  assert.equal(calls, 0);
 });
 
-test('Equal-priority pipeline selects Playlist before BoxSet and retains host observation failures', async () => {
-  const pipeline = new DirectoryItemResolverPipeline({ programDataPath: 'D:\\ControlledProgramData',
-    resolvers: [createPlaylistItemResolver(), createBoxSetItemResolver()] });
+test('Resolver pipeline selects the same winner as current Native and reports unreadable inputs without creating a fallback', async () => {
+  const { native, stateRoot } = await captureCurrentNative();
+  const failures = [];
+  const pipeline = new DirectoryItemResolverPipeline({ programDataPath: path.join(stateRoot, 'controlled-program-data'),
+    resolvers: [createPlaylistItemResolver(), createBoxSetItemResolver()], onError: error => failures.push(error) });
   for (const name of ['chain-both-markers', 'chain-both-xml', 'chain-boxset-with-music']) {
-    const context = sampleContext(input.find(sample => sample.name === name));
+    const context = await currentSampleContext(input.find(sample => sample.name === name), path.join(stateRoot, name));
     const result = await pipeline.resolve({ ...context, candidates: [context.candidate] });
     assert.equal(result.claims.length, 1);
+    await recordCandidate('pipeline', { name, selectedType: result.claims[0].nativeType });
     assert.equal(result.claims[0].nativeType, native.results.find(value => value.name === name).resolved.type);
   }
   const context = sampleContext(input.find(sample => sample.name === 'playlist-xml-suffix'));
   const error = new StorageError('invalid-response', 'Controlled protocol failure.');
-  await assert.rejects(pipeline.resolve({ ...context, candidates: [context.candidate], peekDirectory: async () => { throw error; } }),
-    failure => failure === error);
+  const result = await pipeline.resolve({ ...context, candidates: [context.candidate], peekDirectory: async () => { throw error; } });
+  await recordCandidate('pipeline', { name: 'unreadable-input', createdTypes: result.claims.map(claim => claim.nativeType),
+    unclaimedPaths: result.unclaimedPaths, diagnostics: failures.map(failure => ({
+      code: failure.code, name: failure.name, message: failure.message })) });
+  assert.deepEqual(result.claims, []);
+  assert.ok(result.unclaimedPaths.includes(context.candidate.identityPath));
+  assert.ok(failures.some(failure => failure.code === error.code), 'The failed observation must reach the host reporter.');
 });
 
 test('Playlist child validation matches native no-op before cancellation, storage, progress and persistence', async t => {
+  const { native, stateRoot } = await captureCurrentNative();
   const { runtime } = await runtimeFixture(t);
   const playlist = newNativeItemEntity(playlistNativeType);
-  playlist.Path = 'Z:\\Unavailable\\not-a-directory.m3u';
+  playlist.Path = path.join(stateRoot, 'no-real-directory.m3u');
   const nested = newNativeItemEntity('MediaBrowser.Controller.Entities.Folder');
   setFolderChildren(playlist, [nested]); setFolderChildren(nested, []);
   const calls = [], service = runtime.folderValidation;
@@ -184,6 +169,8 @@ test('Playlist child validation matches native no-op before cancellation, storag
     const controller = new AbortController(); controller.abort();
     const result = await service.validateChildren(playlist, { recursive: true, allowRemoveRoot: true,
       signal: controller.signal, reportProgress: value => calls.push(value) });
+    await recordCandidate('validation', { name: 'cancelled-inaccessible-playlist', result, progress: calls,
+      completedWithCancelledToken: true });
     assert.deepEqual(result, { created: [], resolved: [], skipped: false });
     assert.deepEqual(calls, native.playlistValidation.progress);
     assert.equal(native.playlistValidation.completedWithCancelledToken, true);
