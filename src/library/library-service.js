@@ -1179,7 +1179,34 @@ export class LibraryService extends EventEmitter {
   async #filterPostgresStandaloneBatch(db, items, user, state) {
     if (!user || !items.length) return items;
     const selected = [];
-    for (const item of items) if (await this.#postgresStandaloneVisible(db, item, user, state)) selected.push(item);
+    for (let offset = 0; offset < items.length; offset += 128) {
+      const page = items.slice(offset, offset + 128);
+      const boxSetIds = page.filter(item => item.Type === 'BoxSet').map(item => item.Id);
+      const linkTypes = boxSetIds.length ? await queryPostgresLinkTypes(db, boxSetIds) : new Map();
+      let modern = [];
+      const identities = new Set();
+      const flush = async () => {
+        if (!modern.length) return;
+        selected.push(...await this.#filterPostgresStandalonePage(db, modern, user, state));
+        modern = []; identities.clear();
+      };
+      for (const item of page) {
+        // Modern BoxSet.IsVisibleStandalone calls IsVisible directly. Reuse
+        // the bounded DTO visibility query, including live rating/membership
+        // and lazy root checks, instead of repeating that SQL for every item.
+        if (item.Type === 'BoxSet' && !isLegacyBoxSet(item, linkTypes.has(idKey(item.Id)), this.options.programDataPath)) {
+          const key = idKey(item.Id);
+          // Separate occurrences may carry different unsaved values for one
+          // identity. Never merge their visibility inputs into the same page.
+          if (identities.has(key)) await flush();
+          identities.add(key); modern.push(item);
+        } else {
+          await flush();
+          if (await this.#postgresStandaloneVisible(db, item, user, state)) selected.push(item);
+        }
+      }
+      await flush();
+    }
     return selected;
   }
 

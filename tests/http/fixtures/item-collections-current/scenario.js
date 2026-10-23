@@ -77,6 +77,7 @@ export async function openScenario(input, seedFilename, report, rootIds) {
   let database, runtime, source, closing, held, currentCase;
   const owners = [], errors = report.runtimeErrors = [], queries = report.queries = [];
   const queryTimings = report.queryTimings = [], slowQueries = report.slowQueries = [];
+  const requestTimings = report.requestTimings = [];
   const explainPlans = report.explainPlans = [], explained = new Set();
   const timedOutCases = new Set();
   const slowQueryThresholdMs = 1000;
@@ -154,8 +155,11 @@ export async function openScenario(input, seedFilename, report, rootIds) {
       const values = typeof args[0] === 'string' ? args[1] : args[0]?.values;
       const comment = text.match(/\/\* ([^*]+) \*\//u)?.[1] ?? null;
       const admittedAt = performance.now();
+      const visibilityItems = text.includes('native_visibility_input("Id","OfficialRating","CustomRating","LibraryFolderIds")')
+        && Array.isArray(values?.[0]) ? values[0].length : null;
       const timing = currentCase ? { ordinal: queryTimings.length + 1, case: currentCase, comment,
         textSha256: sha(text), textLength: text.length, parameterCount: Array.isArray(values) ? values.length : 0,
+        ...(visibilityItems === null ? {} : { visibilityItems }),
         admittedAt: new Date().toISOString(), status: 'waiting' } : null;
       if (timing) queryTimings.push(timing);
       let dispatchedAt, queryFailure;
@@ -205,14 +209,23 @@ export async function openScenario(input, seedFilename, report, rootIds) {
     const request = async (route, auth = 'all') => {
       route = route.replaceAll('$user-root', idKey(rootIds['user-root']));
       const caseName = currentCase, signal = AbortSignal.timeout(30000);
+      const startedAt = performance.now(), observation = { case: caseName, route, auth,
+        startedAt: new Date().toISOString(), deadlineMs: 30000 };
+      requestTimings.push(observation);
       const timeout = () => timedOutCases.add(caseName);
       signal.addEventListener('abort', timeout, { once: true });
       try {
         const response = await fetch(origin + route, { signal, headers: { Accept: 'application/json', Authorization: authorization(tokens[auth]) } });
+        observation.status = response.status;
         const body = await response.text(); let json;
         try { json = JSON.parse(body); } catch { /* Keep complete non-JSON error body. */ }
         return { route, status: response.status, contentType: response.headers.get('content-type'), allow: response.headers.get('allow') ?? '', body, ...(json === undefined ? {} : { json }) };
-      } finally { signal.removeEventListener('abort', timeout); }
+      } catch (error) { observation.error = errorRecord(error); throw error; }
+      finally {
+        observation.elapsedMs = performance.now() - startedAt;
+        observation.finishedAt = new Date().toISOString();
+        signal.removeEventListener('abort', timeout);
+      }
     };
     const snapshot = async () => ({ database: await rows(database), files: await files(root) });
     const run = async sample => {

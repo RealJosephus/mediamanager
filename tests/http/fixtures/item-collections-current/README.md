@@ -72,9 +72,15 @@ column remain in the complete unchanged-table assertion. HTTP deadlines and
 monotonic SQL timings keep their real clocks. The complete fixture has a
 twenty-minute outer test budget for two independent native builds/captures,
 all 105 production HTTP requests and shutdown verification; each HTTP request
-still has its original thirty-second deadline. The raw Node before/after/after-shutdown file lists remain in
-the report. The one diagnostic `plugins/node/host.lock` is read from the actual
-PluginHost directory, bound to the current process PID, a real UUIDv4 nonce,
+still has its original thirty-second deadline. Request timings retain the actual
+case, route, deadline, elapsed time and any failure; visibility SQL input sizes
+and aggregate batch counts are
+diagnostics alongside the full functional comparison and bounded candidate/result
+pages. These observations distinguish repeated single-item work from bounded
+visibility pages without changing the request deadline. The raw Node
+before/after/after-shutdown file lists remain in the report. The one diagnostic
+`plugins/node/host.lock` is read from the actual PluginHost directory, bound to
+the current process PID, a real UUIDv4 nonce,
 byte length and SHA-256, and reread with exact byte/identity assertions before
 shutdown. Real runtime close must remove that exact file, verified with ENOENT.
 Only the post-shutdown persistent-file comparison projects out this proved

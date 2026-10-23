@@ -205,6 +205,11 @@ test('current native item collections match real PostgreSQL HTTP manual parents,
     for (const row of report.sourceBindings ?? []) await attempt('source:' + path.basename(row.path), () => unchangedFile(row.path, row.sha256));
     await attempt('privateClonesAndInstanceRemoved', () => removePrivateRoot(privateRoot, temporaryParent, 'mm-item-collections-'));
     if (failures.length) failure = new AggregateError([...(failure ? [failure] : []), ...failures], 'Collections differential cleanup failed.');
+    const visibilityQueries = (report.queryTimings ?? []).filter(row => row.visibilityItems !== undefined);
+    report.visibilityBatches = { diagnosticOnly: true, queries: visibilityQueries.length,
+      singletonQueries: visibilityQueries.filter(row => row.visibilityItems === 1).length,
+      batchedQueries: visibilityQueries.filter(row => row.visibilityItems > 1).length,
+      maxItems: visibilityQueries.reduce((maximum, row) => Math.max(maximum, row.visibilityItems), 0) };
     report.passed = !failure; if (failure) { report.phaseAcceptance = false; report.error = errorRecord(failure); }
     await save();
   }
