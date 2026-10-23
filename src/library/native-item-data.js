@@ -446,7 +446,9 @@ function writeValue(value, spec, owner) {
     return readValue(value, spec, '$.' + spec.name, new WeakMap());
   }
   if (nestedFields[spec.kind]) return writeObject(value, nestedFields[spec.kind]);
-  if (spec.kind === 'entity') return writeObject(value, nativeItemJsonContract(value.NativeType));
+  // System.Text.Json uses the declared BaseItem element type for
+  // AggregateFolder.VirtualChildren rather than the runtime subtype.
+  if (spec.kind === 'entity') return writeObject(value, baseFields);
   if (spec.kind === 'double') return { [nativeDoubleValue]: value };
   return value;
 }

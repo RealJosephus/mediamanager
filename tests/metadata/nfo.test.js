@@ -133,6 +133,16 @@ test('NFO saver retains custom tags and other provider IDs, writes actual stream
   assert.equal(parseNfo(xml).Item.Name, '中文 & title');
 });
 
+test('NFO saver preserves and orders empty native collection values', async () => {
+  const bytes = await serializeNfo({ Type: 'Movie', Name: 'Movie', Studios: ['Scan Fixture Studio', '', null] },
+    { fileSystem: testFileSystem });
+  const xml = bytes.toString('utf8');
+  const empty = [...xml.matchAll(/<studio \/>/gu)].map(match => match.index);
+  assert.equal(empty.length, 2);
+  assert.ok(empty.every(index => index < xml.indexOf('<studio>Scan Fixture Studio</studio>')));
+  assert.deepEqual(parseNfo(xml).Item.Studios, ['Scan Fixture Studio'], 'the native parser intentionally ignores empty elements');
+});
+
 test('NFO preserved custom XML keeps mixed text order and inherited namespace bindings', async () => {
   const bytes = await serializeNfo({ Type: 'Movie', Name: 'Movie' }, {fileSystem: testFileSystem,  existingXml: '<movie xmlns:x="urn:test"><x:custom>before<b>bold</b>after</x:custom></movie>' });
   assert.match(bytes.toString('utf8'), /<x:custom xmlns:x="urn:test">before<b>bold<\/b>after<\/x:custom>/);

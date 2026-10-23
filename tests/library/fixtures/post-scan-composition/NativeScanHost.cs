@@ -232,7 +232,7 @@ public sealed class NativeScanHost : IAsyncDisposable
             ["TrickplayPath"] = Path.Combine(program,"data","trickplay"),
             ["PeoplePath"] = Path.Combine(program,"metadata","People"), ["ArtistsPath"] = Path.Combine(program,"metadata","artists"),
             ["GenrePath"] = Path.Combine(program,"metadata","Genre"), ["MusicGenrePath"] = Path.Combine(program,"metadata","MusicGenre"),
-            ["StudioPath"] = Path.Combine(program,"metadata","Studio"), ["YearPath"] = Path.Combine(program,"metadata","years") };
+            ["StudioPath"] = Path.Combine(program,"metadata","Studio"), ["YearPath"] = Path.Combine(program,"metadata","Year") };
         foreach (var directory in strings.Values) Directory.CreateDirectory(directory);
         Directory.CreateDirectory(MediaRoot);
         Paths = ForwardProxy.Make<IServerApplicationPaths>((method, values) => method.Name.StartsWith("get_",StringComparison.Ordinal)

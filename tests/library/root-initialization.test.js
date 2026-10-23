@@ -171,12 +171,28 @@ test('root initialization keeps the first native save committed if the second sa
   const db = await createPostgresTestDatabase(t, 'root_save_failure'), store = new DomainStore(db);
   const directory = await mkdtemp(path.join(tmpdir(), 'mm-root-failure-'));
   try {
-    const original = db.upsert.bind(db), calls = [];
+    const original = db.upsert.bind(db), calls = [], committed = [];
     db.upsert = async (table, row, ...args) => { calls.push(row.Id); if (row.Id === playlistId) throw new Error('second repository save failed'); return original(table, row, ...args); };
-    await assert.rejects(initializeLibraryRoot({fileSystem: testFileSystem,  store, programDataPath: directory }), /second repository save failed/);
+    await assert.rejects(initializeLibraryRoot({fileSystem: testFileSystem, store, programDataPath: directory,
+      onCommitted: value => committed.push(value) }), /second repository save failed/);
     assert.deepEqual(calls, [rootId, playlistId]);
     assert.equal((await db.rows('BaseItems', { where: { Id: rootId } })).length, 1);
     assert.equal((await db.rows('BaseItems', { where: { Id: playlistId } })).length, 0);
+    assert.equal(committed.length, 1);
+    assert.deepEqual(committed[0].aggregateFolder.Studios, [],
+      'The first independently committed fresh identity is published before the second save starts.');
+    assert.equal(committed[0].playlistsFolder, null);
+
+    db.upsert = original;
+    const retry = await initializeLibraryRoot({ fileSystem: testFileSystem, store, programDataPath: directory,
+      onCommitted: value => committed.push(value) });
+    assert.deepEqual(retry.aggregateFolder.Studios, [''],
+      'The retry publishes the committed cold frame without relabeling it as freshly constructed.');
+    assert.equal(retry.freshAggregateFolder, false);
+    assert.deepEqual(retry.playlistsFolder.Studios, []);
+    assert.equal(committed.length, 3, 'The retry publishes its root repair and new playlists commits independently.');
+    assert.equal(committed[1].freshAggregateFolder, false);
+    assert.equal(committed[2].freshPlaylistsFolder, true);
   } finally { await store.close(); await removeTemporary(directory); }
 });
 

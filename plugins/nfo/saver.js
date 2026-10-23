@@ -1,4 +1,4 @@
-import { clrWhitespaceCharacters } from '@mediamanager/plugin-sdk/metadata/whitespace';
+import { clrTrim, clrWhitespaceCharacters } from '@mediamanager/plugin-sdk/metadata/whitespace';
 import { randomUUID } from 'node:crypto';
 import { networkXmlSpool, validateXmlSpoolRoot } from '@mediamanager/plugin-sdk/metadata/local-xml-sinks';
 import { nativeTextSql } from '@mediamanager/plugin-sdk/database/native-text-sql';
@@ -13,7 +13,7 @@ import { formatInvariantDate } from '@mediamanager/plugin-sdk/core/invariant-dat
 const commonTags = new Set('plot customrating lockdata dateadded title rating year sorttitle mpaa aspectratio collectionnumber tmdbid rottentomatoesid language tvcomid tagline studio genre tag runtime actor criticrating fileinfo director writer trailer premiered releasedate outline id credits originaltitle originallanguage watched playcount lastplayed art resume biography formed review style imdbid imdb_id country audiodbalbumid audiodbartistid enddate lockedfields zap2itid tvrageid musicbrainzartistid musicbrainzalbumartistid musicbrainzalbumid musicbrainzreleasegroupid tvdbid collectionitem isuserfavorite userrating countrycode'.split(' '));
 const rootNames = { Movie: 'movie', Video: 'movie', MusicVideo: 'musicvideo', Series: 'tvshow', Season: 'season', Episode: 'episodedetails', MusicAlbum: 'album', MusicArtist: 'artist' };
 const customTags = { Movie: ['album', 'artist', 'set', 'id'], Video: ['album', 'artist', 'set', 'id'], MusicVideo: ['album', 'artist', 'set', 'id'], Series: ['id', 'episodeguide', 'season', 'episode', 'status', 'displayorder'], Season: ['seasonnumber'], Episode: ['aired', 'season', 'episode', 'episodenumberend', 'airsafter_season', 'airsbefore_episode', 'airsbefore_season', 'displayseason', 'displayepisode', 'showtitle'], MusicAlbum: ['track', 'artist', 'albumartist'], MusicArtist: ['album', 'disbanded'] };
-const sorted = (values) => (values ?? []).map((value) => value?.trim()).filter(Boolean).sort();
+const sorted = (values) => (values ?? []).map((value) => clrTrim(String(value ?? ''))).sort();
 
 function roundMinutes(ticks) {
   const n = BigInt(ticks); const denominator = 600000000n; const quotient = n / denominator; const remainder = n % denominator;

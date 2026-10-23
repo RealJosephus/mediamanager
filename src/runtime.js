@@ -12,7 +12,7 @@ import { LiveTvGuideImages } from './library/live-tv-guide-images.js';
 import { LiveTvCountriesClient } from './core/live-tv-countries.js';
 import { LiveTvMediaSources } from './library/live-tv-media-sources.js';
 import { createIntroPathResolver } from './library/intro-path-resolver.js';
-import { guid, nonemptyId, libraryError } from './library/records.js';
+import { guid, nonemptyId, libraryError, sameId } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
@@ -37,7 +37,7 @@ import { ArtistsPostScanTask } from './library/artists-post-scan-task.js';
 import { CollectionPosterVerifyPostScanTask } from './library/collection-poster-post-scan-task.js';
 import { createCollectionRuntimeServices } from './library/collection-runtime-services.js';
 import { PostgresLinkedChildrenStore } from './library/postgres-linked-children.js';
-import { publishNativeItemLinks } from './library/native-item-entity.js';
+import { copyNativeItemRepositoryFrame, publishNativeItemLinks } from './library/native-item-entity.js';
 import { CleanDatabasePostScanTask } from './library/clean-database-post-scan-task.js';
 import { SplashscreenPostScanTask } from './library/splashscreen-post-scan-task.js';
 import { ExtractionService } from './playback/extraction.js';
@@ -152,8 +152,37 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const bookArchives = new BookArchiveService({ vfs, identityMap,
     spoolPath: programDataPath && path.join(programDataPath, 'cache', 'book-archives') });
   rollback.push(() => bookArchives.close());
+  let rootInitialization, libraryScanHost;
+  const mergeCommittedRoot = (current, committed, currentFresh, committedFresh) => {
+    if (!current || current.NativeType !== committed.NativeType || !sameId(current.Id, committed.Id)) {
+      return { item: committed, fresh: Boolean(committedFresh) };
+    }
+    current.ParentId = committed.ParentId;
+    current.DateLastSaved = committed.DateLastSaved;
+    current.Path = committed.Path;
+    copyNativeItemRepositoryFrame(current, committed);
+    return { item: current, fresh: Boolean(currentFresh || committedFresh) };
+  };
+  const adoptRootInitialization = initialized => {
+    if (!initialized?.aggregateFolder && !initialized?.playlistsFolder) return;
+    if (libraryScanHost) {
+      libraryScanHost.adoptRootInitialization(initialized);
+      return;
+    }
+    const aggregate = initialized.aggregateFolder
+      ? mergeCommittedRoot(rootInitialization?.aggregateFolder, initialized.aggregateFolder,
+        rootInitialization?.freshAggregateFolder, initialized.freshAggregateFolder)
+      : { item: rootInitialization?.aggregateFolder ?? null, fresh: Boolean(rootInitialization?.freshAggregateFolder) };
+    const playlists = initialized.playlistsFolder
+      ? mergeCommittedRoot(rootInitialization?.playlistsFolder, initialized.playlistsFolder,
+        rootInitialization?.freshPlaylistsFolder, initialized.freshPlaylistsFolder)
+      : { item: rootInitialization?.playlistsFolder ?? null, fresh: Boolean(rootInitialization?.freshPlaylistsFolder) };
+    rootInitialization = Object.freeze({ aggregateFolder: aggregate.item, playlistsFolder: playlists.item,
+      freshAggregateFolder: aggregate.fresh, freshPlaylistsFolder: playlists.fresh });
+  };
   const initializeStorageRoots = async () => {
-    await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath, configuration });
+    await initializeLibraryRoot({ fileSystem, store, programDataPath, dataPath, metadataPath, configuration,
+      onCommitted: adoptRootInitialization });
     if (!spoolRoot) return;
     const directory = spoolRoot;
     await fileSystem.mkdir(directory, { recursive: true });
@@ -352,8 +381,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   const topLevelValidation = itemCreation && loadContext ? new TopLevelFolderValidationService({ library, itemCreation, loadContext,
     metadataScanner, metadataConfiguration: metadataOptions.metadataConfiguration ?? metadataSettings.metadata,
     configuration, optionsStore: libraryOptionsStore }) : undefined;
-  const libraryScanHost = topLevelValidation ? new LibraryScanHost({ store, library, itemCreation, metadataScanner,
-    topLevelValidation, ignoreRule }) : undefined;
+  libraryScanHost = topLevelValidation ? new LibraryScanHost({ store, library, itemCreation, metadataScanner,
+    topLevelValidation, ignoreRule, rootInitialization }) : undefined;
+  rootInitialization = undefined;
   library.rootHost = libraryScanHost;
   if (libraryScanHost) rollback.push(() => libraryScanHost.close());
   const musicGenresPostScanTask = itemCreation && metadataScanner

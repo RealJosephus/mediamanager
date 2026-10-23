@@ -4,11 +4,70 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { captureMovieGlobal, json } from './fixtures/movie-global-native/capture.js';
 import { runMovieCandidate } from './fixtures/movie-global-native/candidate.js';
-import { projectMovieRun, differences } from './fixtures/movie-global-native/projection.js';
+import { assertAggregatePhysicalLocationSet, differences, normalizeAggregatePhysicalLocations,
+  projectMovieRun, stabilizeMovieEventProjection } from './fixtures/movie-global-native/projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'currentNativeSqlite', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_JELLYFIN_DLL && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
   && process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE && process.env.MEDIAMANAGER_TEST_POSTGRES;
+
+test('Movie projection preserves AggregateFolder Path and normalizes only additional-location enumeration', () => {
+  const aggregate = 'MediaBrowser.Controller.Entities.AggregateFolder|$CASE/program/root';
+  const native = ['$CASE/program/root', '$CASE/media', '$CASE/program/data/collections'];
+  const node = ['$CASE/program/root', '$CASE/program/data/collections', '$CASE/media'];
+  assert.deepEqual(normalizeAggregatePhysicalLocations(native, aggregate),
+    normalizeAggregatePhysicalLocations(node, aggregate));
+  assert.equal(normalizeAggregatePhysicalLocations(node, aggregate)[0], '$CASE/program/root');
+  assert.throws(() => normalizeAggregatePhysicalLocations(['$CASE/media', '$CASE/program/root'], aggregate),
+    /own Path at index 0/u);
+  assert.doesNotThrow(() => assertAggregatePhysicalLocationSet(native, '$CASE/program/root', native));
+  assert.throws(() => assertAggregatePhysicalLocationSet(
+    ['$CASE/program/root', '$CASE/media', '$CASE/media'], '$CASE/program/root', native), /must not contain duplicates/u);
+  assert.throws(() => assertAggregatePhysicalLocationSet(
+    ['$CASE/program/root', '$CASE/media'], '$CASE/program/root', native), /complete raw location set/u);
+
+  const collection = 'MediaBrowser.Controller.Entities.CollectionFolder|$CASE/program/root/default/Movies';
+  assert.deepEqual(normalizeAggregatePhysicalLocations(native, collection), native);
+  assert.notDeepEqual(normalizeAggregatePhysicalLocations(native, collection),
+    normalizeAggregatePhysicalLocations(node, collection), 'CollectionFolder location order remains significant.');
+});
+
+test('Movie projection stabilizes only the live BoxSet MetadataEdit event sample', () => {
+  const stable = { phase: 'created', action: 'updated', id: 'boxset',
+    type: 'MediaBrowser.Controller.Entities.Movies.BoxSet', path: '$CASE/program/data/collections/fixture',
+    parent: null, updateReason: 16, ParentId: 'collections', OwnerId: '$EMPTY', IsFolder: true };
+  const beforeRefresh = { ...stable, Name: 'Scan Fixture Collection', Genres: [], Studios: [],
+    tmdbCollectionName: null, Overview: null, RunTimeTicks: null, ProviderIds: {}, IsLocked: false,
+    DateCreated: 'created', DateModified: 'event-clock', DateLastSaved: 'saved', DateLastRefreshed: 'refreshed' };
+  const duringRefresh = { ...beforeRefresh, Genres: ['Scan Original Genre'],
+    Studios: ['Scan Fixture Studio', ''], DateModified: { ticks: '0' } };
+  assert.deepEqual(stabilizeMovieEventProjection(beforeRefresh), stabilizeMovieEventProjection(duringRefresh));
+  assert.deepEqual(Object.keys(stabilizeMovieEventProjection(beforeRefresh)), [
+    'phase', 'action', 'id', 'type', 'path', 'parent', 'updateReason', 'ParentId', 'OwnerId', 'IsFolder',
+    'Name', 'tmdbCollectionName', 'Overview', 'RunTimeTicks', 'ProviderIds', 'IsLocked',
+    'DateCreated', 'DateLastSaved', 'DateLastRefreshed']);
+  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, id: 'different' }),
+    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit identity remains strict.');
+  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, Name: 'different' }),
+    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit content remains strict.');
+  assert.notDeepEqual(stabilizeMovieEventProjection({ ...beforeRefresh, ProviderIds: { Tmdb: '42' } }),
+    stabilizeMovieEventProjection(beforeRefresh), 'BoxSet MetadataEdit provider identities remain strict.');
+
+  const metadataImportBefore = { ...beforeRefresh, updateReason: 2 };
+  const metadataImportAfter = { ...duringRefresh, updateReason: 2 };
+  assert.equal(stabilizeMovieEventProjection(metadataImportBefore), metadataImportBefore);
+  assert.notDeepEqual(stabilizeMovieEventProjection(metadataImportBefore),
+    stabilizeMovieEventProjection(metadataImportAfter), 'Other BoxSet update reasons retain full metadata strictness.');
+  const movieEdit = { ...beforeRefresh, type: 'MediaBrowser.Controller.Entities.Movies.Movie' };
+  assert.equal(stabilizeMovieEventProjection(movieEdit), movieEdit);
+  for (const later of [{ ...beforeRefresh, phase: 'updated' }, { ...beforeRefresh, phase: 'deleted' },
+    { ...beforeRefresh, action: 'added' }]) {
+    assert.equal(stabilizeMovieEventProjection(later), later);
+    assert.notDeepEqual(stabilizeMovieEventProjection(later),
+      stabilizeMovieEventProjection({ ...later, Genres: ['different'] }),
+      'Only the observed created-phase updated callback may stabilize its raced fields.');
+  }
+});
 
 test('two independent actual Movie global scans match PG create, timed NFO update, delete, full 33 tables, XML, Item events and metadata queue drain', {
   skip: !enabled, timeout: 900000,

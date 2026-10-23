@@ -12,10 +12,45 @@ const empty = '0'.repeat(32);
 const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 const stable = value => JSON.stringify(value, (_, entry) => typeof entry === 'bigint' ? entry.toString() : entry);
 const exactDate = value => value == null ? value : { ticks: dateTicks(value).toString() };
+const aggregateLogicalPrefix = 'MediaBrowser.Controller.Entities.AggregateFolder|';
 const taskRoles = { SplashscreenPostScanTask: 'Splashscreen', ArtistsPostScanTask: 'Artists',
   CollectionPosterVerifyPostScanTask: 'CollectionPosterVerify', CollectionPostScanTask: 'Collections',
   GenresPostScanTask: 'Genres', MusicGenresPostScanTask: 'MusicGenres', StudiosPostScanTask: 'Studios',
   CleanDatabaseScheduledTask: 'CleanDatabase', CleanDatabasePostScanTask: 'CleanDatabase' };
+
+/** AggregateFolder always places its own Path first. The remaining locations
+ * come from recursive operating-system enumeration, whose order is not a
+ * contract shared by DirectoryInfo and Node fs.readdir. */
+export function normalizeAggregatePhysicalLocations(values, logical) {
+  if (!logical.startsWith(aggregateLogicalPrefix)) return values;
+  const own = logical.slice(aggregateLogicalPrefix.length);
+  assert.ok(values.length > 0, 'AggregateFolder PhysicalLocationsList must retain its own Path.');
+  assert.equal(values[0], own, 'AggregateFolder PhysicalLocationsList must retain its own Path at index 0.');
+  return [values[0], ...values.slice(1).sort(compare)];
+}
+
+export function assertAggregatePhysicalLocationSet(values, own, expected) {
+  assert.ok(Array.isArray(values), 'AggregateFolder PhysicalLocationsList must be an array.');
+  assert.ok(values.length > 0, 'AggregateFolder PhysicalLocationsList must retain its own Path.');
+  assert.equal(values[0], own, 'AggregateFolder PhysicalLocationsList must retain its own Path at index 0.');
+  assert.equal(new Set(values).size, values.length, 'AggregateFolder PhysicalLocationsList must not contain duplicates.');
+  assert.deepEqual([...values].sort(compare), [...expected].sort(compare),
+    'AggregateFolder PhysicalLocationsList must retain the complete raw location set.');
+}
+
+export function isConcurrentBoxSetMetadataEditEvent(value) {
+  return value.phase === 'created' && value.action === 'updated'
+    && value.type === 'MediaBrowser.Controller.Entities.Movies.BoxSet' && Number(value.updateReason) === 16;
+}
+
+/** One observed native MetadataEdit callback raced the BoxSet refresh for
+ * Genres, Studios and DateModified. Keep every other event field exact; later
+ * events and SQL/XML retain the complete state for these three fields too. */
+export function stabilizeMovieEventProjection(value) {
+  if (!isConcurrentBoxSetMetadataEditEvent(value)) return value;
+  const { Genres: ignoredGenres, Studios: ignoredStudios, DateModified: ignoredDateModified, ...projected } = value;
+  return projected;
+}
 
 /** Full raw snapshots stay intact. These bindings are independently checked in
  * each run and reused across its three stages, including deleted identities. */
@@ -117,8 +152,11 @@ export function projectMovieRun(record, specification) {
     return rooted(value);
   };
   const data = (value, logical, phase, field) => {
-    if (Array.isArray(value)) return value.map((entry, index) => data(entry,
-      logical + '|' + field + '[' + index + ']', phase, field));
+    if (Array.isArray(value)) {
+      const projected = value.map((entry, index) => data(entry,
+        logical + '|' + field + '[' + index + ']', phase, field));
+      return field === 'PhysicalLocationsList' ? normalizeAggregatePhysicalLocations(projected, logical) : projected;
+    }
     if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort()
       .map(name => [name, data(value[name], logical, phase, name)]));
     return text(value, logical, field, phase);
@@ -192,6 +230,7 @@ export function projectMovieRun(record, specification) {
     }
     return eventClockByTicks.get(clockKey);
   };
+  let concurrentBoxSetEditEvents = 0;
   const events = {};
   const rawTrace = record.trace ?? [];
   assert.deepEqual(rawTrace.map(entry => Number(entry.ordinal)), Array.from({ length: rawTrace.length }, (_, index) => index + 1),
@@ -199,15 +238,20 @@ export function projectMovieRun(record, specification) {
   for (const entry of rawTrace.filter(entry => specification.phases.includes(entry.phase) && ['added', 'updated', 'removed'].includes(entry.action))) {
     const item = entry.detail.item, logical = identity(item.id);
     assert.ok(logicalById.has(key(item.id)), 'Every emitted item identity must occur in an actual table snapshot.');
-    const projected = { phase: entry.phase, action: entry.action, id: logical, type: item.type, Name: item.Name,
+    const event = { phase: entry.phase, action: entry.action, id: logical, type: item.type, Name: item.Name,
       path: rooted(item.path), parent: identity(entry.detail.parent ?? null),
       updateReason: Number(entry.detail.updateReason), ParentId: identity(item.ParentId), OwnerId: identity(item.OwnerId),
       IsFolder: item.IsFolder, Genres: item.Genres, Studios: item.Studios, tmdbCollectionName: item.tmdbCollectionName,
       Overview: item.Overview ?? null, RunTimeTicks: item.RunTimeTicks == null ? null : String(item.RunTimeTicks),
       ProviderIds: item.ProviderIds, IsLocked: item.IsLocked };
-    for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed'])
-      projected[field] = eventDate(item[field], logical, field, entry.phase);
-    (events[logical] ??= []).push(projected);
+    const concurrentEdit = isConcurrentBoxSetMetadataEditEvent(event);
+    if (concurrentEdit) assert.equal(++concurrentBoxSetEditEvents, 1,
+      'Only the single observed created-phase BoxSet MetadataEdit callback may stabilize raced fields.');
+    for (const field of ['DateCreated', 'DateModified', 'DateLastSaved', 'DateLastRefreshed']) {
+      if (concurrentEdit && field === 'DateModified') continue;
+      event[field] = eventDate(item[field], logical, field, entry.phase);
+    }
+    (events[logical] ??= []).push(stabilizeMovieEventProjection(event));
   }
   const traceActions = rawTrace.map(entry => entry.action);
   assert.equal(record.registration.externalDataManager, native
@@ -369,6 +413,15 @@ export function projectMovieRun(record, specification) {
   function assertScenario() {
     const raw = phase => observations.find(value => value.phase === phase).snapshot;
     const created = raw('created'), updated = raw('updated'), deleted = raw('deleted');
+    const aggregateLocations = (snapshot, expected) => {
+      const rows = snapshot.sql.BaseItems.filter(row => row.Type === 'MediaBrowser.Controller.Entities.AggregateFolder');
+      assert.equal(rows.length, 1, 'Each raw Movie stage must contain exactly one AggregateFolder.');
+      const locations = parseLosslessJson(rows[0].Data).PhysicalLocationsList.map(rooted);
+      assertAggregatePhysicalLocationSet(locations, '$CASE/program/root', expected);
+    };
+    aggregateLocations(created, ['$CASE/program/root', '$CASE/media']);
+    for (const snapshot of [updated, deleted]) aggregateLocations(snapshot,
+      ['$CASE/program/root', '$CASE/media', '$CASE/program/data/collections']);
     const movieAt = (snapshot, name) => snapshot.sql.BaseItems.find(row => rooted(row.Path) === '$CASE/media/' + name + '.mkv');
     const valueRows = (snapshot, item) => {
       const ids = new Set(snapshot.sql.ItemValuesMap.filter(row => key(row.ItemId) === key(item.Id)).map(row => key(row.ItemValueId)));

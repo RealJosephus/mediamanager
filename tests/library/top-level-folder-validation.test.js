@@ -7,14 +7,18 @@ import path from 'node:path';
 import pg from 'pg';
 import sharp from 'sharp';
 import { PostgresDatabase } from '../../src/database/postgres.js';
+import { postgresTestRow } from '../database/postgres-fixture.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createRuntime } from '../../src/runtime.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
-import { collectionFolderNativeType, physicalFolderNativeType } from '../../src/library/index.js';
+import { collectionFolderNativeType, physicalFolderNativeType, newNativeItemEntity,
+  refreshCollectionFolderLocations } from '../../src/library/index.js';
+import { publishNativeItemLinks, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
 import { collectionTypeFromMarkers } from '../../src/library/top-level-folder-validation.js';
+import { ItemUpdateType } from '../../src/metadata/save-manager.js';
 
 const mediaPath = 'Z:\\TopLevel\\Movies';
 const key = value => String(value).replaceAll('-', '').toLowerCase();
@@ -85,6 +89,37 @@ async function rowsByType(database, type) {
   return (await database.rows('BaseItems')).filter(row => row.Type === type);
 }
 
+async function createLinkRelation(linkedChildren, parentId, rows) {
+  return linkedChildren.withSession(async session => {
+    const writer = await linkedChildren.createWriter({ session, parentId });
+    try {
+      for (const row of rows) await writer.append(row);
+      return await writer.finish();
+    } catch (error) {
+      try { await writer.abort(); }
+      catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
+      throw error;
+    }
+  });
+}
+
+async function readLinkRelation(linkedChildren, handle) {
+  return linkedChildren.withSession(async session => {
+    const rows = [];
+    for await (const page of linkedChildren.pages(handle, { session })) rows.push(...page);
+    return rows.map(({ ItemId, Type, Path, LibraryItemId }) => ({ ItemId, Type, Path, LibraryItemId }));
+  });
+}
+
+async function privateLinkSetCount(linkedChildren) {
+  return linkedChildren.withSession(async session => BigInt((await session.client.query(
+    `SELECT count(*) AS count FROM "${linkedChildren.schemaName}".sets`)).rows[0].count));
+}
+
+function testFolder(nativeType, Id) {
+  const item = newNativeItemEntity(nativeType); item.Id = Id; return item;
+}
+
 test('postgres: poster maintenance loads user-root libraries and persists local images through the real refresh host',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
     const { runtime, database, firstPath, errors } = await fixture(t, 'postgres');
@@ -151,6 +186,158 @@ test('collection markers use case-sensitive enum names and skip invalid marker f
     { IsDirectory: true, Path: 'Z:\\Library\\movies.collection' }
   ]), null);
 });
+
+test('postgres: collection links flatten physical folders in order with native comparison and owned leases',
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { runtime } = await fixture(t, 'postgres');
+    const linkedChildren = runtime.linkedChildren, baselineSets = await privateLinkSetCount(linkedChildren);
+    const collection = testFolder(collectionFolderNativeType, randomUUID());
+    const physicalA = testFolder(physicalFolderNativeType, randomUUID());
+    const physicalB = testFolder(physicalFolderNativeType, randomUUID());
+    const shared = randomUUID(), missing = randomUUID(), empty = '00000000-0000-0000-0000-000000000000';
+    const first = [
+      { ItemId: shared, Type: 0, Path: 'ignored/first', LibraryItemId: 'first-library' },
+      { ItemId: null, Type: 1, Path: 'relative/legacy/', LibraryItemId: 'legacy-library' },
+      { ItemId: shared, Type: 0, Path: 'ignored/duplicate', LibraryItemId: 'duplicate-library' }
+    ];
+    const second = [
+      { ItemId: shared, Type: 0, Path: 'ignored/cross-folder-duplicate', LibraryItemId: null },
+      { ItemId: empty, Type: 0, Path: 'ignored/empty-guid', LibraryItemId: 'empty-guid-library' },
+      { ItemId: missing, Type: 1, Path: 'ignored/missing-target', LibraryItemId: 'missing-library' }
+    ];
+    const flattened = [...first, ...second];
+    const current = flattened.map((row, index) => ({ ...row,
+      Path: row.ItemId == null
+        ? process.platform === 'win32' ? 'RELATIVE/LEGACY' : 'relative/legacy'
+        : `different/ignored/${index}`,
+      LibraryItemId: `different-library-${index}`
+    }));
+    collection.PhysicalLocationsList = ['collection', 'physical-a', 'physical-b'];
+    collection.PhysicalFolderIds = [physicalA.Id, physicalB.Id];
+    const loaded = {
+      item: collection, linkedChildren,
+      async rootFolderResolveArgs(setLocations) { assert.equal(setLocations, true); return { files: [] }; },
+      async physicalFolders(enableCache) { assert.equal(enableCache, false); return [physicalA, physicalB]; }
+    };
+
+    try {
+      publishNativeItemLinks(physicalA, await createLinkRelation(linkedChildren, physicalA.Id, first));
+      publishNativeItemLinks(physicalB, await createLinkRelation(linkedChildren, physicalB.Id, second));
+      publishNativeItemLinks(collection, await createLinkRelation(linkedChildren, collection.Id, current));
+
+      const equal = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(equal, { updateType: ItemUpdateType.None, requiresSave: false });
+      assert.equal(collection.LinkedChildrenLoaded, true);
+      assert.deepEqual(await readLinkRelation(linkedChildren, collection.LinkedChildren), flattened,
+        'raw duplicates, missing targets and physical-folder order remain observable before persistence');
+
+      const changedSecond = second.map(row => ({ ...row }));
+      changedSecond.at(-1).Type = 2;
+      publishNativeItemLinks(physicalB, await createLinkRelation(linkedChildren, physicalB.Id, changedSecond));
+      const changed = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(changed, { updateType: ItemUpdateType.None, requiresSave: true });
+      assert.deepEqual(await readLinkRelation(linkedChildren, collection.LinkedChildren), [...first, ...changedSecond]);
+
+      collection.PhysicalFolderIds = [physicalB.Id, physicalA.Id];
+      const idsOnly = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(idsOnly, { updateType: ItemUpdateType.None, requiresSave: true },
+        'an ID-only repair relies on ForceSave without adding MetadataImport');
+      assert.deepEqual(collection.PhysicalFolderIds, [physicalA.Id, physicalB.Id]);
+      const stableIds = collection.PhysicalFolderIds;
+      const stable = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(stable, { updateType: ItemUpdateType.None, requiresSave: false });
+      assert.equal(collection.PhysicalFolderIds, stableIds,
+        'an equal native physical-ID sequence does not replace the live array');
+
+      const beforeFailure = collection.LinkedChildren;
+      publishNativeItemLinks(physicalB, null);
+      await assert.rejects(refreshCollectionFolderLocations(loaded), { nativeException: 'NullReferenceException' });
+      assert.equal(collection.LinkedChildren, beforeFailure, 'a failed flatten never replaces the collection relation');
+    } finally {
+      for (const item of [collection, physicalA, physicalB]) releaseNativeItemLinks(item);
+      await linkedChildren.flushReleases();
+    }
+    assert.equal(await privateLinkSetCount(linkedChildren), baselineSets,
+      'published, replaced, failed and iterator leases all return to the session baseline');
+  });
+
+test('postgres: collection refresh cold-loads unknown links and publishes authoritative empty state',
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { runtime, database } = await fixture(t, 'postgres');
+    const linkedChildren = runtime.linkedChildren, baselineSets = await privateLinkSetCount(linkedChildren);
+    const collection = testFolder(collectionFolderNativeType, randomUUID());
+    const physical = testFolder(physicalFolderNativeType, randomUUID());
+    const childId = randomUUID();
+    collection.PhysicalLocationsList = ['collection', 'physical'];
+    collection.PhysicalFolderIds = [physical.Id];
+    for (const row of [
+      { Id: collection.Id, Type: collectionFolderNativeType, IsFolder: true },
+      { Id: physical.Id, Type: physicalFolderNativeType, IsFolder: true },
+      { Id: childId, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', IsFolder: false }
+    ]) await database.insert('BaseItems', postgresTestRow('BaseItems', { ...row, Data: '{}' }));
+    for (const ParentId of [collection.Id, physical.Id]) await database.insert('LinkedChildren', {
+      ParentId, ChildId: childId, ChildType: 0, SortOrder: 0
+    });
+    let folders = [physical];
+    const loaded = { item: collection, linkedChildren,
+      async rootFolderResolveArgs() { return { files: [] }; },
+      async physicalFolders() { return folders; } };
+
+    try {
+      assert.equal(collection.LinkedChildrenLoaded, false);
+      assert.equal(physical.LinkedChildrenLoaded, false);
+      const unchanged = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(unchanged, { updateType: ItemUpdateType.None, requiresSave: false });
+      assert.equal(collection.LinkedChildrenLoaded, true);
+      assert.equal(physical.LinkedChildrenLoaded, false, 'temporary cold source handles do not rewrite physical folders');
+      assert.deepEqual(await readLinkRelation(linkedChildren, collection.LinkedChildren), [
+        { ItemId: childId, Type: 0, Path: null, LibraryItemId: null }
+      ]);
+
+      folders = []; collection.PhysicalFolderIds = [];
+      const emptied = await refreshCollectionFolderLocations(loaded);
+      assert.deepEqual(emptied, { updateType: ItemUpdateType.None, requiresSave: true },
+        'a links-only change upgrades the owner refresh to ForceSave');
+      assert.deepEqual(await readLinkRelation(linkedChildren, collection.LinkedChildren), []);
+      assert.equal(collection.LinkedChildrenLoaded, true, 'empty is authoritative after native-style assignment');
+    } finally {
+      for (const item of [collection, physical]) releaseNativeItemLinks(item);
+      await linkedChildren.flushReleases();
+    }
+    assert.equal(await privateLinkSetCount(linkedChildren), baselineSets);
+  });
+
+test('postgres: a fresh collection publishes empty physical IDs before owned refresh forces reason 11',
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { runtime, database, adapter, stateRoot, firstPath, errors } = await fixture(t, 'postgres');
+    const identityOptions = { programDataPath: stateRoot, enableCaseSensitiveItemIds: false };
+    const collectionId = nativeGuid(getNewItemId(firstPath, collectionFolderNativeType, identityOptions));
+    const physicalId = nativeGuid(getNewItemId(mediaPath, physicalFolderNativeType, identityOptions));
+    await adapter.write('/Movies/Feature.mkv', Buffer.from('fixture'));
+    let phase = 1;
+    const events = [];
+    runtime.library.on('ItemAdded', ({ Item }) => {
+      if (Item.Type === 'CollectionFolder') events.push({ phase, action: 'added', ids: [...Item.PhysicalFolderIds] });
+    });
+    runtime.library.on('ItemUpdated', ({ Item, UpdateReason }) => {
+      if (Item.Type === 'CollectionFolder') events.push({ phase, action: 'updated', reason: UpdateReason,
+        ids: [...Item.PhysicalFolderIds] });
+    });
+
+    await runtime.libraryScanLifecycle.validateTopLibraryFolders();
+    assert.deepEqual(events, [
+      { phase: 1, action: 'added', ids: [] },
+      { phase: 1, action: 'updated', reason: 2, ids: [physicalId] },
+      { phase: 1, action: 'updated', reason: 11, ids: [physicalId] }
+    ]);
+    assert.deepEqual((await runtime.library.getItemRecord(collectionId)).PhysicalFolderIds, [physicalId]);
+
+    phase = 2;
+    await runtime.libraryScanLifecycle.validateTopLibraryFolders();
+    assert.equal(events.some(event => event.phase === 2 && event.action === 'updated' && (event.reason & 8) !== 0), false);
+    assert.deepEqual(errors, []);
+    assert.equal((await database.rows('BaseItems', { where: { Id: collectionId } })).length, 1);
+  });
 
 for (const dialect of ['postgres']) test(`${dialect}: top-level validation persists configured collections and shared physical roots`,
   { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {

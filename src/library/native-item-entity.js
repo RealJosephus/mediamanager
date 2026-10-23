@@ -433,6 +433,20 @@ function defineRepositoryColumns(item, value) {
   });
 }
 
+/** Rebind only the immutable repository frame while preserving every live
+ * entity/private relation identity. */
+export function copyNativeItemRepositoryFrame(target, source) {
+  if (!isNativeItemEntity(target) || !isNativeItemEntity(source)) {
+    throw new TypeError('Native repository frames can only be copied between branded entities.');
+  }
+  const frame = source.NativeRepositoryColumns;
+  if (!frame || guid(frame.Id) !== guid(target.Id) || frame.Type !== target.NativeType) {
+    throw new TypeError('A native repository frame requires the same persisted entity identity.');
+  }
+  defineRepositoryColumns(target, frame);
+  return target;
+}
+
 function applyValues(target, sources, { validateReadonly, copyNonEnumerable = false } = {}) {
   const expected = [];
   for (const source of sources) {

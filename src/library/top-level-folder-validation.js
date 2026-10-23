@@ -1,9 +1,11 @@
+import path from 'node:path';
 import { getNewItemId } from '../core/identity.js';
 import { ItemUpdateType } from '../metadata/save-manager.js';
 import { validateCollectionLocations } from '../metadata/internal-folder-refresh.js';
+import { clrTrim } from '../metadata/whitespace.js';
 import { nativeGuid } from '../users/native.js';
 import { idKey, nonemptyId, sameId } from './records.js';
-import { newNativeItemEntity } from './native-item-entity.js';
+import { newNativeItemEntity, publishNativeItemLinks } from './native-item-entity.js';
 import { setResolverInitialValues } from './resolver-initial-values.js';
 import { nativeFileName, nativeFileNameWithoutExtension, nativePathKey, sameNativePath } from './native-path.js';
 import { parseNativeCollectionType } from './scan-context.js';
@@ -19,6 +21,107 @@ export const collectionFolderNativeType = 'MediaBrowser.Controller.Entities.Coll
 
 const itemType = item => String(item?.NativeType ?? item?.Type ?? '').split('.').at(-1);
 const immutable = values => Object.freeze(values.map(value => Object.freeze(value)));
+const hostPath = process.platform === 'win32' ? path.win32 : path.posix;
+const hostPathSeparator = value => process.platform === 'win32' ? value === '\\' || value === '/' : value === '/';
+
+// ManagedFileSystem.AreEqual follows the current host, not the spelling of a
+// persisted path. Path.TrimEndingDirectorySeparator removes one non-root
+// separator; blank paths are never equal, including two null values.
+function managedFileSystemPathsEqual(left, right) {
+  if (typeof left !== 'string' || typeof right !== 'string' || !clrTrim(left) || !clrTrim(right)) return false;
+  const trim = value => hostPathSeparator(value.at(-1)) && value.length > hostPath.parse(value).root.length
+    ? value.slice(0, -1) : value;
+  const normalizedLeft = trim(left), normalizedRight = trim(right);
+  return process.platform === 'win32'
+    ? ordinalIgnoreCaseEquals(normalizedLeft, normalizedRight)
+    : normalizedLeft === normalizedRight;
+}
+
+function linkedChildEquals(left, right) {
+  if (left.Type !== right.Type) return false;
+  if (left.ItemId != null && right.ItemId != null) return sameId(left.ItemId, right.ItemId);
+  return managedFileSystemPathsEqual(left.Path, right.Path);
+}
+
+async function* linkedRows(linkedChildren, handle, session) {
+  // plan(null) preserves Folder.LinkedChildren's native null-sequence failure
+  // before pages attempts to retain the relation.
+  if (handle === null) linkedChildren.plan(handle);
+  for await (const page of linkedChildren.pages(handle, { session })) yield* page;
+}
+
+async function linkedChildrenSequenceEqual(linkedChildren, left, right, session) {
+  const iterators = [linkedRows(linkedChildren, left, session)[Symbol.asyncIterator](),
+    linkedRows(linkedChildren, right, session)[Symbol.asyncIterator]()];
+  let equal = false, failure;
+  try {
+    for (;;) {
+      const leftRow = await iterators[0].next(), rightRow = await iterators[1].next();
+      if (leftRow.done || rightRow.done) { equal = leftRow.done === rightRow.done; break; }
+      if (!linkedChildEquals(leftRow.value, rightRow.value)) break;
+    }
+  } catch (error) { failure = error; }
+  const cleanupErrors = [];
+  for (const iterator of iterators) try { await iterator.return?.(); } catch (error) { cleanupErrors.push(error); }
+  if (cleanupErrors.length) throw new AggregateError([...(failure ? [failure] : []), ...cleanupErrors],
+    failure?.message ?? 'Linked-child comparison cleanup failed.', failure ? { cause: failure } : undefined);
+  if (failure) throw failure;
+  return equal;
+}
+
+async function appendFolderLinkedChildren(linkedChildren, writer, folder, session) {
+  let temporary, failure;
+  try {
+    const source = folder.LinkedChildrenLoaded ? folder.LinkedChildren
+      : temporary = await linkedChildren.load(session, folder.Id);
+    if (source === null) linkedChildren.plan(source);
+    for await (const page of linkedChildren.pages(source, { session })) {
+      for (const row of page) await writer.append(row);
+    }
+  } catch (error) { failure = error; }
+  if (temporary) {
+    try { await linkedChildren.release(temporary, { session }); }
+    catch (error) {
+      if (failure) throw new AggregateError([failure, error], failure.message, { cause: failure });
+      throw error;
+    }
+  }
+  if (failure) throw failure;
+}
+
+async function refreshCollectionFolderLinkedChildren(loaded, physicalFolders) {
+  const linkedChildren = loaded.linkedChildren, item = loaded.item;
+  return linkedChildren.withSession(async session => {
+    let writer, replacement, currentTemporary, changed, failure, published = false;
+    try {
+      writer = await linkedChildren.createWriter({ session, parentId: item.Id });
+      for (const folder of physicalFolders) await appendFolderLinkedChildren(linkedChildren, writer, folder, session);
+      replacement = await writer.finish();
+      const current = item.LinkedChildrenLoaded ? item.LinkedChildren
+        : currentTemporary = await linkedChildren.load(session, item.Id);
+      changed = !await linkedChildrenSequenceEqual(linkedChildren, replacement, current, session);
+      if (currentTemporary) {
+        await linkedChildren.release(currentTemporary, { session }); currentTemporary = null;
+      }
+      // Native CollectionFolder assigns the freshly flattened sequence even
+      // when its comparer says that no repository save is required.
+      try { publishNativeItemLinks(item, replacement); published = true; }
+      catch (error) { published = item.LinkedChildren === replacement; throw error; }
+    } catch (error) { failure = error; }
+
+    const cleanupErrors = [];
+    try { await writer?.abort(); } catch (error) { cleanupErrors.push(error); }
+    if (currentTemporary) try { await linkedChildren.release(currentTemporary, { session }); }
+    catch (error) { cleanupErrors.push(error); }
+    if (replacement && !published) try { await linkedChildren.release(replacement, { session }); }
+    catch (error) { cleanupErrors.push(error); }
+    try { await linkedChildren.flushReleases({ session }); } catch (error) { cleanupErrors.push(error); }
+    if (cleanupErrors.length) throw new AggregateError([...(failure ? [failure] : []), ...cleanupErrors],
+      failure?.message ?? 'CollectionFolder linked-child cleanup failed.', failure ? { cause: failure } : undefined);
+    if (failure) throw failure;
+    return changed;
+  });
+}
 
 export function collectionTypeFromMarkers(files) {
   return files
@@ -101,7 +204,6 @@ export class TopLevelFolderValidationService {
     const loaded = await this.loadContext(item.Id, { draft: item });
     const resolved = await loaded.rootFolderResolveArgs(true);
     item.CollectionType = collectionTypeFromMarkers(resolved.files);
-    item.PhysicalFolderIds = (await loaded.physicalFolders(false)).map(folder => folder.Id);
     signal?.throwIfAborted();
     return item;
   }
@@ -207,17 +309,28 @@ export class TopLevelFolderValidationService {
   }
 }
 
-/** Update CollectionFolder-owned location state before its repository save. */
+/** Update CollectionFolder-owned location and linked-child state before its repository save. */
 export async function refreshCollectionFolderLocations(loaded) {
-  if (loaded.item.Type !== 'CollectionFolder') return ItemUpdateType.None;
+  if (loaded.item.Type !== 'CollectionFolder') {
+    return Object.freeze({ updateType: ItemUpdateType.None, requiresSave: false });
+  }
   const beforeLocations = [...(loaded.item.PhysicalLocationsList ?? [])];
   const beforeIds = [...(loaded.item.PhysicalFolderIds ?? [])].map(idKey);
   await loaded.rootFolderResolveArgs(true);
-  const physicalIds = (await loaded.physicalFolders(false)).map(folder => folder.Id);
-  loaded.item.PhysicalFolderIds = physicalIds;
-  const changed = beforeLocations.length !== loaded.item.PhysicalLocationsList.length
-    || beforeLocations.some((value, index) => value !== loaded.item.PhysicalLocationsList[index])
-    || beforeIds.length !== physicalIds.length
+  // Physical-folder discovery may itself use the max=1 relation repository.
+  // Finish it before holding the flattening session to avoid nested admission.
+  const physicalFolders = await loaded.physicalFolders(false);
+  const linkedChildrenChanged = await refreshCollectionFolderLinkedChildren(loaded, physicalFolders);
+  const physicalIds = physicalFolders.map(folder => folder.Id);
+  const locationsChanged = beforeLocations.length !== loaded.item.PhysicalLocationsList.length
+    || beforeLocations.some((value, index) => value !== loaded.item.PhysicalLocationsList[index]);
+  const physicalIdsChanged = beforeIds.length !== physicalIds.length
     || beforeIds.some((value, index) => value !== idKey(physicalIds[index]));
-  return changed ? ItemUpdateType.MetadataImport : ItemUpdateType.None;
+  if (physicalIdsChanged) loaded.item.PhysicalFolderIds = physicalIds;
+  return Object.freeze({
+    updateType: locationsChanged ? ItemUpdateType.MetadataImport : ItemUpdateType.None,
+    // CollectionFolder.RefreshLinkedChildren reports either relation or
+    // physical-ID sequence changes through the owned-item ForceSave signal.
+    requiresSave: linkedChildrenChanged || physicalIdsChanged
+  });
 }

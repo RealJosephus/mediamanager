@@ -368,9 +368,11 @@ export class MetadataRefreshHost {
       options[liveMetadataItem] ? { draft: options[liveMetadataItem] } : undefined), options[liveSeriesParent]);
     ownership.contexts.add(loaded);
     this.validateRefresh(loaded.item, options);
+    let collectionFolderRefresh = { updateType: ItemUpdateType.None, requiresSave: false };
     // D3: configured external writers must be available before image/probe or
     // first-refresh persistence can commit state that requires a sidecar save.
     const possibleWrite = mode > 0 || imageMode > 0 || options.ForceSave || options.ReplaceAllMetadata
+      || options[validateCollectionLocations] && loaded.item.Type === 'CollectionFolder'
       ? ItemUpdateType.MetadataDownload : ItemUpdateType.MetadataImport;
     await validateMetadataSaves(loaded, possibleWrite, this.registry);
     if (loaded.supportsOwnedItems?.() ?? supportsOwnedItems(loaded.item)) {
@@ -384,6 +386,15 @@ export class MetadataRefreshHost {
       let requiresOwnedSave = false;
       try {
         requiresOwnedSave = await this.ownedLifecycle.beforeRefresh(loaded, options);
+        // Top-level directory validation owns CollectionFolder location,
+        // linked-child flattening and physical-folder ID reconciliation. A
+        // relation or ID change is the native owned-item signal that upgrades
+        // this refresh to ForceSave. Like every owned-item failure, resolution
+        // is logged and the independent provider lifecycle still proceeds.
+        if (options[validateCollectionLocations] && loaded.item.Type === 'CollectionFolder') {
+          collectionFolderRefresh = await refreshCollectionFolderLocations(loaded);
+          requiresOwnedSave ||= collectionFolderRefresh.requiresSave;
+        }
         const Images = loaded.context.images;
         loaded.onImageRemoteChange = () => saveMetadataItem(this.updates, loaded, { Item: loaded.item, Images },
           ItemUpdateType.ImageUpdate);
@@ -415,11 +426,6 @@ export class MetadataRefreshHost {
     const lastRefresh = initialItem.DateLastRefreshed ? new Date(initialItem.DateLastRefreshed.replace(' ', 'T').replace(/Z?$/, 'Z')).getTime() : -Infinity;
     let requiresRefresh = interval > 0 && new Date(this.now()).getTime() - lastRefresh >= interval * 86400000;
     if (!requiresRefresh && mode !== 0) requiresRefresh = await loaded.requiresRefresh?.() ?? false;
-    // Only directory validation updates CollectionFolder's locations and
-    // physical links. Ordinary MetadataService refresh observes their old
-    // values through RequiresRefresh without replacing them.
-    const collectionFolderUpdate = options[validateCollectionLocations]
-      ? await refreshCollectionFolderLocations(loaded) : ItemUpdateType.None;
     // Native MetadataResult starts with null People: null leaves stored credits.
     const metadata = { Item: null, People: null, Images: loaded.context.images };
     let imageChanged = false, imagesFailed = false;
@@ -429,7 +435,7 @@ export class MetadataRefreshHost {
       else imageChanged = await this.images.merge(metadata.Images, await scanLocalImages(loaded, { signal }), loaded, signal, options) || imageChanged;
     }
     catch (error) { if (signal?.aborted) throw error; imagesFailed = true; this.logger.error(error, 'Error validating images'); }
-    let beforeSaveUpdate = collectionFolderUpdate;
+    let beforeSaveUpdate = collectionFolderRefresh.updateType;
     const fullBeforeSave = firstRefresh || options.ReplaceAllMetadata || mode === 3 || requiresRefresh || options.ForceSave;
     const imageUpdate = imageChanged ? ItemUpdateType.ImageUpdate | ItemUpdateType.None : ItemUpdateType.None;
     if (loaded.metadataChildren && requiresMetadataChildren(initialItem, fullBeforeSave, imageUpdate)) {

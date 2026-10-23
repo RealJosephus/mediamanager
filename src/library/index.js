@@ -20,7 +20,8 @@ export { UnsafeItemDeletionService } from './unsafe-item-deletion-service.js';
 export { LinkedChildReferenceService } from './linked-child-reference-service.js';
 export { createResolvedItemEntity } from './resolved-item-entity.js';
 export { newNativeItemEntity, nativeItemDescriptor, hydrateNativeItemEntity, isNativeItemEntity,
-  applyNativeItemValues, copyNativeItemState, cloneNativeItemEntity } from './native-item-entity.js';
+  applyNativeItemValues, copyNativeItemState, copyNativeItemRepositoryFrame,
+  cloneNativeItemEntity } from './native-item-entity.js';
 export { nativeItemJsonContract, serializeNativeItemData, deserializeNativeItemData, NativeItemJsonError } from './native-item-data.js';
 export { LibraryScanService, libraryScanCapabilities } from './library-scan-service.js';
 export { LibraryScanLifecycle } from './library-scan-lifecycle.js';

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { deserializeNativeItemData, NativeItemJsonError, serializeNativeItemData } from '../../src/library/native-item-data.js';
-import { cloneNativeItemEntity, isNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { cloneNativeItemEntity, isNativeItemEntity, newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { createPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
 import { EMPTY_ID, extraTypeCode, loadLibrary, mapRecord, repositoryTopParentId, repositoryValue, repositoryIdPresent } from '../../src/library/records.js';
 
@@ -164,4 +164,14 @@ test('native Data encoder preserves declared order and escapes Unicode and HTML-
   assert.match(raw, /"Container":"\\u4E2D\\u6587\\u003C\\u003E\\u0026\\u0022"/u);
   assert.ok(raw.indexOf('"IsHD":true') < raw.indexOf('"Height":720'));
   assert.match(raw, /"DateLastSaved":"0001-01-01T00:00:00\.0000000Z"/u);
+});
+
+test('AggregateFolder VirtualChildren serialize through the declared BaseItem contract', () => {
+  const aggregate = newNativeItemEntity('MediaBrowser.Controller.Entities.AggregateFolder');
+  const playlists = newNativeItemEntity('Emby.Server.Implementations.Playlists.PlaylistsFolder');
+  aggregate.VirtualChildren.push(playlists);
+  const data = JSON.parse(serializeNativeItemData(aggregate));
+  assert.equal(data.VirtualChildren.length, 1);
+  assert.equal(Object.hasOwn(data.VirtualChildren[0], 'IsRoot'), false);
+  assert.equal(data.VirtualChildren[0].DateCreated, '0001-01-01T00:00:00.0000000Z');
 });

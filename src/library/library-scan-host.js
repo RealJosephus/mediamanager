@@ -2,7 +2,7 @@ import { setFolderChildren } from './folder-cache.js';
 import { updateInheritedValues } from './item-persistence.js';
 import { ItemDeletionScope } from './item-deletion-scope.js';
 import { createMetadataChildren } from './metadata-children.js';
-import { idKey, nonemptyId, libraryError } from './records.js';
+import { idKey, nonemptyId, libraryError, sameId } from './records.js';
 import { sameNativePath } from './native-path.js';
 import path from 'node:path';
 import { getNewItemId } from '../core/identity.js';
@@ -12,7 +12,7 @@ import { quoteIdentifier as q } from '../database/model.js';
 import { nativeTextBytes } from '../database/native-text.js';
 import { nativeTextSql } from '../database/native-text-sql.js';
 import { randomUUID } from 'node:crypto';
-import { nativeItemTypes, nativeItemDescriptor } from './native-item-entity.js';
+import { copyNativeItemRepositoryFrame, nativeItemTypes, nativeItemDescriptor } from './native-item-entity.js';
 import { loadPostgresPageGraph, loadPostgresRowsByIds } from './postgres-library-query.js';
 import { withPostgresCachedFolderChildren } from './postgres-cached-folder-children.js';
 
@@ -31,12 +31,14 @@ async function releaseResources(primary, operations) {
 /** Concrete host for the native library-scan lifecycle. */
 export class LibraryScanHost {
   #roots = new Map();
+  #initializedRootItems = new Map();
   constructor({ store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule,
-    now = () => new Date().toISOString() } = {}) {
+    rootInitialization, now = () => new Date().toISOString() } = {}) {
     if (!store || !library || !itemCreation || !metadataScanner || !topLevelValidation) {
       throw new TypeError('Library scan hosting requires persistence, library, metadata and top-level validation services.');
     }
     Object.assign(this, { store, library, itemCreation, metadataScanner, topLevelValidation, ignoreRule, now });
+    this.adoptRootInitialization(rootInitialization);
     this.capabilities = Object.freeze({
       ...library.folderValidation?.capabilities,
       resolvesProductionMediaFiles: library.folderValidation?.resolverPipeline?.capabilities.resolvesProductionMediaFiles === true,
@@ -44,6 +46,35 @@ export class LibraryScanHost {
       runsMetadataProbeRefresh: typeof metadataScanner.refreshAccessibleChildren === 'function',
       reconcilesTopLevelConfiguration: topLevelValidation.capabilities?.reconcilesTopLevelConfiguration === true
     });
+  }
+
+  adoptRootInitialization(rootInitialization) {
+    for (const [type, item, fresh] of [['AggregateFolder', rootInitialization?.aggregateFolder,
+      rootInitialization?.freshAggregateFolder === true], ['PlaylistsFolder', rootInitialization?.playlistsFolder,
+      rootInitialization?.freshPlaylistsFolder === true]]) {
+      if (!item) continue;
+      if (itemType(item) !== type) throw new TypeError(`Root initialization supplied an invalid ${type}.`);
+      // A read may have raced either independent repository commit. Preserve
+      // its published identity while applying the committed root frame; fresh
+      // constructor seeds also carry their pre-mapper empty Studios value.
+      const rooted = type === 'PlaylistsFolder'
+        ? this.#roots.get('AggregateFolder')?.item.VirtualChildren
+          ?.find(candidate => sameId(candidate.Id, item.Id) && itemType(candidate) === type)
+        : this.#roots.get(type)?.item;
+      const cached = this.itemCreation.getCachedItemById(item.Id);
+      const adopted = rooted && sameId(rooted.Id, item.Id) && itemType(rooted) === type ? rooted
+        : cached && itemType(cached) === type ? cached : item;
+      if (adopted !== item) {
+        adopted.ParentId = item.ParentId;
+        adopted.DateLastSaved = item.DateLastSaved;
+        adopted.Path = item.Path;
+        if (fresh) adopted.Studios = [...item.Studios];
+        copyNativeItemRepositoryFrame(adopted, item);
+      }
+      this.itemCreation.recordRepositorySnapshot(adopted, item.NativeRepositoryColumns);
+      this.itemCreation.registerItem(adopted);
+      this.#initializedRootItems.set(type, adopted);
+    }
   }
 
   async #root(type) {
@@ -68,7 +99,9 @@ export class LibraryScanHost {
       const stored = selectedId ? state.byId.get(idKey(selectedId))
         : state.items.find(value => itemType(value) === type
           && (canonicalPath == null || sameNativePath(value.Path, canonicalPath)));
-      const item = stored && await this.itemCreation.getItemById(stored.Id);
+      const initialized = this.#initializedRootItems.get(type);
+      const item = stored && initialized && sameId(initialized.Id, stored.Id)
+        ? initialized : stored && await this.itemCreation.getItemById(stored.Id);
       if (!item) throw Object.assign(new Error(`${type} is not initialized.`), { status: 500 });
       // LibraryManager.CreateRootFolder/GetUserRootFolder reset the registered
       // root Path after moving program data. Reusing an existing row or an
@@ -86,8 +119,11 @@ export class LibraryScanHost {
           programDataPath: path.resolve(this.library.options.programDataPath),
           enableCaseSensitiveItemIds: this.library.options.configuration?.EnableCaseSensitiveItemIds
         }));
-        const playlist = await this.itemCreation.getItemById(playlistId);
-        if (!playlist || itemType(playlist) !== 'PlaylistsFolder' || !sameNativePath(playlist.Path, playlistPath)) {
+        const initialized = this.#initializedRootItems.get('PlaylistsFolder');
+        const playlist = initialized && sameId(initialized.Id, playlistId)
+          ? initialized : await this.itemCreation.getItemById(playlistId);
+        if (!playlist || itemType(playlist) !== 'PlaylistsFolder' || !sameNativePath(playlist.Path, playlistPath)
+          || !sameId(playlist.ParentId, resolved.item.Id)) {
           throw new Error('The registered playlists folder is not initialized.');
         }
         const playlistOwner = this.itemCreation.retainItem(playlist);
@@ -244,6 +280,7 @@ export class LibraryScanHost {
       root.owner.release();
     }
     this.#roots.clear();
+    this.#initializedRootItems.clear();
     await this.itemCreation.linkedChildren.flushReleases();
   }
 }
