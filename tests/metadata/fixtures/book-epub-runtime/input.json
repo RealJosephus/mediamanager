@@ -1,5 +1,6 @@
 {
-  "timeZone": "UTC",
+  "timeZone": "Asia/Taipei",
+  "timeZoneOffsetMinutes": 480,
   "timeZoneInstant": "2024-03-02T23:04:05Z",
   "epubs": [
     {

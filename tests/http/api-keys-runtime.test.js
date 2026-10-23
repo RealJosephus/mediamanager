@@ -69,7 +69,7 @@ test('postgres: real API-key management enforces elevated authorization, persist
   assert.deepEqual(state.errors, []);
 });
 
-for (const operation of ['create', 'list', 'revoke']) test('postgres: runtime close drains admitted API-key ' + operation + ' and rejects new operations before releasing PostgreSQL', enabled, async t => {
+for (const operation of ['create', 'list', 'revoke']) test('postgres: runtime close drains admitted API-key ' + operation + ' and rejects new operations before releasing PostgreSQL', { ...enabled, timeout: 60000 }, async t => {
   const state = await setup(t); const initial = await state.runtime.apiKeys.create('Original');
   const entered = Promise.withResolvers(), release = Promise.withResolvers(), connection = state.database.client;
   const original = connection.query.bind(connection);

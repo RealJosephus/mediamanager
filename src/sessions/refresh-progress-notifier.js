@@ -39,12 +39,12 @@ export class RefreshProgressNotifier {
   #started = false;
   #closed = false;
 
-  constructor({ refreshes, sessions, library, onError = () => {}, clock = () => Date.now(), throttleMs = refreshProgressThrottleMs }) {
+  constructor({ refreshes, sessions, library, onError = () => {}, runBackground = operation => operation(), clock = () => Date.now(), throttleMs = refreshProgressThrottleMs }) {
     if (!refreshes || !sessions?.sendMessageToAdminSessions || !library?.getCollectionFolders) {
       throw new TypeError('Provider refresh, session and library services are required.');
     }
     if (!Number.isFinite(throttleMs) || throttleMs < 0) throw new RangeError('The refresh progress throttle must be non-negative.');
-    Object.assign(this, { refreshes, sessions, library, onError, clock, throttleMs });
+    Object.assign(this, { refreshes, sessions, library, onError, runBackground, clock, throttleMs });
   }
 
   start() {
@@ -60,7 +60,7 @@ export class RefreshProgressNotifier {
   }
 
   #queue(item, progress, active) {
-    const task = this.#send(item, progress, active).catch(error => this.#report(error));
+    const task = (async () => this.runBackground(() => this.#send(item, progress, active)))().catch(error => this.#report(error));
     this.#active.add(task);
     task.finally(() => this.#active.delete(task));
   }

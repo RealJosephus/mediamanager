@@ -278,6 +278,7 @@ for (const dialect of ['postgres']) test(`${dialect}: cross-library reparent per
       IndexNumber: 1, ParentIndexNumber: 1, SeriesId: cross.oldSeries, SeasonId: cross.oldSeason,
       ProviderIds: { Tmdb: '301' }, ancestors: ['oldSeason', 'oldSeries', 'oldFolder', 'oldCollection'] },
   ] });
+  current.library.options.userRoot = (await current.database.rows('BaseItems', { where: { Id: cross.userRoot }, limit: 1 }))[0];
   current.library.options.libraryOptions = new Map([
     [cross.oldCollection.replaceAll('-', '').toLowerCase(), { PreferredMetadataLanguage: 'de', MetadataCountryCode: 'DE' }],
     [cross.newCollection.replaceAll('-', '').toLowerCase(), { PreferredMetadataLanguage: 'fr', MetadataCountryCode: 'FR' }],

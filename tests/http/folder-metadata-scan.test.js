@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
+import { appendFile, mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
@@ -12,6 +12,8 @@ import pg from 'pg';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
+import { isLinkedChildrenHandle } from '../../src/library/postgres-linked-children.js';
+import { observeNativeItemLinkOwnership } from '../../src/library/native-item-entity.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
 import { readXml, child } from '../../src/core/xml.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
@@ -37,15 +39,117 @@ const read = async (vfs, pathname) => {
   finally { await handle.close(); }
 };
 
+async function traceCleanup(runtime, { schema, collectionType, global }) {
+  const output = validationOutputRoot(); await mkdir(output, { recursive: true });
+  const filename = path.join(output, 'folder-metadata-cleanup-' + schema + '.jsonl');
+  await writeFile(filename, JSON.stringify({ schema, collectionType, global,
+    scope: 'Actual owner close invocation and settlement only; no forced release or shutdown replacement.' }) + '\n', { flag: 'wx' });
+  let pending = Promise.resolve();
+  const linkedChildren = runtime.linkedChildren, trackedHandles = new Map(), trackedOperations = [], roots = [];
+  const stack = message => {
+    const previous = Error.stackTraceLimit;
+    try { Error.stackTraceLimit = 30; return new Error(message).stack; }
+    finally { Error.stackTraceLimit = previous; }
+  };
+  const observedRoots = new WeakSet();
+  const observeRoot = item => {
+    if (!item || item.Type !== 'UserRootFolder' || observedRoots.has(item)) return;
+    observedRoots.add(item);
+    const entry = { item: new WeakRef(item), Id: item.Id, Path: item.Path,
+      pendingOwners: new Map(), observedFrom: stack('Actual UserRoot ownership observation') };
+    roots.push(entry);
+    observeNativeItemLinkOwnership(item, event => {
+      if (event.phase === 'released') entry.pendingOwners.delete(event.owner);
+      else entry.pendingOwners.set(event.owner, { phase: event.phase, count: event.count,
+        acquiredFrom: event.phase === 'acquired' ? stack('Actual native item owner acquisition') : null });
+    });
+  };
+  const load = runtime.library.load;
+  runtime.library.load = async function (...args) {
+    const state = await load.apply(this, args);
+    for (const item of state.items) observeRoot(item);
+    observeRoot(state.liveUserRoot);
+    return state;
+  };
+  const getCached = runtime.itemCreation.getCachedItemById;
+  runtime.itemCreation.getCachedItemById = function (...args) {
+    const item = getCached.apply(this, args); observeRoot(item); return item;
+  };
+  const track = (value, method, parentId, stack) => {
+    if (isLinkedChildrenHandle(value) && !trackedHandles.has(value)) trackedHandles.set(value, { method, parentId, stack });
+    return value;
+  };
+  const retain = linkedChildren.retain;
+  linkedChildren.retain = function (...args) {
+    const origin = stack('Actual retained SQL link acquisition');
+    return track(retain.apply(this, args), 'retain', null, origin);
+  };
+  for (const method of ['load', 'createFromSession', 'createFromSnapshot', 'restoreState']) {
+    const original = linkedChildren[method];
+    linkedChildren[method] = async function (...args) {
+      const origin = stack('Actual SQL link acquisition');
+      const parentId = method === 'load' ? args[1] : args[0]?.parentId ?? null;
+      return track(await original.apply(this, args), method, parentId, origin);
+    };
+  }
+  const admit = linkedChildren.admitHandleOperation;
+  linkedChildren.admitHandleOperation = function (...args) {
+    const operation = admit.apply(this, args), entry = { handle: operation.handle,
+      acquiredFrom: stack('Actual SQL handle operation acquisition'), released: false };
+    trackedOperations.push(entry);
+    return Object.freeze({ ...operation, release: () => {
+      const result = operation.release();
+      Promise.resolve(result).then(() => { entry.released = true; }, () => {});
+      return result;
+    } });
+  };
+  const record = value => {
+    pending = pending.then(() => appendFile(filename, JSON.stringify({ ...value, time: new Date().toISOString() }) + '\n'));
+    void pending.catch(() => {});
+  };
+  const observed = new Set([runtime, runtime.server]);
+  for (const [name, owner] of [...Object.entries(runtime), ['linkedChildren', runtime.library.options.linkedChildren]]) {
+    if (!owner || typeof owner !== 'object' || typeof owner.close !== 'function' || observed.has(owner)) continue;
+    observed.add(owner);
+    const close = owner.close;
+    owner.close = function (...args) {
+      record({ owner: name, phase: 'start', ...(owner === linkedChildren ? { liveHandles: [...trackedHandles]
+        .filter(([handle]) => !handle.released).map(([handle, origin]) => ({ ...origin,
+          setId: handle.entry.id, references: handle.entry.references, revision: handle.revision.toString() })),
+        liveHandleOperations: trackedOperations.filter(entry => !entry.released).map(entry => ({ acquiredFrom: entry.acquiredFrom,
+          setId: isLinkedChildrenHandle(entry.handle) ? entry.handle.entry.id : null })),
+        liveRootOwners: roots.flatMap(entry => {
+          const item = entry.item.deref();
+          return entry.pendingOwners.size ? [{ Id: item?.Id ?? entry.Id, Path: item?.Path ?? entry.Path, collected: !item,
+            setId: isLinkedChildrenHandle(item?.LinkedChildren) ? item.LinkedChildren.entry.id : null,
+            observedFrom: entry.observedFrom, pendingOwners: [...entry.pendingOwners.values()] }] : [];
+        }) } : {}) });
+      try {
+        return Promise.resolve(close.apply(this, args)).then(value => {
+          record({ owner: name, phase: 'settled' }); return value;
+        }, error => {
+          record({ owner: name, phase: 'failed', error: { name: error.name, code: error.code, message: error.message } });
+          throw error;
+        });
+      } catch (error) {
+        record({ owner: name, phase: 'failed', error: { name: error.name, code: error.code, message: error.message } });
+        throw error;
+      }
+    };
+  }
+  return () => pending;
+}
+
 async function setup(t, collectionType, { writable = true, global = false } = {}) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'metadata-scan-'));
   const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES, schema = `scan_metadata_${randomUUID().replaceAll('-', '').slice(0, 16)}`;
   const storage = new StorageRegistry();
-  let database, runtime;
+  let database, runtime, drainCleanupTrace = async () => {};
   t.after(async () => {
     const cleanupErrors = [];
     const attempt = async operation => { try { await operation(); } catch (error) { cleanupErrors.push(error); } };
     await attempt(() => runtime?.close()); await attempt(() => database?.close()); await attempt(() => storage.close());
+    await attempt(() => drainCleanupTrace());
     // Teardown owns these two isolated schemas. Use an administrative connection
     // solely for deletion; opening a production database is not a cleanup step.
     const cleanup = new pg.Client({ connectionString });
@@ -93,6 +197,8 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, LibraryScanFanoutConcurrency: 1 },
     serverId: 'metadata-scan-test', libraryOptions: new Map(global ? [] : [[ids.collection.replaceAll('-', ''), libraryOptions]]),
     probeOptions: { ffprobePath: validationExecutable('ffprobe') }, onError: error => errors.push(error) });
+  if (!global) runtime.library.options.userRoot = row(ids.userRoot, 'UserRootFolder');
+  drainCleanupTrace = await traceCleanup(runtime, { schema, collectionType, global });
   if (global) {
     // Keep the real NFO reader/saver and every production post-scan task. This
     // input has no online metadata or images and does not exercise watching.
@@ -609,6 +715,34 @@ async function setup(t, collectionType, { writable = true, global = false } = {}
     }
     assert.equal(runtime.libraryScanner.capabilities.completeLibraryScan, true);
   });
+
+  for (const mode of ['admitted load', 'delayed continuation']) {
+    test(`${dialect}: metadata ${mode} scope releases its contexts before runtime close`, options, async t => {
+      const { runtime, errors } = await setup(t, 'movies');
+      const loadContext = runtime.itemCreation.loadContext, resume = Promise.withResolvers();
+      let pending, loaded;
+      await loadContext.withScope(async () => {
+        if (mode === 'admitted load') pending = loadContext(ids.folder).then(value => { loaded = value; });
+        else pending = resume.promise.then(() => loadContext.withScope(async () => { loaded = await loadContext(ids.folder); }));
+      });
+      resume.resolve();
+      await pending;
+      assert.deepEqual(errors, []);
+      const closing = runtime.close();
+      let timer;
+      try {
+        await Promise.race([closing, new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error('Runtime close did not drain the completed metadata scope.')), 5000);
+        })]);
+      } finally {
+        clearTimeout(timer);
+        // A failing ownership regression must remain a failed test while its
+        // fixture still releases the explicitly returned context for cleanup.
+        await loaded?.dispose();
+        await closing;
+      }
+    });
+  }
 
   test(`${dialect}: global Movie scan connects NFO, probe, collections and missing-media cleanup`, options, async t => {
     const { runtime, database, adapter, vfs, post, errors, generate, programDataPath, user } = await setup(t, 'movies', { global: true });

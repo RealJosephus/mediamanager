@@ -61,7 +61,11 @@ for (const dialect of ['postgres']) test(`${dialect}: TMDB missing cleanup match
       ParentId: ids[parent], ChildId: ids[child], SortOrder: order, ChildType: 0 });
     await db.insert('BaseItemImageInfos', { ...empty('BaseItemImageInfos'), Id: 'f2222222-2222-2222-2222-000000000099',
       ItemId: ids.owned, ImageType: 0, Path: 'https://images.invalid/owned.jpg' });
-    owned.services = await createTmdbTestServices({ store, serverId: 'tmdb-diff', vfs: {}, identityMap: {
+    // The native dependency explicitly supplies this seeded UserRoot singleton.
+    // The temporary Node state directory is infrastructure, not a replacement
+    // library root whose derived ID can change the controlled membership.
+    const userRoot = (await db.rows('BaseItems', { where: { Id: ids.root } }))[0];
+    owned.services = await createTmdbTestServices({ store, userRoot, serverId: 'tmdb-diff', vfs: {}, identityMap: {
       resolve: () => '/fixture/series',
     } });
     const load = owned.services.loadContext;

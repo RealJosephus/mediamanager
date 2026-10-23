@@ -146,8 +146,6 @@ export function mapRecord(row, { skipDeserialization = false, onJsonError, onUnk
   // BaseItemMapper.Split('|') retains Studio empty segments for in-memory
   // StudioIds filtering; AttachStudios drops them only when building DTOs.
   item.Studios = typeof row.Studios === 'string' ? row.Studios.split('|') : [];
-  item.LocationType = descriptor.type === 'LiveTvChannel' ? 'Remote'
-    : !item.Path ? (item.SourceType === 'Channel' ? 'Remote' : 'Virtual') : /^[a-z][a-z\d+.-]*:\/\//i.test(item.Path) ? 'Remote' : 'FileSystem';
   return item;
 }
 

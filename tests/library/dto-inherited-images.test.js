@@ -80,7 +80,12 @@ test('inherited DTO images match the actual native image field graph and cache t
         }));
       }
       const before = await snapshot(database);
-      const state = await library.load(database, null, { baseRows: await database.rows('BaseItems') });
+      const baseRows = await database.rows('BaseItems');
+      // The native dependency boundary supplies this scenario's collection
+      // folders. Bind its declared root instead of deriving a different root
+      // from the unrelated common program-data directory.
+      library.options.userRoot = baseRows.find(row => row.Type === native.types.UserRootFolder) ?? null;
+      const state = await library.load(database, null, { baseRows });
       try {
         const target = state.byId.get(idKey(ids.get(sample.target)));
         if (sample.batch) state.dtoImageArtistsBatch = await state.getDtoArtists(target.AlbumArtists);

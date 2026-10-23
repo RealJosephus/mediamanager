@@ -7,7 +7,7 @@ import { PostgresDatabase } from '../../../../src/database/postgres.js';
 import { transferDatabase } from '../../../../src/migration/database-transfer.js';
 import { idKey } from '../../../../src/library/records.js';
 import { stringifyNativeJson } from '../../../../src/core/json.js';
-import { cloneNativeItemEntity, nativeItemDescriptor } from '../../../../src/library/native-item-entity.js';
+import { newNativeItemEntity, nativeItemDescriptor } from '../../../../src/library/native-item-entity.js';
 import { setFolderChildren } from '../../../../src/library/folder-cache.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../../../database/postgres-fixture.js';
 import { assignTestLinks, readTestLinks } from '../../collection-test-consumers.js';
@@ -18,14 +18,15 @@ export const itemProjection = item => ({ id: idKey(item.Id), nativeType: item.Na
   isFolder: item.IsFolder, isTypedFolder: nativeItemDescriptor(item.NativeType).family === 'folder',
   parentId: idKey(item.ParentId), officialRating: item.OfficialRating });
 export const observedProjection = value => ({ name: value.name, lane: value.lane, value: value.value,
-  error: value.error ? { type: value.error.type, status: value.error.status } : null,
-  linksBefore: value.linksBefore, linksAfter: value.linksAfter });
+  error: value.error ? { status: value.error.status } : null,
+  linksBefore: value.linksBefore, linksAfter: value.linksAfter,
+  ...(Object.hasOwn(value, 'collectionsBefore') ? { collectionsBefore: value.collectionsBefore, collectionsAfter: value.collectionsAfter } : {}) });
 
 /** Real transferred SQLite -> PostgreSQL -> createRuntime. Warm assignments
  * are explicit public typed entity inputs, not replacement repository rows. */
 export async function openRootScenario(input, native, report) {
   let database, runtime, source, closing, originalQuery, currentCase, held, hostLockFilename;
-  const owners = [], errors = report.runtimeErrors = [], queries = report.queries = [];
+  const owners = [], observedCollections = new Map(), errors = report.runtimeErrors = [], queries = report.queries = [];
   const root = input.root, style = process.platform === 'win32' ? 'windows' : 'posix';
   const close = () => closing ??= (async () => {
     held?.release.resolve(); const failures = [];
@@ -83,31 +84,77 @@ export async function openRootScenario(input, native, report) {
       const item = await runtime.itemCreation.getItemById(id); assert.ok(item); return item;
     };
     const occurrence = async value => {
-      const item = cloneNativeItemEntity(await lookup(value.id)); owners.push(runtime.itemCreation.retainItem(item));
+      if (value.cached === true) {
+        const item = await lookup(value.id); owners.push(runtime.itemCreation.retainItem(item));
+        applyValues(item, value);
+        await applyOccurrenceRelations(item, value);
+        return item;
+      }
+      const original = value.kind ? null : await lookup(value.id);
+      const type = original?.NativeType ?? (value.kind === 'Movie' ? 'MediaBrowser.Controller.Entities.Movies.Movie'
+        : value.kind === 'Folder' ? 'MediaBrowser.Controller.Entities.Folder'
+          : value.kind === 'Episode' ? 'MediaBrowser.Controller.Entities.TV.Episode'
+            : value.kind === 'BoxSet' ? 'MediaBrowser.Controller.Entities.Movies.BoxSet' : null);
+      assert.ok(type, 'A fresh occurrence requires an explicit known native type.');
+      const item = newNativeItemEntity(type);
+      // Match the explicit fresh native occurrence boundary. Repository-only
+      // fields are not implicitly copied into either side's new object.
+      if (original) for (const name of ['Name', 'Path', 'ParentId', 'OfficialRating', 'Tags']) item[name] = original[name];
+      item.Id = value.id; owners.push(runtime.itemCreation.retainItem(item));
       applyValues(item, value);
+      await applyOccurrenceRelations(item, value);
       return item;
+    };
+    const applyOccurrenceRelations = async (item, value) => {
+      if (Object.hasOwn(value, 'links')) await assignTestLinks(runtime, item,
+        value.links?.map(link => ({ ...link, Path: map(link.Path) })) ?? null);
+      if (Object.hasOwn(value, 'children')) {
+        assert.equal(item.IsFolder, true);
+        setFolderChildren(item, value.children === 'stored' ? null : await Promise.all(value.children.map(occurrence)));
+      }
+      if (value.track) observedCollections.set(value.track, item);
     };
     const applyValues = (item, value) => {
       for (const [inputName, name] of Object.entries({ name: 'Name', overview: 'Overview', genres: 'Genres', tags: 'Tags',
-        tagline: 'Tagline', providerIds: 'ProviderIds' })) if (Object.hasOwn(value, inputName)) {
+        tagline: 'Tagline', providerIds: 'ProviderIds', rating: 'OfficialRating', customRating: 'CustomRating', sort: 'ForcedSortName',
+        studios: 'Studios', year: 'ProductionYear', index: 'IndexNumber', parentIndex: 'ParentIndexNumber',
+        locked: 'IsLocked', virtualItem: 'IsVirtualItem', created: 'DateCreated', premiere: 'PremiereDate', runtime: 'RunTimeTicks',
+        communityRating: 'CommunityRating', criticRating: 'CriticRating', parentId: 'ParentId', airsAfterSeason: 'AirsAfterSeasonNumber',
+        airsBeforeSeason: 'AirsBeforeSeasonNumber', airsBeforeEpisode: 'AirsBeforeEpisodeNumber' })) if (Object.hasOwn(value, inputName)) {
         const provided = value[inputName];
         item[name] = provided && typeof provided === 'object' ? structuredClone(provided) : provided;
       }
+      if (Object.hasOwn(value, 'communityRating') && typeof value.communityRating === 'string') item.CommunityRating = Number(value.communityRating);
+      if (Object.hasOwn(value, 'path')) item.Path = map(value.path);
+      if (Object.hasOwn(value, 'images')) item.ImageInfos = value.images === null ? null : value.images.map(image => ({
+        Path: map(image.path), Type: image.type, DateModified: image.modified, Width: image.width, Height: image.height, BlurHash: image.blurHash }));
     };
     const map = value => value === null ? null : value.replaceAll('{root}', root).replaceAll('/', path.sep);
-    const rawLinks = async () => {
-      const links = await readTestLinks(userRoot);
+    const rawLinks = async (folder = userRoot) => {
+      const links = await readTestLinks(folder);
       return links === null ? null : links.map(link => ({ ItemId: link.ItemId === null ? null : idKey(link.ItemId), Type: Number(link.Type),
         Path: link.Path ?? null, LibraryItemId: link.LibraryItemId ?? null }));
     };
-    const apply = async sample => {
+    const collectionLinks = async () => Object.fromEntries(await Promise.all([...observedCollections]
+      .map(async ([name, item]) => [name, await rawLinks(item)])));
+    const apply = async (sample, folder = userRoot) => {
+      if (Object.hasOwn(sample, 'folderPath')) folder.Path = map(sample.folderPath);
       if (sample.warm) {
         const item = await lookup(sample.warm.id); owners.push(runtime.itemCreation.retainItem(item));
         applyValues(item, sample.warm);
+        await applyOccurrenceRelations(item, sample.warm);
       }
-      if (Object.hasOwn(sample, 'direct')) setFolderChildren(userRoot, sample.direct === 'stored' ? null : await Promise.all(sample.direct.map(occurrence)));
+      if (Object.hasOwn(sample, 'direct')) setFolderChildren(folder, sample.direct === 'stored' ? null : await Promise.all(sample.direct.map(occurrence)));
+      if (Object.hasOwn(sample, 'aggregateChildren')) setFolderChildren(aggregate, sample.aggregateChildren === 'stored' ? null
+        : await Promise.all(sample.aggregateChildren.map(occurrence)));
+      if (Object.hasOwn(sample, 'collectionsChildren')) {
+        const collectionsFolder = await runtime.collections.getCollectionsFolder(false); assert.ok(collectionsFolder);
+        owners.push(runtime.itemCreation.retainItem(collectionsFolder));
+        setFolderChildren(collectionsFolder, sample.collectionsChildren === 'stored' ? null
+          : await Promise.all(sample.collectionsChildren.map(occurrence)));
+      }
       if (Object.hasOwn(sample, 'virtual')) aggregate.VirtualChildren.splice(0, aggregate.VirtualChildren.length, ...await Promise.all(sample.virtual.map(occurrence)));
-      if (Object.hasOwn(sample, 'replaceLinks')) await assignTestLinks(runtime, userRoot, sample.replaceLinks?.map(link => ({ ...link, Path: map(link.Path) })) ?? null);
+      if (Object.hasOwn(sample, 'replaceLinks')) await assignTestLinks(runtime, folder, sample.replaceLinks?.map(link => ({ ...link, Path: map(link.Path) })) ?? null);
     };
     originalQuery = database.client.query;
     database.client.query = async (...args) => {
@@ -116,15 +163,25 @@ export async function openRootScenario(input, native, report) {
         held.enteredOnce = true; held.entered.resolve(); await held.release.promise;
       }
       const result = await originalQuery(...args);
-      if (currentCase && /mm_link_resolution_|item-collections-/u.test(text)) queries.push({ case: currentCase, text, returned: result.rows?.length ?? 0 });
+      if (currentCase && /mm_link_resolution_|item-collections-|mm_folder_physical_|mm_folder_winners_|mm_folder_collapse_|mm_native_query_|item_cohorts/u.test(text)) {
+        queries.push({ case: currentCase, text, returned: result.rows?.length ?? 0 });
+      }
       return result;
     };
     const run = async sample => {
-      currentCase = sample.name; await apply(sample);
-      const linksBefore = await rawLinks(), user = await runtime.users.getUser(input.users.find(row => row.key === sample.user).id);
+      currentCase = sample.name;
+      if (sample.configuration) Object.assign(runtime.configuration, sample.configuration);
+      const folder = sample.folder ? await lookup(sample.folder) : userRoot;
+      await apply(sample, folder);
+      const collectionsBefore = sample.observeCollections ? await collectionLinks() : null;
+      const linksBefore = await rawLinks(folder), user = sample.user === null ? null
+        : await runtime.users.getUser(input.users.find(row => row.key === sample.user).id);
       let value = null, error = null;
       try {
-        if (sample.lane === 'collections') {
+        if (sample.lane === 'folder') {
+          value = JSON.parse(stringifyNativeJson(await runtime.library.queryItems({ ParentId: folder.Id,
+            Fields: input.dtoFields, EnableImages: false, EnableUserData: false, ...sample.query }, { user })));
+        } else if (sample.lane === 'collections') {
           const result = await runtime.library.getItemCollections(input.target, { user });
           value = result.Items.map(item => idKey(item.Id)).sort();
         } else if (sample.lane === 'dto') {
@@ -143,22 +200,25 @@ export async function openRootScenario(input, native, report) {
           } finally { await state.dispose({ session }); }
         });
       } catch (caught) { error = { type: caught.nativeException ?? caught.name, message: caught.message, status: caught.status ?? 500, stack: caught.stack }; }
-      return { name: sample.name, lane: sample.lane, value, error, linksBefore, linksAfter: await rawLinks() };
+      return { name: sample.name, lane: sample.lane, value, error, linksBefore, linksAfter: await rawLinks(folder),
+        ...(sample.observeCollections ? { collectionsBefore, collectionsAfter: await collectionLinks() } : {}) };
     };
     const snapshot = async () => ({ database: await rows(database), files: await files(root) });
-    const drain = async () => {
-      currentCase = 'held root resolution'; held = { entered: Promise.withResolvers(), release: Promise.withResolvers() };
+    const drain = async sample => {
+      currentCase = sample ? 'held folder resolution' : 'held root resolution'; held = { entered: Promise.withResolvers(), release: Promise.withResolvers() };
       const preShutdownLock = await readFile(hostLockFilename);
       assert.equal(sha(preShutdownLock), report.pluginHostLease.sha256);
       assert.deepEqual(JSON.parse(preShutdownLock.toString('utf8')), { pid: report.pluginHostLease.pid, token: report.pluginHostLease.nonce });
       report.pluginHostLease.preShutdownIdentityUnchanged = true;
       const user = await runtime.users.getUser(input.users[0].id);
+      const read = () => sample ? runtime.library.queryItems({ ParentId: sample.folder, Fields: input.dtoFields,
+        EnableImages: false, EnableUserData: false, ...sample.query }, { user }) : runtime.library.getItemCollections(input.target, { user });
       let pending, libraryClosing, runtimeClosing, libraryDone = false, runtimeDone = false;
       try {
-        pending = runtime.library.getItemCollections(input.target, { user }); void pending.catch(() => {});
+        pending = read(); void pending.catch(() => {});
         await within(held.entered.promise, 'admitted real root positive-batch SELECT');
         libraryClosing = runtime.library.close(); libraryClosing.then(() => { libraryDone = true; }, () => { libraryDone = true; });
-        await assert.rejects(runtime.library.getItemCollections(input.target, { user }), { status: 503 });
+        await assert.rejects(read(), { status: 503 });
         for (const owner of owners.splice(0)) owner.release(); await runtime.linkedChildren.flushReleases();
         runtimeClosing = runtime.close(); runtimeClosing.then(() => { runtimeDone = true; }, () => { runtimeDone = true; });
         assert.equal(libraryDone, false); assert.equal(runtimeDone, false); held.release.resolve();

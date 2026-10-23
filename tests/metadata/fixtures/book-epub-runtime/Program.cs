@@ -19,14 +19,15 @@ if (args.Length != 3) throw new ArgumentException("Expected input manifest, new 
 var inputBytes = File.ReadAllBytes(args[0]);
 using var input = JsonDocument.Parse(inputBytes);
 var requestedTimeZone = input.RootElement.GetProperty("timeZone").GetString()!;
-if (requestedTimeZone != "UTC" || Environment.GetEnvironmentVariable("TZ") != requestedTimeZone)
-    throw new IOException("The declared UTC input must be bound to the native process.");
+if (Environment.GetEnvironmentVariable("TZ") != requestedTimeZone)
+    throw new IOException("The declared time zone input must be bound to the native process.");
+var expectedOffsetMinutes = input.RootElement.GetProperty("timeZoneOffsetMinutes").GetInt32();
 var timeZoneInstant = input.RootElement.GetProperty("timeZoneInstant").GetString()!;
 var utc = DateTime.Parse(timeZoneInstant, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
 var offsetMinutes = TimeZoneInfo.Local.GetUtcOffset(utc).TotalMinutes;
 // Windows .NET uses the system time zone, independently of TZ. Verify its
 // actual offset rather than treating the requested environment as evidence.
-if (offsetMinutes != 0) throw new IOException("The native host does not provide the declared UTC time zone.");
+if (offsetMinutes != expectedOffsetMinutes) throw new IOException("The native host does not provide the declared time zone offset.");
 var timeZoneControl = new { requested = requestedTimeZone, effective = TimeZoneInfo.Local.Id,
     instant = timeZoneInstant, offsetMinutes };
 var assets = Path.GetFullPath(args[1]);

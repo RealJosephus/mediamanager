@@ -71,7 +71,8 @@ async function setup(t, postgres = true, configuration = {}) {
   const libraryOptions = new Map([[ids.collection.replaceAll('-', '').toLowerCase(), { SaveLocalMetadata: true, MetadataSavers: ['Nfo'], PreferredMetadataLanguage: 'fr', MetadataCountryCode: 'FR' }]]);
   const spoolRoot = path.join(stateRoot, 'metadata-spool'), contextLoaders = [];
   const linkedChildren = await openMetadataRelations(db, spoolRoot);
-  const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, spoolRoot, serverId: 'metadata-test', libraryOptions, programDataPath: stateRoot });
+  const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, spoolRoot, serverId: 'metadata-test',
+    userRoot: { Id: ids.userRoot }, libraryOptions, programDataPath: stateRoot });
   const extensions=[];
   const loadContext = trackMetadataContexts(createMetadataContextLoader({fileSystem: testFileSystem,  store, library, linkedChildren, spoolRoot, vfs, identityMap, configuration: { PreferredMetadataLanguage: 'en', MetadataCountryCode: 'US', ...configuration }, contextExtensions:()=>extensions }), contextLoaders);
   const itemCreation = attachMetadataItemCreation({ store, library, linkedChildren, loadContext });

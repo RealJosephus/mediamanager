@@ -3,7 +3,10 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
-import { withPostgresNativeVisibilityJitOff } from '../../src/database/postgres-native-visibility-jit.js';
+import { withPostgresNativeQueryJitOff } from '../../src/database/postgres-native-query-jit.js';
+import { queryPostgresItemPage } from '../../src/database/postgres-item-query.js';
+import { createPostgresNativeItemQueryProjection } from '../../src/library/postgres-native-item-query-projection.js';
+import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from './postgres-fixture.js';
 
@@ -26,7 +29,7 @@ const enteredBeforeCompletion = (entered, pending, label) => within(Promise.race
 
 function pgCase(name, operation) {
   test(name, { skip: !postgresTestConnectionString, timeout: 90000 }, async () => {
-    const output = path.join(validationOutputRoot(), 'native-visibility-jit-' + randomUUID());
+    const output = path.join(validationOutputRoot(), 'native-query-jit-' + randomUUID());
     assertValidationOutputChild(output); await mkdir(output, { recursive: true });
     const report = { schemaVersion: 1, name, actualPostgresExecuted: true, actualNativeExecuted: false,
       observations: [], cleanup: {}, phaseAcceptance: false, releaseAcceptance: false };
@@ -50,7 +53,7 @@ function pgCase(name, operation) {
   });
 }
 
-pgCase('bounded native visibility JIT lease pins root calls and restores both original settings after success and failure', async (database, report) => {
+pgCase('native query JIT lease pins root calls and restores both original settings after success and failure', async (database, report) => {
   let saved;
   await database.withConnection(async session => {
     saved = session;
@@ -58,39 +61,71 @@ pgCase('bounded native visibility JIT lease pins root calls and restores both or
     try {
       for (const original of ['on', 'off']) {
         await set(session, original);
-        for (const count of [1, 128]) {
-          const actual = await withPostgresNativeVisibilityJitOff(database, count, async owner => {
-            assert.equal(owner, session);
-            const during = await setting(owner);
-            assert.equal(during.jit, 'off'); assert.equal(during.pid, baseline.pid);
-            return during;
-          });
-          assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
-          report.observations.push({ original, projectionCount: count, during: actual, after: await setting(session) });
-        }
+        const actual = await withPostgresNativeQueryJitOff(database, async owner => {
+          assert.equal(owner, session);
+          const during = await setting(owner);
+          assert.equal(during.jit, 'off'); assert.equal(during.pid, baseline.pid);
+          return during;
+        });
+        assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
+        report.observations.push({ original, during: actual, after: await setting(session) });
         const primary = new Error('Controlled visibility callback failure.');
-        await assert.rejects(withPostgresNativeVisibilityJitOff(session, 2, async () => { throw primary; }), error => error === primary);
+        await assert.rejects(withPostgresNativeQueryJitOff(session, async () => { throw primary; }), error => error === primary);
         assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
       }
-      await withPostgresNativeVisibilityJitOff(session, 1, async owner => {
-        await assert.rejects(withPostgresNativeVisibilityJitOff(owner, 1, async () => {}), /cannot nest/u);
+      await withPostgresNativeQueryJitOff(session, async owner => {
+        await assert.rejects(withPostgresNativeQueryJitOff(owner, async () => {}), /cannot nest/u);
       });
     } finally { await set(session, baseline.jit); }
   });
   let invoked = false;
-  for (const count of [0, -1, 129, 1.5, NaN]) {
-    await assert.rejects(withPostgresNativeVisibilityJitOff(database, count, async () => { invoked = true; }), TypeError);
+  for (const invalid of [null, 1, {}]) {
+    await assert.rejects(withPostgresNativeQueryJitOff(database, invalid), TypeError);
   }
-  await assert.rejects(withPostgresNativeVisibilityJitOff(saved, 1, async () => { invoked = true; }), /active owned/u);
+  await assert.rejects(withPostgresNativeQueryJitOff(saved, async () => { invoked = true; }), /active owned/u);
   assert.equal(invoked, false);
 });
 
-pgCase('transaction-local native visibility JIT restores success and preserves the primary SQL error through 25P02 cleanup and owner rollback', async (database, report) => {
+pgCase('live relational item pages borrow JIT settings without a scalar visibility batch and restore after real SQL failure', async (database, report) => {
+  await database.withConnection(async session => {
+    const baseline = await setting(session), originalQuery = session.client.query;
+    const projection = await createPostgresNativeItemQueryProjection(session);
+    const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Movies.Movie');
+    item.Id = randomUUID(); item.Name = 'Unsaved live query item';
+    const slot = randomUUID(); await projection.append(item, slot, 1n);
+    let fail = false;
+    session.client.query = async (...args) => {
+      if (text(args[0]).startsWith('WITH RECURSIVE') && text(args[0]).includes(projection.table)) {
+        const during = (await originalQuery("SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid")).rows[0];
+        assert.deepEqual(during, { jit: 'off', pid: baseline.pid });
+        report.observations.push({ fail, during });
+        if (fail) return originalQuery('SELECT 1 / 0');
+      }
+      return originalQuery(...args);
+    };
+    const options = { nativeItemsPlan: projection.plan(), resumableMode: 'memory', memorySourceOrder: 'occurrence' };
+    try {
+      for (const original of ['on', 'off']) {
+        await set(session, original); fail = false;
+        const page = await queryPostgresItemPage(session, { sortby: ['Name'] }, options);
+        assert.equal(page.total, 1); assert.deepEqual(page.slots, [{ id: item.Id, slot }]);
+        assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
+        fail = true;
+        await assert.rejects(queryPostgresItemPage(session, { sortby: ['Name'] }, options), { code: '22012' });
+        assert.deepEqual(await setting(session), { jit: original, pid: baseline.pid });
+      }
+    } finally {
+      session.client.query = originalQuery; await set(session, baseline.jit); await projection.close();
+    }
+  });
+});
+
+pgCase('transaction-local native query JIT restores success and preserves the primary SQL error through 25P02 cleanup and owner rollback', async (database, report) => {
   await database.withConnection(async session => {
     const baseline = await setting(session), originalQuery = session.client.query;
     const controls = [];
     session.client.query = async (...args) => {
-      const control = text(args[0]).match(/native-visibility-jit:(read|disable|restore)/u)?.[1];
+      const control = text(args[0]).match(/native-query-jit:(read|disable|restore)/u)?.[1];
       const observed = control ? { control, local: args[0]?.values?.[1] ?? null } : null;
       if (observed) controls.push(observed);
       try { const result = await originalQuery(...args); if (observed) observed.jit = result.rows[0]?.jit; return result; }
@@ -99,17 +134,17 @@ pgCase('transaction-local native visibility JIT restores success and preserves t
     try {
       await set(session, 'on');
       await session.transaction(async transaction => {
-        await withPostgresNativeVisibilityJitOff(transaction, 2, async owner => assert.equal((await setting(owner)).jit, 'off'));
+        await withPostgresNativeQueryJitOff(transaction, async owner => assert.equal((await setting(owner)).jit, 'off'));
         assert.equal((await setting(transaction)).jit, 'on');
         await set(transaction, 'off', true);
-        await withPostgresNativeVisibilityJitOff(transaction, 1, async owner => assert.equal((await setting(owner)).jit, 'off'));
+        await withPostgresNativeQueryJitOff(transaction, async owner => assert.equal((await setting(owner)).jit, 'off'));
         assert.equal((await setting(transaction)).jit, 'off');
       });
       assert.equal((await setting(session)).jit, 'on', 'Committing local settings preserves the pre-transaction session value.');
       let primary;
       await assert.rejects(session.transaction(async transaction => {
         try {
-          await withPostgresNativeVisibilityJitOff(transaction, 128, owner => owner.client.query('SELECT 1 / 0'));
+          await withPostgresNativeQueryJitOff(transaction, owner => owner.client.query('SELECT 1 / 0'));
         } catch (error) { primary = error; throw error; }
       }), error => error === primary && error.code === '22012');
       assert.equal(session.inTransaction, false);
@@ -122,25 +157,25 @@ pgCase('transaction-local native visibility JIT restores success and preserves t
   });
 });
 
-pgCase('two native visibility setting leases on one physical client serialize their complete read-disable-query-restore intervals', async (database, report) => {
+pgCase('two native query setting leases on one physical client serialize their complete read-disable-query-restore intervals', async (database, report) => {
   await database.withConnection(async session => {
     const baseline = await setting(session), originalQuery = session.client.query;
     const entered = Promise.withResolvers(), proceed = Promise.withResolvers(), order = [];
     let first, second, secondEntered = false;
     session.client.query = (...args) => {
-      const control = text(args[0]).match(/native-visibility-jit:(read|disable|restore)/u)?.[1];
+      const control = text(args[0]).match(/native-query-jit:(read|disable|restore)/u)?.[1];
       if (control) order.push(control);
       return originalQuery(...args);
     };
     try {
       await set(session, 'on');
-      first = withPostgresNativeVisibilityJitOff(session, 1, async owner => {
+      first = withPostgresNativeQueryJitOff(session, async owner => {
         order.push('first'); assert.equal((await setting(owner)).jit, 'off'); entered.resolve();
         await proceed.promise;
         assert.equal((await setting(owner)).jit, 'off'); return 'first-result';
       }); void first.catch(() => {});
       await enteredBeforeCompletion(entered.promise, first, 'first visibility query entered');
-      second = withPostgresNativeVisibilityJitOff(session, 2, async owner => {
+      second = withPostgresNativeQueryJitOff(session, async owner => {
         secondEntered = true; order.push('second'); assert.equal((await setting(owner)).jit, 'off'); return 'second-result';
       }); void second.catch(() => {});
       await Promise.resolve();
@@ -164,7 +199,7 @@ pgCase('a caller abort after admitted real PostgreSQL work does not cancel JIT r
     const reason = new DOMException('Controlled caller cancellation after admitted SQL.', 'AbortError');
     let pending;
     session.client.query = (...args) => {
-      const control = text(args[0]).match(/native-visibility-jit:(read|disable|restore)/u)?.[1];
+      const control = text(args[0]).match(/native-query-jit:(read|disable|restore)/u)?.[1];
       if (control) {
         assert.equal(typeof args[0] === 'string' ? undefined : args[0].signal, undefined);
         controls.push(control);
@@ -173,7 +208,7 @@ pgCase('a caller abort after admitted real PostgreSQL work does not cancel JIT r
     };
     try {
       await set(session, 'on');
-      pending = withPostgresNativeVisibilityJitOff(session, 1, async owner => {
+      pending = withPostgresNativeQueryJitOff(session, async owner => {
         const actual = await owner.client.query({ text: "SELECT current_setting('jit') AS jit, pg_backend_pid() AS pid", signal: controller.signal });
         assert.deepEqual(actual.rows[0], { jit: 'off', pid: baseline.pid });
         entered.resolve(); await proceed.promise; controller.signal.throwIfAborted();
@@ -201,19 +236,19 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
       const entered = Promise.withResolvers(), proceed = Promise.withResolvers();
       let first, queued, queuedInvoked = false, aggregate;
       await set(session, 'on');
-      session.client.query = (...args) => text(args[0]).includes('native-visibility-jit:restore')
+      session.client.query = (...args) => text(args[0]).includes('native-query-jit:restore')
         // Actual PostgreSQL rejects this unknown setting. This is a controlled
         // restore-path SQL fault, not a fabricated driver result or exception.
         ? originalQuery('SELECT current_setting($1) AS jit', ['mediamanager_controlled_missing_jit_setting'])
         : originalQuery(...args);
       try {
-        first = withPostgresNativeVisibilityJitOff(session, 1, async owner => {
+        first = withPostgresNativeQueryJitOff(session, async owner => {
           assert.equal((await setting(owner)).jit, 'off'); entered.resolve(); await proceed.promise;
           if (failBusiness) throw primary;
           return 'business-succeeded';
         }); void first.catch(() => {});
         await enteredBeforeCompletion(entered.promise, first, 'visibility callback before controlled restore SQL fault');
-        queued = withPostgresNativeVisibilityJitOff(session, 1, async () => { queuedInvoked = true; }); void queued.catch(() => {});
+        queued = withPostgresNativeQueryJitOff(session, async () => { queuedInvoked = true; }); void queued.catch(() => {});
         proceed.resolve();
         await assert.rejects(within(first, 'failed restoration quarantines physical client'), error => {
           aggregate = error; assert.ok(error instanceof AggregateError);
@@ -242,7 +277,7 @@ pgCase('a real SQL restoration failure quarantines the backend, drains queued le
   }
 });
 
-pgCase('pool close waits for an admitted native visibility query to restore JIT and rejects new root work', async (database, report) => {
+pgCase('pool close waits for an admitted native query to restore JIT and rejects new root work', async (database, report) => {
   const entered = Promise.withResolvers(), proceed = Promise.withResolvers(), events = [];
   let pending, closing, saved;
   try {
@@ -252,13 +287,13 @@ pgCase('pool close waits for an admitted native visibility query to restore JIT 
       await set(session, 'on');
       session.client.query = async (...args) => {
         const result = await originalQuery(...args);
-        if (text(args[0]).includes('native-visibility-jit:restore')) {
+        if (text(args[0]).includes('native-query-jit:restore')) {
           assert.equal(result.rows[0].jit, 'on'); events.push('restored');
         }
         return result;
       };
       try {
-        const result = await withPostgresNativeVisibilityJitOff(session, 128, async owner => {
+        const result = await withPostgresNativeQueryJitOff(session, async owner => {
           assert.equal((await setting(owner)).jit, 'off'); entered.resolve();
           await proceed.promise; events.push('business-finished'); return 'complete';
         });
@@ -269,14 +304,14 @@ pgCase('pool close waits for an admitted native visibility query to restore JIT 
     await enteredBeforeCompletion(entered.promise, pending, 'held visibility query before root close');
     let closed = false;
     closing = database.close().then(() => { closed = true; events.push('closed'); }); void closing.catch(() => {});
-    await assert.rejects(withPostgresNativeVisibilityJitOff(database, 1, async () => {}), /closed|not queryable/u);
+    await assert.rejects(withPostgresNativeQueryJitOff(database, async () => {}), /closed|not queryable/u);
     assert.equal(closed, false);
     proceed.resolve();
     assert.equal(await within(pending, 'admitted query restores before connection release'), 'complete');
     await within(closing, 'pool close after restoration');
     assert.deepEqual(events, ['business-finished', 'restored', 'closed']);
     assert.equal(saved.connectionActive, false); assert.equal(database.pool.totalCount, 0);
-    await assert.rejects(withPostgresNativeVisibilityJitOff(saved, 1, async () => {}), /active owned/u);
+    await assert.rejects(withPostgresNativeQueryJitOff(saved, async () => {}), /active owned/u);
     report.observations.push({ events, connectionReturned: !saved.connectionActive, poolConnections: database.pool.totalCount });
   } finally { proceed.resolve(); await Promise.allSettled([pending, closing]); }
 });

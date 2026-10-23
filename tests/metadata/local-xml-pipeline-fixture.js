@@ -180,8 +180,8 @@ export async function runLocalXmlFailurePipeline(t, protocols, startActualAList)
     const saveResults = [];
     runtime.configuration.LibraryScanFanoutConcurrency = 1;
     const scanner = new LibraryMetadataScanService({ library: runtime.library, scheduler: runtime.libraryTaskScheduler,
-      metadata: { validateRefresh() {}, async refresh(reference) {
-        const loaded = frames.get(reference);
+      metadata: { validateRefresh() {}, async refreshLiveItem(reference) {
+        const loaded = frames.get(reference.Id);
         activeMonitorPath = localXmlSavePath(loaded.item);
         let Saves; try { Saves = await saveMetadataItem(runtime.metadataUpdates, loaded, { Item: loaded.item, Images: [] }, 16); } finally { await loaded.dispose(); }
         saveResults.push(Saves);

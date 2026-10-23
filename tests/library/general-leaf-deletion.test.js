@@ -497,7 +497,8 @@ for (const dialect of ['postgres']) {
       await assert.rejects(value.operation(), { status: 501 });
       assert.deepEqual(await value.fixture.database.rows('BaseItems'), rows);
       assert.deepEqual(await value.state(), before);
-      assert.deepEqual(value.calls, []);
+      assert.deepEqual(value.calls, field === 'ChannelId' ? [{ action: 'channel', id: guid(ids.target), state: before }] : [],
+        'native Channel source dispatch consumes the live getter before later deletion preflight');
       assert.deepEqual(readCachedFolderChildren(value.parent, {}, () => { throw new Error('parent cache invalidated'); }), [value.item]);
     });
   }

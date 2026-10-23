@@ -65,12 +65,12 @@ for (const max of [1, 2]) test(`postgres: shared scheduler preserves nested SQL 
   const errors = [], seen = [], sessions = new Map();
   await scheduler.enqueue(sequence([0, 1]), parent => runtime.store.transaction(async parentSession => {
     sessions.set(parent, parentSession);
-    const metadata = { validateRefresh() {}, async refresh(reference) {
+    const metadata = { validateRefresh() {}, async refreshLiveItem(reference) {
       await runtime.store.run(async nestedSession => {
         assert.equal(nestedSession, parentSession, 'Nested inline work must retain its parent transaction.');
         await tick();
-        await nestedSession.update('BaseItems', { Id: reference }, { Name: `Refreshed child of ${parent}` });
-        seen.push([parent, reference]);
+        await nestedSession.update('BaseItems', { Id: reference.Id }, { Name: `Refreshed child of ${parent}` });
+        seen.push([parent, reference.Id]);
       });
       return { UpdateType: 0, Failures: 0 };
     } };

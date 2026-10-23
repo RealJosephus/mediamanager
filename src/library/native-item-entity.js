@@ -74,6 +74,7 @@ export const nativeItemTypes = Object.freeze([...descriptors.keys()]);
 
 const nativeItems = new WeakSet();
 const folderStates = new WeakMap();
+const linkOwnershipObservers = new WeakMap();
 const aggregateStates = new WeakMap();
 const sortStates = new WeakMap();
 const nameObservers = new WeakMap();
@@ -245,6 +246,9 @@ function addDerivedGetters(item, descriptor) {
   defineGetter(item, 'SourceType', () => ['LiveTvProgram', 'LiveTvChannel'].includes(descriptor.type)
     || descriptor.family === 'video' && recordingAccess.get(item)?.(item)
     ? 'LiveTV' : descriptor.type === 'Channel' || nonemptyId(item.ChannelId) ? 'Channel' : 'Library');
+  defineGetter(item, 'LocationType', () => descriptor.type === 'LiveTvChannel' ? 'Remote'
+    : !item.Path ? item.SourceType === 'Channel' ? 'Remote' : 'Virtual'
+      : item.Path.includes('://') && !/^file:\/\//iu.test(item.Path) ? 'Remote' : 'FileSystem');
   defineGetter(item, 'MediaType', () => descriptor.type === 'Playlist' ? item.PlaylistMediaType
     : descriptor.type === 'LiveTvChannel' ? item.ChannelType === 'Radio' ? 'Audio' : 'Video' : descriptor.mediaType);
   defineGetter(item, 'UnratedType', () => descriptor.sourceAwareUnrated && item.SourceType === 'Channel'
@@ -648,12 +652,37 @@ export function acquireNativeItemLinkOwner(item) {
   if (!state) return Object.freeze({ release() {} });
   const owner = Symbol('native-item-link-owner');
   state.owners.add(owner);
+  reportLinkOwnership(item, { phase: 'acquired', owner, count: state.owners.size });
   let released = false;
   return Object.freeze({ release() {
     if (released) return;
     released = true;
     state.owners.delete(owner);
+    reportLinkOwnership(item, { phase: 'released', owner, count: state.owners.size });
     if (state.owners.size === 0) releaseNativeItemLinks(item);
+  } });
+}
+
+function reportLinkOwnership(item, event) {
+  for (const listener of linkOwnershipObservers.get(item) ?? []) {
+    try { listener(event); } catch { /* Diagnostics cannot alter entity ownership. */ }
+  }
+}
+
+/** Diagnostic observations of actual leases; never an admission or query gate. */
+export function observeNativeItemLinkOwnership(item, listener) {
+  const state = folderStates.get(item);
+  if (!state || typeof listener !== 'function') throw new TypeError('A native Folder and ownership observer are required.');
+  let listeners = linkOwnershipObservers.get(item);
+  if (!listeners) linkOwnershipObservers.set(item, listeners = new Set());
+  listeners.add(listener);
+  for (const owner of state.owners) {
+    try { listener({ phase: 'existing', owner, count: state.owners.size }); }
+    catch { /* Diagnostics cannot alter entity ownership. */ }
+  }
+  return Object.freeze({ release() {
+    listeners.delete(listener);
+    if (!listeners.size) linkOwnershipObservers.delete(item);
   } });
 }
 

@@ -22,7 +22,7 @@ const receipt = () => ({ attemptedCount: 0, updatedCount: 0, providerFailures: 0
 export class LibraryMetadataScanService {
   constructor({ library, metadata, configuration = {}, now = () => new Date().toISOString(), logger = { error() {} },
     scheduler, stateLoader }) {
-    if (!library?.store || !metadata?.refresh || !metadata?.validateRefresh) {
+    if (!library?.store || !metadata?.refreshLiveItem || !metadata?.validateRefresh) {
       throw new TypeError('Library metadata traversal requires authoritative library state and a refresh host.');
     }
     if (!scheduler || typeof scheduler.enqueue !== 'function') throw new TypeError('Library metadata traversal requires the shared library scheduler.');
@@ -41,7 +41,8 @@ export class LibraryMetadataScanService {
       try { return await operation(loaded); } finally { await loaded.close(); }
     }
     const referenceId = typeof reference === 'string' ? reference : reference.Id;
-    return this.metadata.loadContext.withContext(referenceId, { includeChildren: false }, loaded => operation({
+    return this.metadata.loadContext.withContext(referenceId, { includeChildren: false,
+      ...(typeof reference === 'string' ? {} : { draft: reference }) }, loaded => operation({
       item: loaded.item,
       children: createMetadataChildren({ store: this.library.store, library: this.library,
         linkedChildren: this.metadata.loadContext.linkedChildren,
@@ -89,7 +90,7 @@ export class LibraryMetadataScanService {
   async #refresh(item, options, receipt) {
     options.signal?.throwIfAborted();
     receipt.attemptedCount++;
-    const result = await this.metadata.refresh(item.Id, options);
+    const result = await this.metadata.refreshLiveItem(item, options);
     receipt.updatedCount += Number(result?.changed === true);
     receipt.providerFailures += result?.Failures ?? 0;
     return result?.UpdateType ?? ItemUpdateType.None;

@@ -8,7 +8,7 @@ import path from 'node:path';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { createRuntime } from '../../src/runtime.js';
-import { idKey } from '../../src/library/records.js';
+import { dateTicks, idKey } from '../../src/library/records.js';
 import { similarCachePath } from '../../src/library/similar-items.js';
 import { registerDomainRoutes } from '../../src/http/routes.js';
 import { captureShows } from './fixtures/shows-current/capture.js';
@@ -488,8 +488,19 @@ test('Shows API oracle binds designated sources, real DLL execution, inputs and 
     const result=structuredClone(value);
     // The native cache expiry is tied to each real execution clock. Its
     // duration is tested by the provider contract; paths identify each build.
-    assert.match(result.similarProviderOrchestration.first.cache.expiresAtTicks,/^\d+$/u);
-    result.similarProviderOrchestration.first.cache.expiresAtTicks='<execution-clock>';
+    const cache = result.similarProviderOrchestration.first.cache;
+    assert.match(cache.expiresAtTicks,/^\d+$/u);
+    assert.equal(cache.expiresAtKind, 'Utc');
+    assert.equal(Buffer.byteLength(cache.rawJson, 'utf8'), cache.byteLength);
+    const document = JSON.parse(cache.rawJson);
+    assert.deepEqual(Object.keys(document), cache.propertyNames);
+    assert.equal(dateTicks(document.ExpiresAt).toString(), cache.expiresAtTicks);
+    assert.equal(cache.rawJson.replace(JSON.stringify(document.ExpiresAt), '"$EXPIRES_AT"'), cache.rawJsonTemplate);
+    // The raw bytes remain evidence. Their length varies with the real clock's
+    // fractional-second encoding even when the complete cache template agrees.
+    cache.rawJson='<execution-clock-json>';
+    cache.byteLength='<execution-clock-json-length>';
+    cache.expiresAtTicks='<execution-clock>';
     result.runtimeAssemblies=result.runtimeAssemblies.filter(entry=>entry.name!=='Oracle').map(({path,...entry})=>entry);
     return result;
   };

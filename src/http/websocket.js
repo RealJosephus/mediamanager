@@ -12,7 +12,7 @@ const messageTypes = ['ForceKeepAlive', 'GeneralCommand', 'UserDataChanged', 'Se
 const eventForces = { SessionStarted: true, SessionEnded: true, PlaybackStart: true, PlaybackStopped: true, PlaybackProgress: event => !event.IsAutomated, CapabilitiesChanged: true, SessionActivity: false };
 const field = (value, name) => value[name];
 
-export function attachWebSocketServer(server, { authentication, sessions, tasks, userData, users, library, refreshes, localization, configuration = {}, onError = () => {}, clock = () => Date.now() }) {
+export function attachWebSocketServer(server, { authentication, sessions, tasks, userData, users, library, refreshes, localization, configuration = {}, onError = () => {}, runBackground = operation => operation(), clock = () => Date.now() }) {
   const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false, maxPayload: 0 });
   const connections = new Set();
   const connecting = new Set();
@@ -56,14 +56,14 @@ export function attachWebSocketServer(server, { authentication, sessions, tasks,
     if (!controller?.connections.delete(connection) || controller.connections.size) return;
     requestControllerDetach(controller);
   };
-  const userDataChanges = userData ? new UserDataChangeNotifier({ userData, sessions, onError }) : null;
+  const userDataChanges = userData ? new UserDataChangeNotifier({ userData, sessions, onError, runBackground }) : null;
   userDataChanges?.start();
   const libraryChanges = users && library?.on
-    ? new LibraryChangedNotifier({ events: library, sessions, users, library, configuration, onError })
+    ? new LibraryChangedNotifier({ events: library, sessions, users, library, configuration, onError, runBackground })
     : null;
   libraryChanges?.start();
   const refreshProgress = refreshes?.on && library?.getCollectionFolders && sessions.sendMessageToAdminSessions
-    ? new RefreshProgressNotifier({ refreshes, sessions, library, onError, clock })
+    ? new RefreshProgressNotifier({ refreshes, sessions, library, onError, runBackground, clock })
     : null;
   refreshProgress?.start();
   const send = (connection, messageType, data, messageId = randomUUID().replaceAll('-', '')) => new Promise((resolve, reject) => {

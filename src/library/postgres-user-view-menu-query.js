@@ -14,7 +14,7 @@ const FILTER_KEYS = Object.freeze([
   'isplayed', 'sortby', 'sortorder', 'adjacentto', 'startindex', 'limit',
 ]);
 
-function menuQuery(query, hasUser) {
+export function nativeUserViewFilterQuery(query, hasUser) {
   const result = {};
   for (const key of FILTER_KEYS) {
     if (Object.hasOwn(query, key) && query[key] !== undefined) result[key] = query[key];
@@ -36,7 +36,7 @@ export function queryPostgresUserViewMenuPage(database, query, itemIds, {
   childScope,
   visibility, onPlan,
 } = {}) {
-  const filtered = menuQuery(query, userId != null);
+  const filtered = nativeUserViewFilterQuery(query, userId != null);
   const options = {
     scope: childScope ?? { ids: itemIds },
     userId,

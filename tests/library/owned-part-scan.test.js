@@ -100,7 +100,9 @@ async function fixture(t, dialect, collectionType = 'movies') {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: collectionType, PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, programDataPath, serverId: 'owned-part-scan' });
+  const [userRoot] = await database.rows('BaseItems', { where: { Id: userRootId } });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, programDataPath,
+    userRoot, serverId: 'owned-part-scan' });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   ignoreRule.normalizePath = true;
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });

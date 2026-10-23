@@ -34,6 +34,7 @@ export class LibraryChangedNotifier {
   #closed = false;
 
   constructor({ events, sessions, users, library, configuration = {}, onError = () => {},
+    runBackground = operation => operation(),
     delayMs,
     maxBatchSize = libraryChangedMaxBatchSize,
     schedule = (callback, delay) => setTimeout(callback, delay), cancel = timer => clearTimeout(timer) }) {
@@ -41,7 +42,7 @@ export class LibraryChangedNotifier {
     const initialDelay = delayMs ?? Number(configuration.LibraryUpdateDuration ?? libraryChangedDefaultDelayMs / 1000) * 1000;
     if (!Number.isFinite(initialDelay) || initialDelay < 0) throw new RangeError('The library change delay must be non-negative.');
     if (!Number.isInteger(maxBatchSize) || maxBatchSize < 1) throw new RangeError('The library change batch size must be a positive integer.');
-    Object.assign(this, { events, sessions, users, library, configuration, onError, delayMs, maxBatchSize, schedule, cancel });
+    Object.assign(this, { events, sessions, users, library, configuration, onError, runBackground, delayMs, maxBatchSize, schedule, cancel });
   }
 
   start() {
@@ -94,7 +95,7 @@ export class LibraryChangedNotifier {
     this.#foldersAddedTo = new Map();
     this.#foldersRemovedFrom = new Map();
     if (!Object.values(changes).some(values => values.length)) return Promise.resolve();
-    const task = this.#send(changes).catch(error => this.#report(error));
+    const task = (async () => this.runBackground(() => this.#send(changes)))().catch(error => this.#report(error));
     this.#active.add(task);
     task.finally(() => this.#active.delete(task));
     return task;

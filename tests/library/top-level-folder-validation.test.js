@@ -188,6 +188,7 @@ for (const dialect of ['postgres']) test(`${dialect}: top-level validation persi
 
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();
     userRoots = await rowsByType(database, 'MediaBrowser.Controller.Entities.UserRootFolder');
+    assert.deepEqual(errors, []);
     collections = await rowsByType(database, collectionFolderNativeType);
     physical = await rowsByType(database, physicalFolderNativeType);
     assert.equal(userRoots.length, 1);

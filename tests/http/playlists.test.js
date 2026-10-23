@@ -57,7 +57,10 @@ test('playlist HTTP contract binds body-only creation and every managed playlist
     async remove(id, entryIds, options) { calls.push(['remove', id, entryIds, options]); },
     async move(id, entryId, newIndex, options) { calls.push(['move', id, entryId, newIndex, options]); },
     async getItems(id, options) { calls.push(['items', id, options]); return { Items: [], TotalRecordCount: 0, StartIndex: 1 }; },
-    async delete(id, options) { calls.push(['delete', id, options]); }
+    async delete(id, { user, isApiKey, channelAccess }) {
+      assert.equal(channelAccess, undefined);
+      calls.push(['delete', id, { user, isApiKey }]);
+    }
   };
   const application = await fixture({ playlists });
   try {
@@ -183,7 +186,10 @@ test('playlist API-key mutations retain the native no-user authorization branch'
   const calls = [];
   const playlists = {
     async remove(id, entryIds, options) { calls.push(['remove', id, entryIds, options]); },
-    async delete(id, options) { calls.push(['delete', id, options]); }
+    async delete(id, { user, isApiKey, channelAccess }) {
+      assert.equal(channelAccess, undefined);
+      calls.push(['delete', id, { user, isApiKey }]);
+    }
   };
   const application = await fixture({ playlists,
     auth: { IsApiKey: true, IsAdministrator: true, UserId: '00000000000000000000000000000000', User: null } });

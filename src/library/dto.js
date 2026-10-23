@@ -160,6 +160,12 @@ async function relationRows(state, item, name, table) {
 }
 
 async function itemImageRows(state, item) {
+  // A page may contain separate live objects with the same Guid. Read each
+  // object's current images only when a selected DTO image consumer needs them.
+  if (state.dtoRelations?.liveImageItems?.has(item)) return item.ImageInfos.map(image => ({ ItemId: item.Id,
+    Path: image.Path, ImageType: typeof image.Type === 'number' ? image.Type : itemImageTypes.indexOf(image.Type),
+    DateModified: image.DateModified, Width: image.Width, Height: image.Height,
+    Blurhash: image.BlurHash == null ? null : Buffer.from(image.BlurHash) }));
   const rowsByItem = relationMap(state, 'imageRowsByItem'), key = idKey(item.Id);
   if (rowsByItem.has(key)) return rowsByItem.get(key);
   const rows = await readItemImageRows(state.db, item.Id);
@@ -195,7 +201,7 @@ async function prefetchRelationRows(state, name, table, ids, orderBy) {
 
 async function prefetchImageRows(state, items) {
   const unique = uniqueItems(items), rowsByItem = relationMap(state, 'imageRowsByItem');
-  const missing = unique.filter(item => !rowsByItem.has(idKey(item.Id)));
+  const missing = unique.filter(item => !state.dtoRelations?.liveImageItems?.has(item) && !rowsByItem.has(idKey(item.Id)));
   if (!missing.length) return;
   for (const item of missing) rowsByItem.set(idKey(item.Id), []);
   for (const row of await readNativeImageRows(state.db, missing.map(item => item.Id))) {

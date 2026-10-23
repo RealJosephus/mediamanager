@@ -1,4 +1,76 @@
-# Current UserRoot linked navigation
+# Current UserRoot and Folder linked navigation
+
+`folder-input.js` and `tests/library/folder-links-native.test.js` additionally
+exercise actual `Folder.GetItems` against two independent native captures. The
+formal Node consumer is `LibraryService.queryItems`, with complete selected DTOs,
+counts and pages. Cases cover cold membership, replaced/empty/null loaded
+handles, duplicate IDs, Path before LibraryItemId, negative cache persistence,
+the live parent Path, malformed LibraryItemId failures with an unchanged failing
+slot and preserved earlier successful cache prefix, a 140-item positive batch, rating/tag/name filters and a
+held query across actual library/runtime shutdown. Native and candidate preserve
+all 31 persistent tables and instance files before/after reads; the candidate
+also reopens PostgreSQL after shutdown. The exact diagnostic plugin host lock is
+bound before close and its owner must remove it.
+
+The Folder input also supplies warm physical Children, explicit fresh objects
+that have no repository row, unsaved cached fallback targets, duplicate winners
+before and after name/full filtering, typed genre/tag separators, stable sorts,
+100ns dates, NaN outside the selected page and a 140-occurrence warm page. Native
+queries use the actual ItemsController argument inventory and actual
+PipeDelimitedCollectionModelBinder. Raw/bound pipe values are recorded: a
+single occurrence splits at `|`, repeated occurrences retain each literal
+value, and unknown public keys such as MinIndexNumber stay unbound. Known
+arguments the fixture cannot map fail explicitly. These are differential inputs;
+their presence alone does not establish candidate acceptance. Full
+HTTP/authentication and release acceptance remain outside this fixture. It shares the
+oracle assembly and resource ownership harness with the root scenarios; it does
+not reuse recorded outputs or manufacture a new historical seal.
+
+The grouping inputs explicitly control the two actual ServerConfiguration flags
+and exercise the actual CollectionManager replacement through Folder.GetItems.
+They include replacement rows outside the source folder, count/page and name
+filtering after replacement, warm rating filtering before replacement, repeated
+members, and an unsaved remaining Folder with one or both types enabled. The
+last case restores both flags before the held shutdown read. Earlier captures
+without these inputs retain their original scope.
+
+The collectionsChildren assignments locate their parent through the actual
+CollectionManager/GetCollectionsFolder(false) service on both sides. Empty,
+restricted and reset Children values exercise the live replacement catalogue.
+An occurrence with cached=true explicitly reuses the real cached entity; other
+occurrences keep the existing fresh-object boundary. Unsaved replacement names,
+sorting and tags are actual mutable inputs. Optional links assignments replace
+the exact Folder occurrence's raw handle. Named track references observe that
+same object's complete raw links before and after selected collection cases;
+they do not query repository associations to invent expected membership. The
+additional cases cover positive-ID short circuits, malformed fallback and Path
+cache prefixes, full filtering and visibility before membership, duplicate
+collection winners, replacement objects without rows and catalogue traversal
+order. Detached tracked objects remain observable after the catalogue resets.
+All warm fields are consumed through the real collection visibility and DTO
+paths without saving repository rows. Failure status and cache prefixes are
+functional comparisons; exception classes and stacks remain diagnostics.
+
+The explicit null-user inputs execute Folder.GetItems over Children directly:
+empty/warm/cold lists, repeated identities with different live fields, stable
+and rating sorts, filter/page, and IsPlayed without a user. Null or nonempty
+loaded links must remain unconsumed. Both sides receive the same explicit null
+user; database user lookups for the other inputs still execute normally.
+
+Fresh Episode occurrences carry explicit AirsAfterSeasonNumber,
+AirsBeforeSeasonNumber and AirsBeforeEpisodeNumber. The actual
+AiredEpisodeOrderComparer supplies ascending/descending, secondary-key and
+paged results, including different same-ID objects in the userless branch.
+These fields cross the candidate SQL query boundary as typed integers without
+serializing an unselected entity's full Data.
+
+Selected Folder cases enable DTO images explicitly. The real ImageProcessor
+computes tags from each exact item's Path and each image's full DateModified;
+its consumed method names are recorded. The encoder boundary rejects any pixel
+operation. Same-ID Movie objects carry different primary/backdrop images and
+BlurHashes, including one-tick dates, page selection and image-type limits. A
+separate disabled-images input supplies a null ImageInfos list to verify that
+an unrequested image consumer does not run eagerly.
 
 This independent fixture runs the supplied designated native build twice over
 two real stopped SQLite clones. It uses the actual repository/mapper,
@@ -37,7 +109,7 @@ that event, initializes timers, supplies a media encoder/stream helper, or calls
 recording/media execution methods. The dictionary must remain empty before and
 after every case set; normal Dispose releases the unused semaphore. Provider
 and monitor dependencies continue to throw on any attempted execution. Chapters,
-Trickplay, MediaSources, ExternalUrls and image processing are not requested.
+Trickplay, MediaSources, ExternalUrls and pixel decoding/encoding are not requested.
 
 The first native stopped controlled database is transferred through the
 production database-transfer path into fresh PostgreSQL, then opened by the real
@@ -65,8 +137,10 @@ a registered same-Guid warm metadata value as a positive-batch substitute. The
 original root/raw/BoxSet/menu observations and final held membership lane remain.
 
 All successful scalar projections, complete DTO JSON and raw link values are compared completely.
-Component failures compare actual exception type and status; full raw messages
-and stacks are retained without claiming HTTP error-wire parity. There is no
+Component failures compare public status and the cache/commit prefix; native
+exception classes, full raw messages and stacks remain diagnostics without
+claiming HTTP error-wire parity. Malformed LibraryItemId scenarios run in both
+the ordinary Folder and UserRoot consumers. There is no
 deliberately malformed late positive-ID mapper failure in this first slice, so
 its successful batch evidence does not establish every possible failure prefix.
 Original item-collections-current's 270-item HTTP baseline is unchanged.

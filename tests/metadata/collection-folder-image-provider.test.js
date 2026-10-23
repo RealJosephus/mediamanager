@@ -47,6 +47,9 @@ async function fixture(t) {
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, onError: error => errors.push(error) });
   const userRoot = await runtime.libraryScanHost.getUserRootFolder();
   const aggregate = await runtime.libraryScanHost.getAggregateFolder();
+  // Root reads can return fresh live entities. Persist these real parents
+  // before the fixture's direct SQL inserts establish child foreign keys.
+  await runtime.itemCreation.saveItems([aggregate, userRoot]);
   const createCollection = async (number, CollectionType) => {
     const physicalId = id(number + 1), folderPath = path.join(root, 'root', 'default', 'Library ' + number);
     await mkdir(folderPath, { recursive: true });

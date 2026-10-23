@@ -5,7 +5,8 @@ import path from 'node:path';
 import { createRuntime } from '../../src/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { idKey } from '../../src/library/records.js';
-import { newNativeItemEntity, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
+import { isNativeItemEntity, newNativeItemEntity, releaseNativeItemLinks } from '../../src/library/native-item-entity.js';
+import { beforeMetadataRefresh } from '../../src/metadata/before-refresh.js';
 import { readTestLinkIds, assignTestLinks, captureTestEvent } from './collection-test-consumers.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString,
@@ -14,6 +15,26 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 const boxSetType = 'MediaBrowser.Controller.Entities.Movies.BoxSet';
 const movieType = 'MediaBrowser.Controller.Entities.Movies.Movie';
 const movieIds = ['11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'];
+
+test('postgres: collection membership consumes a cached constructor-empty native relation before publishing additions', {
+  skip: !postgresTestConnectionString, timeout: 60000,
+}, async t => {
+  const { runtime, database, queued } = await setup(t);
+  const created = await runtime.collections.create({ Name: 'Constructor Empty', ItemIdList: [] });
+  const current = newNativeItemEntity(boxSetType);
+  for (const name of ['Id', 'Name', 'Path', 'ParentId']) current[name] = created[name];
+  assert.equal(current.LinkedChildrenLoaded, false);
+  runtime.itemCreation.registerItem(current);
+  assert.equal(await runtime.itemCreation.getItemById(current.Id), current);
+  await runtime.collections.add(current.Id, [movieIds[0], movieIds[1], movieIds[0]]);
+  assert.equal(current.LinkedChildrenLoaded, true);
+  assert.deepEqual(await readTestLinkIds(current), [movieIds[0], movieIds[1], movieIds[0]].map(idKey));
+  assert.deepEqual((await database.rows('LinkedChildren', { where: { ParentId: current.Id },
+    orderBy: [{ column: 'SortOrder', direction: 'ASC' }] })).map(row => idKey(row.ChildId)), movieIds.map(idKey));
+  const xml = await fs.readFile(path.join(current.Path, 'collection.xml'), 'utf8');
+  assert.match(xml, /Movie1\.mkv/u); assert.match(xml, /Movie2\.mkv/u);
+  assert.equal(queued.length, 2); assert.equal(queued[1].options.ForceSave, true);
+});
 
 test('postgres: metadata scan captures bounded typed pages, continues a failure and releases cancelled traversal owners', {
   skip: !postgresTestConnectionString,
@@ -37,7 +58,9 @@ test('postgres: metadata scan captures bounded typed pages, continues a failure 
   runtime.metadata.refresh=async reference=>{
     maximumActive=Math.max(maximumActive,++active);attempted++;
     try { await new Promise(resolve=>setImmediate(resolve));
-      if(idKey(reference)===idKey(children[128].Id))throw Object.assign(new Error('Expected child failure'),{name:'IOException'});
+      assert.equal(isNativeItemEntity(reference),true);
+      assert.equal(reference.NativeType,movieType);
+      if(idKey(reference.Id)===idKey(children[128].Id))throw Object.assign(new Error('Expected child failure'),{name:'IOException'});
       return {changed:false,Failures:0};
     }finally{active--;}
   };
@@ -254,6 +277,12 @@ test('postgres: registered Collection task runs through the post-scan lifecycle 
     }));
     await database.insert('AncestorIds', { ItemId: Id, ParentItemId: physicalId });
   }
+  // The direct SQL seed bypassed scan invalidation. Establish the native
+  // post-scan boundary before deriving live options from UserRoot.Children.
+  beforeMetadataRefresh(userRoot);
+  runtime.libraryScanHost.invalidateChildren(userRoot);
+  assert.equal(await runtime.metadata.loadContext.withContext(physicalId, { includeChildren: false },
+    loaded => loaded.libraryOptions.AutomaticallyAddToCollection), true);
   const created = [], added = [], pending = [], failures = [];
   runtime.collections.on('CollectionCreated', ({ Collection }) => created.push({ id: Collection.Id, name: Collection.Name }));
   runtime.collections.on('ItemsAddedToCollection', ({ Collection, Items }) => {

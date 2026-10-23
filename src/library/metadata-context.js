@@ -70,6 +70,21 @@ export function metadataLookup(item, parents = []) {
 export function createMetadataContextLoader({ store, library, fileSystem = library?.options.fileSystem, linkedChildren, spoolRoot, vfs, identityMap, metadataIdentityMap = identityMap, configuration = {}, contextExtensions = () => [], metadataConfiguration = { UseFileCreationTimeForDateAdded: true }, videoPathResolver, extraPathResolver, ignoreRule, externalData, logger }) {
   if (!store || !library) throw new TypeError('Metadata context requires a native store and library.');
   const relationScopes = new AsyncLocalStorage();
+  const activeScope = () => {
+    const scope = relationScopes.getStore();
+    return scope?.active ? scope : null;
+  };
+  const scopeWork = (scope, operation) => {
+    let work;
+    try { work = Promise.resolve(operation()); }
+    catch (error) { work = Promise.reject(error); }
+    if (scope) {
+      scope.pending.add(work);
+      const settled = () => scope.pending.delete(work);
+      work.then(settled, settled);
+    }
+    return work;
+  };
   const personIdentity = name => nativePersonIdentity(name, { ...library.options, configuration });
   const metadataPath = library.options.metadataPath ?? (library.options.programDataPath && imageMetadataPath(library.options.programDataPath));
   const dataPath = library.options.dataPath ?? (library.options.programDataPath && imagePathApiForRoot(library.options.programDataPath).join(library.options.programDataPath, 'data'));
@@ -103,7 +118,9 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
     try { return (await vfs.stat(path)).kind === 'file'; }
     catch (error) { if (error.code === 'not-found') return false; throw error; }
   };
-  const loadContext = async (reference, { draft, includeChildren = false } = {}) => store.run(async db => {
+  const loadContext = (reference, { draft, includeChildren = false } = {}) => {
+    const owningScope = activeScope();
+    return scopeWork(owningScope, () => store.run(async db => {
     let state, itemOwner, loaded;
     try {
     const referenceId = typeof reference === 'string' ? nativeGuid(reference) : reference.Id;
@@ -188,7 +205,6 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
         ...preferredCollectionFolders.map(entry => entry.PreferredMetadataCountryCode), preferredLibraryOptions.MetadataCountryCode]) ?? configuration.MetadataCountryCode;
       return value;
     };
-    if (!item.Path) item.LocationType = item.SourceType === 'Channel' ? 'Remote' : 'Virtual';
     if (VIDEO_TYPES.has(item.Type)) item.VideoType = videoTypes[item.VideoType] ?? item.VideoType ?? 'VideoFile';
     item.ExtraType = extraTypes[item.ExtraType] ?? item.ExtraType;
     if (!draft && item.Type === 'Series' && !Object.hasOwn(item.Data, 'AirDays')) item.AirDays = [];
@@ -428,7 +444,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
     loaded = { item, context, linkedChildren,
       async dispose() {
         if (disposed) return; disposed = true;
-        relationScopes.getStore()?.delete(loaded);
+        owningScope?.contexts.delete(loaded);
         itemOwner.release(); await state.dispose();
         await linkedChildren.flushReleases();
       }, logger, libraryOptions, globalOptions: configuration, metadataConfiguration, saveLocalMetadataEnabled, exists, relationships, versionLinks, fileSystemMetadata,
@@ -507,7 +523,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       return previewContexts(parts);
     };
     for (const extension of contextExtensions()) await extension.enrich(loaded, { database: db });
-    relationScopes.getStore()?.add(loaded);
+    owningScope?.contexts.add(loaded);
     return loaded;
     } catch (error) {
       itemOwner?.release();
@@ -515,20 +531,27 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       catch (cleanup) { throw new AggregateError([error, cleanup], error.message, { cause: error }); }
       throw error;
     }
-  });
+    }));
+  };
   loadContext.library=library;loadContext.linkedChildren=linkedChildren;
-  loadContext.withContext = async (reference, options, operation) => {
+  loadContext.withContext = (reference, options, operation) => scopeWork(activeScope(), async () => {
     const loaded = await loadContext(reference, options);
     try { return await operation(loaded); } finally { await loaded.dispose(); }
-  };
+  });
   loadContext.withScope = async operation => {
-    if (relationScopes.getStore()) return operation();
-    const contexts = new Set();
-    return relationScopes.run(contexts, async () => {
+    const inherited = activeScope();
+    if (inherited) return scopeWork(inherited, operation);
+    const scope = { active: true, contexts: new Set(), pending: new Set() };
+    return relationScopes.run(scope, async () => {
       try { return await operation(); }
       finally {
+        // Accepted loads and consumers can still finish after the body. Once
+        // they drain, a continuation inheriting this ALS value starts a new
+        // owner instead of appending contexts to an already disposed scope.
+        while (scope.pending.size) await Promise.allSettled([...scope.pending]);
+        scope.active = false;
         const failures = [];
-        for (const loaded of contexts) try { await loaded.dispose(); } catch (error) { failures.push(error); }
+        for (const loaded of scope.contexts) try { await loaded.dispose(); } catch (error) { failures.push(error); }
         await linkedChildren.flushReleases();
         if (failures.length) throw new AggregateError(failures, 'Metadata relation scope release failed.');
       }

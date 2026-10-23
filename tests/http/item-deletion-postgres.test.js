@@ -15,6 +15,7 @@ test('postgres: Item DELETE controller matrix uses production bounded lookup and
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async t => {
   const fixture = await setupChildrenFixture(t);
+  fixture.library.options.userRoot = { Id: fixtureId(1) };
   const creator = new ItemCreationService(fixture); fixture.library.itemCreation = creator;
   t.after(() => creator.close());
   fixture.library.options.isActiveRecording = item => item.Path === 'Z:\\SyntheticMedia\\active.mkv';

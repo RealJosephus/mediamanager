@@ -91,7 +91,7 @@ async function fixture(t, dialect) {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [rootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, serverId: 'local-version-scan', programDataPath });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, serverId: 'local-version-scan', programDataPath, userRoot: row(userRootId, 'MediaBrowser.Controller.Entities.UserRootFolder', { IsFolder: true }) });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [rootPath] });
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });
   itemCreation = new ItemCreationService({ store, library, linkedChildren:lifecycleFixture.linkedChildren, loadContext: lifecycleFixture.loadContext });

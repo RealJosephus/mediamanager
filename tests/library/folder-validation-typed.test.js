@@ -142,6 +142,8 @@ async function typedValidationFixture(t, dialect, collectionType, resolver, { me
     ]
   });
 
+  const [userRoot] = await fixture.database.rows('BaseItems', { where: { Id: ids.userRoot } });
+  fixture.library.options.userRoot = userRoot;
   const loadContext = fixture.trackContextLoader(createMetadataContextLoader({fileSystem: testFileSystem, ...fixture, ignoreRule: fixture.ignoreRule }));
   fixture.loadContext = fixture.host.loadContext = loadContext;
   const creator = new ItemCreationService({ ...fixture, loadContext });

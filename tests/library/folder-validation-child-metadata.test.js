@@ -32,8 +32,8 @@ for (const dialect of ['postgres']) test(`${dialect}: child metadata starts afte
         metadata: {
           loadContext: fixture.loadContext,
           validateRefresh() {},
-          async refresh(reference) {
-            const row = (await fixture.database.rows('BaseItems')).find(item => idKey(item.Id) === idKey(reference));
+          async refreshLiveItem(reference) {
+            const row = (await fixture.database.rows('BaseItems')).find(item => idKey(item.Id) === idKey(reference.Id));
             providerCalls.push(row?.Name ?? null);
             return { UpdateType: ItemUpdateType.None, Failures: 0 };
           }

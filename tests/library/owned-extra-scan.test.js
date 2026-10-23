@@ -114,7 +114,11 @@ async function fixture(t, dialect) {
     Name: 'Movies', ParentId: userRootId, IsFolder: true,
     Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [rootId], PhysicalLocationsList: [physicalRootPath] })
   }));
-  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, programDataPath, serverId: 'owned-extra-scan' });
+  // The seeded library root is the authoritative GetUserRootFolder singleton;
+  // the instance storage path must not synthesize a different library graph.
+  const [userRoot] = await database.rows('BaseItems', { where: { Id: userRootId } });
+  library = new LibraryService({fileSystem: testFileSystem, ...await ownedStatePaths(t), store, programDataPath,
+    userRoot, serverId: 'owned-extra-scan' });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [physicalRootPath] });
   ignoreRule.normalizePath = true;
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule });

@@ -1,6 +1,6 @@
 import { makeNativeAbsolutePath } from '../metadata/playlist-items.js';
 import { nativeGuid } from '../users/native.js';
-import { nonemptyId, EMPTY_ID, idKey } from './records.js';
+import { nonemptyId, EMPTY_ID, idKey, libraryError } from './records.js';
 import { buildPostgresItemPageQuery, queryPostgresItemPage } from '../database/postgres-item-query.js';
 import { hydrateNativeItemEntity, acquireNativeItemLinkOwner } from './native-item-entity.js';
 import { quoteIdentifier as q } from '../database/model.js';
@@ -25,7 +25,7 @@ export function findPostgresLinkedChildByPath({ library, store, itemCreation }, 
  * repository batch is hydrated before any live fallback. The caller owns the
  * item, resolution workspace, raw handle and typed cohort until completion. */
 export async function resolvePostgresLinkedChildren({ session, item, links, linkedChildren,
-  library, itemCreation, findByPath, resolution, cohort }) {
+  library, itemCreation, findByPath, resolution, cohort, ordinalOffset = 0n }) {
   await resolution.captureInitialBatch(buildPostgresItemPageQuery(session,
     { enabletotalrecordcount: false }, { itemIdsPlan: resolution.initialIdsPlan(), includeOrdinal: true }), {
     capturePage: async (rows, publishSlot) => {
@@ -52,7 +52,7 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
       if (link.ItemId != null && !nonemptyId(link.ItemId)) continue;
       const batched = link.ItemId != null ? await resolution.initialSlot(link.ItemId) : null;
       if (batched) {
-        await cohort.appendSlot(batched.slotKey, { ordinal: link.Ordinal });
+        await cohort.appendSlot(batched.slotKey, { ordinal: ordinalOffset + link.Ordinal });
         await resolution.recordResolution(link.Ordinal, { itemId: link.ItemId,
           resolvedId: batched.id, slotKey: batched.slotKey });
         continue;
@@ -65,7 +65,7 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
           // repository save. Repository rollback must not erase this prefix.
           if (nextId !== link.ItemId) await linkedChildren.recordResolution(links,
             link.Ordinal, nextId, { session });
-          const slotKey = child ? await cohort.capture(child, { ordinal: link.Ordinal, session }) : null;
+          const slotKey = child ? await cohort.capture(child, { ordinal: ordinalOffset + link.Ordinal, session }) : null;
           await resolution.recordResolution(link.Ordinal, { itemId: nextId,
             resolvedId: child?.Id ?? null, slotKey });
         } finally { owner?.release(); await linkedChildren.flushReleases({ session }); }
@@ -75,7 +75,12 @@ export async function resolvePostgresLinkedChildren({ session, item, links, link
         if (link.LibraryItemId) {
           let id;
           try { id = nativeGuid(link.LibraryItemId); }
-          catch (error) { if (error?.status !== 400) throw error; return capture(null); }
+          catch (error) {
+            if (error?.status !== 400) throw error;
+            // LibraryManager's string overload constructs Guid before lookup.
+            // A malformed legacy ID is a failure, not a missing-item cache hit.
+            throw Object.assign(libraryError(500, 'Unrecognized Guid format.'), { cause: error });
+          }
           return itemCreation.withItem(id, capture);
         }
         return capture(null);

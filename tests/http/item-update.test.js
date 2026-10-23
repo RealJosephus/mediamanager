@@ -57,15 +57,23 @@ async function setup(t, { writable = true, saveLocal = true } = {}) {
   const runtime = await createRuntime({ database, programDataPath, configurationDirectoryPath, configuration: { UICulture: 'en-US', MetadataCountryCode: 'US', IsStartupWizardCompleted: true, ContentTypes: [] },
     serverId: 'item-edit-test', vfs, identityMap, ignoreIdentityMap, libraryOptions, onError: error => errors.push(error) });
   t.after(async () => {
-    await runtime.close(); await storage.close();
-    const cleanup = await PostgresDatabase.open({ connectionString, schema });
-    try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`); await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}__mm" CASCADE`); }
-    finally { await cleanup.close(); }
-    await rm(instanceRoot, { recursive: true, force: true });
+    const failures = [];
+    for (const release of [() => runtime.close(), () => storage.close(), () => database.close(), async () => {
+      const cleanup = await PostgresDatabase.open({ connectionString, schema });
+      try { await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`); await cleanup.client.query(`DROP SCHEMA IF EXISTS "${schema}__mm" CASCADE`); }
+      finally { await cleanup.close(); }
+    }, async () => {
+      assert.equal(path.dirname(instanceRoot), os.tmpdir());
+      await rm(instanceRoot, { recursive: true, force: true });
+    }]) {
+      try { await release(); } catch (error) { failures.push(error); }
+    }
+    if (failures.length) throw new AggregateError(failures, 'Metadata edit fixture cleanup failed.');
   });
   const roots = await database.rows('BaseItems');
   const root = roots.find(item => item.Type === 'MediaBrowser.Controller.Entities.AggregateFolder');
   const userRoot = await database.insert('BaseItems', row('userRoot', 'UserRootFolder', { IsFolder: true }));
+  runtime.library.options.userRoot = userRoot;
   await database.insert('BaseItems', row('folder', 'Folder', { IsFolder: true, Path: 'Z:\\EditMedia', ParentId: root.Id }));
   await database.insert('BaseItems', row('collection', 'CollectionFolder', { IsFolder: true, ParentId: userRoot.Id,
     Data: JSON.stringify({ PhysicalFolderIds: [ids.folder], PhysicalLocationsList: ['Z:\\EditMedia'], CollectionType: 'movies' }) }));

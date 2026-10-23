@@ -13,12 +13,12 @@ export class UserDataChangeNotifier {
   #started = false;
   #closed = false;
 
-  constructor({ userData, sessions, onError = () => {}, delayMs = userDataChangeDelayMs, maxBatchSize = userDataChangeMaxBatchSize,
+  constructor({ userData, sessions, onError = () => {}, runBackground = operation => operation(), delayMs = userDataChangeDelayMs, maxBatchSize = userDataChangeMaxBatchSize,
     schedule = (callback, delay) => setTimeout(callback, delay), cancel = timer => clearTimeout(timer) }) {
     if (!userData || !sessions) throw new TypeError('User data and session services are required.');
     if (!Number.isInteger(delayMs) || delayMs < 0) throw new RangeError('The user data change delay must be a non-negative integer.');
     if (!Number.isInteger(maxBatchSize) || maxBatchSize < 1) throw new RangeError('The user data change batch size must be a positive integer.');
-    Object.assign(this, { userData, sessions, onError, delayMs, maxBatchSize, schedule, cancel });
+    Object.assign(this, { userData, sessions, onError, runBackground, delayMs, maxBatchSize, schedule, cancel });
   }
 
   start() {
@@ -70,7 +70,7 @@ export class UserDataChangeNotifier {
     const changes = this.#changes;
     this.#changes = new Map();
     this.#changedItemCount = 0;
-    const task = this.#send(changes).catch(error => {
+    const task = (async () => this.runBackground(() => this.#send(changes)))().catch(error => {
       try { this.onError(error); } catch { /* Error reporting must not reject the notifier lifetime. */ }
     });
     this.#active.add(task);

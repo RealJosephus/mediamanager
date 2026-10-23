@@ -49,6 +49,9 @@ function ipv4Range(value) {
 // net_uptime is a cached coarse clock; two early reads alone cannot establish
 // stability across the subsequent interface activity. Preflight is not a seal.
 // https://github.com/apple-oss-distributions/xnu/blob/xnu-11215.81.4/bsd/kern/uipc_domain.c
+// PF_ROUTE also publishes interface/address notifications with a shorter header.
+// Inspect their common length/version/type prefix before expecting rt_msghdr.
+// https://github.com/apple-oss-distributions/xnu/blob/xnu-11215.81.4/bsd/net/if.h
 const routeSource = String.raw`
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -65,6 +68,7 @@ const routeSource = String.raw`
 #include <fcntl.h>
 #include <limits.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -75,6 +79,9 @@ typedef union { struct rt_msghdr header; unsigned char bytes[8192]; } Message;
 static int sequence;
 static uint64_t observation_deadline;
 static uint64_t monotonic_milliseconds(void);
+static const char *notification_base;
+static unsigned notification_sequence;
+static void record_notification(Message *message, size_t length);
 static size_t padded(size_t size) { return size ? ((size + 3u) & ~3u) : 4u; }
 static struct sockaddr *address(Message *message, unsigned bit) {
   size_t offset = sizeof(struct rt_msghdr);
@@ -105,20 +112,31 @@ static int exchange(int socket_fd, Message *request, Message *reply, int type) {
   ssize_t written = write(socket_fd, request->bytes, request->header.rtm_msglen);
   if (written < 0) return errno;
   if (written != request->header.rtm_msglen) return EIO;
+  const uint64_t deadline = observation_deadline ? observation_deadline : monotonic_milliseconds() + 5000u;
   for (;;) {
     // Unrelated PF_ROUTE notifications cannot restart the observation budget.
-    if (observation_deadline) {
+    {
       uint64_t now = monotonic_milliseconds();
-      if (now >= observation_deadline) return ETIMEDOUT;
-      uint64_t remaining = observation_deadline - now;
+      if (now >= deadline) return ETIMEDOUT;
+      uint64_t remaining = deadline - now;
       struct timeval timeout = { .tv_sec = (time_t)(remaining / 1000u), .tv_usec = (suseconds_t)((remaining % 1000u) * 1000u) };
       if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout))) return errno;
     }
     ssize_t length = read(socket_fd, reply->bytes, sizeof(*reply));
     if (length < 0) return errno;
-    if ((size_t)length < sizeof(struct rt_msghdr)) return EIO;
+    if ((size_t)length < offsetof(struct rt_msghdr, rtm_type) + sizeof(reply->header.rtm_type)) {
+      fprintf(stderr, "PF_ROUTE truncated message prefix: received=%zd\n", length); return EIO;
+    }
+    if (reply->header.rtm_version != RTM_VERSION || reply->header.rtm_type != type) {
+      record_notification(reply, (size_t)length); continue;
+    }
+    if ((size_t)length < sizeof(struct rt_msghdr) || reply->header.rtm_msglen < sizeof(struct rt_msghdr)) {
+      fprintf(stderr, "PF_ROUTE truncated route reply: received=%zd declared=%u\n", length, reply->header.rtm_msglen); return EIO;
+    }
     if (reply->header.rtm_pid != getpid() || reply->header.rtm_seq != sequence) continue;
-    if (reply->header.rtm_msglen > length) return EIO;
+    if (reply->header.rtm_msglen > length) {
+      fprintf(stderr, "PF_ROUTE incomplete matching reply: received=%zd declared=%u\n", length, reply->header.rtm_msglen); return EIO;
+    }
     return reply->header.rtm_errno;
   }
 }
@@ -193,6 +211,23 @@ static void publish_receipt(FILE *output, const char *temporary, const char *fil
   if (replace) { if (rename(temporary, filename)) err(1, "Publish mutation state"); }
   else { if (link(temporary, filename)) err(1, "Publish exclusive observation"); if (unlink(temporary)) err(1, "Remove observation temporary link"); }
   sync_directory(filename);
+}
+static void record_notification(Message *message, size_t length) {
+  char suffix[96], binary[PATH_MAX], json[PATH_MAX], temporary[PATH_MAX];
+  unsigned ordinal = ++notification_sequence;
+  snprintf(suffix, sizeof(suffix), ".notification-%d-%u.bin", getpid(), ordinal);
+  owned_path(binary, sizeof(binary), notification_base, suffix);
+  FILE *output = pending_receipt(binary, temporary, sizeof(temporary));
+  if (fwrite(message->bytes, 1, length, output) != length) err(1, "Write unrelated route notification");
+  publish_receipt(output, temporary, binary, 0);
+  snprintf(suffix, sizeof(suffix), ".notification-%d-%u.json", getpid(), ordinal);
+  owned_path(json, sizeof(json), notification_base, suffix);
+  output = pending_receipt(json, temporary, sizeof(temporary));
+  fprintf(output, "{\"helperPid\":%d,\"ordinal\":%u,\"receivedBytes\":%zu,\"declaredBytes\":%u,\"version\":%u,\"type\":%u,"
+    "\"routeHeaderBytes\":%zu,\"monotonicMilliseconds\":%llu,\"observationDeadlineMonotonicMilliseconds\":%llu,\"usedAsRouteObservation\":false}\n",
+    getpid(), ordinal, length, message->header.rtm_msglen, message->header.rtm_version, message->header.rtm_type,
+    sizeof(struct rt_msghdr), (unsigned long long)monotonic_milliseconds(), (unsigned long long)observation_deadline);
+  publish_receipt(output, temporary, json, 0);
 }
 static void describe(FILE *output, Message *message) {
   if (!message->header.rtm_msglen) { fputs("null", output); return; }
@@ -324,6 +359,7 @@ int main(int argc, char **argv) {
   int install = argc == 9 && !strcmp(argv[1], "install"), restore = argc == 9 && !strcmp(argv[1], "restore");
   if (!preflight && !snapshot && !install && !restore) errx(1, "Invalid owned route operation");
   if (!owned_interface(argv[3])) errx(1, "The route operation must bind an owned feth interface");
+  notification_base = argv[2];
   unsigned bound_index = 0;
   if (!preflight && !snapshot) {
     if ((!hex_identity(argv[5], 40) && !hex_identity(argv[5], 64)) || !hex_identity(argv[6], 64) || !hex_identity(argv[7], 32)) errx(1, "Invalid immutable mutation identity");

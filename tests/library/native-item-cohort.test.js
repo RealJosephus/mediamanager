@@ -6,6 +6,44 @@ import {PostgresLinkedChildrenStore} from '../../src/library/postgres-linked-chi
 import {newNativeItemEntity,cloneNativeItemEntity,releaseNativeItemLinks} from '../../src/library/native-item-entity.js';
 import {createNativeItemCohort} from '../../src/library/native-item-cohort.js';
 
+test('postgres: typed pages update captured live fields without adopting an uncaptured same-ID cache value', {
+ skip:!process.env.MEDIAMANAGER_TEST_POSTGRES,
+}, async()=>{
+ const schema='native_live_page_'+randomUUID().replaceAll('-','').slice(0,16);
+ const database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,max:1});
+ const links=new PostgresLinkedChildrenStore({database});let cohort,page;
+ try {
+  await links.initialize();
+  const first=newNativeItemEntity('MediaBrowser.Controller.Entities.Movies.Movie');
+  first.Id='10000000000000000000000000000003';first.Name='first';first.Tags=['initial'];
+  const second=cloneNativeItemEntity(first);second.Name='captured second';
+  const unrelated=cloneNativeItemEntity(first);unrelated.Name='uncaptured cached value';
+  const sources=new Map();let sourceReleases=0;
+  cohort=await createNativeItemCohort({linkedChildren:links,resolveLiveItem:(_id,slot)=>sources.get(slot),
+   onRelease:async({session})=>{
+    assert.equal(BigInt((await session.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".item_states`)).rows[0].count),2n);
+    sources.clear();sourceReleases++;
+   }});
+  const firstSlot=await cohort.capture(first,{ordinal:1n}),secondSlot=await cohort.capture(second,{ordinal:2n});
+  sources.set(firstSlot,first);sources.set(secondSlot,unrelated);
+  page=await cohort.page();
+  page.entries[0].item.Name='live metadata update';page.entries[0].item.Tags.push('metadata');
+  assert.equal(first.Name,'live metadata update');assert.deepEqual(first.Tags,['initial','metadata']);
+  assert.equal(page.entries[1].item.Name,'captured second');page.entries[1].item.Name='owned page update';
+  assert.equal(unrelated.Name,'uncaptured cached value');assert.equal(second.Name,'captured second');
+  await page.release();page=null;
+  await cohort.withSlot(secondSlot,item=>assert.equal(item.Name,'owned page update'));
+  page=await cohort.page();
+  await cohort.release();cohort=null;assert.equal(sourceReleases,0);
+  page.entries[0].item.Tags.push('retained page');assert.deepEqual(first.Tags,['initial','metadata','retained page']);
+  await page.release();page=null;assert.equal(sourceReleases,1);
+  assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".item_states`)).rows[0].count),0n);
+ } finally {
+  if(page)await page.release();if(cohort)await cohort.release();await links.flushReleases();await links.close();
+  await database.client.query(`DROP SCHEMA "${schema}" CASCADE;DROP SCHEMA "${schema}__mm" CASCADE`);await database.close();
+ }
+});
+
 test('postgres: typed slots preserve repeated captured values, observer mutations and event retention after TEMP disposal',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async()=>{
  const schema='native_cohort_'+randomUUID().replaceAll('-','').slice(0,20),database=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true,max:1}),links=new PostgresLinkedChildrenStore({database});
  let cohort,event,retained,page;

@@ -45,9 +45,8 @@ function fixture(scenario) {
   }
   const state = { items: [...byId.values()], byId, links, children: item => [...children.get(item.Id)] };
   const calls = [], artistLookups = [], errors = [], controller = new AbortController();
-  const metadata = { loadContext: { linkedChildren: { async flushReleases() {} } }, validateRefresh() {}, async refresh(Id, options) {
+  const metadata = { loadContext: { linkedChildren: { async flushReleases() {} } }, validateRefresh() {}, async refreshLiveItem(item, options) {
     options.signal?.throwIfAborted();
-    const item = byId.get(idKey(Id));
     calls.push({ name: item.Name, type: item.Type, metadataMode: options.MetadataRefreshMode, imageMode: options.ImageRefreshMode,
       automated: options.IsAutomated, replaceAllMetadata: options.ReplaceAllMetadata, forceSave: options.ForceSave,
       ...(options.RefreshPaths == null ? {} : { refreshPaths: options.RefreshPaths }) });
@@ -100,10 +99,10 @@ for (const scenario of input) test(`native metadata scan traversal: ${scenario.n
 test('ordinary folder children are reloaded after its metadata provider commits', async () => {
   const scenario = input[0];
   const { scanner, metadata, root, byName, children, options, calls } = fixture(scenario);
-  const refresh = metadata.refresh;
-  metadata.refresh = async (Id, options) => {
-    const result = await refresh(Id, options);
-    if (Id === byName.get('nested').Id) children.set(Id, [byName.get('sibling')]);
+  const refresh = metadata.refreshLiveItem;
+  metadata.refreshLiveItem = async (item, options) => {
+    const result = await refresh(item, options);
+    if (item.Id === byName.get('nested').Id) children.set(item.Id, [byName.get('sibling')]);
     return result;
   };
   await scanner.refreshChildren(root, options);
@@ -115,13 +114,13 @@ test('bounded native fanout drains failures and nested folders without occupying
   scanner.configuration.LibraryScanFanoutConcurrency = 2;
   const entered = Promise.withResolvers(), release = Promise.withResolvers();
   let active = 0, maximum = 0;
-  const refresh = metadata.refresh;
-  metadata.refresh = async (Id, options) => {
+  const refresh = metadata.refreshLiveItem;
+  metadata.refreshLiveItem = async (item, options) => {
     maximum = Math.max(maximum, ++active);
     try {
-      if (Id === byName.get('nested').Id) { entered.resolve(); await release.promise; }
-      if (Id === byName.get('sibling').Id) { await entered.promise; release.resolve(); }
-      return await refresh(Id, options);
+      if (item.Id === byName.get('nested').Id) { entered.resolve(); await release.promise; }
+      if (item.Id === byName.get('sibling').Id) { await entered.promise; release.resolve(); }
+      return await refresh(item, options);
     } finally { active--; }
   };
   const result = await scanner.refreshChildren(root, options);
@@ -172,7 +171,7 @@ test('a pre-cancelled accessible workset is skipped and completes scheduler prog
 
 test('provider failures remain receipt failures rather than scheduler errors', async () => {
   const { scanner, metadata, byName, options } = fixture(input[0]);
-  metadata.refresh = async () => ({ UpdateType: ItemUpdateType.None, Failures: 2 });
+  metadata.refreshLiveItem = async () => ({ UpdateType: ItemUpdateType.None, Failures: 2 });
   const result = await scanner.refreshAccessibleChildren(ownedSequence([byName.get('sibling')]), options, { recursive: false });
   assert.equal(result.attemptedCount, 1);
   assert.equal(result.providerFailures, 2);

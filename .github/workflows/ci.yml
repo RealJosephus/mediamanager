@@ -24,6 +24,11 @@ on:
         type: string
         required: false
         default: ''
+      diagnostic_timeout_ms:
+        description: Optional timeout in milliseconds for an explicit diagnostic subset; empty keeps the standard limit
+        type: string
+        required: false
+        default: ''
       native_reference:
         description: Build the sealed native reference runtime for selected native consumers
         type: boolean
@@ -88,6 +93,7 @@ jobs:
       TZ: Asia/Taipei
       MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
       MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
+      MEDIAMANAGER_CI_TIMEOUT_MS: ${{ inputs.diagnostic_timeout_ms || '' }}
       MEDIAMANAGER_CI_PROFILE: ${{ inputs.release_pair && 'full' || inputs.validation_profile || 'available' }}
       MEDIAMANAGER_CI_RELEASE_PAIR: ${{ inputs.release_pair && 'true' || 'false' }}
       MEDIAMANAGER_CI_PLATFORM: ${{ inputs.platform || 'all' }}
@@ -153,6 +159,18 @@ jobs:
               throw "Unknown requested test: $filename"
             }
             if (-not $requested.Add($filename)) { throw "Duplicate requested test: $filename" }
+          }
+          if ($env:MEDIAMANAGER_CI_TIMEOUT_MS) {
+            if ($requested.Count -eq 0 -or $env:MEDIAMANAGER_CI_PROFILE -eq 'full' -or $env:MEDIAMANAGER_CI_RELEASE_PAIR -eq 'true') {
+              throw 'A diagnostic timeout requires an explicit subset and cannot change full or release-pair limits.'
+            }
+            if ($env:MEDIAMANAGER_CI_TIMEOUT_MS -notmatch '^[1-9][0-9]{0,6}$') {
+              throw 'The diagnostic timeout must be a decimal integer.'
+            }
+            $diagnosticTimeout = [long]$env:MEDIAMANAGER_CI_TIMEOUT_MS
+            if ($diagnosticTimeout -lt 1000 -or $diagnosticTimeout -gt 6000000) {
+              throw 'The diagnostic timeout must be between 1000 and 6000000 milliseconds.'
+            }
           }
           Write-Output "Validated $($requested.Count) exact requests; an empty list retains automatic scope selection."
       - name: Set up Node

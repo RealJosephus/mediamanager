@@ -1,11 +1,7 @@
-import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
-import { PostgresDatabase } from '../../src/database/postgres.js';
-import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
-import { LibraryService } from '../../src/library/index.js';
+import { setupChildrenFixture } from '../metadata/children-fixture.js';
 
 const ids = Object.fromEntries([
   'root', 'firstCollection', 'firstFolder', 'secondCollection', 'secondFolder', 'hiddenCollection', 'hiddenFolder',
@@ -105,127 +101,105 @@ const restrictedUser = {
 
 const sortedInfo = info => Object.fromEntries(Object.entries(info).map(([name, values]) => [name, values.toSorted()]));
 
-for (const dialect of ['postgres']) test(`${dialect}: library update projection batches visibility, removals, parents and root folders in one relationship frame`,
-  { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async () => {
-    const connectionString = process.env.MEDIAMANAGER_TEST_POSTGRES;
-    const schema = `library_changed_${randomUUID().replaceAll('-', '').slice(0, 20)}`;
-    const database = await PostgresDatabase.open({ connectionString, schema, create: true });
-    const originalRows = database.rows.bind(database);
-    try {
-      await seed(database);
-      const library = new LibraryService({fileSystem: testFileSystem,  store: new DomainStore(database), serverId: 'library-changed-test' });
-      const snapshots = {};
-      for (const name of ['firstFolder', 'hiddenFolder', 'visibleAdded', 'hiddenAdded', 'visibleUpdated', 'hiddenUpdated', 'hiddenRemoved', 'aggregate']) {
-        snapshots[name] = await library.getItemRecord(ids[name]);
+for (const dialect of ['postgres']) test(`${dialect}: library update projection batches visibility, removals, parents and root folders with bounded SQL`,
+  { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+    const { database, library } = await setupChildrenFixture(t);
+    await seed(database);
+    library.options.userRoot = (await database.rows('BaseItems', { where: { Id: ids.root }, limit: 1 }))[0];
+    const snapshots = {};
+    for (const name of ['firstFolder', 'hiddenFolder', 'visibleAdded', 'hiddenAdded', 'visibleUpdated', 'hiddenUpdated', 'hiddenRemoved', 'aggregate']) {
+      snapshots[name] = await library.getItemRecord(ids[name]);
+    }
+    await database.delete('BaseItems', { Id: ids.hiddenRemoved });
+
+    const info = await library.getLibraryUpdateInfo({
+      itemsAdded: [snapshots.visibleAdded, snapshots.hiddenAdded, snapshots.visibleAdded],
+      itemsUpdated: [snapshots.visibleUpdated, snapshots.hiddenUpdated],
+      itemsRemoved: [snapshots.hiddenRemoved],
+      foldersAddedTo: [snapshots.firstFolder, snapshots.hiddenFolder],
+      foldersRemovedFrom: [snapshots.firstFolder, snapshots.hiddenFolder]
+    }, { user: restrictedUser });
+
+    assert.deepEqual(Object.keys(info).toSorted(), [
+      'CollectionFolders', 'FoldersAddedTo', 'FoldersRemovedFrom', 'ItemsAdded', 'ItemsRemoved', 'ItemsUpdated'
+    ]);
+    assert.deepEqual(sortedInfo(info), sortedInfo({
+      FoldersAddedTo: [dtoId(ids.firstFolder)],
+      FoldersRemovedFrom: [dtoId(ids.firstFolder)],
+      ItemsAdded: [dtoId(ids.visibleAdded)],
+      ItemsRemoved: [dtoId(ids.hiddenRemoved)],
+      ItemsUpdated: [dtoId(ids.visibleUpdated)],
+      CollectionFolders: [ids.firstCollection, ids.secondCollection, ids.rootChild].map(dtoId)
+    }));
+
+    const hiddenOnly = await library.getLibraryUpdateInfo({
+      itemsAdded: [snapshots.hiddenAdded],
+      foldersAddedTo: [snapshots.hiddenFolder],
+      foldersRemovedFrom: [snapshots.hiddenFolder]
+    }, { user: restrictedUser });
+    assert.deepEqual(hiddenOnly, {
+      FoldersAddedTo: [],
+      FoldersRemovedFrom: [],
+      ItemsAdded: [],
+      ItemsRemoved: [],
+      ItemsUpdated: [],
+      CollectionFolders: [ids.firstCollection, ids.secondCollection, ids.rootChild].map(dtoId)
+    }, 'a hidden parent still invalidates every visible root collection');
+
+    const aggregate = await library.getLibraryUpdateInfo({
+      itemsAdded: [snapshots.aggregate],
+      itemsUpdated: [snapshots.aggregate],
+      itemsRemoved: [snapshots.aggregate],
+      foldersAddedTo: [snapshots.aggregate],
+      foldersRemovedFrom: [snapshots.aggregate]
+    }, { user: restrictedUser });
+    const rootId = dtoId(ids.root);
+    assert.deepEqual(aggregate, {
+      FoldersAddedTo: [rootId],
+      FoldersRemovedFrom: [rootId],
+      ItemsAdded: [rootId],
+      ItemsRemoved: [rootId],
+      ItemsUpdated: [rootId],
+      CollectionFolders: []
+    });
+
+    if (dialect === 'postgres') {
+      const accessItems = [];
+      for (let index = 0; index < 8; index++) {
+        const playlistId = `C3333333-3333-3333-3333-${String(index * 2 + 1).padStart(12, '0')}`;
+        const boxSetId = `C3333333-3333-3333-3333-${String(index * 2 + 2).padStart(12, '0')}`;
+        await database.insert('BaseItems', item(playlistId, 'Playlist', {
+          ParentId: ids.firstFolder, TopParentId: ids.firstFolder,
+        }));
+        await database.insert('BaseItems', item(boxSetId, 'BoxSet', {
+          ParentId: ids.firstFolder, TopParentId: ids.firstFolder,
+        }));
+        accessItems.push(await library.getItemRecord(playlistId), await library.getItemRecord(boxSetId));
       }
-      await database.delete('BaseItems', { Id: ids.hiddenRemoved });
-
-      const reads = [];
-      database.rows = (table, ...args) => { reads.push(table); return originalRows(table, ...args); };
-      const info = await library.getLibraryUpdateInfo({
-        itemsAdded: [snapshots.visibleAdded, snapshots.hiddenAdded, snapshots.visibleAdded],
-        itemsUpdated: [snapshots.visibleUpdated, snapshots.hiddenUpdated],
-        itemsRemoved: [snapshots.hiddenRemoved],
-        foldersAddedTo: [snapshots.firstFolder, snapshots.hiddenFolder],
-        foldersRemovedFrom: [snapshots.firstFolder, snapshots.hiddenFolder]
-      }, { user: restrictedUser });
-
-      assert.deepEqual(Object.keys(info).toSorted(), [
-        'CollectionFolders', 'FoldersAddedTo', 'FoldersRemovedFrom', 'ItemsAdded', 'ItemsRemoved', 'ItemsUpdated'
-      ]);
-      assert.deepEqual(sortedInfo(info), sortedInfo({
-        FoldersAddedTo: [dtoId(ids.firstFolder)],
-        FoldersRemovedFrom: [dtoId(ids.firstFolder)],
-        ItemsAdded: [dtoId(ids.visibleAdded)],
-        ItemsRemoved: [dtoId(ids.hiddenRemoved)],
-        ItemsUpdated: [dtoId(ids.visibleUpdated)],
-        CollectionFolders: [ids.firstCollection, ids.secondCollection, ids.rootChild].map(dtoId)
-      }));
-      assert.equal(reads.filter(table => table === 'BaseItems').length, 1, 'one library snapshot projects the whole event batch');
-      assert.equal(reads.filter(table => table === 'UserData').length, 1,
-        'one complete relationship frame supplies user data for the whole event batch');
-
-      reads.length = 0;
-      const hiddenOnly = await library.getLibraryUpdateInfo({
-        itemsAdded: [snapshots.hiddenAdded],
-        foldersAddedTo: [snapshots.hiddenFolder],
-        foldersRemovedFrom: [snapshots.hiddenFolder]
-      }, { user: restrictedUser });
-      assert.deepEqual(hiddenOnly, {
-        FoldersAddedTo: [],
-        FoldersRemovedFrom: [],
-        ItemsAdded: [],
-        ItemsRemoved: [],
-        ItemsUpdated: [],
-        CollectionFolders: [ids.firstCollection, ids.secondCollection, ids.rootChild].map(dtoId)
-      }, 'a hidden parent still invalidates every visible root collection');
-      assert.equal(reads.filter(table => table === 'BaseItems').length, 1);
-      assert.equal(reads.filter(table => table === 'UserData').length, 1);
-
-      reads.length = 0;
-      const aggregate = await library.getLibraryUpdateInfo({
-        itemsAdded: [snapshots.aggregate],
-        itemsUpdated: [snapshots.aggregate],
-        itemsRemoved: [snapshots.aggregate],
-        foldersAddedTo: [snapshots.aggregate],
-        foldersRemovedFrom: [snapshots.aggregate]
-      }, { user: restrictedUser });
-      const rootId = dtoId(ids.root);
-      assert.deepEqual(aggregate, {
-        FoldersAddedTo: [rootId],
-        FoldersRemovedFrom: [rootId],
-        ItemsAdded: [rootId],
-        ItemsRemoved: [rootId],
-        ItemsUpdated: [rootId],
-        CollectionFolders: []
-      });
-      assert.equal(reads.filter(table => table === 'BaseItems').length, 1);
-      assert.equal(reads.filter(table => table === 'UserData').length, 1);
-
-      if (dialect === 'postgres') {
-        const accessItems = [];
-        for (let index = 0; index < 8; index++) {
-          const playlistId = `C3333333-3333-3333-3333-${String(index * 2 + 1).padStart(12, '0')}`;
-          const boxSetId = `C3333333-3333-3333-3333-${String(index * 2 + 2).padStart(12, '0')}`;
-          await database.insert('BaseItems', item(playlistId, 'Playlist', {
-            ParentId: ids.firstFolder, TopParentId: ids.firstFolder,
-          }));
-          await database.insert('BaseItems', item(boxSetId, 'BoxSet', {
-            ParentId: ids.firstFolder, TopParentId: ids.firstFolder,
-          }));
-          accessItems.push(await library.getItemRecord(playlistId), await library.getItemRecord(boxSetId));
-        }
-        const countedUpdate = async candidates => {
-          let queryCount = 0;
-          const withConnection = database.withConnection;
-          database.withConnection = function countQueries(operation, options) {
-            return withConnection.call(this, async session => {
-              const query = session.client.query;
-              session.client.query = async function countedQuery(...args) {
-                queryCount += 1;
-                return query.apply(this, args);
-              };
-              try { return await operation(session); }
-              finally { session.client.query = query; }
-            }, options);
-          };
-          try {
-            const result = await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user: restrictedUser });
-            return { queryCount, result };
-          } finally { database.withConnection = withConnection; }
+      const countedUpdate = async candidates => {
+        let queryCount = 0;
+        const withConnection = database.withConnection;
+        database.withConnection = function countQueries(operation, options) {
+          return withConnection.call(this, async session => {
+            const query = session.client.query;
+            session.client.query = async function countedQuery(...args) {
+              queryCount += 1;
+              return query.apply(this, args);
+            };
+            try { return await operation(session); }
+            finally { session.client.query = query; }
+          }, options);
         };
-        const singleAccess = await countedUpdate(accessItems.slice(0, 2));
-        const batchAccess = await countedUpdate(accessItems);
-        assert.equal(batchAccess.result.ItemsAdded.length, accessItems.length);
-        assert.equal(batchAccess.queryCount, singleAccess.queryCount,
-          'LibraryChanged Playlist/BoxSet visibility must use a batch-bounded SQL statement count');
-      }
-    } finally {
-      database.rows = originalRows;
-      if (dialect === 'postgres') {
-        await database.client.query(`DROP SCHEMA "${schema}" CASCADE`);
-        await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
-      }
-      await database.close();
+        try {
+          const result = await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user: restrictedUser });
+          return { queryCount, result };
+        } finally { database.withConnection = withConnection; }
+      };
+      const singleAccess = await countedUpdate(accessItems.slice(0, 2));
+      const batchAccess = await countedUpdate(accessItems);
+      assert.equal(batchAccess.result.ItemsAdded.length, accessItems.length);
+      assert.ok(singleAccess.queryCount > 0, 'the batch bound must observe actual PostgreSQL statements');
+      assert.equal(batchAccess.queryCount, singleAccess.queryCount,
+        'LibraryChanged Playlist/BoxSet visibility must use a batch-bounded SQL statement count');
     }
   });

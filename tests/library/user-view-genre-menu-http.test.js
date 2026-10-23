@@ -7,6 +7,8 @@ import { getNewItemId } from '../../src/core/identity.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { dateText, dateTicks, idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { writeHttpEndpointEvidence } from './http-endpoint-evidence.js';
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 for (const scenario of [
@@ -107,6 +109,8 @@ for (const dialect of dialects) {
     skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
   }, async () => {
     let actual;
+    const output = path.resolve(process.env.MEDIAMANAGER_USER_VIEW_GENRE_MENU_EVIDENCE
+      ?? path.join(validationOutputRoot(), 'user-view-genre-menu'), scenario.name === 'main' ? '.' : 'lazy');
     try {
       actual = await recordItemFilterCandidate({
         dialect, fixture, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -161,8 +165,7 @@ for (const dialect of dialects) {
         },
       });
     } catch (error) {
-      if (process.env.MEDIAMANAGER_USER_VIEW_GENRE_MENU_EVIDENCE) {
-        const output = path.resolve(process.env.MEDIAMANAGER_USER_VIEW_GENRE_MENU_EVIDENCE, scenario.name === 'main' ? '.' : 'lazy');
+      {
         await mkdir(output, { recursive: true });
         await writeFile(path.join(output, `${dialect}-failure.json`), JSON.stringify({
           passed: false, phaseAcceptance: false, completeResponsesCaptured: false, dialect,
@@ -264,12 +267,8 @@ for (const dialect of dialects) {
       assert.deepEqual(actual.runtimeErrors, []);
       assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
     });
-    if (process.env.MEDIAMANAGER_USER_VIEW_GENRE_MENU_EVIDENCE) {
-      const output = path.resolve(process.env.MEDIAMANAGER_USER_VIEW_GENRE_MENU_EVIDENCE, scenario.name === 'main' ? '.' : 'lazy');
-      await mkdir(output, { recursive: true });
-      const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
-      await writeFile(path.join(output, `${dialect}.json`), json(actual), { flag: 'wx' });
-      await writeFile(path.join(output, `${dialect}-comparison.json`), json({
+    {
+      await writeHttpEndpointEvidence(output, dialect, actual, {
         passed: differences.length === 0, phaseAcceptance: false, dialect, responses: scenario.responses, endpointSnapshots: scenario.responses,
         newRows: newRows(actual.afterReads.BaseItems).length,
         fixtureSha256: summary.fixtureSha256,
@@ -283,7 +282,7 @@ for (const dialect of dialects) {
         normalization: 'Isolated ServerId/account name and two explicitly derived user-bound root identities only. GUID casing, native boolean representation and path separators follow storage contracts. New-row DateCreated, DateModified, DateLastRefreshed, DateLastSaved and Data.DateLastSaved retain raw observations. Genre creation/modification dates are checked for valid chronological order, and its Data/refreshed/saved fields remain exact null. UserView creation/refreshed/saved dates are checked for final validity/order/Data equality; final DateModified remains exact null. Intermediate PresentationUniqueKey retains raw pending/refreshed observations and must satisfy actual derived-key invariants; final value is exact. Shared menu IDs, all other fields, names, list duplicates/order/count and paging are exact. Refresh failure/cancellation/concurrency are not proven.',
         cultureSetup: 'Four server-culture changes apply equivalent runtime configuration directly and verify readback; the server configuration HTTP controller is not validated.',
         native: summary, differences,
-      }), { flag: 'wx' });
+      });
     }
     assert.equal(differences.length, 0, JSON.stringify(differences.slice(0, 3)));
   });

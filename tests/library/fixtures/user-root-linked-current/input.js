@@ -61,6 +61,13 @@ export function rootLinkInput(root) {
   add('nullable LibraryItemId resolves actual item', 'root', 'all', { replaceLinks: [link(null, { LibraryItemId: id(21) })] });
   add('missing target caches Guid.Empty', 'root', 'all', { replaceLinks: [link(null, { LibraryItemId: id(999) })] });
   add('missing cache remains Empty', 'root');
+  add('malformed LibraryItemId fails without caching', 'root', 'all', {
+    replaceLinks: [link(null, { LibraryItemId: 'invalid-guid' })],
+  });
+  add('malformed LibraryItemId fails again', 'root');
+  add('malformed LibraryItemId keeps an earlier successful cache', 'root', 'all', {
+    replaceLinks: [link(null, { LibraryItemId: id(21) }), link(null, { LibraryItemId: 'invalid-guid' })],
+  });
   add('typed MusicArtist is Folder although IsFolder is false', 'root', 'all', { replaceLinks: [link(id(400))] });
   add('actual menu retains typed by-name MusicArtist', 'views');
   add('raw folders exclude linked MusicArtist', 'raw');

@@ -20,7 +20,8 @@ import { newNativeItemEntity, nativeItemDescriptor, isNativeItemEntity, acquireN
 import { BoundedItemCache } from './bounded-item-cache.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { prepareUserRootNavigation } from './user-root-navigation.js';
-import { imageTypes as nativeImageTypes } from '../metadata/image-paths.js';
+import { createPostgresFolderLinksQuery } from './postgres-folder-links-query.js';
+import { createPostgresFolderCollectionCollapse } from './postgres-folder-collection-collapse.js';
 import { MetadataImageAssets } from '../metadata/image-assets.js';
 import { queryPostgresInstantMix, queryPostgresInstantMixGenres } from './playback-items.js';
 import { querySplashscreenImagePaths } from './splashscreen-image-query.js';
@@ -69,7 +70,7 @@ import { queryPostgresSeriesEpisodePage } from './postgres-series-episodes-query
 import { filterPostgresSimilarAccessRows, hasPostgresVisibleArtistRelation, localGenreTagSimilarQuery, queryPostgresLocalSimilarRows,
   queryPostgresMovieSimilarRows,
   resolvePostgresRemoteSimilarRows } from './postgres-similar-items-query.js';
-import { queryPostgresUserViewMenuPage } from './postgres-user-view-menu-query.js';
+import { queryPostgresUserViewMenuPage, nativeUserViewFilterQuery } from './postgres-user-view-menu-query.js';
 import { buildPostgresPlaylistVisibility, queryPostgresPlaylistAccess,
   queryPostgresPlaylistAccessBatch } from './postgres-playlist-query.js';
 
@@ -705,6 +706,24 @@ export class LibraryService extends EventEmitter {
       });
       if (required.total > 0) { await this.#prepareRootNavigation(db, user, state); return; }
     }
+  }
+
+  async #prepareFolderQueryVisibility(db, user, state, plan, options) {
+    if (!user || !options.visibility?.boxSetStandalone) return options;
+    if (state.rootNavigation?.user !== user) {
+      const { boxSetUserRootIds: _unconsumedRootIds, ...visibility } = options.visibility;
+      const required = await queryPostgresItemPage(db, { includeitemtypes: ['BoxSet'], limit: 1 }, {
+        ...options, scope: {}, nativeItemsPlan: plan, collapseTypes: null, includeOwnedItems: true,
+        includeAlternateVersions: true, groupByPresentationKey: false,
+        visibility: { ...visibility, itemMode: 'standalone', scopeTopParentAccess: false,
+          boxSetRootLookupOnly: true, boxSetChildRatingMode: 'memory' },
+      });
+      if (required.total > 0) await this.#prepareRootNavigation(db, user, state);
+    }
+    const context = this.#postgresVisibility(state, user);
+    return { ...options, visibility: { ...options.visibility,
+      boxSetUserRootIds: context.boxSetUserRootIds, boxSetRootFolders: context.boxSetRootFolders,
+      boxSetPathExpansion: context.boxSetPathExpansion } };
   }
 
   async #filterMediaSourceIds(db, user, ids) {
@@ -1472,7 +1491,6 @@ export class LibraryService extends EventEmitter {
       else if (kind === 'MusicGenre') return null;
       else {
         named = newNativeItemEntity('MediaBrowser.Controller.Entities.Genre');
-        named.LocationType = 'Virtual';
       }
     } else named = await this[factories[kind]](name);
     return this.#runWithStates(async db => {
@@ -1677,8 +1695,12 @@ export class LibraryService extends EventEmitter {
         ? createPresentationUniqueKey(series, { libraryOptions: this.options.libraryOptions }) : null);
       let visibility = this.#postgresVisibility(navigation, user);
       if (visibility) {
-        const { topParentIds: _repositoryScope, ...explicitVisibility } = visibility;
-        visibility = explicitVisibility;
+        // Episodes derive their physical series/season scope here. Collection
+        // membership inputs belong to standalone BoxSet visibility and are not
+        // part of the episode query's parental-access contract.
+        const context = visibility;
+        visibility = Object.fromEntries(['blockedTags', 'allowedTags', 'maxRating', 'maxSubRating',
+          'blockUnratedTypes', 'libraryTopParentIds', 'ratingContext'].map(key => [key, context[key]]));
       }
       const includeMissing = Boolean(isApiKey
         || (user?.DisplayMissingEpisodes ?? user?.Configuration?.DisplayMissingEpisodes));
@@ -1974,7 +1996,7 @@ export class LibraryService extends EventEmitter {
   async #queryItemsPostgres(db, query, {
     user, isApiKey, fromUserViewChildren, playedFolderScope, checkParentAccess, project,
   }) {
-    let ownedSearchCollation, primaryError;
+    let ownedSearchCollation, folderLinks, folderCollections, primaryError;
     try {
     let navigationRows = await loadPostgresNavigationRows(db, query.parentid);
     const requestedParentRow = nonemptyId(query.parentid)
@@ -2218,13 +2240,14 @@ export class LibraryService extends EventEmitter {
       throw libraryError(500, 'Error processing request.');
     }
 
-    const ordinaryLinkedFolder = Boolean(user && !repositoryQuery && !recursive && parent?.Type === 'Folder');
-    const linkedParentTypes = (['BoxSet', 'Playlist'].includes(parent?.Type) || ordinaryLinkedFolder)
+    const ordinaryFolder = Boolean(!repositoryQuery && !recursive && parent?.Type === 'Folder');
+    const linkedParentTypes = ['BoxSet', 'Playlist'].includes(parent?.Type)
       ? await queryPostgresLinkTypes(db, [parent.Id])
       : new Map();
     const parentHasLinks = linkedParentTypes.has(idKey(parent?.Id));
     const legacyBoxSet = parent?.Type === 'BoxSet'
       && isLegacyBoxSet(parent, parentHasLinks, this.options.programDataPath);
+    if (ordinaryFolder) folderLinks = await createPostgresFolderLinksQuery({ session: db, library: this, item: parent, user });
     let scope = {};
     const preauthorizedRootScope = dispatch.foldersView || isUserRoot && !recursive;
     if (query.ids?.length) scope = {};
@@ -2261,7 +2284,7 @@ export class LibraryService extends EventEmitter {
     } else if (parent?.Type === 'Playlist') {
       scope = { linkedParentId: parent.Id };
     } else if (parent) scope = recursive ? { ancestorId: parent.Id }
-      : ordinaryLinkedFolder && parentHasLinks ? { parentOrLinkedId: parent.Id } : { parentId: parent.Id };
+      : ordinaryFolder ? {} : { parentId: parent.Id };
     if (dispatch.linkedChildAncestorIds.length) {
       scope.linkedChildAncestorIds = dispatch.linkedChildAncestorIds;
     }
@@ -2275,7 +2298,7 @@ export class LibraryService extends EventEmitter {
     // intentionally empty.
     if (visibility && preauthorizedRootScope && !query.ids?.length) visibility = undefined;
     else if (visibility && (fromUserViewChildren && parent?.Type === 'CollectionFolder'
-      && scope.linkedParentId != null || ordinaryLinkedFolder && scope.parentOrLinkedId != null)) {
+      && scope.linkedParentId != null || ordinaryFolder)) {
       const { topParentIds: _topParentIds, ...directVisibility } = visibility;
       visibility = directVisibility;
     }
@@ -2349,6 +2372,16 @@ export class LibraryService extends EventEmitter {
       } : null,
       visibility,
     };
+    let pageQuery = query;
+    if (folderLinks) {
+      const nativeItemsPlan = await folderLinks.prepare(query, postgresQueryOptions, {
+        prepareVisibility: (plan, options) => this.#prepareFolderQueryVisibility(db, user, navigation, plan, options),
+      });
+      Object.assign(postgresQueryOptions, { nativeItemsPlan, visibility: undefined, scope: {},
+        includeOwnedItems: true, includeAlternateVersions: true, groupByPresentationKey: false,
+        memorySourceOrder: 'occurrence', memoryFolderPlayback: Boolean(user), memoryUserViewFilter: true });
+      pageQuery = nativeUserViewFilterQuery(query, Boolean(user));
+    }
     const leadingEmptyMemorySelector = !repositoryQuery
       ? ['studioids', 'genreids'].find(key => query[key]?.length && !nonemptyId(query[key][0]))
       : undefined;
@@ -2358,7 +2391,7 @@ export class LibraryService extends EventEmitter {
       // and earlier named-entity predicates have produced at least one row.
       // Probe that existence relationally so an empty folder or a failing
       // Genres/Studios precondition retains the native successful empty page.
-      const selectorProbe = { ...query, startindex: 0, limit: 1 };
+      const selectorProbe = { ...pageQuery, startindex: 0, limit: 1 };
       delete selectorProbe[leadingEmptyMemorySelector];
       const probe = await queryPostgresItemPage(db, selectorProbe, {
         ...postgresQueryOptions,
@@ -2377,12 +2410,32 @@ export class LibraryService extends EventEmitter {
         } catch { /* Error observers do not alter item queries. */ }
       }
     }
+    if (folderLinks && collapse.active) {
+      folderCollections = await createPostgresFolderCollectionCollapse({ session: db, library: this,
+        source: folderLinks, sourcePlan: postgresQueryOptions.nativeItemsPlan, query: pageQuery,
+        options: { ...postgresQueryOptions, visibility }, user,
+        prepareVisibility: (plan, options) => this.#prepareFolderQueryVisibility(db, user, navigation, plan, options),
+        aggregate: navigation.items.find(item => item.Type === 'AggregateFolder' && item.IsRoot) });
+      Object.assign(postgresQueryOptions, { nativeItemsPlan: folderCollections.plan, collapseTypes: null });
+      // Full predicates have consumed the source before CollectionManager.
+      // Only name predicates are repeated against introduced collections.
+      const afterCollapseKeys = new Set(['sortby', 'sortorder', 'startindex', 'limit', 'adjacentto',
+        'namestartswith', 'namestartswithorgreater', 'namelessthan', 'enabletotalrecordcount']);
+      pageQuery = Object.fromEntries(Object.entries(pageQuery).filter(([key]) => afterCollapseKeys.has(key)));
+    }
     if (typeof project === 'function') return await project(db,
-      buildPostgresItemPageQuery(db, query, { ...postgresQueryOptions, includeOrdinal: true }));
-    const page = await queryPostgresItemPage(db, query, postgresQueryOptions);
+      buildPostgresItemPageQuery(db, pageQuery, { ...postgresQueryOptions, includeOrdinal: true }));
+    const page = await queryPostgresItemPage(db, pageQuery, postgresQueryOptions);
     const graphRows = await loadPostgresPageGraph(db, page.rows, navigationRows);
     const state = await this.load(db, user, { baseRows: graphRows });
-    const items = page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean);
+    const items = [];
+    if (folderLinks) {
+      for (const selected of page.slots) {
+        if (selected.slot) await (folderCollections ?? folderLinks).withSlot(selected.slot,
+          item => items.push(this.adoptLiveItem(state, item)));
+        else { const item = state.byId.get(idKey(selected.id)); if (item) items.push(item); }
+      }
+    } else items.push(...page.rows.map(row => state.byId.get(idKey(row.Id))).filter(Boolean));
     const start = page.startIndex;
     state.folderStats = await queryPostgresFolderStats(db,
       items.filter(item => item.IsFolder).map(item => item.Id), user?.Id);
@@ -2402,7 +2455,13 @@ export class LibraryService extends EventEmitter {
         : repositoryQuery && query.enabletotalrecordcount === false ? dtos.length : page.total;
     return { Items: dtos, TotalRecordCount: totalRecordCount, StartIndex: start };
     } catch (error) { primaryError = error; throw error; }
-    finally { await releasePostgresSearchCollation(ownedSearchCollation, primaryError); }
+    finally {
+      try { await folderCollections?.close(primaryError); }
+      finally {
+        try { await folderLinks?.close(primaryError); }
+        finally { await releasePostgresSearchCollation(ownedSearchCollation, primaryError); }
+      }
+    }
   }
 
   async #queryNextUpViewPostgres(db, query, user, parent, navigationRows, navigation, project) {
@@ -2490,13 +2549,8 @@ export class LibraryService extends EventEmitter {
     const baseVisibility = this.#postgresVisibility(navigation, user);
     let sourceVisibility;
     if (baseVisibility) {
-      const {
-        topParentIds: _topParentIds,
-        libraryTopParentIds: _libraryTopParentIds,
-        ratingContext: _ratingContext,
-        ...directVisibility
-      } = baseVisibility;
-      sourceVisibility = directVisibility;
+      sourceVisibility = Object.fromEntries(['blockedTags', 'allowedTags', 'maxRating', 'maxSubRating',
+        'blockUnratedTypes'].map(key => [key, baseVisibility[key]]));
     }
     const viewType = menuType === 'moviegenres' ? 'moviegenre' : 'tvgenre';
     const subviewId = nativeUserSubviewIdentity(parent.Id, viewType, this.options).Id;
@@ -3282,9 +3336,7 @@ export class LibraryService extends EventEmitter {
 
   adoptLiveItem(state, item) {
     state.adoptItem(item); state.byId.set(idKey(item.Id), item); this.bindChannelAccess(item, state);
-    state.dtoRelations.imageRowsByItem.set(idKey(item.Id), item.ImageInfos.map(image => ({ ItemId: item.Id,
-      Path: image.Path, ImageType: nativeImageTypes.indexOf(image.Type), DateModified: image.DateModified,
-      Width: image.Width, Height: image.Height, Blurhash: image.BlurHash == null ? null : Buffer.from(image.BlurHash) })));
+    (state.dtoRelations.liveImageItems ??= new WeakSet()).add(item);
     return item;
   }
 

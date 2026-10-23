@@ -133,6 +133,9 @@ for (const dialect of ['postgres']) {
         await database.insert('BaseItems', record(row.Id.toUpperCase(), row.Type === 'Series' ? 'TV.Series' : row.Type, { ...fields, Id: row.Id.toUpperCase(), ParentId: nonemptyId(row.ParentId) ? row.ParentId : null,
           Type: row.Type === 'Series' ? 'MediaBrowser.Controller.Entities.TV.Series' : `MediaBrowser.Controller.Entities.${row.Type}`, Data }));
       }
+      const declaredRoots = sample.rows.filter(row => row.Type === 'UserRootFolder');
+      assert.equal(declaredRoots.length, 1);
+      library.options.userRoot = { Id: declaredRoots[0].Id };
       for (const ParentItemId of sample.staleQueryAncestorIds) await database.insert('AncestorIds', { ItemId: sample.itemId, ParentItemId });
       library.options.libraryOptions = new Map(sample.configuredOptions.filter(entry => !entry.missing).map(entry => [idKey(entry.id), entry.value]));
       const loaded = await loadContext(sample.itemId);
@@ -183,6 +186,7 @@ for (const dialect of ['postgres']) {
     const collectionIds = ['ABCDEF01-0000-0000-0000-000000000002', 'ABCDEF01-0000-0000-0000-000000000001'];
     await database.insert('BaseItems', record(root, 'AggregateFolder'));
     await database.insert('BaseItems', record(userRoot, 'UserRootFolder'));
+    library.options.userRoot = { Id: userRoot };
     await database.insert('BaseItems', record(physical, 'Folder', { ParentId: root, Path: 'Z:\\Fixture' }));
     for (const [index, collection] of collectionIds.entries()) {
       await database.insert('BaseItems', record(collection, 'CollectionFolder', { ParentId: userRoot, SortName: String(index),

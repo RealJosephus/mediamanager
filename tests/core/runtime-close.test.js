@@ -89,7 +89,13 @@ test('runtime closes every resource after an actual HLS cache initialization fai
     expectedCloseError = error;
     assert.ok(error instanceof AggregateError); assert.deepEqual(error.errors, [initializeError, processorError]); return true;
   });
-  assert.deepEqual([...new Set(closed)], resources.map(([name]) => name));
+  assert.deepEqual([...new Set(closed)].sort(), resources.map(([name]) => name).sort());
+  assert.ok(closed.indexOf('libraryConfiguration') < closed.indexOf('recordingFolders'),
+    'Configuration admission closes before admitted recording-folder work drains.');
+  assert.ok(closed.indexOf('recordingFolders') < closed.indexOf('saver.stop'),
+    'Admitted recording-folder work retains its metadata writer until drained.');
+  assert.ok(closed.indexOf('plugins') < closed.indexOf('store'),
+    'Plugin shutdown retains its database owner until all plugin cleanup completes.');
   const completed = [...closed];
   assert.equal(runtime.server.listening, false);
   await assert.rejects(fetch(origin, { signal: AbortSignal.timeout(2000) }));

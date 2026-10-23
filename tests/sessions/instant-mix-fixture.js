@@ -101,6 +101,7 @@ export async function openInstantMixFixture(connectionString) {
       await linkedChildren.flushReleases();
       await database.client.query(`TRUNCATE ${qualified('BaseItems')} CASCADE`);
       library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'instant-mix-fixture', programDataPath,
+        userRoot: { Id: id(50) },
         dataPath: path.join(programDataPath, 'data'), metadataPath: path.join(programDataPath, 'metadata'),
         configuration: { DisplaySpecialsWithinSeasons: true, EnableGroupingMoviesIntoCollections: false,
           EnableGroupingShowsIntoCollections: false } });

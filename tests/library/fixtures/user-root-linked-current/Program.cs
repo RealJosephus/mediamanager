@@ -19,6 +19,7 @@ using Jellyfin.Api.Auth.DefaultAuthorizationPolicy;
 using Jellyfin.Api.Constants;
 using Jellyfin.Api.Controllers;
 using Jellyfin.Api.Middleware;
+using Jellyfin.Api.ModelBinders;
 using Jellyfin.Data;
 using Jellyfin.Data.Enums;
 using Jellyfin.Database.Implementations;
@@ -27,6 +28,7 @@ using Jellyfin.Database.Implementations.Enums;
 using Jellyfin.Database.Implementations.Locking;
 using Jellyfin.Database.Providers.Sqlite;
 using Jellyfin.Extensions.Json;
+using Jellyfin.Drawing;
 using Jellyfin.Server.Extensions;
 using Jellyfin.Server.Implementations.Item;
 using MediaBrowser.Common;
@@ -35,9 +37,11 @@ using MediaBrowser.Controller;
 using MediaBrowser.Controller.Collections;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Dto;
+using MediaBrowser.Controller.Drawing;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Entities.Movies;
+using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.LiveTv;
 using MediaBrowser.Controller.Persistence;
@@ -57,12 +61,16 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using DbLinkType = Jellyfin.Database.Implementations.Entities.LinkedChildType;
 
 CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
@@ -225,12 +233,25 @@ Set(library, "_rootFolder", library.GetItemById(rootIds["aggregate"])!); Set(lib
 
 var userRoot = (UserRootFolder)library.GetUserRootFolder();
 var aggregateRoot = (AggregateFolder)library.RootFolder;
-typeof(LibraryManager).GetProperty("Comparers", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(library, new IBaseItemComparer[] { new SortNameComparer() });
+typeof(LibraryManager).GetProperty("Comparers", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(library, new IBaseItemComparer[] {
+    new SortNameComparer(), new NameComparer(), new DateCreatedComparer(), new ProductionYearComparer(),
+    new CommunityRatingComparer(), new CriticRatingComparer(), new IndexNumberComparer(),
+    new ParentIndexNumberComparer(), new PremiereDateComparer(), new RuntimeComparer(), new IsFolderComparer(), new AiredEpisodeOrderComparer()
+});
 var views = new UserViewManager(library, localization, null!, null!, configuration);
 Folder.UserViewManager = views;
 var provider = Stub.Make<IProviderManager>((method, _) => throw new InvalidOperationException("Metadata execution is forbidden."));
 var monitor = Stub.Make<ILibraryMonitor>((method, _) => throw new InvalidOperationException("Monitoring mutation is forbidden."));
 var collections = new CollectionManager(library, paths, localization, fileSystem, monitor, NullLoggerFactory.Instance, provider, links);
+var collectionCalls = new List<string>();
+Folder.CollectionManager = Stub.Make<ICollectionManager>((method, values) => {
+    collectionCalls.Add(method.Name);
+    try { return method.Invoke(collections, values); }
+    catch (TargetInvocationException error) when (error.InnerException is not null) {
+        System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error.InnerException).Throw();
+        throw;
+    }
+});
 // The actual constructor initializes an empty active-recording dictionary and
 // subscribes to configuration events only. This read-only fixture never raises
 // those events, initializes timers, or calls recording/media methods. Its only
@@ -238,7 +259,17 @@ var collections = new CollectionManager(library, paths, localization, fileSystem
 using var recordings = new Jellyfin.LiveTv.Recordings.RecordingsManager(NullLogger<Jellyfin.LiveTv.Recordings.RecordingsManager>.Instance,
     configuration, null!, fileSystem, library, monitor, provider, null!, BaseItem.MediaSourceManager, null!, null!, null!, null!);
 Video.RecordingsManager = recordings;
-var dto = new DtoService(NullLogger<DtoService>.Instance, library, userData, null!, provider, recordings, appHost,
+var imageCalls = new List<string>();
+using var imageProcessor = new ImageProcessor(NullLogger<ImageProcessor>.Instance, paths, fileSystem,
+    Stub.Make<IImageEncoder>((_, _) => throw new InvalidOperationException("Image encoding is outside this read-only DTO component.")), configuration);
+var imageReader = Stub.Make<IImageProcessor>((method, values) => {
+    imageCalls.Add(method.Name);
+    try { return method.Invoke(imageProcessor, values); }
+    catch (TargetInvocationException error) when (error.InnerException is not null) {
+        System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(error.InnerException).Throw(); throw;
+    }
+});
+var dto = new DtoService(NullLogger<DtoService>.Instance, library, userData, imageReader, provider, recordings, appHost,
     BaseItem.MediaSourceManager, null!, null!, null!);
 var dtoOptions = new DtoOptions(false) {
     Fields = input.GetProperty("dtoFields").EnumerateArray().Select(value => Enum.Parse<ItemFields>(value.GetString()!)).ToArray(),
@@ -250,7 +281,9 @@ if (!activeRecordings.IsEmpty) throw new InvalidOperationException("The DTO depe
 var before = Evidence.Tables(databaseFilename);
 object Item(BaseItem item) => new { id = item.Id.ToString("N"), nativeType = item.GetType().FullName, name = item.Name,
     isFolder = item.IsFolder, isTypedFolder = item is Folder, parentId = item.ParentId.ToString("N"), officialRating = item.OfficialRating };
-object? RawLinks() => userRoot.LinkedChildren?.Select(link => new { ItemId = link.ItemId?.ToString("N"), Type = (int)link.Type, link.Path, link.LibraryItemId }).ToArray();
+object? RawLinks(Folder folder) => folder.LinkedChildren?.Select(link => new { ItemId = link.ItemId?.ToString("N"), Type = (int)link.Type, link.Path, link.LibraryItemId }).ToArray();
+var observedCollections = new Dictionary<string, Folder>(StringComparer.Ordinal);
+object CollectionLinks() => observedCollections.ToDictionary(pair => pair.Key, pair => RawLinks(pair.Value), StringComparer.Ordinal);
 void ApplyValues(BaseItem child, JsonElement value) {
     if (value.TryGetProperty("name", out var name)) child.Name = name.GetString();
     if (value.TryGetProperty("overview", out var overview)) child.Overview = overview.GetString();
@@ -258,24 +291,85 @@ void ApplyValues(BaseItem child, JsonElement value) {
     if (value.TryGetProperty("tags", out var tags)) child.Tags = tags.EnumerateArray().Select(item => item.GetString()!).ToArray();
     if (value.TryGetProperty("tagline", out var tagline)) child.Tagline = tagline.GetString();
     if (value.TryGetProperty("providerIds", out var ids)) child.ProviderIds = ids.EnumerateObject().ToDictionary(item => item.Name, item => item.Value.GetString()!, StringComparer.OrdinalIgnoreCase);
+    foreach (var (key, propertyName) in new[] {
+        ("rating", "OfficialRating"), ("customRating", "CustomRating"), ("sort", "ForcedSortName"),
+        ("studios", "Studios"), ("year", "ProductionYear"), ("index", "IndexNumber"), ("parentIndex", "ParentIndexNumber"),
+        ("locked", "IsLocked"), ("virtualItem", "IsVirtualItem"), ("created", "DateCreated"), ("premiere", "PremiereDate"),
+        ("runtime", "RunTimeTicks")
+    }) if (value.TryGetProperty(key, out var supplied)) {
+        var property = typeof(BaseItem).GetProperty(propertyName)!;
+        property.SetValue(child, supplied.Deserialize(property.PropertyType, JsonDefaults.Options));
+    }
+    if (value.TryGetProperty("communityRating", out var community)) child.CommunityRating = community.ValueKind == JsonValueKind.Null ? null
+        : community.ValueKind == JsonValueKind.String ? float.Parse(community.GetString()!, CultureInfo.InvariantCulture) : community.GetSingle();
+    if (value.TryGetProperty("criticRating", out var critic)) child.CriticRating = critic.ValueKind == JsonValueKind.Null ? null : critic.GetSingle();
+    if (value.TryGetProperty("path", out var suppliedPath)) child.Path = suppliedPath.ValueKind == JsonValueKind.Null ? null : Map(suppliedPath.GetString()!);
+    if (value.TryGetProperty("parentId", out var parentId)) child.ParentId = Id(parentId.GetString()!);
+    if (value.TryGetProperty("images", out var images)) child.ImageInfos = images.ValueKind == JsonValueKind.Null ? null!
+        : images.EnumerateArray().Select(image => new ItemImageInfo {
+            Path = Map(image.GetProperty("path").GetString()!), Type = Enum.Parse<ImageType>(image.GetProperty("type").GetString()!),
+            DateModified = image.GetProperty("modified").Deserialize<DateTime>(JsonDefaults.Options),
+            Width = image.GetProperty("width").GetInt32(), Height = image.GetProperty("height").GetInt32(),
+            BlurHash = image.GetProperty("blurHash").GetString()
+        }).ToArray();
+    if (value.TryGetProperty("links", out var links)) {
+        if (child is not Folder folder) throw new InvalidOperationException("Only a Folder occurrence accepts links.");
+        folder.LinkedChildren = links.ValueKind == JsonValueKind.Null ? null! : links.EnumerateArray().Select(link => new LinkedChild {
+            ItemId = link.GetProperty("ItemId").ValueKind == JsonValueKind.Null ? null : Id(link.GetProperty("ItemId").GetString()!),
+            Type = (MediaBrowser.Controller.Entities.LinkedChildType)link.GetProperty("Type").GetInt32(),
+            Path = link.GetProperty("Path").ValueKind == JsonValueKind.Null ? null : Map(link.GetProperty("Path").GetString()!),
+            LibraryItemId = link.GetProperty("LibraryItemId").GetString()
+        }).ToArray();
+    }
+    if (value.TryGetProperty("children", out var children)) {
+        if (child is not Folder childFolder) throw new InvalidOperationException("Only a Folder occurrence accepts Children.");
+        childFolder.Children = children.ValueKind == JsonValueKind.String ? null! : children.EnumerateArray().Select(Occurrence).ToArray();
+    }
+    if (value.TryGetProperty("track", out var track)) observedCollections[track.GetString()!] = (Folder)child;
+    if (child is Episode episode) {
+        if (value.TryGetProperty("airsAfterSeason", out var after)) episode.AirsAfterSeasonNumber = after.Deserialize<int?>();
+        if (value.TryGetProperty("airsBeforeSeason", out var before)) episode.AirsBeforeSeasonNumber = before.Deserialize<int?>();
+        if (value.TryGetProperty("airsBeforeEpisode", out var number)) episode.AirsBeforeEpisodeNumber = number.Deserialize<int?>();
+    }
 }
 BaseItem Occurrence(JsonElement value) {
+    if (value.TryGetProperty("cached", out var cached) && cached.GetBoolean()) {
+        var live = library.GetItemById(Id(value.GetProperty("id").GetString()!))!;
+        ApplyValues(live, value); library.RegisterItem(live);
+        return live;
+    }
     // A distinct exact object with the same ID is a real warm Children/virtual
     // occurrence. It is never registered as a replacement repository result.
-    var original = library.GetItemById(Id(value.GetProperty("id").GetString()!))!;
-    BaseItem child = original is MusicArtist ? new MusicArtist() : original is Movie ? new Movie() : new Folder();
-    child.Id = original.Id; child.Name = original.Name;
-    child.Path = original.Path; child.ParentId = original.ParentId; child.OfficialRating = original.OfficialRating; child.Tags = original.Tags;
+    BaseItem child;
+    if (value.TryGetProperty("kind", out var kind)) child = kind.GetString() switch {
+        "Movie" => new Movie(), "Folder" => new Folder(), "Episode" => new Episode(), "BoxSet" => new BoxSet(), _ => throw new InvalidOperationException("Unknown fresh occurrence type.")
+    };
+    else {
+        var original = library.GetItemById(Id(value.GetProperty("id").GetString()!))!;
+        child = (BaseItem)Activator.CreateInstance(original.GetType())!;
+        child.Name = original.Name; child.Path = original.Path; child.ParentId = original.ParentId;
+        child.OfficialRating = original.OfficialRating; child.Tags = original.Tags;
+    }
+    child.Id = Id(value.GetProperty("id").GetString()!);
     ApplyValues(child, value);
     return child;
 }
-void Apply(JsonElement sample) {
+void Apply(JsonElement sample, Folder folder) {
+    if (sample.TryGetProperty("folderPath", out var folderPath)) folder.Path = Map(folderPath.GetString()!);
     if (sample.TryGetProperty("warm", out var warm)) {
         var item = library.GetItemById(Id(warm.GetProperty("id").GetString()!))!;
         ApplyValues(item, warm);
         library.RegisterItem(item);
     }
-    if (sample.TryGetProperty("direct", out var direct)) userRoot.Children = direct.ValueKind == JsonValueKind.String ? null! : direct.EnumerateArray().Select(Occurrence).ToArray();
+    if (sample.TryGetProperty("direct", out var direct)) folder.Children = direct.ValueKind == JsonValueKind.String ? null! : direct.EnumerateArray().Select(Occurrence).ToArray();
+    if (sample.TryGetProperty("aggregateChildren", out var aggregateChildren)) aggregateRoot.Children = aggregateChildren.ValueKind == JsonValueKind.String ? null!
+        : aggregateChildren.EnumerateArray().Select(Occurrence).ToArray();
+    if (sample.TryGetProperty("collectionsChildren", out var collectionChildren)) {
+        var collectionsFolder = collections.GetCollectionsFolder(false).GetAwaiter().GetResult()
+            ?? throw new InvalidOperationException("The actual collection folder must exist.");
+        collectionsFolder.Children = collectionChildren.ValueKind == JsonValueKind.String ? null!
+            : collectionChildren.EnumerateArray().Select(Occurrence).ToArray();
+    }
     if (sample.TryGetProperty("virtual", out var virtualChildren)) {
         aggregateRoot.VirtualChildren.Clear();
         // ConcurrentBag's actual one-thread enumeration is LIFO. The neutral
@@ -283,7 +377,7 @@ void Apply(JsonElement sample) {
         foreach (var child in virtualChildren.EnumerateArray().Select(Occurrence).Reverse()) aggregateRoot.VirtualChildren.Add(child);
     }
     if (sample.TryGetProperty("replaceLinks", out var replacements)) {
-        userRoot.LinkedChildren = replacements.ValueKind == JsonValueKind.Null ? null! : replacements.EnumerateArray().Select(value => new LinkedChild {
+        folder.LinkedChildren = replacements.ValueKind == JsonValueKind.Null ? null! : replacements.EnumerateArray().Select(value => new LinkedChild {
             ItemId = value.GetProperty("ItemId").ValueKind == JsonValueKind.Null ? null : Id(value.GetProperty("ItemId").GetString()!),
             Type = (MediaBrowser.Controller.Entities.LinkedChildType)value.GetProperty("Type").GetInt32(),
             Path = value.GetProperty("Path").ValueKind == JsonValueKind.Null ? null : Map(value.GetProperty("Path").GetString()!),
@@ -291,17 +385,79 @@ void Apply(JsonElement sample) {
         }).ToArray();
     }
 }
+var itemArguments = typeof(ItemsController).GetMethods(BindingFlags.Instance | BindingFlags.Public)
+    .Where(method => method.Name == nameof(ItemsController.GetItems)).SelectMany(method => method.GetParameters())
+    .Select(parameter => parameter.Name!).ToHashSet(StringComparer.OrdinalIgnoreCase);
+if (!itemArguments.Contains("genres") || !itemArguments.Contains("tags") || itemArguments.Contains("minIndexNumber"))
+    throw new InvalidOperationException("The designated Items argument inventory changed.");
+var pipeBindings = new List<object>();
+string[] BindPipe(string name, JsonElement value, string caseName) {
+    var raw = value.ValueKind == JsonValueKind.Array ? value.EnumerateArray().Select(item => item.GetString()!).ToArray() : [value.GetString()!];
+    var queryProvider = new QueryStringValueProvider(BindingSource.Query,
+        new QueryCollection(new Dictionary<string, StringValues> { [name] = new StringValues(raw) }), CultureInfo.InvariantCulture);
+    var context = DefaultModelBindingContext.CreateBindingContext(new ActionContext { HttpContext = new DefaultHttpContext() },
+        queryProvider, new EmptyModelMetadataProvider().GetMetadataForType(typeof(string[])), null, name);
+    new PipeDelimitedCollectionModelBinder(NullLogger<PipeDelimitedCollectionModelBinder>.Instance).BindModelAsync(context).GetAwaiter().GetResult();
+    if (!context.Result.IsModelSet) throw new InvalidOperationException("The real pipe binder did not produce a model.");
+    var bound = (string[])context.Result.Model!;
+    pipeBindings.Add(new { caseName, name, raw, bound });
+    return bound;
+}
+object FolderItems(Folder folder, User user, JsonElement sample) {
+    var options = new DtoOptions(false) { Fields = dtoOptions.Fields, EnableImages = false, EnableUserData = false };
+    var query = new InternalItemsQuery(user) { DtoOptions = options };
+    if (sample.TryGetProperty("query", out var supplied)) {
+        if (supplied.TryGetProperty("EnableImages", out var enableImages)) options.EnableImages = enableImages.GetBoolean();
+        if (supplied.TryGetProperty("ImageTypeLimit", out var imageLimit)) options.ImageTypeLimit = imageLimit.GetInt32();
+        if (supplied.TryGetProperty("EnableImageTypes", out var imageTypes)) options.ImageTypes = imageTypes.EnumerateArray()
+            .Select(value => Enum.Parse<ImageType>(value.GetString()!)).ToArray();
+        if (supplied.TryGetProperty("SortBy", out var sort)) {
+            var orders = supplied.TryGetProperty("SortOrder", out var order) ? order.EnumerateArray().Select(value => Enum.Parse<SortOrder>(value.GetString()!)).ToArray() : [];
+            query.OrderBy = sort.EnumerateArray().Select((value, index) => (Enum.Parse<ItemSortBy>(value.GetString()!),
+                orders.Length == 0 ? SortOrder.Ascending : orders[Math.Min(index, orders.Length - 1)])).ToArray();
+        }
+        foreach (var property in supplied.EnumerateObject()) {
+            if (property.Name is "SortBy" or "SortOrder" or "EnableImages" or "ImageTypeLimit" or "EnableImageTypes") continue;
+            // The candidate's formal queryItems consumer applies the public
+            // Items binder. Unknown HTTP keys do not become Internal fields.
+            if (!itemArguments.Contains(property.Name)) continue;
+            var name = property.Name switch { "Ids" => "ItemIds", _ => property.Name };
+            var target = typeof(InternalItemsQuery).GetProperty(name)
+                ?? throw new InvalidOperationException("The native fixture cannot silently ignore query field " + property.Name);
+            target.SetValue(query, property.Name is "Genres" or "Tags" or "OfficialRatings"
+                ? BindPipe(property.Name, property.Value, sample.GetProperty("name").GetString()!) : property.Value.Deserialize(target.PropertyType, JsonDefaults.Options));
+        }
+    }
+    var result = folder.GetItems(query);
+    return new { Items = JsonSerializer.SerializeToElement(dto.GetBaseItemDtos(result.Items, options, user, skipVisibilityCheck: true), JsonDefaults.Options),
+        result.TotalRecordCount, StartIndex = query.StartIndex ?? 0 };
+}
 var results = new List<object>();
 foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
-    Apply(sample); var linksBefore = RawLinks(); object? value = null; object? error = null;
-    var key = sample.GetProperty("user").GetString(); var userId = Id(input.GetProperty("users").EnumerateArray().Single(row => row.GetProperty("key").GetString() == key).GetProperty("id").GetString()!);
-    using var db = factory.CreateDbContext(); var user = db.Users.AsNoTracking().Include(row => row.Permissions).Include(row => row.Preferences).Single(row => row.Id == userId);
+    if (sample.TryGetProperty("configuration", out var configured)) {
+        foreach (var property in configured.EnumerateObject()) {
+            if (property.Name is not (nameof(ServerConfiguration.EnableGroupingMoviesIntoCollections) or nameof(ServerConfiguration.EnableGroupingShowsIntoCollections)))
+                throw new InvalidOperationException("Unknown controlled grouping setting.");
+            typeof(ServerConfiguration).GetProperty(property.Name)!.SetValue(settings, property.Value.GetBoolean());
+        }
+    }
+    var folder = sample.TryGetProperty("folder", out var folderId) ? (Folder)library.GetItemById(Id(folderId.GetString()!))! : userRoot;
+    Apply(sample, folder); var linksBefore = RawLinks(folder); object? value = null; object? error = null;
+    var observeCollections = sample.TryGetProperty("observeCollections", out var observe) && observe.GetBoolean();
+    var collectionsBefore = observeCollections ? CollectionLinks() : null;
+    var key = sample.GetProperty("user").GetString();
+    using var db = factory.CreateDbContext(); User user = null!;
+    if (key is not null) {
+        var userId = Id(input.GetProperty("users").EnumerateArray().Single(row => row.GetProperty("key").GetString() == key).GetProperty("id").GetString()!);
+        user = db.Users.AsNoTracking().Include(row => row.Permissions).Include(row => row.Preferences).Single(row => row.Id == userId);
+    } else if (sample.GetProperty("lane").GetString() != "folder") throw new InvalidOperationException("Only the Folder lane accepts an explicit null user.");
     try {
         value = sample.GetProperty("lane").GetString() switch {
+            "folder" => FolderItems(folder, user, sample),
             "root" => userRoot.GetChildren(user, true).Select(Item).ToArray(),
             "dto" => JsonSerializer.SerializeToElement(dto.GetBaseItemDtos(userRoot.GetChildren(user, true), dtoOptions, user, skipVisibilityCheck: true), JsonDefaults.Options),
             "raw" => library.GetCollectionFolders(library.GetItemById(Id(input.GetProperty("target").GetString()!))!).Select(Item).ToArray(),
-            "collections" => collections.GetCollectionsContainingItem(user, Id(input.GetProperty("target").GetString()!)).Select(row => row.Id.ToString("N")).Order(StringComparer.Ordinal).ToArray(),
+            "collections" => Folder.CollectionManager.GetCollectionsContainingItem(user, Id(input.GetProperty("target").GetString()!)).Select(row => row.Id.ToString("N")).Order(StringComparer.Ordinal).ToArray(),
             "views" => views.GetUserViews(new UserViewQuery { User = user, IncludeExternalContent = false, IncludeHidden = true }).Select(Item).ToArray(),
             _ => throw new InvalidOperationException("Unknown root-linked lane.")
         };
@@ -309,7 +465,9 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         error = new { type = exception.GetType().Name, message = exception.Message, stack = exception.StackTrace,
             status = exception is ArgumentException ? 400 : 500 };
     }
-    results.Add(new { name = sample.GetProperty("name").GetString(), lane = sample.GetProperty("lane").GetString(), value, error, linksBefore, linksAfter = RawLinks() });
+    if (observeCollections) results.Add(new { name = sample.GetProperty("name").GetString(), lane = sample.GetProperty("lane").GetString(), value, error,
+        linksBefore, linksAfter = RawLinks(folder), collectionsBefore, collectionsAfter = CollectionLinks() });
+    else results.Add(new { name = sample.GetProperty("name").GetString(), lane = sample.GetProperty("lane").GetString(), value, error, linksBefore, linksAfter = RawLinks(folder) });
 }
 var after = Evidence.Tables(databaseFilename);
 if (!activeRecordings.IsEmpty) throw new InvalidOperationException("Read-only root DTO consumption changed the active-recording dictionary.");
@@ -317,9 +475,18 @@ if (JsonSerializer.Serialize(before) != JsonSerializer.Serialize(after)) throw n
 if (Evidence.Schema(databaseFilename) != schemaBefore || Evidence.Hash(sourceFilename) != sourceHash) throw new InvalidOperationException("The supplied database/schema changed.");
 var foreignKeys = Evidence.ForeignKeys(databaseFilename);
 File.WriteAllText(output, JsonSerializer.Serialize(new { inputSha256 = Evidence.Hash(args[0]), sourceSha256 = sourceHash, databaseFilename, rootIds,
-    actualRepositoryAndTypedMapper = true, actualLinkedChildrenService = true, actualRootGetChildren = true, actualCollectionManager = true,
-    actualCollectionFolders = true, actualUserViewManager = true, actualEfSqlite = true, userLookupControlled = false,
-    actualDtoService = true, actualReadOnlyRecordingsManager = true,
+    actualRepositoryAndTypedMapper = true, actualLinkedChildrenService = true,
+    actualRootGetChildren = input.GetProperty("cases").EnumerateArray().Any(sample => sample.GetProperty("lane").GetString() is "root" or "dto"),
+    actualCollectionManager = collectionCalls.Count > 0,
+    collectionManagerInitialization = new { implementation = collections.GetType().FullName, calls = collectionCalls.ToArray() },
+    imageProcessorInitialization = new { implementation = imageProcessor.GetType().FullName, calls = imageCalls.ToArray() },
+    actualCollectionFolders = input.GetProperty("cases").EnumerateArray().Any(sample => sample.GetProperty("lane").GetString() == "raw"),
+    actualUserViewManager = input.GetProperty("cases").EnumerateArray().Any(sample => sample.GetProperty("lane").GetString() == "views"),
+    actualEfSqlite = true, userLookupControlled = false, actualDtoService = true, actualReadOnlyRecordingsManager = true,
+    actualFolderGetItems = input.GetProperty("cases").EnumerateArray().Any(sample => sample.GetProperty("lane").GetString() == "folder"),
+    folderQueryInitialization = new { actualItemsArgumentInventory = true, actualPipeDelimitedBinder = pipeBindings.Count > 0,
+        controller = typeof(ItemsController).FullName, binder = typeof(PipeDelimitedCollectionModelBinder).FullName,
+        arguments = itemArguments.Order(StringComparer.Ordinal).ToArray(), bindings = pipeBindings, httpHostExecuted = false },
     dtoInitialization = new { fields = dtoOptions.Fields.Select(value => value.ToString()).ToArray(), dtoOptions.EnableImages, dtoOptions.EnableUserData,
         skipVisibilityCheck = true, activeRecordingsBeforeAndAfterEmpty = true, mediaExecutionDependenciesAbsent = true },
     schemaCreated = false, schemaHistoryPreserved = true, recordingOrMediaExecution = false,

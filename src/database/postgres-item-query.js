@@ -2,7 +2,7 @@ import { decodeNativeTextBytes, nativeTextBytes, nativeTextProjection, nativeTex
 import { nativeTextSql } from './native-text-sql.js';
 import { quoteIdentifier as q } from './model.js';
 import { postgresAliasedVersionFamilyKey, postgresSignedPaddedInteger } from './postgres-query-expressions.js';
-import { withPostgresNativeVisibilityJitOff } from './postgres-native-visibility-jit.js';
+import { withPostgresNativeQueryJitOff } from './postgres-native-query-jit.js';
 import {
   postgresCleanValueFunctionName,
   postgresRemoveDiacriticsFunctionName,
@@ -190,6 +190,7 @@ export function buildPostgresItemPageQuery(database, query, {
   memoryFolderPlayback = false,
   repositoryFolderPlayback = resumableMode === 'repository',
   memoryUserViewFilter = false,
+  nativeItemsPlan = null,
   itemIdsPlan = null,
   genreIdsPlan = null,
   playedFolderScope = null,
@@ -216,11 +217,16 @@ export function buildPostgresItemPageQuery(database, query, {
   if (memoryPresort !== null && typeof memoryPresort !== 'string') {
     throw new TypeError('memoryPresort must be a string or null.');
   }
-  if (memorySourceOrder !== null && memorySourceOrder !== 'stored-sort-name') {
+  if (memorySourceOrder !== null && memorySourceOrder !== 'stored-sort-name' && memorySourceOrder !== 'occurrence') {
     throw new TypeError('Unknown memory source order.');
   }
   if (typeof memoryFolderPlayback !== 'boolean') throw new TypeError('memoryFolderPlayback must be boolean.');
   if (typeof memoryUserViewFilter !== 'boolean') throw new TypeError('memoryUserViewFilter must be boolean.');
+  if (nativeItemsPlan !== null && (resumableMode !== 'memory' || typeof nativeItemsPlan?.text !== 'string'
+    || !nativeItemsPlan.text.trim() || !Array.isArray(nativeItemsPlan.values))) {
+    throw new TypeError('Live item projections require a relational memory-query plan.');
+  }
+  if (memorySourceOrder === 'occurrence' && nativeItemsPlan === null) throw new TypeError('Occurrence order requires live item projections.');
   if (typeof requireRelatedNameAccess !== 'boolean') throw new TypeError('requireRelatedNameAccess must be boolean.');
   if (nativeVisibilityProjections !== null) {
     if (!Array.isArray(nativeVisibilityProjections) || nativeVisibilityProjections.length > 128) {
@@ -312,6 +318,25 @@ export function buildPostgresItemPageQuery(database, query, {
   const postCollapsePredicates = [];
   const relationalCtes = [];
   const baseItems = table(database, 'BaseItems');
+  let primaryItems = baseItems;
+  if (nativeItemsPlan !== null) {
+    const offset = values.length;
+    relationalCtes.push(`native_query_items AS (${nativeItemsPlan.text.replace(/\$(\d+)\b/gu, (_, index) => '$' + (Number(index) + offset))})`);
+    values.push(...nativeItemsPlan.values); primaryItems = 'native_query_items';
+    if (collapseTypes !== null) {
+      const replacement = nativeItemsPlan.repository;
+      if (typeof replacement?.text !== 'string' || !Array.isArray(replacement.values)) {
+        throw new TypeError('Live collection collapse requires a repository row projection.');
+      }
+      const replacementOffset = values.length;
+      relationalCtes.push(`native_query_repository_items AS (${replacement.text.replace(/\$(\d+)\b/gu,
+        (_, index) => '$' + (Number(index) + replacementOffset))})`);
+      values.push(...replacement.values);
+    }
+  }
+  const liveAlias = alias => nativeItemsPlan !== null && ['i', 'memory_source', 'incoming', 'existing'].includes(alias);
+  const memoryList = (alias, column) => liveAlias(alias) ? `${alias}.${q('__' + column)}`
+    : `ARRAY(SELECT ${fromProject('list_value')} FROM unnest(string_to_array(${project(`${alias}.${q(column)}`)}, '|')) list_value)`;
   if (nativeVisibilityProjections?.length) {
     // Only the caller's bounded typed objects cross this boundary. The complete
     // library remains in its real relation; this is not a BaseItems mirror.
@@ -325,7 +350,8 @@ export function buildPostgresItemPageQuery(database, query, {
   }
   // Resolve the outer Guid once before scanning the bounded projection.
   // Presence stays separate from the nullable projected value.
-  const visibilityColumn = (alias, name, stored = `${alias}.${q(name)}`) => !nativeVisibilityProjections?.length ? stored
+  const visibilityColumn = (alias, name, stored = `${alias}.${q(name)}`) => liveAlias(alias) && name === 'LibraryFolderIds'
+    ? `${alias}."__LibraryFolderIds"` : !nativeVisibilityProjections?.length ? stored
     : `(SELECT CASE WHEN visibility_value."Present" IS TRUE THEN visibility_value."Value" ELSE ${stored} END
       FROM (SELECT ${normalizedId(`${alias}."Id"`)} AS "Id" OFFSET 0) visibility_key
       LEFT JOIN LATERAL (
@@ -523,11 +549,11 @@ export function buildPostgresItemPageQuery(database, query, {
     const blockedParameter = bindNativeArray(blocked, `${name}.blockedTags`);
     const idKeySql = expression => `replace(${nativeTextSql(database.schemaName).guidLower(expression)}, '-', '')`;
     return `EXISTS (WITH RECURSIVE rating_tag_chain("Id", "ParentId", "OwnerId", "Path", "Tags", "Depth", "Seen") AS (
-      SELECT ${alias}."Id", ${alias}."ParentId", ${alias}."OwnerId", ${alias}."Path", ${alias}."Tags", 0,
+      SELECT ${alias}."Id", ${alias}."ParentId", ${alias}."OwnerId", ${alias}."Path", ${nativeItemsPlan ? memoryList(alias, 'Tags') : `${alias}."Tags"`}, 0,
         ARRAY[${idKeySql(`${alias}."Id"`)}]
       UNION ALL
       SELECT rating_parent."Id", rating_parent."ParentId", rating_parent."OwnerId", rating_parent."Path",
-        rating_parent."Tags", rating_chain."Depth" + 1,
+        ${nativeItemsPlan ? memoryList('rating_parent', 'Tags') : 'rating_parent."Tags"'}, rating_chain."Depth" + 1,
         rating_chain."Seen" || ${idKeySql('rating_parent."Id"')}
       FROM rating_tag_chain rating_chain
       JOIN ${baseItems} rating_parent ON ${idKeySql('rating_parent."Id"')}
@@ -572,8 +598,8 @@ export function buildPostgresItemPageQuery(database, query, {
         ) END
     )
     SELECT 1 FROM rating_tag_chain rating_item
-      CROSS JOIN LATERAL unnest(string_to_array(COALESCE(${project('rating_item."Tags"')}, ''), '|')) rating_tag("Value")
-      WHERE ${runtimeTextKey(postgresCleanValueFunctionName, fromProject('rating_tag."Value"'))} = ANY(${blockedParameter})
+      CROSS JOIN LATERAL unnest(${nativeItemsPlan ? 'rating_item."Tags"' : `string_to_array(COALESCE(${project('rating_item."Tags"')}, ''), '|')`}) rating_tag("Value")
+      WHERE ${runtimeTextKey(postgresCleanValueFunctionName, nativeItemsPlan ? 'rating_tag."Value"' : fromProject('rating_tag."Value"'))} = ANY(${blockedParameter})
     UNION ALL
     SELECT 1 FROM rating_tag_matched_folders rating_folder
       CROSS JOIN LATERAL jsonb_array_elements_text(rating_folder."Tags") rating_tag("Value")
@@ -583,6 +609,7 @@ export function buildPostgresItemPageQuery(database, query, {
 
   let cachedMemorySortName;
   const memorySortName = (alias = 'i') => {
+    if (liveAlias(alias)) return `${alias}."SortName"`;
     if (alias === 'i' && cachedMemorySortName) return cachedMemorySortName;
     const rawColumn = name => `${alias}.${q(name)}`;
     const column = name => ['ForcedSortName', 'Name', 'SortName'].includes(name) ? project(rawColumn(name)) : rawColumn(name);
@@ -793,7 +820,7 @@ export function buildPostgresItemPageQuery(database, query, {
     predicates.push(`i."IsMovie" IS ${query.ismovie ? 'TRUE' : 'FALSE'}`);
   }
   for (const [key, column] of [['mincommunityrating', 'CommunityRating'], ['mincriticrating', 'CriticRating']]) {
-    if (query[key] !== undefined) predicates.push(`i.${q(column)} >= ${bind(query[key])}`);
+    if (query[key] !== undefined) predicates.push(`i.${q(column)} >= ${bind(query[key])}${nativeItemsPlan ? ` AND i.${q(column)} <> 'NaN'::real` : ''}`);
   }
   for (const [key, column, comparison] of [
     ['minpremieredate', 'PremiereDate', '>='], ['maxpremieredate', 'PremiereDate', '<='],
@@ -812,7 +839,8 @@ export function buildPostgresItemPageQuery(database, query, {
   }
   if (query.officialratings?.length) {
     const ratings = bindNativeArray(query.officialratings, 'officialratings');
-    predicates.push(`(i."OfficialRating" = ANY(${ratings}) OR EXISTS (SELECT 1 FROM ${ancestors} rating_ancestor JOIN ${baseItems} rating_item ON ${nativeTextSql(database.schemaName).guidLower("rating_item.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("rating_ancestor.\"ItemId\"")} WHERE ${nativeTextSql(database.schemaName).guidLower("rating_ancestor.\"ParentItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_item."OfficialRating" = ANY(${ratings})))`);
+    predicates.push(memoryUserViewFilter ? `COALESCE(i."OfficialRating", ''::bytea) = ANY(${ratings})`
+      : `(i."OfficialRating" = ANY(${ratings}) OR EXISTS (SELECT 1 FROM ${ancestors} rating_ancestor JOIN ${baseItems} rating_item ON ${nativeTextSql(database.schemaName).guidLower("rating_item.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("rating_ancestor.\"ItemId\"")} WHERE ${nativeTextSql(database.schemaName).guidLower("rating_ancestor.\"ParentItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND rating_item."OfficialRating" = ANY(${ratings})))`);
   }
   if (memoryUserViewFilter && query.hasparentalrating !== undefined) {
     const hasRating = `(COALESCE(i."CustomRating", '') <> '' OR COALESCE(i."OfficialRating", '') <> '')`;
@@ -844,7 +872,10 @@ export function buildPostgresItemPageQuery(database, query, {
 
   for (const [key, provider] of [['hasimdbid', 'imdb'], ['hastmdbid', 'tmdb'], ['hastvdbid', 'tvdb']]) {
     if (query[key] === undefined) continue;
-    const exists = `EXISTS (SELECT 1 FROM ${providers} p WHERE ${nativeTextSql(database.schemaName).guidLower("p.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND ${ordinalKey('p."ProviderId"')} = ${bind(nativeTextOrdinalIgnoreCaseKey(provider))}${memoryUserViewFilter ? ` AND COALESCE(p."ProviderValue", '') <> ''` : ''})`;
+    const providerKey = bind(nativeTextOrdinalIgnoreCaseKey(provider));
+    const exists = nativeItemsPlan ? `EXISTS (SELECT 1 FROM unnest(i."__ProviderKeys", i."__ProviderValues") p("Key","Value")
+      WHERE ${sql.ordinalIgnoreCaseKey('p."Key"')}=${providerKey} AND COALESCE(p."Value", ''::bytea)<>''::bytea)`
+      : `EXISTS (SELECT 1 FROM ${providers} p WHERE ${nativeTextSql(database.schemaName).guidLower("p.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND ${ordinalKey('p."ProviderId"')} = ${providerKey}${memoryUserViewFilter ? ` AND COALESCE(p."ProviderValue", '') <> ''` : ''})`;
     predicates.push(query[key] ? exists : `NOT ${exists}`);
   }
   if (resumableMode === 'repository' && query.albumids?.length) predicates.push(`${normalizedId('i."ParentId"')} = ANY(${bindIdArray(query.albumids, 'albumids')})`);
@@ -855,13 +886,13 @@ export function buildPostgresItemPageQuery(database, query, {
   };
   const memoryPipeValues = (column, names, label) => {
     const requested = bindOrdinalArray(names);
-    const populated = column === 'Genres' ? ` AND ${clrTrim(`COALESCE(${project(`i.${q(column)}`)}, '')`)} <> ''` : '';
-    predicates.push(`EXISTS (SELECT 1 FROM unnest(string_to_array(COALESCE(${project(`i.${q(column)}`)}, ''), '|')) memory_value("Name") WHERE ${ordinalKey('memory_value."Name"')} = ANY(${requested}))${populated}`);
+    const populated = !nativeItemsPlan && column === 'Genres' ? ` AND ${clrTrim(`COALESCE(${project(`i.${q(column)}`)}, '')`)} <> ''` : '';
+    predicates.push(`EXISTS (SELECT 1 FROM unnest(${memoryList('i', column)}) memory_value("Name") WHERE ${sql.ordinalIgnoreCaseKey('memory_value."Name"')} = ANY(${requested}))${populated}`);
   };
   const memoryPipeSelectorIds = (column, selectorIds, label) => {
     const selectors = bindIdArray(selectorIds, label);
-    const populated = column === 'Genres' ? ` AND ${clrTrim(`COALESCE(${project(`i.${q(column)}`)}, '')`)} <> ''` : '';
-    predicates.push(`EXISTS (SELECT 1 FROM unnest(string_to_array(COALESCE(${project(`i.${q(column)}`)}, ''), '|')) memory_value("Name") WHERE ${ordinalKey('memory_value."Name"')} IN (SELECT ${ordinalKey('selector."Name"')} FROM ${baseItems} selector WHERE ${normalizedId('selector."Id"')} = ANY(${selectors}) AND selector."Name" IS NOT NULL))${populated}`);
+    const populated = !nativeItemsPlan && column === 'Genres' ? ` AND ${clrTrim(`COALESCE(${project(`i.${q(column)}`)}, '')`)} <> ''` : '';
+    predicates.push(`EXISTS (SELECT 1 FROM unnest(${memoryList('i', column)}) memory_value("Name") WHERE ${sql.ordinalIgnoreCaseKey('memory_value."Name"')} IN (SELECT ${ordinalKey('selector."Name"')} FROM ${baseItems} selector WHERE ${normalizedId('selector."Id"')} = ANY(${selectors}) AND selector."Name" IS NOT NULL))${populated}`);
   };
   if (query.genres?.length) {
     if (resumableMode === 'memory') memoryPipeValues('Genres', query.genres, 'memory genres');
@@ -894,7 +925,10 @@ export function buildPostgresItemPageQuery(database, query, {
     if (query[key] === true) includedTags.push(tag);
     else if (query[key] === false) excludedTags.push(tag);
   }
-  if (includedTags.length) valueExists(4, includedTags.map(cleanValue));
+  if (includedTags.length) {
+    if (nativeItemsPlan) memoryPipeValues('Tags', includedTags, 'live tags');
+    else valueExists(4, includedTags.map(cleanValue));
+  }
   if (excludedTags.length) valueExists(4, excludedTags.map(cleanValue), true);
 
   const selectorValueExists = (type, selectorIds, { contributing = false, negate = false } = {}) => {
@@ -944,7 +978,9 @@ export function buildPostgresItemPageQuery(database, query, {
   if (query.imagetypes?.length) {
     const requested = query.imagetypes.map(value => Number.isFinite(Number(value)) ? Number(value) : ({ Primary: 0, Art: 1, Backdrop: 2, Banner: 3, Logo: 4, Thumb: 5, Disc: 6, Box: 7, Screenshot: 8, Menu: 9, Chapter: 10, BoxRear: 11, Profile: 12 })[value]);
     if (requested.some(value => !Number.isSafeInteger(value))) throw new TypeError('imagetypes contains an unknown value.');
-    predicates.push(`EXISTS (SELECT 1 FROM ${images} image WHERE ${nativeTextSql(database.schemaName).guidLower("image.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND image."ImageType" = ANY(${bind(requested)}::integer[]))`);
+    const selected = bind(requested);
+    predicates.push(nativeItemsPlan ? `i."__ImageTypes" && ${selected}::integer[]`
+      : `EXISTS (SELECT 1 FROM ${images} image WHERE ${nativeTextSql(database.schemaName).guidLower("image.\"ItemId\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")} AND image."ImageType" = ANY(${selected}::integer[]))`);
   }
 
   let virtual = query.ismissing;
@@ -1616,10 +1652,10 @@ export function buildPostgresItemPageQuery(database, query, {
   // children use the same comparer values before SQL paging.
   const minDate = `'0001-01-01T00:00:00.0000000Z'`;
   const storedDateOrder = expression => nativeDateTextKey(project(expression));
-  const firstNonemptyListValue = (alias, column) => `(SELECT ${fromProject('memory_list_part."Value"')}
-    FROM unnest(string_to_array(${project(`${alias}.${q(column)}`)}, '|')) WITH ORDINALITY memory_list_part("Value", "Ordinal")
-    WHERE memory_list_part."Value" <> '' ORDER BY memory_list_part."Ordinal" LIMIT 1)`;
-  const firstStudio = alias => `CASE WHEN ${alias}."Studios" IS NULL THEN NULL
+  const firstNonemptyListValue = (alias, column) => `(SELECT memory_list_part."Value"
+    FROM unnest(${memoryList(alias, column)}) WITH ORDINALITY memory_list_part("Value", "Ordinal")
+    WHERE memory_list_part."Value" <> ''::bytea ORDER BY memory_list_part."Ordinal" LIMIT 1)`;
+  const firstStudio = alias => liveAlias(alias) ? `${alias}."__Studios"[1]` : `CASE WHEN ${alias}."Studios" IS NULL THEN NULL
     ELSE ${fromProject(`split_part(${project(`${alias}."Studios"`)}, '|', 1)`)} END`;
   const naturalTextOrder = expression => ordinalKey(`CASE WHEN ${expression} IS NULL THEN NULL ELSE COALESCE((
     SELECT string_agg(CASE WHEN memory_natural_chunk[1] ~ '^[0-9]+$'
@@ -1681,8 +1717,12 @@ export function buildPostgresItemPageQuery(database, query, {
       case 'artist': return [`${ordinalKey(`CASE WHEN ${type} IN ('Audio', 'AudioBook')
         THEN ${firstNonemptyListValue(alias, 'Artists')} ELSE '' END`)}`];
       case 'runtime': return [`COALESCE(${alias}."RunTimeTicks", 0)`];
-      case 'communityrating': return [`COALESCE(${alias}."CommunityRating", 0)::real`];
-      case 'criticrating': return [`COALESCE(${alias}."CriticRating", 0)::real`];
+      case 'communityrating':
+      case 'criticrating': {
+        const value = `${alias}.${q(name === 'communityrating' ? 'CommunityRating' : 'CriticRating')}`;
+        return nativeItemsPlan ? [`CASE WHEN ${value} = 'NaN'::real THEN 0 ELSE 1 END`, `COALESCE(${value}, 0)::real`]
+          : [`COALESCE(${value}, 0)::real`];
+      }
       case 'productionyear': return [`COALESCE(${alias}."ProductionYear", CASE WHEN ${alias}."PremiereDate" IS NULL
         THEN 0 ELSE substring(${project(`${alias}."PremiereDate"`)} from 1 for 4)::integer END, 0)`];
       case 'isfolder': return [`CASE WHEN ${alias}."IsFolder" IS TRUE THEN 0 ELSE 1 END`];
@@ -1712,8 +1752,8 @@ export function buildPostgresItemPageQuery(database, query, {
       default: return undefined;
     }
   };
-  const extractedInteger = (alias, property) => safeInt32(
-    `(${safeNativeItemData(alias)} ->> '${property}')`);
+  const extractedInteger = (alias, property) => nativeItemsPlan ? `${alias}.${q('__' + property)}`
+    : safeInt32(`(${safeNativeItemData(alias)} ->> '${property}')`);
   const int32 = expression => `(mod(mod((${expression})::bigint + 2147483648, 4294967296)
     + 4294967296, 4294967296) - 2147483648)`;
   const scalarComparison = (left, right) => `CASE WHEN ${left} IS NULL THEN CASE WHEN ${right} IS NULL THEN 0 ELSE -1 END
@@ -1859,7 +1899,9 @@ export function buildPostgresItemPageQuery(database, query, {
       // sequence. In-memory comparers are stable, so it remains the final
       // semantic tie-break after request and optional BoxSet display ordering.
       if (scope.sourceChildren != null) order.push('i."__source_ordinal" ASC', 'i."__source_parent_ordinal" ASC');
-      order.push('i."SortName" ASC NULLS FIRST');
+      order.push(memorySourceOrder === 'occurrence'
+        ? nativeItemsPlan && collapseTypes !== null ? 'i."__collapse_ordinal" ASC' : 'i."__SourceOrdinal" ASC'
+        : 'i."SortName" ASC NULLS FIRST');
     }
   } else if (resumableMode !== 'memory' && !hasSearchTerm
     && !sorts.some(entry => ['sortname', 'name'].includes(entry.name))) {
@@ -1910,7 +1952,9 @@ export function buildPostgresItemPageQuery(database, query, {
         }
       }
       if (scope.sourceChildren != null) memoryInsertionSourceOrder.push('memory_source."__source_ordinal" ASC', 'memory_source."__source_parent_ordinal" ASC');
-      memoryInsertionSourceOrder.push('memory_source."SortName" ASC NULLS FIRST');
+      memoryInsertionSourceOrder.push(memorySourceOrder === 'occurrence'
+        ? nativeItemsPlan && collapseTypes !== null ? 'memory_source."__collapse_ordinal" ASC' : 'memory_source."__SourceOrdinal" ASC'
+        : 'memory_source."SortName" ASC NULLS FIRST');
     }
     memoryInsertionSourceOrder.push('memory_source."Id" ASC');
   }
@@ -1929,7 +1973,7 @@ export function buildPostgresItemPageQuery(database, query, {
 
   const ctes = [
     ...relationalCtes,
-    `filtered AS (\n  SELECT i.*${scope.sourceChildren != null ? ', source_child."Ordinal" AS "__source_ordinal", source_child."ParentOrdinal" AS "__source_parent_ordinal"' : ''}\n  FROM ${baseItems} i\n  ${sourceExpansion}\n  WHERE ${predicates.join('\n    AND ')}\n)`,
+    `filtered AS (\n  SELECT i.*${scope.sourceChildren != null ? ', source_child."Ordinal" AS "__source_ordinal", source_child."ParentOrdinal" AS "__source_parent_ordinal"' : ''}\n  FROM ${primaryItems} i\n  ${sourceExpansion}\n  WHERE ${predicates.join('\n    AND ')}\n)`,
   ];
   if (groupByPresentationKey) {
     ctes.push(`group_ranked AS (\n  SELECT filtered.*, row_number() OVER (PARTITION BY "PresentationUniqueKey" ORDER BY ("PrimaryVersionId" IS NOT NULL) ASC, "Id" ASC) AS __group_rank\n  FROM filtered\n)`);
@@ -1955,7 +1999,23 @@ export function buildPostgresItemPageQuery(database, query, {
     const childType = collapseMode === 'repository' ? ' AND collapse_link."ChildType" = 0' : '';
     const containing = `EXISTS (SELECT 1 FROM ${links} collapse_link JOIN ${baseItems} collapse_parent ON ${nativeTextSql(database.schemaName).guidLower("collapse_parent.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("collapse_link.\"ParentId\"")} WHERE ${nativeTextSql(database.schemaName).guidLower("collapse_link.\"ChildId\"")} = ${nativeTextSql(database.schemaName).guidLower("candidate.\"Id\"")}${childType} AND ${leafType('collapse_parent')} = 'BoxSet'${collapseParentScope})`;
     ctes.push(`collapsed_ids AS (\n  SELECT candidate."Id"\n  FROM precollapsed candidate\n  WHERE NOT (${eligible}) OR (${eligible} AND ${leafType('candidate')} <> 'BoxSet' AND NOT ${containing})\n  UNION\n  SELECT collapse_parent."Id"\n  FROM precollapsed candidate\n  JOIN ${links} collapse_link ON ${nativeTextSql(database.schemaName).guidLower("collapse_link.\"ChildId\"")} = ${nativeTextSql(database.schemaName).guidLower("candidate.\"Id\"")}${childType}\n  JOIN ${baseItems} collapse_parent ON ${nativeTextSql(database.schemaName).guidLower("collapse_parent.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("collapse_link.\"ParentId\"")} AND ${leafType('collapse_parent')} = 'BoxSet'${collapseParentScope}\n  WHERE ${eligible}\n)`);
-    ctes.push(`collapsed AS (\n  SELECT item.*\n  FROM ${baseItems} item\n  JOIN collapsed_ids ON ${nativeTextSql(database.schemaName).guidLower("collapsed_ids.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")}\n)`);
+    if (nativeItemsPlan) {
+      const sql = nativeTextSql(database.schemaName);
+      ctes.push(`collapsed_source AS (
+        SELECT item.* FROM precollapsed item JOIN collapsed_ids ON ${sql.guidKey('collapsed_ids."Id"')}=${sql.guidKey('item."Id"')}
+        UNION ALL SELECT item.* FROM native_query_repository_items item JOIN collapsed_ids ON ${sql.guidKey('collapsed_ids."Id"')}=${sql.guidKey('item."Id"')}
+        WHERE NOT EXISTS(SELECT 1 FROM precollapsed captured WHERE ${sql.guidKey('captured."Id"')}=${sql.guidKey('item."Id"')})
+      )`);
+      const contributes = `(${sql.guidKey('candidate."Id"')}=${sql.guidKey('item."Id"')}
+        OR (${eligible}) AND ${leafType('candidate')} IN ('Movie','Series') AND EXISTS (
+          SELECT 1 FROM ${links} relation WHERE ${sql.guidKey('relation."ChildId"')}=${sql.guidKey('candidate."Id"')}
+          AND ${sql.guidKey('relation."ParentId"')}=${sql.guidKey('item."Id"')}))`;
+      const category = collapseTypes.length === 1 ? `CASE WHEN EXISTS(SELECT 1 FROM precollapsed candidate
+        WHERE (${eligible}) AND ${contributes}) THEN 0 ELSE 1 END,` : '';
+      ctes.push(`collapsed AS (SELECT item.*, row_number() OVER(ORDER BY ${category}
+        (SELECT min(candidate."__SourceOrdinal") FROM precollapsed candidate WHERE ${contributes}),
+        item."SortName" ASC NULLS FIRST,item."Id") AS "__collapse_ordinal" FROM collapsed_source item)`);
+    } else ctes.push(`collapsed AS (\n  SELECT item.*\n  FROM ${baseItems} item\n  JOIN collapsed_ids ON ${nativeTextSql(database.schemaName).guidLower("collapsed_ids.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("item.\"Id\"")}\n)`);
   } else ctes.push('collapsed AS (SELECT * FROM precollapsed)');
   ctes.push(postCollapsePredicates.length
     ? `selected AS (SELECT i.* FROM collapsed i WHERE ${postCollapsePredicates.join('\n    AND ')})`
@@ -1966,49 +2026,51 @@ export function buildPostgresItemPageQuery(database, query, {
         count(*) OVER () AS "__input_count"
       FROM selected memory_source
     )`);
-    ctes.push(`memory_sort_state("Step", "Ids", "InputCount") AS (
-      SELECT 0::bigint, ARRAY[]::bytea[], count(*)::bigint FROM memory_sort_input
+    // Stable sorting tracks occurrences. Same-ID objects can carry different
+    // live fields and must never join one another through their shared Guid.
+    ctes.push(`memory_sort_state("Step", "Keys", "InputCount") AS (
+      SELECT 0::bigint, ARRAY[]::bigint[], count(*)::bigint FROM memory_sort_input
       UNION ALL
       SELECT memory_state."Step" + 1,
-        CASE WHEN memory_insertion."Ordinal" IS NULL THEN memory_state."Ids" || incoming."Id"
-          WHEN memory_insertion."Ordinal" = 1 THEN ARRAY[incoming."Id"] || memory_state."Ids"
-          ELSE memory_state."Ids"[1:memory_insertion."Ordinal" - 1] || ARRAY[incoming."Id"]
-            || memory_state."Ids"[memory_insertion."Ordinal":cardinality(memory_state."Ids")] END,
+        CASE WHEN memory_insertion."Ordinal" IS NULL THEN memory_state."Keys" || incoming."__input_ordinal"
+          WHEN memory_insertion."Ordinal" = 1 THEN ARRAY[incoming."__input_ordinal"] || memory_state."Keys"
+          ELSE memory_state."Keys"[1:memory_insertion."Ordinal" - 1] || ARRAY[incoming."__input_ordinal"]
+            || memory_state."Keys"[memory_insertion."Ordinal":cardinality(memory_state."Keys")] END,
         memory_state."InputCount"
       FROM memory_sort_state memory_state
       JOIN memory_sort_input incoming ON incoming."__input_ordinal" = memory_state."Step" + 1
       LEFT JOIN LATERAL (
         SELECT memory_existing_position."Ordinal"
-        FROM unnest(memory_state."Ids") WITH ORDINALITY memory_existing_position("Id", "Ordinal")
-        JOIN memory_sort_input existing ON ${nativeTextSql(database.schemaName).guidLower("existing.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("memory_existing_position.\"Id\"")}
+        FROM unnest(memory_state."Keys") WITH ORDINALITY memory_existing_position("Key", "Ordinal")
+        JOIN memory_sort_input existing ON existing."__input_ordinal"=memory_existing_position."Key"
         WHERE ${memoryInsertionComparison} < 0
         ORDER BY memory_existing_position."Ordinal" LIMIT 1
       ) memory_insertion ON TRUE
       WHERE memory_state."Step" < memory_state."InputCount"
     )`);
     ctes.push(`memory_ordered AS (
-      SELECT memory_position."Id", memory_position."Ordinal" AS "__memory_ordinal"
+      SELECT memory_position."Key", memory_position."Ordinal" AS "__memory_ordinal"
       FROM memory_sort_state memory_state
-      CROSS JOIN LATERAL unnest(memory_state."Ids") WITH ORDINALITY memory_position("Id", "Ordinal")
+      CROSS JOIN LATERAL unnest(memory_state."Keys") WITH ORDINALITY memory_position("Key", "Ordinal")
       WHERE memory_state."Step" = memory_state."InputCount"
     )`);
     const finalOrder = [...order, 'memory_ordered."__memory_ordinal" ASC', 'i."Id" ASC'];
-    ctes.push(`ordered_base AS (\n  SELECT i."Id", row_number() OVER (ORDER BY ${finalOrder.join(', ')}) AS __ordinal\n  FROM selected i\n  JOIN memory_ordered ON ${nativeTextSql(database.schemaName).guidLower("memory_ordered.\"Id\"")} = ${nativeTextSql(database.schemaName).guidLower("i.\"Id\"")}\n)`);
+    ctes.push(`ordered_base AS (\n  SELECT i."Id"${nativeItemsPlan ? ', i."__SlotKey"' : ''}, row_number() OVER (ORDER BY ${finalOrder.join(', ')}) AS __ordinal\n  FROM memory_sort_input i\n  JOIN memory_ordered ON memory_ordered."Key"=i."__input_ordinal"\n)`);
   } else {
-    ctes.push(`ordered_base AS (\n  SELECT i."Id", row_number() OVER (ORDER BY ${order.join(', ')}) AS __ordinal\n  FROM selected i\n)`);
+    ctes.push(`ordered_base AS (\n  SELECT i."Id"${nativeItemsPlan ? ', i."__SlotKey"' : ''}, row_number() OVER (ORDER BY ${order.join(', ')}) AS __ordinal\n  FROM selected i\n)`);
   }
   if (query.adjacentto) {
     const adjacentId = bind(idKey(query.adjacentto));
     ctes.push(`anchor AS (SELECT __ordinal FROM ordered_base WHERE replace(${nativeTextSql(database.schemaName).guidLower("\"Id\"")}, '-', '') = ${adjacentId} LIMIT 1)`);
     ctes.push('ordered AS (SELECT ordered_base.* FROM ordered_base CROSS JOIN anchor WHERE ordered_base.__ordinal BETWEEN greatest(anchor.__ordinal - 1, 1) AND anchor.__ordinal + 1)');
   } else ctes.push('ordered AS (SELECT * FROM ordered_base)');
-  ctes.push(`page AS (SELECT "Id", __ordinal FROM ordered ORDER BY __ordinal${pagination})`);
+  ctes.push(`page AS (SELECT "Id"${nativeItemsPlan ? ', "__SlotKey"' : ''}, __ordinal FROM ordered ORDER BY __ordinal${pagination})`);
   ctes.push('total AS (SELECT count(*)::bigint AS "TotalRecordCount" FROM ordered)');
-  const requestedPageOrder = !searchScores?.length && query.ids?.length > 1 && !query.sortby?.length
+  const requestedPageOrder = !nativeItemsPlan && !searchScores?.length && query.ids?.length > 1 && !query.sortby?.length
     ? `array_position(${bindTextArray(query.ids.map(idKey), 'requested page ids')}, replace(${nativeTextSql(database.schemaName).guidLower("page.\"Id\"")}, '-', '')) NULLS LAST, `
     : '';
   const ordinal = includeOrdinal ? `, row_number() OVER (ORDER BY ${requestedPageOrder}page.__ordinal NULLS LAST) AS "__ordinal"` : '';
-  const text = `WITH RECURSIVE ${ctes.join(',\n')}\nSELECT page."Id", total."TotalRecordCount"${ordinal}\nFROM total\nLEFT JOIN page ON TRUE\nORDER BY page.__ordinal NULLS LAST`;
+  const text = `WITH RECURSIVE ${ctes.join(',\n')}\nSELECT page."Id", total."TotalRecordCount"${nativeItemsPlan ? ', page."__SlotKey"' : ''}${ordinal}\nFROM total\nLEFT JOIN page ON TRUE\nORDER BY page.__ordinal NULLS LAST`;
   const orderedText = requestedPageOrder
     ? text.replace('ORDER BY page.__ordinal NULLS LAST', `ORDER BY ${requestedPageOrder}page.__ordinal NULLS LAST`)
     : text;
@@ -2036,11 +2098,14 @@ export async function queryPostgresItemPage(database, query, options = {}) {
       total,
       startIndex: plan.startIndex,
       plan,
+      ...(options.nativeItemsPlan ? { slots: result.rows.filter(row => row.Id != null).map(row => ({
+        id: decodeNativeTextBytes(row.Id), slot: row.__SlotKey,
+      })) } : {}),
     };
   };
   const projectionCount = options.nativeVisibilityProjections?.length ?? 0;
-  return projectionCount > 0 && projectionCount <= 128
-    ? withPostgresNativeVisibilityJitOff(database, projectionCount, execute)
+  return options.nativeItemsPlan || projectionCount > 0
+    ? withPostgresNativeQueryJitOff(database, execute)
     : execute(database);
 }
 

@@ -146,6 +146,27 @@ test('complete positive lookup failure prevents early fallback; a later fallback
   assert.equal(BigInt((await fixture.database.client.query(`SELECT count(*) AS count FROM ${q(linkedChildren.schemaName)}.item_states`)).rows[0].count), 0n);
 });
 
+test('metadata links propagate a malformed legacy ID without erasing the successful live cache prefix', {
+  skip: !postgresTestConnectionString, timeout: 180000,
+}, async t => {
+  const fixture = await setupChildrenFixture(t), { store, linkedChildren, database } = fixture;
+  await fixture.seed({ target: 'member', items: [{ key: 'member', type: 'Movie', Id: id(1),
+    Path: 'Z:\\ChildSelection\\member.mkv', Name: 'Stored member' }] });
+  const root = await transientRoot(fixture, [
+    { ItemId: null, LibraryItemId: id(1) }, { ItemId: null, LibraryItemId: 'invalid-guid' },
+  ]);
+  const before = await database.rows('LinkedChildren');
+  try {
+    await assert.rejects(createMetadataChildren(fixture).linked(root), { status: 500 });
+    assert.deepEqual((await rootLinks(fixture, root)).map(row => row.ItemId), [idKey(id(1)), null]);
+    await assert.rejects(createMetadataChildren(fixture).linked(root), { status: 500 });
+    assert.deepEqual((await rootLinks(fixture, root)).map(row => row.ItemId), [idKey(id(1)), null]);
+    assert.deepEqual(await database.rows('LinkedChildren'), before);
+    await store.run(async session => assert.deepEqual(await tempNames(session), []));
+    assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM ${q(linkedChildren.schemaName)}.item_states`)).rows[0].count), 0n);
+  } finally { releaseNativeItemLinks(root); await linkedChildren.flushReleases(); }
+});
+
 test('workspace disposal drops owned SQL state, preserves transaction failure, and discards a real failed DROP connection', {
   skip: !postgresTestConnectionString, timeout: 180000,
 }, async t => {

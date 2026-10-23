@@ -31,7 +31,7 @@ async function cleanupResources(primary, operations, message) {
     primary?.message ?? message, primary ? { cause: primary } : undefined);
 }
 
-async function physicalPlan(session, parent, recursive, { linkedChildren, library }) {
+export async function physicalPlan(session, parent, recursive, { linkedChildren, library }) {
   const sql = nativeTextSql(session.schemaName), items = `${q(session.schemaName)}."BaseItems"`;
   const dataPath=library.options.dataPath??(library.options.programDataPath&&path.join(library.options.programDataPath,'data'));
   const empty=()=>plan('SELECT NULL::bytea AS "Id", 0::bigint AS "Ordinal" WHERE FALSE');
@@ -110,7 +110,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
       'Metadata child capture table cleanup failed.'); }
   }
 
-  async function capturePhysicalChildren(session, parent, recursive, cohort, target, predicate) {
+  async function capturePhysicalChildren(session, parent, recursive, cohort, target, predicate, liveSources) {
     if (cachedFolderChildrenSnapshot(parent) === undefined) {
       return capturePlan(session, await physicalPlan(session, parent, recursive, { linkedChildren, library }), cohort, target, { predicate });
     }
@@ -134,16 +134,22 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
         // materialized collection. Each exact child is owned across SQL awaits.
         for (const child of cached) {
           const owner = acquireNativeItemLinkOwner(child);
-          let childFailure;
+          let childFailure, retained = false;
           try {
             if (predicate(child)) {
               const ordinal = ++cursor.value, slot = await cohort.capture(child, { ordinal });
+              // The existing warm array owns these exact occurrences. Keep a
+              // branch owner through metadata consumption and mutate the exact
+              // warm object when a page restores that captured slot.
+              if (!liveSources.has(slot)) {
+                liveSources.set(slot, { reference: new WeakRef(child), owner }); retained = true;
+              }
               await session.client.query(`INSERT INTO ${target}("Ordinal","Id","SlotKey","Type") VALUES($1,$2,$3,$4)`,
                 [ordinal, encoded(child.Id), slot, encoded(child.NativeType)]);
             }
             if (recursive && child.IsFolder) await captureChildren(child);
           } catch (error) { childFailure = error; throw error; }
-          finally { await cleanupResources(childFailure, [() => owner.release(), () => linkedChildren.flushReleases({ session })],
+          finally { await cleanupResources(childFailure, [() => !retained && owner.release(), () => linkedChildren.flushReleases({ session })],
             'Cached metadata child ownership cleanup failed.'); }
         }
       } catch (error) { failure = error; throw error; }
@@ -199,7 +205,13 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
       || includeItemTypes.some(type => !nativeItemTypes.includes(type)))) {
       throw new TypeError('Metadata child filters require exact native item types.');
     }
-    let cohort = await createNativeItemCohort({ linkedChildren }), view;
+    const liveSources = new Map();
+    const releaseSources = async ({ session } = {}) => {
+      for (const source of liveSources.values()) source.owner.release();
+      liveSources.clear(); await linkedChildren.flushReleases({ session });
+    };
+    let cohort = await createNativeItemCohort({ linkedChildren,
+      resolveLiveItem: (_id, slot) => liveSources.get(slot)?.reference.deref(), onRelease: releaseSources }), view;
     try {
       view = await store.run(async session => {
         const target = q('mm_metadata_selection_' + randomUUID().replaceAll('-', ''));
@@ -242,7 +254,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
           } else {
             const predicate = mode === 'albums' ? value => value.Type==='MusicAlbum' : mode === 'tracks' ? value => ['Audio', 'AudioBook'].includes(value.Type)
               : item.Type === 'MusicArtist' && mode === 'children' ? value => ['Audio', 'AudioBook', 'MusicAlbum', 'MusicVideo'].includes(value.Type) && !value.IsFolder : () => true;
-            await capturePhysicalChildren(session, item, mode !== 'physical', cohort, target, predicate);
+            await capturePhysicalChildren(session, item, mode !== 'physical', cohort, target, predicate, liveSources);
             if (mode !== 'physical' && includeLinkedChildren) {
               const offset = BigInt((await session.client.query(`SELECT COALESCE(max("Ordinal"),0) AS value FROM ${target}`)).rows[0].value);
               await captureLinks(session, item, cohort, target, offset, predicate);
@@ -265,7 +277,7 @@ export function createMetadataChildren({ store, library, linkedChildren, configu
       await cohort.release(); cohort = null;
       return metadataChildSequence(view, linkedChildren, store);
     } catch (error) {
-      await cleanupResources(error, [() => view?.release(), () => cohort?.release()], 'Metadata child selection ownership cleanup failed.');
+      await cleanupResources(error, [() => view?.release(), () => cohort?.release(), releaseSources], 'Metadata child selection ownership cleanup failed.');
       throw error;
     }
   }

@@ -1,7 +1,7 @@
 import { resolvePostgresLinkedChildren } from './postgres-linked-child-resolution.js';
 import { nativeGuid } from '../users/native.js';
 import { idKey, nonemptyId, EMPTY_ID, libraryError } from './records.js';
-import { isLinkedChildrenHandle, emptyLinkedChildrenPlan } from './postgres-linked-children.js';
+import { EMPTY_NATIVE_LINKS, isLinkedChildrenHandle, emptyLinkedChildrenPlan } from './postgres-linked-children.js';
 import { publishNativeItemLinks } from './native-item-entity.js';
 import { createPostgresCollectionMembership } from './postgres-collection-membership.js';
 import { CollectionEventItems } from './collection-event-items.js';
@@ -11,7 +11,8 @@ import { createNativeItemCohort } from './native-item-cohort.js';
 function requireLinks(collection) {
   if (collection.LinkedChildren === null) throw Object.assign(libraryError(500, 'A collection linked child relation cannot be null.'),
     { nativeException: 'NullReferenceException' });
-  if (!isLinkedChildrenHandle(collection.LinkedChildren)) throw new TypeError('A live collection requires its adopted shared link relation.');
+  if (collection.LinkedChildren !== EMPTY_NATIVE_LINKS && !isLinkedChildrenHandle(collection.LinkedChildren))
+    throw new TypeError('A live collection requires its current native link value.');
   return collection.LinkedChildren;
 }
 

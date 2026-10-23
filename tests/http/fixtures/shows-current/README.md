@@ -20,7 +20,14 @@ The same four tests retain all original controller, binder, repository, provider
 cache, cancellation and PostgreSQL HTTP assertions. Only execution-clock cache
 expiry and per-build assembly locations/Oracle identity are projected when
 comparing the independent native captures; each raw identity remains bound in
-its original receipt. The native component uses actual EF SQLite with explicit
+its original receipt. Each cache also records the complete raw JSON. Before
+normalizing execution-clock JSON and its variable byte length, the consumer
+checks the actual UTF-8 length, complete property list, exact expiry ticks and
+exact template reconstruction for each capture. Fractional-second trailing
+zeros cannot create a false repeat difference; all other cache content and
+the configured expiry-window assertions remain exact.
+
+The native component uses actual EF SQLite with explicit
 controlled entities and provider/lookup seams. It does not demonstrate actual
 ASP.NET authorization filter execution, concrete DtoService internals, live
 external services, production instance exchange or deterministic Random order.

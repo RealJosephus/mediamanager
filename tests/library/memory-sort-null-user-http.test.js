@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
 import { tableDefinition } from '../../src/database/model.js';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { writeHttpEndpointEvidence } from './http-endpoint-evidence.js';
 
 const fixtureBytes = await readFile(new URL('./fixtures/boxset-display-order/null-user-input.json', import.meta.url));
 const nativeBytes = await readFile(new URL('./fixtures/boxset-display-order/null-user-native.json', import.meta.url));
@@ -104,16 +106,12 @@ for (const dialect of ['postgres']) {
     check('runtime', 'errors', () => { assert.deepEqual(actual.runtimeErrors, []); assert.deepEqual(actual.handledExpectedRuntimeErrors, []); });
     check('cleanup', 'resource ownership', () => assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
       portReleased: true, postgresSchemasRemoved: dialect === 'postgres' ? true : null, programDataDirectoryRemoved: true }));
-    if (process.env.MEDIAMANAGER_MEMORY_SORT_NULL_USER_EVIDENCE) {
-      const output = path.resolve(process.env.MEDIAMANAGER_MEMORY_SORT_NULL_USER_EVIDENCE);
-      await mkdir(output, { recursive: true });
-      const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? entry.toString() : entry, 2) + '\n';
-      await writeFile(path.join(output, `${dialect}.json`), json(actual), { flag: 'wx' });
-      await writeFile(path.join(output, `${dialect}-comparison.json`), json({ passed: differences.length === 0,
+    const output = path.resolve(process.env.MEDIAMANAGER_MEMORY_SORT_NULL_USER_EVIDENCE
+      ?? path.join(validationOutputRoot(), 'memory-sort-null-user'));
+    await writeHttpEndpointEvidence(output, dialect, actual, { passed: differences.length === 0,
         phaseAcceptance: false, dialect, responses: 14, endpointSnapshots: 14, nativeProjectionSha256: sha256(nativeBytes),
         fixtureSha256: sha256(fixtureBytes), testSha256: sha256(await readFile(new URL(import.meta.url))),
-        comparedFields: 'Complete HTTP JSON/status/contentType/error body/expected requires-user diagnostics with isolated ServerId normalization only; candidate per-endpoint recorded media tables/UserData/four filesystem domains unchanged, final post-host state and resource cleanup. Original native evidence has three unchanged state windows, not per-endpoint snapshots or complete database coverage.', differences }), { flag: 'wx' });
-    }
+        comparedFields: 'Complete HTTP JSON/status/contentType/error body/expected requires-user diagnostics with isolated ServerId normalization only; candidate per-endpoint recorded media tables/UserData/four filesystem domains unchanged, final post-host state and resource cleanup. Original native evidence has three unchanged state windows, not per-endpoint snapshots or complete database coverage.', differences });
     assert.deepEqual(differences, []);
   });
 }

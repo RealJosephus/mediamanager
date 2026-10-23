@@ -12,13 +12,16 @@ compares the actual candidate archive reader through independent media and
 metadata stores. Archive keys follow native host path rules; media identity
 mapping remains independent of the host OS.
 
-This consumer declares UTC in its input manifest. Its isolated Node test
-process passes UTC to the oracle, and both hosts record and check the actual
-offset for the rich archive's date, `2024-03-02T23:04:05Z`. Windows .NET reads
+This consumer declares Asia/Taipei and an exact 480-minute offset in its input
+manifest, matching the Actions host input on all three platforms. Its isolated
+Node test process passes that zone to the oracle, and both hosts record and
+check the actual offset at `2024-03-02T23:04:05Z`. Windows .NET reads
 the system time zone independently of `TZ`; an incompatible host fails
 explicitly. The parent strict runner's environment is unchanged. This aligns
 the test input; production date parsing continues to use the Node process
-time zone and the original metadata date comparisons remain exact.
+time zone and the original metadata date comparisons remain exact. Earlier UTC
+captures retain their original input and outcome; the changed manifest requires
+a new same-run native capture and candidate comparison.
 
 The original rich archive uses Windows-style archive keys, so its metadata is
 not read by the native EPUB provider on POSIX. All 37 original archive byte

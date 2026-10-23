@@ -192,7 +192,8 @@ async function service(database, programDataPath) {
   let library, itemCreation, linkedChildren;
   try {
     linkedChildren = await createStateRelations(database, spoolRoot);
-    library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, spoolRoot, serverId: 'album-query-test', programDataPath });
+    library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, spoolRoot, serverId: 'album-query-test',
+      userRoot: { Id: ids.userRoot }, programDataPath });
     const loadContext = createMetadataContextLoader({fileSystem: testFileSystem,  store, library, linkedChildren, spoolRoot });
     itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext });
     library.itemCreation = itemCreation;

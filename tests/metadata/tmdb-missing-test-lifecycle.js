@@ -9,11 +9,11 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-export async function createTmdbTestServices({ store, serverId = 'tmdb-cleanup', vfs = {}, identityMap = {}, configuration = {} }) {
+export async function createTmdbTestServices({ store, serverId = 'tmdb-cleanup', vfs = {}, identityMap = {}, configuration = {}, userRoot }) {
   const linkedChildren = new PostgresLinkedChildrenStore({ database: store.database });
   await linkedChildren.initialize();
   const programDataPath = await mkdtemp(path.join(os.tmpdir(), 'tmdb-cleanup-state-'));
-  const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId, configuration, programDataPath });
+  const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId, configuration, programDataPath, userRoot });
   const original = createMetadataContextLoader({fileSystem: testFileSystem,  store, library, linkedChildren, vfs, identityMap, configuration });
   const contexts = new Set(), hosts = new Set();
   const loadContext = Object.assign(async (...args) => {

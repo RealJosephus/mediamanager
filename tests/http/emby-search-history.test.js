@@ -35,6 +35,7 @@ test('Emby search history uses the current user and SQL filters, survives copyin
   let database, runtime, socket;
   const open = async () => {
     runtime = await createRuntime({ database, ...options });
+    runtime.library.options.userRoot = item(ids.root, 'UserRootFolder', 'Media Folders');
     await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
   };
   const closeSocket = async () => {

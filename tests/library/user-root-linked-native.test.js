@@ -18,6 +18,7 @@ const sourcePaths = [
   'MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Entities/Folder.cs',
   'MediaBrowser.Controller/Entities/UserRootFolder.cs', 'MediaBrowser.Controller/Entities/AggregateFolder.cs',
   'MediaBrowser.Controller/Entities/LinkedChild.cs', 'MediaBrowser.Controller/Entities/Movies/BoxSet.cs',
+  'MediaBrowser.Controller/Library/LibraryManagerExtensions.cs',
   'MediaBrowser.Controller/Entities/Audio/MusicArtist.cs', 'Emby.Server.Implementations/Library/LibraryManager.cs',
   'Emby.Server.Implementations/Library/MediaSourceManager.cs', 'Emby.Server.Implementations/IO/ManagedFileSystem.cs',
   'Emby.Server.Implementations/Localization/LocalizationManager.cs', 'Emby.Server.Implementations/Localization/Ratings/us.json',
@@ -89,6 +90,7 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
       assert.deepEqual(native.results.map(row => row.name), input.cases.map(row => row.name));
       for (const result of native.results) {
         if (result.name === 'typed null is consumed as native failure') assert.deepEqual({ type: result.error?.type, status: result.error?.status }, { type: 'NullReferenceException', status: 500 });
+        else if (result.name.startsWith('malformed LibraryItemId')) assert.deepEqual({ type: result.error?.type, status: result.error?.status }, { type: 'FormatException', status: 500 });
         else assert.equal(result.error, null, result.name + ': dependency failures must not become a false positive baseline');
       }
       const byName = name => native.results.find(row => row.name === name);
@@ -105,6 +107,9 @@ test('current native UserRoot links preserve positive batches, warm occurrences,
       assert.equal(byName('relative Path fallback wins conflicting LibraryItemId').linksAfter[0].ItemId, rootLinkId(500).replaceAll('-', ''));
       assert.equal(byName('Guid.Empty never retries a valid Path').linksAfter[0].ItemId, '0'.repeat(32));
       assert.equal(byName('missing target caches Guid.Empty').linksAfter[0].ItemId, '0'.repeat(32));
+      assert.equal(byName('malformed LibraryItemId fails without caching').linksAfter[0].ItemId, null);
+      assert.deepEqual(byName('malformed LibraryItemId keeps an earlier successful cache').linksAfter.map(link => link.ItemId),
+        [rootLinkId(21).replaceAll('-', ''), null]);
       const menuArtist = byName('actual menu retains typed by-name MusicArtist').value.find(row => row.id === rootLinkId(400).replaceAll('-', ''));
       assert.equal(menuArtist.isFolder, false); assert.equal(menuArtist.isTypedFolder, true);
       assert.ok(byName('root IsVisible allows own G through R parent').value.some(row => row.id === rootLinkId(500).replaceAll('-', '')));

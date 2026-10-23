@@ -527,6 +527,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.collectionPostScanTask = collectionPostScanTask;
   services.linkedChildren = linkedChildren;
   services.runWithContext = loadContext && (operation => loadContext.withScope(operation));
+  // Event delivery outlives its producer. Give notifier SQL and metadata work
+  // their own scopes before timers or immediate batch sends can inherit a
+  // request's read-only transaction, writer connection or release boundary.
+  services.runBackground = operation => store.runDetached(() => loadContext
+    ? loadContext.withDetachedScope(operation) : operation());
   services.libraryMonitor = libraryMonitor;
   services.libraryMonitorHost = libraryMonitorHost;
   services.libraryTaskScheduler = libraryTaskScheduler;
@@ -596,6 +601,15 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // save synchronously reserved its recording-folder dependencies; those
       // reservations can finish their own reads and follow-up saves.
       const liveTvClosing = liveTv.close();
+      // Reject new Collection/configuration calls synchronously. Admitted
+      // mutations and recording-folder updates already own configuration and
+      // metadata permits, which remain valid while their dependencies drain.
+      const collectionsClosing = collections?.close();
+      const libraryConfigurationClosing = libraryConfiguration?.close();
+      // Reject new key operations in the synchronous admission phase. An
+      // admitted writer can still be awaiting its caller while recording
+      // folders drain; accepting another writer here can form a wait cycle.
+      const apiKeysClosing = attempt(() => apiKeys.close());
       introProviders.close();
       stopStorageObserver();
       // A scheduler worker can be awaiting a metadata provider's cancellation.
@@ -615,11 +629,11 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => displayPreferences.close()),
         attempt(() => startup.close()),
         attempt(() => liveTvClosing),
-        attempt(() => apiKeys.close()),
+        apiKeysClosing,
         attempt(() => splashscreen?.close()),
         attempt(() => branding.close()),
-        attempt(() => collections?.close()),
-        attempt(() => libraryConfiguration?.close()),
+        attempt(() => collectionsClosing),
+        attempt(() => libraryConfigurationClosing),
         attempt(() => libraryMonitor?.close()),
         attempt(async () => { try { await tasks.close(); } finally { guideTaskConfiguration?.release(); } }),
         attempt(() => guideClosing),

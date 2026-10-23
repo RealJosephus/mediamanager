@@ -76,7 +76,8 @@ async function fixture(t) {
   const vfs = new VirtualFileSystem(storage); vfs.mount({ path: '/fixture', instanceId: 'fixture', capabilities: {} });
   const identityMap = new IdentityAccessMap();
   identityMap.addPrefix({ identityRoot: 'Z:\\Series', accessRoot: '/fixture/series', style: 'windows', returnAccess: 'isolated TMDB opt-in controls' });
-  services = await createTmdbTestServices({ store, vfs, identityMap, serverId: 'tmdb-missing-test' });
+  const userRootRecord = (await db.rows('BaseItems', { where: { Id: userRoot } }))[0];
+  services = await createTmdbTestServices({ store, vfs, identityMap, serverId: 'tmdb-missing-test', userRoot: userRootRecord });
   const { loadContext } = services;
   const loaded = await loadContext(ids.series);
   const seriesKey = createPresentationUniqueKey(loaded.item, loaded);

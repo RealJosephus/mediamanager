@@ -12,6 +12,7 @@ import { ordinalIgnoreCaseEquals } from '../storage/ordinal-comparer.js';
 import { createNativeItemCohort } from './native-item-cohort.js';
 import { metadataChildSequence } from './metadata-child-sequence.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { clearFolderChildIds, releaseCachedFolderChildren, setFolderChildren } from './folder-cache.js';
 
 export const physicalFolderNativeType = 'MediaBrowser.Controller.Entities.Folder';
 export const collectionFolderNativeType = 'MediaBrowser.Controller.Entities.CollectionFolder';
@@ -80,7 +81,8 @@ export class TopLevelFolderValidationService {
   async #refreshChildren(children, options) {
     if (!options.refreshChildMetadata || !children.length || !this.metadataScanner) return null;
     const { recursive, refreshChildMetadata, allowRemoveRoot, reportProgress, ...metadataOptions } = options;
-    const cohort=await createNativeItemCohort({linkedChildren:this.loadContext.linkedChildren});
+    const cohort=await createNativeItemCohort({linkedChildren:this.loadContext.linkedChildren,
+      resolveLiveItem:id=>children.find(item=>idKey(item.Id)===idKey(id))});
     try {
       let ordinal=0n;
       for(const item of children){const owner=this.itemCreation.retainItem(item);
@@ -105,6 +107,8 @@ export class TopLevelFolderValidationService {
   }
 
   async #validateUserRoot(parent, options) {
+    releaseCachedFolderChildren(parent);
+    clearFolderChildIds(parent);
     options.signal?.throwIfAborted();
     const loaded = await this.loadContext(parent.Id, { draft: parent });
     const resolution = await loaded.rootFolderResolveArgs(false);
@@ -112,8 +116,9 @@ export class TopLevelFolderValidationService {
     for (const file of resolution.files) if (file.IsDirectory && file.Exists !== false) {
       candidates.set(nativePathKey(file.Path), file);
     }
-    const current = (await this.#directChildren(parent, options.signal))
-      .filter(item => itemType(item) === 'CollectionFolder');
+    const currentChildren = await this.#directChildren(parent, options.signal);
+    setFolderChildren(parent, currentChildren);
+    const current = currentChildren.filter(item => itemType(item) === 'CollectionFolder');
     const currentById = new Map(current.map(item => [idKey(item.Id), item]));
     const currentByPath = new Map(current.map(item => [nativePathKey(item.Path), item]));
     const created = [], retained = [], accessible = [];
@@ -145,8 +150,19 @@ export class TopLevelFolderValidationService {
         this.itemCreation.registerItem(item);
         this.library.reportItemAdded(item, parent);
       }
+      // Folder validation invalidates Children after creating siblings. A
+      // metadata lookup during resolution may already have warmed an empty
+      // UserRoot list; child refresh must see the newly committed libraries.
+      releaseCachedFolderChildren(parent);
+      clearFolderChildIds(parent);
     }
+    // Metadata lookups and the later root pass must share the actual matched
+    // children, including refreshed location state. Keep stale directories in
+    // this snapshot until the existing deletion pass examines them.
+    setFolderChildren(parent, [...currentChildren, ...created]);
     const refresh = await this.#refreshChildren(accessible, options);
+    clearFolderChildIds(parent);
+    for (const item of [...currentChildren, ...created]) this.itemCreation.registerItem(item);
     return Object.freeze({
       created: immutable(created.map(item => ({ Id: item.Id, Path: item.Path, Type: item.Type,
         CollectionType: item.CollectionType, PhysicalFolderIds: [...item.PhysicalFolderIds] }))),

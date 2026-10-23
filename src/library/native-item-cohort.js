@@ -135,7 +135,7 @@ class NativeItemCohort {
       const item = await entry.scope.run(async session => {
         const row = (await session.client.query(`SELECT state FROM ${entry.states} WHERE scope_id=$1 AND slot_id=$2`, [entry.id, slot])).rows[0];
         if (!row) throw new TypeError('The slot belongs to a different or released cohort.');
-        const state = deserialize(row.state), live = entry.resolveLiveItem?.(state.values.Id);
+        const state = deserialize(row.state), live = entry.resolveLiveItem?.(state.values.Id, slot);
         const reused = live && entry.slots.get(live) === slot;
         const value = reused ? live : await restoreNativeItemState(state, {}, { linkedChildren: entry.links, session });
         owner = acquireNativeItemLinkOwner(value);
@@ -165,8 +165,13 @@ class NativeItemCohort {
         WHERE cohort.view_id=$1 AND cohort."Ordinal">$2 ORDER BY cohort."Ordinal" LIMIT $3`,[this.id,after,limit])).rows;
       for(const row of rows){
         let item=items.get(row.slot_id);
-        if(!item){item=await restoreNativeItemState(deserialize(row.state),{}, {linkedChildren:entry.links,session});
-          owners.push(acquireNativeItemLinkOwner(item));items.set(row.slot_id,item);entry.slots.set(item,row.slot_id);observe(entry,item,row.slot_id);}
+        if(!item){
+          const state=deserialize(row.state),live=entry.resolveLiveItem?.(state.values.Id,row.slot_id);
+          const reused=live&&entry.slots.get(live)===row.slot_id;
+          item=reused?live:await restoreNativeItemState(state,{}, {linkedChildren:entry.links,session});
+          owners.push(acquireNativeItemLinkOwner(item));items.set(row.slot_id,item);entry.slots.set(item,row.slot_id);
+          if(!reused)observe(entry,item,row.slot_id);
+        }
         entries.push({Ordinal:BigInt(row.Ordinal),item});
       }
       });
@@ -181,17 +186,22 @@ class NativeItemCohort {
     const failures=[];
     try{await entry.tail;}catch(error){failures.push(error);}
     try{await entry.scope.run(async session=>{
-      await session.client.query(`DELETE FROM ${entry.rows} WHERE scope_id=$1`,[entry.id]);
-      await session.client.query(`DELETE FROM ${entry.states} WHERE scope_id=$1`,[entry.id]);
-      await entry.links.releaseStateScope(entry.id,{session});
-      await entry.links.flushReleases({session});
-    });}catch(error){failures.push(error);}finally{entry.scope.release();}
+      // Retained pages share this entry. External warm owners must outlive
+      // those pages and release while the last admitted SQL scope still runs.
+      for(const release of [()=>entry.onRelease?.({session}),
+        ()=>session.client.query(`DELETE FROM ${entry.rows} WHERE scope_id=$1`,[entry.id]),
+        ()=>session.client.query(`DELETE FROM ${entry.states} WHERE scope_id=$1`,[entry.id]),
+        ()=>entry.links.releaseStateScope(entry.id,{session}),()=>entry.links.flushReleases({session})]){
+        try{await release();}catch(error){failures.push(error);}
+      }
+    });}catch(error){failures.push(error);}finally{try{entry.scope.release();}catch(error){failures.push(error);}}
     if(failures.length)throw new AggregateError(failures,'Typed cohort release failed.');
   }
 }
-export async function createNativeItemCohort({linkedChildren,resolveLiveItem}) {
+export async function createNativeItemCohort({linkedChildren,resolveLiveItem,onRelease}) {
   if(resolveLiveItem!==undefined&&typeof resolveLiveItem!=='function')throw new TypeError('A live slot resolver must be a function.');
-  const entry={id:randomUUID(),links:linkedChildren,resolveLiveItem,scope:linkedChildren.admitScope(),slots:new WeakMap(),tail:Promise.resolve(),references:0,error:null,
+  if(onRelease!==undefined&&typeof onRelease!=='function')throw new TypeError('A cohort release hook must be a function.');
+  const entry={id:randomUUID(),links:linkedChildren,resolveLiveItem,onRelease,scope:linkedChildren.admitScope(),slots:new WeakMap(),tail:Promise.resolve(),references:0,error:null,
     states:`${q(linkedChildren.schemaName)}.item_states`,rows:`${q(linkedChildren.schemaName)}.item_cohorts`};
   return new NativeItemCohort(entry);
 }

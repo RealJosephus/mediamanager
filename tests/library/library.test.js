@@ -84,6 +84,25 @@ test('library queries enforce visibility before counting and preserve native pre
   finally { await closeLibraryNavigation(library); }
 });
 
+test('cold folder queries ignore unavailable plugin entities before count and paging',
+  { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+  const db = await createPostgresTestDatabase(t, 'library_unknown_child');
+  const library = await service(db);
+  const unknownId = 'A1111111-1111-1111-1111-000000000100';
+  try {
+    await seed(db);
+    await db.insert('BaseItems', item(unknownId, 'Movie', 'Unavailable child', {
+      Type: 'Unavailable.Plugin.Entities.Movie', ParentId: ids.physical, TopParentId: ids.physical,
+      Path: 'Z:\\Movies\\Unavailable.mkv'
+    }));
+    const page = await library.queryItems({ ParentId: ids.physical, Recursive: false,
+      SortBy: 'SortName', StartIndex: 1, Limit: 1 }, { user });
+    assert.equal(page.TotalRecordCount, 4);
+    assert.deepEqual(page.Items.map(item => item.Name), ['Beta Film']);
+    assert.equal((await db.rows('BaseItems', { where: { Id: unknownId } })).length, 1);
+  } finally { await closeLibraryNavigation(library); }
+});
+
 test('item request rejects missing entities and projects real populated media streams',
   { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
   const db = await createPostgresTestDatabase(t, 'library_item');

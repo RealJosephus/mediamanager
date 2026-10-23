@@ -355,3 +355,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tools/validation/fixtures/alist-api-host/** -text
 /tests/library/fixtures/book-photo-global-runtime/assets/** -text
 /tests/metadata/fixtures/book-epub-runtime/assets/** -text
+/tests/metadata/fixtures/book-opf-current/assets/** -text

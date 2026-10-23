@@ -16,13 +16,14 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const inputFile = new URL('./fixtures/book-epub-runtime/input.json', import.meta.url);
 const inputBytes = await readFile(inputFile), input = JSON.parse(inputBytes);
-assert.equal(input.timeZone, 'UTC');
+assert.equal(input.timeZone, 'Asia/Taipei');
+assert.equal(input.timeZoneOffsetMinutes, 480);
 // This test file runs in its own Node test process. The parent strict runner's
 // environment and the other files' clocks remain separate inputs.
 process.env.TZ = input.timeZone;
 const timeZoneControl = { requested: input.timeZone, effective: Intl.DateTimeFormat().resolvedOptions().timeZone,
   instant: input.timeZoneInstant, offsetMinutes: 0 - new Date(input.timeZoneInstant).getTimezoneOffset() };
-assert.equal(timeZoneControl.offsetMinutes, 0);
+assert.equal(timeZoneControl.offsetMinutes, input.timeZoneOffsetMinutes);
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const root = new URL('.', inputFile);
 const identity = filename => 'Z:\\Books\\' + filename.replaceAll('/', '\\');

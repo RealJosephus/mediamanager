@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { setTimeout as delay } from 'node:timers/promises';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import os from 'node:os';
 import { WebSocket } from 'ws';
@@ -15,6 +16,7 @@ import { guidN } from '../../src/sessions/user-data.js';
 import { refreshProgressThrottleMs } from '../../src/sessions/refresh-progress-notifier.js';
 import { dateText } from '../../src/library/records.js';
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
 
 const ids = {
   root: '44000000-0000-0000-0000-000000000001',
@@ -48,11 +50,14 @@ async function nextMessage(messages, type, matches = () => true, timeoutMs = 400
   throw new Error(`Missing matching ${type} WebSocket message.`);
 }
 
-async function collectLibraryChanges(messages, expectedAddedId, timeoutMs = 4000) {
+async function collectLibraryChanges(messages, expectedAddedIds, observe, timeoutMs = 4000) {
+  const startedAt = Date.now();
   const deadline = Date.now() + timeoutMs;
   const fields = ['FoldersAddedTo', 'FoldersRemovedFrom', 'ItemsAdded', 'ItemsRemoved', 'ItemsUpdated', 'CollectionFolders'];
   const combined = Object.fromEntries(fields.map(field => [field, new Set()]));
   let lastMessageAt = 0;
+  let firstWindowRecorded = false;
+  const snapshot = () => Object.fromEntries(fields.map(field => [field, [...combined[field]]]));
   do {
     let received = false;
     for (let index = messages.length - 1; index >= 0; index--) {
@@ -63,16 +68,25 @@ async function collectLibraryChanges(messages, expectedAddedId, timeoutMs = 4000
       for (const field of fields) for (const id of message.Data[field] ?? []) combined[field].add(id);
     }
     if (received) lastMessageAt = Date.now();
-    if (combined.ItemsAdded.has(expectedAddedId) && lastMessageAt && Date.now() - lastMessageAt >= 100) break;
+    if (!firstWindowRecorded && Date.now() - startedAt >= 4000) {
+      firstWindowRecorded = true;
+      observe({ phase: 'first-window', startedAt, observedAt: Date.now(), value: snapshot() });
+    }
+    if (expectedAddedIds.every(id => combined.ItemsAdded.has(id)) && lastMessageAt && Date.now() - lastMessageAt >= 100) break;
     await delay(10);
   } while (Date.now() < deadline);
-  return Object.fromEntries(fields.map(field => [field, [...combined[field]]]));
+  observe({ phase: 'complete', startedAt, observedAt: Date.now(), timeoutMs, expectedAddedIds, value: snapshot() });
+  return snapshot();
 }
 
-async function connect(origin, token) {
+async function connect(origin, token, observe) {
   const socket = new WebSocket(origin.replace('http', 'ws') + `/socket?ApiKey=${token}`);
   const messages = [];
-  socket.on('message', bytes => messages.push(parseLosslessJson(bytes.toString())));
+  socket.on('message', bytes => {
+    const bodyText = bytes.toString();
+    observe({ receivedAt: Date.now(), bodyText });
+    messages.push(parseLosslessJson(bodyText));
+  });
   await new Promise((resolve, reject) => { socket.once('open', resolve); socket.once('error', reject); });
   await nextMessage(messages, 'ForceKeepAlive');
   return { socket, messages };
@@ -81,6 +95,12 @@ async function connect(origin, token) {
 test('elevated folder Refresh scans folders and an ordinary root movie, then publishes progress and library changes', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
+  const output = path.join(validationOutputRoot(), 'folder-scan-websocket-' + randomUUID());
+  await mkdir(output, { recursive: true });
+  const observation = { scope: 'Actual scan events, complete WebSocket wire bodies, per-user SQL projections and observed delivery windows.',
+    wire: { admin: [], reader: [] }, libraryEvents: [], projections: [], deliveryWindows: [] };
+  t.after(() => writeFile(path.join(output, 'candidate.json'), JSON.stringify(observation,
+    (_, value) => typeof value === 'bigint' ? value.toString() : value, 2) + '\n', { flag: 'wx' }));
   const database = await createPostgresTestDatabase(t, 'folder_scan_ws');
   const stateRoot = await mkdtemp(path.join(os.tmpdir(), 'folder-scan-websocket-state-'));
   t.after(async () => {
@@ -123,6 +143,23 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
     programDataPath: stateRoot,
     configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, LibraryUpdateDuration: 0 },
     serverId: 'folder-scan-websocket-test', onError: error => errors.push(error) });
+  runtime.library.options.userRoot = item(ids.root, 'UserRootFolder', { Name: 'Media Folders', IsFolder: true });
+  for (const type of ['ItemAdded', 'ItemUpdated', 'ItemRemoved']) {
+    const listener = event => observation.libraryEvents.push({ type, observedAt: Date.now(),
+      item: Object.fromEntries(['Id', 'NativeType', 'Name', 'Path', 'ParentId', 'SourceType', 'IsFolder']
+        .map(name => [name, event.Item[name]])) });
+    runtime.library.on(type, listener);
+    t.after(() => runtime.library.off(type, listener));
+  }
+  const projectChanges = runtime.library.getLibraryUpdateInfo;
+  runtime.library.getLibraryUpdateInfo = async function (changes, options) {
+    const entry = { startedAt: Date.now(), userId: options.user.Id,
+      changes: Object.fromEntries(Object.entries(changes).map(([name, values]) => [name, values.map(item => item.Id)])) };
+    observation.projections.push(entry);
+    try { const result = await projectChanges.call(this, changes, options); entry.result = result; return result; }
+    catch (error) { entry.error = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+    finally { entry.settledAt = Date.now(); }
+  };
   t.after(() => runtime.close());
   // ProviderManager refreshes the folder's own metadata before ValidateChildren.
   // Hold an actual validation listing after its RefreshStarted event; holding
@@ -170,8 +207,8 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
 
     await new Promise(resolve => runtime.server.listen(0, '127.0.0.1', resolve));
     const origin = `http://127.0.0.1:${runtime.server.address().port}`;
-    const adminSocket = await connect(origin, adminLogin.AccessToken);
-    const readerSocket = await connect(origin, readerLogin.AccessToken);
+    const adminSocket = await connect(origin, adminLogin.AccessToken, value => observation.wire.admin.push(value));
+    const readerSocket = await connect(origin, readerLogin.AccessToken, value => observation.wire.reader.push(value));
     sockets.push(adminSocket.socket, readerSocket.socket);
     const refresh = token => fetch(`${origin}/Items/${ids.physical}/Refresh`, {
       method: 'POST', headers: { Authorization: `MediaBrowser Token="${token}"` }
@@ -199,6 +236,7 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
     releaseListing();
     await runtime.metadata.drain();
     const rows = await database.rows('BaseItems');
+    observation.afterScan = rows;
     const scannedPaths = rows.filter(row => row.Type === 'MediaBrowser.Controller.Entities.Folder').map(row => row.Path).toSorted();
     assert.deepEqual(scannedPaths, [physicalPath, `${physicalPath}\\Alpha`, `${physicalPath}\\Alpha\\Deep`]);
     const movie = rows.find(row => row.Path === moviePath);
@@ -228,9 +266,12 @@ test('elevated folder Refresh scans folders and an ordinary root movie, then pub
       message.Data?.ItemId === guidN(ids.collection) && message.Data.Progress === '0');
     assert.deepEqual(completion.Data, { ItemId: guidN(ids.physical), Progress: '100' });
     assert.deepEqual(aggregate.Data, { ItemId: guidN(ids.collection), Progress: '0' });
-    const changed = await collectLibraryChanges(readerSocket.messages, guidN(movie.Id));
-    assert.ok(changed.ItemsAdded.includes(guidN(movie.Id)), JSON.stringify(changed));
-    assert.ok(changed.ItemsAdded.length >= 3, JSON.stringify(changed));
+    // Each native scan addition has its own notification batch. Completion of
+    // the movie's batch does not imply that the nested folder's batch arrived.
+    const expectedAddedIds = [movie, ...rows.filter(row => row.Path !== physicalPath && scannedPaths.includes(row.Path))]
+      .map(row => guidN(row.Id));
+    const changed = await collectLibraryChanges(readerSocket.messages, expectedAddedIds, value => observation.deliveryWindows.push(value));
+    assert.deepEqual(changed.ItemsAdded.toSorted(), expectedAddedIds.toSorted(), JSON.stringify(changed));
     assert.ok(changed.CollectionFolders.includes(guidN(ids.collection)), JSON.stringify(changed));
     assert.deepEqual(errors, []);
   } finally {

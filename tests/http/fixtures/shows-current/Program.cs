@@ -923,6 +923,7 @@ static async Task<object> RecordSimilarProviderOrchestration(string root)
         {
             path = Path.GetRelativePath(cacheRoot, cacheFile).Replace('\\', '/'),
             propertyNames = cache.RootElement.EnumerateObject().Select(property => property.Name).ToArray(),
+            rawJson = firstCacheText,
             rawJsonTemplate = firstCacheText.Replace(expiresAtToken, "\"$EXPIRES_AT\"", StringComparison.Ordinal),
             byteLength = firstCacheBytes.Length,
             utf8Bom = firstCacheBytes.AsSpan().StartsWith(Encoding.UTF8.Preamble),

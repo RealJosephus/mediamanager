@@ -8,14 +8,14 @@ function ownedSession(database) {
   if (!database.connectionSession || !database.connectionActive
     || database.root.operationContext.getStore() !== database
     || !database.client.physicalClient) {
-    throw new Error('Native visibility JIT settings require the active owned PostgreSQL operation session.');
+    throw new Error('Native query JIT settings require the active owned PostgreSQL operation session.');
   }
   if (database.client.discardedError) throw database.client.discardedError;
   return database.client.physicalClient;
 }
 
 async function runLease(database, operation) {
-  const read = await database.client.query('/* native-visibility-jit:read */ SELECT current_setting(\'jit\') AS jit');
+  const read = await database.client.query('/* native-query-jit:read */ SELECT current_setting(\'jit\') AS jit');
   const original = read.rows[0]?.jit;
   if (original !== 'on' && original !== 'off') throw new Error('PostgreSQL returned an invalid JIT setting.');
   const local = Boolean(database.inTransaction);
@@ -24,10 +24,10 @@ async function runLease(database, operation) {
     // Setting writes can fail after reaching PostgreSQL. Always attempt cleanup
     // after dispatch, including when the disable query itself reports failure.
     const disabled = await database.client.query({
-      text: '/* native-visibility-jit:disable */ SELECT set_config(\'jit\', $1, $2) AS jit',
+      text: '/* native-query-jit:disable */ SELECT set_config(\'jit\', $1, $2) AS jit',
       values: ['off', local],
     });
-    if (disabled.rows[0]?.jit !== 'off') throw new Error('PostgreSQL did not disable JIT for the native visibility query.');
+    if (disabled.rows[0]?.jit !== 'off') throw new Error('PostgreSQL did not disable JIT for the native query.');
     value = await operation(database);
   } catch (error) { failure = error; failed = true; }
   finally {
@@ -35,10 +35,10 @@ async function runLease(database, operation) {
       // The caller's cancellation signal belongs to its business query, not to
       // restoring this connection before the owning operation releases it.
       const restored = await database.client.query({
-        text: '/* native-visibility-jit:restore */ SELECT set_config(\'jit\', $1, $2) AS jit',
+        text: '/* native-query-jit:restore */ SELECT set_config(\'jit\', $1, $2) AS jit',
         values: [original, local],
       });
-      if (restored.rows[0]?.jit !== original) throw new Error('PostgreSQL did not restore the native visibility JIT setting.');
+      if (restored.rows[0]?.jit !== original) throw new Error('PostgreSQL did not restore the native query JIT setting.');
     } catch (error) {
       // SET LOCAL is automatically rolled back by the existing transaction
       // owner. A failed business statement leaves that transaction in 25P02;
@@ -51,25 +51,23 @@ async function runLease(database, operation) {
   }
   if (restorationFailure) {
     throw new AggregateError(failed ? [failure, restorationFailure] : [restorationFailure],
-      failed && typeof failure?.message === 'string' ? failure.message : 'PostgreSQL native visibility JIT restoration failed.',
+      failed && typeof failure?.message === 'string' ? failure.message : 'PostgreSQL native query JIT restoration failed.',
       { cause: failed ? failure : restorationFailure });
   }
   if (failed) throw failure;
   return value;
 }
 
-/** Only a bounded scalar visibility projection may borrow a connection's JIT setting. */
-export async function withPostgresNativeVisibilityJitOff(database, projectionCount, operation) {
-  if (!(database instanceof PostgresDatabase)) throw new TypeError('Native visibility JIT settings require PostgreSQL.');
-  if (!Number.isSafeInteger(projectionCount) || projectionCount < 1 || projectionCount > 128) {
-    throw new TypeError('Native visibility projections must contain between 1 and 128 items.');
-  }
-  if (typeof operation !== 'function') throw new TypeError('A native visibility query operation is required.');
+/** Borrow only the owned connection's JIT setting for a native entity query.
+ * Both scalar visibility pages and relational live-item frames use this lease. */
+export async function withPostgresNativeQueryJitOff(database, operation) {
+  if (!(database instanceof PostgresDatabase)) throw new TypeError('Native query JIT settings require PostgreSQL.');
+  if (typeof operation !== 'function') throw new TypeError('A native query operation is required.');
   if (!database.connectionSession) {
-    return database.withConnection(session => withPostgresNativeVisibilityJitOff(session, projectionCount, operation));
+    return database.withConnection(session => withPostgresNativeQueryJitOff(session, operation));
   }
   const physical = ownedSession(database);
-  if (activeLease.getStore() === physical) throw new Error('Native visibility JIT leases cannot nest on the same PostgreSQL connection.');
+  if (activeLease.getStore() === physical) throw new Error('Native query JIT leases cannot nest on the same PostgreSQL connection.');
   const previous = pending.get(physical) ?? Promise.resolve();
   let release;
   const tail = new Promise(resolve => { release = resolve; });
