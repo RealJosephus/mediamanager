@@ -59,6 +59,7 @@ const executionManifests = new Map([
   ['tests/library/channel-parent-latest-native.test.js', ['current-oracle', 'tests/library/fixtures/channel-parent-latest/current-profile.json']],
   ['tests/library/movie-similar.test.js', ['current-oracle', 'tests/library/fixtures/movie-similar/current-profile.json']],
   ['tests/library/postgres-collection-maintenance.test.js', ['current-oracle', 'tests/library/fixtures/collection-source/current-profile.json']],
+  ['tests/library/book-photo-global.test.js', ['current-oracle', 'tests/library/fixtures/book-photo-global/current-profile.json']],
   ['tests/core/server-identity.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/core/server-identity-runtime.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],

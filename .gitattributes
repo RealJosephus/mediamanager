@@ -420,5 +420,7 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/http/fixtures/library-structure-current/Oracle.csproj text eol=lf
 /tests/http/fixtures/library-structure-current/observations.js text eol=lf
 /tests/http/fixtures/library-structure-current/current-profile.json text eol=lf
+/tests/library/fixtures/book-photo-global/current/** -text
+/tests/library/fixtures/book-photo-global/current-profile.json text eol=lf
 /tests/http/fixtures/collections/current/** -text
 /tests/http/fixtures/collections/current-profile.json text eol=lf

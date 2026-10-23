@@ -243,6 +243,12 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
   ['tests/library/postgres-collection-maintenance.test.js', 'tests/library/fixtures/collection-source',
     ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json'],
+  ['tests/library/book-photo-global.test.js', 'tests/library/fixtures/book-photo-global',
+    ['dotnet', 'jellyfinDll', 'postgres'], null, 'current/input.json', [
+      'current/NativeScanHost.cs', 'current/BookPhotoProviders.cs',
+      ...['cover.png', 'plain-photo.jpg', 'rich-photo.jpg', 'oriented-photo.jpg', 'invalid-photo.jpg',
+        'epub-positive.epub', 'epub-standard-slashes.epub', 'epub-malformed.epub'].map(name => 'current/assets/' + name),
+    ]],
   ['tests/core/server-identity.test.js', 'tests/core/fixtures/server-identity',
     ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current-consumer/Program.cs', 'current-consumer/Oracle.csproj',
       'current/FileSharingProbe.cs', 'current/observations.js', '../../native-file-holder.js']],

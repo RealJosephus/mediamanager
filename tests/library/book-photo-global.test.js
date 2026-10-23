@@ -3,68 +3,19 @@ import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rename, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { createHash } from 'node:crypto';
 import { createRuntime } from '../../src/runtime.js';
 import { defaultLibraryOptions } from '../../src/library/options.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { matrix, assetUrls, digest, slash, currentBookPhoto, allTables, fileEvidence, recordCandidate } from './book-photo-global-current-fixture.js';
 
-const provenanceUrl = new URL('./fixtures/book-photo-global/provenance.json', import.meta.url);
-const fixture = new URL('.', provenanceUrl);
-const matrix = JSON.parse(await readFile(new URL('input.json', fixture)));
-const native = JSON.parse(await readFile(new URL('native.json', fixture)));
-const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-const slash = value => value?.replaceAll('\\', '/');
-const assetUrls = new Map([
-  ['cover', new URL('./fixtures/book-photo-global/cover.png', import.meta.url)],
-  ['plain-photo', new URL('./fixtures/book-photo-global/plain-photo.jpg', import.meta.url)],
-  ['rich-photo', new URL('./fixtures/book-photo-global/rich-photo.jpg', import.meta.url)],
-  ['oriented-photo', new URL('./fixtures/book-photo-global/oriented-photo.jpg', import.meta.url)],
-  ['invalid-photo', new URL('./fixtures/book-photo-global/invalid-photo.jpg', import.meta.url)],
-  ['epub-positive', new URL('./fixtures/book-photo-global/epub-positive.epub', import.meta.url)],
-  ['epub-standard-slashes', new URL('./fixtures/book-photo-global/epub-standard-slashes.epub', import.meta.url)],
-  ['epub-malformed', new URL('./fixtures/book-photo-global/epub-malformed.epub', import.meta.url)]
-]);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
-function projectNative(record) {
-  return record.results.map(sample => ({ name: sample.Name, steps: sample.observations.slice(1).map(observation => {
-    const root = slash(sample.root), media = root + '/media', rows = observation.snapshot.sql.BaseItems;
-    const normalize = value => typeof value !== 'string' ? null : slash(value).replace(media, '$MEDIA').replace(root + '/program', '$PROGRAM');
-    const ids = new Map(rows.map(row => [row.Id.toLowerCase(), slash(row.Path) ?? '$NONPATH:' + row.Type + ':' + row.Name]));
-    const items = rows.filter(row => slash(row.Path)?.startsWith(media + '/')).map(row => {
-      const cold = observation.snapshot.cold.find(value => value.Id.toLowerCase() === row.Id.toLowerCase());
-      return { path: normalize(row.Path), type: row.Type, name: row.Name, isFolder: !!row.IsFolder, mediaType: row.MediaType,
-        parent: normalize(ids.get(String(row.ParentId).toLowerCase())), seriesName: row.SeriesName, index: row.IndexNumber,
-        overview: row.Overview, genres: row.Genres ?? '', width: row.Width ?? 0, height: row.Height ?? 0,
-        images: (cold?.imagePaths ?? []).map(image => ({ kind: image.Type, extension: path.extname(image.Path),
-          location: slash(image.Path).startsWith(media + '/') ? 'local' : 'internal', width: image.Width,
-          height: image.Height, blurHash: image.BlurHash, sha256: image.sha256 })),
-        ancestors: observation.snapshot.sql.AncestorIds.filter(value => value.ItemId.toLowerCase() === row.Id.toLowerCase())
-          .map(value => normalize(ids.get(value.ParentItemId.toLowerCase()))).sort() };
-    }).sort((a, b) => a.path.localeCompare(b.path));
-    return { name: observation.phase, error: observation.error, scanException: observation.scan?.Exception ?? null, items };
-  }) }));
-}
-
-test('Book/Photo compound raw, helpers, runtime, sources and final native files retain their actual identities', async () => {
-  const proof = JSON.parse(await readFile(provenanceUrl));
-  const seen = new Map();
-  const verify = async input => {
-    if (seen.has(input.path)) { assert.equal(seen.get(input.path), input.sha256, input.path); return; }
-    seen.set(input.path, input.sha256);
-    const bytes = await readFile(input.path);
-    assert.equal(bytes.length, input.bytes, input.path);
-    assert.equal(digest(bytes), input.sha256, input.path);
-    if (input.path.endsWith('.json') && bytes.includes(Buffer.from('"requiredInputs"'))) {
-      for (const child of JSON.parse(bytes).requiredInputs ?? []) await verify(child);
-    }
-  };
-  for (const input of [proof.rawRecording, proof.input, proof.native, ...proof.requiredInputs]) await verify(input);
-  const raw = JSON.parse(await readFile(proof.rawRecording.path));
-  assert.equal(raw.actualExecution, true);
-  assert.equal(raw.inputSha256, proof.input.sha256);
-  assert.deepEqual(native.cases, projectNative(raw));
-  assert.equal(native.cases.length, 14);
-  assert.equal(native.cases.reduce((count, value) => count + value.steps.length, 0), 61);
+test('Book/Photo current designated Native independently executes both complete fourteen-case sixty-one-step matrices', async () => {
+  const { cases, report } = await currentBookPhoto();
+  assert.equal(cases.length, 14);
+  assert.equal(cases.reduce((count, value) => count + value.steps.length, 0), 61);
+  assert.equal(report.nativeExecutionRecorded, true);
+  assert.equal(report.independentRepeatMatched, true);
 });
 
 // A small genuine ZIP writer supplies the same logical input entry names and
@@ -93,34 +44,45 @@ function zip(entries) {
 async function applyChanges(changes, { media, metadata }) {
   const target = relative => { assert.ok(!path.isAbsolute(relative)); const resolved = path.resolve(media, relative);
     assert.ok(resolved.startsWith(media + path.sep)); return resolved; };
+  const mutations = [];
   for (const change of changes) {
+    const startedAt = new Date().toISOString();
     const filename = target(change.path), sidecar = /\.(xml|opf)$/iu.test(change.path);
-    if (change.kind === 'mkdir') { await mkdir(filename, { recursive: true }); continue; }
-    if (change.kind === 'remove-directory') { await rm(filename, { recursive: true }); continue; }
-    if (change.kind === 'remove-file') {
-      await rm(filename); if (sidecar) await rm(path.join(metadata, change.path)); continue;
+    if (change.kind === 'mkdir') await mkdir(filename, { recursive: true });
+    else if (change.kind === 'remove-directory') await rm(filename, { recursive: true });
+    else if (change.kind === 'remove-file') {
+      await rm(filename); if (sidecar) await rm(path.join(metadata, change.path));
+    } else if (change.kind === 'move-file') await rename(filename, target(change.destination));
+    else {
+      await mkdir(path.dirname(filename), { recursive: true });
+      const asset = change.asset && matrix.assets.find(value => value.id === change.asset);
+      const bytes = asset ? await readFile(assetUrls.get(change.asset)) : null;
+      if (asset) { assert.equal(bytes.length, asset.bytes); assert.equal(digest(bytes), asset.sha256); }
+      if (change.kind === 'copy') await writeFile(filename, bytes);
+      else if (change.kind === 'comic') await writeFile(filename, zip([
+        ['ComicInfo.xml', Buffer.from(change.text)], ['cover.png', bytes]]));
+      else if (change.kind === 'text') {
+        if (sidecar) {
+          const actual = path.join(metadata, change.path); await mkdir(path.dirname(actual), { recursive: true });
+          await writeFile(actual, change.text);
+          await writeFile(filename, '<media-decoy>Wrong sidecar storage</media-decoy>');
+        } else await writeFile(filename, change.text);
+      } else assert.fail('Undeclared mutation ' + change.kind);
     }
-    if (change.kind === 'move-file') { await rename(filename, target(change.destination)); continue; }
-    await mkdir(path.dirname(filename), { recursive: true });
-    const asset = change.asset && matrix.assets.find(value => value.id === change.asset);
-    const bytes = asset ? await readFile(assetUrls.get(change.asset)) : null;
-    if (asset) assert.equal(digest(bytes), asset.sha256);
-    if (change.kind === 'copy') await writeFile(filename, bytes);
-    else if (change.kind === 'comic') await writeFile(filename, zip([
-      ['ComicInfo.xml', Buffer.from(change.text)], ['cover.png', bytes]]));
-    else if (change.kind === 'text') {
-      if (sidecar) {
-        const actual = path.join(metadata, change.path); await mkdir(path.dirname(actual), { recursive: true });
-        await writeFile(actual, change.text);
-        await writeFile(filename, '<media-decoy>Wrong sidecar storage</media-decoy>');
-      } else await writeFile(filename, change.text);
-    } else assert.fail('Undeclared mutation ' + change.kind);
+    const observed = change.kind === 'move-file' ? target(change.destination) : filename;
+    const details = await stat(observed).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+    const sidecarInfo = sidecar && details?.isFile() ? await stat(path.join(metadata, change.path)) : null;
+    mutations.push({ kind: change.kind, path: change.path, destination: change.destination ?? null, startedAt,
+      endedAt: new Date().toISOString(), exists: details !== null, modified: details?.mtime.toISOString() ?? null,
+      sidecarModified: sidecarInfo?.mtime.toISOString() ?? null,
+      sha256: details?.isFile() ? digest(await readFile(observed)) : null });
   }
+  return mutations;
 }
 
-async function snapshot(runtime, database, { identity, program }) {
-  const rows = await database.rows('BaseItems'), ancestors = await database.rows('AncestorIds');
-  const images = await database.rows('BaseItemImageInfos');
+async function snapshot(runtime, database, { identity, program, allowMissingImages = false }) {
+  const tables = await allTables(database);
+  const rows = tables.BaseItems, ancestors = tables.AncestorIds, images = tables.BaseItemImageInfos;
   const expand = value => typeof value === 'string' ? value.replace(/%MetadataPath%/giu, path.join(program, 'metadata'))
     .replace(/%AppDataPath%/giu, path.join(program, 'data')) : value;
   const normalize = value => typeof value !== 'string' ? null : slash(expand(value))
@@ -131,10 +93,15 @@ async function snapshot(runtime, database, { identity, program }) {
     const itemImages = [];
     const loaded = images.some(value => value.ItemId === row.Id) ? await runtime.images.load(row.Id) : null;
     for (const image of images.filter(value => value.ItemId === row.Id)) {
-      const filename = expand(image.Path), bytes = await loaded.imageAssets.read(filename);
+      const filename = expand(image.Path);
+      const bytes = await loaded.imageAssets.read(filename).catch(error => {
+        if (allowMissingImages && ['not-found', 'ENOENT'].includes(error.code)) return null;
+        throw error;
+      });
       itemImages.push({ kind: image.ImageType, extension: path.extname(filename),
         location: slash(filename).startsWith(slash(identity) + '/') ? 'local' : 'internal',
-        width: image.Width, height: image.Height, blurHash: Buffer.from(image.Blurhash ?? '').toString('utf8'), sha256: digest(bytes) });
+        width: image.Width, height: image.Height, blurHash: Buffer.from(image.Blurhash ?? '').toString('utf8'),
+        sha256: bytes === null ? null : digest(bytes), base64: bytes?.toString('base64') ?? null });
     }
     projected.push({ path: normalize(row.Path), type: row.Type, name: row.Name, isFolder: row.IsFolder,
       mediaType: row.MediaType, parent: ids.get(row.ParentId?.toLowerCase()) ?? null,
@@ -142,22 +109,30 @@ async function snapshot(runtime, database, { identity, program }) {
       width: row.Width ?? 0, height: row.Height ?? 0, images: itemImages,
       ancestors: ancestors.filter(value => value.ItemId === row.Id).map(value => ids.get(value.ParentItemId.toLowerCase()) ?? null).sort() });
   }
-  return projected.sort((a, b) => a.path.localeCompare(b.path));
+  return { tables, items: projected.sort((a, b) => a.path.localeCompare(b.path)) };
 }
 
 for (const sample of matrix.cases) test('fresh actual Book/Photo global pipeline: ' + sample.name, async t => {
+  const { cases, repeatCases } = await currentBookPhoto();
+  const expected = cases.find(value => value.name === sample.name);
+  const repeated = repeatCases.find(value => value.name === sample.name);
   const directory = await mkdtemp(path.join(os.tmpdir(), 'book-photo-global-'));
-  const database = await createPostgresTestDatabase(null, 'book_photo_scan');
-  let runtime;
+  let database, runtime;
+  const cleanup = { runtimeClosed: false, postgresDropped: false, directoryRemoved: false };
   t.after(async () => {
-    try { await runtime?.close(); }
-    finally {
-      await dropPostgresTestDatabase(database);
+    const failures = [];
+    try { await runtime?.close(); cleanup.runtimeClosed = true; } catch (error) { failures.push(error); }
+    try { if (database) await dropPostgresTestDatabase(database); cleanup.postgresDropped = true; } catch (error) { failures.push(error); }
+    try {
       assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
       assert.ok(path.basename(directory).startsWith('book-photo-global-'));
-      await rm(directory, { recursive: true });
-    }
+      await rm(directory, { recursive: true }); cleanup.directoryRemoved = true;
+    } catch (error) { failures.push(error); }
+    await recordCandidate(sample.name + '-cleanup', { cleanup,
+      errors: failures.map(error => ({ name: error.name, message: error.message })) });
+    if (failures.length) throw new AggregateError(failures, 'Current Book/Photo cleanup failed.');
   });
+  database = await createPostgresTestDatabase(null, 'book_photo_scan');
   const program = path.join(directory, 'program'), media = path.join(directory, 'original'), metadata = path.join(directory, 'sidecars');
   await mkdir(path.join(media, 'Subjects'), { recursive: true });
   await mkdir(path.join(metadata, 'Subjects'), { recursive: true });
@@ -183,16 +158,35 @@ for (const sample of matrix.cases) test('fresh actual Book/Photo global pipeline
   await runtime.libraryConfiguration.addVirtualFolder('Subjects', sample.collectionType,
     { ...defaultLibraryOptions(), SaveLocalMetadata: sample.saveLocalMetadata, EnablePhotos: sample.enablePhotos,
       PathInfos: [{ Path: identity + '\\Subjects' }] }, false);
-  const expected = native.cases.find(value => value.name === sample.name);
+  // Preserve the old contract: default plugins, Windows logical identity and
+  // actual write times. The independent runtime fixture owns its other inputs.
   for (const [index, step] of sample.steps.entries()) {
     await t.test(step.name, async () => {
-      await applyChanges(step.changes, { media, metadata });
-      const result = await runtime.libraryScanner.runCompleteScan();
-      const actual = await snapshot(runtime, database, { identity, program });
-      t.diagnostic(JSON.stringify({ case: sample.name, step: step.name, actual, errors, result }));
-      assert.equal(expected.steps[index].error, null);
-      assert.equal(expected.steps[index].scanException, null);
-      assert.deepEqual(actual, expected.steps[index].items);
+      const observation = { case: sample.name, step: step.name, startedAt: new Date().toISOString(),
+        succeeded: false, compared: false, errors };
+      try {
+        observation.mutations = await applyChanges(step.changes, { media, metadata });
+        observation.before = await snapshot(runtime, database, { identity, program, allowMissingImages: true });
+        observation.beforeFiles = await fileEvidence(directory);
+        observation.scanStartedAt = new Date().toISOString();
+        try { observation.result = await runtime.libraryScanner.runCompleteScan(); observation.succeeded = true; }
+        catch (error) { observation.scanError = { name: error.name, code: error.code, message: error.message, stack: error.stack }; }
+        observation.scanEndedAt = new Date().toISOString();
+        observation.after = await snapshot(runtime, database, { identity, program });
+        observation.afterFiles = await fileEvidence(directory);
+        assert.equal(expected.steps[index].succeeded, true, 'Original complete scan succeeds, including malformed-provider cases.');
+        assert.equal(observation.succeeded, expected.steps[index].succeeded);
+        assert.deepEqual(observation.after.items, expected.steps[index].items);
+        assert.equal(repeated.steps[index].succeeded, true);
+        assert.deepEqual(observation.after.items, repeated.steps[index].items);
+        observation.compared = true;
+      } catch (error) {
+        observation.failure = { name: error.name, message: error.message, stack: error.stack };
+        // A failed image consumer or scan must still retain its SQL/file prefix.
+        if (!observation.after) observation.failedTables = await allTables(database);
+        if (!observation.afterFiles) observation.failedFiles = await fileEvidence(directory);
+        throw error;
+      } finally { await recordCandidate(sample.name + '-' + index, observation); }
     });
   }
   assert.ok((await stat(media)).isDirectory());
