@@ -907,6 +907,7 @@ export class LibraryService extends EventEmitter {
 
   async #baseItemVisible(db, item, user, state, {
     checkStandaloneParents = true, skipRelatedNameCheck = false, skipAllowedTags = false,
+    resolveCollectionFolders = null,
   } = {}) {
     const policy = user.Policy;
     if (!policy) throw new TypeError('Library access requires an authoritative user policy.');
@@ -920,7 +921,8 @@ export class LibraryService extends EventEmitter {
     if (item.Type === 'CollectionFolder' && !visibleLibrary(item, user, this.options.libraryOptions)) return false;
     const parents = parentChainForItem(item, state);
     let matched;
-    const folders = async () => matched ??= await this.getCollectionFolders(item, state);
+    const folders = async () => matched ??= await (resolveCollectionFolders
+      ? resolveCollectionFolders(item) : this.getCollectionFolders(item, state));
     const hasTags = policy.BlockedTags?.length || policy.AllowedTags?.length;
     const needsCountry = comparisonItemRating(item, state) != null
       && !preferredMetadataCountryBeforeFolders(item, state).found;
@@ -935,12 +937,13 @@ export class LibraryService extends EventEmitter {
       skipAllowedTags: skipAllowedTags || item.Type === 'Person', playlistVisibilityChecked: true }, matched ?? [])) return false;
     if (checkStandaloneParents) {
       for (const parent of parents) if (!await this.#postgresStandaloneVisible(db, parent, user, state,
-        { checkStandaloneParents: false, skipAllowedTags: true })) return false;
+        { checkStandaloneParents: false, skipAllowedTags: true, resolveCollectionFolders })) return false;
       if (item.SourceType === 'Channel') {
         if (!nonemptyId(item.ChannelId)) throw libraryError(400, 'Guid cannot be empty.');
         const channel = state.byId.get(idKey(item.ChannelId));
         if (channel?.Type !== 'Channel') throw libraryError(500, 'The source channel is unavailable.');
-        if (!await this.#postgresStandaloneVisible(db, channel, user, state, { checkStandaloneParents: false })) return false;
+        if (!await this.#postgresStandaloneVisible(db, channel, user, state,
+          { checkStandaloneParents: false, resolveCollectionFolders })) return false;
       } else {
         const top = parents.at(-1) ?? item;
         if (top.Path != null && top.Path !== '') {
@@ -959,7 +962,7 @@ export class LibraryService extends EventEmitter {
         || policy.BlockedTags?.length || policy.AllowedTags?.length)) {
       if (!state.relatedItems) unsupported('Restricted by-name item visibility requires related item records.');
       for (const related of state.relatedItems(item)) if (!NAME_TYPES.has(related.Type)
-        && await this.#postgresStandaloneVisible(db, related, user, state)) return true;
+        && await this.#postgresStandaloneVisible(db, related, user, state, { resolveCollectionFolders })) return true;
       return false;
     }
     return true;
@@ -968,6 +971,7 @@ export class LibraryService extends EventEmitter {
   async #postgresStandaloneVisible(db, item, user, state, {
     checkStandaloneParents = true, skipRelatedNameCheck = false, preparingRoot = false,
     skipAllowedTags = false, playlistVisibilityChecked = false,
+    resolveCollectionFolders = null,
   } = {}) {
     if (!item) return false;
     if (!user) return true;
@@ -976,7 +980,7 @@ export class LibraryService extends EventEmitter {
         ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
       const managed = item.Path && dataPath && nativeContainsSubPath(item.Path, dataPath);
       if (!managed && !await this.#baseItemVisible(db, item, user, state,
-        { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags })) return false;
+        { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags, resolveCollectionFolders })) return false;
       return queryPostgresPlaylistAccess(db, item, {
         user,
         dataPath,
@@ -985,7 +989,8 @@ export class LibraryService extends EventEmitter {
       });
     }
     if (item.Type !== 'BoxSet') {
-      return this.#baseItemVisible(db, item, user, state, { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags });
+      return this.#baseItemVisible(db, item, user, state,
+        { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags, resolveCollectionFolders });
     }
     const linked = await db.rows('LinkedChildren', {
       where: { ParentId: item.Id },
@@ -993,7 +998,8 @@ export class LibraryService extends EventEmitter {
       limit: 1,
     });
     if (isLegacyBoxSet(item, linked.length > 0, this.options.programDataPath)) {
-      return this.#baseItemVisible(db, item, user, state, { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags });
+      return this.#baseItemVisible(db, item, user, state,
+        { checkStandaloneParents, skipRelatedNameCheck, skipAllowedTags, resolveCollectionFolders });
     }
     const visibility = preparingRoot ? await this.#postgresVisibility(state, user)
       : await this.#prepareBoxSetRootNavigation(db, user, state, [item]);
@@ -1183,29 +1189,103 @@ export class LibraryService extends EventEmitter {
       const page = items.slice(offset, offset + 128);
       const boxSetIds = page.filter(item => item.Type === 'BoxSet').map(item => item.Id);
       const linkTypes = boxSetIds.length ? await queryPostgresLinkTypes(db, boxSetIds) : new Map();
-      let modern = [];
-      const identities = new Set();
-      const flush = async () => {
-        if (!modern.length) return;
-        selected.push(...await this.#filterPostgresStandalonePage(db, modern, user, state));
-        modern = []; identities.clear();
-      };
-      for (const item of page) {
-        // Modern BoxSet.IsVisibleStandalone calls IsVisible directly. Reuse
-        // the bounded DTO visibility query, including live rating/membership
-        // and lazy root checks, instead of repeating that SQL for every item.
-        if (item.Type === 'BoxSet' && !isLegacyBoxSet(item, linkTypes.has(idKey(item.Id)), this.options.programDataPath)) {
-          const key = idKey(item.Id);
-          // Separate occurrences may carry different unsaved values for one
-          // identity. Never merge their visibility inputs into the same page.
-          if (identities.has(key)) await flush();
-          identities.add(key); modern.push(item);
-        } else {
-          await flush();
-          if (await this.#postgresStandaloneVisible(db, item, user, state)) selected.push(item);
+      const modern = page.map(item => item.Type === 'BoxSet'
+        && !isLegacyBoxSet(item, linkTypes.has(idKey(item.Id)), this.options.programDataPath));
+      const modernVisibility = new Map(), playlistAccess = new Map(), memberships = new Map();
+      const groupPositions = (start, eligible) => {
+        // A failed statement aborts its caller-owned transaction. Preserve
+        // that first failure without speculative reads or attribution retries.
+        if (db.inTransaction) return [start];
+        const positions = [], identities = new Set();
+        for (let next = start; next < page.length; next++) {
+          if (!eligible(next)) continue;
+          const key = idKey(page[next].Id);
+          if (identities.has(key)) break;
+          identities.add(key); positions.push(next);
         }
+        return positions;
+      };
+      const readBatch = async (positions, readMany, readOne) => {
+        const outcomes = new Map();
+        try {
+          const visible = await readMany();
+          for (const [index, position] of positions.entries()) outcomes.set(position, { visible: visible[index] });
+        } catch (batchFailure) {
+          if (positions.length === 1) {
+            outcomes.set(positions[0], { failed: true, failure: batchFailure }); return outcomes;
+          }
+          // A speculative read can encounter a later item's invalid data.
+          // Attribute failures within this bounded page before consuming its
+          // results in source order. Never turn an unreproduced batch failure
+          // into success; SQL/connection failures remain failures as well.
+          for (const position of positions) {
+            try { outcomes.set(position, { visible: await readOne(position) }); }
+            catch (failure) { outcomes.set(position, { failed: true, failure }); return outcomes; }
+          }
+          outcomes.set(positions[0], { failed: true, failure: batchFailure });
+        }
+        return outcomes;
+      };
+      const resolveCollectionFolders = reference => {
+        // Membership depends on the resolved Parent/Owner path, not on the
+        // child identity. Share only this page's lookup; each item's parental,
+        // tag, channel and managed-playlist checks still execute normally.
+        const target = this.#collectionFolderTarget(reference, state);
+        if (!target) return [];
+        const key = target.Path ?? null;
+        if (!memberships.has(key)) memberships.set(key, this.getCollectionFolders(reference, state));
+        return memberships.get(key);
+      };
+      for (let index = 0; index < page.length; index++) {
+        const item = page[index];
+        // Modern BoxSet.IsVisibleStandalone calls IsVisible directly. Reuse
+        // one bounded query across intervening ordinary items, then consume
+        // its answers at the original positions. Repeated identities start a
+        // new group so distinct live values never overwrite one another.
+        if (modern[index]) {
+          if (!modernVisibility.has(index)) {
+            const positions = groupPositions(index, next => modern[next]);
+            const batch = positions.map(position => page[position]);
+            const outcomes = await readBatch(positions, async () => {
+              const visible = new Set(await this.#filterPostgresStandalonePage(db, batch, user, state));
+              return batch.map(item => visible.has(item));
+            }, async position => (await this.#filterPostgresStandalonePage(db, [page[position]], user, state)).length > 0);
+            for (const [position, outcome] of outcomes) modernVisibility.set(position, outcome);
+          }
+          const outcome = modernVisibility.get(index);
+          if (outcome.failed) throw outcome.failure;
+          if (outcome.visible) selected.push(item);
+        } else if (item.Type === 'Playlist') {
+          if (!playlistAccess.has(index)) {
+            const positions = groupPositions(index, next => page[next].Type === 'Playlist'), allowed = [];
+            const dataPath = this.options.dataPath
+              ?? (this.options.programDataPath && path.join(this.options.programDataPath, 'data'));
+            for (const position of positions) {
+              const playlist = page[position];
+              const managed = playlist.Path && dataPath && nativeContainsSubPath(playlist.Path, dataPath);
+              try {
+                const visible = managed || await this.#baseItemVisible(db, playlist, user, state, { resolveCollectionFolders });
+                playlistAccess.set(position, { visible: false });
+                if (visible) allowed.push(position);
+              } catch (failure) {
+                playlistAccess.set(position, { failed: true, failure }); break;
+              }
+            }
+            if (allowed.length) {
+              const options = { user, dataPath, programDataPath: this.options.programDataPath,
+                visibility: buildPostgresPlaylistVisibility(state.items, user, this.options.libraryOptions) };
+              const outcomes = await readBatch(allowed, async () => {
+                const access = await queryPostgresPlaylistAccessBatch(db, allowed.map(position => page[position]), options);
+                return allowed.map(position => access.get(idKey(page[position].Id)) === true);
+              }, position => queryPostgresPlaylistAccess(db, page[position], options));
+              for (const [position, outcome] of outcomes) playlistAccess.set(position, outcome);
+            }
+          }
+          const outcome = playlistAccess.get(index);
+          if (outcome.failed) throw outcome.failure;
+          if (outcome.visible) selected.push(item);
+        } else if (await this.#postgresStandaloneVisible(db, item, user, state, { resolveCollectionFolders })) selected.push(item);
       }
-      await flush();
     }
     return selected;
   }
@@ -3045,12 +3125,8 @@ export class LibraryService extends EventEmitter {
     });
   }
 
-  async #collectionFolders(reference, state) {
-    const db = state.db;
-    const item = reference?.Id ? reference : state.byId.get(idKey(reference)) ?? null;
-    const root = userRootItem(state);
-    if (!item || !root) return [];
-    let target = item;
+  #collectionFolderTarget(reference, state) {
+    let target = reference?.Id ? reference : state.byId.get(idKey(reference)) ?? null;
     const seen = new Set();
     while (target && !seen.has(idKey(target.Id))) {
       seen.add(idKey(target.Id));
@@ -3061,6 +3137,13 @@ export class LibraryService extends EventEmitter {
       if (!owner) break;
       target = owner;
     }
+    return target;
+  }
+
+  async #collectionFolders(reference, state) {
+    const db = state.db;
+    const root = userRootItem(state), target = this.#collectionFolderTarget(reference, state);
+    if (!target || !root) return [];
     return await withPostgresCachedFolderChildren({ session: db, library: this, item: root }, async source => {
       await source.flush();
       const plan = source.pathPlan(), offset = plan.values.length, sql = nativeTextSql(db.schemaName);

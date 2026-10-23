@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
+import { mapRecord } from '../../src/library/records.js';
 import { setupChildrenFixture } from '../metadata/children-fixture.js';
 
 const ids = Object.fromEntries([
@@ -176,7 +178,7 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
         }));
         accessItems.push(await library.getItemRecord(playlistId), await library.getItemRecord(boxSetId));
       }
-      const countedUpdate = async candidates => {
+      const countedUpdate = async (candidates, user = restrictedUser) => {
         let queryCount = 0;
         const withConnection = database.withConnection;
         database.withConnection = function countQueries(operation, options) {
@@ -191,15 +193,66 @@ for (const dialect of ['postgres']) test(`${dialect}: library update projection 
           }, options);
         };
         try {
-          const result = await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user: restrictedUser });
+          const result = await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user });
           return { queryCount, result };
         } finally { database.withConnection = withConnection; }
       };
       const singleAccess = await countedUpdate(accessItems.slice(0, 2));
       const batchAccess = await countedUpdate(accessItems);
-      assert.equal(batchAccess.result.ItemsAdded.length, accessItems.length);
+      const reversedItems = accessItems.toReversed();
+      const reversedSingleAccess = await countedUpdate(reversedItems.slice(0, 2));
+      const reversedAccess = await countedUpdate(reversedItems);
+      const ratingLimited = { ...restrictedUser, MaxParentalRatingScore: 10, MaxParentalRatingSubScore: 0 };
+      const ratedSingleAccess = await countedUpdate(accessItems.slice(0, 2), ratingLimited);
+      const ratedBatchAccess = await countedUpdate(accessItems, ratingLimited);
+      t.diagnostic(JSON.stringify({ scope: 'one visibility page with alternating Playlist and BoxSet',
+        single: { items: 2, statements: singleAccess.queryCount },
+        batch: { items: accessItems.length, statements: batchAccess.queryCount },
+        reversedSingle: { items: 2, statements: reversedSingleAccess.queryCount },
+        reversed: { items: reversedItems.length, statements: reversedAccess.queryCount },
+        ratedSingle: { items: 2, statements: ratedSingleAccess.queryCount },
+        ratedBatch: { items: accessItems.length, statements: ratedBatchAccess.queryCount } }));
+      assert.deepEqual(singleAccess.result.ItemsAdded, accessItems.slice(0, 2).map(item => dtoId(item.Id)));
+      assert.deepEqual(batchAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)),
+        'batching visibility retains the complete notification identity sequence');
+      assert.deepEqual(reversedSingleAccess.result.ItemsAdded, reversedItems.slice(0, 2).map(item => dtoId(item.Id)));
+      assert.deepEqual(reversedAccess.result.ItemsAdded, reversedItems.map(item => dtoId(item.Id)),
+        'BoxSet-first and Playlist-first pages retain their original notification order');
+      assert.deepEqual(ratedSingleAccess.result.ItemsAdded, accessItems.slice(0, 2).map(item => dtoId(item.Id)));
+      assert.deepEqual(ratedBatchAccess.result.ItemsAdded, accessItems.map(item => dtoId(item.Id)),
+        'the empty-playlist parental gate must preserve every eligible notification');
       assert.ok(singleAccess.queryCount > 0, 'the batch bound must observe actual PostgreSQL statements');
       assert.equal(batchAccess.queryCount, singleAccess.queryCount,
         'LibraryChanged Playlist/BoxSet visibility must use a batch-bounded SQL statement count');
+      assert.equal(reversedAccess.queryCount, reversedSingleAccess.queryCount,
+        'changing the type interleave must not turn one visibility page into per-item SQL');
+      assert.equal(ratedBatchAccess.queryCount, ratedSingleAccess.queryCount,
+        'Playlist parental member visibility must also use a batch-bounded SQL statement count');
+
+      const channelUser = { ...restrictedUser, Policy: { ...restrictedUser.Policy, EnableAllChannels: true } };
+      const invalidChannel = mapRecord({ ...item('C4444444-4444-4444-4444-000000000001', 'Folder'),
+        Type: 'MediaBrowser.Controller.Channels.Channel' });
+      const missingSourcePlaylist = mapRecord(item('C4444444-4444-4444-4444-000000000002', 'Playlist', {
+        ChannelId: 'C4444444-4444-4444-4444-000000000099',
+      }));
+      const invalidSharesPlaylist = mapRecord(item('C4444444-4444-4444-4444-000000000003', 'Playlist', {
+        Path: path.join(library.options.programDataPath, 'data', 'playlists', 'invalid-shares'),
+        Data: JSON.stringify({ OpenAccess: true, Shares: null }),
+      }));
+      const failureFor = async candidates => {
+        try { await library.getLibraryUpdateInfo({ itemsAdded: candidates }, { user: channelUser }); }
+        catch (error) { return { status: error.statusCode ?? error.status ?? 500, message: error.message }; }
+        assert.fail('invalid visibility input must fail');
+      };
+      const channelFailure = await failureFor([invalidChannel]);
+      assert.equal(channelFailure.status, 400);
+      for (const later of [missingSourcePlaylist, invalidSharesPlaylist]) {
+        const laterFailure = await failureFor([later]);
+        assert.equal(laterFailure.status, 500);
+        assert.deepEqual(await failureFor([accessItems[0], invalidChannel, later]), channelFailure,
+          'prefetching a later Playlist cannot replace the earlier public failure');
+        assert.deepEqual(await failureFor([accessItems[0], later, invalidChannel]), laterFailure,
+          'consuming a deferred Playlist failure retains its original input position');
+      }
     }
   });
