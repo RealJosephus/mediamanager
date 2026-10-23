@@ -899,7 +899,13 @@ test('PostgreSQL: Shows Upcoming, NextUp, Episodes, Seasons and Similar preserve
     if (nativeName) {
       const expected = nativeResult(nativeName);
       assert.equal(expected.status, 200);
-      assert.deepEqual(selected.Items.map(item => item.Id), expected.items.map(key => idKey(ids[key])));
+      const seasonKeys = { Specials: 'season0', 'Season 1': 'season1', 'Season 2': 'season2', 'Unnumbered Season': 'seasonNull' };
+      assert.deepEqual(selected.Items.map(item => item.Name), expected.items);
+      assert.deepEqual(selected.Items.map(item => item.Id), expected.items.map(name => {
+        const key = seasonKeys[name] ?? name;
+        assert.ok(Object.hasOwn(ids, key), 'Every Native result must identify a declared scenario item: ' + name);
+        return idKey(ids[key]);
+      }));
       assert.equal(selected.TotalRecordCount, expected.totalRecordCount);
       assert.equal(selected.StartIndex, expected.startIndex);
     }

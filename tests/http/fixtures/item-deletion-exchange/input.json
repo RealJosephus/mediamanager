@@ -1,5 +1,6 @@
 {
   "libraryName": "Deletion exchange photos",
+  "collectionType": "homevideos",
   "photos": ["Node removal", "Native removal", "Native edit", "Opaque survivor"],
   "initialOverview": "Native preparation before PostgreSQL takeover.",
   "continuedOverview": "Native continuation after the Node deletion.",

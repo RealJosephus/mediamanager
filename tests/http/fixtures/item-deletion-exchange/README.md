@@ -7,7 +7,9 @@ response as the expected result.
 The test copies that instance into a new private root, removes the two documented
 synthetic scaffold items before startup, and creates four PNG files from
 `tests/images/fixtures/processor/single.png`. Actual Native HTTP creates a photo
-library and runs its registered library scan. The real resolver supplies the item
+library using the accepted `homevideos` collection option with `EnablePhotos`,
+verifies its registered type and physical path, and runs its registered library
+scan. The real resolver supplies the item
 identities. HTTP metadata updates, image uploads and favorite requests establish
 the business rows and assets. All scheduled triggers are disabled in this private
 instance before the explicit scan.

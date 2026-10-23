@@ -60,8 +60,8 @@ test('CI full forwards the strict full profile and refuses every form of selecti
 });
 
 test('reviewed consumer records bind original source bytes and native runtime inputs without promoting ordinary DTO paths', () => {
-  const consumer = executionManifestContract('tests/consumer-contracts/consumer-readers.test.js');
-  assert.equal(consumer.argument, 'readers');
+  const consumer = executionManifestContract('tests/metadata/playlist-items.test.js');
+  assert.equal(consumer.argument, 'playlist-layouts');
   assert.equal(executionManifestContract('tests/playback/http-native.test.js'), null, 'playback records its current reader oracle instead of executing the historical recording');
   assert.equal(executionManifestContract('tests/metadata/playlist-items.test.js').argument, 'playlist-layouts');
   assert.equal(executionManifestContract('tests/consumer-contracts/date-roundtrip.test.js').argument, 'date-roundtrip');
@@ -84,7 +84,7 @@ test('reviewed consumer records bind original source bytes and native runtime in
 });
 
 test('shared reader manifests require only the called layout and retain ownership at the actual consumer', async () => {
-  const consumer = 'tests/metadata/nfo-episode-blocks.test.js', sibling = 'tests/metadata/nfo-scalar-provider.test.js';
+  const consumer = 'tests/metadata/nfo-episode-blocks.test.js', sibling = 'tests/metadata/local-xml-provider.test.js';
   const contract = executionManifestContract(consumer), siblingContract = executionManifestContract(sibling);
   assert.equal(executionManifestContract('tests/metadata/local-xml-provider.test.js').argument, 'local-xml-provider');
   assert.equal(contract.manifest, siblingContract.manifest);
@@ -109,7 +109,7 @@ test('shared reader manifests require only the called layout and retain ownershi
 });
 
 test('input capture binds the real consumer manifest without including unread history or DTO paths', async t => {
-  const consumer = 'tests/consumer-contracts/consumer-readers.test.js', contract = executionManifestContract(consumer);
+  const consumer = 'tests/metadata/playlist-items.test.js', contract = executionManifestContract(consumer);
   const output = path.join(repositoryRoot, '.test-output'); await mkdir(output, { recursive: true });
   const root = await mkdtemp(path.join(output, 'ci-execution-inputs-'));
   t.after(async () => { assert.equal(path.dirname(root), output); await rm(root, { recursive: true, force: true }); });

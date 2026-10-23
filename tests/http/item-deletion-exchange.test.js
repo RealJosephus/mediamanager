@@ -124,6 +124,7 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
     report.sourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/LibraryController.cs',
       'Jellyfin.Api/Controllers/ItemUpdateController.cs', 'Jellyfin.Api/Controllers/LibraryStructureController.cs',
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'MediaBrowser.Controller/Entities/Photo.cs',
+      'MediaBrowser.Model/Entities/CollectionTypeOptions.cs',
       'MediaBrowser.Controller/Entities/BaseItem.cs', 'Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs',
       'Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs', 'Jellyfin.Api/Controllers/ImageController.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
@@ -148,7 +149,14 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
       TypeOptions: ['Photo', 'PhotoAlbum', 'Folder', 'CollectionFolder'].map(Type => ({ Type,
         MetadataFetchers: [], MetadataFetcherOrder: [], ImageFetchers: [], ImageFetcherOrder: [] })) };
     assert.equal((await request(nativeOrigin, '/Library/VirtualFolders?name=' + encodeURIComponent(input.libraryName)
-      + '&collectionType=photos&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: libraryOptions } })).status, 204);
+      + '&collectionType=' + input.collectionType + '&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: libraryOptions } })).status, 204);
+    const libraries = await request(nativeOrigin, '/Library/VirtualFolders');
+    assert.equal(libraries.status, 200);
+    const registeredLibrary = libraries.bodyJson.find(library => library.Name === input.libraryName);
+    assert.equal(registeredLibrary?.CollectionType, input.collectionType);
+    assert.equal(registeredLibrary.LibraryOptions.EnablePhotos, true);
+    assert.deepEqual(registeredLibrary.Locations, [media.root]);
+    report.registeredLibrary = registeredLibrary;
     const beforeScan = (await idleTasks(nativeOrigin)).find(task => task.Key === 'RefreshLibrary');
     assert.ok(beforeScan);
     assert.equal((await request(nativeOrigin, '/ScheduledTasks/Running/' + beforeScan.Id, { method: 'POST' })).status, 204);
