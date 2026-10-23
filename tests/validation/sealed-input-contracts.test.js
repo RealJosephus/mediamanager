@@ -223,6 +223,44 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
 });
 
+test('Startup current readers bind neutral scenarios without acquiring the historical recording', async t => {
+  const consumer = 'tests/http/startup.test.js';
+  const manifest = 'tests/http/fixtures/startup/current-profile.json';
+  const contract = executionManifestContract(consumer);
+  assert.deepEqual(contract, { kind: 'current-oracle', manifest, loader: consumer });
+  const profileFilename = path.join(repositoryRoot, manifest);
+  const profile = JSON.parse(await readFile(profileFilename, 'utf8'));
+  await assertOracleSourcesProfiled(profile, profileFilename);
+  const references = executionManifestReferences(contract, profile, profileFilename);
+  assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
+    'tests/Directory.Build.props', 'tests/http/fixtures/startup/current/Oracle.csproj',
+    'tests/http/fixtures/startup/current/Program.cs', 'tests/http/fixtures/startup/input.json',
+  ]);
+  const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
+  assert.deepEqual(closure.find(value => value.path === consumer).services, ['dotnet', 'jellyfinDll', 'postgres']);
+  const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-startup-current-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const directory of ['host', 'shared', 'sdk', 'runtime']) await mkdir(path.join(root, directory));
+  const dotnet = path.join(root, process.platform === 'win32' ? 'dotnet.exe' : 'dotnet');
+  const jellyfinDll = path.join(root, 'runtime', 'jellyfin.dll');
+  await writeFile(dotnet, 'same-run dotnet identity');
+  await writeFile(jellyfinDll, 'same-run designated Native identity');
+  const identity = await captureInputIdentity({ selected: [consumer], dependencies, environment: {},
+    preflight: { ready: true, tools: [], services: [{ name: 'postgres', available: true, version: 'PostgreSQL 17' },
+      { name: 'dotnet', filename: dotnet }, { name: 'jellyfinDll', filename: jellyfinDll }] } });
+  assert.equal(identity.currentReleaseInputReady, true);
+  for (const reference of references) {
+    const found = identity.entries.find(value => value.filename === reference.filename);
+    assert.ok(found?.required && found.expectedDigestMatched, reference.filename);
+    assert.ok(found.expectedDigests.includes(reference.sha256), reference.filename);
+  }
+  const described = identity.entries.flatMap(value => describedPaths(value));
+  for (const filename of ['native.json', 'provenance.json', 'Program.cs', 'Oracle.csproj']) {
+    assert.ok(!described.includes(path.join(path.dirname(profileFilename), filename)), filename);
+  }
+  assert.equal(identity.historicalArchive.profiles.find(value => value.id === 'sealed-startup')?.disposition, 'current-identity');
+});
+
 test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles without historical execution paths', async t => {
   const cases = [{
     consumer: 'tests/http/item-deletion.test.js',

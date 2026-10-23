@@ -63,7 +63,7 @@
         "tests/http/fixtures/startup/provenance.json"
       ],
       "currentExecution": {
-        "disposition": "historical-seal",
+        "disposition": "current-identity",
         "consumers": [
           "tests/http/startup.test.js"
         ]

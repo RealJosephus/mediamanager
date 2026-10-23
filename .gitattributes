@@ -367,3 +367,6 @@ src/metadata/resources/comic-culture-language.json -text
 # Derived recorded-input manifests use the generator's canonical LF bytes.
 /tests/library/fixtures/library-directory-monitor/required-inputs.json text eol=lf
 /tests/images/fixtures/user-view-collage/required-inputs.json text eol=lf
+
+/tests/http/fixtures/startup/current/** -text
+/tests/http/fixtures/startup/current-profile.json text eol=lf

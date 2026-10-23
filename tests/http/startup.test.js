@@ -15,33 +15,29 @@ import { ServerConfigurationStore } from '../../src/core/server-configuration-st
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
+import { recordCurrentOracleOnce } from '../helpers/current-oracle.js';
 import { projectStartupObservation, startupTables } from './fixtures/startup/observations.js';
 
 const fixture = new URL('./fixtures/startup/', import.meta.url);
 const inputBytes = await fs.readFile(new URL('input.json', fixture)), input = JSON.parse(inputBytes);
-const nativeBytes = await fs.readFile(new URL('native.json', fixture)), native = JSON.parse(nativeBytes);
-const proof = JSON.parse(await fs.readFile(new URL('provenance.json', fixture)));
-const enabled = { skip: !postgresTestConnectionString }, diskInputs = [];
+const enabled = { skip: !postgresTestConnectionString || !process.env.MEDIAMANAGER_JELLYFIN_DLL }, diskInputs = [];
+const currentStartup = (label = 'startup-current') => recordCurrentOracleOnce({ owner: import.meta.url, label,
+  project: 'tests/http/fixtures/startup/current/Oracle.csproj', input: 'tests/http/fixtures/startup/input.json' });
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, (_key, entry) => typeof entry === 'bigint' ? JSON.rawJSON(entry.toString()) : entry, 2) + '\n';
 
-test('Startup fixtures bind actual MVC, user/configuration managers, EF, native reader and an independent repeat', async () => {
+test('current Startup MVC, user/configuration managers and EF repeat preserve public and persisted behavior', enabled, async () => {
+  const { native } = await currentStartup(), { native: repeat } = await currentStartup('startup-current-repeat');
   for (const flag of ['actualController', 'actualBinding', 'actualAuthorizationHandlers', 'actualUserManager', 'actualEfSqlite', 'actualConfigurationManager']) assert.equal(native[flag], true);
-  assert.equal(hash(inputBytes), proof.inputSha256); assert.equal(hash(nativeBytes), proof.nativeSha256);
-  assert.equal(proof.completeBuildInputClosure, false); assert.equal(proof.phaseAcceptance, false);
-  assert.equal(hash(await fs.readFile(proof.rawRecording)), proof.nativeSha256);
-  for (const source of proof.sources) for (const root of ['D:/jellyfin', proof.jellyfin.buildSource]) assert.equal(hash(await fs.readFile(path.join(root, source.filename))), source.sha256);
-  for (const row of [...proof.assemblies, ...proof.nativeLibraries, ...proof.oracleSources]) assert.equal(hash(await fs.readFile(row.filename)), row.sha256);
-  const repeat = JSON.parse(await fs.readFile(proof.repeat.filename));
-  assert.equal(hash(await fs.readFile(proof.repeat.filename)), proof.repeat.sha256);
-  assert.equal(repeat.inputSha256, native.inputSha256); assert.deepEqual(repeat.caseFoldExceptions, native.caseFoldExceptions);
-  assert.equal(hash(await fs.readFile(new URL('../../src/core/resources/invariant-case-fold.json', import.meta.url))), proof.caseFoldSha256);
-  assert.deepEqual(JSON.parse(await fs.readFile(new URL('../../src/core/resources/invariant-case-fold.json', import.meta.url))), native.caseFoldExceptions);
+  assert.equal(native.inputSha256, hash(inputBytes)); assert.equal(repeat.inputSha256, native.inputSha256);
+  assert.deepEqual(native.results.map(row => row.name), input.map(sample => sample.name));
+  assert.deepEqual(repeat.results.map(row => row.name), input.map(sample => sample.name));
   for (const sample of input) assert.deepEqual(await projectStartupObservation(repeat.results.find(row => row.name === sample.name), sample, repeat.environmentUserName),
     await projectStartupObservation(native.results.find(row => row.name === sample.name), sample, native.environmentUserName));
 });
 
 for (const sample of input) test(`postgres: native startup HTTP, rows, configuration and failure prefix: ${sample.name}`, enabled, async t => {
+  const { native } = await currentStartup();
   const output = path.resolve(validationOutputRoot()); await fs.mkdir(output, { recursive: true });
   const root = await fs.mkdtemp(path.join(output, 'startup-http-'));
   const configuration = { ServerName: 'Initial', UICulture: 'en-US', MetadataCountryCode: 'US', PreferredMetadataLanguage: 'en',
@@ -118,7 +114,7 @@ test('actual native XML reader consumes every candidate startup snapshot and unc
   const root = path.join(path.resolve(validationOutputRoot()), 'startup-config-reader'); await fs.mkdir(root, { recursive: true });
   assert.equal(diskInputs.length, input.length + input.reduce((total, sample) => total + (sample.steps?.length ?? 1), 0));
   const manifest = path.join(root, 'input.json'); await fs.writeFile(manifest, json(diskInputs.map(({ expected, ...row }) => row)), { flag: 'wx' });
-  await recordOracle({ project: fileURLToPath(new URL('./fixtures/startup/Oracle.csproj', import.meta.url)), output: path.join(root, 'oracle'),
+  await recordOracle({ project: fileURLToPath(new URL('./fixtures/startup/current/Oracle.csproj', import.meta.url)), output: path.join(root, 'oracle'),
     args: ['read-config', manifest, '{output}/native.json'] });
   const result = JSON.parse(await fs.readFile(path.join(root, 'oracle/native.json')));
   assert.equal(result.actualNativeReader, true); assert.equal(result.manifestSha256, hash(await fs.readFile(manifest)));
