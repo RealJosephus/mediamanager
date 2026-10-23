@@ -89,6 +89,16 @@ export function decodeNativeTextEncoding(bytes, encoding = 'utf-8') {
     return new TextDecoder(name).decode(value);
   }
   const name = String(encoding).toLowerCase();
+  // WHATWG aliases these labels to Windows-1252. Native playlist readers
+  // instead retain Latin-1 controls and replace non-ASCII bytes with '?'.
+  if (name === 'iso-8859-1' || name === 'latin1') return value.toString('latin1');
+  if (name === 'iso-8859-9') return value.toString('latin1').replace(/[ÐÝÞðýþ]/gu,
+    character => ({ Ð: 'Ğ', Ý: 'İ', Þ: 'Ş', ð: 'ğ', ý: 'ı', þ: 'ş' })[character]);
+  if (name === 'us-ascii' || name === 'ascii') {
+    let text = '';
+    for (const byte of value) text += byte < 0x80 ? String.fromCharCode(byte) : '?';
+    return text;
+  }
   if (name === 'utf-32' || name === 'utf-32le') return utf32(value, true);
   if (name === 'utf-32be') return utf32(value, false);
   if (singleByteCharacters.has(name)) return singleByte(value, singleByteCharacters.get(name));

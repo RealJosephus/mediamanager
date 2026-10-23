@@ -646,6 +646,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
       // admitted writer can still be awaiting its caller while recording
       // folders drain; accepting another writer here can form a wait cycle.
       const apiKeysClosing = attempt(() => apiKeys.close());
+      // Reject new setup work before the first asynchronous drain while
+      // admitted user/password changes keep their database dependencies.
+      const startupClosing = attempt(() => startup.close());
       introProviders.close();
       stopStorageObserver();
       // A scheduler worker can be awaiting a metadata provider's cancellation.
@@ -663,7 +666,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
         attempt(() => quickConnect.close()),
         attempt(() => passwordResets.close()),
         attempt(() => displayPreferences.close()),
-        attempt(() => startup.close()),
+        startupClosing,
         attempt(() => liveTvClosing),
         apiKeysClosing,
         attempt(() => splashscreen?.close()),
