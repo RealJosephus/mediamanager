@@ -4,6 +4,7 @@ import { ItemUpdateType } from './save-manager.js';
 import { nativePlaylistIsFile } from '../library/native-path.js';
 import { createLocalXmlProviders } from './local-xml-provider.js';
 import { directFileXmlSink, networkXmlSpool, validateXmlSpoolRoot } from './local-xml-sinks.js';
+import { MetadataImageAssets } from './image-assets.js';
 
 const providerName = 'Emby Xml';
 
@@ -82,7 +83,7 @@ export { streamLocalXml } from './local-xml-writer.js';
 
 export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRoot, linkedChildren } = {}) {
   if (!fileSystem || typeof fileSystem.lstat !== 'function' || typeof fileSystem.realpath !== 'function'
-    || typeof fileSystem.open !== 'function') {
+    || typeof fileSystem.open !== 'function' || typeof fileSystem.stat !== 'function') {
     throw new TypeError('Local XML metadata requires a filesystem with direct file handles.');
   }
   const validateDestination = async (item, context = {}) => {
@@ -126,7 +127,15 @@ export function createLocalXmlPlugin({ vfs, fileSystem, externalIdInfos, spoolRo
       }
       if (preparationError) throw preparationError;
     } finally { if (output.dispose) await output.dispose(); else await output.close(); }
-    return { path: destination.path, changed: true };
+    const result = { path: destination.path, changed: true };
+    // DateLastSaved must cover the actual closed file, not a wall-clock sample
+    // that can precede the filesystem's final modification timestamp.
+    if (destination.kind === 'local') {
+      const saved = await new MetadataImageAssets({ fileSystem,
+        stateRoots: [context.localRoot] }).stat(destination.path);
+      result.dateLastSavedFloor = saved.modified;
+    }
+    return result;
   };
   const provider = (id, itemType) => ({
     id, name: providerName, kind: 'saver', itemTypes: [itemType], save,

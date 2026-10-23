@@ -1,8 +1,15 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { assertVideoRepositoryPath, copyLocalAlternateMetadata, localAlternateVersionIds, loadLocalAlternateContext } from './video-repository.js';
 import { cloneNativeItemEntity, releaseNativeItemLinks } from '../library/native-item-entity.js';
+import { dateTicks } from '../library/records.js';
 
 export const ItemUpdateType = Object.freeze({ None: 1, MetadataImport: 2, ImageUpdate: 4, MetadataDownload: 8, MetadataEdit: 16 });
+
+export function latestDateLastSaved(...values) {
+  let latest;
+  for (const value of values) if (value != null && (latest == null || dateTicks(value) > dateTicks(latest))) latest = value;
+  return latest;
+}
 
 export async function isSaverEnabled(saver, item, updateType, { libraryOptions = {}, globalOptions = {}, includeDisabled = false, exists, saveLocalMetadataEnabled = item.SaveLocalMetadata === true, context = {}, logger = { error() {} } } = {}) {
   try {
@@ -56,7 +63,7 @@ export async function validateMetadataSaves(loaded, updateType, registry, ancest
 export async function saveMetadata(item, updateType, savers, { now = () => new Date().toISOString(), monitor = {}, logger = { error() {} }, context = {}, ...selection } = {}) {
   const applicable = [];
   for (const saver of savers) if (await isSaverEnabled(saver, item, updateType, { ...selection, logger, context })) applicable.push(saver);
-  const outcomes = [];
+  const outcomes = []; let dateLastSavedFloor;
   for (const saver of applicable) {
     let path;
     try { path = saver.getMonitorPath ? saver.getMonitorPath(item, context) : saver.getSavePath?.(item, context); }
@@ -70,7 +77,11 @@ export async function saveMetadata(item, updateType, savers, { now = () => new D
       // Wait for a real clock transition; preserve file times and comparisons.
       const completedTick = Date.now();
       do { await delay(1); } while (Date.now() === completedTick);
-      item.DateLastSaved = now(); outcomes.push({ saver: saver.id, result });
+      if (result?.dateLastSavedFloor != null) {
+        dateLastSavedFloor = latestDateLastSaved(dateLastSavedFloor, result.dateLastSavedFloor);
+      }
+      item.DateLastSaved = latestDateLastSaved(now(), dateLastSavedFloor);
+      outcomes.push({ saver: saver.id, result });
     } catch (error) { logger.error(error, 'Error in metadata saver'); outcomes.push({ saver: saver.id, error }); }
     finally { if (path != null) monitor.reportFileSystemChangeComplete?.(path, false); }
   }

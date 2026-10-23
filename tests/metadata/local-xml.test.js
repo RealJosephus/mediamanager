@@ -1,11 +1,11 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, readFile, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, readFile, rm, stat, symlink, utimes, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { createLocalXmlPlugin, localXmlSavePath, serializeLocalXml } from '../../src/metadata/local-xml.js';
-import { ItemUpdateType } from '../../src/metadata/save-manager.js';
+import { ItemUpdateType, saveMetadata } from '../../src/metadata/save-manager.js';
 import { idKey } from '../../src/library/records.js';
 import { createMetadataContextLoader } from '../../src/library/metadata-context.js';
 import { setupChildrenFixture } from './children-fixture.js';
@@ -213,6 +213,38 @@ test('state-local XML saver confines real paths and rejects symbolic item and de
   await symlink(outside, linked, process.platform === 'win32' ? 'junction' : 'dir');
   await assert.rejects(saver.validateSave({ ...item, Path: linked }, { localRoot: root, localPath: linked }),
     error => error.code === 'permission-denied');
+});
+
+test('state-local XML save persists its closed-file clock and detects a later same-size external write', async t => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'local-xml-generation-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const directory = path.join(root, 'collections', 'Set');
+  await mkdir(directory, { recursive: true });
+  const plugin = createLocalXmlPlugin({ fileSystem: testFileSystem });
+  const saver = plugin.providers.find(provider => provider.id === 'BoxSetXmlSaver');
+  const item = base({ Path: directory, DateLastSaved: '0001-01-01T00:00:00.0000000Z' });
+  const context = { localRoot: root, localPath: directory, prepareLinkedXmlItems: emptyLinks };
+  const filename = path.join(directory, 'collection.xml');
+
+  const outcomes = await saveMetadata(item, ItemUpdateType.MetadataDownload, [saver], {
+    includeDisabled: true, context, now: () => '0001-01-01T00:00:00.0000000Z'
+  });
+  assert.equal(outcomes.length, 1);
+  assert.equal(outcomes[0].error, undefined);
+  const written = await stat(filename, { bigint: true });
+  const restarted = createLocalXmlPlugin({ fileSystem: testFileSystem });
+  const reader = restarted.providers.find(provider => provider.id === 'BoxSetXmlProvider');
+  const reloaded = { ...item };
+  assert.equal(await reader.hasChanged(reloaded, context), false);
+
+  const bytes = await readFile(filename);
+  await writeFile(filename, bytes);
+  const externalTime = new Date(Number(written.mtimeNs / 1000000n) + 1000);
+  await utimes(filename, externalTime, externalTime);
+  const external = await stat(filename, { bigint: true });
+  assert.equal(external.size, written.size);
+  assert.notEqual(external.mtimeNs, written.mtimeNs);
+  assert.equal(await reader.hasChanged(reloaded, context), true);
 });
 
 for (const dialect of ['postgres']) test(`${dialect}: metadata context keeps state-local XML and linked paths in its current library frame`, { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { ItemUpdateType, saveMetadata, validateMetadataSaves } from './save-manager.js';
+import { ItemUpdateType, latestDateLastSaved, saveMetadata, validateMetadataSaves } from './save-manager.js';
 import { persistMetadata, persistPeopleCredits, persistImageMetadata, reattachUserData } from './persistence.js';
 import { peopleItemTypes } from './item-update.js';
 import { PeopleMetadataLifecycleHost } from './people-lifecycle.js';
@@ -8,6 +8,14 @@ import { invalidateVideoParent } from '../library/video-version-discovery.js';
 import { publishNativeImageInfos } from './images.js';
 
 const repositoryAncestors = Symbol('video repository ancestors');
+const successfulSaveDateFloor = saves => {
+  let floor;
+  for (const outcome of saves) {
+    const value = outcome.error == null ? outcome.result?.dateLastSavedFloor : null;
+    if (value != null) floor = latestDateLastSaved(floor, value);
+  }
+  return floor;
+};
 
 export class MetadataUpdateHost extends EventEmitter {
   constructor({ registry, store, images, library, monitor, logger = { error() {} }, now = () => new Date().toISOString(), reattach = reattachUserData }) {
@@ -81,7 +89,7 @@ export class MetadataUpdateHost extends EventEmitter {
     item.DateLastSaved = this.now();
     const saves = await this.runMetadataSavers(updated, updateReason, { saverOperation, persistImages, persistenceContext: loaded });
     // The stored timestamp must follow external metadata and image writes, even with no enabled saver.
-    item.DateLastSaved = this.now();
+    item.DateLastSaved = latestDateLastSaved(item.DateLastSaved, this.now(), successfulSaveDateFloor(saves));
     const newVersions = await updated.videoVersionDiscovery?.prepare(updated,
       { baseline: loaded, reportRemoved: (item, parent) => this.reportItemRemoved(item, parent) }) ?? [];
     await (persist ? persist(updated, result, { signal, newVersions })
