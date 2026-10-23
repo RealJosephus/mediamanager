@@ -378,3 +378,8 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/nfo-scalar-provider/current-profile.json text eol=lf
 /tests/consumer-contracts/fixtures/readers/current/** -text
 /tests/consumer-contracts/fixtures/readers/current-profile.json text eol=lf
+/tests/metadata/fixtures/local-xml-save-current/input.json -text
+/tests/metadata/fixtures/local-xml-save-current/Program.cs -text
+/tests/metadata/fixtures/local-xml-save-current/Oracle.csproj -text
+/tests/metadata/fixtures/local-xml-save-current/current-profile.json text eol=lf
+/tests/metadata/local-xml-prefix-seal.history.js -text

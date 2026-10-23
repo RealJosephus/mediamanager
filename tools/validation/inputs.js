@@ -55,6 +55,7 @@ const executionManifests = new Map([
   ['tests/metadata/nfo-partial-reader.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-partial-reader/current-profile.json']],
   ['tests/metadata/nfo-scalar-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/nfo-scalar-provider/current-profile.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', ['current-oracle', 'tests/consumer-contracts/fixtures/readers/current-profile.json']],
+  ['tests/metadata/local-xml-stream.test.js', ['current-oracle', 'tests/metadata/fixtures/local-xml-save-current/current-profile.json']],
   ['tests/consumer-contracts/date-roundtrip.test.js', ['consumer', 'date-roundtrip']],
   ['tests/metadata/playlist-items.test.js', ['consumer', 'playlist-layouts']],
   ...['local-xml-provider', 'nfo-episode-blocks']
@@ -64,8 +65,6 @@ const sealedExecutionManifests = new Map([
   ['tests/images/splashscreen.test.js', ['splashscreen-sources', 'tests/images/fixtures/splashscreen/files.json']],
   ['tests/library/collection-post-scan.test.js', ['collection-task-sources', 'tests/library/fixtures/collection-post-scan/provenance.json']],
   ['tests/library/folder-validation-progress.test.js', ['folder-progress-sources', 'tests/library/fixtures/folder-validation-progress/record.json']],
-  ['tests/metadata/local-xml-stream.test.js', ['sealed-xml-prefix', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
-  ['tests/metadata/local-xml-prefix-seal.test.js', ['sealed-xml-prefix-history', 'tests/metadata/fixtures/local-xml-save-prefix/provenance.json']],
 ]);
 
 export function executionManifestContract(consumer) {
@@ -200,16 +199,6 @@ export function executionManifestReferences(contract, content, filename) {
     for (const recording of content.recordings) {
       for (const descriptor of [recording.originalRecorder, recording.libraryManagerSource, ...recording.executableBindings,
         ...recording.repetitions]) add(descriptor);
-    }
-  } else if (contract.kind === 'sealed-xml-prefix' || contract.kind === 'sealed-xml-prefix-history') {
-    add({ filename: local('native.json'), sha256: content.nativeSha256 });
-    add({ filename: content.rawRecording, sha256: content.nativeSha256 }, { recorded: true });
-    for (const source of content.oracleSources) add({ filename: local(source.name), sha256: source.sha256 });
-    for (const source of content.sources) for (const filename of [source.designated, source.isolated]) {
-      add({ filename, sha256: source.sha256 }, { recorded: true });
-    }
-    if (contract.kind === 'sealed-xml-prefix-history') {
-      for (const assembly of content.loadedAssemblies) add(assembly, { recorded: true });
     }
   } else if (contract.kind === 'consumer') {
     for (const file of content.files) {

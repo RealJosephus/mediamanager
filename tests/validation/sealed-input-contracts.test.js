@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { captureInputIdentity, executionManifestContract, executionManifestReferences } from '../../tools/validation/inputs.js';
 import { dependencyClosure, inventory } from '../../tools/validation/inventory.js';
-import { recordedInputMapPath, recordedInputPath, repositoryRoot } from '../../tools/validation/paths.js';
+import { repositoryRoot } from '../../tools/validation/paths.js';
 
 const entry = (filename, imports = []) => ({ path: filename, test: filename.endsWith('.test.js'), imports,
   importedFiles: [], declaredReferences: [], fixtureReferences: [], services: [], tools: [], unresolvedImports: [] });
@@ -219,7 +219,7 @@ test('password reset PIN files use a tracked same-run Node-to-Native public-prov
   assert.ok(['complete', 'incomplete'].includes(archiveProfile?.archiveStatus));
 });
 
-for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', additionalInputs = []] of [
+for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', additionalInputs = [], oraclePath = 'current/'] of [
   ['tests/http/startup.test.js', 'tests/http/fixtures/startup', ['dotnet', 'jellyfinDll', 'postgres'], 'sealed-startup'],
   ['tests/core/native-charset.test.js', 'tests/core/fixtures/native-charset', ['dotnet', 'jellyfinDll'], 'sealed-charset'],
   ['tests/core/native-json-encoder.test.js', 'tests/core/fixtures/native-json-encoder', ['dotnet', 'jellyfinDll'], 'sealed-json'],
@@ -237,6 +237,8 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     ['dotnet', 'jellyfinDll'], 'nfo-repeats', 'current/input.json', ['current/layout-input.json']],
   ['tests/consumer-contracts/consumer-readers.test.js', 'tests/consumer-contracts/fixtures/readers',
     ['dotnet', 'jellyfinDll'], null, 'current/input.json', ['current/writer-input.json']],
+  ['tests/metadata/local-xml-stream.test.js', 'tests/metadata/fixtures/local-xml-save-current',
+    ['dotnet', 'jellyfinDll'], null, 'input.json', [], ''],
 ]) test(`${archiveId ?? fixture} current readers bind scenarios without acquiring the historical recording`, async t => {
   const manifest = fixture + '/current-profile.json';
   const contract = executionManifestContract(consumer);
@@ -246,7 +248,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
   await assertOracleSourcesProfiled(profile, profileFilename);
   const references = executionManifestReferences(contract, profile, profileFilename);
   assert.deepEqual(references.map(value => path.relative(repositoryRoot, value.filename).replaceAll('\\', '/')).sort(), [
-    'tests/Directory.Build.props', fixture + '/current/Oracle.csproj', fixture + '/current/Program.cs', fixture + '/' + inputPath,
+    'tests/Directory.Build.props', fixture + '/' + oraclePath + 'Oracle.csproj', fixture + '/' + oraclePath + 'Program.cs', fixture + '/' + inputPath,
     ...additionalInputs.map(filename => fixture + '/' + filename),
   ].sort());
   const dependencies = await inventory(), closure = dependencyClosure(dependencies, [consumer]);
@@ -268,7 +270,7 @@ for (const [consumer, fixture, services, archiveId, inputPath = 'input.json', ad
     assert.ok(found.expectedDigests.includes(reference.sha256), reference.filename);
   }
   const described = identity.entries.flatMap(value => describedPaths(value));
-  for (const filename of ['native.json', 'provenance.json', 'Program.cs', 'Oracle.csproj']) {
+  for (const filename of ['native.json', 'provenance.json', ...(oraclePath ? ['Program.cs', 'Oracle.csproj'] : [])]) {
     assert.ok(!described.includes(path.join(path.dirname(profileFilename), filename)), filename);
   }
   if (archiveId) assert.equal(identity.historicalArchive.profiles.find(value => value.id === archiveId)?.disposition, 'current-identity');
@@ -364,30 +366,3 @@ test('deletion HTTP, PostgreSQL and DTO consumers use tracked current profiles w
   });
 });
 
-test('XML replay owns relocated byte and source pins while the historical seal alone requires every original assembly', async () => {
-  const replay = 'tests/metadata/local-xml-stream.test.js', historical = 'tests/metadata/local-xml-prefix-seal.test.js';
-  const manifest = path.join(repositoryRoot, executionManifestContract(replay).manifest);
-  const proof = JSON.parse(await readFile(new URL('../metadata/fixtures/local-xml-save-prefix/provenance.json', import.meta.url), 'utf8'));
-  const identity = await captureInputIdentity({ selected: [replay, historical],
-    dependencies: { entries: [entry(replay), entry(historical)] }, environment: {},
-    preflight: { ready: true, services: [], tools: [] } });
-  const required = (filename, digest, owners) => {
-    const target = recordedInputPath(filename, digest ? [digest] : [], repositoryRoot, {});
-    const input = identity.entries.find(value => value.filename === target);
-    assert.ok(input?.required, filename);
-    if (digest) assert.ok(input.expectedDigests.includes(digest), filename);
-    for (const consumer of [replay, historical]) assert.equal(
-      input.requiredReasons.some(reason => reason.startsWith(consumer + ':')), owners.includes(consumer), consumer + ': ' + filename);
-    return input;
-  };
-  required(manifest, undefined, [replay, historical]);
-  required(path.join(path.dirname(manifest), 'native.json'), proof.nativeSha256, [replay, historical]);
-  required(recordedInputMapPath, undefined, [replay, historical]);
-  assert.equal(required(proof.rawRecording, proof.nativeSha256, [replay, historical]).available, true);
-  for (const source of proof.sources) for (const filename of [source.designated, source.isolated]) {
-    assert.equal(required(filename, source.sha256, [replay, historical]).available, true);
-  }
-  for (const source of proof.oracleSources) required(path.join(path.dirname(manifest), source.name), source.sha256, [replay, historical]);
-  for (const assembly of proof.loadedAssemblies) required(assembly.filename, assembly.sha256, [historical]);
-  assert.ok(proof.loadedAssemblies.some(assembly => assembly.sha256 === proof.oracleAssembly.sha256));
-});

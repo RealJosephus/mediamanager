@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "fixture": "local-xml-save",
+  "scope": "Same-run actual local XML saving, failed file prefixes, Node output consumed by Native readers, and save-manager continuation; component evidence only.",
+  "cases": 12,
+  "sourcePaths": [
+    "MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+    "MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+    "MediaBrowser.LocalMetadata/Savers/PlaylistXmlSaver.cs",
+    "MediaBrowser.LocalMetadata/Parsers/BaseItemXmlParser.cs",
+    "MediaBrowser.LocalMetadata/Parsers/BoxSetXmlParser.cs",
+    "MediaBrowser.LocalMetadata/Parsers/PlaylistXmlParser.cs",
+    "MediaBrowser.Controller/Playlists/Playlist.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "8066d14a8c4a031fa370b53c4f81c5fac9617adb501ed53ddcee124c881c744d",
+      "bytes": 2155,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "2a6a99abe133ce919fdddf2631c7f9984b3b8b664a9713b36ed9503611d69b05",
+      "bytes": 13986,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f",
+      "bytes": 536,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    }
+  ]
+}
