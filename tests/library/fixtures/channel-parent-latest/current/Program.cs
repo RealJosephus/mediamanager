@@ -32,6 +32,7 @@ using MediaBrowser.Controller.Dto;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Entities.Movies;
+using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.IO;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.LiveTv;
@@ -136,17 +137,46 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
     }
     using var cache = new MemoryCache(new MemoryCacheOptions());
     using var channels = new ChannelManager(users, dto, library, NullLogger<ChannelManager>.Instance, config, fileSystem, userData, providers, cache, inventory); BaseItem.ChannelManager = channels;
+    if (sample.TryGetProperty("persistedItems", out var persistedItems)) {
+        var providerName = sample.GetProperty("persistedProvider").GetString()!;
+        var channel = (Channel)manager.GetItemById(ChannelId(providerName))!;
+        var channelIdentity = typeof(ChannelManager).GetMethod("GetIdToHash", BindingFlags.Static | BindingFlags.NonPublic)!;
+        var seeded = new Dictionary<string, BaseItem>();
+        foreach (var seed in persistedItems.EnumerateArray()) {
+            var externalId = seed.GetProperty("ExternalId").GetString()!;
+            var parentExternalId = seed.GetProperty("ParentExternalId").GetString();
+            var parent = parentExternalId is null ? (BaseItem)channel : seeded[parentExternalId];
+            BaseItem item = seed.GetProperty("Type").GetString() switch {
+                "MusicAlbum" => new MusicAlbum(), "Series" => new Series(), "Audio" => new Audio(), "Episode" => new Episode(),
+                _ => throw new InvalidOperationException("Unknown persisted channel item type.")
+            };
+            item.Id = manager.GetNewItemId((string)channelIdentity.Invoke(null, [externalId, providerName])!, item.GetType());
+            item.ExternalId = externalId; item.ChannelId = channel.Id; item.ParentId = parent.Id;
+            item.Name = seed.GetProperty("Name").GetString()!; item.DateCreated = seed.GetProperty("DateCreated").GetDateTime();
+            item.PresentationUniqueKey = seed.GetProperty("PresentationUniqueKey").GetString()!;
+            if (seed.TryGetProperty("Tags", out var tags)) item.Tags = tags.EnumerateArray().Select(value => value.GetString()!).ToArray();
+            if (item is Episode episode) {
+                var series = (Series)parent;
+                episode.IndexNumber = seed.GetProperty("IndexNumber").GetInt32();
+                episode.SeriesId = series.Id; episode.SeriesName = series.Name; episode.SeriesPresentationUniqueKey = series.PresentationUniqueKey;
+            }
+            manager.CreateItem(item, parent); seeded.Add(externalId, item);
+        }
+    }
     var views = new UserViewManager(library, localization, channels, null!, config);
     var controller = new UserLibraryController(users, userData, library, dto, views, fileSystem, providers) { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext {
         User = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Role, UserRoles.Administrator)], "component")) } } };
-    object[] beforeRows;
+    object[] beforeRows, beforeAncestors;
     using (var db = factory.CreateDbContext()) {
         var connection = db.Database.GetDbConnection(); await connection.OpenAsync();
-        using var command = connection.CreateCommand(); command.CommandText = "SELECT * FROM BaseItems";
-        using var reader = await command.ExecuteReaderAsync(); var rawRows = new List<object>();
-        while (await reader.ReadAsync()) rawRows.Add(Enumerable.Range(0, reader.FieldCount)
-            .ToDictionary(reader.GetName, index => reader.IsDBNull(index) ? null : reader.GetValue(index)));
-        beforeRows = rawRows.ToArray();
+        async Task<object[]> ReadRows(string table) {
+            using var command = connection.CreateCommand(); command.CommandText = "SELECT * FROM " + table;
+            using var reader = await command.ExecuteReaderAsync(); var rawRows = new List<object>();
+            while (await reader.ReadAsync()) rawRows.Add(Enumerable.Range(0, reader.FieldCount)
+                .ToDictionary(reader.GetName, index => reader.IsDBNull(index) ? null : reader.GetValue(index)));
+            return rawRows.ToArray();
+        }
+        beforeRows = await ReadRows("BaseItems"); beforeAncestors = await ReadRows("AncestorIds");
     }
     persistenceCalls.Clear(); var steps = new List<object>();
     foreach (var step in sample.GetProperty("steps").EnumerateArray()) {
@@ -194,6 +224,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
         using var state = factory.CreateDbContext(); var rows = state.BaseItems.AsNoTracking().ToArray();
         object Item(BaseItem value, string persistedType) => new { Id = value.Id.ToString("N"), value.Name, value.Path, value.ExternalId, value.RunTimeTicks, value.Genres, value.Tags,
             value.Overview, channelId = value.ChannelId.ToString("N"), parentId = value.ParentId.ToString("N"), type = persistedType,
+            value.PresentationUniqueKey,
             artists = value is IHasArtist artist ? artist.Artists : null, albumArtists = value is IHasAlbumArtist album ? album.AlbumArtists : null };
         var persisted = rows.Where(row => row.Type != "PLACEHOLDER").OrderBy(row => row.Id)
             .Select(row => Item(BaseItemMapper.DeserializeBaseItem(row, NullLogger.Instance, appHost)!, row.Type)).ToArray();
@@ -201,7 +232,7 @@ foreach (var sample in input.GetProperty("cases").EnumerateArray()) {
             value.Played, value.PlayCount, value.PlaybackPositionTicks }).ToArray();
         steps.Add(new { kind, action, persisted, userData = dataRows, calls = calls.ToArray(), queue = queue.ToArray(), persistenceCalls = persistenceCalls.ToArray() });
     }
-    results.Add(new { name = sample.GetProperty("name").GetString(), root = owned, metadataPath, cachePath, beforeRows, steps,
+    results.Add(new { name = sample.GetProperty("name").GetString(), root = owned, metadataPath, cachePath, beforeRows, beforeAncestors, steps,
         identities = inventory.Select(value => value.Name).Concat(orphan ? ["Absent"] : []).Select(name => new { name, id = ChannelId(name).ToString("N") }) });
 }
 var assemblies = new[] { typeof(ChannelManager).Assembly, typeof(LibraryManager).Assembly, typeof(UserLibraryController).Assembly, typeof(DtoService).Assembly, typeof(BaseItemRepository).Assembly, typeof(JellyfinDbContext).Assembly }.Distinct()

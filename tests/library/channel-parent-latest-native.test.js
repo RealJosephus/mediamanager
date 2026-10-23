@@ -16,6 +16,7 @@ const id = value => String(value).replaceAll('-', '').toLowerCase();
 const userData = rows => rows.map(row => ({ ItemId: id(row.ItemId), UserId: id(row.UserId), CustomDataKey: row.CustomDataKey,
   Played: row.Played, PlayCount: row.PlayCount, PlaybackPositionTicks: BigInt(row.PlaybackPositionTicks) }))
   .sort((left, right) => (left.ItemId + left.CustomDataKey).localeCompare(right.ItemId + right.CustomDataKey));
+const providerReads = calls => calls.filter(call => call.kind === 'items').map(({ canBeCanceled, ...read }) => read);
 
 test('Channel parent Items/Latest matches current Native refresh, user filtering, bounded grouping and public DTOs', {
   skip: !enabled, timeout: 900000,
@@ -23,6 +24,8 @@ test('Channel parent Items/Latest matches current Native refresh, user filtering
   const output = path.join(validationOutputRoot(), 'channel-parent-latest-' + randomUUID());
   const privateRoot = path.join(output, 'private'); await mkdir(privateRoot, { recursive: true });
   const input = makeInput(), bytes = Buffer.from(JSON.stringify(input));
+  assert.equal(input.cases.slice(0, 4).reduce((count, sample) => count + sample.steps.length, 0), 32);
+  assert.equal(input.cases[4].steps.length, 13);
   const inputFile = path.join(output, 'input.json'); await writeFile(inputFile, bytes);
   const report = { comparisons: [], differences: [], failures: [], cleanup: {}, componentAcceptance: false,
     phaseAcceptance: false, releaseAcceptance: false,
@@ -39,7 +42,8 @@ test('Channel parent Items/Latest matches current Native refresh, user filtering
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'Emby.Server.Implementations/Dto/DtoService.cs',
       'Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs', 'Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs',
       'Jellyfin.Server.Implementations/Item/BaseItemMapper.cs', 'MediaBrowser.Controller/Channels/ChannelItemInfo.cs', 'Jellyfin.Api/Helpers/RequestHelpers.cs',
-      'MediaBrowser.Controller/Entities/Audio/Audio.cs', 'MediaBrowser.Controller/Entities/TV/Episode.cs',
+      'MediaBrowser.Controller/Entities/Audio/Audio.cs', 'MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs',
+      'MediaBrowser.Controller/Entities/TV/Episode.cs', 'MediaBrowser.Controller/Entities/TV/Series.cs',
       'MediaBrowser.Controller/Entities/BaseItem.cs', 'MediaBrowser.Controller/Entities/InternalItemsQuery.cs']);
     const receipt = await recordOracle({ project: 'tests/library/fixtures/channel-parent-latest/current/Oracle.csproj',
       output: path.join(output, 'native'), args: [inputFile, '{output}/native.json', path.join(privateRoot, 'native')] });
@@ -56,37 +60,58 @@ test('Channel parent Items/Latest matches current Native refresh, user filtering
       try {
         fixture = await openScenario(sample, expected, path.join(privateRoot, 'node-' + index));
         const observations = [];
+        report.comparisons.push({ name: sample.name, observations, expected });
         for (const [stepIndex, step] of sample.steps.entries()) {
           const original = expected.steps[stepIndex];
           assert.equal(original.action.failure, undefined, 'The actual Native consumer must complete: ' + stringifyNativeJson(original.action));
           const actual = await fixture.step(step);
+          observations.push(actual);
           compare(sample.name + ':' + stepIndex + ': public result', normalize(comparable(actual.action), fixture.root),
             normalize(comparable(original.action), expected.root));
           compare(sample.name + ':' + stepIndex + ': persisted music/video/channel values', normalize(actual.persisted, fixture.root), normalize(original.persisted, expected.root));
-          compare(sample.name + ':' + stepIndex + ': provider reads', normalize(actual.calls, fixture.root), normalize(original.calls, expected.root));
+          compare(sample.name + ':' + stepIndex + ': provider reads', normalize(providerReads(actual.calls), fixture.root), normalize(providerReads(original.calls), expected.root));
           compare(sample.name + ':' + stepIndex + ': persisted user state', userData(actual.userData), userData(original.userData));
           if (step.kind === 'parent-latest') {
             assert.equal(actual.wire?.status, 200);
             assert.match(actual.wire.contentType, /^application\/json\b/u);
             assert.deepEqual(actual.wire.diagnostics, []);
           }
-          if (step.name === 'single audio still returns album') {
-            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'MusicAlbum');
+          const storedId = externalId => original.persisted.find(value => value.ExternalId === externalId)?.Id;
+          if (step.name === 'single audio returns its channel album DTO' || step.name === 'persisted single audio returns its channel album DTO') {
+            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'ChannelFolderItem');
+            assert.equal(original.action.value[0].Id, storedId(sample.persistedItems ? 'typed-album' : 'album'));
             assert.equal(original.action.value[0].ChildCount, 1);
           }
-          if (step.name === 'two audio tracks count within candidate cap') assert.equal(original.action.value[0].ChildCount, 2);
-          if (step.name === 'two episodes return series' || step.name === 'grouped series skips second visibility pass') {
-            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'Series');
+          if (step.name === 'two audio tracks count within candidate cap' || step.name === 'persisted audio group counts both candidates') {
+            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'ChannelFolderItem');
+            assert.equal(original.action.value[0].Id, storedId(sample.persistedItems ? 'typed-album' : 'album'));
             assert.equal(original.action.value[0].ChildCount, 2);
           }
-          if (['zero limit', 'folder type cannot evade IsFolder false', 'blocked Series tags also block Episodes', 'no latest marker', 'no installed provider'].includes(step.name))
+          if (step.name === 'unpopulated episode identities retain one leaf' || step.name === 'allowed episode tags retain the collapsed leaf') {
+            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'Episode');
+            assert.equal(original.action.value[0].Id, storedId('episode-one'));
+          }
+          if (step.name === 'persisted distinct episodes return their series' || step.name === 'persisted grouped series skips a second visibility pass') {
+            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'Series');
+            assert.equal(original.action.value[0].Id, storedId('typed-series'));
+            assert.equal(original.action.value[0].ChildCount, 2);
+          }
+          if (step.name === 'persisted audio remains two leaves without grouping' || step.name === 'persisted episodes remain two leaves without grouping') {
+            const audio = step.query.IncludeItemTypes[0] === 'Audio', prefix = audio ? 'typed-song-' : 'typed-episode-';
+            assert.deepEqual(original.action.value.map(value => ({ Id: value.Id, Type: value.Type })),
+              ['one', 'two'].map(suffix => ({ Id: storedId(prefix + suffix), Type: audio ? 'Audio' : 'Episode' })));
+          }
+          if (['persisted single episode remains a leaf', 'persisted unplayed episode remains a leaf', 'persisted played episode remains a leaf'].includes(step.name)) {
+            assert.equal(original.action.value.length, 1); assert.equal(original.action.value[0].Type, 'Episode');
+            assert.equal(original.action.value[0].Id, storedId(step.query.IsPlayed ? 'typed-episode-two' : 'typed-episode-one'));
+          }
+          if (['zero limit', 'folder type cannot evade IsFolder false', 'blocked channel series tags also block episodes',
+            'blocked persisted series tags block its episodes', 'no latest marker', 'no installed provider'].includes(step.name))
             assert.deepEqual(original.action.value, []);
-          observations.push(actual);
         }
         assert.ok(observations.every(value => value.calls.every(call => call.FolderId !== 'unrefreshed-deep')),
           'Latest refresh must stop after the actual root and its immediate folders.');
         assert.deepEqual(fixture.diagnostics, [], stringifyNativeJson(fixture.diagnostics.map(errorRecord)));
-        report.comparisons.push({ name: sample.name, observations, expected });
       } catch (error) { report.failures.push({ name: sample.name, error: errorRecord(error) }); throw error; }
       finally { await fixture?.close(); }
     });

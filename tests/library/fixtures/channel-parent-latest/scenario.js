@@ -42,6 +42,7 @@ const jsonValue = value => parseLosslessJson(JSON.stringify(value, (_key, entry)
 const projectItem = item => jsonValue({ Id: idKey(item.Id), Name: item.Name, Path: item.Path, ExternalId: item.ExternalId ?? null,
   RunTimeTicks: item.RunTimeTicks, Genres: item.Genres, Tags: item.Tags, Overview: item.Overview,
   channelId: idKey(item.ChannelId), parentId: idKey(item.ParentId), type: item.NativeType,
+  PresentationUniqueKey: item.PresentationUniqueKey,
   artists: item.Artists ?? null, albumArtists: item.AlbumArtists ?? null });
 
 const packageCode = `
@@ -101,11 +102,17 @@ export async function openScenario(sample, expected, root, { fetching } = {}) {
     const references = new LinkedChildReferenceService({ store, itemCreation: items, loadContext, updates: metadata.updates });
     const deletion = library.itemDeletion = new ItemDeletionService({ store, library, loadContext, itemCreation: items, updates: metadata.updates,
       externalData, linkedChildReferences: references, vfs: testFileSystem.vfs, metadataVfs: testFileSystem.vfs, logger });
-    const columns = new Map(tableDefinition('BaseItems').columns.map(column => [column.name, column]));
-    const rows = expected.beforeRows.map(row => postgresTestRow('BaseItems', Object.fromEntries(Object.entries(row).filter(([name]) => columns.has(name))
-      .map(([name, value]) => [name, value != null && columns.get(name).clrType.replace('?', '') === 'Guid' ? nativeGuid(value)
-        : name === 'Path' && typeof value === 'string' && value.startsWith(expected.root) ? root + value.slice(expected.root.length) : value]))));
-    await database.transaction(async db => { await db.client.query('SET CONSTRAINTS ALL DEFERRED'); for (const row of rows) await db.insert('BaseItems', row); });
+    const transferred = (table, rows) => {
+      const columns = new Map(tableDefinition(table).columns.map(column => [column.name, column]));
+      return rows.map(row => postgresTestRow(table, Object.fromEntries(Object.entries(row).filter(([name]) => columns.has(name))
+        .map(([name, value]) => [name, value != null && columns.get(name).clrType.replace('?', '') === 'Guid' ? nativeGuid(value)
+          : name === 'Path' && typeof value === 'string' && value.startsWith(expected.root) ? root + value.slice(expected.root.length) : value]))));
+    };
+    await database.transaction(async db => {
+      await db.client.query('SET CONSTRAINTS ALL DEFERRED');
+      for (const row of transferred('BaseItems', expected.beforeRows)) await db.insert('BaseItems', row);
+      for (const row of transferred('AncestorIds', expected.beforeAncestors)) await db.insert('AncestorIds', row);
+    });
     await database.insert('Users', postgresTestRow('Users', { Id: nativeGuid(userId), Username: 'channel-items', NormalizedUsername: 'CHANNEL-ITEMS', InternalId: 1,
       AuthenticationProviderId: 'controlled', PasswordResetProviderId: 'controlled' }));
     const user = { Id: nativeGuid(userId), Policy: { EnableAllFolders: true, EnableAllChannels: true, BlockedTags: [], AllowedTags: [], BlockUnratedItems: [],
