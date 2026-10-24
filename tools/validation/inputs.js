@@ -67,6 +67,7 @@ const executionManifests = new Map([
     .map(kind => [`tests/metadata/${kind}.test.js`, ['current-oracle', 'tests/metadata/fixtures/book-comic/current-profile.json']]),
   ['tests/metadata/book-runtime.test.js', ['current-oracle', 'tests/metadata/fixtures/book-runtime-current/current-profile.json']],
   ['tests/storage/archive-codec-provenance.test.js', ['current-oracle', 'tests/storage/fixtures/archive-codec-current/current-profile.json']],
+  ['tests/storage/book-archives.test.js', ['current-oracle', 'tests/storage/fixtures/book-archives/current-profile.json']],
   ['tests/core/server-identity.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/core/server-identity-runtime.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],
