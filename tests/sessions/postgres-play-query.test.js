@@ -117,6 +117,9 @@ test('postgres: playback planning releases navigation on success, failure and ne
 });
 
 test('postgres: remote play expansion preserves commands with bounded PostgreSQL reads', async () => {
+  const started = performance.now();
+  const phase = name => process.stderr.write('[postgres-play-query-phase] '
+    + JSON.stringify({ name, elapsedMs: Math.round(performance.now() - started) }) + '\n');
   const schema = `session_play_${randomUUID().replaceAll('-', '').slice(0, 18)}`;
   const database = await PostgresDatabase.open({ connectionString, schema, create: true });
   const programDataPath = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-play-query-'));
@@ -129,6 +132,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true, DisplaySpecialsWithinSeasons: true },
       serverId: 'session-play-postgres',
     });
+    phase('runtime created');
     const ids = {
       userRoot: '71000000-0000-0000-0000-000000000001',
       aggregate: '71000000-0000-0000-0000-000000000002',
@@ -324,6 +328,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       supportsMediaControl: true,
       sendMessage: async (messageType, messageId, data) => messages.push({ messageType, messageId, data }),
     });
+    phase('small catalogue and session ready');
 
       const rows = database.rows.bind(database);
       database.rows = async (name, options, ...rest) => {
@@ -334,10 +339,14 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       };
       restoreRows = () => { database.rows = rows; };
 
+    let playOrdinal = 0;
     const play = async (ItemIds, PlayCommand = 'PlayNow') => {
+      const ordinal = ++playOrdinal;
+      phase(`play ${ordinal} ${PlayCommand} start`);
       await runtime.sessions.sendPlay(login.SessionInfo.Id, { ItemIds, PlayCommand }, {
         controllingSessionId: login.SessionInfo.Id,
       });
+      phase(`play ${ordinal} ${PlayCommand} completed`);
       const message = messages.shift();
       assert.equal(message.messageType, 'Play');
       return message.data.ItemIds;
@@ -365,6 +374,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       return result;
     };
     let scopedPage, emptyPage, noMatches;
+    phase('relational scope pages start');
     try {
       const pageQuery = {
         includeitemtypes: ['Movie'], sortby: ['SortName'], sortorder: ['Ascending'],
@@ -377,6 +387,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       noMatches = await queryPostgresRelationalPlayPage(database, runtime.library,
         pageQuery, { ...scope, roots: [ids.mixFolder] }, null);
     } finally { database.client.query = rootQuery; }
+    phase('relational scope pages completed');
     assert.deepEqual(scopedPage.rows.map(row => row.Id), [ids.zulu]);
     assert.equal(scopedPage.total, 2);
     assert.equal(scopedPage.startIndex, 1);
@@ -420,6 +431,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
           return { queryCount, itemIds: items.map(entry => entry.Id) };
         } finally { scoped.client.query = query; }
       });
+      phase('batched expansion start');
       const singleExpansion = await countedExpansion([ids.folder]);
       const batchedExpansion = await countedExpansion([
         ids.folder, ids.genre, ids.boxSet, ids.folder,
@@ -432,6 +444,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       ]);
       assert.equal(batchedExpansion.queryCount, singleExpansion.queryCount,
         'ordinary multi-item playback expansion must use a request-bounded SQL statement count');
+      phase('batched expansion completed');
 
       const deepSeriesId = '74000000-0000-0000-0000-000000000001';
       const deepCurrentId = '74000000-0000-0000-0000-000000000002';
@@ -485,12 +498,14 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
         querySeriesEpisodes: async () => { throw new Error('A cyclic parent graph has no Series'); },
       }, [cycleEpisode], { enableNextEpisodeAutoPlay: true });
       assert.deepEqual(cycleExpansion.map(entry => entry.Id), [cycleEpisode]);
+      phase('deep and cyclic series controls completed');
 
       // A back-edge exercises recursive UNION de-duplication without changing
       // the reachable playable set.
       await database.insert('AncestorIds', { ItemId: ids.folder, ParentItemId: ids.alpha });
 
       const quotedSchema = `"${schema}"`;
+      phase('unrelated 12000-item catalogue seed start');
       await database.client.query(`INSERT INTO ${quotedSchema}."BaseItems"
         ("Id", "IsFolder", "IsInMixedFolder", "IsLocked", "IsMovie", "IsRepeat", "IsSeries", "IsVirtualItem", "Type", "Name", "SortName")
         SELECT convert_to(md5('frontier-parent-' || ordinal::text)::uuid::text, 'UTF8'),
@@ -513,12 +528,14 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
         SELECT convert_to(md5('frontier-parent-' || ordinal::text)::uuid::text, 'UTF8'), 0,
           convert_to(md5('frontier-child-' || ordinal::text)::uuid::text, 'UTF8'), 0
         FROM generate_series(1, 6000) ordinal`);
+      phase('unrelated 12000-item catalogue seed completed');
 
       await database.insert('BaseItems', item(ids.largeMixFolder, 'Folder', {
         IsFolder: true, Name: 'Large mix', ParentId: ids.physical, TopParentId: ids.physical,
         Path: 'Z:\\Bounded\\LargeMix',
       }));
       const descendantCount = 225;
+      phase('large mix 225-item seed start');
       for (let index = 0; index < descendantCount; index++) {
         const Id = `72000000-0000-0000-0000-${String(index + 1).padStart(12, '0')}`;
         const genreName = `Bounded Genre ${String(index).padStart(3, '0')}`;
@@ -536,6 +553,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       await database.client.query(`ANALYZE ${quotedSchema}."BaseItems"`);
       await database.client.query(`ANALYZE ${quotedSchema}."AncestorIds"`);
       await database.client.query(`ANALYZE ${quotedSchema}."LinkedChildren"`);
+      phase('large catalogue ready');
 
       let returnedDescendantIds = 0;
       let returnedGenreScalars = 0;
@@ -599,7 +617,12 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
         try { return await getMusicGenre(name); }
         catch (error) { genreFailures.push({ name, message: error.message, code: error.code }); throw error; }
       };
-      const observeGenre = ({ Item }) => { if (Item.Type === 'MusicGenre') createdGenres.push(Item.Name); };
+      const observeGenre = ({ Item }) => {
+        if (Item.Type !== 'MusicGenre') return;
+        createdGenres.push(Item.Name);
+        if (createdGenres.length % 64 === 0 || createdGenres.length === descendantCount)
+          phase(`large mix created ${createdGenres.length} genres`);
+      };
       runtime.library.on('ItemAdded', observeGenre);
       try {
         assert.deepEqual(await play([ids.folder]), wire([ids.alpha, ids.owned, ids.alternate, ids.zulu]));
@@ -607,7 +630,9 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
         largePlay = await play([ids.largeMixFolder]);
         maximumRowsReturned = 0;
         returnedDescendantIds = 0;
+        phase('large mix 225-genre consumer start');
         largeMix = await play([ids.largeMixFolder], 'PlayInstantMix');
+        phase('large mix 225-genre consumer completed');
       }
       finally {
         runtime.library.removeListener('ItemAdded', observeGenre);
@@ -671,6 +696,7 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
         visit(explained.rows[0]?.['QUERY PLAN']);
         return names;
       };
+      phase('frontier explain start');
       const parentIndexes = await usedIndexes(parentStatement);
       assert.ok(parentIndexes.has('mm_runtime_baseitems_parent_normalized_sort_idx'),
         `parent frontier did not use its normalized index: ${[...parentIndexes].join(', ')}`);
@@ -679,9 +705,12 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       const linkedIndexes = await usedIndexes(linkedStatement);
       assert.ok(linkedIndexes.has('mm_runtime_linked_children_parent_child_normalized_idx'),
         `linked frontier did not use its normalized index: ${[...linkedIndexes].join(', ')}`);
+      phase('frontier explain completed');
   } finally {
     restoreRows?.();
+    phase('runtime close start');
     await runtime?.close();
+    phase('runtime close completed');
     await dropSchemas(schema);
     const cleanup = path.resolve(programDataPath);
     assert.equal(path.dirname(cleanup), path.resolve(os.tmpdir()));
