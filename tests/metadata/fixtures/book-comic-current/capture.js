@@ -137,8 +137,7 @@ async function capture() {
 
 export async function recordCandidate(kind, name, value) {
   assert.match(kind, /^[a-zA-Z0-9_.-]+$/u);
-  assert.match(name, /^[a-zA-Z0-9_.-]+$/u);
   const { output } = await captureCurrentComic(), directory = path.join(output, 'candidate', kind);
   await mkdir(directory, { recursive: true });
-  await writeFile(path.join(directory, name + '.json'), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+  await writeFile(path.join(directory, encodeURIComponent(name) + '.json'), JSON.stringify({ name, ...value }, null, 2) + '\n', { flag: 'wx' });
 }

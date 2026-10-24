@@ -19,15 +19,13 @@ export function comicDate(year, month, day) {
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T00:00:00.0000000`;
 }
 export function comicLanguage(value) {
-  if (value === '') return 'iv';
-  const language = value.split('\0', 1)[0].replaceAll('_', '-').split('-', 1)[0].toLowerCase();
-  if (language === 'x' && /^x-[a-z0-9]+(?:-[a-z0-9]+)*$/iu.test(value)) return '';
-  try {
-    if (!/^[a-z]{2,3}$/u.test(language)) throw new RangeError();
-    new Intl.Locale(value.split('\0', 1)[0].replaceAll('_', '-'));
-    return language === 'und' ? 'iv' : cultureLanguages.iso3[language] ?? language;
-  }
-  catch { throw comicError('CultureNotFoundException', `Invalid comic language: ${value}`); }
+  const name = value.split('\0', 1)[0].replaceAll('_', '-');
+  if (name === '') return 'iv';
+  // Unknown and numeric language identifiers still carry metadata; Intl.Locale rejects some of them.
+  if (!/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/u.test(name)) throw comicError('CultureNotFoundException', `Invalid comic language: ${value}`);
+  const language = name.split('-', 1)[0].toLowerCase();
+  if (language === 'x' && name.includes('-')) return '';
+  return language === 'und' ? 'iv' : cultureLanguages.iso3[language] ?? language;
 }
 export function addComicPerson(result, name, type) {
   result.People ??= [];
