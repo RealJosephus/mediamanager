@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "scope": "Known original selected-image byte vectors consumed by the current packaged WASM through BookArchiveService; no new Native differential or rebuilt codec claim.",
+  "vectorSource": {
+    "filename": "../../../metadata/fixtures/book-comic/native.json",
+    "bytes": 656401,
+    "sha256": "ffa89ef25b8f3db8823f0bbd07c654497fb05a9e4c90e3e1a5b1d16b5b49c7a4",
+    "role": "retained-recording-byte-vectors"
+  },
+  "cases": [
+    {
+      "name": "rar4",
+      "filename": "assets/Rar.rar",
+      "bytes": 60029,
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar.rar",
+      "gitBlobSha1": "050509c347d6911db98f13db8aa33c8f914ba9de",
+      "selectedEntry": {
+        "key": "jpg\\test.jpg",
+        "bytes": 40372,
+        "sha256": "b251c7501fb0f55dd4a92feabe0a6f5733bc40a02679498155fae9b30138fc53"
+      },
+      "vectorName": "cover-upstream-Rar-rar"
+    },
+    {
+      "name": "rar5",
+      "filename": "assets/Rar5.rar",
+      "bytes": 60066,
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar5.rar",
+      "gitBlobSha1": "0a05d520923cc46f1daebdddcf6faa89fbafee12",
+      "selectedEntry": {
+        "key": "jpg\\test.jpg",
+        "bytes": 40372,
+        "sha256": "b251c7501fb0f55dd4a92feabe0a6f5733bc40a02679498155fae9b30138fc53"
+      },
+      "vectorName": "cover-upstream-Rar5-rar"
+    },
+    {
+      "name": "sevenzip-lzma2",
+      "filename": "assets/7Zip.LZMA2.7z",
+      "bytes": 58970,
+      "sha256": "9dc21162eaa4cc0aad74a847cdbe5b8d2cf75a86e84e4db8928e150f44b28bf1",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/7Zip.LZMA2.7z",
+      "gitBlobSha1": "328eeb36b323947f6de341cfc727b3e806b3d44d",
+      "selectedEntry": {
+        "key": "jpg/test.jpg",
+        "bytes": 40372,
+        "sha256": "b251c7501fb0f55dd4a92feabe0a6f5733bc40a02679498155fae9b30138fc53"
+      },
+      "vectorName": "cover-upstream-7Zip-LZMA2-7z"
+    }
+  ]
+}

@@ -1,159 +1,210 @@
-import test from 'node:test';
+import test, { before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
+import { readFile, mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { BookArchiveService } from '../../src/storage/archive-reader.js';
+import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
+import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
+import { readSourceMembers } from './fixtures/archive-codec-current/source-reader.js';
 
-const wrapperUrl = new URL('./fixtures/archive-codec/provenance.json', import.meta.url);
-const licensesUrl = new URL('../../src/storage/resources/archive-codec-licenses-provenance.json', import.meta.url);
-const rar4Url = new URL('../../src/storage/resources/archive-codec-rar4.provenance.json', import.meta.url);
-const rar5Url = new URL('../../src/storage/resources/archive-codec-rar5-provenance.json', import.meta.url);
-const builderUrl = new URL('../../tools/archive-codec-sources.json', import.meta.url);
-const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-const resourceRoot = new URL('.', licensesUrl);
-const canonical = filename => path.resolve(filename instanceof URL ? fileURLToPath(filename) : filename);
-const cache = new Map();
-async function bytes(filename) {
-  filename = canonical(filename);
-  if (!cache.has(filename)) cache.set(filename, readFile(filename));
-  return cache.get(filename);
-}
-const json = async url => JSON.parse((await bytes(url)).toString('utf8'));
-const [wrapper, licenses, rar4, rar5, builder] = await Promise.all([wrapperUrl, licensesUrl, rar4Url, rar5Url, builderUrl].map(json));
-const resources = [
-  { name: 'licenses', url: licensesUrl, document: licenses },
-  { name: 'rar4', url: rar4Url, document: rar4 },
-  { name: 'rar5', url: rar5Url, document: rar5 },
-  { name: 'builder', url: builderUrl, document: builder },
-];
-const resolve = (filename, base) => path.isAbsolute(filename) ? canonical(filename) : canonical(new URL(filename.replaceAll('\\', '/'), base));
-async function verify(entry, base) {
-  const filename = resolve(entry.filename ?? entry.path, base), actual = await bytes(filename);
-  assert.match(entry.sha256, /^[a-f0-9]{64}$/iu, filename);
-  assert.equal(digest(actual), entry.sha256.toLowerCase(), filename);
-  if (entry.bytes != null) assert.equal(actual.length, entry.bytes, filename);
-  return filename;
-}
-function requiredDescriptors(value, result = []) {
-  if (!value || typeof value !== 'object') return result;
-  if (value.required === true && typeof (value.filename ?? value.path) === 'string' && Object.hasOwn(value, 'sha256')) result.push(value);
-  for (const part of Object.values(value)) if (part && typeof part === 'object') requiredDescriptors(part, result);
-  return result;
+const root = new URL('./fixtures/archive-codec-current/', import.meta.url);
+const profile = JSON.parse(await readFile(new URL('current-profile.json', root)));
+const offer = JSON.parse(await readFile(new URL('source-offer.json', root)));
+const vectors = JSON.parse(await readFile(new URL('functional-cases.json', root)));
+const hash = data => createHash('sha256').update(data).digest('hex');
+const sourceMap = new Map(), sourceBytes = new Map();
+let output, licenses, rar4, rar5, builder;
+const report = { schemaVersion: 1, scope: profile.scope, sourceIntegrityVerified: false,
+  licenseSlicesVerified: false, bridgeAndPatchesVerified: false, functionalConsumersVerified: false, newCodecBuildExecuted: false,
+  historicalLinkMapReplayed: false, phaseAcceptance: false, releaseAcceptance: false,
+  packageInputs: [], originalSources: [], functionalCases: [] };
+
+async function checkedFile(entry) {
+  const data = await readFile(new URL(entry.filename, root));
+  assert.equal(data.length, entry.bytes, entry.filename);
+  assert.equal(hash(data), entry.sha256, entry.filename);
+  return data;
 }
 
-test('archive codec wrapper binds the four actual source manifests and every packaged local file read by consumers', async () => {
-  assert.deepEqual(wrapper.resources.map(entry => entry.name).sort(), resources.map(entry => entry.name).sort());
-  for (const resource of resources) {
-    const entry = wrapper.resources.find(entry => entry.name === resource.name);
-    assert.equal(entry.required, true); assert.equal(canonical(entry.filename), canonical(resource.url));
-    await verify(entry, wrapperUrl);
+before(async () => {
+  output = path.join(validationOutputRoot(), 'archive-codec-current-' + randomUUID());
+  assertValidationOutputChild(output); await mkdir(output, { recursive: true });
+  try {
+    for (const entry of profile.inputs) {
+      await checkedFile(entry);
+      report.packageInputs.push(entry);
+    }
+    const history = new Map();
+    for (const entry of offer.historicalManifests) history.set(entry.name, JSON.parse(await checkedFile(entry)));
+    licenses = history.get('licenses'); rar4 = history.get('rar4'); rar5 = history.get('rar5'); builder = history.get('builder');
+    for (const source of offer.sources) {
+      assert.ok(!sourceMap.has(source.originalFilename), source.originalFilename);
+      sourceMap.set(source.originalFilename, source);
+    }
+    assert.equal(offer.sourceRecoveryComplete, true);
+    assert.deepEqual(offer.unresolvedSources, []);
+    for (const archive of offer.archives) {
+      const wanted = offer.sources.filter(entry => entry.kind === 'archive-member' && entry.archive === archive.id);
+      const members = await readSourceMembers(fileURLToPath(new URL(archive.filename, root)), wanted);
+      for (const source of wanted) sourceBytes.set(source.originalFilename, members.get(source.member));
+    }
+    for (const source of offer.sources) {
+      assert.equal(source.recovered, true, source.originalFilename);
+      const data = source.kind === 'file' ? await checkedFile(source) : sourceBytes.get(source.originalFilename);
+      assert.ok(data, source.originalFilename);
+      assert.equal(data.length, source.bytes, source.originalFilename);
+      assert.equal(hash(data), source.sha256, source.originalFilename);
+      sourceBytes.set(source.originalFilename, data);
+      report.originalSources.push({ originalFilename: source.originalFilename, kind: source.kind,
+        archive: source.archive, member: source.member, filename: source.filename, bytes: data.length, sha256: hash(data) });
+    }
+    report.sourceFilesVerified = true;
+  } catch (error) {
+    report.sourceError = { name: error.name, message: error.message, stack: error.stack };
+    throw error;
   }
-  const local = resources.flatMap(resource => (resource.document.files ?? resource.document.outputs ?? [])
-    .filter(entry => entry.filename && entry.sha256).map(entry => ({ ...entry, base: resource.url })));
-  for (const entry of local) {
-    const filename = resolve(entry.filename, entry.base);
-    assert.ok(wrapper.localFiles.some(pin => canonical(pin.filename) === filename && pin.sha256 === entry.sha256 && pin.required === true), filename);
-  }
-  for (const entry of wrapper.localFiles) { assert.equal(entry.required, true); await verify(entry, wrapperUrl); }
-  for (const entry of wrapper.files) await verify(entry, wrapperUrl);
+}, { timeout: 720000 });
+
+after(async () => {
+  if (output) await writeFile(path.join(output, 'package-report.json'), JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
 });
 
-test('archive codec required external inputs and declared packaged files exist with their exact captured bytes', async () => {
-  const pins = new Set();
-  for (const resource of resources) {
-    for (const entry of requiredDescriptors(resource.document)) pins.add(await verify(entry, resource.url));
-    for (const entry of resource.document.files ?? resource.document.outputs ?? []) if (entry.filename && entry.sha256) await verify(entry, resource.url);
+test('current codec package retains exact payloads, complete upstream archives and every original source identity', () => {
+  assert.equal(report.sourceFilesVerified, true);
+  assert.equal(offer.newCodecBuildExecuted, false);
+  assert.equal(offer.historicalLinkMapReplayed, false);
+  for (const original of builder.sourceArchives) {
+    const restored = offer.archives.find(entry => entry.id === original.name);
+    assert.ok(restored, original.name);
+    assert.equal(restored.sha256, original.sha256, original.name);
+    assert.equal(restored.bytes, original.bytes, original.name);
+    assert.equal(restored.url, original.url, original.name);
   }
-  assert.ok(pins.size >= licenses.sourceFiles.length, 'every original license source is a required input actually read by this test');
-  for (const source of licenses.sourceFiles) { assert.equal(source.required, true); await verify(source, licensesUrl); }
+  const emscripten = offer.archives.find(entry => entry.id === 'emscripten');
+  assert.equal(emscripten.commit, 'ce6d2aad8bbf1e508e5a6d112f986617198bdc0d');
+  assert.equal(emscripten.originalToolchainCommitKnown, false);
+  const prefix = 'D:/mediamanager-validation/20261016-book-stage/';
+  const required = licenses.sourceFiles.filter(entry => entry.filename.startsWith(prefix + 'archive-build-1/')
+    && builder.sourceArchives.some(archive => entry.filename.includes('/' + archive.directory + '/'))
+    || entry.filename.startsWith(prefix + 'archive-toolchain-2/emscripten/') && !entry.filename.endsWith('.a'));
+  required.push(...licenses.sharpCompressSourceReferences.map(entry => ({ ...entry, filename: entry.path })),
+    ...licenses.finalCodecBuild.runtimeObjects.map(entry => entry.source), ...licenses.finalCodecBuild.linkedXzSources.map(entry => entry.source),
+    ...licenses.finalCodecBuild.modifiedLibarchiveSources,
+    ...rar4.requiredInputs.filter(entry => (entry.path ?? entry.filename).startsWith(prefix + 'inputs/comic-rar-paths-2/')
+      && (entry.path ?? entry.filename).endsWith('.cs')).map(entry => ({ ...entry, filename: entry.path ?? entry.filename })));
+  for (const entry of required) {
+    const restored = sourceMap.get(entry.filename);
+    assert.ok(restored, entry.filename);
+    assert.equal(restored.sha256, entry.sha256, entry.filename);
+    assert.equal(restored.bytes, entry.bytes, entry.filename);
+  }
+  for (const artifact of [...licenses.outputs, ...licenses.finalCodecBuild.artifacts]) {
+    assert.ok(profile.inputs.some(entry => entry.sha256 === artifact.sha256 && entry.bytes === artifact.bytes), artifact.filename);
+  }
+  report.sourceIntegrityVerified = true;
 });
 
-test('all original third-party license slices are preserved byte for byte in the distributed bundle', async () => {
-  const bundle = await bytes(new URL('archive-codec-licenses.txt', resourceRoot));
-  assert.ok(licenses.sections.length > 0);
-  const pinnedSources = new Map(licenses.sourceFiles.map(entry => [canonical(entry.filename), entry]));
+test('all original license texts and every distributed notice slice consume independently recovered complete source bytes', async () => {
+  const bundle = await readFile(new URL('../../../../src/storage/resources/archive-codec-licenses.txt', root));
+  assert.equal(licenses.sections.length, offer.sectionCount);
+  assert.deepEqual([...new Set(licenses.sections.flatMap(section => section.origins.map(origin => origin.filename)))].sort(), offer.sectionOriginals);
   for (const section of licenses.sections) {
     const copied = bundle.subarray(section.bundle.offset, section.bundle.offset + section.bundle.bytes);
-    assert.equal(copied.length, section.bundle.bytes); assert.equal(digest(copied), section.bundle.sha256, section.id);
-    assert.ok(section.origins.length > 0);
+    assert.equal(copied.length, section.bundle.bytes, section.id);
+    assert.equal(hash(copied), section.bundle.sha256, section.id);
+    assert.ok(section.origins.length > 0, section.id);
     for (const origin of section.origins) {
-      assert.ok(pinnedSources.has(canonical(origin.filename)), origin.filename);
-      const original = (await bytes(origin.filename)).subarray(origin.offset, origin.offset + origin.bytes);
-      assert.equal(digest(original), origin.sha256, origin.filename); assert.deepEqual(copied, original, section.id);
+      const source = sourceBytes.get(origin.filename);
+      assert.ok(source, origin.filename);
+      const original = source.subarray(origin.offset, origin.offset + origin.bytes);
+      assert.equal(original.length, origin.bytes, origin.filename);
+      assert.equal(hash(original), origin.sha256, origin.filename);
+      assert.deepEqual(copied, original, section.id);
     }
   }
-  for (const output of licenses.outputs) await verify(output, licensesUrl);
-  assert.deepEqual(await bytes(new URL('SharpCompress.LICENSE.txt', resourceRoot)),
-    await bytes(licenses.sections.find(section => section.component === 'sharpcompress').origins[0].filename));
+  const sharp = licenses.sections.find(section => section.component === 'sharpcompress');
+  assert.deepEqual(await readFile(new URL('../../../../src/storage/resources/SharpCompress.LICENSE.txt', root)),
+    sourceBytes.get(sharp.origins[0].filename));
+  report.licenseSlicesVerified = true;
+  report.licenseSections = licenses.sections.length;
 });
 
-test('the actual final linker map, source notices and published codec payload form one closed attribution record', async () => {
-  const build = licenses.finalCodecBuild;
-  const mapDescriptor = build.receipts.find(entry => path.basename(entry.filename) === 'link.map');
-  await verify(mapDescriptor, licensesUrl);
-  const actual = new Map();
-  for (const match of (await bytes(mapDescriptor.filename)).toString('utf8').matchAll(/([^\s]+\.a)\(([^)]+)\)/gu)) {
-    const filename = canonical(match[1].replaceAll('\\', '/'));
-    if (!actual.has(filename)) actual.set(filename, new Set());
-    actual.get(filename).add(match[2]);
+test('current bridge and patches bind both complete modified RAR sources and the retained runtime source attribution', async () => {
+  const patched = licenses.finalCodecBuild.modifiedLibarchiveSources;
+  const rar4Published = patched.find(entry => entry.sha256 === rar4.sourceAfter.sha256 && entry.bytes === rar4.sourceAfter.bytes);
+  assert.ok(rar4Published, 'The complete published RAR4 source retains the recorded patched bytes');
+  assert.equal(sourceMap.get(rar4Published.filename).sha256, rar4.sourceAfter.sha256);
+  for (const source of patched) {
+    const restored = sourceMap.get(source.filename);
+    assert.ok(restored?.derivedFrom, source.filename);
+    assert.equal(restored.sha256, source.sha256, source.filename);
+    assert.equal(restored.derivedFrom.archive, 'libarchive');
+    await checkedFile(restored.derivedFrom.patch);
+    assert.ok(builder.patches.some(entry => entry.patchedSha256 === source.sha256
+      && entry.originalSha256 === restored.derivedFrom.sha256));
   }
-  assert.equal(actual.size, build.libraries.length);
-  for (const library of build.libraries) {
-    await verify(library, licensesUrl);
-    assert.deepEqual([...(actual.get(canonical(library.filename)) ?? [])].sort(), [...library.members].sort(), library.filename);
-  }
-  const runtime = [...actual].filter(([filename]) => filename.replaceAll('\\', '/').includes('/cache/sysroot/'));
-  assert.equal(runtime.reduce((sum, [, members]) => sum + members.size, 0), build.runtimeObjects.length);
-  for (const entry of build.runtimeObjects) {
-    assert.ok(actual.get(canonical(entry.archive))?.has(entry.member)); await verify(entry.source, licensesUrl);
-    assert.equal(path.basename(entry.source.filename).replace(/\.(?:c|S)$/u, ''), entry.member.replace(/\.o$/u, ''));
-  }
-  for (const [filename, members] of actual) if (path.basename(filename) === 'libarchive.a') {
-    for (const member of members) assert.ok(licenses.staticLibraryMembers.some(entry => entry.member === member), member);
-  }
-  for (const source of build.modifiedLibarchiveSources) {
-    await verify(source, licensesUrl);
-    assert.ok(licenses.sections.some(section => section.origins.some(origin => origin.filename === source.filename)), source.filename);
-  }
-  const publishedDescriptor = build.receipts.find(entry => path.basename(entry.filename) === 'published.json');
-  await verify(publishedDescriptor, licensesUrl);
-  const published = JSON.parse((await bytes(publishedDescriptor.filename)).toString('utf8'));
-  for (const artifact of build.artifacts) {
-    await verify(artifact, licensesUrl);
-    assert.ok(published.files.some(entry => canonical(entry.filename) === canonical(artifact.filename) && entry.sha256 === artifact.sha256));
-  }
-  assert.deepEqual(build.artifacts.map(entry => path.basename(entry.filename)).sort(), ['archive-codec.mjs', 'archive-codec.wasm']);
-  assert.equal(build.linkedCppRuntimeObjects, 0);
-  const latest = build.latestReviewedSourceVerification;
-  await verify(latest.currentBridge, licensesUrl); await verify(latest.compiledBridge, licensesUrl);
-  assert.equal(latest.currentBridge.sha256, builder.bridge.sha256);
-  assert.equal(latest.currentBridge.sha256, latest.compiledBridge.sha256);
-  for (const [current, executed] of [[latest.currentDriver, latest.executedDriver], [latest.currentManifest, latest.executedManifest]]) {
-    await verify(current, licensesUrl); await verify(executed, licensesUrl);
-    assert.deepEqual(await bytes(current.filename), await bytes(executed.filename));
-  }
-  assert.equal(canonical(latest.currentManifest.filename), canonical(builderUrl));
-  const receipt = JSON.parse((await bytes(latest.receipts.find(entry => entry.filename.endsWith('/build/receipt.json')).filename)).toString('utf8'));
-  assert.equal(receipt.mode, 'relink'); assert.equal(receipt.passed, true); assert.equal(receipt.inputsUnchanged, true);
-  const record = JSON.parse((await bytes(latest.receipts.find(entry => entry.filename.endsWith('/record.json')).filename)).toString('utf8'));
-  assert.equal(record.status, 0); assert.equal(record.sourcesUnchanged, true); assert.equal(record.outputsMatch, true);
-  for (const output of latest.payloads) {
-    await verify(output, licensesUrl);
-    assert.equal(output.sha256, build.artifacts.find(entry => path.basename(entry.filename) === path.basename(output.filename))?.sha256);
-  }
+  const rar5Source = await readFile(new URL('../../../../src/storage/resources/' + rar5.files.find(entry => entry.filename.endsWith('.c')).filename, root));
+  assert.equal(hash(rar5Source), patched.find(entry => entry.filename.endsWith('rar5.c')).sha256);
+  assert.deepEqual([...new Set(licenses.finalCodecBuild.runtimeObjects.map(entry => entry.source.filename))].sort(), offer.runtimeSourceOriginals);
+  for (const source of licenses.finalCodecBuild.runtimeObjects.map(entry => entry.source))
+    assert.equal(hash(sourceBytes.get(source.filename)), source.sha256, source.filename);
+  assert.equal(hash(await readFile(new URL('../../../../src/storage/resources/archive-codec.c', root))), builder.bridge.sha256);
+  report.bridgeAndPatchesVerified = true;
 });
 
-test('the portable codec builder manifest identifies the same upstream archives and reviewed local source files', async () => {
-  assert.equal(builder.schemaVersion, 1);
-  assert.deepEqual(builder.sourceArchives.map(entry => entry.name).sort(), ['bzip2', 'libarchive', 'xz', 'zlib']);
-  for (const entry of builder.sourceArchives) {
-    assert.ok(!path.isAbsolute(entry.archiveName)); assert.ok(!path.isAbsolute(entry.directory));
-    const original = licenses.sourceArchives.find(source => path.basename(source.filename) === entry.archiveName);
-    assert.ok(original, entry.archiveName); assert.equal(original.sha256, entry.sha256); assert.equal(original.bytes, entry.bytes);
-    await verify(original, licensesUrl);
+test('the published codec decodes original RAR4, RAR5 and LZMA2 selected images through the actual Book archive consumer', async t => {
+  const directory = assertValidationOutputChild(await mkdtemp(path.join(output, 'consumer-')));
+  const spoolPath = path.join(directory, 'spool'), identityMap = new IdentityAccessMap();
+  const locations = new Map(); let opened = 0, closed = 0;
+  const service = new BookArchiveService({ identityMap, spoolPath, vfs: { async openRead(access, { signal } = {}) {
+    opened++;
+    const stream = createReadStream(locations.get(access), { signal, highWaterMark: 32768 }); let released = false;
+    return { stream, async close() { if (!released) { released = true; closed++; stream.destroy(); } } };
+  } } });
+  try {
+    const originalVectors = JSON.parse(await checkedFile(vectors.vectorSource));
+    for (const sample of vectors.cases) await t.test(sample.name, async () => {
+      const bytes = await checkedFile(sample);
+      assert.equal(createHash('sha1').update(Buffer.from('blob ' + bytes.length + '\0')).update(bytes).digest('hex'), sample.gitBlobSha1);
+      const vector = originalVectors.covers.find(entry => entry.name === sample.vectorName);
+      assert.ok(vector?.hasImage, sample.name);
+      assert.equal(sample.selectedEntry.sha256, vector.sha256);
+      assert.equal(sample.selectedEntry.bytes, vector.bytes);
+      const access = '/' + sample.name;
+      identityMap.bind(sample.name, access); locations.set(access, fileURLToPath(new URL(sample.filename, root)));
+      let archive;
+      const observation = { name: sample.name, inputSha256: hash(bytes), selected: null, spoolEmptyAfterClose: false };
+      report.functionalCases.push(observation);
+      try {
+        archive = await service.openArchive({ Id: sample.name, Path: 'Z:\\CodecSources\\' + sample.name + '.cbr' });
+        const entry = archive.findEntry(sample.selectedEntry.key);
+        assert.ok(entry, sample.selectedEntry.key);
+        const result = await archive.read(entry);
+        observation.selected = { key: entry.key, bytes: result.length, sha256: hash(result) };
+        assert.deepEqual(observation.selected, sample.selectedEntry);
+      } catch (error) {
+        observation.error = { name: error.name, message: error.message };
+        throw error;
+      } finally {
+        await archive?.close();
+        assert.deepEqual(await readdir(spoolPath), []);
+        observation.spoolEmptyAfterClose = true;
+      }
+    });
+    assert.ok(report.functionalCases.length === vectors.cases.length && report.functionalCases.every(entry => entry.selected && !entry.error));
+    report.functionalConsumersVerified = true;
+  } finally {
+    try {
+      await service.close();
+      assert.equal(opened, closed, 'All original-media leases are released');
+      report.mediaReads = { opened, closed };
+      report.spoolEmptyAfterServiceClose = (await readdir(spoolPath)).length === 0;
+      assert.equal(report.spoolEmptyAfterServiceClose, true);
+    } finally {
+      assertValidationOutputChild(directory); await rm(directory, { recursive: true });
+    }
   }
-  assert.ok(builder.files.length >= 4);
-  for (const entry of builder.files) await verify(entry, builderUrl);
-  assert.equal(builder.bridge.sha256, builder.files.find(entry => entry.filename === builder.bridge.filename)?.sha256);
 });
