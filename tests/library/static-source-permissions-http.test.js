@@ -4,12 +4,12 @@ import test from 'node:test';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { seedNativeFilterInput } from './native-filter-input.js';
 import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { nativeQueryInputs, readNativeQueryServerId } from './native-query-default-inputs.js';
+import { writeCurrentFilterCandidateEvidence } from './current-filter-http.js';
 import { readNativeStaticSourcePermissionEvidence } from './native-static-source-evidence.js';
 
 const fixture = JSON.parse(await readFile(new URL('./fixtures/rating-permissions/input.json', import.meta.url)));
-const { binding, nativeHttp } = await readNativeStaticSourcePermissionEvidence();
-const nativeServerId = await readNativeQueryServerId();
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
+const { binding, nativeHttp, inputs, nativeServerId } = await readNativeStaticSourcePermissionEvidence();
 
 test('postgres: eight static video source permission combinations match complete native detail responses', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -24,7 +24,7 @@ test('postgres: eight static video source permission combinations match complete
     })) },
     fields: 'SortName', captureResponseBodies: true, trackUserData: true,
     trackFilesystem: true, captureFilesystemDomains: true,
-    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', nativeQueryInputs),
+    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', inputs),
   });
   assertCompleteFilterHttpResponses(actual, nativeHttp, { scenarioName: 'static-source-permissions', nativeServerId });
   await writeCompleteFilterHttpEvidence(actual, nativeHttp, { scenarioName: 'static-source-permissions', nativeServerId });
@@ -54,4 +54,5 @@ test('postgres: eight static video source permission combinations match complete
   assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
     portReleased: true, postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
+  await writeCurrentFilterCandidateEvidence('static-source-permissions', actual, { scenarioName: 'static-source-permissions' });
 });

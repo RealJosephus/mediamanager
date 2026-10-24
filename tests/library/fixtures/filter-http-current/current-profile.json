@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "fixture": "current Native filter HTTP consumers",
+  "kind": "same-workflow-current-native-filter-http",
+  "scope": "classification/extra/image/navigation/rating/tags/static-source complete HTTP, policies, persistent state and cleanup",
+  "historicalRecordingReused": false,
+  "nativeRepetitions": 2,
+  "sourcePaths": [
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/DescendantQueryHelper.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinQueryHelperExtensions.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/ItemValueType.cs",
+    "Jellyfin.Api/Controllers/ItemsController.cs",
+    "Jellyfin.Api/Controllers/UserLibraryController.cs",
+    "Jellyfin.Api/Helpers/RequestHelpers.cs",
+    "Jellyfin.Api/ModelBinders/CommaDelimitedCollectionModelBinder.cs",
+    "Jellyfin.Api/ModelBinders/PipeDelimitedCollectionModelBinder.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/Movies/Movie.cs",
+    "MediaBrowser.Controller/Entities/Audio/Audio.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/Library/MediaSourceManager.cs",
+    "Emby.Server.Implementations/Dto/DtoService.cs",
+    "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+    "Jellyfin.Server.Implementations/Users/UserManager.cs",
+    "src/Jellyfin.Extensions/StringExtensions.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "record-native.js",
+      "bytes": 46396,
+      "sha256": "28e369e86f2982b67bf4ca8f1de5736f13d2ae920d44d016ced6169e97da1a95",
+      "role": "currentNativeRecorder"
+    },
+    {
+      "filename": "scenario.js",
+      "bytes": 8769,
+      "sha256": "c5d85e65e518bc86f72b7b475ea9480744e5d376bde704b8d06c6bec878a3b2a",
+      "role": "requestMatrices"
+    },
+    {
+      "filename": "audio-input.json",
+      "bytes": 1955,
+      "sha256": "ce88db7c19e262d371e36e63f8f7fb3541242151d481458999d4720cab9257db",
+      "role": "recoveredExactAudioInput"
+    },
+    {
+      "filename": "static-audio-binding.json",
+      "bytes": 5180,
+      "sha256": "1131abfbcfd2da68fd98b0f8612d37ab66e6a80969894266d04117ae203e0e5f",
+      "role": "staticAudioInputBinding"
+    },
+    {
+      "filename": "../../current-filter-http.js",
+      "bytes": 15516,
+      "sha256": "7cfc1a9d18ead17d794c0a2034c45f14b590f3e39168ffa3ba58c85c4f85abba",
+      "role": "currentCaptureConsumer"
+    },
+    {
+      "filename": "../../native-filter-input.js",
+      "bytes": 4972,
+      "sha256": "227563e70fad138e134789a1276ddbdd2b73597e19ed0c08fa4dec447c3613ca",
+      "role": "candidateInputSeeder"
+    },
+    {
+      "filename": "../../native-static-source-evidence.js",
+      "bytes": 826,
+      "sha256": "499e59923d62fc7797d9cb6982a2a8bdb626da64dfaf27d13395e063b620964a",
+      "role": "staticVideoEvidenceConsumer"
+    },
+    {
+      "filename": "../../native-static-audio-source-evidence.js",
+      "bytes": 3247,
+      "sha256": "a2acb80f3dec19b9df883225008485304e51f19190451151ca8ed5551fd48411",
+      "role": "staticAudioEvidenceConsumer"
+    },
+    {
+      "filename": "../classification-filters/input.json",
+      "bytes": 5947,
+      "sha256": "2b623e64866f7efc1b75dca450affaccecd156cd74a86f64e6ba4f80900515fa",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../extra-placeholder-filters/input.json",
+      "bytes": 6850,
+      "sha256": "83fcda1f9645645bc40ef53b24dcc9b469e897d54773ed42fab9ddbd1ef5b30f",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../image-type-filters/input.json",
+      "bytes": 4590,
+      "sha256": "63468ca8b3c10f15b47e3012fe1cb602c86fc21402f7cd6e27b1f0c945db4d3c",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../navigation-date-filters/input.json",
+      "bytes": 5636,
+      "sha256": "7a31cbe579ea036391a6e701ecc868d3bc17cacf5844610700cd27176512ed53",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../official-rating-filters/input.json",
+      "bytes": 1746,
+      "sha256": "7e6ce57fa67519993949c9ce4e8d11504870e2cd1f03d331f2581a87e01262db",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../official-rating-range/input.json",
+      "bytes": 3450,
+      "sha256": "e9452e364825cc5fa99853c6699d45d9f3a4400fc7998d1b35245ad99e603214",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../rating-permissions/input.json",
+      "bytes": 1783,
+      "sha256": "f2317118cd990e48bb9337dbc32a6791571fc9d5f4fa5b9363d5bd3b797cd499",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../tag-filters/input.json",
+      "bytes": 2204,
+      "sha256": "53144ff8cf0ed1c15a7daa4f1b851fdfa0039f9caa104001e1a8364100ade19f",
+      "role": "neutralScenarioInput"
+    },
+    {
+      "filename": "../tag-permissions/input.json",
+      "bytes": 2315,
+      "sha256": "10722f48b5db56656bda0ad8a4eb53e717591ac10a3eeb9c82ae72858ac5c957",
+      "role": "neutralScenarioInput"
+    }
+  ],
+  "phaseAcceptance": false,
+  "releaseAcceptance": false
+}

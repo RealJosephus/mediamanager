@@ -3,11 +3,11 @@ import test from 'node:test';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
 import { seedNativeFilterInput } from './native-filter-input.js';
 import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { nativeQueryInputs, readNativeQueryServerId } from './native-query-default-inputs.js';
+import { writeCurrentFilterCandidateEvidence } from './current-filter-http.js';
 import { readNativeStaticAudioSourcePermissionEvidence } from './native-static-audio-source-evidence.js';
 
-const { binding, fixture, nativeHttp } = await readNativeStaticAudioSourcePermissionEvidence();
-const nativeServerId = await readNativeQueryServerId();
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
+const { binding, fixture, nativeHttp, inputs, nativeServerId } = await readNativeStaticAudioSourcePermissionEvidence();
 
 test('postgres: eight static audio source permission combinations match complete native detail responses', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -22,7 +22,7 @@ test('postgres: eight static audio source permission combinations match complete
     })) },
     fields: 'SortName', captureResponseBodies: true, trackUserData: true,
     trackFilesystem: true, captureFilesystemDomains: true,
-    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', nativeQueryInputs),
+    prepareScenario: context => seedNativeFilterInput(context, 'rating-permissions', inputs),
   });
   assertCompleteFilterHttpResponses(actual, nativeHttp, { scenarioName: 'static-audio-source', nativeServerId });
   await writeCompleteFilterHttpEvidence(actual, nativeHttp, { scenarioName: 'static-audio-source', nativeServerId });
@@ -50,4 +50,5 @@ test('postgres: eight static audio source permission combinations match complete
   assert.deepEqual(actual.runtimeErrors, []); assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
   assert.deepEqual(actual.cleanup, { runtimeClosed: true, databaseClosed: true,
     portReleased: true, postgresSchemasRemoved: true, programDataDirectoryRemoved: true });
+  await writeCurrentFilterCandidateEvidence('static-audio-source', actual, { scenarioName: 'static-audio-source' });
 });

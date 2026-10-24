@@ -308,86 +308,61 @@ test('inventory includes shared native evidence verifiers in the selected input 
     assert.ok(syncPlayDate.flatMap(entry => entry.variables).includes(variable), variable);
   }
 
-  const itemFilter = dependencyClosure(dependencies, ['tests/library/classification-filter-http.test.js']);
-  assert.ok(itemFilter.some(entry => entry.path === 'tests/library/native-item-filter-evidence.js'));
-  assert.ok(itemFilter.some(entry => entry.path === 'tests/library/native-query-inputs.js'));
-  const defaultBindingPath = ['.', 'fixtures', 'native-query-inputs', 'binding.json'].join('/');
-  for (const filename of ['native-query-scope', 'classification-filter-http', 'extra-placeholder-filter-http',
-    'image-type-filter-http', 'navigation-date-filter-http', 'official-rating-filter-http',
-    'official-rating-range-http', 'rating-permissions-http', 'tag-filter-http', 'tag-permissions-http']) {
-    const closure = dependencyClosure(dependencies, ['tests/library/' + filename + '.test.js']);
-    assert.ok(closure.some(entry => entry.path === 'tests/library/native-query-inputs.js'), filename);
-    assert.equal(closure.some(entry => entry.path === 'tests/library/native-query-default-inputs.js'), false, filename);
-    assert.equal(closure.flatMap(entry => entry.fixtureReferences)
-      .some(reference => reference.relativePath === defaultBindingPath), false,
-    filename + ': explicit profiles and synthetic inputs must not inherit the default historical binding');
+  const queryFactory = dependencyClosure(dependencies, ['tests/library/native-query-scope.test.js']);
+  assert.ok(queryFactory.some(entry => entry.path === 'tests/library/native-query-inputs.js'));
+  assert.equal(queryFactory.some(entry => entry.path === 'tests/library/native-query-default-inputs.js'), false,
+    'The explicit-profile factory unit test does not acquire an external recording.');
+
+  const currentFilterConsumers = ['classification-filter-http', 'extra-placeholder-filter-http', 'image-type-filter-http',
+    'navigation-date-filter-http', 'official-rating-filter-http', 'official-rating-range-http', 'rating-permissions-http',
+    'static-audio-source-evidence', 'static-audio-source-permissions-http', 'static-source-permissions-http',
+    'tag-filter-http', 'tag-permissions-http'];
+  const currentFilterProfilePath = path.join(repositoryRoot, 'tests/library/fixtures/filter-http-current/current-profile.json');
+  const currentFilterProfile = JSON.parse(await readFile(currentFilterProfilePath, 'utf8'));
+  assert.equal(currentFilterProfile.kind, 'same-workflow-current-native-filter-http');
+  assert.equal(currentFilterProfile.historicalRecordingReused, false);
+  assert.ok(currentFilterProfile.inputs.length > 0);
+  assert.equal(new Set(currentFilterProfile.inputs.map(entry => entry.filename)).size, currentFilterProfile.inputs.length);
+  for (const descriptor of currentFilterProfile.inputs) {
+    assert.equal(typeof descriptor.filename, 'string'); assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
+    assert.ok(Number.isSafeInteger(descriptor.bytes) && descriptor.bytes > 0);
   }
-  const profileFixture = itemFilter.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'classification-filters', 'provenance.json'].join('/'));
-  assert.ok(profileFixture, 'the explicit classification profile must remain discoverable');
-  const profile = JSON.parse(await readFile(profileFixture.filename, 'utf8'));
-  assert.equal(profile.kind, 'new-designated-source-classification-http');
-  assert.equal(profile.profile.preparationInputFiles.length, 11);
-  assert.ok(profile.requiredInputs.length > 0 && profile.requiredInputs.every(entry => entry.required === true));
+  for (const name of currentFilterConsumers) {
+    const closure = dependencyClosure(dependencies, ['tests/library/' + name + '.test.js']);
+    for (const filename of ['tests/library/current-filter-http.js',
+      'tests/library/fixtures/filter-http-current/record-native.js', 'tests/library/fixtures/filter-http-current/scenario.js',
+      'tools/compat/current-native-reference.js', 'tools/validation/native-instance-inputs.js',
+      'tools/validation/native-build-inputs.js']) assert.ok(closure.some(entry => entry.path === filename), name + ': ' + filename);
+    for (const service of ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'])
+      assert.ok(closure.flatMap(entry => entry.services).includes(service), name + ': ' + service);
+    for (const historical of ['native-query-inputs', 'native-query-default-inputs', 'native-item-filter-evidence'])
+      assert.equal(closure.some(entry => entry.path === 'tests/library/' + historical + '.js'), false, name + ': ' + historical);
+    assert.ok(closure.flatMap(entry => entry.fixtureReferences).some(entry => entry.filename === currentFilterProfilePath),
+      name + ': current execution input manifest must be discoverable');
+    assert.equal(closure.flatMap(entry => entry.fixtureReferences)
+      .some(entry => /\/(?:classification-filters|extra-placeholder-filters|image-type-filters|navigation-date-filters|official-rating-filters|official-rating-range|rating-permissions|tag-filters|tag-permissions)\/provenance\.json$/u
+        .test(entry.filename.replaceAll('\\', '/')) || /\/native-query-inputs\/(?:binding|static-source-permissions|static-audio-source-permissions)\.json$/u
+        .test(entry.filename.replaceAll('\\', '/'))), false,
+    name + ': an unconsumed historical seal must not enter current inputs');
+  }
 
   const staticPermissions = dependencyClosure(dependencies, ['tests/library/static-source-permissions-http.test.js']);
-  assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-query-default-inputs.js'));
-  const bindingFixture = staticPermissions.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-query-inputs', 'binding.json'].join('/'));
-  assert.ok(bindingFixture, 'consumers of the default historical profile retain its exact source binding');
-  const binding = JSON.parse(await readFile(bindingFixture.filename, 'utf8'));
-  assert.equal(binding.reference.preparationInputs.length, 11);
-  assert.equal(binding.preparationInputFiles.length, 11);
-  assert.deepEqual(binding.preparationInputFiles.map(entry => entry.kind),
-    binding.reference.preparationInputs.map(([kind]) => kind));
-  for (const entry of [...binding.preparationInputFiles, binding.reference.sourceDatabase,
-    ...binding.independentNativeAudits]) {
-    assert.ok(path.win32.isAbsolute(entry.filename));
-    assert.match(entry.sha256, /^[a-f0-9]{64}$/u);
-  }
-  for (const directory of [binding.runtimeDirectory, binding.dotnetDirectory]) {
-    assert.ok(path.win32.isAbsolute(directory.path));
-    assert.match(directory.entriesSha256, /^[a-f0-9]{64}$/u);
-  }
-  assert.equal(itemFilter.flatMap(entry => entry.declaredReferences)
-    .some(reference => reference.required && reference.logicalPath.startsWith('.agent-docs/evidence/core-flow-20260926/')), false,
-  'new query evidence must not inherit unavailable historical preparation inputs');
-
   assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-static-source-evidence.js'));
-  assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-item-filter-evidence.js'));
-  const permissionFixture = staticPermissions.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-query-inputs', 'static-source-permissions.json'].join('/'));
-  assert.ok(permissionFixture, 'the independently repeated native permission inputs must be discoverable');
-  const permissionBinding = JSON.parse(await readFile(permissionFixture.filename, 'utf8'));
-  assert.equal(permissionBinding.cases.length, 8);
-  assert.equal(permissionBinding.recordings.length, 2);
-  for (const descriptor of [permissionBinding.independentAudit, ...permissionBinding.recordings.map(entry => entry.oracle)]) {
-    assert.ok(path.win32.isAbsolute(descriptor.filename));
-    assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
-  }
-  for (const entry of permissionBinding.recordings) {
-    assert.equal(entry.directory.path, entry.evidenceRoot);
-    assert.ok(path.win32.isAbsolute(entry.directory.path));
-    assert.match(entry.directory.entriesSha256, /^[a-f0-9]{64}$/u);
-  }
+  assert.ok(staticPermissions.some(entry => entry.path === 'tests/library/native-filter-input.js'));
   assert.ok(staticPermissions.flatMap(entry => entry.variables).includes('MEDIAMANAGER_FILTER_WIRE_EVIDENCE'));
-
   const audioPermissions = dependencyClosure(dependencies, ['tests/library/static-audio-source-permissions-http.test.js']);
   assert.ok(audioPermissions.some(entry => entry.path === 'tests/library/native-static-audio-source-evidence.js'));
   assert.ok(audioPermissions.some(entry => entry.path === 'tests/library/native-filter-input.js'));
   const audioFixture = audioPermissions.flatMap(entry => entry.fixtureReferences)
-    .find(reference => reference.relativePath === ['.', 'fixtures', 'native-query-inputs', 'static-audio-source-permissions.json'].join('/'));
-  assert.ok(audioFixture, 'the independent Audio source inputs must be discoverable');
+    .find(entry => entry.relativePath === './fixtures/filter-http-current/static-audio-binding.json');
+  assert.ok(audioFixture, 'The current Audio matrix and exact recovered neutral input must be discoverable.');
   const audioBinding = JSON.parse(await readFile(audioFixture.filename, 'utf8'));
-  assert.equal(audioBinding.cases.length, 8); assert.equal(audioBinding.recordings.length, 2);
+  assert.equal(audioBinding.kind, 'same-workflow-current-native-static-audio');
+  assert.equal(audioBinding.cases.length, 8);
+  assert.equal(audioBinding.neutralFixture.sha256, 'ce88db7c19e262d371e36e63f8f7fb3541242151d481458999d4720cab9257db');
   for (const descriptor of [audioBinding.originalNeutralFixture, audioBinding.neutralFixture,
-    audioBinding.independentAudit, ...audioBinding.recordings.map(entry => entry.oracle)]) {
-    assert.ok(path.win32.isAbsolute(descriptor.filename)); assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
-  }
-  for (const recording of audioBinding.recordings) {
-    assert.equal(recording.directory.path, recording.evidenceRoot);
-    assert.ok(path.win32.isAbsolute(recording.directory.path));
-    assert.match(recording.directory.entriesSha256, /^[a-f0-9]{64}$/u);
+    audioBinding.nativeRecorder, audioBinding.requestMatrix]) {
+    assert.equal(typeof descriptor.filename, 'string'); assert.match(descriptor.sha256, /^[a-f0-9]{64}$/u);
   }
   assert.ok(audioPermissions.flatMap(entry => entry.variables).includes('MEDIAMANAGER_FILTER_WIRE_EVIDENCE'));
 

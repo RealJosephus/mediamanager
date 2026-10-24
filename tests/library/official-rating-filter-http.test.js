@@ -1,54 +1,13 @@
-import { validationFileUrl } from '../../tools/validation/paths.js';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
-import { assertCompleteFilterHttpResponses, assertCompleteNativeFilterHttpRepeat, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
-import { pathToFileURL } from 'node:url';
+import { assertCompleteFilterHttpResponses, writeCompleteFilterHttpEvidence } from './full-filter-wire.js';
+import { seedNativeFilterInput } from './native-filter-input.js';
+import { loadCurrentFilterScenario, writeCurrentFilterCandidateEvidence } from './current-filter-http.js';
 
-// Select this actual new profile before any historical external input is read.
-const provenanceUrl = validationFileUrl('./fixtures/official-rating-filters/provenance.json', import.meta.url);
-const provenance = JSON.parse(await readFile(provenanceUrl, 'utf8'));
-assert.equal(provenance.kind, 'new-designated-source-official-ratings-http');
-assert.equal(provenance.historicalMissingEvidenceAccepted, false);
-assert.equal(provenance.recordings.length, 2);
-assert.equal(new Set(provenance.recordings.map(recording => recording.evidenceRoot)).size, 2);
-assert.ok(provenance.profile.recordedRecorder);
-assert.ok(provenance.profile.sourceBuildReceipt);
-assert.equal(provenance.profile.executionInputs.length, 2);
-const { createNativeQueryInputs, readNativeQueryBoundFile } = await import('./native-query-inputs.js');
-const inputs = createNativeQueryInputs(provenance.profile);
-for (const descriptor of provenance.requiredInputs) {
-  assert.equal(descriptor.required, true);
-  await readNativeQueryBoundFile(descriptor);
-}
-const independentAudit = JSON.parse(await readNativeQueryBoundFile(provenance.independentAudit));
-assert.equal(independentAudit.passed, true);
-assert.equal(independentAudit.preservedDatabaseTables.length, 33);
-assert.equal(independentAudit.nativeRuns.length, 10);
-assert.equal(independentAudit.nativeRuns.reduce((sum, run) => sum + run.records, 0), 384);
-const { verifyNativeItemFilterEvidence } = await import('./native-item-filter-evidence.js');
-const { seedNativeFilterInput } = await import('./native-filter-input.js');
-const fixtureUrl = validationFileUrl('./fixtures/official-rating-filters/input.json', import.meta.url);
-const fixture = JSON.parse(await readFile(fixtureUrl, 'utf8'));
-const runs = [];
-for (const recording of provenance.recordings) runs.push(await verifyNativeItemFilterEvidence({
-  evidence: pathToFileURL(recording.evidenceRoot + '/native-run/'), fixtureUrl, scenario: 'official-ratings',
-  runDirectory: 'native-run', expectedRecords: 34, inputs,
-}));
-assert.ok(runs.every(run => run.summary.cases === 17));
-const nativeServerId = await inputs.readServerId();
-assertCompleteNativeFilterHttpRepeat(runs[0].nativeHttp, runs[1].nativeHttp,
-  { leftServerId: nativeServerId, rightServerId: nativeServerId });
-assert.equal(runs[0].summary.scenarioDefinitionSha256, runs[1].summary.scenarioDefinitionSha256);
-const nativeHttp = runs[0].nativeHttp, nativeSummary = runs[0].summary;
-const evidence = pathToFileURL(provenance.recordings[0].evidenceRoot + '/native-run/');
-const nativeStages = JSON.parse(await readFile(new URL('stages.json', evidence), 'utf8'));
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-assert.equal(nativeSummary.passed, true);
-assert.equal(sha256(await readFile(validationFileUrl('../record-native.mjs', evidence))), nativeSummary.recorderSha256);
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
+const { fixture, inputs, nativeHttp, nativeStages, nativeServerId } = await loadCurrentFilterScenario('official-ratings');
 assert.equal(nativeHttp.records.length, 34);
 assert.deepEqual(nativeStages.before.database, nativeStages.afterReads.database);
 assert.deepEqual(nativeStages.afterReads.database, nativeStages.afterShutdown.database);
@@ -90,7 +49,7 @@ const dialects = process.env.MEDIAMANAGER_OFFICIAL_RATING_DIALECT
 if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid OfficialRatings dialect.');
 
 for (const dialect of dialects) {
-  test(`${dialect}: 17 OfficialRatings binder and descendant cases match 34 frozen HTTP responses`, {
+  test(`${dialect}: 17 OfficialRatings binder and descendant cases match 34 current Native HTTP responses`, {
     skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
   }, async () => {
     const actual = await recordItemFilterCandidate({
@@ -127,5 +86,6 @@ for (const dialect of dialects) {
       postgresSchemasRemoved: dialect === 'postgres' ? true : null,
       programDataDirectoryRemoved: true,
     });
+    await writeCurrentFilterCandidateEvidence('official-ratings', actual, { scenarioName: 'official-rating-filter' });
   });
 }

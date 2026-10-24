@@ -435,3 +435,8 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/storage/fixtures/book-archives/stalled-entry-worker.mjs -text
 /src/images/BlurHashSharp.LICENSE -text
 /tests/storage/fixtures/deflate64-current/** -text
+/tests/library/fixtures/filter-http-current/** -text
+/tests/library/current-filter-http.js -text
+/tests/library/native-filter-input.js -text
+/tests/library/native-static-source-evidence.js -text
+/tests/library/native-static-audio-source-evidence.js -text

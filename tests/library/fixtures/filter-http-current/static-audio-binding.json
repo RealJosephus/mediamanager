@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "kind": "same-workflow-current-native-static-audio",
+  "historicalRecordingReused": false,
+  "originalNeutralFixture": {
+    "filename": "../rating-permissions/input.json",
+    "bytes": 1783,
+    "sha256": "f2317118cd990e48bb9337dbc32a6791571fc9d5f4fa5b9363d5bd3b797cd499",
+    "role": "originalNeutralFixture"
+  },
+  "neutralFixture": {
+    "filename": "audio-input.json",
+    "bytes": 1955,
+    "sha256": "ce88db7c19e262d371e36e63f8f7fb3541242151d481458999d4720cab9257db",
+    "role": "recoveredExactNeutralFixture"
+  },
+  "nativeRecorder": {
+    "filename": "record-native.js",
+    "bytes": 46396,
+    "sha256": "28e369e86f2982b67bf4ca8f1de5736f13d2ae920d44d016ced6169e97da1a95",
+    "role": "currentNativeRecorder"
+  },
+  "requestMatrix": {
+    "filename": "scenario.js",
+    "bytes": 8769,
+    "sha256": "c5d85e65e518bc86f72b7b475ea9480744e5d376bde704b8d06c6bec878a3b2a",
+    "role": "currentRequestMatrix"
+  },
+  "cases": [
+    {
+      "name": "static-audio-source-permissions-0",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-1",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-2",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-3",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-4",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-5",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-6",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-audio-source-permissions-7",
+      "query": "IncludeItemTypes=Audio",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": true
+      }
+    }
+  ],
+  "recoveredNeutralInputOrigin": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-input-v1/input.json",
+  "recoveredNeutralInputSha256": "ce88db7c19e262d371e36e63f8f7fb3541242151d481458999d4720cab9257db",
+  "boundary": "Current Native static permission declarations. Actual encoder capability and playback negotiation are separate consumers."
+}

@@ -62,6 +62,10 @@ const executionManifests = new Map([
   ['tests/library/movie-similar.test.js', ['current-oracle', 'tests/library/fixtures/movie-similar/current-profile.json']],
   ['tests/library/postgres-collection-maintenance.test.js', ['current-oracle', 'tests/library/fixtures/collection-source/current-profile.json']],
   ['tests/library/book-photo-global.test.js', ['current-oracle', 'tests/library/fixtures/book-photo-global/current-profile.json']],
+  ...['classification-filter-http', 'extra-placeholder-filter-http', 'image-type-filter-http', 'navigation-date-filter-http',
+    'official-rating-filter-http', 'official-rating-range-http', 'rating-permissions-http', 'static-audio-source-evidence',
+    'static-audio-source-permissions-http', 'static-source-permissions-http', 'tag-filter-http', 'tag-permissions-http']
+    .map(kind => [`tests/library/${kind}.test.js`, ['current-oracle', 'tests/library/fixtures/filter-http-current/current-profile.json']]),
   ['tests/metadata/photo-album-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/photo-album-cover-current/current-profile.json']],
   ...['book-comic-provider', 'book-comic-cover', 'book-comic-provenance']
     .map(kind => [`tests/metadata/${kind}.test.js`, ['current-oracle', 'tests/metadata/fixtures/book-comic/current-profile.json']]),
