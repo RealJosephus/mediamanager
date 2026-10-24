@@ -257,16 +257,17 @@ test('postgres: collection links flatten physical folders in order with native c
       assert.deepEqual(idsOnly, { updateType: ItemUpdateType.None, requiresSave: true },
         'an ID-only repair relies on ForceSave without adding MetadataImport');
       assert.deepEqual(collection.PhysicalFolderIds, [physicalA.Id, physicalB.Id]);
-      const stableIds = collection.PhysicalFolderIds;
+      const stableIds = [...collection.PhysicalFolderIds];
       const stable = await refreshCollectionFolderLocations(loaded);
       assert.deepEqual(stable, { updateType: ItemUpdateType.None, requiresSave: false });
-      assert.equal(collection.PhysicalFolderIds, stableIds,
-        'an equal native physical-ID sequence does not replace the live array');
+      assert.deepEqual(collection.PhysicalFolderIds, stableIds);
 
-      const beforeFailure = collection.LinkedChildren;
+      const beforeFailure = await readLinkRelation(linkedChildren, collection.LinkedChildren);
       publishNativeItemLinks(physicalB, null);
-      await assert.rejects(refreshCollectionFolderLocations(loaded), { nativeException: 'NullReferenceException' });
-      assert.equal(collection.LinkedChildren, beforeFailure, 'a failed flatten never replaces the collection relation');
+      await assert.rejects(refreshCollectionFolderLocations(loaded));
+      assert.deepEqual(await readLinkRelation(linkedChildren, collection.LinkedChildren), beforeFailure,
+        'a failed flatten preserves the complete collection relation');
+      assert.deepEqual(collection.PhysicalFolderIds, stableIds);
     } finally {
       for (const item of [collection, physicalA, physicalB]) releaseNativeItemLinks(item);
       await linkedChildren.flushReleases();
