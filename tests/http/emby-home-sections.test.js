@@ -47,9 +47,11 @@ test('Emby home section layouts preserve scoped edits, generated identities, dis
     Client: 'Emby Web', Device: 'Controlled browser', DeviceId: user.Id, Version: '1.0',
   })).AccessToken;
   const sourceToken = await login(source), targetToken = await login(target), adminToken = (await runtime.apiKeys.create('Home layouts')).AccessToken;
-  const ids = Object.fromEntries(['root', 'collection', 'folder'].map(key => [key, nativeGuid(randomUUID())]));
+  const userRoot = await runtime.libraryScanHost.getUserRootFolder();
+  const ids = { root: userRoot.Id,
+    ...Object.fromEntries(['collection', 'folder'].map(key => [key, nativeGuid(randomUUID())])) };
   await database.insertBatch('BaseItems', [
-    postgresTestRow('BaseItems', { Id: ids.root, Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Name: 'Media Folders', IsFolder: true, Data: '{}', PresentationUniqueKey: ids.root }),
+    postgresTestRow('BaseItems', { Id: ids.root, Type: 'MediaBrowser.Controller.Entities.UserRootFolder', Name: 'Media Folders', Path: userRoot.Path, IsFolder: true, Data: '{}', PresentationUniqueKey: ids.root }),
     postgresTestRow('BaseItems', { Id: ids.collection, Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Name: 'Controlled music', IsFolder: true,
       ParentId: ids.root, Path: path.join(options.programDataPath, 'root', 'default', 'Controlled music'), PresentationUniqueKey: ids.collection,
       Data: JSON.stringify({ CollectionType: 'music', PhysicalFolderIds: [ids.folder] }) }),
