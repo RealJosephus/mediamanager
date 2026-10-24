@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "images": [
+    {
+      "name": "cover.png",
+      "filename": "../blurhash-resampling/inputs/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "name": "large.png",
+      "filename": "../blurhash-resampling/inputs/large.png",
+      "bytes": 5373,
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e"
+    },
+    {
+      "name": "wide.png",
+      "filename": "../blurhash-resampling/inputs/wide.png",
+      "bytes": 2791,
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e"
+    },
+    {
+      "name": "large.webp",
+      "filename": "../blurhash-resampling/inputs/large.webp",
+      "bytes": 30142,
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa"
+    },
+    {
+      "name": "wide.webp",
+      "filename": "../blurhash-resampling/inputs/wide.webp",
+      "bytes": 20262,
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7"
+    },
+    {
+      "name": "large.jpg",
+      "filename": "../blurhash-resampling/inputs/large.jpg",
+      "bytes": 37527,
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7"
+    },
+    {
+      "name": "wide.jpg",
+      "filename": "../blurhash-resampling/inputs/wide.jpg",
+      "bytes": 25186,
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd"
+    },
+    {
+      "name": "coordinates-129x131.png",
+      "filename": "../blurhash-resampling/inputs/coordinates-129x131.png",
+      "bytes": 54434,
+      "sha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab"
+    },
+    {
+      "name": "coordinates-257x193.png",
+      "filename": "../blurhash-resampling/inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    },
+    {
+      "name": "coordinates-411x129.png",
+      "filename": "../blurhash-resampling/inputs/coordinates-411x129.png",
+      "bytes": 106789,
+      "sha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c"
+    }
+  ]
+}

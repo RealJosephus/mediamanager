@@ -430,3 +430,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/book-runtime-current/** -text
 /tests/storage/fixtures/archive-codec-current/** -text
 /tests/http/fixtures/mime-types-current/** -text
+/tests/images/fixtures/blurhash-current/** -text

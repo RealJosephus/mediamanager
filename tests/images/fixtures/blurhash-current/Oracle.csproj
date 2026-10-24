@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <RequiresJellyfinAssemblies>true</RequiresJellyfinAssemblies>
+    <NativeRid Condition="$([MSBuild]::IsOSPlatform('Windows'))">win-x64</NativeRid>
+    <NativeRid Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-x64</NativeRid>
+    <NativeRid Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</NativeRid>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/><Reference Include="$(JellyfinDllDirectory)/*.dll"/>
+    <Content Include="$(JellyfinDllDirectory)/runtimes/$(NativeRid)/native/*SkiaSharp*">
+      <Link>%(Filename)%(Extension)</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
