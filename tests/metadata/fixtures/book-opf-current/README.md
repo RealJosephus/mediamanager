@@ -6,6 +6,14 @@ the historical `book-opf-epub` and `book-opf-xml-edges` fixtures: 82 reader,
 13 OPF provider, 38 EPUB, five ZIP and nine XML resource cases. Historical
 recordings, source seals and archives remain unchanged.
 
+The additional `rich-both-separators` EPUB retains every original rich archive
+entry and appends exact-content aliases for its container and cover using
+forward slashes. Both host path conventions therefore have an explicit entry;
+the provider still performs literal lookup. Its source hash and added keys are
+recorded in `input.json`. The original 38 EPUB cases continue to verify their
+actual host-dependent lookup outcomes, while the runtime uses this same
+additional rich input on all three platforms.
+
 `input.json` pins every stored asset by length and SHA-256. Resource documents
 are stored as the original gzip files and expanded only inside each private
 execution directory; expanded bytes have their own seals. All other XML and

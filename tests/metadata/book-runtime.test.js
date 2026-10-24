@@ -46,9 +46,11 @@ test('Book runtime reads the explicitly mapped original EPUB and saves its metad
   await bind(root, 'book-metadata', 'metadata');
   const originalAccess = storage.identityMap.resolve({ identityPath: originalPath, style: 'windows' });
   const parentAccess = storage.identityMap.resolve({ identityPath: itemPath, style: 'windows' });
-  const original = await assetBytes('main', opfManifest.groups.main.assets.find(entry => entry.path === 'epub/rich-with-cover.epub'));
+  const original = await assetBytes('main', opfManifest.groups.main.assets.find(entry => entry.path === 'epub/rich-both-separators.epub'));
   const { native: opfNative } = await captureCurrentOpf();
-  const native = opfNative.groups.main.epubResults.find(value => value.name === 'rich-with-cover');
+  const native = opfNative.groups.main.epubResults.find(value => value.name === 'rich-both-separators');
+  assert.equal(native.result.HasMetadata, true);
+  assert.equal(native.hasCover, true);
   const parentDecoy = Buffer.from('Parent media decoy.');
   const metadataDecoy = Buffer.from('Independent metadata decoy.');
   await storage.vfs.write(originalAccess, original);

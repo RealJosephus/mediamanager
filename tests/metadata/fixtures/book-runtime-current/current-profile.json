@@ -216,8 +216,8 @@
     {
       "role": "opfInput",
       "filename": "../book-opf-current/input.json",
-      "bytes": 84547,
-      "sha256": "4b69f93c194602bfa674bb81283e5f35bbeeaad927164c5104f60e8172fa4b20"
+      "bytes": 85397,
+      "sha256": "c80028a8e93ab1d83d225fa8f5fa6373361c9d19f1bf910fafcb94ab97e34b1d"
     },
     {
       "role": "opfInput",
@@ -1196,6 +1196,12 @@
       "filename": "../book-opf-current/assets/resources/single-entity-10000001.opf.gz",
       "bytes": 9873,
       "sha256": "3a544d87a38b2b3ce0e3e893a53672ffb03d73e1ccac478aef394f79ceed047b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/rich-both-separators.epub",
+      "bytes": 2236,
+      "sha256": "6546ac0441908023bbd7fbfb83c0252eef72a554271ff57d6fa686a90be82c22"
     }
   ]
 }

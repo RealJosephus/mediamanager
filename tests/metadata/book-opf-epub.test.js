@@ -50,7 +50,7 @@ test('OPF EPUB binds two current native executions, designated sources, assembli
   assert.equal(nativeCapture.report.independentNativeCapturesAgree, true);
   assert.equal(nativeCapture.report.captures.length, 2);
   assert.equal(nativeCapture.report.sourceBindings.length, manifest.sourcePaths.length);
-  assert.deepEqual([native.readerResults.length, native.providerResults.length, native.epubResults.length, native.archiveResults.length], [68, 13, 38, 5]);
+  assert.deepEqual([native.readerResults.length, native.providerResults.length, native.epubResults.length, native.archiveResults.length], [68, 13, 39, 5]);
   assert.equal(nativeCapture.native.timeZoneControl.offsetMinutes, 480);
 });
 
