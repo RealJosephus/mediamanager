@@ -40,7 +40,17 @@ async function fixture(t, dialect) {
   let database, runtime;
   t.after(async () => {
     const errors = [];
-    for (const cleanup of [() => runtime?.close(), () => storage.close(), () => database?.close(),
+    for (const cleanup of [async () => {
+      if (!runtime) return;
+      const relationSchema = runtime.linkedChildren.schemaName;
+      await runtime.close();
+      const observer = new pg.Client({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES });
+      await observer.connect();
+      try {
+        assert.equal((await observer.query('SELECT to_regnamespace($1) AS namespace', [relationSchema])).rows[0].namespace, null,
+          'Normal runtime shutdown releases its cached roots and every owned relation.');
+      } finally { await observer.end(); }
+    }, () => storage.close(), () => database?.close(),
       () => cleanupPostgres(schema), async () => {
         assert.equal(path.dirname(path.resolve(stateRoot)), path.resolve(os.tmpdir()));
         assert.ok(path.basename(stateRoot).startsWith('mediamanager-top-level-'));
@@ -112,6 +122,10 @@ async function readLinkRelation(linkedChildren, handle) {
 }
 
 async function privateLinkSetCount(linkedChildren) {
+  // Root initialization can still be retiring replaced cache resources.
+  // Observe both baselines only after the owned collector and raw links drain.
+  await linkedChildren.flushOwnedReleases();
+  await linkedChildren.flushReleases();
   return linkedChildren.withSession(async session => BigInt((await session.client.query(
     `SELECT count(*) AS count FROM "${linkedChildren.schemaName}".sets`)).rows[0].count));
 }
