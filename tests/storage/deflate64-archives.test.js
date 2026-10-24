@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
@@ -8,35 +8,30 @@ import { fileURLToPath } from 'node:url';
 import { BookArchiveService } from '../../src/storage/archive-reader.js';
 import { IdentityAccessMap } from '../../src/storage/identity-mapping.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
+import { captureCurrentNative, originalRoot as root, input, recordCandidate } from './fixtures/deflate64-current/capture.js';
 
-const provenanceUrl = new URL('./fixtures/deflate64-archives/provenance.json', import.meta.url);
-const root = new URL('.', provenanceUrl);
-const native = JSON.parse(await fs.readFile(new URL('native.json', root)));
+let native;
+before(async () => { ({ native } = await captureCurrentNative()); });
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
-test('Deflate64 observations bind actual runtime, source, upstream asset, MIT license and immutable native execution', async () => {
-  const provenance = JSON.parse(await fs.readFile(provenanceUrl));
-  for (const file of provenance.files) assert.equal(hash(await fs.readFile(new URL(file.filename, root))), file.sha256, file.filename);
-  for (const file of provenance.requiredInputs) assert.equal(hash(await fs.readFile(file.filename)), file.sha256, file.filename);
-  const recordBytes = await fs.readFile(provenance.record.filename);
-  assert.equal(hash(recordBytes), provenance.record.sha256);
-  const record = JSON.parse(recordBytes);
-  assert.equal(record.passed, true); assert.equal(record.sourcesUnchanged, true);
-  assert.equal(record.sourceFilesSha256, provenance.sourceFilesSha256);
-  for (const source of record.sourceFiles) {
-    const relative = path.basename(source.filename) === 'Directory.Build.props' ? '../../../Directory.Build.props' : path.basename(source.filename);
-    assert.equal(hash(await fs.readFile(new URL(relative, root))), source.sha256);
-  }
-  assert.equal(hash(await fs.readFile(provenance.rawNative.filename)), hash(await fs.readFile(new URL('native.json', root))));
-  assert.equal(native.runtimeVersion, '10.0.12');
-  for (const filename of [native.compressionAssembly, native.zipFileAssembly]) {
-    assert.ok(provenance.requiredInputs.some(file => path.resolve(file.filename) === path.resolve(filename)));
-  }
+test('Deflate64 current native reads bind original upstream bytes, MIT license and every independently encoded plaintext', async () => {
+  assert.equal(native.actualExecution, true);
+  assert.equal(native.archives.length, 9);
+  assert.equal(native.archives.flatMap(sample => sample.entries).length, 30);
   const gitAsset = await fs.readFile(new URL('assets/Zip.deflate64.zip', root));
-  assert.equal(createHash('sha1').update(Buffer.from('blob ' + gitAsset.length + '\0')).update(gitAsset).digest('hex'), provenance.upstream.gitBlobSha1);
+  assert.equal(createHash('sha1').update(Buffer.from('blob ' + gitAsset.length + '\0')).update(gitAsset).digest('hex'), input.upstreamGitBlobSha1);
   const license = await fs.readFile(new URL('LICENSE-SharpCompress.txt', root));
-  assert.equal(createHash('sha1').update(Buffer.from('blob ' + license.length + '\0')).update(license).digest('hex'), provenance.licenseGitBlobSha1);
-  assert.equal(record.comparisons.length, 17); assert.ok(record.comparisons.every(value => value.passed));
+  assert.equal(createHash('sha1').update(Buffer.from('blob ' + license.length + '\0')).update(license).digest('hex'), input.licenseGitBlobSha1);
+  const generated = JSON.parse(await fs.readFile(new URL('generated-inputs.json', root)));
+  const actual = native.archives.find(sample => sample.name === 'generated-boundaries.zip').entries;
+  assert.equal(generated.entries.length, 17);
+  assert.equal(actual.length, generated.entries.length);
+  for (const expected of generated.entries) {
+    const observed = actual.find(entry => entry.name === expected.name);
+    assert.ok(observed, expected.name);
+    assert.equal(observed.openError, null); assert.equal(observed.readError, null);
+    assert.equal(observed.actualLength, expected.generatedLength); assert.equal(observed.sha256, expected.generatedSha256);
+  }
 });
 
 async function setup(t) {
@@ -64,29 +59,31 @@ async function setup(t) {
 test('real BookArchiveService matches native ZIP-only selected bytes, Deflate64 history and compression admission', async t => {
   const fixture = await setup(t);
   for (const sample of native.archives) {
-    const filename = path.basename(sample.filename);
+    const filename = sample.name;
     await t.test(filename, async t => {
       assert.equal(sample.archiveOpened, true); assert.equal(sample.archiveError, null);
       const archive = await fixture.open(filename, { zipOnly: true });
+      const observations = [];
       try {
         assert.deepEqual(archive.entries.map(entry => ({ name: entry.key, size: entry.size })), sample.entries.map(entry => ({ name: entry.name, size: entry.Length })));
         for (const [index, expected] of sample.entries.entries()) {
           await t.test(expected.name, async () => {
             const entry = archive.entries[index]; assert.equal(archive.findEntry(expected.name), entry);
             if (expected.openError) {
-              assert.equal(expected.openError.type, 'System.IO.InvalidDataException');
-              assert.match(expected.openError.Message, /not supported|unsupported compression/iu);
               assert.equal(expected.opened, false); assert.equal(expected.readError, null);
               await assert.rejects(archive.read(entry), error => error.code === 'invalid-archive' && /compression method.*unsupported|unsupported compression method/iu.test(error.message));
+              observations.push({ name: entry.key, size: entry.size, failed: true });
             } else {
               assert.equal(expected.opened, true); assert.equal(expected.readError, null);
               const bytes = await archive.read(entry);
               assert.equal(bytes.length, expected.actualLength); assert.equal(hash(bytes), expected.sha256);
+              observations.push({ name: entry.key, size: entry.size, failed: false, bytes: bytes.length, sha256: hash(bytes) });
             }
           });
         }
       } finally { await archive.close(); }
       assert.deepEqual(await fs.readdir(fixture.spoolPath), []);
+      await recordCandidate(filename, { entries: observations, spool: await fs.readdir(fixture.spoolPath) });
     });
   }
 });

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "upstreamGitBlobSha1": "2c2e89050361492e81b3404258348bf0a742c853",
+  "licenseGitBlobSha1": "94e2f5bc83ac404584fd92c25cfcc305ea2f8942",
+  "archives": [
+    {
+      "name": "Zip.deflate64.zip",
+      "filename": "../deflate64-archives/assets/Zip.deflate64.zip",
+      "bytes": 60747,
+      "sha256": "f5c77a3014606c711777e8e683b97816a90171aedbacb54dc381fa1cacc0248f"
+    },
+    {
+      "name": "generated-boundaries.zip",
+      "filename": "../deflate64-archives/assets/generated-boundaries.zip",
+      "bytes": 560653,
+      "sha256": "074518bfe9feb1234861884620091e1288346763e093b514351be021253a6a1f"
+    },
+    {
+      "name": "method-12.zip",
+      "filename": "../deflate64-archives/assets/method-12.zip",
+      "bytes": 103,
+      "sha256": "717b167a224e1af6608264a4b9329948c64356a029cddc1b7fdb852becd1d696"
+    },
+    {
+      "name": "method-14.zip",
+      "filename": "../deflate64-archives/assets/method-14.zip",
+      "bytes": 103,
+      "sha256": "34c370497b89a2bb96ce513f2b6a5df1023978fe71741c3a4f12ddd419656418"
+    },
+    {
+      "name": "method-8.zip",
+      "filename": "../deflate64-archives/assets/method-8.zip",
+      "bytes": 103,
+      "sha256": "60692d910ca3f9b9ec772d487e3ca7738427272a7a4fda3383df52548a2604e4"
+    },
+    {
+      "name": "method-9.zip",
+      "filename": "../deflate64-archives/assets/method-9.zip",
+      "bytes": 103,
+      "sha256": "0d3a275798118b7815a5653daa0a59fda48037dd5f13ac0f9a3cde009cf93a35"
+    },
+    {
+      "name": "method-93.zip",
+      "filename": "../deflate64-archives/assets/method-93.zip",
+      "bytes": 103,
+      "sha256": "1ded6a129c6d51ec2ea9f3169b78b16251f3cb699c1c2b1415ebda89caee0c02"
+    },
+    {
+      "name": "method-95.zip",
+      "filename": "../deflate64-archives/assets/method-95.zip",
+      "bytes": 103,
+      "sha256": "06792f179ca60f8f3434b502cbb95a6b9d0d2ec1c7fd1c48a2639670b0864568"
+    },
+    {
+      "name": "method-98.zip",
+      "filename": "../deflate64-archives/assets/method-98.zip",
+      "bytes": 103,
+      "sha256": "fcf13ea32d748031681377195580130d345c4ce3cf9a47dbadd3ee519ec62cb3"
+    }
+  ]
+}

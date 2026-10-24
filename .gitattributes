@@ -434,3 +434,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/storage/fixtures/book-archives/current-profile.json text eol=lf
 /tests/storage/fixtures/book-archives/stalled-entry-worker.mjs -text
 /src/images/BlurHashSharp.LICENSE -text
+/tests/storage/fixtures/deflate64-current/** -text
