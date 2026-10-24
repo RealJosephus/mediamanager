@@ -330,7 +330,7 @@ test('postgres: a fresh collection publishes empty physical IDs before owned ref
       { phase: 1, action: 'updated', reason: 2, ids: [physicalId] },
       { phase: 1, action: 'updated', reason: 11, ids: [physicalId] }
     ]);
-    assert.deepEqual((await runtime.library.getItemRecord(collectionId)).PhysicalFolderIds, [physicalId]);
+    assert.deepEqual((await runtime.library.getItemRecord(collectionId)).PhysicalFolderIds.map(key), [key(physicalId)]);
 
     phase = 2;
     await runtime.libraryScanLifecycle.validateTopLibraryFolders();

@@ -169,9 +169,16 @@ test('native Data encoder preserves declared order and escapes Unicode and HTML-
 test('AggregateFolder VirtualChildren serialize through the declared BaseItem contract', () => {
   const aggregate = newNativeItemEntity('MediaBrowser.Controller.Entities.AggregateFolder');
   const playlists = newNativeItemEntity('Emby.Server.Implementations.Playlists.PlaylistsFolder');
+  playlists.IsRoot = true;
+  playlists.DateCreated = '2026-10-24T01:02:03.1234567Z';
+  playlists.DateModified = '2026-10-24T02:03:04.2345678Z';
+  playlists.DateLastSaved = '2026-10-24T03:04:05.3456789Z';
   aggregate.VirtualChildren.push(playlists);
   const data = JSON.parse(serializeNativeItemData(aggregate));
-  assert.equal(data.VirtualChildren.length, 1);
-  assert.equal(Object.hasOwn(data.VirtualChildren[0], 'IsRoot'), false);
-  assert.equal(data.VirtualChildren[0].DateCreated, '0001-01-01T00:00:00.0000000Z');
+  // BaseItem ignores creation/modification dates; DateLastSaved belongs to
+  // its persisted contract. Runtime Folder fields do not widen that contract.
+  assert.deepEqual(data.VirtualChildren, [{
+    IsHD: false, IsShortcut: false, Width: 0, Height: 0,
+    DateLastSaved: '2026-10-24T03:04:05.3456789Z', RemoteTrailers: []
+  }]);
 });
