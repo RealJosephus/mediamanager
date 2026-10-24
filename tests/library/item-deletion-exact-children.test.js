@@ -33,6 +33,8 @@ async function fixtureFor(t) {
 }
 
 async function emptyOwnedSelectionState(fixture) {
+  await fixture.linkedChildren.flushOwnedReleases();
+  await fixture.linkedChildren.flushReleases();
   await fixture.linkedChildren.withSession(async session => {
     for (const table of ['item_states', 'item_cohorts', 'pins']) assert.equal(BigInt((await session.client.query(
       `SELECT count(*) AS count FROM "${fixture.linkedChildren.schemaName}".${table}`)).rows[0].count), 0n, table);

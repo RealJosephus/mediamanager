@@ -34,6 +34,8 @@ async function fixture(t) {
   }));
   await seed(1, { Type: root.NativeType, ParentId: null });
   const assertReleased = async () => {
+    await links.flushOwnedReleases();
+    await links.flushReleases();
     const relations = await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema()
       AND relname LIKE 'mm_scan_missing_%'`);
     assert.deepEqual(relations.rows, []);

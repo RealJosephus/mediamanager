@@ -3,7 +3,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DomainStore} from '../../src/database/domain-store.js';
 import {LibraryService} from '../../src/library/library-service.js';
-import {PostgresLinkedChildrenStore,EMPTY_NATIVE_LINKS} from '../../src/library/postgres-linked-children.js';
+import {PostgresLinkedChildrenStore} from '../../src/library/postgres-linked-children.js';
+import {acquireNativeItemLinkOwner} from '../../src/library/native-item-entity.js';
 import {createPostgresTestDatabase,postgresTestRow} from '../database/postgres-fixture.js';
 
 const id=n=>n.toString(16).padStart(32,'0');
@@ -14,7 +15,9 @@ async function fixture(t){
   await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(1),Type:'MediaBrowser.Controller.Entities.UserRootFolder',Name:'Root',Data:'{}',IsFolder:true}));
   await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(2),Type:'MediaBrowser.Controller.Entities.CollectionFolder',Name:'Collection',ParentId:id(1),Data:JSON.stringify({PhysicalFolderIds:[id(3)]}),IsFolder:true}));
   for(let value=3;value<=12;value++)await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(value),Type:value===4?'MediaBrowser.Controller.Entities.Audio.Audio':value===5?'MediaBrowser.Controller.Entities.Movies.Movie':'MediaBrowser.Controller.Entities.Folder',Name:'item '+value,ParentId:value===3?null:id(3),TopParentId:id(3),Data:'{}',IsFolder:value!==4&&value!==5,MediaType:value===4?'Audio':value===5?'Video':'Unknown'}));
-  t.after(async()=>{await library.close();assert.equal(frames.size,0);await links.flushReleases();await links.close();await store.close();});
+  t.after(async()=>{await library.close();assert.equal(frames.size,0);await links.flushOwnedReleases();await links.flushReleases();
+    for(const table of ['item_states','item_cohorts','pins','sets'])assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".${table}`)).rows[0].count),0n,table);
+    await links.close();await store.close();});
   return{database,store,links,library,frames};
 }
 async function attach(links,item){item.LinkedChildren=await links.withSession(async session=>{const writer=await links.createWriter({session,parentId:item.Id});await writer.append({ItemId:id(5),Type:0});return writer.finish();});}
@@ -22,8 +25,17 @@ async function attach(links,item){item.LinkedChildren=await links.withSession(as
 test('postgres: fresh records retain only returned owners and release frames on lookup, denial and callback failure',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async t=>{
   const{database,library,links,frames}=await fixture(t);
   const first=await library.getItemRecord(id(3));await attach(links,first);assert.equal(await links.count(first.LinkedChildren),1n);assert.equal(frames.size,0);
-  await database.update('BaseItems',{Id:id(3)},{Name:'fresh changed'});
-  const second=await library.getItemRecord(id(3));assert.equal(second.Name,'fresh changed');assert.equal(first.LinkedChildren,EMPTY_NATIVE_LINKS,'replacement released the old raw branch');assert.equal(frames.size,0);
+  const owner=acquireNativeItemLinkOwner(first);
+  try{
+    await database.update('BaseItems',{Id:id(3)},{Name:'fresh changed'});
+    const second=await library.getItemRecord(id(3));assert.equal(second.Name,'fresh changed');assert.equal(first.Name,'item 3');assert.equal(frames.size,0);
+    await links.flushOwnedReleases();
+    const held=[];for await(const page of links.pages(first.LinkedChildren))held.push(...page.map(row=>row.ItemId));
+    assert.deepEqual(held,[id(5)],'An independently retained old record keeps its own members after replacement.');
+    assert.equal(await links.count(second.LinkedChildren),0n,'The fresh record does not inherit the replaced record member assignment.');
+  }finally{owner.release();}
+  await links.flushOwnedReleases();await links.flushReleases();
+  assert.equal(await links.count(first.LinkedChildren),0n,'The old branch is released after its final owner leaves.');
   assert.equal((await library.getItemRecord(id(4))).Type,'Audio');assert.equal((await library.getItemRecord(id(5))).Type,'Movie');
   await assert.rejects(library.getItemRecord(id(99)),error=>error.status===404);
   await database.update('BaseItems',{Id:id(5)},{Tags:'blocked'});
@@ -31,7 +43,8 @@ test('postgres: fresh records retain only returned owners and release frames on 
   await assert.rejects(library.getItemRecord(id(5),{user:denied}),error=>error.status===404);assert.equal(frames.size,0);
   let captured;
   await assert.rejects(library.withItemRecord(id(3),{},async item=>{captured=item;await attach(links,item);for(let value=6;value<=12;value++)await library.getItemRecord(id(value));assert.equal(await links.count(item.LinkedChildren),1n);throw new Error('callback failure');}),/callback failure/);
-  assert.equal(captured.LinkedChildren,EMPTY_NATIVE_LINKS,'callback owner survived eviction and was released on failure');assert.equal(frames.size,0);
+  await links.flushOwnedReleases();await links.flushReleases();
+  assert.equal(await links.count(captured.LinkedChildren),0n,'The callback branch is released after eviction and callback failure.');assert.equal(frames.size,0);
 });
 
 test('postgres: library close drains an admitted raw record callback and rejects new lookup admission',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async t=>{
@@ -39,7 +52,7 @@ test('postgres: library close drains an admitted raw record callback and rejects
   let item,finished=false;
   const operation=library.withItemRecord(id(3),{},async value=>{item=value;await attach(links,value);started();await wait;assert.equal(await links.count(value.LinkedChildren),1n);assert.equal((await library.getItemRecord(id(4))).Type,'Audio');});
   await ready;const closing=library.close().then(()=>{finished=true;});await new Promise(resolve=>setImmediate(resolve));assert.equal(finished,false);await assert.rejects(library.getItemRecord(id(3)),error=>error.status===503);
-  release();await operation;await closing;assert.equal(item.LinkedChildren,EMPTY_NATIVE_LINKS);assert.equal(frames.size,0);
+  release();await operation;await closing;await links.flushOwnedReleases();await links.flushReleases();assert.equal(await links.count(item.LinkedChildren),0n);assert.equal(frames.size,0);
 });
 
 test('postgres: a callback inherited from a finished parent cannot enter a closing library',{skip:!process.env.MEDIAMANAGER_TEST_POSTGRES},async t=>{

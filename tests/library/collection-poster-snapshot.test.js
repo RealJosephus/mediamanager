@@ -46,6 +46,8 @@ async function fixture(t) {
   }));
   await seed(1, { Type: root.NativeType, ParentId: null });
   const assertReleased = async () => {
+    await links.flushOwnedReleases();
+    await links.flushReleases();
     for (const table of ['item_states', 'item_cohorts', 'pins', 'sets']) {
       assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".${table}`)).rows[0].count), 0n, table);
     }

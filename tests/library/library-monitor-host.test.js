@@ -9,13 +9,14 @@ import { LibraryTaskScheduler } from '../../src/library/library-task-scheduler.j
 import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { newNativeItemEntity, acquireNativeItemLinkOwner } from '../../src/library/native-item-entity.js';
 import { DomainStore } from '../../src/database/domain-store.js';
+import { PostgresDatabase } from '../../src/database/postgres.js';
 import { getNewItemId } from '../../src/core/identity.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { createRuntime } from '../../src/runtime.js';
 import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { idKey } from '../../src/library/records.js';
-import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow, postgresTestConnectionString } from '../database/postgres-fixture.js';
 import { knownAncestorIgnoreIdentityMap } from './ignore-namespace-fixture.js';
 
 const pg = { skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 30000 };
@@ -391,9 +392,8 @@ test('postgres: queued Artist cancellation reaches every physical validation and
       assert.deepEqual(metadataFailures, [reason], phase);
       assert.equal(runtime.metadata.getRefreshQueue().size, 0);
       assert.equal(runtime.refreshes.snapshot().size, 0);
+      await runtime.linkedChildren.flushOwnedReleases();
       await runtime.linkedChildren.flushReleases();
-      for (const table of ['item_states', 'item_cohorts']) assert.equal(BigInt((await database.client.query(
-        `SELECT count(*) AS count FROM "${runtime.linkedChildren.schemaName}".${table}`)).rows[0].count), 0n, table);
       assert.deepEqual((await database.client.query(`SELECT relname FROM pg_class WHERE relnamespace=pg_my_temp_schema()
         AND relname LIKE 'mm_monitor_%'`)).rows, []);
     }
@@ -402,4 +402,11 @@ test('postgres: queued Artist cancellation reaches every physical validation and
     runtime.refreshes.off('RefreshCompleted', onCompleted);
     runtime.metadataScanner.refreshLiveItem = refresh;
   }
+  const relationSchema = runtime.linkedChildren.schemaName;
+  await runtime.close();
+  const observer = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema: database.schemaName });
+  try {
+    assert.equal((await observer.client.query('SELECT to_regnamespace($1) AS namespace', [relationSchema])).rows[0].namespace, null,
+      'Normal runtime shutdown releases its cached artists, roots and every owned relation.');
+  } finally { await observer.close(); }
 });
