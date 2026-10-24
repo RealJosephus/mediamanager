@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { createRuntime } from '../../src/runtime.js';
 import { initializeLibraryRoot } from '../../src/library/root-initialization.js';
-import { cloneNativeItemEntity, copyNativeItemRepositoryFrame } from '../../src/library/native-item-entity.js';
+import { copyNativeItemRepositoryFrame } from '../../src/library/native-item-entity.js';
 import { createVirtualPathExpander } from '../../src/library/options.js';
 import { mapRecord, repositoryValue } from '../../src/library/records.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
@@ -13,11 +13,12 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../databas
 
 for (const separateData of [false, true]) test(`postgres: initialized playlists resolve through the aggregate root with ${separateData ? 'separate' : 'default'} DataPath on the current platform`, {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
-}, async () => {
+}, async t => {
+  const phase = name => t.diagnostic('Root lifecycle phase: ' + name);
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'mm-root-platform-'));
   const root = await realpath(temporary), programDataPath = path.join(root, 'state');
   const dataPath = separateData ? path.join(root, 'separate-data') : path.join(programDataPath, 'data');
-  let database, runtime;
+  let database, runtime, primary;
   try {
     database = await createPostgresTestDatabase(null, 'root_platform');
     runtime = await createRuntime({ database, programDataPath, dataPath,
@@ -76,7 +77,9 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
       'Repeated initialization reuses the registered folder without rewriting its timestamps.');
     const aggregateBefore = await database.rows('BaseItems', { where: { Id: aggregate.Id } });
     const schema = database.schemaName;
+    phase('initial runtime close');
     await runtime.close();
+    phase('initial runtime closed');
     const movedProgram = path.join(root, 'moved-state');
     assert.equal(await realpath(programDataPath), programDataPath);
     assert.equal(path.dirname(movedProgram), root);
@@ -105,8 +108,11 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
     assert.equal((await stat(relocatedUserRoot.Path)).isDirectory(), true);
     assert.deepEqual(await database.rows('BaseItems', { where: { Id: userRoot.Id } }), userRootBefore,
       'Native GetUserRootFolder also resets only the live Path until its next repository save.');
-    const aggregateSeed = cloneNativeItemEntity(relocated);
-    const playlistsSeed = cloneNativeItemEntity(relocatedPlaylists);
+    // Initialization publishes repository records, without borrowing the
+    // registered Folder's raw links or recursively cloning its virtual items.
+    const aggregateSeed = mapRecord(relocated.NativeRepositoryColumns);
+    const playlistsSeed = mapRecord(relocatedPlaylists.NativeRepositoryColumns);
+    aggregateSeed.Path = relocated.Path; playlistsSeed.Path = relocatedPlaylists.Path;
     aggregateSeed.Studios = []; playlistsSeed.Studios = [];
     runtime.libraryScanHost.adoptRootInitialization({ aggregateFolder: aggregateSeed, playlistsFolder: playlistsSeed,
       freshAggregateFolder: true, freshPlaylistsFolder: true });
@@ -115,7 +121,8 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
     assert.deepEqual(relocated.Studios, []);
     assert.deepEqual(relocatedPlaylists.Studios, []);
     relocated.Studios = ['Live metadata'];
-    const replacementPlaylistsSeed = cloneNativeItemEntity(relocatedPlaylists);
+    const replacementPlaylistsSeed = mapRecord(relocatedPlaylists.NativeRepositoryColumns);
+    replacementPlaylistsSeed.Path = relocatedPlaylists.Path;
     replacementPlaylistsSeed.Studios = [];
     runtime.libraryScanHost.adoptRootInitialization({ aggregateFolder: null, playlistsFolder: replacementPlaylistsSeed,
       freshAggregateFolder: false, freshPlaylistsFolder: true });
@@ -131,13 +138,16 @@ for (const separateData of [false, true]) test(`postgres: initialized playlists 
     assert.equal(relocatedPlaylists.DateLastSaved, committedPlaylists.DateLastSaved);
     assert.deepEqual(relocatedPlaylists.Studios, [], 'A committed repair delta preserves unrelated live metadata.');
     assert.equal(copyNativeItemRepositoryFrame(relocatedPlaylists, committedPlaylists), relocatedPlaylists);
-  } finally {
+  } catch (error) { primary = error; throw error; }
+  finally {
     const errors = [];
-    for (const cleanup of [() => runtime?.close(), () => dropPostgresTestDatabase(database), async () => {
+    for (const cleanup of [async () => { phase('final runtime close'); await runtime?.close(); phase('final runtime closed'); },
+      () => dropPostgresTestDatabase(database), async () => {
       assert.equal(path.dirname(temporary), os.tmpdir());
       assert.ok(path.basename(temporary).startsWith('mm-root-platform-'));
       await rm(temporary, { recursive: true, force: true });
-    }]) try { await cleanup(); } catch (error) { errors.push(error); }
-    if (errors.length) throw new AggregateError(errors, 'Platform root fixture cleanup failed.');
+    }]) try { await cleanup(); } catch (error) { if (error !== primary) errors.push(error); }
+    if (errors.length) throw new AggregateError(primary ? [primary, ...errors] : errors,
+      primary?.message ?? 'Platform root fixture cleanup failed.', primary ? { cause: primary } : undefined);
   }
 });
