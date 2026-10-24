@@ -50,6 +50,7 @@ async function setup(t, { infos = [], files = {}, configuration = { ContentTypes
   return { root, views, directory, data, calls, errors, optionsById, optionsStore, options, service, lifecycle, monitor, configuration };
 }
 const actions = state => state.calls.map(call => call.action);
+const missingLibrary = error => error.status === 404 || ['ENOENT', 'not-found'].includes(error.code);
 
 test('media-path addition writes colliding shortcuts before appending options and preserves duplicate paths', async t => {
   const state = await setup(t, { infos: [{ Path: mediaA }], files: { 'A.mblink': mediaA },
@@ -178,12 +179,22 @@ test('recursive path removal skips a denied directory realpath without hiding ot
 test('path mutations reject host media and escaped library names before changing files', async t => {
   const state = await setup(t), localMedia = path.join(state.root, 'host-media'); await fs.mkdir(localMedia);
   await assert.rejects(state.service.addMediaPath('Library', { Path: localMedia }), { status: 404 });
-  for (const name of ['../Library', '..\\Library', '.', '..', '', ' ', 'Library.', 'Library ', 'Z:Library', 'bad\0name']) {
-    await assert.rejects(state.service.addMediaPath(name, { Path: mediaA }), { status: 404 });
-    await assert.rejects(state.service.updateMediaPath(name, {}), { status: 404 });
-    await assert.rejects(state.service.removeMediaPath(name, mediaA), { status: 404 });
+  const unsupported = process.platform === 'win32' ? [] : ['..\\Library', 'Z:Library'];
+  for (const name of ['../Library', '.', '..', '', ' ', 'Library.', 'Library ', 'bad\0name',
+    ...(process.platform === 'win32' ? ['..\\Library', 'Z:Library'] : [])]) {
+    await assert.rejects(state.service.addMediaPath(name, { Path: mediaA }), missingLibrary);
+    await assert.rejects(state.service.updateMediaPath(name, {}), missingLibrary);
+    await assert.rejects(state.service.removeMediaPath(name, mediaA), missingLibrary);
+  }
+  // These are literal host names on POSIX; the storage namespace rejects
+  // their backslash/colon before any file operation can escape its mapping.
+  for (const name of unsupported) {
+    await assert.rejects(state.service.addMediaPath(name, { Path: mediaA }), { code: 'invalid-path' });
+    await assert.rejects(state.service.updateMediaPath(name, {}), { code: 'invalid-path' });
+    await assert.rejects(state.service.removeMediaPath(name, mediaA), { code: 'invalid-path' });
   }
   assert.deepEqual(actions(state), []); assert.deepEqual(await fs.readdir(localMedia), []);
+  assert.deepEqual(await fs.readdir(state.views), ['Library']);
 });
 
 test('media-path operations reject escaped directory and shortcut junctions', async t => {
@@ -283,7 +294,9 @@ test('virtual-folder stop failure skips finally and validation failure replaces 
 test('virtual-folder removal rejects missing and unsafe names without stopping the monitor', async t => {
   const state = await setup(t);
   for (const name of [null, '', ' ']) await assert.rejects(state.service.removeVirtualFolder(name), { status: 400 });
-  for (const name of ['Missing', '../Library', '..\\Library', '.', '..', 'Library.', 'Library ', 'bad\0name']) await assert.rejects(state.service.removeVirtualFolder(name), { status: 404 });
+  for (const name of ['Missing', '../Library', '.', '..', 'Library.', 'Library ', 'bad\0name',
+    ...(process.platform === 'win32' ? ['..\\Library'] : [])]) await assert.rejects(state.service.removeVirtualFolder(name), missingLibrary);
+  if (process.platform !== 'win32') await assert.rejects(state.service.removeVirtualFolder('..\\Library'), { code: 'invalid-path' });
   assert.deepEqual(actions(state), []); assert.equal((await fs.stat(state.directory)).isDirectory(), true);
 });
 

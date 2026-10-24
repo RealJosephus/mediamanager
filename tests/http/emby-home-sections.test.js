@@ -8,6 +8,7 @@ import { createRuntime } from '../../src/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { nativeGuid, wireGuid } from '../../src/users/native.js';
 import { homeSectionClient, homeSectionItemId } from '../../src/users/emby-home-sections.js';
+import { clearFolderChildIds } from '../../src/library/folder-cache.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 
 const bytes = await readFile(new URL('./fixtures/emby-home-sections/reference.json', import.meta.url));
@@ -58,6 +59,8 @@ test('Emby home section layouts preserve scoped edits, generated identities, dis
     postgresTestRow('BaseItems', { Id: ids.folder, Type: 'MediaBrowser.Controller.Entities.Folder', Name: 'Audio files', IsFolder: true,
       TopParentId: ids.folder, Data: '{}', PresentationUniqueKey: ids.folder }),
   ]);
+  clearFolderChildIds(userRoot);
+  runtime.libraryScanHost.invalidateChildren(userRoot);
   const policy = (await runtime.users.getUser(source.Id)).Policy;
   await runtime.users.updatePolicy(source.Id, { ...policy, EnableAllFolders: false, EnabledFolders: [ids.collection] });
   const map = new Map([[reference.source.identities.reader, source.Id], [reference.source.identities.other, target.Id],

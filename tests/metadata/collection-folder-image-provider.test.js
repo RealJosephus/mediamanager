@@ -9,6 +9,7 @@ import { withCollectionFolderImageCandidates } from '../../src/library/collectio
 import { createCollectionFolderImagePlugin } from '../../src/metadata/collection-folder-image-provider.js';
 import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { ItemUpdateType } from '../../src/metadata/save-manager.js';
+import { clearFolderChildIds } from '../../src/library/folder-cache.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
@@ -58,7 +59,9 @@ async function fixture(t) {
     }));
     await database.insert('BaseItems', itemRow(number, 'CollectionFolder', { ParentId: userRoot.Id, Path: folderPath,
       Data: JSON.stringify({ CollectionType, PhysicalFolderIds: [physicalId] }) }));
-    // Fixture inserts bypass ItemCreation and its live-root child invalidation.
+    // Direct fixture inserts bypass the normal root metadata refresh, which
+    // clears the root's ID snapshot as well as its materialized children.
+    clearFolderChildIds(userRoot);
     runtime.libraryScanHost.invalidateChildren(userRoot);
     return { Id: id(number), Type: 'CollectionFolder', Name: 'Library ' + number, CollectionType, physicalId };
   };
