@@ -1,7 +1,8 @@
 import { nativeTextSql } from '../../src/database/native-text-sql.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -569,6 +570,10 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       const originalWithConnection = database.withConnection;
       const instrumentedClients = new WeakSet();
       const observedResults = new WeakSet();
+      const genreSqlCounts = new Map(), explainedGenreSql = new Set();
+      const genreSqlScope = new AsyncLocalStorage();
+      let genreLookupOrdinal = 0;
+      const recordGenreSql = value => process.stderr.write('[postgres-play-query-sql] ' + JSON.stringify(value) + '\n');
       database.withConnection = function instrumentPlaybackQuery(operation, options) {
         return originalWithConnection.call(this, async session => {
           const client = session.client;
@@ -576,13 +581,42 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
           instrumentedClients.add(client);
           const originalQuery = client.query;
           client.query = async function instrumentQuery(...args) {
-            const result = await originalQuery.apply(this, args);
-            if (observedResults.has(result)) return result;
-            observedResults.add(result);
             const request = args[0];
             const sql = typeof request === 'string' ? request : request?.text ?? '';
             const values = typeof request === 'string' ? args[1] : request?.values;
+            if (/^\s*EXPLAIN\b/iu.test(sql)) return originalQuery.apply(this, args);
+            const sample = genreSqlScope.getStore();
+            const sampledGenre = sample?.active ? sample.ordinal : null, queryStarted = performance.now();
+            const result = await originalQuery.apply(this, args);
+            const durationMs = Math.round(performance.now() - queryStarted);
+            if (observedResults.has(result)) return result;
+            observedResults.add(result);
             const rows = Array.isArray(result?.rows) ? result.rows : [];
+            const keyQuery = /navigation-root-ids|page-relationship-graph|native-item-batch-order/u.test(sql);
+            if (sampledGenre && (keyQuery || durationMs >= 50) && (genreSqlCounts.get(sampledGenre) ?? 0) < 24) {
+              genreSqlCounts.set(sampledGenre, (genreSqlCounts.get(sampledGenre) ?? 0) + 1);
+              const observation = { genreOrdinal: sampledGenre,
+                label: sql.match(/\/\* ([a-z-]+) \*\//u)?.[1] ?? sql.trimStart().split(/\s/u, 1)[0],
+                durationMs, sqlSha256: createHash('sha256').update(sql).digest('hex'), parameterCount: values?.length ?? 0,
+                rows: rows.length };
+              recordGenreSql(observation);
+              if (durationMs >= 250 && explainedGenreSql.size < 2 && !explainedGenreSql.has(observation.sqlSha256)
+                && /^\s*(?:\/\*[\s\S]*?\*\/\s*)?(?:SELECT|WITH)\b/iu.test(sql)
+                && !/\b(?:INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TRUNCATE)\b/iu.test(sql)) {
+                explainedGenreSql.add(observation.sqlSha256);
+                const explained = await originalQuery.call(this, { text: 'EXPLAIN (FORMAT JSON) ' + sql, values });
+                const document = explained.rows[0]?.['QUERY PLAN']?.[0], nodes = [], pending = [document?.Plan];
+                while (pending.length && nodes.length < 64) {
+                  const node = pending.shift(); if (!node) continue;
+                  nodes.push({ type: node['Node Type'], relation: node['Relation Name'], index: node['Index Name'],
+                    rows: node['Plan Rows'], startupCost: node['Startup Cost'], totalCost: node['Total Cost'] });
+                  pending.push(...(node.Plans ?? []));
+                }
+                recordGenreSql({ genreOrdinal: sampledGenre, label: 'slow-read-explain', sqlSha256: observation.sqlSha256,
+                  nodes, truncated: pending.length > 0,
+                  jit: document?.JIT && { functions: document.JIT.Functions, options: document.JIT.Options } });
+              }
+            }
             maximumRowsReturned = Math.max(maximumRowsReturned, rows.length);
             if (sql.includes('random()') && values?.includes(200)) sawRandomLimit = true;
             const recursive = sql.includes('WITH RECURSIVE closure("Id") AS')
@@ -614,8 +648,13 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
       const createdGenres = [];
       const genreFailures = [], getMusicGenre = runtime.library.getMusicGenre.bind(runtime.library);
       runtime.library.getMusicGenre = async name => {
-        try { return await getMusicGenre(name); }
-        catch (error) { genreFailures.push({ name, message: error.message, code: error.code }); throw error; }
+        const ordinal = ++genreLookupOrdinal;
+        const sample = ordinal <= 2 ? { ordinal, active: true } : null;
+        return genreSqlScope.run(sample, async () => {
+          try { return await getMusicGenre(name); }
+          catch (error) { genreFailures.push({ name, message: error.message, code: error.code }); throw error; }
+          finally { if (sample) sample.active = false; }
+        });
       };
       const observeGenre = ({ Item }) => {
         if (Item.Type !== 'MusicGenre') return;

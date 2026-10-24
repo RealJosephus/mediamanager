@@ -352,16 +352,20 @@ export async function loadPostgresNavigationRows(database, parentId, {
 } = {}) {
   const baseItems = qualified(database, 'BaseItems');
   const loadRows = deferBaseItemHydration ? loadPostgresDiscoveryRowsByIds : loadPostgresRowsByIds;
+  const sql = nativeTextSql(database.schemaName);
+  const leafType = alias => `substring(${sql.projection(`${alias}."Type"`)} from '[^.]+$')`;
   const ids = await itemIds(database,
-    `SELECT "Id" FROM ${baseItems} item
-     WHERE substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = ANY($1::text[])
-       OR EXISTS (
-         SELECT 1 FROM ${baseItems} root
-         WHERE (substring(${nativeTextSql(database.schemaName).projection("root.\"Type\"")} from '[^.]+$') = 'UserRootFolder'
-           OR substring(${nativeTextSql(database.schemaName).projection("root.\"Type\"")} from '[^.]+$') = 'AggregateFolder'
-             AND substring(${nativeTextSql(database.schemaName).projection("item.\"Type\"")} from '[^.]+$') = 'Folder')
-           AND replace(${nativeTextSql(database.schemaName).guidLower("root.\"Id\"")}, '-', '') = replace(${nativeTextSql(database.schemaName).guidLower("item.\"ParentId\"")}, '-', '')
-       )`,
+    `/* navigation-root-ids */
+     WITH roots AS MATERIALIZED (
+       SELECT root."Id", ${leafType('root')} AS "Type"
+       FROM ${baseItems} root
+       WHERE ${leafType('root')} = ANY(ARRAY['UserRootFolder', 'AggregateFolder']::text[])
+     )
+     SELECT item."Id" FROM ${baseItems} item WHERE ${leafType('item')} = ANY($1::text[])
+     UNION
+     SELECT child."Id" FROM roots root
+     JOIN ${baseItems} child ON ${sql.guidKey('child."ParentId"')} = ${sql.guidKey('root."Id"')}
+     WHERE root."Type" = 'UserRootFolder' OR ${leafType('child')} = 'Folder'`,
     [NAVIGATION_TYPES]);
   if (nonemptyId(parentId)) ids.push(parentId);
 

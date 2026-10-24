@@ -191,7 +191,7 @@ export function createMetadataContextLoader({ store, library, fileSystem = libra
       if (!parent) break;
       parents.push(parent); parentId = parent.ParentId;
     }
-    const collectionFolders = await library.getCollectionFolders(item);
+    const collectionFolders = await library.getCollectionFolders(item, state);
     const optionsByLibrary = library.options.libraryOptions;
     const libraryFolder = item.Type === 'CollectionFolder' ? item : collectionFolders.find(entry => entry.Type === 'CollectionFolder');
     const libraryOptions = libraryFolder && (optionsByLibrary instanceof Map ? optionsByLibrary.get(idKey(libraryFolder.Id)) : optionsByLibrary[idKey(libraryFolder.Id)])

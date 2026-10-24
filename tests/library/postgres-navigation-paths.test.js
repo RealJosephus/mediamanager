@@ -67,6 +67,33 @@ test('single-item loaders exclude unrelated user views and collection members', 
   for (const mode of ['page', 'item', 'metadata']) await t.test(`ancestor context: ${mode}`, () => check(mode));
 });
 
+test('navigation includes every user-root child and only ordinary aggregate Folder children', postgresOptions, async t => {
+  const database = await createPostgresTestDatabase(t, 'navigation_roots');
+  const ids = Object.fromEntries(['userRoot', 'aggregate', 'collection', 'userMovie', 'userView',
+    'physical', 'aggregateMovie', 'aggregateAlbum', 'unrelated'].map(name => [name, randomUUID().toUpperCase()]));
+  await database.insertBatch('BaseItems', [
+    item(ids.userRoot, 'UserRootFolder'), item(ids.aggregate, 'AggregateFolder'),
+    item(ids.collection, 'CollectionFolder', { ParentId: key(ids.userRoot) }),
+    item(ids.userMovie, 'Movies.Movie', { ParentId: key(ids.userRoot), IsFolder: false, MediaType: 'Video' }),
+    item(ids.userView, 'UserView', { ParentId: key(ids.userRoot) }),
+    item(ids.physical, 'Folder', { ParentId: key(ids.aggregate) }),
+    item(ids.aggregateMovie, 'Movies.Movie', { ParentId: key(ids.aggregate), IsFolder: false, MediaType: 'Video' }),
+    item(ids.aggregateAlbum, 'PhotoAlbum', { ParentId: key(ids.aggregate) }),
+    item(ids.unrelated, 'Folder'),
+  ]);
+  const before = await database.rows('BaseItems');
+  const expected = ['userRoot', 'aggregate', 'collection', 'userMovie', 'userView', 'physical'].map(name => key(ids[name])).sort();
+  for (const deferBaseItemHydration of [false, true]) {
+    const selected = await loadPostgresNavigationRows(database, undefined, { deferBaseItemHydration });
+    assert.deepEqual(selected.map(row => key(row.Id)).sort(), expected,
+      'overlapping type and child membership yields one row, with N/D parent IDs compared as GUIDs');
+    const explicit = await loadPostgresNavigationRows(database, ids.aggregateMovie, { deferBaseItemHydration });
+    assert.deepEqual(explicit.map(row => key(row.Id)).sort(), [...expected, key(ids.aggregateMovie)].sort(),
+      'an explicit target remains part of its navigation frame');
+  }
+  assert.deepEqual(await database.rows('BaseItems'), before, 'navigation reads preserve every persisted field');
+});
+
 test('real PostgreSQL navigation resolves native-equivalent physical paths without broad folder reads',
   postgresOptions, async t => {
     const database = await createPostgresTestDatabase(t, 'navigation_paths', { max: 2 });
