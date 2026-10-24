@@ -427,3 +427,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/photo-album-cover-current/** -text
 /tests/metadata/fixtures/book-comic-current/** -text
 /tests/metadata/fixtures/book-comic/current-profile.json text eol=lf
+/tests/metadata/fixtures/book-runtime-current/** -text

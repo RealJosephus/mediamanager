@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "fixture": "book-comic-current",
+  "scope": "Same-run designated Native Comic metadata/readers and archive covers, repeated independently; six actual native saved-image/SQLite consumers and Node VFS/PG consumers. Complete original 103 metadata inputs and 44 cover cases retain selected bytes, persisted image values, source inputs and operation cleanup. CLR error names, messages and logs are diagnostics. Historical recordings remain unchanged; component evidence does not claim hosted HTTP takeover, complete instances or release acceptance.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Book.cs",
+    "MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+    "MediaBrowser.Controller/Providers/MetadataResult.cs",
+    "MediaBrowser.Providers/Books/ComicProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ExternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ComicInfoReader.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoMetadata.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoCredit.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoFormat.cs",
+    "MediaBrowser.Providers/Books/ComicImageProvider.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/ItemImageProvider.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "src/Jellyfin.Drawing/ImageProcessor.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "../book-comic-current/input.json",
+      "bytes": 26790,
+      "sha256": "9ea8c874cda2eed6778f86ada5a8c3accc726cfc2659de0d46ba36fd3dc72f59"
+    },
+    {
+      "role": "assetManifest",
+      "filename": "../book-comic-current/assets.json",
+      "bytes": 4465,
+      "sha256": "ed54bc5caadf4780e5c0f48c3ad266fb28989f4a6efa6e0d2d18aed8d796108a"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "../book-comic-current/Program.cs",
+      "bytes": 17449,
+      "sha256": "ce9dc21a48470d66b8254ffcb888cc951eb5b08cd6eb225bc66585c60ef8bf24"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "../book-comic-current/Oracle.csproj",
+      "bytes": 410,
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+    },
+    {
+      "role": "imageConsumerSource",
+      "filename": "../book-comic-current/image-consumer/Program.cs",
+      "bytes": 11290,
+      "sha256": "482ea5db4be2165ee50b92b8f0b2ab47418c1b5a5f4f717fbd33f95b8b43256f"
+    },
+    {
+      "role": "imageConsumerProject",
+      "filename": "../book-comic-current/image-consumer/Oracle.csproj",
+      "bytes": 2250,
+      "sha256": "b21b0bd297d30306a38716f3f23a239110c3a3bc21eb6f2b865222b4df91cd26"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "asset",
+      "filename": "../../../images/fixtures/splashscreen/assets/portrait.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "role": "asset",
+      "filename": "../../../images/fixtures/splashscreen/assets/portrait.jpg",
+      "bytes": 58678,
+      "sha256": "06d6d19fa38d5eb72a97c843ee747d7fd434ee3859c4bee4b63051468b76c0e5"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar.rar",
+      "bytes": 60029,
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.rar",
+      "bytes": 60066,
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.solid.rar",
+      "bytes": 60046,
+      "sha256": "3043d68c5a81f46adcbb5393632d243944ead44eb383a677ac82e68afdde27cf"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.encrypted_filesAndHeader.rar",
+      "bytes": 60686,
+      "sha256": "63fc4b5576f7482311e950155607e171696588881bdd277c8c099efd2f98b6e2"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar.encrypted_filesOnly.rar",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/7Zip.LZMA2.7z",
+      "bytes": 58970,
+      "sha256": "9dc21162eaa4cc0aad74a847cdbe5b8d2cf75a86e84e4db8928e150f44b28bf1"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/7Zip.solid.7z",
+      "bytes": 58959,
+      "sha256": "3c336bf14bef2dc998b548a304c0c07c9c9da899f90e426a965a5f322e232b53"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Tar.tar.gz",
+      "bytes": 61273,
+      "sha256": "ce260029fc3b57e86d9d1f45f1349124f313ba55ced6da101bcac2b9abd76df5"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Tar.tar.Z",
+      "bytes": 90939,
+      "sha256": "3cd8143b4f9b0897c7fd58f65d2c39714a88af1fff9edbd5aa73d146c21a989c"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/large_test.txt.Z",
+      "bytes": 5348,
+      "sha256": "aeff63b3be32bd898d84dfa8564053ab4fbc86baf4ea865546789293f71437bb"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    },
+    {
+      "role": "codecArtifact",
+      "filename": "../../../../src/storage/resources/archive-codec.mjs",
+      "bytes": 14654,
+      "sha256": "ed4e0fd0d4e40c46c0fc2581b41cce7f169a21eff4312e68daf10840f8d600c8"
+    },
+    {
+      "role": "codecArtifact",
+      "filename": "../../../../src/storage/resources/archive-codec.wasm",
+      "bytes": 363215,
+      "sha256": "29500511ab901881802d1819f3f334cfe8f9881db495c83237e12ab2012c2d86"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec.c",
+      "bytes": 4913,
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar4.patch",
+      "bytes": 5083,
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.c",
+      "bytes": 130247,
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-notice.txt",
+      "bytes": 3368,
+      "sha256": "036ba25888546e5efc1c4af69218c10d9336d9f7e62d6eb411babbab00f249cc"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-licenses.txt",
+      "bytes": 351036,
+      "sha256": "413f1dfd71e5ef0b96c1bdf94098a96407faa1cd5acad83a227021bbb39717c4"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/SharpCompress.LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 # Comic book metadata and archive covers
 
+Current provider, cover and saved-image tests use the
+[same-run capture](../book-comic-current/README.md) and `current-profile.json`.
+The recordings and provenance described below remain historical inputs with
+their original identities.
+
 `native.json` is copied byte for byte from `book-comic-native-5`. It contains 412 metadata observations (103 inputs through each of the actual ComicBookInfo, external ComicInfo, internal ComicInfo, and composite providers), plus 44 actual ComicImageProvider archive cases. The oracle executes the new designated-source build; its identity is distinct from the retained older reference build.
 
 The metadata matrix covers reader precedence, exact XML names and namespaces, whitespace, entities, byte encodings, dates, language conversion, JSON scalar conversion and duplicate properties, credits, lookup errors, and cancellation. Archive cases cover actual ZIP, TAR, 7z, RAR4/RAR5, solid/encrypted RAR, GZip and rejected inputs, entry ordering, duplicate entries, Unicode Path extras, and original selected stream bytes. A ZIP stored under a CBR filename is explicitly a payload-detection case; it is not presented as genuine RAR evidence.

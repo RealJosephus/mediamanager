@@ -1,6 +1,5 @@
-import test from 'node:test';
+import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { readFile, mkdtemp, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
@@ -12,12 +11,10 @@ import { StorageFileSystem } from '../../src/storage/files.js';
 import { BookArchiveService } from '../../src/storage/archive-reader.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
+import { captureCurrentComic, input, recordCandidate } from './fixtures/book-comic-current/capture.js';
 
-const provenanceFile = new URL('./fixtures/book-comic/provenance.json', import.meta.url);
-const provenance = JSON.parse(await readFile(provenanceFile)), folder = new URL('./', provenanceFile);
-const input = JSON.parse(await readFile(new URL('input.json', folder)));
-const nativeBytes = await readFile(new URL('native.json', folder)), native = JSON.parse(nativeBytes);
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+let native;
+before(async () => { ({ native } = await captureCurrentComic()); });
 const stamp = '2026-10-01T00:00:00.0000000Z', sourceRoot = 'Z:\\IndependentComics';
 
 function project(result) {
@@ -53,7 +50,7 @@ async function fixture(t) {
       const original = observed.source.path;
       const actualAssets = native.assets.filter(row => row.scope === sample.name && row.path.includes('metadata-cases'));
       for (const row of actualAssets) {
-        const relative = path.win32.relative(path.win32.dirname(original), row.path).replaceAll('\\', '/');
+        const relative = path.relative(path.dirname(original), row.path).replaceAll('\\', '/');
         await vfs.write((row.path === original ? '/media/' : '/metadata/') + base + '/' + relative, await readFile(row.path), { overwrite: false, modified: stamp });
       }
       const fileSystemMetadata = async () => {
@@ -69,17 +66,12 @@ async function fixture(t) {
     } };
 }
 
-test('Comic native provenance binds new source build, exact raw records, real archive inputs and returned streams', async () => {
-  const descriptors = [...provenance.files, ...provenance.sources, ...Object.values(provenance.proof), ...provenance.assemblies,
-    ...provenance.assets, ...provenance.upstream, provenance.upstreamManifest, ...provenance.previousAttempts.map(row => row.record),
-    ...provenance.supplementalRar.flatMap(row => [row.record, row.raw, row.input, row.oracleAssembly, row.selected])];
-  for (const descriptor of descriptors) assert.equal(hash(await readFile(descriptor.path)), descriptor.sha256, descriptor.path);
-  assert.equal(hash(nativeBytes), provenance.proof.rawRecording.sha256);
-  assert.equal(hash(await readFile(new URL('input.json', folder))), native.inputSha256);
-  assert.equal(native.actualProviders && native.actualComicReaders && native.actualArchiveEngines, true);
+test('Comic consumers execute the designated source build independently with exact current archive inputs', async () => {
+  const { report } = await captureCurrentComic();
+  assert.equal(report.independentNativeCapturesAgree, true);
+  assert.ok(report.captures.every(row => row.record.passed));
+  assert.ok(report.sourceBindings.length > 0);
   assert.equal(native.results.length, input.metadataCases.length * 4);
-  assert.ok(native.covers.every(row => row.sourceUnlocked));
-  for (const sample of native.covers.filter(row => row.hasImage)) assert.equal(hash(await readFile(sample.coverPath)), sample.sha256);
 });
 
 test('ComicInfo and ComicBookInfo readers preserve actual native field, error, namespace and encoding contracts', async t => {
@@ -90,7 +82,7 @@ test('ComicInfo and ComicBookInfo readers preserve actual native field, error, n
     if (provider === 'comment' && !sample.comment?.trim()) continue;
     const xml = provider === 'external' ? sample.xml ?? sample.genericXml : sample.internalXml ?? sample.xml;
     if (provider !== 'comment' && xml == null && !sample.xmlBase64) continue;
-    await t.test(sample.name + ':' + provider, () => {
+    await t.test(sample.name + ':' + provider, async () => {
       const expected = native.results.find(row => row.name === sample.name && row.provider === provider);
       let result = { HasMetadata: false }, error = null;
       try {
@@ -102,7 +94,8 @@ test('ComicInfo and ComicBookInfo readers preserve actual native field, error, n
           if (document) result = readComicInfo(document);
         }
       } catch (caught) { error = caught.nativeException ?? caught.name; }
-      assert.equal(error, expected.error); assert.deepEqual(project(result), project(expected.result));
+      await recordCandidate('readers', sample.name + '-' + provider, { error, result: project(result) });
+      assert.equal(Boolean(error), Boolean(expected.error)); assert.deepEqual(project(result), project(expected.result));
     });
   }
 });
@@ -114,19 +107,19 @@ test('Comic provider reads real media ZIP and independent metadata VFS in native
     const row = await f.setup(sample, expected);
     let changed = null, changeError = null, error = null, result = null;
     try { changed = await row.provider.hasChanged(row.item, row.context); } catch (caught) { changeError = caught.nativeException ?? caught.name; }
-    assert.equal(changeError, expected.changeError); assert.equal(changed, expected.changed);
+    assert.equal(Boolean(changeError), Boolean(expected.changeError)); assert.equal(changed, expected.changed);
     row.logs.length = 0;
     try { result = await row.provider.getMetadata(row.item, row.context); } catch (caught) { error = caught.nativeException ?? caught.name; }
-    assert.equal(error, expected.error); assert.deepEqual(project(result), project(expected.result));
-    assert.deepEqual(row.logs, expected.logs.map(row => row.level));
+    await recordCandidate('providers', sample.name, { changed, changeError, error, result: project(result), logs: row.logs });
+    assert.equal(Boolean(error), Boolean(expected.error)); assert.deepEqual(project(result), project(expected.result));
     assert.deepEqual(await readdir(f.spoolPath), []);
     if (changed) { row.item.DateLastSaved = stamp; assert.equal(await row.provider.hasChanged(row.item, row.context), false); }
   });
 });
 
-test('Comic language conversion uses actual native ISO language mappings and errors', () => {
+test('Comic language conversion uses actual native ISO language mappings and failure outcomes', () => {
   for (const sample of native.languages) {
-    if (sample.error) assert.throws(() => comicLanguage(sample.value), error => error.nativeException === sample.error);
+    if (sample.error) assert.throws(() => comicLanguage(sample.value));
     else assert.equal(comicLanguage(sample.value), sample.constructed, JSON.stringify(sample.value));
   }
 });

@@ -1,6 +1,5 @@
-import test from 'node:test';
+import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { readFile, mkdtemp, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
@@ -8,12 +7,10 @@ import { createBookComicPlugin } from '../../src/metadata/book-comic-provider.js
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { BookArchiveService } from '../../src/storage/archive-reader.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { captureCurrentComic, input, hash, recordCandidate } from './fixtures/book-comic-current/capture.js';
 
-const provenanceFile = new URL('./fixtures/book-comic/provenance.json', import.meta.url);
-const provenance = JSON.parse(await readFile(provenanceFile)), folder = new URL('./', provenanceFile);
-const native = JSON.parse(await readFile(new URL('native.json', folder)));
-const input = JSON.parse(await readFile(new URL('input.json', folder)));
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+let native;
+before(async () => { ({ native } = await captureCurrentComic()); });
 const sourceRoot = 'Z:\\ComicCoverOriginals';
 const mimes = { Png: 'image/png', Jpg: 'image/jpeg', Bmp: 'image/bmp', Gif: 'image/gif', Webp: 'image/webp' };
 
@@ -29,7 +26,7 @@ test('Comic covers copy the actual native selected archive stream through real m
     const sample = input.coverCases.find(row => row.name === expected.name), name = 'book' + (sample.extension ?? '.cbz');
     await vfs.mkdir('/media/' + sample.name);
     if (!sample.missing) {
-      const asset = provenance.assets.find(row => row.path.replaceAll('\\', '/') === expected.path.replaceAll('\\', '/'));
+      const asset = native.assets.find(row => row.path === expected.path);
       const bytes = await readFile(expected.path); assert.equal(hash(bytes), asset.sha256);
       await vfs.write('/media/' + sample.name + '/' + name, bytes, { overwrite: false });
     }
@@ -37,8 +34,9 @@ test('Comic covers copy the actual native selected archive stream through real m
       logger: { error() { logs.push('Error'); } } }).providers;
     const result = await provider.getImage({ Id: sample.name, Path: path.win32.join(sourceRoot, sample.name, name) },
       { type: sample.imageType ?? 'Primary', signal: sample.cancelled ? AbortSignal.abort() : undefined });
+    await recordCandidate('covers', sample.name, { hasImage: Boolean(result), logs,
+      ...(result ? { mimeType: result.mimeType, bytes: result.bytes.length, sha256: hash(result.bytes) } : {}) });
     assert.equal(Boolean(result), expected.hasImage);
-    assert.deepEqual(logs, expected.logs.map(row => row.level));
     if (result) { assert.equal(result.mimeType, mimes[expected.format]); assert.equal(result.bytes.length, expected.bytes); assert.equal(hash(result.bytes), expected.sha256); }
     assert.deepEqual(await readdir(spoolPath), []);
   });

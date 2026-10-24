@@ -9,9 +9,9 @@ import sharp from 'sharp';
 import { createRuntime } from '../../src/runtime.js';
 import { dateTicks } from '../../src/library/records.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestRow } from '../database/postgres-fixture.js';
+import { captureCurrentComic, recordCandidate } from './fixtures/book-comic-current/capture.js';
+import { captureCurrentNative as captureCurrentOpf, assetBytes, manifest as opfManifest } from './fixtures/book-opf-current/capture.js';
 
-const provenance = new URL('./fixtures/book-opf-epub/provenance.json', import.meta.url);
-const fixture = new URL('.', provenance);
 const id = 'ee410000-0000-0000-0000-000000000001';
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
@@ -46,8 +46,9 @@ test('Book runtime reads the explicitly mapped original EPUB and saves its metad
   await bind(root, 'book-metadata', 'metadata');
   const originalAccess = storage.identityMap.resolve({ identityPath: originalPath, style: 'windows' });
   const parentAccess = storage.identityMap.resolve({ identityPath: itemPath, style: 'windows' });
-  const original = await readFile(new URL('assets/epub/rich-with-cover.epub', fixture));
-  const native = JSON.parse(await readFile(new URL('native.json', fixture))).epubResults.find(value => value.name === 'rich-with-cover');
+  const original = await assetBytes('main', opfManifest.groups.main.assets.find(entry => entry.path === 'epub/rich-with-cover.epub'));
+  const { native: opfNative } = await captureCurrentOpf();
+  const native = opfNative.groups.main.epubResults.find(value => value.name === 'rich-with-cover');
   const parentDecoy = Buffer.from('Parent media decoy.');
   const metadataDecoy = Buffer.from('Independent metadata decoy.');
   await storage.vfs.write(originalAccess, original);
@@ -92,8 +93,8 @@ test('Book runtime reads the explicitly mapped original EPUB and saves its metad
   assert.deepEqual(await readdir(path.join(programDataPath, 'cache', 'book-archives')), []);
 });
 
-test('Book runtime persists the actual native independent RAR cover streams and zero-size image rows', async t => {
-  const consumer = JSON.parse(await readFile(new URL('./fixtures/book-comic/image-consumer/native.json', import.meta.url)));
+test('Book runtime persists the current native independent RAR cover streams and zero-size image rows', async t => {
+  const { consumer } = await captureCurrentComic();
   const directory = await mkdtemp(path.join(os.tmpdir(), 'book-runtime-'));
   const database = await createPostgresTestDatabase(null, 'book_runtime_rar');
   let runtime;
@@ -138,6 +139,10 @@ test('Book runtime persists the actual native independent RAR cover streams and 
     assert.equal(image.Width, nativeImage.Width); assert.equal(image.Height, nativeImage.Height);
     assert.equal(Buffer.from(image.Blurhash ?? '').toString('utf8'), nativeImage.BlurHash);
     const bytes = await runtime.fileSystem.readFile(image.Path);
+    await recordCandidate('runtime', name, { refreshed: { Failures: refreshed.Failures },
+      sourceSha256: digest(source), image: { Path: image.Path, Width: image.Width, Height: image.Height,
+        ImageType: image.ImageType, Blurhash: Buffer.from(image.Blurhash ?? '').toString('utf8') },
+      saved: { bytes: bytes.length, sha256: digest(bytes) } });
     assert.equal(bytes.length, expected.selected.bytes); assert.equal(digest(bytes), expected.selected.sha256);
     assert.deepEqual(bytes, await readFile(expected.files[0].path));
     const handle = await storage.vfs.openRead(access);

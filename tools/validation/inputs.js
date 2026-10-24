@@ -61,6 +61,9 @@ const executionManifests = new Map([
   ['tests/library/postgres-collection-maintenance.test.js', ['current-oracle', 'tests/library/fixtures/collection-source/current-profile.json']],
   ['tests/library/book-photo-global.test.js', ['current-oracle', 'tests/library/fixtures/book-photo-global/current-profile.json']],
   ['tests/metadata/photo-album-provider.test.js', ['current-oracle', 'tests/metadata/fixtures/photo-album-cover-current/current-profile.json']],
+  ...['book-comic-provider', 'book-comic-cover', 'book-comic-provenance']
+    .map(kind => [`tests/metadata/${kind}.test.js`, ['current-oracle', 'tests/metadata/fixtures/book-comic/current-profile.json']]),
+  ['tests/metadata/book-runtime.test.js', ['current-oracle', 'tests/metadata/fixtures/book-runtime-current/current-profile.json']],
   ['tests/core/server-identity.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/core/server-identity-runtime.test.js', ['current-oracle', 'tests/core/fixtures/server-identity/current-profile.json']],
   ['tests/users/native-guid-contract.test.js', ['current-oracle', 'tests/users/fixtures/guid-contract/current-profile.json']],

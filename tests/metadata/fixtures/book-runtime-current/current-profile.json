@@ -1,0 +1,1201 @@
+{
+  "schemaVersion": 1,
+  "scope": "The existing PostgreSQL Book runtime consumers compare the current designated Native EPUB metadata/cover and Comic RAR saved-image streams. Required inputs include both executed current capture matrices, archive codec payload/source/licenses and real assets; historical recordings are not substituted. This focused runtime is not a full instance or release acceptance claim.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Book.cs",
+    "MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+    "MediaBrowser.Controller/Providers/MetadataResult.cs",
+    "MediaBrowser.Providers/Books/ComicProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ExternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ComicInfoReader.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoMetadata.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoCredit.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoFormat.cs",
+    "MediaBrowser.Providers/Books/ComicImageProvider.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/ItemImageProvider.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "src/Jellyfin.Drawing/ImageProcessor.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+    "MediaBrowser.Controller/Entities/PeopleHelper.cs",
+    "Jellyfin.Server/Helpers/StartupHelpers.cs"
+  ],
+  "inputs": [
+    {
+      "role": "comicProfile",
+      "filename": "../book-comic/current-profile.json",
+      "bytes": 8199,
+      "sha256": "45b8a8c1c4111694e5cd6183851e1c5bbb065efabfaabc37bcf4eeab8ac0804d"
+    },
+    {
+      "role": "scenarios",
+      "filename": "../book-comic-current/input.json",
+      "bytes": 26790,
+      "sha256": "9ea8c874cda2eed6778f86ada5a8c3accc726cfc2659de0d46ba36fd3dc72f59"
+    },
+    {
+      "role": "assetManifest",
+      "filename": "../book-comic-current/assets.json",
+      "bytes": 4465,
+      "sha256": "ed54bc5caadf4780e5c0f48c3ad266fb28989f4a6efa6e0d2d18aed8d796108a"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "../book-comic-current/Program.cs",
+      "bytes": 17449,
+      "sha256": "ce9dc21a48470d66b8254ffcb888cc951eb5b08cd6eb225bc66585c60ef8bf24"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "../book-comic-current/Oracle.csproj",
+      "bytes": 410,
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+    },
+    {
+      "role": "imageConsumerSource",
+      "filename": "../book-comic-current/image-consumer/Program.cs",
+      "bytes": 11290,
+      "sha256": "482ea5db4be2165ee50b92b8f0b2ab47418c1b5a5f4f717fbd33f95b8b43256f"
+    },
+    {
+      "role": "imageConsumerProject",
+      "filename": "../book-comic-current/image-consumer/Oracle.csproj",
+      "bytes": 2250,
+      "sha256": "b21b0bd297d30306a38716f3f23a239110c3a3bc21eb6f2b865222b4df91cd26"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "asset",
+      "filename": "../../../images/fixtures/splashscreen/assets/portrait.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "role": "asset",
+      "filename": "../../../images/fixtures/splashscreen/assets/portrait.jpg",
+      "bytes": 58678,
+      "sha256": "06d6d19fa38d5eb72a97c843ee747d7fd434ee3859c4bee4b63051468b76c0e5"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar.rar",
+      "bytes": 60029,
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.rar",
+      "bytes": 60066,
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.solid.rar",
+      "bytes": 60046,
+      "sha256": "3043d68c5a81f46adcbb5393632d243944ead44eb383a677ac82e68afdde27cf"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar5.encrypted_filesAndHeader.rar",
+      "bytes": 60686,
+      "sha256": "63fc4b5576f7482311e950155607e171696588881bdd277c8c099efd2f98b6e2"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Rar.encrypted_filesOnly.rar",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/7Zip.LZMA2.7z",
+      "bytes": 58970,
+      "sha256": "9dc21162eaa4cc0aad74a847cdbe5b8d2cf75a86e84e4db8928e150f44b28bf1"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/7Zip.solid.7z",
+      "bytes": 58959,
+      "sha256": "3c336bf14bef2dc998b548a304c0c07c9c9da899f90e426a965a5f322e232b53"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Tar.tar.gz",
+      "bytes": 61273,
+      "sha256": "ce260029fc3b57e86d9d1f45f1349124f313ba55ced6da101bcac2b9abd76df5"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/Tar.tar.Z",
+      "bytes": 90939,
+      "sha256": "3cd8143b4f9b0897c7fd58f65d2c39714a88af1fff9edbd5aa73d146c21a989c"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/large_test.txt.Z",
+      "bytes": 5348,
+      "sha256": "aeff63b3be32bd898d84dfa8564053ab4fbc86baf4ea865546789293f71437bb"
+    },
+    {
+      "role": "asset",
+      "filename": "../book-comic-current/assets/LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    },
+    {
+      "role": "codecArtifact",
+      "filename": "../../../../src/storage/resources/archive-codec.mjs",
+      "bytes": 14654,
+      "sha256": "ed4e0fd0d4e40c46c0fc2581b41cce7f169a21eff4312e68daf10840f8d600c8"
+    },
+    {
+      "role": "codecArtifact",
+      "filename": "../../../../src/storage/resources/archive-codec.wasm",
+      "bytes": 363215,
+      "sha256": "29500511ab901881802d1819f3f334cfe8f9881db495c83237e12ab2012c2d86"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec.c",
+      "bytes": 4913,
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar4.patch",
+      "bytes": 5083,
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.c",
+      "bytes": 130247,
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-notice.txt",
+      "bytes": 3368,
+      "sha256": "036ba25888546e5efc1c4af69218c10d9336d9f7e62d6eb411babbab00f249cc"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-licenses.txt",
+      "bytes": 351036,
+      "sha256": "413f1dfd71e5ef0b96c1bdf94098a96407faa1cd5acad83a227021bbb39717c4"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/SharpCompress.LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    },
+    {
+      "role": "opfInput",
+      "filename": "../book-opf-current/input.json",
+      "bytes": 84547,
+      "sha256": "4b69f93c194602bfa674bb81283e5f35bbeeaad927164c5104f60e8172fa4b20"
+    },
+    {
+      "role": "opfInput",
+      "filename": "../book-opf-current/Program.cs",
+      "bytes": 12906,
+      "sha256": "30b0f95323b8427599bf13462f4454d363bfa8bee9ffb7b1d38cd18df1972c73"
+    },
+    {
+      "role": "opfInput",
+      "filename": "../book-opf-current/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/archive/duplicate-reversed-central.zip",
+      "bytes": 239,
+      "sha256": "9086e3eae8f69b1b0834023eb584cd59c69214d0283ee98bbc512a5d7ac2d99e"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/archive/local-central-name-mismatch.zip",
+      "bytes": 128,
+      "sha256": "fa7031a1fdcf958c41653823ed068937ad4dab2ef3eb820af8306e7d4be77fe7"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/archive/non-utf8-byte.zip",
+      "bytes": 116,
+      "sha256": "b4821975c0b37dd80b073f2cfb303408e5bb89b8e15f937cde76b8e11d45d643"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/archive/non-utf8-valid-utf8.zip",
+      "bytes": 116,
+      "sha256": "59be18d144860dd9e42b66f09b15fe0254b432c9e1e52ad6adb267bdceccc8e6"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/archive/unicode-path-extra.zip",
+      "bytes": 135,
+      "sha256": "37ec08c360b0524c561de00cd27b597c41fafe01ff67dc8dca1f5133ecc02d5a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/cover.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/all-backslashes.epub",
+      "bytes": 735,
+      "sha256": "8efd97728a6a242903f06dd54fa012fe48a094cf21a04ba1b0cea68c609c631a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/back-container-back-cover.epub",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/back-container-slash-cover.epub",
+      "bytes": 735,
+      "sha256": "efb0034600a15c1ceaaef76c0e91bf007cfc54712663fa24469c774fb3b0275b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cancelled-malformed-opf.epub",
+      "bytes": 557,
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cancelled-missing-container.epub",
+      "bytes": 22,
+      "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cancelled-valid.epub",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/corrupt-zip.epub",
+      "bytes": 17,
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-apostrophe.epub",
+      "bytes": 715,
+      "sha256": "f9ff2d207416c350835f2941bba46b048d0210ab9de9535ba1115b38ddbb46b7"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-first-invalid.epub",
+      "bytes": 739,
+      "sha256": "c95efca46a853be49ad606645b85121839a3623782c43d085f503350095c78fd"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-format-bmp.epub",
+      "bytes": 717,
+      "sha256": "8ccb63ed263312cf9cc0ce978a7c4ef8480ade1729949b21a7dc1d376ad1a007"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-format-gif.epub",
+      "bytes": 716,
+      "sha256": "b252b356e96045a263cc61ff279029829b48409bf8f499c4cac1a38513aa39b1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-format-jpeg.epub",
+      "bytes": 718,
+      "sha256": "c062f852f81a36d2cf9352ab9799b6f4e2d180ef5c8e31981783d2da208bdac4"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-format-png-parameters.epub",
+      "bytes": 725,
+      "sha256": "ce46abcfa4b75e19ccb825cd70a4eadca0f86ea9716d11d10c27ced3f589e983"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-href-dot.epub",
+      "bytes": 734,
+      "sha256": "3a8be76235fafd9a2754b3efd2330f22584e58d3562ac2f4524ae681aed7068b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-href-percent.epub",
+      "bytes": 737,
+      "sha256": "a8fad01e41560b8a339a9955b10af63d81a3049bd65bc68ab4e1b3f66fa0b73a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-id-cover-real-mime.epub",
+      "bytes": 724,
+      "sha256": "13484f0c6a477041836299a07340c140a8db7aa78d2dc7be25476332ba07cdff"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-id-cover-wild-mime.epub",
+      "bytes": 726,
+      "sha256": "99db142b8e31776d64f198b738b46efbe7473267e83341ac948e7f7391fbba06"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-literal-star.epub",
+      "bytes": 731,
+      "sha256": "0b3a90fafa05c822d8b030f0219438f84ee532ac83f5d4c413e09b24a6d3817e"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-meta-id.epub",
+      "bytes": 740,
+      "sha256": "aa0aebb126cc940d4fe7891f512c5e1e64fbebf110be1a57f0cec2e2e452bc25"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-plain-mime.epub",
+      "bytes": 735,
+      "sha256": "581785aa2f3aa9b411707831c70c4e057439ad4750263e0c676fa11bbc6f5e2f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-tokens.epub",
+      "bytes": 736,
+      "sha256": "b8090b4715f0d8d676576559768aba66db72b9b94b25b6f7b64103864e42fc6d"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-unknown-mime.epub",
+      "bytes": 733,
+      "sha256": "9d9610731505f40b11d280390a5a8856bbfbaf5344e472f1251727a417b13e0f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/cover-webp-mime.epub",
+      "bytes": 735,
+      "sha256": "2d7e39ca5f251c74961d36aaabf6d631350f763b1c889332872e6801ddceb988"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/duplicate-container.epub",
+      "bytes": 753,
+      "sha256": "7c163b706c1196ec148626e708f093c7670b63012bd03730a6d9550edc4fef1a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/empty-root-path.epub",
+      "bytes": 1065,
+      "sha256": "e547dd6ea5a4f0d51628a2353d1ad738011f9bcd9bd39c95f7a991d3d5e0ce28"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/first-rootfile-missing.epub",
+      "bytes": 1091,
+      "sha256": "e2ab23ab2650364043e5206c8d560402f054bda1d22a4cd266d718af3f73143a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/malformed-container.epub",
+      "bytes": 989,
+      "sha256": "12f0c43abb3a57b9bb135a1a99bef498a3bbf1b760ab7e3cf9d9e477030f756f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/malformed-opf.epub",
+      "bytes": 557,
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/missing-container.epub",
+      "bytes": 663,
+      "sha256": "fd1ac75091641cf98c31604ee4f3c13f9c78cd988076e4ccb1f034ee0d74838a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/missing-opf.epub",
+      "bytes": 1073,
+      "sha256": "c8f69ceae58021cce9f652cf2bb0d998a9fe1a9b7c37e5635eb614850a7cf3c6"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/nested-opf-directory.epub",
+      "bytes": 763,
+      "sha256": "e31308bed775cb513b384f002b5169fd998cdca9cebb8ee00a6cd7b1ab1508cc"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/rich-with-cover.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/root-opf.epub",
+      "bytes": 712,
+      "sha256": "7f64e0786a69f1c3a8e4769351c66b750e1b5ffd892b254ca4cab46d1aa6e28c"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/standard-slashes.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/upper-extension.EPUB",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/wrong-container-namespace.epub",
+      "bytes": 1035,
+      "sha256": "6e10f004be717aadf9d046fddc625a5451f37083433407ab7c459056ab54e28f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/epub/wrong-extension.zip",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/cancelled-existing/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/cancelled-existing/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/cancelled-missing/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/content-second/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/content-second/content.opf",
+      "bytes": 228,
+      "sha256": "60e6e6e95a2a0da3e4a465c5ce26deca07bf6ec02f019739f73b914adaf7ac58"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/content-second/metadata.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/directory-specific/Volume/Volume.opf",
+      "bytes": 230,
+      "sha256": "8c222bd4803688a60e0a744ed3f6e55c1fbf701636fa8409a84cb50155cc6b41"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/directory-specific/Volume/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/locked-selected/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/locked-selected/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/malformed-specific/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/malformed-specific/book.opf",
+      "bytes": 8,
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/malformed-specific/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/metadata-last/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/metadata-last/metadata.opf",
+      "bytes": 228,
+      "sha256": "cccd46ab19955ef70652b0cc6401d10afdf16b9ffabf0acb87515fe43f23cdff"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/missing-all/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/missing-parent-source/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime--1/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime--1/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime-0/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime-0/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime-1/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/mtime-1/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/specific-first/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/specific-first/book.opf",
+      "bytes": 229,
+      "sha256": "19af7cc5dd1c2db350ba00b97e5ca97c467696ffffadf682be5dfc1b52e318bc"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/specific-first/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/opf/specific-first/metadata.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/alternate-prefix.opf",
+      "bytes": 226,
+      "sha256": "717aea180950efe7c3eacdae23a5da3d91c0dc70d80277795409427c96021d56"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/attribute-whitespace.opf",
+      "bytes": 296,
+      "sha256": "8a16ed0a53d33680ce4f2b3f54cf72528c6a82423ad7b44bdeff2393353367d4"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/bom-declaration-conflict.opf",
+      "bytes": 460,
+      "sha256": "1b437eb9f5ac875fa7d24817f8196cc2b4f60def842af02b4b788fe035c07c5f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/cancelled-malformed.opf",
+      "bytes": 8,
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/cancelled-valid.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/cdata-comments.opf",
+      "bytes": 309,
+      "sha256": "6c0ed497784efec9adbff505a9a57a1413ac4f22ef8d1baa0c7ef1888ef09391"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/cp1252-declaration.opf",
+      "bytes": 238,
+      "sha256": "2dea144e29f6dd44e5bbee34c3e36d473ea78f359fe556fe773affb0f0e046f3"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/creator-roles.opf",
+      "bytes": 1034,
+      "sha256": "9e8a26c4361adade2d19422da6137b61b3733aa77b20e24ea3b3841edc383fc1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-0.opf",
+      "bytes": 229,
+      "sha256": "978aa9dd8d1e2ec71614ac3b0c6b78af5bf06b9666fe7ef5ce316b5f620caea7"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-1.opf",
+      "bytes": 239,
+      "sha256": "f429ca54169d2fff63b220d2a4181db6f156ad1253d097b22b566c73f9f4336a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-2.opf",
+      "bytes": 244,
+      "sha256": "067711fef582585ba476ba7b98a61090167b5682d3729fb3c1b4d214c490c401"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-3.opf",
+      "bytes": 229,
+      "sha256": "2cc995a8c7ac7c571edeb7ab7c34467b2ad3cb98015e0785c948f742bcd7cb8d"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-4.opf",
+      "bytes": 229,
+      "sha256": "55c97dad150c27c9ae7356f4539bcc23ac4c78a14248b46f941c597536e42753"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-5.opf",
+      "bytes": 223,
+      "sha256": "565a7636bfc5a9492afb66d8ab4743ced75de6738d83aa4f45f365a1ffc7f78a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-6.opf",
+      "bytes": 229,
+      "sha256": "0d902865c671ae51a24cd9c73231c5e273fc96491a67cb7b7638cbeb6a566eb7"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-7.opf",
+      "bytes": 229,
+      "sha256": "34369231d851b240f747560ffaaafa51f6f540645a94fbab24f2b27b1a43fe8a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/date-8.opf",
+      "bytes": 252,
+      "sha256": "bc212090dbefd4394d2f7271a061dd3f4166c9ca9079c51d9085eb6b0451b0ad"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/empty-main-fallback.opf",
+      "bytes": 362,
+      "sha256": "81edf2f3b5d774d69a133e35078cb993772635462920831b805a4aec95f93429"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/empty.opf",
+      "bytes": 11,
+      "sha256": "7dce060dfa286d6c10a2f73103995027f58a1bf02bd89b81320b4677e03b0c4d"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/external-dtd.opf",
+      "bytes": 279,
+      "sha256": "8604c37b5d7d642333e79f5c8be896b89f0b24940e39be8396e7f5da34f0822e"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/external-entity-attribute.opf",
+      "bytes": 321,
+      "sha256": "092fc3d9ae3a1ae694ce6464e9719360d05b15b48cd8ae23fef6fd5690615f20"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/external-entity.opf",
+      "bytes": 302,
+      "sha256": "d698aa6f321669e78cf0d78e7d8fac99587131fd38533b4b66653bbea07b4347"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/first-whitespace.opf",
+      "bytes": 486,
+      "sha256": "5f83ac170b880a6fa79af1ba3d1b331e4220fa82f9cc2ca44db2a1202db1430f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/ids-case-duplicate.opf",
+      "bytes": 471,
+      "sha256": "b5548dc72edbb749037bb83a39cb209f7aaec8d522ff4fd2ccdaf9a43ec3bd6b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/internal-dtd.opf",
+      "bytes": 249,
+      "sha256": "0bd146525b3dceb4da13e05b185ff3f8febaca44f22130d5e6e8f8c7174d4f86"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/invalid-character.opf",
+      "bytes": 229,
+      "sha256": "ca84f67e787a9c5bfd5fbe86240de177c792c865c3e9afaf3d331593d5a213cf"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/invalid-utf8.opf",
+      "bytes": 223,
+      "sha256": "0988e2747ae046a8b56e0044333d4cb2bf315aaeaf457e770ab6390e3ca62602"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/last-main-first-sort.opf",
+      "bytes": 528,
+      "sha256": "0442c61c2b92c8101358c1d7a5b591cca854449dec0e6a1b39b1fd32d78844a1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/latin1-declaration.opf",
+      "bytes": 232,
+      "sha256": "812c2da063de81af5141e8b499b8666a35f87619163dbb8c4bfca0dcaa496492"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/literal-cr.opf",
+      "bytes": 240,
+      "sha256": "90672703334715f35ddb9cc8b055b259e814c78194dbc091ee4b222f4cfcff82"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/literal-crlf.opf",
+      "bytes": 273,
+      "sha256": "a58a11363b4c4b3f8144588eb7f4e42e077954178bd86f83d419189209f1b2dd"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/malformed.opf",
+      "bytes": 27,
+      "sha256": "0aeeb62763cee61c581810061679b13ba905399acaea389b0821abb3930e02b4"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/nested-entity.opf",
+      "bytes": 248,
+      "sha256": "70bbd7f0400eea737019bf266cad74c5606f53b4edeef6589275140202720d26"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-0.opf",
+      "bytes": 333,
+      "sha256": "9cca99fb33771bf653209ceec8348de95008739c772a53abe70abd0ab0d06ca5"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-1.opf",
+      "bytes": 333,
+      "sha256": "6514fe25cfc9b9564d56ea9a0856d16619890f13acef97345f41605a8f6a7fd2"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-10.opf",
+      "bytes": 333,
+      "sha256": "aea11bee366a09d28f3c801b6ea625a5459b83627c5c5a9906d2e619bd1c4320"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-11.opf",
+      "bytes": 333,
+      "sha256": "34760e5cff4566a62bd71ebb61cb76f8963f9c9d76c23105dd6fb38181845b2a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-12.opf",
+      "bytes": 351,
+      "sha256": "4c3076205c64abe52429d2b33bbc9193bddfc72b2e694b5683daabb5d4818f4f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-13.opf",
+      "bytes": 327,
+      "sha256": "2b0a7619fb005eae8cc3c263ba1fd31a4c874f4bb7a78feb9f752f8310170ad1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-2.opf",
+      "bytes": 335,
+      "sha256": "bfcecd186790ac4e921c1c1507bc4ca8de73c517aac07adb43cd2d2e5b0a5ef1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-3.opf",
+      "bytes": 335,
+      "sha256": "ec177f5b56391354367b18f279eab23ada7e369fc9b3e958074c99f114688b76"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-4.opf",
+      "bytes": 347,
+      "sha256": "0d75f03112e2b07c56dbc823b46e38ef4daf5ac02030a3875231c7325efebd29"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-5.opf",
+      "bytes": 333,
+      "sha256": "08cd18cd7b51a3434e185ab058efbd8996bbec7a41fcc2dd868ef851e7c0645a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-6.opf",
+      "bytes": 343,
+      "sha256": "bd9d6fa43fdd1ef2f5c963b66d2160f2874b07ab8b5fa0e83b76e2a7a99bc5c3"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-7.opf",
+      "bytes": 351,
+      "sha256": "d91d481845eb674ce452ec9b9d8daec9e68b8263127fa3581c01be1d79baaa8b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-8.opf",
+      "bytes": 351,
+      "sha256": "ef8236d5af7bb4c047869038a128f6fec50ccdea231d2063f99e9f9e8d9e1b20"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numbers-9.opf",
+      "bytes": 353,
+      "sha256": "e22c6130044bc7dcd78a9d2d27e658d824b4a7d6c02a81cf27a8afad15087ede"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/numeric-references.opf",
+      "bytes": 276,
+      "sha256": "de246851cadf03cb92dc1b48226cb5b08db1304d4daa148b5d60cb79cfcf1223"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/reference-control.opf",
+      "bytes": 225,
+      "sha256": "8f3b113c9c099ed402579b76cc08f50a960100e2ee9047c9f0b0134ebca4819f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/reference-noncharacter.opf",
+      "bytes": 229,
+      "sha256": "688b6e01fdeda7fc7ea578f50daa7b51d0d57da21afc88489eaa2ee4bb09b3f3"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/reference-null.opf",
+      "bytes": 225,
+      "sha256": "a7d55fa44cb7a6ac56ec1324d3eaa93f46645805ba5604362fd7cedcc62c5b02"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/reference-surrogate.opf",
+      "bytes": 229,
+      "sha256": "e728c3ed2c3b5f4026bfc631b29dc469433ab622ed27ddbcef909d5ae200e8ae"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/reference-too-large.opf",
+      "bytes": 231,
+      "sha256": "038f0d02658d3b4058759c1fb5cec01d7fdaff7acaf57318f4dd39effb8f9170"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/refinement-apostrophe.opf",
+      "bytes": 292,
+      "sha256": "0553b65109550749e17a7d9e13e5bce129994b117c0ec633c5901772d6cb4cc9"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/rich.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/unbound-prefix.opf",
+      "bytes": 50,
+      "sha256": "f0c86bef1107db4bd27579eca6d4edbdbc1a7a6345ebc0c4f301752ee01f6c61"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/unknown-entity.opf",
+      "bytes": 230,
+      "sha256": "66dc5eb00e0288e512762d587ea12cadd99de5e65d9f1978245d47cc5e0f78ab"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf16be-bom.opf",
+      "bytes": 460,
+      "sha256": "76de87a4201e133feb1d4001af23463d821a9ad36bd67f0038822586195e0276"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf16be-no-bom.opf",
+      "bytes": 462,
+      "sha256": "7480aa4899b5dc59d299e963122fcf26e6ced7d0c564d2189b780704def4554b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf16le-bom.opf",
+      "bytes": 460,
+      "sha256": "39f102176a07152dcc19f622fc54be9712384a6692c37cbb3e27bd2ad4c3abd1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf16le-no-bom.opf",
+      "bytes": 462,
+      "sha256": "176bbcb56054e5d0e281ffee60f6f49c73fe3ee3c21d74bb8dc5484f97c9fc6a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf32be-bom.opf",
+      "bytes": 908,
+      "sha256": "70e2b160c36edb438ae2fda3afe3813cd9eb2c47749c016c6bcf27d5a2cb2e99"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf32be-explicit.opf",
+      "bytes": 944,
+      "sha256": "2ce933af962d6e8f0c31af7cdbc9323b7fd322661764c70ab5d302702497b394"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf32le-bom.opf",
+      "bytes": 908,
+      "sha256": "474b0d3eeeed31c072b6410ba9a79ccb4cb59264d98730c41d44a1788915334e"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/utf8-bom.opf",
+      "bytes": 236,
+      "sha256": "d1fb6935c160a18dae3a59df61f709d42101f8a40572cd4b75879ca4bf1ee2dd"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/wrong-namespace.opf",
+      "bytes": 62,
+      "sha256": "0f75408a31beec7951f0434c6757f0d43f6d9dc50cd2f1a5ad5135b07416eac2"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/xml-space-cdata.opf",
+      "bytes": 266,
+      "sha256": "72c6ea12ecc56517af181ab00e5aea99b08344bfb00253bb5f932e1f6b108d5a"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/main/reader/xml-space-preserve.opf",
+      "bytes": 275,
+      "sha256": "773512b19de484bf003904682ba9bafed5b315cc130a953c037eecca5c7edba1"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/deep-xml.opf",
+      "bytes": 1105,
+      "sha256": "0a526d69e454fddcd92a4567488da1f8fcb9d8616c8bd469de5159d10276ec3f"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/dtd-default-attribute.opf",
+      "bytes": 202,
+      "sha256": "c1cc5fa9ce6d74a167e1be64729d9d8a8e114ba16f1fbb070844f239eae4f227"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-comment-literal.opf",
+      "bytes": 175,
+      "sha256": "8d42d96d1e40681377377790e4aaf88d9dd26dd2529b7ac8045329731b5af426"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-duplicate.opf",
+      "bytes": 184,
+      "sha256": "e6a2ceba49ff964758c6e9d0813a9445ba4979260fc80f61dac78a92897db0f7"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-long.opf",
+      "bytes": 10160,
+      "sha256": "02dcb7fddd73fce004cc0fe20427a0bdbfa2d5cdb6beb167f388c7f6dec13f66"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-markup-attribute.opf",
+      "bytes": 190,
+      "sha256": "8f4a7802e2d87132f865af33fa36f20ae0439f4de7f8dc2c531b31320fc13a6b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-markup-whitespace.opf",
+      "bytes": 180,
+      "sha256": "1d6fb4135453beae7958ad48d511bd5e8cee821dfc60acf223b96593d89fafa6"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-markup.opf",
+      "bytes": 177,
+      "sha256": "30ac09fde969405384d74f1812b4a6833757acb3d645e9c64504acb2f9d13f4c"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/entity-recursive.opf",
+      "bytes": 179,
+      "sha256": "b9a1ff98cd3323d8bb0f6172d2395d8603f36e51b6cc53a3e115f0e3d8ae551b"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/namespace-duplicate-attribute.opf",
+      "bytes": 138,
+      "sha256": "b140c1d96561114cedcc44d59df40688e5f7d23ea2fb422c02a5a730b190a534"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/namespace-invalid-xml.opf",
+      "bytes": 49,
+      "sha256": "6c088d8b8738e046a09662ac361368cc4d996a457aabf647d5bdd17a67d927b3"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/edges/parameter-entity.opf",
+      "bytes": 193,
+      "sha256": "98991dfe17defb446d2eaef2e9ebba19cd71708c8bfcfdf49022622765333c50"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/scalars/initial-clr-whitespace.opf",
+      "bytes": 140,
+      "sha256": "8a2b58663dab57466ac1183159a70bc88bf9d27e258a6901f99b9ce064af3da6"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/scalars/long-encoding-declaration.opf",
+      "bytes": 5170,
+      "sha256": "d63ffc81a3c21a78587ab14798f0d783ab0e25726668a93eab4d1aee47b56071"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/entity-depth-2048.opf.gz",
+      "bytes": 10608,
+      "sha256": "7701dcce7968605f5b8c377e0d280eafcdd43050e6a0268479bae7f89f2f6a4c"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/entity-depth-300.opf.gz",
+      "bytes": 1506,
+      "sha256": "6886415e00056aae935dbdb8c90914f8fc5a6c18cccdacee06a66d1f0e264a35"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/entity-mutual-cycle.opf.gz",
+      "bytes": 136,
+      "sha256": "fe99447bd8a779ad1df3a0912074d3b44f25852f645169db3c68e80945f1e797"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/entity-self-cycle.opf.gz",
+      "bytes": 126,
+      "sha256": "37e0b6754a4a272eb3fad626e30abac4a0cfb5740116896765b65e61ddc6a1cb"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/expanded-10-million.opf.gz",
+      "bytes": 184,
+      "sha256": "c9f6d0dc57590e7bb6feb216761a680d72e5c99f423378ee7f7cb1514d1a2a15"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/expanded-9-million.opf.gz",
+      "bytes": 184,
+      "sha256": "ed21eed15287bddba74983ea53c981679dc4f3ce2709834a7f69cf46b78f01ec"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/literal-10000001.opf.gz",
+      "bytes": 9832,
+      "sha256": "92f6a5bebcbc8f505d95a6ff4eef2109473b7dcae2b08a6ac410dac36b4349a3"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/single-entity-10000000.opf.gz",
+      "bytes": 9873,
+      "sha256": "6119d3137e72cff1b9023ad204975051f57b9ef8d6cd5e9d9072902e50a4393d"
+    },
+    {
+      "role": "opfAsset",
+      "filename": "../book-opf-current/assets/resources/single-entity-10000001.opf.gz",
+      "bytes": 9873,
+      "sha256": "3a544d87a38b2b3ce0e3e893a53672ffb03d73e1ccac478aef394f79ceed047b"
+    }
+  ]
+}
