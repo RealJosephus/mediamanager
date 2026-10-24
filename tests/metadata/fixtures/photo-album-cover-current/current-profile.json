@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "fixture": "photo-album-cover-current",
+  "scope": "Same-run PhotoAlbum image provider selection, original file copies, protected paths, failure prefixes, and actual SQLite/ImageSaver consumers; Node PostgreSQL, image persistence and HTTP consumers are isolated component evidence.",
+  "cases": 41,
+  "sourcePaths": [
+    "Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+    "Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+    "Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "MediaBrowser.Model/Net/MimeTypes.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "cb755abd29e7651a9e9fc6f669da98b151ae9f4216d83295db2999db06ea50f9",
+      "bytes": 889,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "7c51c8dff930e95eda59412bcad19d0cb909e234f665bdb5be6e0d15657e940c",
+      "bytes": 18354,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "85517f503080a223ad02b544898de3832560c3e57bd871a120cb9117687bc3f6",
+      "bytes": 1345,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    },
+    {
+      "filename": "../../../images/fixtures/http/poster.png",
+      "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+      "bytes": 287,
+      "role": "png"
+    },
+    {
+      "filename": "../../../images/fixtures/http/backdrop.jpg",
+      "sha256": "0ae30be0bed4084a9251f37447a42ad4195654fc799f78c47be51eb77195c730",
+      "bytes": 334,
+      "role": "jpeg"
+    }
+  ]
+}

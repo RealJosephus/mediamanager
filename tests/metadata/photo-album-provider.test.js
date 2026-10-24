@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { before } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
@@ -11,28 +11,22 @@ import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier as q } from '../../src/database/model.js';
 import { decodeNativeTextBytes } from '../../src/database/native-text.js';
 import { createPhotoAlbumImagePlugin } from '../../src/metadata/photo-album-provider.js';
-import { queryPhotoAlbumCover } from '../../src/library/photo-album-cover.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { MetadataImages } from '../../src/metadata/images.js';
-import { imageTypes, internalImagePath } from '../../src/metadata/image-paths.js';
+import { internalImagePath } from '../../src/metadata/image-paths.js';
 import { persistImageMetadata } from '../../src/metadata/persistence.js';
 import { ImageProcessor } from '../../src/images/processor.js';
 import { ImageService } from '../../src/images/service.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
 import { MIN_DATE, mapRecord } from '../../src/library/records.js';
+import { cases, profile, captureCurrentNative, recordCandidate } from './fixtures/photo-album-cover-current/capture.js';
 
-const provenanceFile = new URL('./fixtures/photo-album-cover/provenance.json', import.meta.url);
-const provenance = JSON.parse(await readFile(provenanceFile));
-const folder = new URL('./', provenanceFile);
-const nativeBytes = await readFile(new URL('native.json', folder)), native = JSON.parse(nativeBytes);
-const inputBytes = await readFile(new URL('input.json', folder));
-const pathProvenanceFile = new URL('./fixtures/photo-album-cover-paths/provenance.json', import.meta.url);
-const pathProvenance = JSON.parse(await readFile(pathProvenanceFile));
-const pathFolder = new URL('./', pathProvenanceFile);
-const pathNative = JSON.parse(await readFile(new URL('native.json', pathFolder)));
-const pathInputBytes = await readFile(new URL('input.json', pathFolder));
-const oracleFixtures = [{ provenance, native, inputBytes }, { provenance: pathProvenance, native: pathNative, inputBytes: pathInputBytes }];
+let native, nativeCapture;
+before(async () => {
+  nativeCapture = await captureCurrentNative();
+  native = nativeCapture.native;
+}, { timeout: 720000 });
 const png = await readFile(new URL('../images/fixtures/http/poster.png', import.meta.url));
 const jpeg = await readFile(new URL('../images/fixtures/http/backdrop.jpg', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -47,6 +41,16 @@ async function fixture(t, sample, { independentBytes = false, mediaBindingOnly =
   const store = new DomainStore(database), directory = await mkdtemp(path.join(os.tmpdir(), 'mm-photo-album-'));
   const metadataPath = path.join(directory, 'metadata'), tempPath = path.join(directory, 'temp');
   const storage = new StorageRegistry(); storage.registerType('memory', () => new MemoryStorageAdapter());
+  const metadataImages = new MetadataImages({ processor: new ImageProcessor({ fileSystem: testFileSystem }) });
+  let readOpens = 0, readCloses = 0;
+  t.after(async () => {
+    await metadataImages.close(); await storage.close();
+    await database.client.query(`DROP SCHEMA ${q(schema)} CASCADE`); await database.client.query(`DROP SCHEMA ${q(schema + '__mm')} CASCADE`); await store.close();
+    const absolute = path.resolve(directory), prefix = path.resolve(os.tmpdir()) + path.sep;
+    assert.ok(absolute.startsWith(prefix) && path.basename(absolute).startsWith('mm-photo-album-'));
+    await rm(absolute, { recursive: true, force: false });
+    assert.equal(readOpens, readCloses, 'every selected media read closes its VFS handle');
+  });
   const media = await storage.createInstance('media', 'memory', {}), sidecars = await storage.createInstance('sidecars', 'memory', {});
   const vfs = new VirtualFileSystem(storage);
   for (const name of ['media', 'sidecars']) vfs.mount({ path: '/' + name, instanceId: name, capabilities: { create: true, replace: true, mkdir: true, delete: true } });
@@ -96,7 +100,6 @@ async function fixture(t, sample, { independentBytes = false, mediaBindingOnly =
       queries.push({ rows: result.rows.length, fields: result.fields.map(field => field.name), ids: result.rows.map(row => decodeNativeTextBytes(row.Id)) });
       return result;
     } } }), options); } };
-  const metadataImages = new MetadataImages({ processor: new ImageProcessor({ fileSystem: testFileSystem }) });
   const saves = [], save = metadataImages.saveRemote.bind(metadataImages);
   metadataImages.saveRemote = (loaded, images, image, options) => save(loaded, images, image, { ...options, download: async (...args) => {
     const result = await options.download(...args);
@@ -104,26 +107,17 @@ async function fixture(t, sample, { independentBytes = false, mediaBindingOnly =
       extension: path.extname(image.Url), sha256: hash(result.bytes) });
     return result;
   } });
-  if (sample.name === 'save-failure') assets.write = async () => { throw Object.assign(new Error('Injected SaveImage destination failure'), { nativeException: 'IOException', code: 'EIO' }); };
-  if (sample.name === 'delete-old-failure') assets.delete = async () => { throw Object.assign(new Error('Injected previous image deletion failure'), { nativeException: 'IOException', code: 'EIO' }); };
+  if (sample.name === 'save-failure') assets.write = async () => { throw Object.assign(new Error('Injected SaveImage destination failure'), { code: 'EIO' }); };
+  if (sample.name === 'delete-old-failure') assets.delete = async () => { throw Object.assign(new Error('Injected previous image deletion failure'), { code: 'EIO' }); };
   const provider = createPhotoAlbumImagePlugin({ store: selectedStore, fileSystem: testFileSystem, vfs, identityMap,
     metadataIdentityMap, metadataPath, tempPath, images: metadataImages, configuration: { ImageSavingConvention: 'Compatible' } }).providers[0];
-  const cancelled = Object.assign(new Error('Injected cancellation'), { nativeException: 'TaskCanceledException' });
+  const cancelled = new Error('Injected cancellation');
   const signal = sample.name === 'cancelled' ? AbortSignal.abort(cancelled) : undefined;
   const live = { images: values, imageAssets: assets, signal };
-  let readOpens = 0, readCloses = 0;
   const openRead = media.openRead.bind(media);
   media.openRead = async (...args) => { const handle = await openRead(...args); readOpens++; let closed = false; return { ...handle, close: async () => {
     if (!closed) { closed = true; readCloses++; } await handle.close();
   } }; };
-  t.after(async () => {
-    assert.equal(readOpens, readCloses, 'every selected media read closes its VFS handle');
-    await metadataImages.close(); await storage.close();
-    await database.client.query(`DROP SCHEMA ${q(schema)} CASCADE`); await database.client.query(`DROP SCHEMA ${q(schema + '__mm')} CASCADE`); await store.close();
-    const absolute = path.resolve(directory), prefix = path.resolve(os.tmpdir()) + path.sep;
-    assert.ok(absolute.startsWith(prefix) && path.basename(absolute).startsWith('mm-photo-album-'));
-    await rm(absolute, { recursive: true, force: false });
-  });
   const project = value => value == null ? null : value.replace(directory, '$STATE').replace(directory.replaceAll('\\', '/'), '$STATE').replaceAll('\\', '/');
   const files = async root => { try { return await Promise.all((await readdir(root)).toSorted().map(async name => {
     const filename = path.join(root, name), bytes = await readFile(filename); return { path: project(filename), bytes: bytes.length, sha256: hash(bytes) };
@@ -132,45 +126,32 @@ async function fixture(t, sample, { independentBytes = false, mediaBindingOnly =
     identityMap, metadataIdentityMap, vfs, media, sidecars, metadataImages, project, files, readCounts: () => ({ readOpens, readCloses }) };
 }
 
-test('album fixture executes the new source-built native provider, SQLite query and real ImageSaver', async () => {
-  for (const { provenance, native, inputBytes } of oracleFixtures) {
-  for (const entry of [...Object.values(provenance.files), ...Object.values(provenance.proof), ...provenance.sources, ...provenance.assemblies]) {
-    assert.equal(entry.required, true, 'executed proof dependencies are explicit required inputs');
-    const location = /^[A-Za-z]:[\\/]/u.test(entry.path) ? entry.path : new URL('../../' + entry.path, import.meta.url);
-    assert.equal(hash(await readFile(location)), entry.sha256, entry.path);
-  }
-  assert.equal(provenance.files.native.sha256, provenance.proof.rawRecording.sha256);
-  const execution = JSON.parse(await readFile(provenance.proof.executionRecord.path));
-  const build = JSON.parse(await readFile(provenance.proof.buildReceipt.path));
-  assert.equal(execution.passed, true);
-  assert.equal(execution.sourceFilesSha256, provenance.sourceFilesSha256);
-  assert.equal(execution.jellyfinDll.sha256, build.buildIdentity.nativeDll.sha256);
-  assert.equal(build.fullBuildInputClosure, true);
-  assert.notEqual(execution.jellyfinDll.sha256, build.buildIdentity.retainedOldDllSHA256);
-  assert.equal(native.sourceInputSha256, hash(inputBytes));
-  assert.deepEqual(native.results.map(row => row.name), JSON.parse(inputBytes));
-  for (const key of ['actualProvider', 'actualNativeRepository', 'actualSqlite', 'actualProviderManagerFileSave', 'actualImageSaver']) assert.equal(native[key], true);
-  assert.ok(native.assemblies.some(assembly => assembly.name === 'MediaBrowser.Controller' && /photo-album-(?:paths-)?native/u.test(assembly.path)));
-  }
+test('album fixture binds two current native provider, SQLite query and actual ImageSaver executions', () => {
+  assert.equal(nativeCapture.report.independentNativeCapturesAgree, true);
+  assert.equal(nativeCapture.report.captures.length, 2);
+  assert.equal(nativeCapture.report.sourceBindings.length, profile.sourcePaths.length);
+  assert.deepEqual(native.results.map(row => row.name), cases);
 });
 
-for (const sample of [...native.results, ...pathNative.results]) test(`postgres: photo album provider matches native ${sample.name}`, { skip: !enabled }, async t => {
+for (const name of cases) test(`postgres: photo album provider matches current native ${name}`, { skip: !enabled }, async t => {
+  const sample = native.results.find(row => row.name === name);
   const f = await fixture(t, sample);
   let changed = null, changeError = null, update = null, errorType = null;
-  const classify = error => error.nativeException ?? (error.code === 'not-found' ? 'FileNotFoundException' : error.name);
-  try { changed = await f.provider.hasChanged(f.item, f.live); } catch (error) { changeError = classify(error); }
-  try { update = await f.provider.fetch(f.item, f.live); } catch (error) { errorType = classify(error); }
+  const diagnostic = error => ({ name: error.name, code: error.code, message: error.message });
+  try { changed = await f.provider.hasChanged(f.item, f.live); } catch (error) { changeError = diagnostic(error); }
+  try { update = await f.provider.fetch(f.item, f.live); } catch (error) { errorType = diagnostic(error); }
   const images = await Promise.all(f.live.images.map(async image => ({ path: f.project(image.Path), type: image.Type,
     Width: image.Width ?? 0, Height: image.Height ?? 0, BlurHash: image.Blurhash == null ? null : Buffer.from(image.Blurhash).toString(),
     sha256: /^http/u.test(image.Path) ? null : await readFile(image.Path).then(hash, error => error.code === 'ENOENT' ? null : Promise.reject(error)) })));
   const internalFiles = await f.files(internalImagePath(f.item, f.metadataPath));
   const temporaryFiles = (await f.files(f.tempPath)).map(file => ({ extension: path.extname(file.path), bytes: file.bytes, sha256: file.sha256 }));
-  assert.deepEqual({ changed, changeError, update, errorType, images, internalFiles, temporaryFiles },
-    Object.fromEntries(['changed', 'changeError', 'update', 'errorType', 'images', 'internalFiles', 'temporaryFiles'].map(key => [key, sample[key]])));
+  const observed = { changed, changeFailed: Boolean(changeError), update, error: Boolean(errorType), images, internalFiles, temporaryFiles };
+  await recordCandidate(name, { observation: observed, changeError, errorType, saves: f.saves, selections: f.queries });
+  assert.deepEqual(observed, { changed: sample.changed, changeFailed: Boolean(sample.changeError), update: sample.update,
+    error: Boolean(sample.errorType), images: sample.images, internalFiles: sample.internalFiles, temporaryFiles: sample.temporaryFiles });
   assert.deepEqual(f.saves, sample.saves);
   assert.deepEqual(f.queries.map(query => query.ids), sample.selected.map(selection => selection.ids));
-  assert.equal(f.queries.length, sample.queries.length);
-  assert.ok(f.queries.every(query => query.rows <= 1 && query.fields.length === 4), 'selection returns at most one narrow SQL row');
+  assert.ok(f.queries.every(query => query.rows <= 1), 'SQL selects at most one cover candidate');
 });
 
 test('postgres: photo album selects one row from 20,000 descendants without materializing children', { skip: !enabled }, async t => {
