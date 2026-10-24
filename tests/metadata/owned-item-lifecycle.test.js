@@ -238,6 +238,29 @@ for (const dialect of dialects) {
     assert.equal(events.some(event => idKey(event.Item.Id) === extraId), false);
   });
 
+  databaseTest('refresh persists inherited ratings before providers and recalculates a changed rating at the successful stamp', async t => {
+    const fixture = await setupChildrenFixture(t, dialect);
+    await seedFamily(fixture, { mixed: true });
+    await fixture.database.update('BaseItems', { Id: ownerId }, {
+      OfficialRating: 'PG', CustomRating: null, PreferredMetadataCountryCode: 'US'
+    });
+    const first = await fixture.host.refresh(ownerId, noMetadata);
+    assert.equal(first.changed, true);
+    const [beforeProviders] = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
+    assert.deepEqual([beforeProviders.OfficialRating, beforeProviders.InheritedParentalRatingValue,
+      beforeProviders.InheritedParentalRatingSubValue], ['PG', 10, 0]);
+    fixture.registry.register({ id: 'changed-rating', name: 'Changed rating', providers: [{
+      id: 'rating', name: 'Changed rating', kind: 'custom', itemTypes: ['Movie'],
+      hasChanged: async () => true,
+      async fetch(item) { item.OfficialRating = 'TV-14-D'; return 1; }
+    }] });
+    const second = await fixture.host.refresh(ownerId, { MetadataRefreshMode: 'FullRefresh', ImageRefreshMode: 'None' });
+    assert.equal(second.changed, true); assert.equal(second.Failures, 0);
+    const [afterProviders] = await fixture.database.rows('BaseItems', { where: { Id: ownerId } });
+    assert.deepEqual([afterProviders.OfficialRating, afterProviders.InheritedParentalRatingValue,
+      afterProviders.InheritedParentalRatingSubValue], ['TV-14-D', 14, 1]);
+  });
+
   for (const options of [{ MetadataRefreshMode: 'FullRefresh' }, { MetadataRefreshMode: 'None', ReplaceAllMetadata: true }]) {
     databaseTest(`extras of every linked local version inherit the primary title on ${options.ReplaceAllMetadata ? 'replacement' : 'full refresh'}`, async t => {
       const fixture = await setupChildrenFixture(t, dialect);

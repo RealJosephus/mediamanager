@@ -460,7 +460,7 @@ export class MetadataRefreshHost {
     // save. Provider-supplied fields are retained until the next refresh.
     beforeSaveUpdate |= beforeSaveTvMetadata(initialItem, loaded);
     beforeSaveUpdate |= await beforeSaveBoxSetMetadata(initialItem, loaded);
-    beforeSaveUpdate |= onMetadataChanged(initialItem, loaded.parentalRating?.(initialItem));
+    beforeSaveUpdate |= onMetadataChanged(initialItem, await loaded.parentalRating?.(initialItem));
     if (['Episode', 'Season'].includes(initialItem.Type) && loaded.refreshTvContext) Object.assign(loaded, loaded.refreshTvContext(initialItem));
     if (loaded.lookupFor) loaded.lookup = loaded.lookupFor(initialItem);
     // Native image validation and BeforeSave precede the first repository save
@@ -645,7 +645,7 @@ export class MetadataRefreshHost {
     const refreshStamp = (mode > 1 || imageMode > 1) && !failures && !imagesFailed;
     if (refreshStamp) {
       item.DateLastRefreshed = this.now();
-      updateType |= onMetadataChanged(item, loaded.parentalRating?.(item));
+      updateType |= onMetadataChanged(item, await loaded.parentalRating?.(item));
     }
     const shouldSave = updateType > ItemUpdateType.None || options.ForceSave || options.ReplaceAllMetadata || firstRefresh || requiresRefresh || refreshStamp && (mode === 3 || imageMode === 3);
     if (!shouldSave) {

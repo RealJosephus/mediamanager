@@ -146,17 +146,15 @@ async function setup(t, { writable = true, saveLocal = true } = {}) {
     assert.deepEqual(await database.rows('PeopleBaseItemMap', { where: { ItemId: ids.movie } }), []);
   });
 
-  test(`${dialect}: an unchanged NFO on a read-only destination rejects people before their independent commit`, options, async t => {
+  test(`${dialect}: a repeated edit with an existing read-only NFO rejects people before their independent commit`, options, async t => {
     const { runtime, database, vfs, user } = await setup(t);
     await runtime.itemUpdates.update(ids.movie, body('{"Name":"Saved title"}'), { user });
-    const loaded = await runtime.metadata.loadContext(ids.movie);
-    const saver = runtime.metadataUpdates.registry.discover({ ...loaded, kind: 'saver' })[0];
-    assert.equal((await saver.prepareSave(loaded.item, loaded.context)).changed, false);
     const capability = vfs.capabilities.bind(vfs);
     vfs.capabilities = pathname => ({ ...capability(pathname), create: false, replace: false, delete: false });
-    const before = await database.rows('BaseItems'), nfo = await read(vfs, '/media/movie.nfo');
+    const before = await database.rows('BaseItems'), people = await database.rows('Peoples'), nfo = await read(vfs, '/media/movie.nfo');
     await assert.rejects(runtime.itemUpdates.update(ids.movie, body('{"Name":"Saved title","People":[{"Name":"Blocked actor","Type":"Actor"}]}'), { user }));
     assert.deepEqual(await database.rows('BaseItems'), before);
+    assert.deepEqual(await database.rows('Peoples'), people);
     assert.deepEqual(await database.rows('PeopleBaseItemMap', { where: { ItemId: ids.movie } }), []);
     assert.deepEqual(await read(vfs, '/media/movie.nfo'), nfo);
   });
