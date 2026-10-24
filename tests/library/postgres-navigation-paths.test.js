@@ -71,14 +71,15 @@ test('navigation includes every user-root child and only ordinary aggregate Fold
   const database = await createPostgresTestDatabase(t, 'navigation_roots');
   const ids = Object.fromEntries(['userRoot', 'aggregate', 'collection', 'userMovie', 'userView',
     'physical', 'aggregateMovie', 'aggregateAlbum', 'unrelated'].map(name => [name, randomUUID().toUpperCase()]));
+  ids.userRoot = key(ids.userRoot);
   await database.insertBatch('BaseItems', [
     item(ids.userRoot, 'UserRootFolder'), item(ids.aggregate, 'AggregateFolder'),
-    item(ids.collection, 'CollectionFolder', { ParentId: key(ids.userRoot) }),
-    item(ids.userMovie, 'Movies.Movie', { ParentId: key(ids.userRoot), IsFolder: false, MediaType: 'Video' }),
-    item(ids.userView, 'UserView', { ParentId: key(ids.userRoot) }),
-    item(ids.physical, 'Folder', { ParentId: key(ids.aggregate) }),
-    item(ids.aggregateMovie, 'Movies.Movie', { ParentId: key(ids.aggregate), IsFolder: false, MediaType: 'Video' }),
-    item(ids.aggregateAlbum, 'PhotoAlbum', { ParentId: key(ids.aggregate) }),
+    item(ids.collection, 'CollectionFolder', { ParentId: ids.userRoot }),
+    item(ids.userMovie, 'Movies.Movie', { ParentId: ids.userRoot, IsFolder: false, MediaType: 'Video' }),
+    item(ids.userView, 'UserView', { ParentId: ids.userRoot }),
+    item(ids.physical, 'Folder', { ParentId: ids.aggregate }),
+    item(ids.aggregateMovie, 'Movies.Movie', { ParentId: ids.aggregate, IsFolder: false, MediaType: 'Video' }),
+    item(ids.aggregateAlbum, 'PhotoAlbum', { ParentId: ids.aggregate }),
     item(ids.unrelated, 'Folder'),
   ]);
   const before = await database.rows('BaseItems');
@@ -86,8 +87,8 @@ test('navigation includes every user-root child and only ordinary aggregate Fold
   for (const deferBaseItemHydration of [false, true]) {
     const selected = await loadPostgresNavigationRows(database, undefined, { deferBaseItemHydration });
     assert.deepEqual(selected.map(row => key(row.Id)).sort(), expected,
-      'overlapping type and child membership yields one row, with N/D parent IDs compared as GUIDs');
-    const explicit = await loadPostgresNavigationRows(database, ids.aggregateMovie, { deferBaseItemHydration });
+      'overlapping type and child membership yields one row for roots persisted in N and D GUID formats');
+    const explicit = await loadPostgresNavigationRows(database, key(ids.aggregateMovie), { deferBaseItemHydration });
     assert.deepEqual(explicit.map(row => key(row.Id)).sort(), [...expected, key(ids.aggregateMovie)].sort(),
       'an explicit target remains part of its navigation frame');
   }
