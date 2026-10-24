@@ -8,6 +8,8 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/index.js';
+import { ItemCreationService } from '../../src/library/item-creation-service.js';
+import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { nativePathWithin, sameNativePath } from '../../src/library/native-path.js';
 import { ProviderRefreshService } from '../../src/metadata/provider-refresh-service.js';
 import { RefreshProgressNotifier } from '../../src/sessions/refresh-progress-notifier.js';
@@ -73,9 +75,15 @@ for (const dialect of ['postgres']) test(`${dialect}: refresh collection lookup 
     const schema = `refresh_collection_${randomUUID().replaceAll('-', '').slice(0, 18)}`;
     const database = await PostgresDatabase.open({ connectionString, schema, create: true });
     const store = new DomainStore(database);
-    const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'refresh-collection-test' });
+    let library, itemCreation, linkedChildren;
     const result = { dialect, nativeFixtureSha256: hash(fixtureBytes), passed: false, phaseAcceptance: false, cleanup: {} };
     try {
+      linkedChildren = new PostgresLinkedChildrenStore({ database }); await linkedChildren.initialize();
+      library = new LibraryService({fileSystem: testFileSystem, store, linkedChildren, serverId: 'refresh-collection-test' });
+      itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext: async () => {
+        throw new Error('Metadata mutation is outside the refresh progress read scenario.');
+      } });
+      library.itemCreation = itemCreation;
       for (const entry of native.raw.inputs) await database.insert('BaseItems', item(entry.Id, entry.type, {
         ParentId: entry.ParentId === '00000000-0000-0000-0000-000000000000' ? null : entry.ParentId,
         Path: entry.Path, TopParentId: entry.type === 'Folder' ? entry.Id : null,
@@ -172,7 +180,14 @@ for (const dialect of ['postgres']) test(`${dialect}: refresh collection lookup 
     } catch (error) {
       result.error = { name: error.name, message: error.message }; throw error;
     } finally {
-      await library.close();
+      await itemCreation?.close();
+      await library?.close();
+      await linkedChildren?.close();
+      if (linkedChildren) {
+        assert.equal((await database.client.query('SELECT to_regnamespace($1) AS namespace',
+          [linkedChildren.schemaName])).rows[0].namespace, null);
+        result.cleanup.relationsRemoved = true;
+      }
       if (dialect === 'postgres') {
         await database.client.query(`DROP SCHEMA ${quoteIdentifier(schema)} CASCADE`);
         await database.client.query(`DROP SCHEMA ${quoteIdentifier(schema + '__mm')} CASCADE`);

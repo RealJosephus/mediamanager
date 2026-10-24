@@ -9,6 +9,8 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { LibraryService } from '../../src/library/library-service.js';
+import { ItemCreationService } from '../../src/library/item-creation-service.js';
+import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { loadLibrary, idKey, VIDEO_TYPES, MIN_DATE } from '../../src/library/records.js';
 import { mediaSources } from '../../src/library/dto.js';
 import { mediaSourceCount, commonVersionPrefix } from '../../src/library/media-versions.js';
@@ -91,13 +93,19 @@ test('version resume ordering preserves queried streams and excludes inaccessibl
   entry.items[1].MediaStreams=[{Type:'Video',Index:0,Width:3840}];
   entry.items[2].MediaStreams=[{Type:'Video',Index:0,Width:1280}];
   const user={Id:'B0000000-0000-0000-0000-000000000001',Username:'Reader',Policy:{EnableAllFolders:true,EnablePlaybackRemuxing:true},Configuration:{}};
-  let library;
+  const store = new DomainStore(db);
+  let library, itemCreation, linkedChildren, primaryError;
   try {
     await seed(db,entry);
     await db.insert('Users',{...empty('Users'),Id:user.Id,Username:'Reader',NormalizedUsername:'READER',InternalId:1});
     for(const [index,item] of entry.items.entries()) await db.insert('UserData',{...empty('UserData'),UserId:user.Id,ItemId:item.Id,
       CustomDataKey:idKey(item.Id),PlaybackPositionTicks:BigInt(index*100),LastPlayedDate:`2026-09-2${index} 12:00:00.0000000`});
-    library=new LibraryService({fileSystem: testFileSystem, store:new DomainStore(db),serverId:'versions',programDataPath:'D:\\isolated-state'});
+    linkedChildren = new PostgresLinkedChildrenStore({ database: db }); await linkedChildren.initialize();
+    library=new LibraryService({fileSystem: testFileSystem, store, linkedChildren,serverId:'versions',programDataPath:'D:\\isolated-state'});
+    itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext: async () => {
+      throw new Error('Metadata mutation is outside the version resume read scenario.');
+    } });
+    library.itemCreation = itemCreation;
     const primary=await library.getItem(entry.query,{user});
     assert.deepEqual(primary.MediaSources.map(source=>source.Id),[entry.items[2].Id,entry.items[0].Id,entry.items[1].Id].map(idKey));
     assert.deepEqual(primary.MediaStreams,[]);
@@ -107,7 +115,15 @@ test('version resume ordering preserves queried streams and excludes inaccessibl
     const restricted={...user,Policy:{...user.Policy,BlockedTags:['hidden']}};
     assert.equal((await library.getItem(entry.query,{user:restricted})).MediaSourceCount,2);
     assert.deepEqual((await library.getMediaSources(entry.query,{user:restricted})).map(source=>source.Id),[entry.items[1].Id,entry.items[0].Id].map(idKey));
-  } finally { await library?.close(); }
+  } catch (error) { primaryError = error; throw error; }
+  finally {
+    const failures = [];
+    for (const close of [() => itemCreation?.close(), () => library?.close(), () => linkedChildren?.close(), () => store.close()]) {
+      try { await close(); } catch (error) { failures.push(error); }
+    }
+    if (failures.length) throw new AggregateError(primaryError ? [primaryError, ...failures] : failures,
+      primaryError?.message ?? 'Version resume read cleanup failed.', primaryError ? { cause: primaryError } : undefined);
+  }
 });
 
 test('retained channel content without a saved cache preserves the static shortcut source',

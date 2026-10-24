@@ -189,7 +189,7 @@ async function fixture(t, dialect, resolvers, {
     returnAccess: 'Directory item scan fixture'
   });
   const library = new LibraryService({fileSystem: testFileSystem, store, serverId: 'directory-item-scan',
-    programDataPath: PROGRAM_DATA_PATH, configuration });
+    programDataPath: PROGRAM_DATA_PATH, configuration, userRoot: { Id: USER_ROOT_ID } });
   const ignoreRule = await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [ROOT_PATH] });
   const refreshes = new ProviderRefreshService();
   lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, ignoreRule, configuration,

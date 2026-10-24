@@ -35,7 +35,7 @@ const safetyDivergence = input.filter(sample => sample.safetyDivergence);
 test('live video source protocols depend on the actual path without a repository LocationType projection', async () => {
   const item = newNativeItemEntity('MediaBrowser.Controller.Entities.Movies.Movie');
   item.Id = '98c00000-0000-0000-0000-000000000010'; item.Name = 'Live movie';
-  assert.equal(item.LocationType, undefined);
+  assert.equal(item.LocationType, 'Virtual');
   const project = () => mediaSources(item, { byId: new Map([[idKey(item.Id), item]]), links: [],
     db: { rows: async () => [] } }, null, {});
   for (const Path of ['D:\\Media\\Film.mkv', '\\\\server\\share\\Film.mkv', '/media/Film.mkv', null]) {
