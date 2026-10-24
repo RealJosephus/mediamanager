@@ -156,7 +156,7 @@ test('Book runtime persists the current native independent RAR cover streams and
 
 test('Comic language outcomes preserve the complete metadata commit or failure through PostgreSQL and HTTP', async t => {
   const { native } = await captureCurrentComic();
-  const values = new Set(['qz', 'qzz', 'qzzz', 'qzzzz', 'qzzzzzzz', '123', 'qzz-Latn-XY', 'qz-419', 'en--US']);
+  const values = new Set(['qz', 'qzz', 'qzzz', 'qzzzz', 'qzzzzzzz', '123', 'qzz-Latn-XY', 'qz-419', 'en--US', 'ca-ES-valencia']);
   const names = new Set(['xml-language-notvalid', 'xml-language-123', 'json-language-extra-6e6f7476616c6964',
     ...[...values].flatMap(value => ['xml', 'json'].map(format => 'language-boundary-' + format + '-' + Buffer.from(value).toString('hex')))]);
   const directory = await mkdtemp(path.join(os.tmpdir(), 'book-runtime-'));

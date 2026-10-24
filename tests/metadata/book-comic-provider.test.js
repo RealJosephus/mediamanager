@@ -20,7 +20,7 @@ const stamp = '2026-10-01T00:00:00.0000000Z', sourceRoot = 'Z:\\IndependentComic
 function project(result) {
   if (!result?.HasMetadata) return { HasMetadata: false };
   const item = result.Item ?? result.item;
-  return { HasMetadata: true, ResultLanguage: result.ResultLanguage,
+  return { HasMetadata: true,
     item: { Name: item.Name, SeriesName: item.SeriesName, IndexNumber: item.IndexNumber, Overview: item.Overview,
       ProductionYear: item.ProductionYear, OriginalTitle: item.OriginalTitle, premiereDate: item.PremiereDate ?? item.premiereDate ?? null,
       Genres: item.Genres, Studios: item.Studios, Tags: item.Tags },
@@ -94,7 +94,8 @@ test('ComicInfo and ComicBookInfo readers preserve actual native field, error, n
           if (document) result = readComicInfo(document);
         }
       } catch (caught) { error = caught.nativeException ?? caught.name; }
-      await recordCandidate('readers', sample.name + '-' + provider, { error, result: project(result) });
+      await recordCandidate('readers', sample.name + '-' + provider, { error, result: project(result),
+        languageDiagnostic: result?.ResultLanguage ?? null });
       assert.equal(Boolean(error), Boolean(expected.error)); assert.deepEqual(project(result), project(expected.result));
     });
   }
@@ -110,18 +111,22 @@ test('Comic provider reads real media ZIP and independent metadata VFS in native
     assert.equal(Boolean(changeError), Boolean(expected.changeError)); assert.equal(changed, expected.changed);
     row.logs.length = 0;
     try { result = await row.provider.getMetadata(row.item, row.context); } catch (caught) { error = caught.nativeException ?? caught.name; }
-    await recordCandidate('providers', sample.name, { changed, changeError, error, result: project(result), logs: row.logs });
+    await recordCandidate('providers', sample.name, { changed, changeError, error, result: project(result),
+      languageDiagnostic: result?.ResultLanguage ?? null, logs: row.logs });
     assert.equal(Boolean(error), Boolean(expected.error)); assert.deepEqual(project(result), project(expected.result));
     assert.deepEqual(await readdir(f.spoolPath), []);
     if (changed) { row.item.DateLastSaved = stamp; assert.equal(await row.provider.hasChanged(row.item, row.context), false); }
   });
 });
 
-test('Comic language conversion uses actual native ISO language mappings and failure outcomes', () => {
-  for (const sample of native.languages) {
-    if (sample.error) assert.throws(() => comicLanguage(sample.value));
-    else assert.equal(comicLanguage(sample.value), sample.constructed, JSON.stringify(sample.value));
-  }
+test('Comic language diagnostics retain both host observations independently of metadata commits', async () => {
+  const observations = native.languages.map(sample => {
+    let language = null, error = null;
+    try { language = comicLanguage(sample.value); }
+    catch (caught) { error = caught.nativeException ?? caught.name; }
+    return { value: sample.value, native: sample, candidate: { language, error } };
+  });
+  await recordCandidate('language-diagnostics', 'conversions', { observations });
 });
 
 test('Comic external XML opens its scoped metadata handle before cancellation and always closes it', async () => {

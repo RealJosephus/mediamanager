@@ -7,11 +7,15 @@ asset names. The ten original SharpCompress archives and its MIT license were
 recovered from their original fixed commit and match the original length and
 SHA-256 pins. `assets.json` records each URL and Git blob identity.
 
-The metadata matrix appends 76 XML/JSON language cases. Unknown two-, three-,
+The metadata matrix appends 88 XML/JSON language cases. Unknown two-, three-,
 four-, five-, eight- and nine-character language identifiers, numeric values,
-script and region subtags, private use, extensions and malformed separators
+script and region subtags, registered and unknown variants, private use,
+collation extensions and malformed separators
 run through the actual component and composite providers. The raw language
-constructor observations remain available to explain host behavior.
+constructor observations and candidate conversions remain available to explain
+host behavior. Local metadata comparisons cover returned item/people content
+and success/failure; the refresh host does not consume the local result's
+language annotation.
 
 The metadata oracle executes the real ComicBookInfo, external/internal
 ComicInfo and composite providers. Candidate tests read the newly generated
@@ -30,7 +34,7 @@ consume these fresh selected streams and verify persisted image values and
 source preservation. The EPUB runtime case uses the existing current OPF/EPUB
 capture and its exact tracked archive input.
 
-The language runtime consumer refreshes 21 selected boundary inputs through the
+The language runtime consumer refreshes 23 selected boundary inputs through the
 production metadata host, PostgreSQL and authenticated HTTP. It records the
 complete DTO and compares committed name, overview and credit rows with the
 same-run composite provider outcome, including failed providers that commit no

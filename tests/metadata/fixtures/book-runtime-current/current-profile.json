@@ -37,13 +37,13 @@
       "role": "comicProfile",
       "filename": "../book-comic/current-profile.json",
       "bytes": 8236,
-      "sha256": "867d6c80dd46f15f8a7299d1dd2281bd4257e142b077d7f9cae920b41ff4bc5b"
+      "sha256": "57ad047ef41cdb31631efc3868fa4c4b0bbece619a3e46bf16ea13b1c360ad37"
     },
     {
       "role": "scenarios",
       "filename": "../book-comic-current/input.json",
-      "bytes": 51995,
-      "sha256": "014ea8b136495fdbb5b22eaa723ff7a13c64433e7fe1c280f17a7daebc087150"
+      "bytes": 56201,
+      "sha256": "0c89896cc29e27e419a0401c3352ff5e7cc0aaf1a644c93eb82a66b2ce158e40"
     },
     {
       "role": "assetManifest",

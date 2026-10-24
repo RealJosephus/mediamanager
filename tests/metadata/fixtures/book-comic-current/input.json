@@ -739,6 +739,54 @@
     {
       "name": "language-boundary-json-c3a9c3a9",
       "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"éé\"}}"
+    },
+    {
+      "name": "language-boundary-xml-63612d45532d76616c656e636961",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>ca-ES-valencia</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-63612d45532d76616c656e636961",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"ca-ES-valencia\"}}"
+    },
+    {
+      "name": "language-boundary-xml-736c2d726f7a616a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>sl-rozaj</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-736c2d726f7a616a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"sl-rozaj\"}}"
+    },
+    {
+      "name": "language-boundary-xml-64652d44452d31393031",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>de-DE-1901</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-64652d44452d31393031",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"de-DE-1901\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d55532d706f736978",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-US-posix</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d55532d706f736978",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-US-posix\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d55532d6162636465",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-US-abcde</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d55532d6162636465",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-US-abcde\"}}"
+    },
+    {
+      "name": "language-boundary-xml-64652d44452d752d636f2d70686f6e65626b",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>de-DE-u-co-phonebk</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-64652d44452d752d636f2d70686f6e65626b",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"de-DE-u-co-phonebk\"}}"
     }
   ],
   "coverCases": [
@@ -1341,7 +1389,13 @@
     "und-XY",
     "a1",
     "q1z",
-    "éé"
+    "éé",
+    "ca-ES-valencia",
+    "sl-rozaj",
+    "de-DE-1901",
+    "en-US-posix",
+    "en-US-abcde",
+    "de-DE-u-co-phonebk"
   ],
   "culture": "en-US"
 }

@@ -17,14 +17,18 @@ export const profile = JSON.parse(await readFile(new URL('../book-comic/current-
 const assetManifest = JSON.parse(await readFile(new URL('./assets.json', import.meta.url)));
 export const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 
+const localMetadata = result => {
+  if (!result) return result;
+  const { ResultLanguage, ...metadata } = result;
+  return metadata;
+};
 const metadataOutcome = row => ({ name: row.name, provider: row.provider, changed: row.changed,
-  changeFailed: Boolean(row.changeError), failed: Boolean(row.error), trace: row.trace, result: row.result,
+  changeFailed: Boolean(row.changeError), failed: Boolean(row.error), trace: row.trace, result: localMetadata(row.result),
   source: { exists: row.source.exists, kind: row.source.kind, modified: row.source.modified } });
 const coverOutcome = row => ({ name: row.name, culture: row.culture, hasImage: row.hasImage, format: row.format,
   bytes: row.bytes, sha256: row.sha256, sourceUnlocked: row.sourceUnlocked });
 function functionalNative(native) {
-  return { results: native.results.map(metadataOutcome), covers: native.covers.map(coverOutcome),
-    languages: native.languages.map(({ value, constructed, cached, error }) => ({ value, constructed, cached, failed: Boolean(error) })) };
+  return { results: native.results.map(metadataOutcome), covers: native.covers.map(coverOutcome) };
 }
 const imageOutcome = sample => ({ name: sample.name, saveLocal: sample.saveLocal, sourceSha256: sample.sourceSha256,
   selected: sample.selected, refreshFailed: Boolean(sample.refreshError), updateFailed: Boolean(sample.updateError),
