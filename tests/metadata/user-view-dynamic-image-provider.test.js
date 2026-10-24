@@ -80,21 +80,29 @@ async function fixture(t) {
   const user = { Id: id(100), Configuration: {}, Policy: { EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
   const users = { getUser: async userId => { assert.equal(idKey(userId), idKey(user.Id)); return user; } };
   const provider = createUserViewDynamicImagePlugin({ library, users }).providers[0];
-  return { database, library, provider, user, directory, errors, view: { Id: view.Id, Type: 'UserView', ViewType: 'movies', DisplayParentId: id(3) } };
+  const setViewType = async ViewType => {
+    await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType, DisplayParentId: idKey(id(3)) }) });
+    // A direct fixture write has no metadata manager to publish its new live
+    // entity. Start the next consumer from the newly stored view instead.
+    itemCreation.unregisterItem(view.Id);
+    await linkedChildren.flushReleases();
+  };
+  return { database, library, provider, user, directory, errors, setViewType,
+    view: { Id: view.Id, Type: 'UserView', ViewType: 'movies', DisplayParentId: id(3) } };
 }
 test('dynamic images use actual recursive movie/TV queries, including the frozen null-user failure', async t => {
-  const { provider, view, database } = await fixture(t);
+  const { provider, view, setViewType } = await fixture(t);
   for (const ViewType of ['movies', 'tvshows']) {
-    await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType, DisplayParentId: idKey(id(3)) }) });
+    await setViewType(ViewType);
     await assert.rejects(provider.fetch({ ...view, ViewType }), error => error.status === 500 && error.message === 'Error processing request.');
     await assert.rejects(provider.hasChanged({ ...view, ViewType }), error => error.status === 500 && error.message === 'Error processing request.');
   }
 });
 test('real user and playlist empty image sources return None without reporting a refresh failure', async t => {
-  const { provider, view, user, database } = await fixture(t);
+  const { provider, view, user, setViewType } = await fixture(t);
   assert.equal(await provider.fetch({ ...view, UserId: user.Id }), ItemUpdateType.None);
   assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), false);
-  await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'playlists', DisplayParentId: idKey(id(3)) }) });
+  await setViewType('playlists');
   assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }), ItemUpdateType.None);
   assert.equal(await provider.fetch({ ...view, ViewType: 'books' }), ItemUpdateType.None);
 });
@@ -107,7 +115,7 @@ test('an existing remote or media-side primary image prevents the null-user quer
   }
 });
 test('a genuine local source image creates and saves a UserView thumbnail for movies and playlists', async t => {
-  const { provider, database, library, view, user, directory } = await fixture(t);
+  const { provider, database, library, view, user, directory, setViewType } = await fixture(t);
   const Path = path.join(directory, 'source.png');
   await writeFile(Path, await readFile(new URL('../images/fixtures/user-view-collage/assets/same.png', import.meta.url)));
   await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
@@ -122,7 +130,7 @@ test('a genuine local source image creates and saves a UserView thumbnail for mo
   assert.deepEqual(await sharp(await readFile(images[0].Path)).metadata().then(({ width, height }) => ({ width, height })), { width: 960, height: 540 });
   assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
   assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }, { images }), false);
-  await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'playlists', DisplayParentId: idKey(id(3)) }) });
+  await setViewType('playlists');
   assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
   const production = createUserViewDynamicImagePlugin({ library, users: { getUser: async () => user } }).providers[0];
   assert.equal(await production.fetch({ ...view, Name: 'Movies 中影', ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
@@ -177,8 +185,8 @@ test('UserView image membership remains SQL-owned across 260 items and first-ima
 });
 
 test('UserView image candidates replace repeated episodes and seasons by their real series', async t => {
-  const { database, library, view, user } = await fixture(t);
-  await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType: 'tvshows', DisplayParentId: idKey(id(3)) }) });
+  const { database, library, view, user, setViewType } = await fixture(t);
+  await setViewType('tvshows');
   await database.insertBatch('BaseItems', [
     item(6, 'TV.Series', { ParentId: id(4), TopParentId: id(4) }),
     item(7, 'TV.Season', { ParentId: id(6), TopParentId: id(4) }),
