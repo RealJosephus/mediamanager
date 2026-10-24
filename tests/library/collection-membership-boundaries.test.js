@@ -8,6 +8,8 @@ import { PostgresDatabase } from '../../src/database/postgres.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
+import { ItemCreationService } from '../../src/library/item-creation-service.js';
+import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { idKey } from '../../src/library/records.js';
 import { collectionFoldersForItem, userRootFolders } from '../../src/library/collection-membership.js';
 
@@ -31,18 +33,25 @@ for(const dialect of dialects)test(dialect+': root-child scope, 36 nullable path
 },async()=>{
  const schema='member_bounds_'+process.pid+'_'+randomBytes(4).toString('hex');
  const db=await PostgresDatabase.open({connectionString:process.env.MEDIAMANAGER_TEST_POSTGRES,schema,create:true});
- const store=new DomainStore(db),library=new LibraryService({fileSystem: testFileSystem, store,serverId:'membership-boundaries-test'});
+ const store=new DomainStore(db);
+ let library,itemCreation,linkedChildren,state;
  const cases=[],differences=[],cleanup={libraryClosed:false,databaseClosed:false,schemasRemoved:false};
  try{
+  linkedChildren=new PostgresLinkedChildrenStore({database:db});await linkedChildren.initialize();
+  library=new LibraryService({fileSystem:testFileSystem,store,linkedChildren,serverId:'membership-boundaries-test'});
+  itemCreation=new ItemCreationService({store,library,linkedChildren,loadContext:async()=>{
+   throw new Error('Metadata mutation is outside the nullable collection membership scenario.');
+  }});library.itemCreation=itemCreation;
   for(const item of [row(1,'UserRootFolder'),row(2,'Folder'),row(3,'CollectionFolder',{ParentId:id(1)})])await db.insert('BaseItems',item);
   for(const expected of reference.nullable){
    await db.update('BaseItems',{Id:id(2)},{Path:expected.rootPath});
    await db.update('BaseItems',{Id:id(3)},{Path:expected.collectionPath,Data:JSON.stringify({PhysicalFolderIds:[id(2)],PhysicalLocationsList:expected.locations})});
-   const state=await store.run(async database=>library.load(database,null,{includeUserData:false,baseRows:await database.rows('BaseItems')}));
+   state=await store.run(async database=>library.load(database,null,{includeUserData:false,baseRows:await database.rows('BaseItems')}));
    const physical=state.byId.get(idKey(id(2)));
    const actual={helper:collectionFoldersForItem(physical,state).map(folder=>folder.Id),service:(await library.getCollectionFolders(physical)).map(folder=>folder.Id)};
    for(const [field,ids] of Object.entries(actual))if(JSON.stringify(ids)!==JSON.stringify(expected.collectionFolders))differences.push({case:cases.length,field,expected:expected.collectionFolders,actual:ids});
    cases.push({rootPath:expected.rootPath,collectionPath:expected.collectionPath,locations:expected.locations,actual});
+   await state.dispose();state=null;
   }
   await db.delete('BaseItems',{Id:id(3)});
   await db.insert('BaseItems',row(4,'CollectionFolder',{ParentId:id(1),Path:'Z:\\Library',Data:reference.alias.json}));
@@ -52,7 +61,7 @@ for(const dialect of dialects)test(dialect+': root-child scope, 36 nullable path
   for(const item of [row(11,'UserRootFolder'),row(12,'AggregateFolder'),row(13,'Folder',{ParentId:id(12),Path:'Z:\\Refresh'}),
    row(14,'CollectionFolder',{ParentId:id(11),Data:JSON.stringify({PhysicalLocationsList:['z:/refresh/']})}),
    row(15,'CollectionFolder',{ParentId:id(12),Data:JSON.stringify({PhysicalLocationsList:['Z:\\Refresh']})})])await db.insert('BaseItems',item);
-  let state=await store.run(async database=>library.load(database,null,{includeUserData:false,baseRows:await database.rows('BaseItems')}));
+  state=await store.run(async database=>library.load(database,null,{includeUserData:false,baseRows:await database.rows('BaseItems')}));
   const children=userRootFolders(state).map(item=>item.Id);
   if(JSON.stringify(children)!==JSON.stringify(reference.scope.rootChildren))differences.push({field:'rootChildren',expected:reference.scope.rootChildren,actual:children});
   const physical=state.byId.get(idKey(id(13)));
@@ -60,6 +69,7 @@ for(const dialect of dialects)test(dialect+': root-child scope, 36 nullable path
   if(JSON.stringify(scopeFolders.map(item=>item.Id))!==JSON.stringify(reference.scope.rootChildMembership))differences.push({field:'rootScope',expected:reference.scope.rootChildMembership,actual:scopeFolders.map(item=>item.Id)});
   const explicit=collectionFoldersForItem(physical,state,[state.byId.get(idKey(id(14))),state.byId.get(idKey(id(15)))]).map(item=>item.Id);
   if(JSON.stringify(explicit)!==JSON.stringify(reference.scope.explicitlyIncludingNested))differences.push({field:'explicitNested',expected:reference.scope.explicitlyIncludingNested,actual:explicit});
+  await state.dispose();state=null;
   // Source GetCachedChildren uses Parent=this and default binary SortName. No
   // by-type or virtual-root fallback participates in this entity Children path.
   await db.update('BaseItems',{Id:id(14)},{SortName:'z'});
@@ -70,7 +80,8 @@ for(const dialect of dialects)test(dialect+': root-child scope, 36 nullable path
   assert.deepEqual(userRootFolders(state).map(item=>item.Id),[id(18),id(16),id(14)]);
   assert.deepEqual(userRootFolders({...state,items:state.items.filter(item=>item.Type!=='UserRootFolder')}),[]);
  }finally{
-  await library.close();cleanup.libraryClosed=true;
+  await state?.dispose();await itemCreation?.close();await library?.close();cleanup.libraryClosed=true;
+  await linkedChildren?.close();
   if(dialect==='postgres'){
    await db.client.query('DROP SCHEMA '+quoteIdentifier(db.schemaName)+' CASCADE');
    await db.client.query('DROP SCHEMA '+quoteIdentifier(db.controlSchema)+' CASCADE');

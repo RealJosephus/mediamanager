@@ -169,6 +169,8 @@ test('postgres: remote play expansion preserves commands with bounded PostgreSQL
     };
 
     await database.insert('BaseItems', item(ids.userRoot, 'UserRootFolder', { IsFolder: true }));
+    // Bind grouped views to the root declared by this isolated catalogue.
+    runtime.library.options.userRoot = { Id: ids.userRoot };
     await database.insert('BaseItems', item(ids.aggregate, 'AggregateFolder', { IsFolder: true }));
     await database.insert('BaseItems', item(ids.physical, 'Folder', {
       IsFolder: true, ParentId: ids.aggregate, Path: 'Z:\\Bounded\\Movies',

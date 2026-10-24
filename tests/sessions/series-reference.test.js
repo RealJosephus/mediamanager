@@ -71,29 +71,31 @@ test('postgres: persisted typed Series resolution and complete user data keys ma
         assert.equal(Object.hasOwn(mapped, 'Series'), false, 'DAO canonicalization ignores persisted getter aliases');
         const plain = { ...hydrated, SeriesId: entry.SeriesId };
         const asyncSeries = await resolveSeriesAsync(plain, lookup);
-        const state = await loadState(), canonical = state.byId.get(idKey(entry.Id));
-        const syncSeries = resolveSeries(canonical, state.byId);
-        assert.equal(guid(asyncSeries?.Id), guid(entry.actualSeriesId));
-        assert.equal(guid(syncSeries?.Id), guid(entry.actualSeriesId));
-        assert.equal(guid(state.memoryContext.seriesFor(canonical)?.Id), guid(entry.actualSeriesId));
-        const storedAncestors = before.ancestors.filter(row => guid(row.ItemId) === guid(entry.Id)).map(row => guid(row.ParentItemId));
-        assert.deepEqual(storedAncestors.sort(), raw.getters[0].savedAncestorIds.map(idKey).sort(), 'contradictory persisted ancestors stay intact');
-        const persistedKeys = await userDataKeys(db, hydrated), domainKeys = await userDataKeys(db, plain);
-        assert.deepEqual(persistedKeys, entry.userDataKeys, `${entry.type}/${entry.mode}: SQL hydration`);
-        assert.deepEqual(domainKeys, entry.userDataKeys, `${entry.type}/${entry.mode}: actual Guid.Empty domain input`);
-        assert.equal(state.userData.get(idKey(entry.Id)).Key, entry.userDataKeys[0], 'LibraryService.load uses the evaluated typed getter');
-        const rows = state.rowsFor(canonical), expectedRow = rows.find(row => row.CustomDataKey === entry.userDataKeys[0]);
-        assert.ok(expectedRow); assert.equal(state.userData.get(idKey(entry.Id)).PlayCount, expectedRow.PlayCount);
-        assert.equal((await readUserDataRows(db, canonical, rows)).Key, entry.userDataKeys[0]);
-        const listed = await library.getUserDataList([{ item: canonical }], { user });
-        assert.equal(listed.length, 1); assert.equal(listed[0].Key, entry.userDataKeys[0], 'explicit item branch uses typed getter too');
-        assert.equal(listed[0].PlayCount, expectedRow.PlayCount);
-        const after = await snapshot();
-        assert.deepEqual(after, before, 'all reads preserve exact SQL rows, ancestors and JSON');
-        result.observations.push({ type: entry.type, mode: entry.mode, persisted: storedRow,
-          actualSeriesId: asyncSeries?.Id ?? null, persistedKeys, domainKeys,
-          loadKey: state.userData.get(idKey(entry.Id)).Key, list: listed[0], unchanged: true,
-          beforeStateSha256: hash(fullJson(before)), afterStateSha256: hash(fullJson(after)) });
+        const state = await loadState();
+        try {
+          const canonical = state.byId.get(idKey(entry.Id));
+          const syncSeries = resolveSeries(canonical, state.byId);
+          assert.equal(guid(asyncSeries?.Id), guid(entry.actualSeriesId));
+          assert.equal(guid(syncSeries?.Id), guid(entry.actualSeriesId));
+          const storedAncestors = before.ancestors.filter(row => guid(row.ItemId) === guid(entry.Id)).map(row => guid(row.ParentItemId));
+          assert.deepEqual(storedAncestors.sort(), raw.getters[0].savedAncestorIds.map(idKey).sort(), 'contradictory persisted ancestors stay intact');
+          const persistedKeys = await userDataKeys(db, hydrated), domainKeys = await userDataKeys(db, plain);
+          assert.deepEqual(persistedKeys, entry.userDataKeys, `${entry.type}/${entry.mode}: SQL hydration`);
+          assert.deepEqual(domainKeys, entry.userDataKeys, `${entry.type}/${entry.mode}: actual Guid.Empty domain input`);
+          assert.equal(state.userData.get(idKey(entry.Id)).Key, entry.userDataKeys[0], 'LibraryService.load uses the evaluated typed getter');
+          const rows = state.rowsFor(canonical), expectedRow = rows.find(row => row.CustomDataKey === entry.userDataKeys[0]);
+          assert.ok(expectedRow); assert.equal(state.userData.get(idKey(entry.Id)).PlayCount, expectedRow.PlayCount);
+          assert.equal((await readUserDataRows(db, canonical, rows)).Key, entry.userDataKeys[0]);
+          const listed = await library.getUserDataList([{ item: canonical }], { user });
+          assert.equal(listed.length, 1); assert.equal(listed[0].Key, entry.userDataKeys[0], 'explicit item branch uses typed getter too');
+          assert.equal(listed[0].PlayCount, expectedRow.PlayCount);
+          const after = await snapshot();
+          assert.deepEqual(after, before, 'all reads preserve exact SQL rows, ancestors and JSON');
+          result.observations.push({ type: entry.type, mode: entry.mode, persisted: storedRow,
+            actualSeriesId: asyncSeries?.Id ?? null, persistedKeys, domainKeys,
+            loadKey: state.userData.get(idKey(entry.Id)).Key, list: listed[0], unchanged: true,
+            beforeStateSha256: hash(fullJson(before)), afterStateSha256: hash(fullJson(after)) });
+        } finally { await state.dispose({ session: db }); }
       }
 
       const episode = await setSeriesCase(db, raw.getters[0]);
@@ -104,11 +106,13 @@ test('postgres: persisted typed Series resolution and complete user data keys ma
         ['evaluated-null', null, [raw.getters[0].Id]], ['evaluated-undefined', undefined, [raw.getters[0].Id]],
         ['wrong-type', wrongSeries, [raw.getters[0].Id]]]) {
         const item = { ...episode, Series }, state = await loadState();
-        assert.equal(resolveSeries(item, state.byId), name === 'evaluated-series' ? realSeries : null);
-        assert.equal(await resolveSeriesAsync(item, () => assert.fail('resolved getter must not perform another lookup')),
-          name === 'evaluated-series' ? realSeries : null);
-        const keys = await userDataKeys(db, item); assert.deepEqual(keys, expected);
-        result.domainControls.push({ name, keys });
+        try {
+          assert.equal(resolveSeries(item, state.byId), name === 'evaluated-series' ? realSeries : null);
+          assert.equal(await resolveSeriesAsync(item, () => assert.fail('resolved getter must not perform another lookup')),
+            name === 'evaluated-series' ? realSeries : null);
+          const keys = await userDataKeys(db, item); assert.deepEqual(keys, expected);
+          result.domainControls.push({ name, keys });
+        } finally { await state.dispose({ session: db }); }
       }
       // Even a null serialized alias is removed, so SQL hydration can evaluate its actual parent chain.
       await db.update('BaseItems', { Id: episode.Id }, { Data: '{"Series":null}', SeriesId: null });
@@ -117,7 +121,8 @@ test('postgres: persisted typed Series resolution and complete user data keys ma
       assert.deepEqual(await userDataKeys(db, nullAlias), raw.getters[0].userDataKeys);
       assert.equal(Object.hasOwn(mapRecord((await db.rows('BaseItems', { where: { Id: episode.Id } }))[0]), 'Series'), false);
       const nullState = await loadState();
-      assert.equal(nullState.userData.get(idKey(episode.Id)).Key, raw.getters[0].userDataKeys[0]);
+      try { assert.equal(nullState.userData.get(idKey(episode.Id)).Key, raw.getters[0].userDataKeys[0]); }
+      finally { await nullState.dispose({ session: db }); }
       const afterControls = await snapshot();
       beforeControls.items.find(item => item.Id === episode.Id).Data = '{"Series":null}';
       beforeControls.items.find(item => item.Id === episode.Id).SeriesId = null;

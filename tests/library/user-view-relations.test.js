@@ -5,6 +5,8 @@ import test from 'node:test';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
+import { ItemCreationService } from '../../src/library/item-creation-service.js';
+import { PostgresLinkedChildrenStore } from '../../src/library/postgres-linked-children.js';
 import { idKey, mapRecord } from '../../src/library/records.js';
 import { persistItemRelations, itemSaveRelations } from '../../src/library/item-relations.js';
 import { loadUserViewsNativeContract } from './fixtures/user-views/native-contract.js';
@@ -24,12 +26,21 @@ test('all 17 recorded UserViews derive native ancestors and inherited tags from 
   const db = await createPostgresTestDatabase(t, 'user_view_relations_native');
   const store = new DomainStore(db);
   const programDataPath = path.join(manifest.referenceRoot, 'data');
-  const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'item-relations-test', programDataPath, configuration: { UICulture: 'en-US' } });
+  const roots = native.baseItems.filter(item => item.Type === 'MediaBrowser.Controller.Entities.UserRootFolder');
+  assert.equal(roots.length, 1);
+  let library, itemCreation, linkedChildren, state, primary;
   try {
+    linkedChildren = new PostgresLinkedChildrenStore({ database: db }); await linkedChildren.initialize();
+    library = new LibraryService({fileSystem: testFileSystem, store, linkedChildren, serverId: 'item-relations-test',
+      programDataPath, userRoot: { Id: roots[0].Id }, configuration: { UICulture: 'en-US' } });
+    itemCreation = new ItemCreationService({ store, library, linkedChildren, loadContext: async () => {
+      throw new Error('Metadata mutation is outside the recorded UserView relation scenario.');
+    } });
+    library.itemCreation = itemCreation;
     // These are copied observations. The frozen native database stays closed.
     for (const source of native.baseItems) await db.insert('BaseItems', { ...source, ParentId: null, OwnerId: null });
     for (const source of native.baseItems) await db.update('BaseItems', { Id: source.Id }, { ParentId: source.ParentId, OwnerId: source.OwnerId });
-    const state = await library.load(db, null, { includeUserData: false, baseRows: await db.rows('BaseItems') });
+    state = await library.load(db, null, { includeUserData: false, baseRows: await db.rows('BaseItems') });
     const views = state.items.filter(item => item.Type === 'UserView');
     assert.equal(views.length, 17);
     let inherited = 0;
@@ -51,7 +62,16 @@ test('all 17 recorded UserViews derive native ancestors and inherited tags from 
     }
     assert.equal(inherited, 5);
     assert.equal(isolated, 6);
-  } finally { await library.close(); await store.close(); }
+  } catch (error) { primary = error; throw error; }
+  finally {
+    const failures = [];
+    for (const close of [() => state?.dispose(), () => itemCreation?.close(), () => library?.close(),
+      () => linkedChildren?.close(), () => store.close()]) {
+      try { await close(); } catch (error) { failures.push(error); }
+    }
+    if (failures.length) throw new AggregateError(primary ? [primary, ...failures] : failures,
+      primary?.message ?? 'UserView relation fixture cleanup failed.', primary ? { cause: primary } : undefined);
+  }
 });
 
 test('real parents and collections deduplicate GUIDs and tags without inheriting DisplayParentId', () => {
