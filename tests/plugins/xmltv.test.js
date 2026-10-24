@@ -126,6 +126,36 @@ test('a failed source open removes an abandoned temporary file without creating 
   } finally { await provider.close(); }
 });
 
+test('abandoned temporary-file cleanup excludes a new writer until unlink completes', { timeout: 30000 }, async t => {
+  const root = await ownedRoot(t), cachePath = path.join(root, 'cache');
+  const temporary = path.join(cachePath, 'same-id.xml.tmp');
+  await fs.mkdir(cachePath); await fs.writeFile(temporary, 'abandoned bytes');
+  const removing = Promise.withResolvers(), release = Promise.withResolvers();
+  let sourceClosed = 0;
+  const first = createXmlTvListingsProvider({ cachePath, fileSystem: { ...fs, async unlink(filename) {
+    removing.resolve(); await release.promise; return fs.unlink(filename);
+  } }, source: { async openRead() {
+    throw Object.assign(new Error('The controlled mapped source is missing.'), { code: 'ENOENT' });
+  } } });
+  const second = createXmlTvListingsProvider({ cachePath, source: { async openRead() {
+    return { stream: [xml], async close() { sourceClosed++; } };
+  } } });
+  const info = { Id: 'same-id', Path: '/mapped.xml' }, pending = first.getLineups(info, '', '');
+  const rejected = assert.rejects(pending, error => error.code === 'ENOENT');
+  try {
+    await Promise.race([removing.promise, pending.then(() => { throw new Error('The owner completed before cleanup admission.'); })]);
+    await assert.rejects(second.getLineups(info, '', ''));
+    assert.equal(sourceClosed, 1);
+    assert.equal(await fs.readFile(temporary, 'utf8'), 'abandoned bytes');
+    release.resolve(); await rejected;
+    assert.deepEqual(await fs.readdir(cachePath), []);
+    assert.deepEqual(await second.getLineups(info, '', ''), [{ Id: 'c1', Name: 'English' }]);
+    assert.equal(sourceClosed, 2);
+    assert.deepEqual(await fs.readFile(path.join(cachePath, 'same-id.xml')), xml);
+    assert.deepEqual(await fs.readdir(cachePath), ['same-id.xml']);
+  } finally { release.resolve(); await Promise.allSettled([pending, rejected, first.close(), second.close()]); }
+});
+
 test('close cancels admitted real file writes, rejects new work and drains the source close owner', { timeout: 30000 }, async t => {
   const root = await ownedRoot(t), cachePath = path.join(root, 'cache');
   const admitted = Promise.withResolvers(), aborted = Promise.withResolvers(), closingSource = Promise.withResolvers(), releaseClose = Promise.withResolvers();

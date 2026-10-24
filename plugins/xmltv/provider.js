@@ -153,9 +153,12 @@ export function createXmlTvListingsProvider({ cachePath, source, preferredMetada
       await fileSystem.rename(temporary, filename); failures.delete(info.Path); return filename;
     } catch (cause) {
       if (handle) { try { await handle.close(); } catch (closeError) { report(closeError); } handle = undefined; }
-      // Preserve another admitted writer's temporary file. An orphan from an
-      // earlier process can still be cleaned after a download/open failure.
-      if (ownsTemporary || !activeTemporaryFiles.has(temporaryIdentity)) await removeTemp(temporary);
+      // Cleanup owns the path until unlink completes, so a writer admitted
+      // during that await cannot lose its newly opened temporary file.
+      if (!ownsTemporary && !activeTemporaryFiles.has(temporaryIdentity)) {
+        activeTemporaryFiles.add(temporaryIdentity); ownsTemporary = true;
+      }
+      if (ownsTemporary) await removeTemp(temporary);
       if (signal.aborted && (cause === signal.reason || cause === downloadSignal.reason || cause.name === 'AbortError' || cause.name === 'OperationCanceledException')) throw signal.reason ?? cause;
       failures.set(info.Path, now()); report(cause);
       if (await exists(filename)) return filename;
