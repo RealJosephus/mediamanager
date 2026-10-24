@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "fixture": "book-comic-current",
-  "scope": "Same-run designated Native Comic metadata/readers and archive covers, repeated independently; six actual native saved-image/SQLite consumers and Node VFS/PG consumers. Complete original 103 metadata inputs and 44 cover cases retain selected bytes, persisted image values, source inputs and operation cleanup. CLR error names, messages and logs are diagnostics. Historical recordings remain unchanged; component evidence does not claim hosted HTTP takeover, complete instances or release acceptance.",
+  "scope": "Same-run designated Native Comic metadata/readers and archive covers, repeated independently; six actual native saved-image/SQLite consumers and Node VFS/PG consumers. Complete original 103 metadata inputs plus 76 XML/JSON language boundaries and 44 cover cases retain selected bytes, persisted image values, source inputs and operation cleanup. CLR error names, messages and logs are diagnostics. Historical recordings remain unchanged; component evidence does not claim hosted HTTP takeover, complete instances or release acceptance.",
   "sourcePaths": [
     "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
     "Emby.Server.Implementations/Library/LibraryManager.cs",
@@ -30,8 +30,8 @@
     {
       "role": "scenarios",
       "filename": "../book-comic-current/input.json",
-      "bytes": 26790,
-      "sha256": "9ea8c874cda2eed6778f86ada5a8c3accc726cfc2659de0d46ba36fd3dc72f59"
+      "bytes": 51995,
+      "sha256": "014ea8b136495fdbb5b22eaa723ff7a13c64433e7fe1c280f17a7daebc087150"
     },
     {
       "role": "assetManifest",

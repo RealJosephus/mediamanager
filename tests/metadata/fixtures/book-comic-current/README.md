@@ -7,6 +7,12 @@ asset names. The ten original SharpCompress archives and its MIT license were
 recovered from their original fixed commit and match the original length and
 SHA-256 pins. `assets.json` records each URL and Git blob identity.
 
+The metadata matrix appends 76 XML/JSON language cases. Unknown two-, three-,
+four-, five-, eight- and nine-character language identifiers, numeric values,
+script and region subtags, private use, extensions and malformed separators
+run through the actual component and composite providers. The raw language
+constructor observations remain available to explain host behavior.
+
 The metadata oracle executes the real ComicBookInfo, external/internal
 ComicInfo and composite providers. Candidate tests read the newly generated
 archive inputs through the production media VFS and independently mapped
@@ -23,6 +29,15 @@ paths and image rows are retained. The existing PostgreSQL Book runtime cases
 consume these fresh selected streams and verify persisted image values and
 source preservation. The EPUB runtime case uses the existing current OPF/EPUB
 capture and its exact tracked archive input.
+
+The language runtime consumer refreshes 21 selected boundary inputs through the
+production metadata host, PostgreSQL and authenticated HTTP. It records the
+complete DTO and compares committed name, overview and credit rows with the
+same-run composite provider outcome, including failed providers that commit no
+metadata. Original archives, metadata sidecars, independent decoys and empty
+archive spools are checked before outcome assertions. This exercises the Node
+host with fresh Native provider observations; it does not claim a hosted Native
+metadata-service or database recording.
 
 `../book-comic/current-profile.json` binds the current oracle sources, projects,
 assets, build properties, shipped codec payload, reviewed codec source/patches

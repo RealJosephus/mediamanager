@@ -435,6 +435,310 @@
     {
       "name": "json-language-extra-756e64",
       "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"und\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a7a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzzz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a7a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzzz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a7a7a7a7a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzzzzzz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a7a7a7a7a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzzzzzz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a7a7a7a7a7a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzzzzzzz</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a7a7a7a7a7a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzzzzzzz\"}}"
+    },
+    {
+      "name": "language-boundary-xml-3132",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>12</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-3132",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"12\"}}"
+    },
+    {
+      "name": "language-boundary-xml-313233",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>123</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-313233",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"123\"}}"
+    },
+    {
+      "name": "language-boundary-xml-31323334",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>1234</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-31323334",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"1234\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qz-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qz-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzz-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzz-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzz-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzz-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a7a2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzzz-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a7a2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzzz-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a2d4c61746e",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qz-Latn</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a2d4c61746e",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qz-Latn\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a2d4c61746e",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzz-Latn</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a2d4c61746e",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzz-Latn\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a2d4c61746e",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzz-Latn</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a2d4c61746e",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzz-Latn\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a7a7a2d4c61746e",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzzzz-Latn</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a7a7a2d4c61746e",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzzzz-Latn\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a2d4c61746e2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qz-Latn-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a2d4c61746e2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qz-Latn-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a2d4c61746e2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzz-Latn-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a2d4c61746e2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzz-Latn-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a2d343139",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qz-419</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a2d343139",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qz-419\"}}"
+    },
+    {
+      "name": "language-boundary-xml-717a7a2d343139",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>qzz-419</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-717a7a2d343139",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"qzz-419\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d416263",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-Abc</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d416263",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-Abc\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d4142434445",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-ABCDE</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d4142434445",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-ABCDE\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d31",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-1</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d31",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-1\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d3132",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-12</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d3132",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-12\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d313233",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-123</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d313233",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-123\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d31323334",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-1234</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d31323334",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-1234\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d4c61746e2d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-Latn-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d4c61746e2d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-Latn-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d4c61746e2d58595a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-Latn-XYZ</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d4c61746e2d58595a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-Latn-XYZ\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d2d5553",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en--US</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d2d5553",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en--US\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d55532d",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-US-</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d55532d",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-US-\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d55532d752d63612d677265676f7279",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-US-u-ca-gregory</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d55532d752d63612d677265676f7279",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-US-u-ca-gregory\"}}"
+    },
+    {
+      "name": "language-boundary-xml-656e2d782d636f6d6963",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>en-x-comic</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-656e2d782d636f6d6963",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"en-x-comic\"}}"
+    },
+    {
+      "name": "language-boundary-xml-782d636f6d6963",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>x-comic</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-782d636f6d6963",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"x-comic\"}}"
+    },
+    {
+      "name": "language-boundary-xml-756e642d5859",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>und-XY</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-756e642d5859",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"und-XY\"}}"
+    },
+    {
+      "name": "language-boundary-xml-6131",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>a1</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-6131",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"a1\"}}"
+    },
+    {
+      "name": "language-boundary-xml-71317a",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>q1z</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-71317a",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"q1z\"}}"
+    },
+    {
+      "name": "language-boundary-xml-c3a9c3a9",
+      "xml": "<ComicInfo><Title>Language title</Title><Summary>Language overview</Summary><Genre>Language genre</Genre><Publisher>Language publisher</Publisher><Writer>Language Author</Writer><LanguageISO>éé</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "language-boundary-json-c3a9c3a9",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Language title\",\"comments\":\"Language overview\",\"genre\":\"Language genre\",\"publisher\":\"Language publisher\",\"credits\":[{\"person\":\"Language Author\",\"role\":\"Author\"}],\"language\":\"éé\"}}"
     }
   ],
   "coverCases": [
@@ -1000,7 +1304,44 @@
     "ger",
     "deu",
     "en_US",
-    "en-US-x-test"
+    "en-US-x-test",
+    "qz",
+    "qzz",
+    "qzzz",
+    "qzzzz",
+    "qzzzzzzz",
+    "qzzzzzzzz",
+    "12",
+    "1234",
+    "qz-XY",
+    "qzz-XY",
+    "qzzz-XY",
+    "qzzzz-XY",
+    "qz-Latn",
+    "qzz-Latn",
+    "qzzz-Latn",
+    "qzzzz-Latn",
+    "qz-Latn-XY",
+    "qzz-Latn-XY",
+    "qz-419",
+    "qzz-419",
+    "en-Abc",
+    "en-ABCDE",
+    "en-1",
+    "en-12",
+    "en-123",
+    "en-1234",
+    "en-Latn-XY",
+    "en-Latn-XYZ",
+    "en--US",
+    "en-US-",
+    "en-US-u-ca-gregory",
+    "en-x-comic",
+    "x-comic",
+    "und-XY",
+    "a1",
+    "q1z",
+    "éé"
   ],
   "culture": "en-US"
 }
