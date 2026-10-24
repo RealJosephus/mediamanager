@@ -42,6 +42,7 @@ const executionManifests = new Map([
   ['tests/core/parental-rating-unicode.test.js', ['current-oracle', 'tests/core/fixtures/parental-rating-unicode/current-profile.json']],
   ['tests/database/postgres-rating-unicode.test.js', ['current-oracle', 'tests/core/fixtures/parental-rating-unicode/current-profile.json']],
   ['tests/http/password-reset-consumer.test.js', ['current-oracle', 'tests/http/fixtures/password-reset/current-profile.json']],
+  ['tests/http/mime-types.test.js', ['current-oracle', 'tests/http/fixtures/mime-types-current/current-profile.json']],
   ['tests/http/startup.test.js', ['current-oracle', 'tests/http/fixtures/startup/current-profile.json']],
   ['tests/core/native-charset.test.js', ['current-oracle', 'tests/core/fixtures/native-charset/current-profile.json']],
   ['tests/core/native-json-encoder.test.js', ['current-oracle', 'tests/core/fixtures/native-json-encoder/current-profile.json']],

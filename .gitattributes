@@ -429,3 +429,4 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/metadata/fixtures/book-comic/current-profile.json text eol=lf
 /tests/metadata/fixtures/book-runtime-current/** -text
 /tests/storage/fixtures/archive-codec-current/** -text
+/tests/http/fixtures/mime-types-current/** -text
