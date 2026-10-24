@@ -5,19 +5,23 @@ import {DomainStore} from '../../src/database/domain-store.js';
 import {LibraryService} from '../../src/library/library-service.js';
 import {PostgresLinkedChildrenStore} from '../../src/library/postgres-linked-children.js';
 import {acquireNativeItemLinkOwner} from '../../src/library/native-item-entity.js';
-import {createPostgresTestDatabase,postgresTestRow} from '../database/postgres-fixture.js';
+import {createPostgresTestDatabase,dropPostgresTestDatabase,postgresTestRow} from '../database/postgres-fixture.js';
 
 const id=n=>n.toString(16).padStart(32,'0');
 async function fixture(t){
-  const database=await createPostgresTestDatabase(t,'record_owner',{max:1}),store=new DomainStore(database),links=new PostgresLinkedChildrenStore({database});await links.initialize();
+  const database=await createPostgresTestDatabase(null,'record_owner',{max:1}),store=new DomainStore(database),links=new PostgresLinkedChildrenStore({database});await links.initialize();
   const library=new LibraryService({fileSystem: testFileSystem, store,linkedChildren:links,serverId:'record-owner',configuration:{CacheSize:3}});
   const frames=new Set(),load=library.load.bind(library);library.load=async(...args)=>{const state=await load(...args),dispose=state.dispose.bind(state);frames.add(state);state.dispose=async options=>{try{await dispose(options);}finally{frames.delete(state);}};return state;};
   await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(1),Type:'MediaBrowser.Controller.Entities.UserRootFolder',Name:'Root',Data:'{}',IsFolder:true}));
   await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(2),Type:'MediaBrowser.Controller.Entities.CollectionFolder',Name:'Collection',ParentId:id(1),Data:JSON.stringify({PhysicalFolderIds:[id(3)]}),IsFolder:true}));
   for(let value=3;value<=12;value++)await database.insert('BaseItems',postgresTestRow('BaseItems',{Id:id(value),Type:value===4?'MediaBrowser.Controller.Entities.Audio.Audio':value===5?'MediaBrowser.Controller.Entities.Movies.Movie':'MediaBrowser.Controller.Entities.Folder',Name:'item '+value,ParentId:value===3?null:id(3),TopParentId:id(3),Data:'{}',IsFolder:value!==4&&value!==5,MediaType:value===4?'Audio':value===5?'Video':'Unknown'}));
-  t.after(async()=>{await library.close();assert.equal(frames.size,0);await links.flushOwnedReleases();await links.flushReleases();
-    for(const table of ['item_states','item_cohorts','pins','sets'])assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".${table}`)).rows[0].count),0n,table);
-    await links.close();await store.close();});
+  t.after(async()=>{
+    const errors=[];
+    for(const close of [()=>library.close(),()=>{assert.equal(frames.size,0);},()=>links.flushOwnedReleases(),()=>links.flushReleases(),async()=>{
+      for(const table of ['item_states','item_cohorts','pins','sets'])assert.equal(BigInt((await database.client.query(`SELECT count(*) AS count FROM "${links.schemaName}".${table}`)).rows[0].count),0n,table);
+    },()=>links.close(),()=>store.close(),()=>dropPostgresTestDatabase(database)])try{await close();}catch(error){errors.push(error);}
+    if(errors.length)throw new AggregateError(errors,'Record owner fixture cleanup failed.');
+  });
   return{database,store,links,library,frames};
 }
 async function attach(links,item){item.LinkedChildren=await links.withSession(async session=>{const writer=await links.createWriter({session,parentId:item.Id});await writer.append({ItemId:id(5),Type:0});return writer.finish();});}

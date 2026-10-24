@@ -107,7 +107,7 @@ foreach (var name in cases) {
     var internalCover = name.StartsWith("internal-cover") || name.StartsWith("boundary-") || name == "delete-old-failure";
     if (internalCover || name is "external-cover" or "remote-cover") {
         var cover = name == "remote-cover" ? "https://images.invalid/existing.png" : name == "external-cover" ? Path.Combine(root, "external.png") : Path.Combine(album.GetInternalMetadataPath(), "old.png");
-        if (name == "boundary-forward-separators") cover = cover.Replace('\', '/');
+        if (name == "boundary-forward-separators") cover = cover.Replace('\\', '/');
         if (name == "boundary-root-equal") cover = album.GetInternalMetadataPath();
         if (name == "boundary-dot-segment") cover = album.GetInternalMetadataPath() + Path.DirectorySeparatorChar + ".." + Path.DirectorySeparatorChar + "sibling" + Path.DirectorySeparatorChar + "old.png";
         var date = name.StartsWith("boundary-") || name is "internal-cover-changed" or "internal-cover-missing-min" ? DateTime.MinValue : stamp;
