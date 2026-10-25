@@ -1,0 +1,185 @@
+{
+  "neutralFixture": "tests/library/fixtures/rating-permissions/input.json",
+  "cases": [
+    {
+      "name": "static-source-permissions-0",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-source-permissions-1",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-source-permissions-2",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-source-permissions-3",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": false
+      }
+    },
+    {
+      "name": "static-source-permissions-4",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-source-permissions-5",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": false,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-source-permissions-6",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": false,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": true
+      }
+    },
+    {
+      "name": "static-source-permissions-7",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [
+        "alpha"
+      ],
+      "detailKey": "alpha",
+      "maxRating": null,
+      "blockUnrated": [],
+      "detailExpectedStatus": 200,
+      "endpoints": [
+        "detail"
+      ],
+      "transcodingPolicy": {
+        "EnableVideoPlaybackTranscoding": true,
+        "EnableAudioPlaybackTranscoding": true,
+        "EnablePlaybackRemuxing": true
+      }
+    }
+  ],
+  "independentAudit": {
+    "filename": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-repeat-audit-v1.json",
+    "sha256": "b2bb5d8d2b75961a67f4a5983d9a9def17473359d4f994779126c4974179ea72"
+  },
+  "recordings": [
+    {
+      "evidenceRoot": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v3/rating-permissions-native-v1",
+      "directory": {
+        "path": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v3/rating-permissions-native-v1",
+        "entriesSha256": "8923b08f1af49c9aeeaf187bc6c221cbc9a828bb7bb9849e5dc23bc88708bf73"
+      },
+      "oracle": {
+        "filename": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v3/rating-permissions-native-v1/oracle-validation.json",
+        "sha256": "4c39b65ea5dcc2234e74cbe766f78d322bf6ffe3ffd5cc68409b46d8b5f58ad3"
+      }
+    },
+    {
+      "evidenceRoot": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v4/rating-permissions-native-v1",
+      "directory": {
+        "path": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v4/rating-permissions-native-v1",
+        "entriesSha256": "8ed5a3bf9f68baf40ec193d6d9b87e8a65283174ce3df2dee9d3c1eb12109ed1"
+      },
+      "oracle": {
+        "filename": "D:/mediamanager-validation/20261011/filter-results/static-source-policy-native-v4/rating-permissions-native-v1/oracle-validation.json",
+        "sha256": "1996a2d0f9956488c97110f30658c78439c0f257e3ac8bd394fb4a0be323497e"
+      }
+    }
+  ]
+}

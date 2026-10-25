@@ -1,0 +1,3122 @@
+{
+  "results": [
+    {
+      "name": "Folder fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Video fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Fresh.Title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Episode fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Fresh.Title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Audio fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Fresh.Title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "AudioBook fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Fresh.Title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicAlbum fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "BoxSet fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "UserView fills an empty name and clears a warmed cache",
+      "result": {
+        "changed": true,
+        "initialCache": "",
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "Z:\\ChildrenMetadata\\Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "null name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "name",
+          "Path": "Z:\\ChildrenMetadata\\name.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "name"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "whitespace name remains",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "  ",
+          "Path": "Z:\\ChildrenMetadata\\name.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": ""
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "no path leaves null name",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": null,
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": null
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "empty path leaves empty name",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "",
+          "Path": "",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": ""
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "trailing separator yields empty name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "",
+          "Path": "Z:\\ChildrenMetadata\\Folder\\",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": ""
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "dotfile yields empty name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "",
+          "Path": "Z:\\ChildrenMetadata\\.hidden",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": ""
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "trailing dot is stripped",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "name",
+          "Path": "Z:\\ChildrenMetadata\\name.",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "name"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "forward slash identity",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Fresh.Title",
+          "Path": "/fixture/aggregate/Fresh.Title.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "fresh title"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "remote URL basename",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "https://media.test/Feature.mp4",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "path contains consecutive separators",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\\\Feature.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: year in name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: zero year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 0,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: existing year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2001,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: locks do not suppress inferred year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: path supplies name and year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: year in name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: zero year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 0,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: existing year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2001,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: locks do not suppress inferred year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: path supplies name and year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: year in name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: zero year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 0,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: existing year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2001,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: locks do not suppress inferred year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: path supplies name and year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series: year in name",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series: zero year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 0,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series: existing year is retained",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2001,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series: locks do not suppress inferred year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Series: path supplies name and year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2022).mkv",
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: folder year fallback",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: mixed folder skips fallback",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: name year precedes folder",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2021)",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2021,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002021)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: DVD folder uses its own year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+          "ProductionYear": 2023,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: stacked DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: placeholder DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Movie: trailing directory separator remains observable",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: folder year fallback",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: mixed folder skips fallback",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: name year precedes folder",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2021)",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2021,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002021)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: DVD folder uses its own year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+          "ProductionYear": 2023,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: stacked DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: placeholder DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "MusicVideo: trailing directory separator remains observable",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: folder year fallback",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: mixed folder skips fallback",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: name year precedes folder",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature (2021)",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv",
+          "ProductionYear": 2021,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002021)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: DVD folder uses its own year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Feature (2023)",
+          "ProductionYear": 2023,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: stacked DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: placeholder DVD uses parent year",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\Disc (2023)",
+          "ProductionYear": 2024,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Trailer: trailing directory separator remains observable",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\Folder (2024)\\file.mkv\\",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: keyword season",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2",
+          "ProductionYear": null,
+          "IndexNumber": 2,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "0002"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: number preserved",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2",
+          "ProductionYear": null,
+          "IndexNumber": 0,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "0000"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: special alias",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\Specials",
+          "ProductionYear": null,
+          "IndexNumber": 0,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "0000"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: parent name removed",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\The.Show.Season.3",
+          "ProductionYear": null,
+          "IndexNumber": 3,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "0003"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: prefix season",
+      "result": {
+        "changed": true,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\The Show S04",
+          "ProductionYear": null,
+          "IndexNumber": 4,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "0004"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: unrecognized season",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\Winter",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "Season: trailing season separator",
+      "result": {
+        "changed": false,
+        "initialCache": null,
+        "clearedCache": null,
+        "item": {
+          "Name": "Feature",
+          "Path": "Z:\\ChildrenMetadata\\The.Show\\Season 2\\",
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "Feature"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Season 1\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022SEASON_02\u0022",
+      "result": {
+        "SeasonNumber": 2,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S03\u0022",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Show S1234\u0022",
+      "result": {
+        "SeasonNumber": 1234,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S12345\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S02E03\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u002202\u0022",
+      "result": {
+        "SeasonNumber": 2,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00220\u0022",
+      "result": {
+        "SeasonNumber": 0,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022-1\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022\u002B1\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00222147483647\u0022",
+      "result": {
+        "SeasonNumber": 2147483647,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00222147483648\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Specials\u0022",
+      "result": {
+        "SeasonNumber": 0,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Ex.tras\u0022",
+      "result": {
+        "SeasonNumber": 0,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00221st Season\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u002202nd staffel\u0022",
+      "result": {
+        "SeasonNumber": 2,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022season1201080p\u0022",
+      "result": {
+        "SeasonNumber": 120,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022season120720p\u0022",
+      "result": {
+        "SeasonNumber": 12,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022season1E02\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S01.E02\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022\uC2DC\uC98C 7\u0022",
+      "result": {
+        "SeasonNumber": 7,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022\u30B7\u30FC\u30BA\u30F3 8\u0022",
+      "result": {
+        "SeasonNumber": 8,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022\u0441\u0435\u0437\u043E\u043D 9\u0022",
+      "result": {
+        "SeasonNumber": 9,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S\u00E6son 10\u0022",
+      "result": {
+        "SeasonNumber": 10,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Saison 11\u0022",
+      "result": {
+        "SeasonNumber": 11,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Staffel 12\u0022",
+      "result": {
+        "SeasonNumber": 12,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Series 13\u0022",
+      "result": {
+        "SeasonNumber": 13,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Stagione 14\u0022",
+      "result": {
+        "SeasonNumber": 14,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S\u00E4song 15\u0022",
+      "result": {
+        "SeasonNumber": 15,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Seizoen 16\u0022",
+      "result": {
+        "SeasonNumber": 16,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Seasong 17\u0022",
+      "result": {
+        "SeasonNumber": 17,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Sezon 18\u0022",
+      "result": {
+        "SeasonNumber": 18,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Sezona 19\u0022",
+      "result": {
+        "SeasonNumber": 19,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Sez\u00F3na 20\u0022",
+      "result": {
+        "SeasonNumber": 20,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Sezonul 21\u0022",
+      "result": {
+        "SeasonNumber": 21,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S\u00E9rie 22\u0022",
+      "result": {
+        "SeasonNumber": 22,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S\u00E9ria 23\u0022",
+      "result": {
+        "SeasonNumber": 23,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Serie 24\u0022",
+      "result": {
+        "SeasonNumber": 24,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Seria 25\u0022",
+      "result": {
+        "SeasonNumber": 25,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Temporada 26\u0022",
+      "result": {
+        "SeasonNumber": 26,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Kausi 27\u0022",
+      "result": {
+        "SeasonNumber": 27,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Season \u0661\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022S\uFF11\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Seas\\non 2\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00221 Season\\nnotes\u0022",
+      "result": {
+        "SeasonNumber": 1,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Season\\t4\u0022",
+      "result": {
+        "SeasonNumber": 4,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Season\u00A05\u0022",
+      "result": {
+        "SeasonNumber": 5,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u00221.e2Season\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parser: \u0022Season 2\\\\\u0022",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:true} 03",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:true} Specials",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:true} Season 3",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:true} S03",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:true} S.e.a.s.o.n.3",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:true,\u0022numeric\u0022:false} 03",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:true,\u0022numeric\u0022:false} Specials",
+      "result": {
+        "SeasonNumber": 0,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:true,\u0022numeric\u0022:false} Season 3",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:true,\u0022numeric\u0022:false} S03",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:true,\u0022numeric\u0022:false} S.e.a.s.o.n.3",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:false} 03",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:false} Specials",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:false} Season 3",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:false} S03",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season flags {\u0022aliases\u0022:false,\u0022numeric\u0022:false} S.e.a.s.o.n.3",
+      "result": {
+        "SeasonNumber": null,
+        "Success": false,
+        "IsSeasonFolder": false
+      },
+      "exception": null
+    },
+    {
+      "name": "season parent spelling is removed repeatedly",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "season parent trailing separator",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "empty normalized parent throws",
+      "result": null,
+      "exception": "ArgumentException"
+    },
+    {
+      "name": "prefix parse bypasses empty normalized parent",
+      "result": {
+        "SeasonNumber": 3,
+        "Success": true,
+        "IsSeasonFolder": true
+      },
+      "exception": null
+    },
+    {
+      "name": "null season path throws",
+      "result": null,
+      "exception": "ArgumentNullException"
+    },
+    {
+      "name": "Episode cache: indices retain a warm cache until After",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "001 - 0001 - Track",
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "after",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "003 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "003 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Episode cache: Before clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "001 - 0001 - Track",
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "before",
+            "value": false,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Episode cache: same Name setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "001 - 0001 - Track",
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Episode cache: same ForcedSortName setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "001 - 0001 - Track",
+            "cache": "001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Audio cache: indices retain a warm cache until After",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0001 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "after",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0003 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0003 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Audio cache: Before clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "before",
+            "value": false,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Audio cache: same Name setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Audio cache: same ForcedSortName setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "AudioBook cache: indices retain a warm cache until After",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0001 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "after",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0003 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0003 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "AudioBook cache: Before clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "before",
+            "value": false,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "AudioBook cache: same Name setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "AudioBook cache: same ForcedSortName setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001 - 0001 - Track",
+            "cache": "0001 - 0001 - Track"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001 - 0009 - Track",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0001 - 0009 - Track"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Season cache: indices retain a warm cache until After",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001",
+            "cache": "0001"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001"
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0001",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0001"
+          },
+          {
+            "op": "after",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0009",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 3
+            },
+            "cache": "0009"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Season cache: Before clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001",
+            "cache": "0001"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": "0001"
+          },
+          {
+            "op": "before",
+            "value": false,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0009",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0009"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Season cache: same Name setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001",
+            "cache": "0001"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0009",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0009"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "Season cache: same ForcedSortName setter clears a warm cache",
+      "result": {
+        "steps": [
+          {
+            "op": "read",
+            "value": "0001",
+            "cache": "0001"
+          },
+          {
+            "op": "change",
+            "value": null,
+            "cache": null
+          },
+          {
+            "op": "map",
+            "value": {
+              "Name": "Track",
+              "ForcedSortName": null,
+              "SortName": "0009",
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1
+            },
+            "cache": "0009"
+          }
+        ]
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: missing path short circuits",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: minimum date short circuits",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: exactly one second is unchanged",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 1
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: one second and one tick changes",
+      "result": {
+        "requiresRefresh": true,
+        "fileCalls": 1
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: earlier file date changes",
+      "result": {
+        "requiresRefresh": true,
+        "fileCalls": 1
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: missing file remains unchanged",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 1
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: ordinary folder missing runtime does not refresh",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: album missing runtime requires refresh",
+      "result": {
+        "requiresRefresh": true,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: album zero runtime remains",
+      "result": {
+        "requiresRefresh": false,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "requires: physical artist missing runtime requires refresh",
+      "result": {
+        "requiresRefresh": true,
+        "fileCalls": 0
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: FullRefresh selected provider",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": 2022,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [
+          {
+            "Name": "Feature (2022)",
+            "Year": 2022
+          }
+        ],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: Default changed provider",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": 2022,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [
+          {
+            "Name": "Feature (2022)",
+            "Year": 2022
+          }
+        ],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: Default unchanged provider skips Before",
+      "result": {
+        "updateType": 1,
+        "calls": [],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: ValidationOnly remote change is filtered",
+      "result": {
+        "updateType": 1,
+        "calls": [],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": false,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: None first save skips Before",
+      "result": {
+        "updateType": 1,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 2
+          },
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 1
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 1,
+        "stampChanged": false,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: Default first refresh with no provider calls Before",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 2
+          },
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": 2022,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 1,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: FullRefresh no provider existing item skips Before",
+      "result": {
+        "updateType": 1,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 1
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: ForceSave no provider skips Before",
+      "result": {
+        "updateType": 9,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 9
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: locked first refresh still calls Before",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 2
+          },
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": 2022,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [],
+        "reattachments": 1,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "refresh: first save cancellation retains pre-hook database state",
+      "result": {
+        "updateType": null,
+        "calls": [
+          {
+            "item": {
+              "Name": "Feature (2022)",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": null,
+              "ParentIndexNumber": null,
+              "ForcedSortName": null,
+              "SortName": "feature (0000002022)"
+            },
+            "updateReason": 2
+          }
+        ],
+        "lookups": [
+          {
+            "Name": "Feature (2022)",
+            "Year": 2022
+          }
+        ],
+        "providerSortReads": [],
+        "reattachments": 0,
+        "stampChanged": false,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Feature (2022)",
+          "Path": null,
+          "ProductionYear": 2022,
+          "IndexNumber": null,
+          "ParentIndexNumber": null,
+          "ForcedSortName": null,
+          "SortName": "feature (0000002022)"
+        }
+      },
+      "exception": "OperationCanceledException"
+    },
+    {
+      "name": "episode refresh: unreported ValidationOnly index runs After without saving",
+      "result": {
+        "updateType": 1,
+        "calls": [],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 0,
+        "stampChanged": false,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0009 - Track"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "episode refresh: reported index saves a warm value then clears After",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0009 - Track"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "episode refresh: force save retains a warm value until After",
+      "result": {
+        "updateType": 9,
+        "calls": [
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track"
+            },
+            "updateReason": 9
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 0,
+        "stampChanged": false,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0009 - Track"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "episode refresh: same Name setter saves the new index sort",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0009 - Track"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 0,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0009 - Track"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "episode refresh: first save occurs before the warm index mutation",
+      "result": {
+        "updateType": 3,
+        "calls": [
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 1,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track"
+            },
+            "updateReason": 2
+          },
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 9,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track"
+            },
+            "updateReason": 3
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 1,
+        "stampChanged": true,
+        "cacheAfterRefresh": null,
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0009 - Track"
+        }
+      },
+      "exception": null
+    },
+    {
+      "name": "episode refresh: cancellation leaves a warm runtime cache and first save",
+      "result": {
+        "updateType": null,
+        "calls": [
+          {
+            "item": {
+              "Name": "Track",
+              "Path": null,
+              "ProductionYear": null,
+              "IndexNumber": 1,
+              "ParentIndexNumber": 1,
+              "ForcedSortName": null,
+              "SortName": "001 - 0001 - Track"
+            },
+            "updateReason": 2
+          }
+        ],
+        "lookups": [],
+        "providerSortReads": [
+          "001 - 0001 - Track"
+        ],
+        "reattachments": 0,
+        "stampChanged": false,
+        "cacheAfterRefresh": "001 - 0001 - Track",
+        "item": {
+          "Name": "Track",
+          "Path": null,
+          "ProductionYear": null,
+          "IndexNumber": 9,
+          "ParentIndexNumber": 1,
+          "ForcedSortName": null,
+          "SortName": "001 - 0001 - Track"
+        }
+      },
+      "exception": "OperationCanceledException"
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "86648d1d3c0ec5d6d749e888abc33dc1f93dd9861b2cbbf735400829887b3553",
+  "boundary": "Actual BaseItem/Movie/MusicVideo/Trailer/Series/Season BeforeMetadataRefresh, BaseItem.AfterMetadataRefresh, SeasonPathParser and BaseItemMapper warmed-cache projections. Actual LibraryManager.ParseName uses native NamingOptions. Actual pathless MovieMetadataService and EpisodeMetadataService with ProviderManager record refresh gates, warmed provider reads, first-save order and cancellation. Library items/options, file metadata, enabled remote/custom providers, episode-number no-change callback and repository/reattachment callbacks are controlled. Episode filename parsing, embedded episode probing, rebasing by-name state paths, specialized service After hooks, native SQL writes, NFO and media file operations are excluded."
+}

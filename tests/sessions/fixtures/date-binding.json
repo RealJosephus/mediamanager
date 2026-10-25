@@ -1,0 +1,5861 @@
+{
+  "source": "Actual LegacyDateTimeModelBinder and SQLite DateTimeKindValueConverter from frozen current Jellyfin DLLs",
+  "now": "2026-09-26T21:12:09.4508580+08:00",
+  "timeZone": "China Standard Time",
+  "cases": [
+    {
+      "culture": "en-US",
+      "values": [],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        ""
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        " "
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "20260926120000"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "20260926120000",
+        "20260926130000"
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "20260230000000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.12345678Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.99999999Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56+08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 12:34:56 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26/09/2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26, 2026 12:34:56 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat, 26 Sep 2026 12:34:56 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "September 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26日"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56.1234567"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T00:00:00-14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 14:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T00:00:00+14:01"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9999-12-31T23:59:59.9999999Z"
+      ],
+      "valid": true,
+      "stored": "9999-12-31 23:59:59.9999999"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26/49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26/50"
+      ],
+      "valid": true,
+      "stored": "1950-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026.09.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T24:00:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat Sep 26 2026 12:34:56 GMT+0800"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        " 2026 - 09 - 26  12 : 34 : 56 Z "
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "bad"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-02-29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024-02-29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12 Sep"
+      ],
+      "valid": true,
+      "stored": "2012-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "13 Sep"
+      ],
+      "valid": true,
+      "stored": "2013-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "31 Sep"
+      ],
+      "valid": true,
+      "stored": "2031-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 9"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 13"
+      ],
+      "valid": true,
+      "stored": "2026-09-12 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 50"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 September"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "September 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 2026 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26-9-2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-9-26T1:2:3"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26t12:34:56z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "PM 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30 A.M."
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30:00,5"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.5000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:30:00 +8"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:30:00 +0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:30:00 +08:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 +08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:00:00 GMT+8"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Fri, 26 Sep 2026 12:34:56 GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26日12时34分56秒"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26日12時34分56秒"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26日9月2026年"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 A.D."
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 BC"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "20260926"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.12345678901234567Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.12345675Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.12345665Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000005Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000015Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000002"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.99999999999999999Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01T00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9999-12-31T23:59:59-14:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01T00:00:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9999-12-31"
+      ],
+      "valid": true,
+      "stored": "9999-12-30 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1/1/1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "00/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "01/01/00"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026:09:26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026--09--26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep. 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Saturday September 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat 2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Saturday 2026-09-25"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        " 20260926120000 "
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56+08"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56+0830"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:04:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56+8:3"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:31:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9月26日"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年"
+      ],
+      "valid": true,
+      "stored": "2025-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 12:34:56 UTC"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30:60"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "24:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30 PM 2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 PM 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 12:34:56 EST"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56."
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56."
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26\u0000"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26junk"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "﻿2026-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1800-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1800-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1899-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1899-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1900-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1900-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1901-01-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1901-01-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1940-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1940-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1989-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1989-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1991-04-14 02:30"
+      ],
+      "valid": true,
+      "stored": "1991-04-13 18:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1991-09-15 01:30"
+      ],
+      "valid": true,
+      "stored": "1991-09-14 17:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "49-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0099-01-01"
+      ],
+      "valid": true,
+      "stored": "0098-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 September 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "49 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 9 0001"
+      ],
+      "valid": true,
+      "stored": "0001-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/9"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/2026"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "49/9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09-26-0001"
+      ],
+      "valid": true,
+      "stored": "0001-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09-26-99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "September"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T1:23:45"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T01:2:45"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T01:23:4"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-9-26T01:23:45"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 17:23:45.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 1:2:3"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 17:02:03.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56,5Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.5000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat, 26 Sep 2026 12:34:56Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56+24:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30 +8"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:30:00 -3"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 15:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 0 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 0 AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 13 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 05:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 1 pm"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 05:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:30PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12 : 30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat. Sep 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 Sat"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 -0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 08:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 - 09 - 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/09/26/"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 Sep,"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep,9"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026년9월26일"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26日12点30分"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.123456789012345678901234567890Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-9-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9-26-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26-9-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26-9-2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26-49-9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9-26-49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9-26-99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99-9-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0-1-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1-1-0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1-1-1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99-1-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "100-1-1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024-2-29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-2-29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-13-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26/9/26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26/9/2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26/49/9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26/49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9/26/99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99/9/26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1/1/0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1/1/1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "100/1/1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024/2/29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/2/29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026/13/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026.9.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9.26.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26.9.26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26.9.2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26.49.9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9.26.49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9.26.99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99.9.26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0.1.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1.1.0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1.1.1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99.1.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "100.1.1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024.2.29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026.2.29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026.13.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 26 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 9 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 9 2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 49 9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 26 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 9 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0 1 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 1 0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 1 1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 1 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "100 1 1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024 2 29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 2 29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 13 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 , 9 , 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 , 26 , 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 , 9 , 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 , 9 , 2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 , 49 , 9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 , 26 , 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 , 26 , 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 , 9 , 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0 , 1 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 , 1 , 0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 , 1 , 1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 , 1 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "100 , 1 , 1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2024 , 2 , 29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 , 2 , 29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 , 13 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 1 1"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 1 9"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 49 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 99 26"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 2026 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 32 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 2026 32"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 Sep 1"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 Sep 9"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "49 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 Sep 26"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "32 Sep 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 Sep 32"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 1 Sep"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "1 9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 49 Sep"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "49 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 99 Sep"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99 26 Sep"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26 2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "32 49 Sep"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 32 Sep"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12 AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "13 AM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "23 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 15:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "23 AM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "24PM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "AM 12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "PM 1 2026-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56 +1400"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 22:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56 +99"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56 +001"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:33:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56 +8:0"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26+0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56Z "
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56 GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.000000049Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.000000050Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.000000051Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.123456785Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 12:34.5"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56.1.2"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "September26,2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26Sep2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 September 26 AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026 September 26 AD AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56 GMT GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12:30:00-5"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 17:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01 00:00:00Z"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01 00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-02 00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "0001-01-01 00:00:00+00:01"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 23:59:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9999-12-31T23:59:59.99999999Z"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26日 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年09月26日 PM12時30分"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26日"
+      ],
+      "valid": true,
+      "stored": "2026-01-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9月"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12時"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "12時30分"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9月26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年9月26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "9月2026年"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026年26日9月"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "26日9月"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sep 0000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26\u0000\u0000"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09\u0000-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "Sat, Sep 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026, 12:34:56"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "09/26/2026 12:34:56,"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "00010101000000"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99991231155959"
+      ],
+      "valid": true,
+      "stored": "9999-12-31 15:59:59.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99991231160000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99991231235959"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "99991301000000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "﻿"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567+08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.99999995Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000025Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000003"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000035Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000004"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000045Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000005"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000055Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000006"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000065Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000007"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000075Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000008"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000085Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000009"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.00000095Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000010"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26 12:34:56.00000045Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000005"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567-14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-27 02:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567+14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 22:34:56.1234567"
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567+14:01"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "en-US",
+      "values": [
+        "2026-09-26T12:34:56.1234567-14:01"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        ""
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        " "
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "20260926120000"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "20260926120000",
+        "20260926130000"
+      ],
+      "valid": true,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "20260230000000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.12345678Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.99999999Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56+08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 12:34:56 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26/09/2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26, 2026 12:34:56 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat, 26 Sep 2026 12:34:56 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "September 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26日"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56.1234567"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T00:00:00-14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 14:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T00:00:00+14:01"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9999-12-31T23:59:59.9999999Z"
+      ],
+      "valid": true,
+      "stored": "9999-12-31 23:59:59.9999999"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26/49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26/50"
+      ],
+      "valid": true,
+      "stored": "1950-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026.09.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T24:00:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat Sep 26 2026 12:34:56 GMT+0800"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        " 2026 - 09 - 26  12 : 34 : 56 Z "
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "bad"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-02-29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024-02-29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12 Sep"
+      ],
+      "valid": true,
+      "stored": "2012-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "13 Sep"
+      ],
+      "valid": true,
+      "stored": "2013-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "31 Sep"
+      ],
+      "valid": true,
+      "stored": "2031-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 9"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 13"
+      ],
+      "valid": true,
+      "stored": "2026-09-12 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 50"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 September"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "September 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 2026 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26-9-2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-9-26T1:2:3"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26t12:34:56z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "PM 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30 A.M."
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30:00,5"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.5000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:30:00 +8"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:30:00 +0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:30:00 +08:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 GMT"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 +08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:00:00 GMT+8"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Fri, 26 Sep 2026 12:34:56 GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26日12时34分56秒"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26日12時34分56秒"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26日9月2026年"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 A.D."
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 BC"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "20260926"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.12345678901234567Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.12345675Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.12345665Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000005Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000015Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000002"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.99999999999999999Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01T00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9999-12-31T23:59:59-14:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01T00:00:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9999-12-31"
+      ],
+      "valid": true,
+      "stored": "9999-12-30 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1/1/1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "00/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "01/01/00"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026:09:26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026--09--26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep. 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Saturday September 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat 2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Saturday 2026-09-25"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        " 20260926120000 "
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56+08"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56+0830"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:04:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56+8:3"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:31:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9月26日"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年"
+      ],
+      "valid": true,
+      "stored": "2025-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 12:34:56 UTC"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30:60"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "24:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30 PM 2026-09-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 PM 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 12:34:56 EST"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56."
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56."
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26\u0000"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26junk"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "﻿2026-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1800-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1800-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1899-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1899-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1900-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1900-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1901-01-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1901-01-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1940-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1940-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1989-06-01 12:00"
+      ],
+      "valid": true,
+      "stored": "1989-06-01 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1991-04-14 02:30"
+      ],
+      "valid": true,
+      "stored": "1991-04-13 18:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1991-09-15 01:30"
+      ],
+      "valid": true,
+      "stored": "1991-09-14 17:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "49-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0099-01-01"
+      ],
+      "valid": true,
+      "stored": "0098-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 September 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "49 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 9 0001"
+      ],
+      "valid": true,
+      "stored": "0001-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/9"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/2026"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "49/9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09-26-0001"
+      ],
+      "valid": true,
+      "stored": "0001-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09-26-99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "September"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T1:23:45"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T01:2:45"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T01:23:4"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-9-26T01:23:45"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 17:23:45.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 1:2:3"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 17:02:03.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56,5Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.5000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat, 26 Sep 2026 12:34:56Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56+24:00"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30 +8"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:30:00 -3"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 15:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 0 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 0 AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 13 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 05:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 1 pm"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 05:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:30PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12 : 30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat. Sep 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 Sat"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 -0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 08:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 - 09 - 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/09/26/"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 Sep,"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep,9"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026년9월26일"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26日12点30分"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.123456789012345678901234567890Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-9-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9-26-26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26-9-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26-9-2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26-49-9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9-26-49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9-26-99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99-9-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0-1-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1-1-0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1-1-1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99-1-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "100-1-1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024-2-29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-2-29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-13-1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/9/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26/26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26/9/26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26/9/2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26/49/9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26/49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9/26/99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99/9/26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1/1/0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1/1/1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99/1/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "100/1/1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024/2/29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/2/29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026/13/1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026.9.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9.26.26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26.9.26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26.9.2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26.49.9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9.26.49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9.26.99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99.9.26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0.1.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1.1.0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1.1.1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99.1.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "100.1.1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024.2.29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026.2.29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026.13.1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 26 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 9 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 9 2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 49 9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 26 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 9 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0 1 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 1 0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 1 1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 1 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "100 1 1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024 2 29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 2 29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 13 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 , 9 , 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 , 26 , 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 , 9 , 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 , 9 , 2026"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 , 49 , 9"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 , 26 , 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 , 26 , 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 , 9 , 26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0 , 1 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 , 1 , 0"
+      ],
+      "valid": true,
+      "stored": "1999-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 , 1 , 1"
+      ],
+      "valid": true,
+      "stored": "2000-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 , 1 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "100 , 1 , 1"
+      ],
+      "valid": true,
+      "stored": "0099-12-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2024 , 2 , 29"
+      ],
+      "valid": true,
+      "stored": "2024-02-28 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 , 2 , 29"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 , 13 , 1"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 1 1"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 1 9"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 9 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 49 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 99 26"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 26 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 2026 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 32 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 2026 32"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 Sep 1"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 Sep 9"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep 9"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep 49"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "49 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep 99"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 Sep 26"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 Sep 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 Sep 26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "32 Sep 49"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 Sep 32"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 1 Sep"
+      ],
+      "valid": true,
+      "stored": "2001-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "1 9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-08 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 9 Sep"
+      ],
+      "valid": true,
+      "stored": "2009-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 49 Sep"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "49 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2049-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 99 Sep"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99 26 Sep"
+      ],
+      "valid": true,
+      "stored": "1999-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26 2026 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 26 Sep"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "32 49 Sep"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 32 Sep"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12 AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "13 AM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "23 PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 15:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "23 AM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0AM"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "24PM"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12PM"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "AM 12"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "PM 1 2026-09-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56 +1400"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 22:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56 +99"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56 +001"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:33:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56 +8:0"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26+0800"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56Z "
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56 GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.000000049Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.000000050Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.000000051Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000001"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.123456785Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.1234568"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 12:34.5"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56.1.2"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "September26,2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26Sep2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026Sep"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 September 26 AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026 September 26 AD AD"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56 GMT GMT"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12:30:00-5"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 17:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01 00:00:00Z"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01 00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-02 00:00:00+14:00"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 10:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "0001-01-01 00:00:00+00:01"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 23:59:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9999-12-31T23:59:59.99999999Z"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26日 12:30"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年09月26日 PM12時30分"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26日"
+      ],
+      "valid": true,
+      "stored": "2026-01-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9月"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12時"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "12時30分"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:30:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9月26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年9月26"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "9月2026年"
+      ],
+      "valid": true,
+      "stored": "2026-08-31 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026年26日9月"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "26日9月"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sep 0000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26\u0000\u0000"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09\u0000-26"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "Sat, Sep 26, 2026"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 16:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026, 12:34:56"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "09/26/2026 12:34:56,"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "00010101000000"
+      ],
+      "valid": true,
+      "stored": "0001-01-01 00:00:00.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99991231155959"
+      ],
+      "valid": true,
+      "stored": "9999-12-31 15:59:59.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99991231160000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99991231235959"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "99991301000000"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "﻿"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567+08:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 04:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.99999995Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:57.0000000"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000025Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000003"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000035Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000004"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000045Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000005"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000055Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000006"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000065Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000007"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000075Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000008"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000085Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000009"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.00000095Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000010"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26 12:34:56.00000045Z"
+      ],
+      "valid": true,
+      "stored": "2026-09-26 12:34:56.0000005"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567-14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-27 02:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567+14:00"
+      ],
+      "valid": true,
+      "stored": "2026-09-25 22:34:56.1234567"
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567+14:01"
+      ],
+      "valid": false,
+      "stored": null
+    },
+    {
+      "culture": "zh-CN",
+      "values": [
+        "2026-09-26T12:34:56.1234567-14:01"
+      ],
+      "valid": false,
+      "stored": null
+    }
+  ]
+}

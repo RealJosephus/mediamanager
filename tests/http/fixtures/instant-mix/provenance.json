@@ -1,0 +1,133 @@
+{
+  "nativeSha256": "f551e728a32efb6b52c86ca6d92346967ac6bd6cc54751f7557098bd08009149",
+  "inputSha256": "96cd3a14d008ca1f289c00e9a20512d17d66c4cfef209bf691033d140976b889",
+  "sources": [
+    {
+      "path": "Jellyfin.Api/Controllers/InstantMixController.cs",
+      "sha256": "7e829e7a2610f83ce6ad50c65ebe13e5575a0440157e216879bd90fc16819430",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/MusicManager.cs",
+      "sha256": "f4ea1a79740bfdba3cb9c38e5cdda1ab70feedd378045842542a47092b2e7c33",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Library/NameExtensions.cs",
+      "sha256": "58dbce701d53e74124ad4342c396ae14894b208316868a8210d9c4de5afd9c5f",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Helpers/RequestHelpers.cs",
+      "sha256": "213a922281289ea49aacd9b45a9302beeb4995160f66a8d575e7432b58d6e5e6",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Extensions/DtoExtensions.cs",
+      "sha256": "836aa69bd5b9569f4c3dbf140b29243f172cd348861759027bbc447bbf7c8290",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Dto/DtoOptions.cs",
+      "sha256": "e495bf966465c0acdd3d0196fb77bf2f7c06ce933c0d6607432186f2b1e898eb",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+      "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+      "sha256": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "92fd6f18ef968b1976b598afeed9a089a5df632b4c37dc0b679725aea9115eb1"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 60416,
+    "sha256": "ae83ff6ccf5d515efcb8d54e1a5087f8a6ad119adf4fa478018f3a4b0d5d09b0"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager\\tests\\http\\fixtures\\instant-mix\\input.json",
+      "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "cases": 74,
+  "sqliteRuntime": {
+    "filename": "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9\\native\\bin\\Release\\net10.0\\e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "evidence": "D:\\mediamanager-validation\\20261012-instant-mix-http-native-9",
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

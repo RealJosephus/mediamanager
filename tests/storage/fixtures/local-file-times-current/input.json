@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scope": "After real timestamp operations, the same isolated regular files and directories are read by Node, LocalAdapter, VFS, StorageFileSystem and the executing Native ManagedFileSystem. Raw Node before/after operation values and final same-files stability are retained separately.",
+  "fileBytesBase64": "U2FtZSBpc29sYXRlZCBsb2NhbCBmaWxlIGJ5dGVzADENCg==",
+  "cases": [
+    { "name": "past-file", "kind": "file", "mtime": "2001-02-03T04:05:06.123Z" },
+    { "name": "future-file", "kind": "file", "mtime": "2091-02-03T04:05:06.789Z", "changeMode": true },
+    { "name": "current-file", "kind": "file", "mtime": "current" },
+    { "name": "past-directory", "kind": "directory", "mtime": "2001-02-03T04:05:06.123Z" },
+    { "name": "future-directory", "kind": "directory", "mtime": "2091-02-03T04:05:06.789Z", "changeMode": true },
+    { "name": "current-directory", "kind": "directory", "mtime": "current" }
+  ],
+  "runtimeSourceRepository": "https://github.com/dotnet/dotnet",
+  "runtimeSourcePrefix": "src/runtime/",
+  "runtimeSourceManifest": "src/source-manifest.json",
+  "runtimeMappedRepository": "https://github.com/dotnet/runtime",
+  "runtimeSourcePaths": {
+    "linux": ["src/libraries/System.Private.CoreLib/src/System/IO/FileStatus.Unix.cs", "src/native/libs/System.Native/pal_io.c"],
+    "darwin": ["src/libraries/System.Private.CoreLib/src/System/IO/FileStatus.Unix.cs", "src/native/libs/System.Native/pal_io.c"],
+    "win32": ["src/libraries/System.Private.CoreLib/src/System/IO/FileSystem.Windows.cs", "src/libraries/System.Private.CoreLib/src/System/IO/FileSystemInfo.Windows.cs"]
+  },
+  "nativeSourcePaths": [
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "MediaBrowser.Model/IO/FileSystemMetadata.cs",
+    "MediaBrowser.Model/IO/IFileSystem.cs"
+  ]
+}

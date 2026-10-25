@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "sourceEvidence": ".test-input/evidence/syncplay-date-impact-native-v1/native-run/native-contract.json",
+  "sourceEvidenceSha256": "81d53056f6a8be7d30ad99570c84c6edd6468488f83ee427152a7288a71e5cd9",
+  "sourceRawEvidence": ".test-input/evidence/syncplay-date-impact-native-v1/native-run/native-http.json",
+  "sourceRawEvidenceSha256": "f821c4df12f88f252f540b51ef1b21361b0a296abeab81491de1201cacba98ab",
+  "sourceSummary": ".test-input/evidence/syncplay-date-impact-native-v1/native-run/summary.json",
+  "sourceSummarySha256": "eab31cbc287941a53b4530104c38d9e3f3d5fe9b5190cf61e581ad1fc51f469b",
+  "recorderSha256": "b04381cc4487a7881cc56af6ee502d342a3e32b13e1793656ee243338f70cb32",
+  "scenarioSha256": "a3bce89f039a3aac5556a40efe51bda653798df0a80b1e8387c43582d3a6b74a",
+  "nativeSource": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "jellyfinDllSha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03",
+    "waitingGroupStateSha256": "81757b195e5538cca56094df2699b31583a285646ae481ae48eb408a20f9dad8",
+    "groupSha256": "1ca12235b420cd61f76c42277da50dfe30179e052d1829b247106438d4516ca8",
+    "syncPlayControllerSha256": "ec60069b5d539025c02982c43a437a535c907eae21a42a92bb949dd9db8b128c"
+  },
+  "candidateSource": {
+    "groupSha256": "3d5058e92a76998d024d52f0ac165becb6a6afcb6007886183276ae56ed35214",
+    "dateSourceSha256": "2b519f0ba14477bb7067398c6d01347e09c4bdabe091e891c73cc1c858dd9d95",
+    "recordedGroupSha256": "7ef8d66f551df84df8b1f4b10310acc257fa88f2aae25a172d2534888e03f765",
+    "recordedDateSourceSha256": "697b751a949020c3e23812de114ca898dd901a087018e53325381f39aaad2ea5",
+    "reprojection": "tests/sessions/fixtures/syncplay/runtime-date-candidate-reprojection.json",
+    "reprojectionSha256": "9fd7a0754cf8a0624449b4610eed4b83390abbeb9c054895ab10f3ce36476918"
+  },
+  "guardDiagnostics": [
+    { "name": "minimum-minus-14-playing", "guardWarningCount": 1 },
+    { "name": "minimum-minus-14-paused", "guardWarningCount": 1 },
+    { "name": "minimum-utc-playing", "guardWarningCount": 1 },
+    { "name": "minimum-utc-paused", "guardWarningCount": 1 },
+    { "name": "inside-two-second-guard", "guardWarningCount": 0 },
+    { "name": "outside-two-second-guard", "guardWarningCount": 1 }
+  ],
+  "contract": {
+    "schemaVersion": 1,
+    "startPositionTicks": "6000000000",
+    "cases": [
+      {
+        "name": "minimum-minus-14-playing",
+        "input": { "boundary": "minimum-year-minus-14", "isPlaying": true },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Playing",
+          "command": "Unpause",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "within-500ms-tolerance",
+          "effectiveDelay": "0-ticks-after-two-second-guard",
+          "commandSchedule": "default-ping-approximately-1000ms",
+          "stateUpdate": { "State": "Playing", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      },
+      {
+        "name": "minimum-minus-14-paused",
+        "input": { "boundary": "minimum-year-minus-14", "isPlaying": false },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Playing",
+          "command": "Unpause",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "within-500ms-tolerance",
+          "effectiveDelay": "0-ticks-after-two-second-guard",
+          "commandSchedule": "default-ping-approximately-1000ms",
+          "stateUpdate": { "State": "Playing", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      },
+      {
+        "name": "minimum-utc-playing",
+        "input": { "boundary": "minimum-year-utc", "isPlaying": true },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Playing",
+          "command": "Unpause",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "within-500ms-tolerance",
+          "effectiveDelay": "0-ticks-after-two-second-guard",
+          "commandSchedule": "default-ping-approximately-1000ms",
+          "stateUpdate": { "State": "Playing", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      },
+      {
+        "name": "minimum-utc-paused",
+        "input": { "boundary": "minimum-year-utc", "isPlaying": false },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Playing",
+          "command": "Unpause",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "within-500ms-tolerance",
+          "effectiveDelay": "0-ticks-after-two-second-guard",
+          "commandSchedule": "default-ping-approximately-1000ms",
+          "stateUpdate": { "State": "Playing", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      },
+      {
+        "name": "inside-two-second-guard",
+        "input": { "boundary": "server-clock-minus-1000ms", "isPlaying": true },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Waiting",
+          "command": "Seek",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "outside-500ms-tolerance",
+          "effectiveDelay": "negative-more-than-5000000-ticks",
+          "commandSchedule": "not-future-scheduled",
+          "stateUpdate": { "State": "Waiting", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      },
+      {
+        "name": "outside-two-second-guard",
+        "input": { "boundary": "server-clock-minus-3000ms", "isPlaying": true },
+        "result": {
+          "readyStatus": 204,
+          "positionTicks": "6000000000",
+          "state": "Playing",
+          "command": "Unpause",
+          "commandPositionTicks": "6000000000",
+          "delayOutcome": "within-500ms-tolerance",
+          "effectiveDelay": "0-ticks-after-two-second-guard",
+          "commandSchedule": "default-ping-approximately-1000ms",
+          "stateUpdate": { "State": "Playing", "Reason": "Ready" },
+          "requestWhenEchoed": false
+        }
+      }
+    ]
+  },
+  "persistence": {
+    "nativeStableWindow": ["afterAuthentication", "afterCases"],
+    "nativeCompleteDigestStableInWindow": true,
+    "nativeAfterShutdownActivityLogDelta": 2,
+    "candidateStableWindow": ["afterAuthentication", "afterCases"],
+    "candidateCompleteDigestStableInWindow": true,
+    "requestWhenPersisted": false
+  },
+  "phaseAcceptance": false
+}

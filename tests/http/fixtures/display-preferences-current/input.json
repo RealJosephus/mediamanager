@@ -1,0 +1,752 @@
+[
+  {
+    "name": "new-defaults",
+    "path": "/DisplayPreferences/usersettings?client=emby"
+  },
+  {
+    "name": "guid-identity",
+    "path": "/DisplayPreferences/00112233-4455-6677-8899-aabbccddeeff?client=web"
+  },
+  {
+    "name": "empty-guid",
+    "path": "/DisplayPreferences/00000000000000000000000000000000?client=emby"
+  },
+  {
+    "name": "unicode-identity",
+    "path": "/DisplayPreferences/%E4%B8%AD%E6%96%87%20caf%C3%A9?client=emby"
+  },
+  {
+    "name": "x-guid",
+    "path": "/DisplayPreferences/%7B0x00112233%2C0x4455%2C0x6677%2C%7B0x88%2C0x99%2C0xaa%2C0xbb%2C0xcc%2C0xdd%2C0xee%2C0xff%7D%7D?client=emby"
+  },
+  {
+    "name": "repeated-get",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "steps": [
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      }
+    ]
+  },
+  {
+    "name": "empty-object",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{}"
+  },
+  {
+    "name": "full-update",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "steps": [
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby",
+        "method": "POST",
+        "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      }
+    ]
+  },
+  {
+    "name": "repeat-update",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{}",
+    "steps": [
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby",
+        "method": "POST",
+        "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby",
+        "method": "POST",
+        "body": "{\"CustomPrefs\":{\"homesection0\":\"LatestMedia\",\"foo\":\"new\"}}"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      }
+    ]
+  },
+  {
+    "name": "anonymous",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "anonymous": true
+  },
+  {
+    "name": "regular",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "regular": true
+  },
+  {
+    "name": "cross-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=df100000000000000000000000000002",
+    "regular": true
+  },
+  {
+    "name": "admin-cross-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=df100000000000000000000000000002"
+  },
+  {
+    "name": "unknown-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=df100000000000000000000000000099"
+  },
+  {
+    "name": "api-key",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "apiKey": true
+  },
+  {
+    "name": "api-cross-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=df100000000000000000000000000002",
+    "apiKey": true
+  },
+  {
+    "name": "empty-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=00000000000000000000000000000000"
+  },
+  {
+    "name": "invalid-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=nope"
+  },
+  {
+    "name": "blank-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=%C2%85"
+  },
+  {
+    "name": "bom-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=%EF%BB%BF"
+  },
+  {
+    "name": "missing-client",
+    "path": "/DisplayPreferences/usersettings"
+  },
+  {
+    "name": "empty-client",
+    "path": "/DisplayPreferences/usersettings?client="
+  },
+  {
+    "name": "space-client",
+    "path": "/DisplayPreferences/usersettings?client=%C2%85"
+  },
+  {
+    "name": "bom-client",
+    "path": "/DisplayPreferences/usersettings?client=%EF%BB%BF"
+  },
+  {
+    "name": "repeated-client",
+    "path": "/DisplayPreferences/usersettings?client=emby&client=other"
+  },
+  {
+    "name": "long-client",
+    "path": "/DisplayPreferences/usersettings?client=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "name": "head",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "HEAD"
+  },
+  {
+    "name": "wrong-method",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "DELETE"
+  },
+  {
+    "name": "body-null",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "null"
+  },
+  {
+    "name": "body-array",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "[]"
+  },
+  {
+    "name": "body-open",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{"
+  },
+  {
+    "name": "body-null-custom",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":null}"
+  },
+  {
+    "name": "body-dictionary-array",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":[]}"
+  },
+  {
+    "name": "body-dictionary-number",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"foo\":123,\"flag\":true}}"
+  },
+  {
+    "name": "body-dictionary-container",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"foo\":{}}}"
+  },
+  {
+    "name": "body-dictionary-duplicate",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"foo\":\"a\",\"foo\":\"b\"}}"
+  },
+  {
+    "name": "body-prototype",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"__proto__\":\"yes\",\"constructor\":\"value\",\"2\":\"two\",\"1\":\"one\"}}"
+  },
+  {
+    "name": "body-duplicate-invalid",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ShowSidebar\":2,\"ShowSidebar\":true}"
+  },
+  {
+    "name": "body-bad-integer",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"PrimaryImageWidth\":2147483648}"
+  },
+  {
+    "name": "body-numeric-string",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"PrimaryImageWidth\":\"123\",\"ScrollDirection\":\"1\",\"SortOrder\":3}"
+  },
+  {
+    "name": "body-null-string",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortBy\":null,\"IndexBy\":null}"
+  },
+  {
+    "name": "body-empty-string",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortBy\":\"\",\"IndexBy\":\"\"}"
+  },
+  {
+    "name": "body-null-bool",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ShowBackdrop\":null}"
+  },
+  {
+    "name": "body-enum-unknown",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ScrollDirection\":\"unsupported\"}"
+  },
+  {
+    "name": "body-enum-numeric",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ScrollDirection\":42,\"SortOrder\":-3}"
+  },
+  {
+    "name": "body-enum-combined",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ScrollDirection\":\"Horizontal,Vertical\"}"
+  },
+  {
+    "name": "body-bad-index",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"IndexBy\":\"Bogus\"}"
+  },
+  {
+    "name": "body-numeric-index",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"IndexBy\":\"42\"}"
+  },
+  {
+    "name": "body-custom-case",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"ChromecastVersion\":\"bad\",\"TVHOME\":\"other\",\"HomeSection0\":\"NextUp\",\"landing-movies\":\"bogus\",\"landing-tv\":\"42\"}}"
+  },
+  {
+    "name": "body-custom-empty",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"\",\"enableNextVideoInfoOverlay\":\"\",\"skipBackLength\":\"\",\"skipForwardLength\":\"\"}}"
+  },
+  {
+    "name": "body-chromecast-bad",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"bad\"}}"
+  },
+  {
+    "name": "body-chromecast-numeric",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"42\"}}"
+  },
+  {
+    "name": "body-overlay-bad",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"enableNextVideoInfoOverlay\":\"bad\"}}"
+  },
+  {
+    "name": "body-overlay-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"enableNextVideoInfoOverlay\":\"\\u0000TRUE\\u0000\"}}"
+  },
+  {
+    "name": "body-skip-space",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"skipBackLength\":\"\\u0085 12 \\u0085\"}}"
+  },
+  {
+    "name": "body-skip-overflow",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"skipForwardLength\":\"2147483648\"}}"
+  },
+  {
+    "name": "body-home-negative",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection-1\":\"bad\"}}"
+  },
+  {
+    "name": "body-home-missing-order",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection\":\"Resume\"}}"
+  },
+  {
+    "name": "body-home-overflow",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection2147483648\":\"Resume\"}}"
+  },
+  {
+    "name": "body-home-alias",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection0\":\"Resume\",\"HomeSection00\":\"LatestMedia\"}}"
+  },
+  {
+    "name": "body-home-numeric",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection0\":\"42\",\"homesection1\":\"Resume,NextUp\"}}"
+  },
+  {
+    "name": "body-home-null",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection0\":null}}"
+  },
+  {
+    "name": "body-landing-null",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"landing-movies\":null,\"landing-tv\":\"\",\"landing-books\":\"bad\"}}"
+  },
+  {
+    "name": "body-strings-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortBy\":\"x\\u0000y\",\"CustomPrefs\":{\"foo\":\"a\\u0000b\",\"tvhome\":null,\"dashboardTheme\":null}}"
+  },
+  {
+    "name": "failure-display-insert",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "display-insert",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "failure-custom-delete",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "custom-delete",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "failure-custom-insert",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "custom-insert",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "failure-item-update",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "item-update",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "failure-display-update",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "display-update",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "failure-home-insert",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Id\":\"ignored\",\"Client\":\"ignored\",\"ViewType\":\"ignored\",\"PrimaryImageWidth\":123,\"PrimaryImageHeight\":456,\"SortBy\":\"DateCreated\",\"SortOrder\":\"Descending\",\"IndexBy\":\"ProductionYear\",\"RememberIndexing\":true,\"RememberSorting\":true,\"ShowBackdrop\":false,\"ShowSidebar\":true,\"ScrollDirection\":\"Vertical\",\"CustomPrefs\":{\"chromecastVersion\":\"unstable\",\"enableNextVideoInfoOverlay\":\"false\",\"skipBackLength\":\"123\",\"skipForwardLength\":\"456\",\"tvhome\":\"tv\",\"dashboardTheme\":\"dark\",\"homesection0\":\"resume\",\"homesection2\":\"bogus\",\"homesection9\":\"bogus\",\"landing-movies\":\"Movies\",\"foo\":\"中文\",\"nullable\":null}}",
+    "fail": "home-insert",
+    "seed": [
+      "INSERT INTO CustomItemDisplayPreferences (Client,ItemId,Key,UserId,Value) VALUES ('emby','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','old','DF100000-0000-0000-0000-000000000001','old value')"
+    ]
+  },
+  {
+    "name": "no-body",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST"
+  },
+  {
+    "name": "wrong-content",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "combined-errors",
+    "path": "/DisplayPreferences/usersettings?userId=bad",
+    "method": "POST",
+    "body": "{\"ShowSidebar\":3}"
+  },
+  {
+    "name": "seeded-get",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "seed": [
+      "INSERT INTO DisplayPreferences (Id,UserId,ItemId,Client,ShowSidebar,ShowBackdrop,ScrollDirection,IndexBy,SkipForwardLength,SkipBackwardLength,ChromecastVersion,EnableNextVideoInfoOverlay,DashboardTheme,TvHome) VALUES (7,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',1,0,42,19,9876,5432,42,1,'curated','home')",
+      "INSERT INTO ItemDisplayPreferences (Id,UserId,ItemId,Client,ViewType,RememberIndexing,IndexBy,RememberSorting,SortBy,SortOrder) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',29,1,2,1,'ExistingSort',-3)",
+      "INSERT INTO HomeSection (Id,DisplayPreferencesId,\"Order\",Type) VALUES (4,7,0,42)",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (8,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','chromecastVersion','ignored')",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','unknown','preserved')"
+    ]
+  },
+  {
+    "name": "seeded-update",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ViewType\":\"ignored\",\"IndexBy\":\"CommunityRating\",\"CustomPrefs\":{\"homesection0\":\"Resume\"}}",
+    "seed": [
+      "INSERT INTO DisplayPreferences (Id,UserId,ItemId,Client,ShowSidebar,ShowBackdrop,ScrollDirection,IndexBy,SkipForwardLength,SkipBackwardLength,ChromecastVersion,EnableNextVideoInfoOverlay,DashboardTheme,TvHome) VALUES (7,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',1,0,42,19,9876,5432,42,1,'curated','home')",
+      "INSERT INTO ItemDisplayPreferences (Id,UserId,ItemId,Client,ViewType,RememberIndexing,IndexBy,RememberSorting,SortBy,SortOrder) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',29,1,2,1,'ExistingSort',-3)",
+      "INSERT INTO HomeSection (Id,DisplayPreferencesId,\"Order\",Type) VALUES (4,7,0,42)",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (8,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','chromecastVersion','ignored')",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','unknown','preserved')"
+    ],
+    "steps": [
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby",
+        "method": "POST",
+        "body": "{\"ViewType\":\"ignored\",\"IndexBy\":\"CommunityRating\",\"CustomPrefs\":{\"homesection0\":\"Resume\"}}"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      }
+    ]
+  },
+  {
+    "name": "client-case-isolation",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "seed": [
+      "INSERT INTO DisplayPreferences (Id,UserId,ItemId,Client,ShowSidebar,ShowBackdrop,ScrollDirection,IndexBy,SkipForwardLength,SkipBackwardLength,ChromecastVersion,EnableNextVideoInfoOverlay,DashboardTheme,TvHome) VALUES (7,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',1,0,42,19,9876,5432,42,1,'curated','home')",
+      "INSERT INTO ItemDisplayPreferences (Id,UserId,ItemId,Client,ViewType,RememberIndexing,IndexBy,RememberSorting,SortBy,SortOrder) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby',29,1,2,1,'ExistingSort',-3)",
+      "INSERT INTO HomeSection (Id,DisplayPreferencesId,\"Order\",Type) VALUES (4,7,0,42)",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (8,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','chromecastVersion','ignored')",
+      "INSERT INTO CustomItemDisplayPreferences (Id,UserId,ItemId,Client,Key,Value) VALUES (9,'DF100000-0000-0000-0000-000000000001','3CE5B65D-E116-D731-65D1-EFC4A30EC35C','emby','unknown','preserved')"
+    ],
+    "steps": [
+      {
+        "path": "/DisplayPreferences/usersettings?client=emby"
+      },
+      {
+        "path": "/DisplayPreferences/usersettings?client=Emby"
+      },
+      {
+        "path": "/DisplayPreferences/other?client=emby"
+      }
+    ]
+  },
+  {
+    "name": "body-home-negative-valid",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homesection-1\":\"Resume\"}}"
+  },
+  {
+    "name": "body-index-clr-space",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"IndexBy\":\"\\u0085ProductionYear\\u0085\"}"
+  },
+  {
+    "name": "body-enum-clr-space",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"\\u0085Descending\\u0085\"}"
+  },
+  {
+    "name": "body-enum-bom",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"\\ufeffDescending\\ufeff\"}"
+  },
+  {
+    "name": "body-number-terminal-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"skipBackLength\":\"-123\\u0000\",\"homesection0\\u0000\":\"Resume\"}}"
+  },
+  {
+    "name": "body-enum-terminal-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"1\\u0000\"}}"
+  },
+  {
+    "name": "body-empty-content",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "",
+    "contentType": "application/json"
+  },
+  {
+    "name": "post-binding-cross-user",
+    "path": "/DisplayPreferences/usersettings?client=emby&userId=df100000000000000000000000000002",
+    "method": "POST",
+    "body": "{\"ShowSidebar\":3}",
+    "regular": true
+  },
+  {
+    "name": "body-json-enum-numeric-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"1\\u0000\"}"
+  },
+  {
+    "name": "body-json-enum-numeric-nul-space",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"1\\u0000 \"}"
+  },
+  {
+    "name": "body-json-enum-positive-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"+1\\u0000\"}"
+  },
+  {
+    "name": "body-json-enum-negative-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"-1\\u0000\"}"
+  },
+  {
+    "name": "body-json-enum-named-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\"Ascending\\u0000\"}"
+  },
+  {
+    "name": "body-json-enum-named-space-nul",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortOrder\":\" Descending\\u0000\"}"
+  },
+  {
+    "name": "binding-path-0",
+    "path": "/DisplayPreferences/a%2Fb?client=emby"
+  },
+  {
+    "name": "binding-path-1",
+    "path": "/DisplayPreferences/a%2fb?client=emby"
+  },
+  {
+    "name": "binding-path-2",
+    "path": "/DisplayPreferences/a%252Fb?client=emby"
+  },
+  {
+    "name": "binding-path-3",
+    "path": "/DisplayPreferences/a%5Cb?client=emby"
+  },
+  {
+    "name": "binding-path-4",
+    "path": "/DisplayPreferences/a%255Cb?client=emby"
+  },
+  {
+    "name": "binding-path-5",
+    "path": "/DisplayPreferences/%20x%20?client=emby"
+  },
+  {
+    "name": "binding-path-6",
+    "path": "/DisplayPreferences/%EF%BB%BF?client=emby"
+  },
+  {
+    "name": "binding-path-7",
+    "path": "/DisplayPreferences/%C2%85?client=emby"
+  },
+  {
+    "name": "binding-path-8",
+    "path": "/DisplayPreferences/%20?client=emby"
+  },
+  {
+    "name": "binding-unicode-0",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"bad\":\"\\uD800\"}}"
+  },
+  {
+    "name": "binding-unicode-1",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"SortBy\":\"\\uDC00\"}"
+  },
+  {
+    "name": "binding-unicode-2",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":\"value\"}}"
+  },
+  {
+    "name": "binding-unicode-3",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"bad\":\"\\uD800\",\"bad\":\"fixed\"}}"
+  },
+  {
+    "name": "binding-unicode-4",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Unknown\":\"\\uD800\"}"
+  },
+  {
+    "name": "binding-key-0",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":true}}"
+  },
+  {
+    "name": "binding-key-1",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":12345}}"
+  },
+  {
+    "name": "binding-key-2",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":null}}"
+  },
+  {
+    "name": "binding-key-3",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":{}}}"
+  },
+  {
+    "name": "binding-key-4",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\":[]}}"
+  },
+  {
+    "name": "binding-key-5",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"\\uD800\": \"value\"}}"
+  },
+  {
+    "name": "binding-unknown-key",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Un\\uD800known\":42}"
+  },
+  {
+    "name": "binding-unknown-key-skip",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"Unknown\":{\"\\uD800\":\"value\"}}"
+  },
+  {
+    "name": "binding-ordinal-prefix",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"homeſection0\":\"Resume\"}}"
+  },
+  {
+    "name": "binding-ordinal-boolean",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"enableNextVideoInfoOverlay\":\"Falſe\"}}"
+  },
+  {
+    "name": "binding-ordinal-property",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"ShowBacKdrop\":false}"
+  },
+  {
+    "name": "chromecast-overflow-0",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"2147483648\"}}"
+  },
+  {
+    "name": "chromecast-overflow-1",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"-2147483649\"}}"
+  },
+  {
+    "name": "chromecast-overflow-2",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\" +2147483648 \"}}"
+  },
+  {
+    "name": "chromecast-overflow-3",
+    "path": "/DisplayPreferences/usersettings?client=emby",
+    "method": "POST",
+    "body": "{\"CustomPrefs\":{\"chromecastVersion\":\"2147483648\\u0000\"}}"
+  }
+]

@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "identity": "jpeg-boundaries-current-real-source-scale-and-cached-dimensions-20261024",
+  "scope": "Thirty-one independently declared real sources retain the original seventeen plus fourteen newly generated JPEG header dimensions on both sides of every n/8 source-scale midpoint. Forty-five actual public ImageProcessor cases compare dimensions, complete BlurHash, success/failure and source lifetime, including fourteen cached-dimension controls. Actual header dimensions govern decoding and resizing. The original 48 internal pixel observations and 28 additional real-source decodes remain full diagnostics.",
+  "images": [
+    {
+      "name": "upstream-gray",
+      "filename": "assets/upstream-gray.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "upstream-progressive",
+      "filename": "assets/upstream-progressive.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "upstream-rgb",
+      "filename": "assets/upstream-rgb.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "generated-rgb",
+      "filename": "assets/generated-rgb.jpg",
+      "thresholds": true
+    },
+    {
+      "name": "generated-cmyk",
+      "filename": "assets/generated-cmyk.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "generated-ycck",
+      "filename": "assets/generated-ycck.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "rgb-profile",
+      "filename": "assets/rgb-profile.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "cmyk-profile",
+      "filename": "assets/cmyk-profile.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "mismatched-profile",
+      "filename": "assets/mismatched-profile.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "malformed-profile",
+      "filename": "assets/malformed-profile.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "truncated-eoi",
+      "filename": "assets/truncated-eoi.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "truncated-scan",
+      "filename": "assets/truncated-scan.jpg",
+      "thresholds": false
+    },
+    {
+      "name": "bad-marker",
+      "filename": "assets/bad-marker.jpg",
+      "thresholds": false,
+      "hashDimensions": {
+        "Width": 257,
+        "Height": 193
+      }
+    },
+    {
+      "name": "alias-jpeg-png",
+      "filename": "assets/alias-jpeg.png",
+      "thresholds": false,
+      "content": "jpeg"
+    },
+    {
+      "name": "alias-jpeg-webp",
+      "filename": "assets/alias-jpeg.webp",
+      "thresholds": false,
+      "content": "jpeg"
+    },
+    {
+      "name": "alias-png-jpg",
+      "filename": "assets/alias-png.jpg",
+      "thresholds": false,
+      "content": "png"
+    },
+    {
+      "name": "alias-png-webp",
+      "filename": "assets/alias-png.webp",
+      "thresholds": false,
+      "content": "png"
+    },
+    {
+      "name": "scale-n2-width-floor",
+      "filename": "scale-source/assets/scale-n2-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 682,
+        "Height": 512
+      }
+    },
+    {
+      "name": "scale-n2-width-ceil",
+      "filename": "scale-source/assets/scale-n2-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 683,
+        "Height": 512
+      }
+    },
+    {
+      "name": "scale-n3-width-floor",
+      "filename": "scale-source/assets/scale-n3-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 409,
+        "Height": 307
+      }
+    },
+    {
+      "name": "scale-n3-width-ceil",
+      "filename": "scale-source/assets/scale-n3-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 410,
+        "Height": 307
+      }
+    },
+    {
+      "name": "scale-n4-width-floor",
+      "filename": "scale-source/assets/scale-n4-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 292,
+        "Height": 219
+      }
+    },
+    {
+      "name": "scale-n4-width-ceil",
+      "filename": "scale-source/assets/scale-n4-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 293,
+        "Height": 220
+      }
+    },
+    {
+      "name": "scale-n5-width-floor",
+      "filename": "scale-source/assets/scale-n5-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 227,
+        "Height": 170
+      }
+    },
+    {
+      "name": "scale-n5-width-ceil",
+      "filename": "scale-source/assets/scale-n5-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 228,
+        "Height": 171
+      }
+    },
+    {
+      "name": "scale-n6-width-floor",
+      "filename": "scale-source/assets/scale-n6-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 186,
+        "Height": 139
+      }
+    },
+    {
+      "name": "scale-n6-width-ceil",
+      "filename": "scale-source/assets/scale-n6-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 187,
+        "Height": 140
+      }
+    },
+    {
+      "name": "scale-n7-width-floor",
+      "filename": "scale-source/assets/scale-n7-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 157,
+        "Height": 117
+      }
+    },
+    {
+      "name": "scale-n7-width-ceil",
+      "filename": "scale-source/assets/scale-n7-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 158,
+        "Height": 118
+      }
+    },
+    {
+      "name": "scale-n8-width-floor",
+      "filename": "scale-source/assets/scale-n8-width-floor.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 136,
+        "Height": 102
+      }
+    },
+    {
+      "name": "scale-n8-width-ceil",
+      "filename": "scale-source/assets/scale-n8-width-ceil.jpg",
+      "thresholds": false,
+      "content": "jpeg",
+      "sourceDimensions": {
+        "Width": 137,
+        "Height": 102
+      }
+    }
+  ],
+  "thresholdScales": [
+    {
+      "name": "below-3of16",
+      "value": 0.1874999850988388
+    },
+    {
+      "name": "at-3of16",
+      "value": 0.1875
+    },
+    {
+      "name": "below-5of16",
+      "value": 0.3124999701976776
+    },
+    {
+      "name": "at-5of16",
+      "value": 0.3125
+    },
+    {
+      "name": "below-7of16",
+      "value": 0.4374999701976776
+    },
+    {
+      "name": "at-7of16",
+      "value": 0.4375
+    },
+    {
+      "name": "below-9of16",
+      "value": 0.5624999403953552
+    },
+    {
+      "name": "at-9of16",
+      "value": 0.5625
+    },
+    {
+      "name": "below-11of16",
+      "value": 0.6874999403953552
+    },
+    {
+      "name": "at-11of16",
+      "value": 0.6875
+    },
+    {
+      "name": "below-13of16",
+      "value": 0.8124999403953552
+    },
+    {
+      "name": "at-13of16",
+      "value": 0.8125
+    },
+    {
+      "name": "below-15of16",
+      "value": 0.9374999403953552
+    },
+    {
+      "name": "at-15of16",
+      "value": 0.9375
+    }
+  ],
+  "cachedDimensions": [
+    {
+      "name": "cached-683x513",
+      "Width": 683,
+      "Height": 513
+    },
+    {
+      "name": "cached-682x512",
+      "Width": 682,
+      "Height": 512
+    },
+    {
+      "name": "cached-410x308",
+      "Width": 410,
+      "Height": 308
+    },
+    {
+      "name": "cached-409x307",
+      "Width": 409,
+      "Height": 307
+    },
+    {
+      "name": "cached-293x220",
+      "Width": 293,
+      "Height": 220
+    },
+    {
+      "name": "cached-292x219",
+      "Width": 292,
+      "Height": 219
+    },
+    {
+      "name": "cached-228x171",
+      "Width": 228,
+      "Height": 171
+    },
+    {
+      "name": "cached-227x170",
+      "Width": 227,
+      "Height": 170
+    },
+    {
+      "name": "cached-187x140",
+      "Width": 187,
+      "Height": 140
+    },
+    {
+      "name": "cached-186x140",
+      "Width": 186,
+      "Height": 140
+    },
+    {
+      "name": "cached-158x119",
+      "Width": 158,
+      "Height": 119
+    },
+    {
+      "name": "cached-157x118",
+      "Width": 157,
+      "Height": 118
+    },
+    {
+      "name": "cached-137x103",
+      "Width": 137,
+      "Height": 103
+    },
+    {
+      "name": "cached-136x102",
+      "Width": 136,
+      "Height": 102
+    }
+  ]
+}

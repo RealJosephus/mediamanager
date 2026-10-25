@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-10T09:18:43.6776117Z",
+  "candidateVerified": false,
+  "jellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "sources": [
+      {
+        "path": "Emby.Server.Implementations/Playlists/PlaylistManager.cs",
+        "sha256": "57aff7f96b21b284658229ee1eaad423810b18d7163892fcc9ed5d792077a3ce"
+      },
+      {
+        "path": "MediaBrowser.Controller/Playlists/Playlist.cs",
+        "sha256": "3d7488cbfa751ccba0e2debc7d9a34e4dc390a9f4ed7b8031c60750a76774d97"
+      }
+    ],
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/playlist-items-v4/bin/Release/net10.0"
+  },
+  "playlistsNet": {
+    "version": "1.4.1",
+    "commit": "10a2a55eea67b6cca866022107686bdac9b19fba"
+  },
+  "sdk": "10.0.401",
+  "platform": "win32",
+  "files": {
+    "input": {
+      "filename": "input.json",
+      "sha256": "9dded0e45c45d09cb3bc0cd3c9a2f246e6bec4185843e737ae474d4eb20f6e58"
+    },
+    "native": {
+      "filename": "native.json",
+      "sha256": "3a134786ef10c4396e062c398df7d57b39d1e4b68c4677927a436a571b75f754"
+    },
+    "oracle": {
+      "filename": "Program.cs",
+      "sha256": "7808abe91f96453c604b234e75020732dfc545357348ca3f218b9b9c24ad452d"
+    },
+    "project": {
+      "filename": "Oracle.csproj",
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261010/results/playlist-file-v5/native.raw.json",
+      "sha256": "870c76a643d1a624b9e1b35ed78c9f982ca84628a60a1831638e124d3da5a7f5"
+    }
+  },
+  "counts": { "writeCases": 34, "pathCases": 51, "operationCases": 12 },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261010/results/playlist-file-v6/native.raw.json",
+    "rawSha256": "870c76a643d1a624b9e1b35ed78c9f982ca84628a60a1831638e124d3da5a7f5",
+    "projectionEqual": true
+  },
+  "boundary": "Actual pinned PlaylistManager.SavePlaylistFile, NormalizeItemPath and public add/remove/move/update over real neutral files, with controlled ILibraryManager lookups/repository callbacks and QueueRefresh capture. Calls retain the file visible at each repository/queue boundary, committed and live linked order, cancelled-token status and native errors. The oracle does not execute LibraryManager.RunMetadataSavers, images, native repository persistence or queued refresh. Production JavaScript PostgreSQL/metadata/runtime/HTTP and actual rclone WebDAV integration are separate tests. The pin, selected source bytes and loaded assembly seals are retained, not a complete build-input closure, POSIX native recording, full scan, two-client or release acceptance claim."
+}

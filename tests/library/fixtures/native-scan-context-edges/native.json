@@ -1,0 +1,605 @@
+{
+  "actualFrozenNativeScanContextEdges": true,
+  "results": [
+    {
+      "name": "enum-_music_",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "music",
+        "inherited": "movies",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "enum-_2",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "tvshows",
+        "inherited": "movies",
+        "contentType": "tvshows"
+      }
+    },
+    {
+      "name": "enum--1",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "-1",
+        "inherited": "movies",
+        "contentType": "-1"
+      }
+    },
+    {
+      "name": "enum-0",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "unknown",
+        "inherited": "movies",
+        "contentType": "unknown"
+      }
+    },
+    {
+      "name": "enum-101",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "tvshowseries",
+        "inherited": "movies",
+        "contentType": "tvshowseries"
+      }
+    },
+    {
+      "name": "enum-2147483647",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "2147483647",
+        "inherited": "movies",
+        "contentType": "2147483647"
+      }
+    },
+    {
+      "name": "enum--2147483648",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "-2147483648",
+        "inherited": "movies",
+        "contentType": "-2147483648"
+      }
+    },
+    {
+      "name": "enum-2147483648",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "enum-movies__tvshows",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "music",
+        "inherited": "movies",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "enum-movies__music",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "music",
+        "inherited": "movies",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "enum-1_2",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "enum-music__invalid",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "enum-",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "enum-___",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "null-override-array",
+      "exception": "ArgumentNullException",
+      "parameterName": "source",
+      "result": null
+    },
+    {
+      "name": "null-override-entry",
+      "exception": "NullReferenceException",
+      "parameterName": null,
+      "result": null
+    },
+    {
+      "name": "literal-null-locations-path-short-circuit",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "movie-containing-folder",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "movie-containing-folder-override",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "tvshows",
+        "inherited": "movies",
+        "contentType": "tvshows"
+      }
+    },
+    {
+      "name": "movie-file-path-is-not-containing-override",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "top-parent-configured-last",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": null,
+        "configured": null,
+        "inherited": "tvshows",
+        "contentType": "tvshows"
+      }
+    },
+    {
+      "name": "top-parent-configured-case-sensitive-value",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": null,
+        "configured": null,
+        "inherited": "music",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "inherited-first-invalid-hides-later-parent-prefix",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": null,
+        "configured": null,
+        "inherited": null,
+        "contentType": null
+      }
+    },
+    {
+      "name": "path-prefix-respects-raw-slash",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": null,
+        "configured": null,
+        "inherited": null,
+        "contentType": null
+      }
+    },
+    {
+      "name": "playlists-interface-type",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": "playlists",
+        "inherited": "movies",
+        "contentType": "playlists"
+      }
+    },
+    {
+      "name": "collection-entity-numeric-0",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "unknown",
+        "contentType": "unknown"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric-0",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "unknown",
+        "inherited": null,
+        "contentType": "unknown"
+      }
+    },
+    {
+      "name": "collection-entity-numeric-1",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric-1",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "movies",
+        "inherited": null,
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "collection-entity-numeric-3",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "music",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric-3",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "music",
+        "inherited": null,
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "collection-entity-numeric-101",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "tvshowseries",
+        "contentType": "tvshowseries"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric-101",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "tvshowseries",
+        "inherited": null,
+        "contentType": "tvshowseries"
+      }
+    },
+    {
+      "name": "collection-entity-numeric--1",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "-1",
+        "contentType": "-1"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric--1",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "-1",
+        "inherited": null,
+        "contentType": "-1"
+      }
+    },
+    {
+      "name": "collection-entity-numeric-2147483647",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97910000-0000-0000-0000-000000000020",
+          "97910000-0000-0000-0000-000000000010"
+        ],
+        "country": "AA",
+        "configured": null,
+        "inherited": "2147483647",
+        "contentType": "2147483647"
+      }
+    },
+    {
+      "name": "self-collection-entity-numeric-2147483647",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "AA",
+        "configured": "2147483647",
+        "inherited": null,
+        "contentType": "2147483647"
+      }
+    },
+    {
+      "name": "deep-invalid-first-parent-fallback",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": null,
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "deep-null-mapped-type-parent-fallback",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97930000-0000-0000-0000-000000000005"
+        ],
+        "country": "CONTROL",
+        "configured": null,
+        "inherited": "movies",
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "deep-mapped-type-before-parent-fallback",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [
+          "97930000-0000-0000-0000-000000000005"
+        ],
+        "country": "CONTROL",
+        "configured": null,
+        "inherited": "music",
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "self-collection-uppercase",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "SELF",
+        "configured": "movies",
+        "inherited": null,
+        "contentType": "movies"
+      }
+    },
+    {
+      "name": "self-collection-mixed-case",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "SELF",
+        "configured": "music",
+        "inherited": null,
+        "contentType": "music"
+      }
+    },
+    {
+      "name": "self-collection-numeric-string",
+      "exception": null,
+      "parameterName": null,
+      "result": {
+        "collectionIds": [],
+        "country": "SELF",
+        "configured": "music",
+        "inherited": null,
+        "contentType": "music"
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\native-scan-context-edges-final-2026-10-05T08-52-38.274Z\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\native-scan-context-edges-final-2026-10-05T08-52-38.274Z\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\native-scan-context-edges-final-2026-10-05T08-52-38.274Z\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    }
+  ],
+  "scope": "Actual LibraryManager GetCollectionFolders, GetLibraryOptions, configured/inherited/content type methods. Live parent/owner objects, user-root child order and a country marker in the actual CollectionFolder options cache are explicit controls; real EF database is initialized but no item saves or SQL projections are claimed. Tests ordinal paths, first-folder selection, NULL and malformed/numeric override values. No options XML, resolver execution, scanner transactions or complete-library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"3f4ec85e43bc8402b2dc49140d1d1c33fa6b2c8541815f8c9bbf6401c3bc96b8","sourceFilesSha256":"c162a6e936da57245c08bda30ba25fa952a3c8e8428d7bf8b6dd9a3c89ae6ac9"}

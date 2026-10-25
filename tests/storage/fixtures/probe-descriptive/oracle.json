@@ -1,0 +1,1164 @@
+[
+  {
+    "input": {
+      "name": "empty",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {}
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "video-complete",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "title": "Embedded title",
+            "title-sort": "Ordered",
+            "synopsis": "Synopsis",
+            "season_number": "2",
+            "episode_sort": "4",
+            "show_name": "Series",
+            "date": "2024",
+            "genre": " Drama; Comedy / drama",
+            "copyright": "Studio A, Studio B",
+            "iTunEXTC": "mpaa|PG|100|Guidance",
+            "stereo_mode": "left_right"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": "Embedded title",
+      "ForcedSortName": "Ordered",
+      "Overview": "Synopsis",
+      "ParentIndexNumber": 2,
+      "IndexNumber": 4,
+      "ShowName": "Series",
+      "ProductionYear": 2024,
+      "PremiereDate": "2024-01-01T00:00:00.0000000Z",
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [
+        "Drama",
+        "Comedy"
+      ],
+      "Studios": [
+        "Studio A",
+        "Studio B"
+      ],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": "PG",
+      "OfficialRatingDescription": "Guidance",
+      "Video3DFormat": "FullSideBySide",
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "stream-format-precedence",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "TITLE": "Container",
+            "title": "Ignored duplicate",
+            "description": "Description"
+          }
+        },
+        "streams": [
+          {
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "tags": {
+              "title": "Stream",
+              "genre": "Sci-Fi"
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "Name": "Container",
+      "ForcedSortName": null,
+      "Overview": "Description",
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [
+        "Sci-Fi"
+      ],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "aliases",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "title": " ",
+            "title-eng": "English title",
+            "sort_name": " ",
+            "titlesort": "Sorted",
+            "synopsis": "",
+            "desc": "Description",
+            "episode_sort": "bad",
+            "episode_id": "7",
+            "retail_date": "2023-03-02"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": "English title",
+      "ForcedSortName": "Sorted",
+      "Overview": "Description",
+      "ParentIndexNumber": null,
+      "IndexNumber": 7,
+      "ShowName": "show",
+      "ProductionYear": 2023,
+      "PremiereDate": "2023-03-02T00:00:00.0000000Z",
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "datetime-offset",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "date": "2022-04-05T12:34:56\u002B02:00"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": 2022,
+      "PremiereDate": "2022-04-05T10:34:56.0000000Z",
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "datetime-precision",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "originaldate": "2020-02-29T01:02:03.1234567Z"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": 2020,
+      "PremiereDate": "2020-02-29T01:02:03.1234567Z",
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "invalid-date",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "date": "2020-02-30"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "invalid-int",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "season_number": "2147483648",
+            "episode_sort": "1/3"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "audio-complete",
+      "isAudio": true,
+      "raw": {
+        "format": {
+          "tags": {
+            "title": " Track ",
+            "album": " Album ",
+            "artist": "Alice feat. Bob / AC/DC",
+            "album_artist": "Composer / Alice",
+            "track": "3/12",
+            "disc": "2/4",
+            "date": "2001",
+            "genre": "Rock, Pop",
+            "composer": "One;Two",
+            "conductor": "Conduct",
+            "lyricist": "Lyric",
+            "performer": "Player (electric guitar);Band",
+            "writer": "Write",
+            "arranger": "Arrange",
+            "engineer": "Engineer",
+            "mixer": "Mixer",
+            "remixer": "Remix",
+            "organization": "First",
+            "publisher": "Label / Alice"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": " Track ",
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": 2,
+      "IndexNumber": 3,
+      "ShowName": "show",
+      "ProductionYear": 2001,
+      "PremiereDate": "2001-01-01T00:00:00.0000000Z",
+      "Album": " Album ",
+      "Artists": [
+        "AC/DC",
+        "Alice",
+        "Bob"
+      ],
+      "AlbumArtists": [
+        "Composer",
+        "Alice"
+      ],
+      "Genres": [
+        "Rock",
+        "Pop"
+      ],
+      "Studios": [
+        "Label"
+      ],
+      "People": [
+        {
+          "Name": "One",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Composer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Two",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Composer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Conduct",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Conductor",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Lyric",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Lyricist",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Player",
+          "Id": "00000000000000000000000000000000",
+          "Role": "Electric Guitar",
+          "Type": "Actor",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Write",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Writer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Arrange",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Arranger",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Engineer",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Engineer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Mixer",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Mixer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Remix",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Remixer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        }
+      ],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "artist-whitelist",
+      "isAudio": true,
+      "raw": {
+        "format": {
+          "tags": {
+            "artists": "AC/DC;Alice|Bob/LSR/CITY",
+            "artist": "Ignored"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [
+        "AC/DC",
+        "LSR/CITY",
+        "|",
+        "Alice|Bob"
+      ],
+      "AlbumArtists": [
+        "AC/DC",
+        "LSR/CITY",
+        "|",
+        "Alice|Bob"
+      ],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "artist-fallback",
+      "isAudio": true,
+      "raw": {
+        "format": {
+          "tags": {
+            "artist": "AC/DC/AC/DC/Alice",
+            "albumartist": " "
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [
+        "AC/DC",
+        "Alice"
+      ],
+      "AlbumArtists": [
+        "AC/DC",
+        "Alice"
+      ],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "studios-overwrite",
+      "isAudio": true,
+      "raw": {
+        "format": {
+          "tags": {
+            "artist": "Alice",
+            "organization": "First",
+            "ensemble": "Second",
+            "publisher": "Third",
+            "label": "Alice"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [
+        "Alice"
+      ],
+      "AlbumArtists": [
+        "Alice"
+      ],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "musicbrainz",
+      "isAudio": true,
+      "raw": {
+        "format": {
+          "tags": {
+            "MusicBrainz Album Artist Id": "11111111-1111-1111-1111-111111111111/22222222-2222-2222-2222-222222222222",
+            "MUSICBRAINZ_ARTISTID": "22222222-2222-2222-2222-222222222222",
+            "MUSICBRAINZ_ALBUMID": "33333333-3333-3333-3333-333333333333",
+            "MUSICBRAINZ_RELEASEGROUPID": "44444444-4444-4444-4444-444444444444",
+            "MUSICBRAINZ_RELEASETRACKID": "55555555-5555-5555-5555-555555555555"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {
+        "MusicBrainzAlbumArtist": "11111111-1111-1111-1111-111111111111",
+        "MusicBrainzArtist": "22222222-2222-2222-2222-222222222222",
+        "MusicBrainzAlbum": "33333333-3333-3333-3333-333333333333",
+        "MusicBrainzReleaseGroup": "44444444-4444-4444-4444-444444444444",
+        "MusicBrainzTrack": "55555555-5555-5555-5555-555555555555"
+      },
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "itunes-quirks",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "iTunMOVI": "\u003Cplist\u003E\u003Cdict\u003E\u003Ckey\u003Ecast\u003C/key\u003E\u003Carray\u003E\u003Cdict\u003E\u003Ckey\u003Ename\u003C/key\u003E\u003Cstring\u003EActor\u003C/string\u003E\u003C/dict\u003E\u003C/array\u003E\u003Ckey\u003Edirectors\u003C/key\u003E\u003Carray\u003E\u003Cdict\u003E\u003Ckey\u003Ename\u003C/key\u003E\u003Cstring\u003EDirector\u003C/string\u003E\u003C/dict\u003E\u003C/array\u003E\u003Ckey\u003Estudio\u003C/key\u003E\u003Cstring\u003ELast ignored studio\u003C/string\u003E\u003C/dict\u003E\u003C/plist\u003E"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [
+        {
+          "Name": "Director",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Director",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        }
+      ],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "itunes-studio",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "iTunMOVI": "\u003C?xml version=\u00221.0\u0022?\u003E\u003C!DOCTYPE plist PUBLIC \u0022a\u0022 \u0022http://example.invalid\u0022\u003E\u003Cplist\u003E\u003Cdict\u003E\u003Ckey\u003Estudio\u003C/key\u003E\u003Cstring\u003EStudio\u003C/string\u003E\u003Ckey\u003Escreenwriters\u003C/key\u003E\u003Carray\u003E\u003Cdict\u003E\u003Ckey\u003Ename\u003C/key\u003E\u003Cstring\u003EWriter\u003C/string\u003E\u003C/dict\u003E\u003C/array\u003E\u003Ckey\u003Eend\u003C/key\u003E\u003C/dict\u003E\u003C/plist\u003E"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [
+        "Studio"
+      ],
+      "People": [
+        {
+          "Name": "Writer",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Writer",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        }
+      ],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "itunes-malformed",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "iTunMOVI": "\u003C"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": null,
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "wtv",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "WM/Genre": "Drama/Comedy;Drama",
+            "WM/ParentalRating": "TV-PG",
+            "WM/MediaCredits": "Actor A;Actor B",
+            "WM/OriginalReleaseTime": "1999",
+            "WM/MediaOriginalBroadcastDateTime": "2005-01-02",
+            "WM/SubTitleDescription": "4/13. The Mystery: Description"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": "The Mystery",
+      "ParentIndexNumber": null,
+      "IndexNumber": 4,
+      "ShowName": "show",
+      "ProductionYear": 1999,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [
+        "Drama",
+        "Comedy",
+        "Drama"
+      ],
+      "Studios": [],
+      "People": [
+        {
+          "Name": "Actor A",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Actor",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        },
+        {
+          "Name": "Actor B",
+          "Id": "00000000000000000000000000000000",
+          "Role": null,
+          "Type": "Actor",
+          "PrimaryImageTag": null,
+          "ImageBlurHashes": null
+        }
+      ],
+      "ProviderIds": {},
+      "OfficialRating": "TV-PG",
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "wtv-comment",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "WM/SubTitleDescription": "Bedtime Hour. The Mystery: Description"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": "The Mystery",
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "wtv-fallback",
+      "isAudio": false,
+      "raw": {
+        "format": {
+          "tags": {
+            "WM/SubTitleDescription": "x/13. The Mystery: Description"
+          }
+        }
+      }
+    },
+    "expected": {
+      "Name": null,
+      "ForcedSortName": null,
+      "Overview": "The Mystery",
+      "ParentIndexNumber": null,
+      "IndexNumber": null,
+      "ShowName": "show",
+      "ProductionYear": null,
+      "PremiereDate": null,
+      "Album": null,
+      "Artists": [],
+      "AlbumArtists": [],
+      "Genres": [],
+      "Studios": [],
+      "People": [],
+      "ProviderIds": {},
+      "OfficialRating": null,
+      "OfficialRatingDescription": null,
+      "Video3DFormat": null,
+      "Timestamp": null
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle",
+      "filename": "/video.srt",
+      "extra": "",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.srt",
+      "Language": null,
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.en",
+      "filename": "/video.en.srt",
+      "extra": ".en",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.en.srt",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.eng.default.forced",
+      "filename": "/video.eng.default.forced.srt",
+      "extra": ".eng.default.forced",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.eng.default.forced.srt",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": true,
+      "IsForced": true,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.en.hi",
+      "filename": "/video.en.hi.srt",
+      "extra": ".en.hi",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.en.hi.srt",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": true
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.hi.en",
+      "filename": "/video.hi.en.srt",
+      "extra": ".hi.en",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.hi.en.srt",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": true
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.hi",
+      "filename": "/video.hi.srt",
+      "extra": ".hi",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.hi.srt",
+      "Language": "hin",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.sdh",
+      "filename": "/video.sdh.srt",
+      "extra": ".sdh",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.sdh.srt",
+      "Language": null,
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": true
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.zh-Hans",
+      "filename": "/video.zh-Hans.srt",
+      "extra": ".zh-Hans",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.zh-Hans.srt",
+      "Language": "zh-hans",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.en.commentary",
+      "filename": "/video.en.commentary.srt",
+      "extra": ".en.commentary",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.en.commentary.srt",
+      "Language": "eng",
+      "Title": "commentary",
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.mydefault.en",
+      "filename": "/video.mydefault.en.srt",
+      "extra": ".mydefault.en",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.mydefault.en.srt",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": true,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.foreign-language",
+      "filename": "/video.foreign-language.srt",
+      "extra": ".foreign-language",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.foreign-language.srt",
+      "Language": null,
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": true,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "subtitle.English.en",
+      "filename": "/video.English.en.srt",
+      "extra": ".English.en",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.English.en.srt",
+      "Language": "eng",
+      "Title": "English",
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "/video.en.idxSubtitle",
+      "filename": "/video.en.idx",
+      "extra": ".en",
+      "type": "Subtitle"
+    },
+    "expected": {
+      "Path": "/video.en.idx",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "/video.en.aacAudio",
+      "filename": "/video.en.aac",
+      "extra": ".en",
+      "type": "Audio"
+    },
+    "expected": {
+      "Path": "/video.en.aac",
+      "Language": "eng",
+      "Title": null,
+      "IsDefault": false,
+      "IsForced": false,
+      "IsHearingImpaired": false
+    }
+  },
+  {
+    "input": {
+      "name": "/video.txtSubtitle",
+      "filename": "/video.txt",
+      "extra": "",
+      "type": "Subtitle"
+    },
+    "expected": null
+  },
+  {
+    "input": {
+      "name": "/video.srtAudio",
+      "filename": "/video.srt",
+      "extra": "",
+      "type": "Audio"
+    },
+    "expected": null
+  },
+  {
+    "input": {
+      "name": "chapter-timespan",
+      "chapterNames": [
+        null,
+        "",
+        " ",
+        "Chapter",
+        "24:00",
+        "1:60",
+        "1:02",
+        "123",
+        "-01:00",
+        "\u002B01:00",
+        "00:00:00.00000001",
+        ".5",
+        "1.02:03:04",
+        "1:2:3:4",
+        "01:02:03,5",
+        "0:0:60",
+        "10675199.02:48:05.4775807"
+      ]
+    },
+    "expected": [
+      "Chapter 1",
+      "Chapter 2",
+      "Chapter 3",
+      "Chapter",
+      "24:00",
+      "1:60",
+      "Chapter 7",
+      "Chapter 8",
+      "Chapter 9",
+      "\u002B01:00",
+      "Chapter 11",
+      ".5",
+      "Chapter 13",
+      "Chapter 14",
+      "01:02:03,5",
+      "0:0:60",
+      "Chapter 17"
+    ]
+  }
+]

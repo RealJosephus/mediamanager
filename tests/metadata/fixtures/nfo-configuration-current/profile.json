@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent actual NfoConfigurationFactory, ServerConfigurationManager, MyXmlSerializer, ConfigurationController/MVC and bounded NFO parser/saver/ImageSaver consumers. Public JSON, real files, current-value aliases and cold known fields are recorded separately from Node unknown-XML retention. No full Native server or media executor is started.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs",
+    "MediaBrowser.XbmcMetadata/Configuration/NfoConfigurationFactory.cs",
+    "MediaBrowser.XbmcMetadata/Configuration/NfoConfigurationExtension.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/MovieNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Savers/BaseNfoSaver.cs",
+    "MediaBrowser.XbmcMetadata/Savers/EpisodeNfoSaver.cs",
+    "MediaBrowser.XbmcMetadata/Savers/SeasonNfoSaver.cs",
+    "MediaBrowser.XbmcMetadata/Savers/MovieNfoSaver.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "Jellyfin.Api/Controllers/ConfigurationController.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+  ]
+}

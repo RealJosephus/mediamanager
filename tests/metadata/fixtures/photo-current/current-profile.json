@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 1,
+  "fixture": "current Photo metadata, DTO and image lifecycle consumers",
+  "kind": "same-workflow-current-native-photo",
+  "timezone": "Asia/Taipei",
+  "historicalRecordingReused": false,
+  "scope": "Original PhotoProvider/HasChanged, Unicode-comment and Primary-path inputs; Photo DTO/aspect, actual custom SQL save prefixes and dynamic image files/stream ownership. Native seams remain explicit; Node HTTP/PostgreSQL runtime integration is separately asserted.",
+  "nativeRepetitions": 2,
+  "cases": {
+    "provider": 64,
+    "hasChanged": 14,
+    "comment": 1,
+    "edges": 3,
+    "dto": 19,
+    "aspect": 200,
+    "customLifecycle": 18,
+    "dynamicHost": 30
+  },
+  "sourcePaths": [
+    "Emby.Photos/PhotoProvider.cs",
+    "MediaBrowser.Controller/Entities/Photo.cs",
+    "MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/BaseItemExtensions.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Model/Dto/BaseItemDto.cs",
+    "MediaBrowser.Model/Drawing/ImageOrientation.cs",
+    "Emby.Server.Implementations/Dto/DtoService.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/ItemImageProvider.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "MediaBrowser.Providers/Books/BookMetadataService.cs",
+    "MediaBrowser.Controller/BaseItemManager/BaseItemManager.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "provider/Program.cs",
+      "bytes": 7104,
+      "sha256": "4023a1e106d27c9faa236ec8ce731969a6a64965ab681817aa24fec8d0750991",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "provider/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "comment/Program.cs",
+      "bytes": 6356,
+      "sha256": "6ed37aaa837ab6ee8695d6ef34378d11e5e6e63250376f24237a645968db104f",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "comment/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "edges/Program.cs",
+      "bytes": 2664,
+      "sha256": "d2351ea5d53ac216444b2019c0765c2b0d592c066f93a5fb400901771e78edb0",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "edges/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "dto/Program.cs",
+      "bytes": 5492,
+      "sha256": "d01cdb48180514f05e1bebc8ab4e66cefe3c037a208e0492db63784d2c4a3120",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "dto/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "custom-lifecycle/Program.cs",
+      "bytes": 13999,
+      "sha256": "d14e7de7d763d1f9446cc27c4c5349c707e9f8d6f44e2bcde22e61a3aa745b3c",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "custom-lifecycle/Oracle.csproj",
+      "bytes": 1345,
+      "sha256": "85517f503080a223ad02b544898de3832560c3e57bd871a120cb9117687bc3f6",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "dynamic-host/Program.cs",
+      "bytes": 12803,
+      "sha256": "c84cd0e7d11d6223ee641d022b847bc8cc5bdaaac5a7ca1017ebf15bbfcb1c84",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "dynamic-host/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "role": "currentNativeConsumer"
+    },
+    {
+      "filename": "capture.js",
+      "bytes": 9065,
+      "sha256": "532b6f62380f6a7e4b2cbaf71ab4ccfbb5881c2eb316086459ca2097099fe851",
+      "role": "currentCaptureConsumer"
+    },
+    {
+      "filename": "edges-input.json",
+      "bytes": 105,
+      "sha256": "41718d5e3a1f084f0f0f0f4a5e01cf3abb196910cc3f7529e6eb17a10a3b1b80",
+      "role": "explicitOriginalPrimaryPathInputs"
+    },
+    {
+      "filename": "taglib-source/origins.json",
+      "bytes": 4077,
+      "sha256": "7993a215e073abbab4abac00d54ef26a5f944aa24f9f3b292451ef5ebe068f22",
+      "role": "upstreamSourceOrigins"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/Image/CombinedImageTag.cs",
+      "bytes": 15507,
+      "sha256": "4d747da31e6c61b9c2f0a7de400d82e6bc558f9960f92f1a51414c355662ab7c",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/IFD/IFDTag.cs",
+      "bytes": 17558,
+      "sha256": "2d22b8ae9cc17f9e120e0f3b8c53888fe2536b797f52d746ca793b6557c6b3e1",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/IFD/IFDReader.cs",
+      "bytes": 32217,
+      "sha256": "b8cd80401d7277c759da09c5a51dae4834bb1bf377071e8b9717d8b621fdff7a",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/Xmp/XmpTag.cs",
+      "bytes": 41432,
+      "sha256": "add3d67973b78ea6de9902aeddb8e6f0526e4f9627e8624c49fa02c7fc557252",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/Png/File.cs",
+      "bytes": 26599,
+      "sha256": "9c90fdb1228d704e8fc29d4ed36a11966b55a013d2b04e915634d18b2ecf9dcc",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/IIM/IIMReader.cs",
+      "bytes": 2710,
+      "sha256": "95ee85339189246cb9fcead99724b5dea01517d128c3b7d5463dd9c115c2095a",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/src/TaglibSharp/IFD/Entries/UserCommentIFDEntry.cs",
+      "bytes": 6137,
+      "sha256": "03819588d6008ad4aea238aa0216a9845918282d95636d1c9b097d8b9ed385a4",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "taglib-source/COPYING",
+      "bytes": 26432,
+      "sha256": "6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3",
+      "role": "originalTaglibSourceOrLicense"
+    },
+    {
+      "filename": "../photo-provider/assets/bad-crc.png",
+      "bytes": 120,
+      "sha256": "41e914f325e7fec655cc5fa83c5a1b500da64ae70e1666aeca69eef1939b1430",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/big-endian.jpg",
+      "bytes": 731,
+      "sha256": "ac9ec928565c9ae4cca8aa5f2e99d3f78cda165ea248baabbc4a320be9710d07",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/big-endian.tiff",
+      "bytes": 477,
+      "sha256": "d0b33ad5bfe76d47f95c925129d7b51eefbb9fdaa0fedcdd7234e2072aa67e13",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/blank-title.jpg",
+      "bytes": 767,
+      "sha256": "15489c5289a5ff43c135cec1db00d8107470a1219969bcb8c65a0d6d439f7bcd",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/combined-reverse.jpg",
+      "bytes": 1840,
+      "sha256": "8821f9e98bf59376628b6851c3c2302294cb2259a2f110e435b1e2d2569b36f8",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/combined.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/comment.jpg",
+      "bytes": 284,
+      "sha256": "685d6be604af5e45a0cffd29f6ba20e9a5b600f44e1d901fcd487ac82dcf19ef",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/datetime-only.jpg",
+      "bytes": 731,
+      "sha256": "f109c09354df81cf6879325d25e09e17929e7c0b60e9a72390cfa7e247d6b877",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/duplicate-title.png",
+      "bytes": 153,
+      "sha256": "74af80f2ec17cc20b302017aba6b370cfe7113fde8f0105fbe8408570620740b",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/exif.jpg",
+      "bytes": 731,
+      "sha256": "daa0f9b64a12e81be9e70c30d3f024bb90ad64b1ff92578506114c6c4cc5a70e",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/exif.png",
+      "bytes": 560,
+      "sha256": "0fea7627850b3c3858b2af247e0567c7a51f764a032a0c221341404e30dbf3c7",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/gps-clamp.jpg",
+      "bytes": 731,
+      "sha256": "a09b1a9e6a3ddb0142c25a7709329797d998eab2caa94f9a3649eaaa31472453",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/invalid-date.jpg",
+      "bytes": 731,
+      "sha256": "77437df93f993c0768484881b176874fa5e1465dcb5a651fc9a85f63cc441a82",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/invalid.jpg",
+      "bytes": 13,
+      "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/iptc-xmp.jpg",
+      "bytes": 744,
+      "sha256": "63df1a1b23ac9ddc90d22f07c4451c408221e23ae245d547a4f5c8d4fc9dd219",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/iptc.jpg",
+      "bytes": 346,
+      "sha256": "5b4de075dc5f15e2886ec3dd023434eaba135cc90cd09fef362905458860c49c",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/iso-array.jpg",
+      "bytes": 731,
+      "sha256": "b6bc769ebb83253d56284035a728d5edf586a2862331066591fdb9e2438aa23e",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/iso-overflow.jpg",
+      "bytes": 731,
+      "sha256": "8a1fd07051cb541f90ed6831439c77c27c7a207afde7483faafdfe1d12336867",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/itext.png",
+      "bytes": 140,
+      "sha256": "435e38b6f42f95647820161b09fa46bd870142cb7b8c7ea355c0ad39e917ca7b",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/maximum-date.jpg",
+      "bytes": 681,
+      "sha256": "683dd97111646f5e6e658f7a664f76a9c3d20ef19e7a8a61b5b48a36636be594",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/minimum-date.jpg",
+      "bytes": 680,
+      "sha256": "4aa50e6a988c061002cfc6b3e479207a070ccb02d0506834ffc887480f3b7dd8",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/opaque.raw",
+      "bytes": 12,
+      "sha256": "cf618c1df88bfa802be561eb90865c9908abd24cc99efa4da9f4897ca1a26c2d",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-0.jpg",
+      "bytes": 316,
+      "sha256": "7aa5bd514eef48e2b168660c14cde2a72b802a5f46805ffeef9c283a243f9a52",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-1.jpg",
+      "bytes": 316,
+      "sha256": "ce30d5cd2bf0922afb6399e906494ea27dd40c64200dbac4b9706559ba806039",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-2.jpg",
+      "bytes": 316,
+      "sha256": "06cb7ac6a6cff585ce8d6ee3b4b9cefcae3789770b8d989fd3f3cc5913e76ad5",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-3.jpg",
+      "bytes": 316,
+      "sha256": "d0478a3ddfdda0d38e81dc7e2c4d27916b1d402aa457b055019672007a78ae2a",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-4.jpg",
+      "bytes": 316,
+      "sha256": "717ee6f2175f7fa236bb07a3c7c87690b6e408f37f916717ed1e97317915c1d3",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-5.jpg",
+      "bytes": 316,
+      "sha256": "7da8693dbcedbb333cc970e1e777097b422f9ae74b0c72fc22819348e8e7fdb1",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-6.jpg",
+      "bytes": 316,
+      "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-7.jpg",
+      "bytes": 316,
+      "sha256": "7e5f8c57b52ab5626ce6d00c3b7340459cd4889c3b266bb37262e35c302240bd",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-8.jpg",
+      "bytes": 316,
+      "sha256": "457b2182f4c39a7c4a4526461563784a997a4c311e295617cea82b0d5901fdf9",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/orientation-9.jpg",
+      "bytes": 316,
+      "sha256": "7581302a2539d7bdd24fae028acaa695815e995dd8954c8b3948498d12a34977",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/outside.jpg",
+      "bytes": 731,
+      "sha256": "36ac43773370a12062ac780599e170cfe0a4ecfaf6a17c1d1bb0e0311ac53cc3",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.avif",
+      "bytes": 286,
+      "sha256": "81c8dcd7a5c90942e38e30a24766956a946d79e7a07d07fce49d47e82f884993",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.cr2",
+      "bytes": 485,
+      "sha256": "424226aab4bbb8764e1ffb5d9f2c52e9f6dc5649231241cdb96bc89e10e994e0",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.gif",
+      "bytes": 47,
+      "sha256": "fccabfdb9e7535c2b458944b64cf5895c1c3259fab78177a056f310095fe5b99",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.tif",
+      "bytes": 477,
+      "sha256": "1f625d91bdde1ca7a88b87a952c74f4adc16d1eec8f3f5d398695dbd2b8da451",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.tiff",
+      "bytes": 477,
+      "sha256": "1f625d91bdde1ca7a88b87a952c74f4adc16d1eec8f3f5d398695dbd2b8da451",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/photo.webp",
+      "bytes": 64,
+      "sha256": "589b2b5d7a66b56d03d63d49b1f228a4b6a6a9be49a02c3ae7a6b3e4972c9386",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/plain.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/plain.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/rating-large.jpg",
+      "bytes": 667,
+      "sha256": "206cd3c312e5aa6a12b61b48bb9dfa30e3423814520e34a4e5fc70ddcba655de",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/text.png",
+      "bytes": 280,
+      "sha256": "51281bbf67cb0d4bbdcc0ecd596c5e246079b78bb29e805da343aef58334a296",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/unsigned-shutter.jpg",
+      "bytes": 731,
+      "sha256": "8fb9dadef0008838fc52393a4affc07f707bb184678d92f8ddcc8e541e6a1767",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/upper.JPG",
+      "bytes": 731,
+      "sha256": "daa0f9b64a12e81be9e70c30d3f024bb90ad64b1ff92578506114c6c4cc5a70e",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/utc-date.jpg",
+      "bytes": 681,
+      "sha256": "aed491fb1143db51db42fb5843c697c402b136ec9c6cca4a222460fa37481edf",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/utc-new-year.jpg",
+      "bytes": 681,
+      "sha256": "5b5582af2b7a2e0a65047ed97449b74a8c4be5b54dc52d141709e3f5785a92d3",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/whitespace-iptc.jpg",
+      "bytes": 845,
+      "sha256": "845379fb4f713cc876469d46b59b549dff31d84d3bae4f98a246b76c7ceb15ec",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp-fraction.jpg",
+      "bytes": 694,
+      "sha256": "1860be803a066d3fce33a39199c3d070f9fbb239b402c0c6a1ef20332c1135a9",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp-iptc.jpg",
+      "bytes": 744,
+      "sha256": "a646578b706a29791e949dc7e1f9a4c751097b31d8b1b09ed49849fe940aa7ae",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp-iso-overflow.jpg",
+      "bytes": 761,
+      "sha256": "aa4d202323a67b242488ccf78691d55da29fca79026a626fd525c510dd8a2de5",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp-ztext.png",
+      "bytes": 586,
+      "sha256": "b7da2f4e5ee36af142640d6cd442f2b706787a3fbcff367a470f52f4995672e0",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp.jpg",
+      "bytes": 1377,
+      "sha256": "8f5a7992843dabd909927ff4e74271e4ac4d32bda270257ed8d034f494970a25",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/xmp.png",
+      "bytes": 1205,
+      "sha256": "19d6c51e7634e64ab7a647d9853c312b156f18bb6505928a2bff6b3dc41be3ba",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/zero-rational.jpg",
+      "bytes": 731,
+      "sha256": "6a1235eb2f113a0fde3d4e72083aa9c3c7bd30731b8a622cd1e9f92694b1c495",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/assets/ztext.png",
+      "bytes": 142,
+      "sha256": "76d17eb9029375fda719cc11cd4d4990f839ad0bce23bf96a5053d8c8223a240",
+      "role": "originalPhotoBytes"
+    },
+    {
+      "filename": "../photo-provider/input.json",
+      "bytes": 5028,
+      "sha256": "93443c8c8375028264778e74646aaa248c2b0a3a1698cb86b204123da7bf5368",
+      "role": "originalPhotoMetadataMatrix"
+    },
+    {
+      "filename": "../photo-provider/user-comment/input.json",
+      "bytes": 115,
+      "sha256": "4cf0f1a8dce920dbe2fb694fa6a6136748b45edab5bde2659dc57c79a07df3d7",
+      "role": "originalUnicodeCommentMatrix"
+    },
+    {
+      "filename": "../photo-provider/user-comment/unicode-comment.jpg",
+      "bytes": 731,
+      "sha256": "29b9b26f0c7c937b3b672b6b40a9b54a2c97ef9cf588022ba647386b615a669a",
+      "role": "originalPatchedUnicodeCommentImage"
+    },
+    {
+      "filename": "../photo-provider/user-comment/asset-patch.json",
+      "bytes": 633,
+      "sha256": "438684f9e111fc92069efb1c34da1d3986a39ec50ce2632e473671f059d2318f",
+      "role": "originalUnicodeCommentPatchDeclaration"
+    },
+    {
+      "filename": "../../../library/fixtures/photo-dto/input.json",
+      "bytes": 50597,
+      "sha256": "c913a6465256526df17fcd2dcbc47ad0d78a0b6a01a41ba962bc3c69cb19da1f",
+      "role": "originalPhotoDtoAndAspectMatrix"
+    },
+    {
+      "filename": "../custom-image-lifecycle/input.json",
+      "bytes": 1843,
+      "sha256": "c982533cfb7b48582834dd92fe14d135dd63123efc214d10fa22de1671b8d7d3",
+      "role": "originalCustomImageLifecycleMatrix"
+    },
+    {
+      "filename": "../dynamic-image-host/input.json",
+      "bytes": 2491,
+      "sha256": "25f7e1c691df1b1701872a7a537d897a11c5b53f3e50b7e62b5fc1f764e7cf9c",
+      "role": "originalDynamicImageHostMatrix"
+    },
+    {
+      "filename": "../../../images/fixtures/http/poster.png",
+      "bytes": 287,
+      "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+      "role": "originalCustomLifecycleImage"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "role": "oracleReferenceContract"
+    },
+    {
+      "filename": "../../../../src/metadata/resources/photo-tags-license.txt",
+      "bytes": 26432,
+      "sha256": "6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3",
+      "role": "shippedTagReaderLicense"
+    },
+    {
+      "filename": "../../../../src/metadata/resources/photo-tags-notice.txt",
+      "bytes": 1077,
+      "sha256": "b01844aed9c3636e2822ab8c0c90f3ad8fae7e007c27112777817c801f1cef1c",
+      "role": "shippedTagReaderNotice"
+    }
+  ],
+  "phaseAcceptance": false,
+  "releaseAcceptance": false
+}

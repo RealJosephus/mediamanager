@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "fixture": "library-structure",
+  "scope": "Two independent current designated Native MVC, permission, rename and CollectionFolder consumers; full file contents and real Node options persistence, Native continuation and fresh Node read. Controlled principal, manager and provider seams; not a full Native instance or database exchange.",
+  "cases": {
+    "http": 102,
+    "markers": 15
+  },
+  "sourcePaths": [
+    "Jellyfin.Api/Controllers/LibraryStructureController.cs",
+    "Jellyfin.Api/ModelBinders/CommaDelimitedCollectionModelBinder.cs",
+    "Jellyfin.Api/ModelBinders/NullableEnumModelBinder.cs",
+    "Jellyfin.Api/Auth/CustomAuthenticationHandler.cs",
+    "MediaBrowser.Model/Entities/CollectionTypeOptions.cs",
+    "Jellyfin.Api/Models/LibraryStructureDto/AddVirtualFolderDto.cs",
+    "Jellyfin.Api/Models/LibraryStructureDto/MediaPathDto.cs",
+    "Jellyfin.Api/Models/LibraryStructureDto/UpdateMediaPathRequestDto.cs",
+    "Jellyfin.Api/Models/LibraryStructureDto/UpdateLibraryOptionsDto.cs",
+    "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+    "Jellyfin.Api/Auth/FirstTimeSetupPolicy/FirstTimeSetupHandler.cs",
+    "Jellyfin.Api/Auth/FirstTimeSetupPolicy/FirstTimeSetupRequirement.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "MediaBrowser.Controller/IO/FileSystemHelper.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Model/Configuration/LibraryOptions.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Providers/MetadataRefreshOptions.cs",
+    "MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
+    "MediaBrowser.Model/Configuration/MediaPathInfo.cs",
+    "MediaBrowser.Model/Configuration/TypeOptions.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Controller/Entities/LibraryOptionsUpdatedEventArgs.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "c09acf6daa0f2214959410d1eff9df512a213e2b7b56f4068428fc538a9485ae",
+      "bytes": 20139,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "9a111824a5d4816fa5dd32346b89ea03def946d4f8f7b53629499434a89c99f2",
+      "bytes": 22599,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1",
+      "bytes": 526,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "observations.js",
+      "sha256": "9127cf626c9da2090cf133070c262a041163daa813228ca1ab0d0490b790da78",
+      "bytes": 4039,
+      "role": "functionalProjection"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    }
+  ]
+}

@@ -1,0 +1,1922 @@
+[
+  {
+    "name": "episode empty references resolve physical parents",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season"
+      }
+    ]
+  },
+  {
+    "name": "episode correct references and caches remain unchanged",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Physical series",
+        "SeriesPresentationUniqueKey": "physical-series-key",
+        "SeasonName": "Physical season",
+        "parent": "season",
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "SeasonId": "86000000-0000-0000-0000-000000000004",
+        "PresentationUniqueKey": "86000000000000000000000000000010"
+      }
+    ]
+  },
+  {
+    "name": "episode missing nonempty references preserve old series name and use season fallback first",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "SeriesId": "86000000-0000-0000-0000-000000000098",
+        "SeasonId": "86000000-0000-0000-0000-000000000099"
+      }
+    ]
+  },
+  {
+    "name": "episode wrong-type references use fallback getters before physical correction",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "SeriesId": "86000000-0000-0000-0000-000000000003",
+        "SeasonId": "86000000-0000-0000-0000-000000000003"
+      }
+    ]
+  },
+  {
+    "name": "episode external references contribute names before physical IDs and key are corrected",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "SeriesId": "86000000-0000-0000-0000-000000000002",
+        "SeasonId": "86000000-0000-0000-0000-000000000006"
+      }
+    ]
+  },
+  {
+    "name": "episode nested parent chain resolves typed physical ancestors",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "nested"
+      }
+    ]
+  },
+  {
+    "name": "flat episode resolves numbered season",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "series"
+      }
+    ]
+  },
+  {
+    "name": "flat episode without a season number uses unknown name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": null,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "series"
+      }
+    ]
+  },
+  {
+    "name": "flat episode unmatched season number clears explicit stale season ID",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": -1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "series",
+        "SeasonId": "86000000-0000-0000-0000-000000000099"
+      }
+    ]
+  },
+  {
+    "name": "orphan episode clears typed IDs and key but keeps cached series name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": null,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "SeriesId": "86000000-0000-0000-0000-000000000098",
+        "SeasonId": "86000000-0000-0000-0000-000000000099"
+      }
+    ]
+  },
+  {
+    "name": "orphan episode may read explicit external names before clearing IDs",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "SeriesId": "86000000-0000-0000-0000-000000000002",
+        "SeasonId": "86000000-0000-0000-0000-000000000006"
+      }
+    ]
+  },
+  {
+    "name": "episode reversed range is cleared before parent field updates",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 4,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "IndexNumberEnd": 2
+      }
+    ]
+  },
+  {
+    "name": "episode orphaned range end is cleared",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": null,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "IndexNumberEnd": 2
+      }
+    ]
+  },
+  {
+    "name": "episode valid provider range remains",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 2,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "IndexNumberEnd": 4
+      }
+    ]
+  },
+  {
+    "name": "locked episode still corrects parent fields",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Episode",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeasonName": "Stored season",
+        "parent": "season",
+        "IsLocked": true,
+        "LockedFields": [
+          "Name",
+          "Runtime"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "season empty series reference resolves physical parent",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series"
+      }
+    ]
+  },
+  {
+    "name": "season explicit external series contributes key and name before ID correction",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series",
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      }
+    ]
+  },
+  {
+    "name": "season missing nonempty series leaves own presentation key for this refresh",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series",
+        "SeriesId": "86000000-0000-0000-0000-000000000098"
+      }
+    ]
+  },
+  {
+    "name": "season wrong-type reference clears cached grouping key before ID correction",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series",
+        "SeriesId": "86000000-0000-0000-0000-000000000003"
+      }
+    ]
+  },
+  {
+    "name": "orphan season clears series ID but preserves series name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "SeriesId": "86000000-0000-0000-0000-000000000098"
+      }
+    ]
+  },
+  {
+    "name": "special season gets configured display name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series"
+      }
+    ],
+    "specialName": "Extras"
+  },
+  {
+    "name": "special season case-insensitive name equality preserves spelling",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "eXTrAs",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series"
+      }
+    ],
+    "specialName": "Extras"
+  },
+  {
+    "name": "special season Name lock preserves name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series",
+        "LockedFields": [
+          "Name"
+        ]
+      }
+    ],
+    "specialName": "Extras"
+  },
+  {
+    "name": "locked special season preserves name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series",
+        "IsLocked": true
+      }
+    ],
+    "specialName": "Extras"
+  },
+  {
+    "name": "special season retains configured empty display name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series"
+      }
+    ],
+    "specialName": ""
+  },
+  {
+    "name": "special season retains configured null display name",
+    "target": "target",
+    "items": [
+      {
+        "key": "series",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000001",
+        "Name": "Physical series",
+        "PresentationUniqueKey": "physical-series-key"
+      },
+      {
+        "key": "otherSeries",
+        "type": "Series",
+        "Id": "86000000-0000-0000-0000-000000000002",
+        "Name": "Other series",
+        "PresentationUniqueKey": "other-series-key"
+      },
+      {
+        "key": "wrongType",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000003",
+        "Name": "Wrong type"
+      },
+      {
+        "key": "season",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000004",
+        "parent": "series",
+        "Name": "Physical season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000001",
+        "PresentationUniqueKey": "physical-series-key-001"
+      },
+      {
+        "key": "specials",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000005",
+        "parent": "series",
+        "Name": "Specials",
+        "IndexNumber": 0,
+        "SeriesId": "86000000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "otherSeason",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000006",
+        "parent": "otherSeries",
+        "Name": "Other season",
+        "IndexNumber": 1,
+        "SeriesId": "86000000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Folder",
+        "Id": "86000000-0000-0000-0000-000000000007",
+        "parent": "season",
+        "Name": "Nested folder"
+      },
+      {
+        "key": "target",
+        "type": "Season",
+        "Id": "86000000-0000-0000-0000-000000000010",
+        "Name": "Stored target",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 0,
+        "SeriesName": "Stored series",
+        "SeriesPresentationUniqueKey": "stored-key",
+        "parent": "series"
+      }
+    ],
+    "specialName": null
+  }
+]

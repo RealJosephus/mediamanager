@@ -1,0 +1,259 @@
+{
+  "nativeSha256": "921d153f081db87ea88adfd30e3b7a1242621b924fcccafa7b59cbdc8fbc6b68",
+  "inputSha256": "7caad00b84c4362fd3d7c365d229ebe5ef4ea9e289a1ef7118a6e8014bf5e0a3",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/CollectionPostScanTask.cs",
+      "sha256": "65c3607091c17d95340808cfef31dc41c18111fc86a78b937688d99006004ba5",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserView.cs",
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+      "sha256": "d3002a8af3e88fba82a46a1541620518968677425694978c3e967e325106e964",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BasePluginFolder.cs",
+      "sha256": "a80dba2db7c9907865a41782096059c6536cecf111305c3271cd8de150c5c5d5",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Playlists/PlaylistsFolder.cs",
+      "sha256": "c621e1afdc79c1b641642cac5777964b0aa9e7464989055f5d3344e1ca87ce56",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Movies/Movie.cs",
+      "sha256": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+      "sha256": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+      "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/DescendantQueryHelper.cs",
+      "sha256": "a391b969d0870a6fbd236026d7af574b6a0d897ee41621e3fad0f5339b716f17",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "e18cfdb73181a255a84415ccb7dcd82227c10174edf518194c951f34cfc80266"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "706d543d4f6e7232af0595136d46f8450a08602dcb2b6a397113c1db9042a327"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 44544,
+    "sha256": "218691d3e659275be4bb9029cbf6943351e65db0e0b2844ed629b724a0c6fb68"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native/case",
+      "D:\\mediamanager\\tests\\library\\fixtures\\collection-source\\input.json",
+      "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "assemblies": [
+    {
+      "name": "BitFaster.Caching",
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\BitFaster.Caching.dll"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Data.dll"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Common.dll"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll"
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll"
+    },
+    {
+      "name": "Polly",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Polly.dll"
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll"
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll"
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "filename": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll"
+    }
+  ],
+  "sqliteRuntime": {
+    "name": "e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "rawRecording": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-collection-source-agent-native-5\\native\\native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 2722442,
+    "sha256": "921d153f081db87ea88adfd30e3b7a1242621b924fcccafa7b59cbdc8fbc6b68"
+  },
+  "buildSource": "D:\\mediamanager-validation\\20261005\\jellyfin-baseline\\source",
+  "recorder": {
+    "filename": "D:\\mediamanager\\tools\\compat\\record-collection-source.mjs",
+    "available": true,
+    "kind": "file",
+    "bytes": 4043,
+    "sha256": "3c77816b4ea2808c6ccd526e231d3446b63a1b8967313faa1c5d467b3bc3756e"
+  },
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

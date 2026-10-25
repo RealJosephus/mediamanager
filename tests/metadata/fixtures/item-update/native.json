@@ -1,0 +1,1135 @@
+{
+  "results": [
+    {
+      "name": "empty movie",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "empty episode",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "empty series",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "AirDays": [
+          "Monday"
+        ],
+        "AirTime": "Old time"
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 1
+    },
+    {
+      "name": "empty album",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "full movie",
+      "value": {
+        "Name": " New title ",
+        "ForcedSortName": "Sort",
+        "OriginalLanguage": "zh",
+        "CriticRating": 9.123457,
+        "CommunityRating": 8.123457,
+        "IndexNumber": 4,
+        "ParentIndexNumber": 2,
+        "Overview": "Edited",
+        "Genres": [
+          "Drama",
+          " drama "
+        ],
+        "Tagline": "first",
+        "Studios": [
+          "Studio"
+        ],
+        "DateCreated": "2024-01-02T03:04:05.1234567Z",
+        "PremiereDate": "2024-02-03T03:04:05.1234567Z",
+        "ProductionYear": 2024,
+        "CustomRating": "PG",
+        "Tags": [
+          "Tag",
+          ""
+        ],
+        "ProductionLocations": [
+          "US"
+        ],
+        "PreferredMetadataCountryCode": "CN",
+        "PreferredMetadataLanguage": "zh",
+        "IsLocked": true,
+        "LockedFields": [
+          "Name",
+          "Tags"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Tmdb": "12",
+          "Other": "value"
+        },
+        "AspectRatio": "16:9",
+        "Video3DFormat": "HalfSideBySide"
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [
+        {
+          "Name": " Actor ",
+          "Role": " Lead ",
+          "Type": "Actor"
+        }
+      ],
+      "queued": 0
+    },
+    {
+      "name": "explicit null preserves arrays",
+      "value": {
+        "Name": "Null arrays",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "empty arrays clear",
+      "value": {
+        "Name": "Clear",
+        "Genres": [],
+        "Studios": [],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {}
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "offset date relabels local wall time",
+      "value": {
+        "Name": "Date",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2024-01-02T16:04:05.1234567Z",
+        "EndDate": "2025-03-04T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "series runtime and status",
+      "value": {
+        "Name": "Series",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740995,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "DisplayOrder": "DVD",
+        "Status": "Ended",
+        "AirDays": [
+          "Monday",
+          "Friday"
+        ],
+        "AirTime": "21:00"
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 1
+    },
+    {
+      "name": "series status ignores parser aliases",
+      "error": "ArgumentException",
+      "Message": "Requested value \u0027returning\u0027 was not found."
+    },
+    {
+      "name": "episode special placement",
+      "value": {
+        "Name": "Special",
+        "IndexNumber": 4,
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "SeriesName": "Custom series",
+        "AirsAfterSeasonNumber": 1,
+        "AirsBeforeSeasonNumber": 2,
+        "AirsBeforeEpisodeNumber": 3
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "music video artists",
+      "value": {
+        "Name": "Music video",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Album": "Album",
+        "Artists": [
+          "Artist"
+        ]
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "audio artists",
+      "value": {
+        "Name": "Track",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Album": "Album",
+        "Artists": [
+          "Artist"
+        ],
+        "AlbumArtists": [
+          "Album artist"
+        ]
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "numeric string title converter",
+      "value": {
+        "Name": "false",
+        "OriginalTitle": "3.0",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "duplicate bad integer",
+      "error": "JsonException",
+      "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 5.",
+      "Path": "$",
+      "LineNumber": 0,
+      "BytePositionInLine": 5
+    },
+    {
+      "name": "fractional integer",
+      "error": "JsonException",
+      "Message": "The JSON value could not be converted to System.Int32. Path: $ | LineNumber: 0 | BytePositionInLine: 3.",
+      "Path": "$",
+      "LineNumber": 0,
+      "BytePositionInLine": 3
+    },
+    {
+      "name": "bad boolean",
+      "error": "JsonException",
+      "Message": "The JSON value could not be converted to System.Boolean. Path: $ | LineNumber: 0 | BytePositionInLine: 6.",
+      "Path": "$",
+      "LineNumber": 0,
+      "BytePositionInLine": 6
+    },
+    {
+      "name": "bad enum",
+      "error": "JsonException",
+      "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.MetadataField. Path: $.LockedFields[0] | LineNumber: 0 | BytePositionInLine: 26.",
+      "Path": "$.LockedFields[0]",
+      "LineNumber": 0,
+      "BytePositionInLine": 26
+    },
+    {
+      "name": "bad unrelated guid",
+      "error": "FormatException",
+      "Message": "Unrecognized Guid format."
+    },
+    {
+      "name": "bad unrelated enum dictionary",
+      "error": "JsonException",
+      "Message": "The JSON value could not be converted to MediaBrowser.Model.Entities.ImageType. Path: $.ImageTags.Missing | LineNumber: 0 | BytePositionInLine: 24.",
+      "Path": "$.ImageTags.Missing",
+      "LineNumber": 0,
+      "BytePositionInLine": 24
+    },
+    {
+      "name": "nullable list elements",
+      "value": {
+        "Name": "Nullable lists",
+        "Genres": [
+          null,
+          "Drama"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          null,
+          "Studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          null,
+          "US"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "original language name normalizes",
+      "value": {
+        "Name": "Language",
+        "OriginalLanguage": "fr",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "series cascades and recursive locks",
+      "value": {
+        "Name": "Renamed",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "OfficialRating": "PG",
+        "CustomRating": "G",
+        "Tags": [
+          "KEEP",
+          "new"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "DisplayOrder": "aired",
+        "AirDays": [
+          "Monday"
+        ],
+        "AirTime": "Old time"
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000002",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000003",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000002",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000003",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000004",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0,
+      "writes": [
+        {
+          "Name": "Season",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "G",
+          "Tags": [
+            "child",
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "OfficialRating"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "Old",
+            "keep"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "Tags"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Renamed",
+          "Genres": [
+            "Old genre"
+          ],
+          "Tagline": "Old tagline",
+          "Studios": [
+            "Old studio"
+          ],
+          "DateCreated": "2020-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [
+            "Old country"
+          ],
+          "IsLocked": false,
+          "LockedFields": [
+            "Name"
+          ],
+          "ProviderIds": {
+            "Custom": "old"
+          },
+          "DisplayOrder": "aired",
+          "AirDays": [
+            "Monday"
+          ],
+          "AirTime": "Old time"
+        },
+        {
+          "Name": "Season",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "G",
+          "Tags": [
+            "child",
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "OfficialRating"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "Old",
+            "keep"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "Tags"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Direct episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "Old custom",
+          "Tags": [
+            "Old"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [],
+          "ProviderIds": {}
+        }
+      ],
+      "children": [
+        {
+          "Name": "Season",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "G",
+          "Tags": [
+            "child",
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "OfficialRating"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "Old",
+            "keep"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "Tags"
+          ],
+          "ProviderIds": {},
+          "SeriesName": "Renamed"
+        },
+        {
+          "Name": "Direct episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "Old custom",
+          "Tags": [
+            "Old"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [],
+          "ProviderIds": {}
+        }
+      ]
+    },
+    {
+      "name": "season cascades",
+      "value": {
+        "Name": "Renamed season",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "OfficialRating": "PG",
+        "CustomRating": "G",
+        "Tags": [
+          "KEEP",
+          "new"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": true,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000002",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0,
+      "writes": [
+        {
+          "Name": "Episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "G",
+          "Tags": [
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "OfficialRating"
+          ],
+          "ProviderIds": {}
+        },
+        {
+          "Name": "Renamed season",
+          "Genres": [
+            "Old genre"
+          ],
+          "Tagline": "Old tagline",
+          "Studios": [
+            "Old studio"
+          ],
+          "DateCreated": "2020-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [
+            "Old country"
+          ],
+          "IsLocked": true,
+          "LockedFields": [
+            "Name"
+          ],
+          "RunTimeTicks": 9007199254740993,
+          "ProviderIds": {
+            "Custom": "old"
+          }
+        }
+      ],
+      "children": [
+        {
+          "Name": "Episode",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "R",
+          "CustomRating": "G",
+          "Tags": [
+            "KEEP",
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [
+            "OfficialRating"
+          ],
+          "ProviderIds": {}
+        }
+      ]
+    },
+    {
+      "name": "album cascades",
+      "value": {
+        "Name": "Renamed album",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "OfficialRating": "PG",
+        "CustomRating": "G",
+        "Tags": [
+          "new"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": true,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000002",
+          "reason": "MetadataEdit"
+        },
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0,
+      "writes": [
+        {
+          "Name": "Track",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [],
+          "ProviderIds": {},
+          "Artists": [],
+          "AlbumArtists": []
+        },
+        {
+          "Name": "Renamed album",
+          "Genres": [
+            "Old genre"
+          ],
+          "Tagline": "Old tagline",
+          "Studios": [
+            "Old studio"
+          ],
+          "DateCreated": "2020-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "new"
+          ],
+          "ProductionLocations": [
+            "Old country"
+          ],
+          "IsLocked": true,
+          "LockedFields": [
+            "Name"
+          ],
+          "RunTimeTicks": 9007199254740993,
+          "ProviderIds": {
+            "Custom": "old"
+          },
+          "Artists": [],
+          "AlbumArtists": []
+        }
+      ],
+      "children": [
+        {
+          "Name": "Track",
+          "Genres": [],
+          "Studios": [],
+          "DateCreated": "0001-01-01T00:00:00.0000000Z",
+          "OfficialRating": "PG",
+          "CustomRating": "G",
+          "Tags": [
+            "new"
+          ],
+          "ProductionLocations": [],
+          "IsLocked": false,
+          "LockedFields": [],
+          "ProviderIds": {},
+          "Artists": [],
+          "AlbumArtists": []
+        }
+      ]
+    }
+  ],
+  "sourceBoundary": "Unmodified ItemUpdateController.UpdateItem, native BaseItemDto JSON converters, physical Children, recursive lock propagation and OnMetadataChanged; ILibraryManager repository writes and IProviderManager.QueueRefresh are recorded callbacks, not real database or NFO evidence. Children are supplied explicitly by scenarios; alternate versions are empty.",
+  "runtime": ".NET 10.0.12",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\item-update-native-final-20261004\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "f0bbaba2c4564bf7f04329d728df65a7a3ef54c96936374292db0beb311c87c5"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\item-update-native-final-20261004\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "candidateVerified": false
+}

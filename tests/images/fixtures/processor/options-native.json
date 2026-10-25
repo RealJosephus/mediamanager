@@ -1,0 +1,1079 @@
+{
+  "scope": "Real baseline DLL options, ImageHelper and ImageProcessor orchestration. Encoder is a recording stub; no image pixel decoding or encoding is executed.",
+  "optionsCases": [
+    {
+      "name": "default-known",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "default-unknown",
+      "path": "poster.jpg",
+      "dimensions": null,
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "quality90",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 90,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "quality89",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 89,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "quality101",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 101,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "width-same",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": 800,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "width-smaller",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": 400,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "width-larger",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": 1600,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "width-unknown",
+      "path": "poster.jpg",
+      "dimensions": null,
+      "Width": 800,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "height-same",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": 600,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "max-width-equal",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": 800,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "max-width-larger",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": 1600,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "max-width-smaller",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": 400,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "max-height-smaller",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": 300,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "max-width-unknown",
+      "path": "poster.jpg",
+      "dimensions": null,
+      "Width": null,
+      "Height": null,
+      "MaxWidth": 1600,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "fill-smaller-known",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": 400,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "fill-larger-known",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": 1600,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "fill-equal-known",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": 800,
+      "FillHeight": 600,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "fill-smaller-unknown",
+      "path": "poster.jpg",
+      "dimensions": null,
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": 400,
+      "FillHeight": 300,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "fill-height-smaller",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": 300,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "blur-zero",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": 0,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "unplayed-zero",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": 0,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "percent-zero",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "percent-positive",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 1,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "background-empty",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": "",
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "background-space",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": " ",
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "foreground-space",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": " ",
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "jpeg-case",
+      "path": "poster.JPEG",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "format-mismatch",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Webp"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "tbn-jpeg-mime-is-not-supported-extension",
+      "path": "poster.tbn",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "orientation-not-part-of-options-predicate",
+      "path": "poster.jpg",
+      "dimensions": {
+        "Height": 600,
+        "Width": 800
+      },
+      "Width": null,
+      "Height": null,
+      "MaxWidth": null,
+      "MaxHeight": null,
+      "FillWidth": null,
+      "FillHeight": null,
+      "Quality": 100,
+      "Blur": null,
+      "UnplayedCount": null,
+      "PercentPlayed": 0,
+      "BackgroundColor": null,
+      "ForegroundLayer": null,
+      "RequiresAutoOrientation": true,
+      "formats": [
+        "Jpg",
+        "Png"
+      ],
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "processCases": [
+    {
+      "name": "normal-default",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\normal-default.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "normal-resize-failure",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\normal-resize-failure.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\normal-resize-failure.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\6\\6e4adf73-da43-4bd2-83f3-d0e0bdc2d769.jpg",
+          "autoOrient": false,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    },
+    {
+      "name": "encoder-return-original",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\encoder-return-original.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\encoder-return-original.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\3\\3a71410d-5ee2-a79b-8c19-b81e3257c18e.jpg",
+          "autoOrient": false,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    },
+    {
+      "name": "gif-even-with-transforms",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\gif-even-with-transforms.gif",
+      "MimeType": "image/gif",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "photo-top-left",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-top-left.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "photo-unknown",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-unknown.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-unknown.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\d\\dd4877db-567c-58f3-d875-26030b60dd5e.jpg",
+          "autoOrient": true,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    },
+    {
+      "name": "photo-rotated",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-rotated.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-rotated.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\b\\b3ee26cb-bbe6-186d-ce85-a27feb534198.jpg",
+          "autoOrient": true,
+          "orientation": "RightTop",
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    },
+    {
+      "name": "photo-orientation-disabled-default",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-orientation-disabled-default.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "photo-orientation-disabled-with-resize",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-orientation-disabled-with-resize.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\photo-orientation-disabled-with-resize.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\7\\77b55b47-a848-c207-591c-9fdfd5ab0f1e.jpg",
+          "autoOrient": true,
+          "orientation": "RightTop",
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    },
+    {
+      "name": "missing-file",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\missing-file.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "null-encoder",
+      "expectedEncode": false,
+      "actualEncode": false,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\null-encoder.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": []
+    },
+    {
+      "name": "format-webp-first",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\format-webp-first.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\format-webp-first.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\6\\6b63f0db-86ff-58f2-afb8-8d264a019df7.webp",
+          "autoOrient": false,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Webp"
+        }
+      ]
+    },
+    {
+      "name": "transparent-prefers-png",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\transparent-prefers-png.png",
+      "MimeType": "image/png",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\transparent-prefers-png.png",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\4\\45ff1cdf-6e27-7f85-a2d3-d2336b1a6487.png",
+          "autoOrient": false,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Png"
+        }
+      ]
+    },
+    {
+      "name": "unsupported-client-format-fallback-jpg",
+      "expectedEncode": true,
+      "actualEncode": true,
+      "originalReturned": true,
+      "Path": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\unsupported-client-format-fallback-jpg.jpg",
+      "MimeType": "image/jpeg",
+      "DateModified": "2024-04-03T04:13:14Z",
+      "calls": [
+        {
+          "inputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\unsupported-client-format-fallback-jpg.jpg",
+          "outputPath": "D:\\mediamanager\\.test-input\\evidence\\capability-completion-20260926\\metadata\\image-audit\\assets\\cache\\resized-images\\1\\17902d02-8cd4-f544-3feb-51f9253bcca9.jpg",
+          "autoOrient": false,
+          "orientation": null,
+          "quality": 100,
+          "outputFormat": "Jpg"
+        }
+      ]
+    }
+  ],
+  "resizeCases": [
+    {
+      "name": "no-upscale",
+      "requested": {
+        "Width": 1600,
+        "Height": 1200
+      },
+      "result": {
+        "Height": 600,
+        "Width": 800
+      }
+    },
+    {
+      "name": "shrink",
+      "requested": {
+        "Width": 400,
+        "Height": 300
+      },
+      "result": {
+        "Height": 300,
+        "Width": 400
+      }
+    },
+    {
+      "name": "aspect",
+      "requested": {
+        "Width": 400,
+        "Height": 600
+      },
+      "result": {
+        "Height": 600,
+        "Width": 400
+      }
+    }
+  ],
+  "failures": []
+}

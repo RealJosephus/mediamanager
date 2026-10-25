@@ -1,0 +1,781 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T18:22:50.256Z",
+  "candidateVerified": false,
+  "scope": "38 actual new-source-built native PhotoAlbumImageProvider/BaseFolderImageProvider HasChanged/Fetch scenarios. Actual SQLite EF repository and real ProviderManager file SaveImage/ImageSaver; host/config/library-manager interfaces are harness proxies. Actual LibraryManager ancestor normalization is invoked directly. This is bounded component differential evidence, not a full native HTTP server or release acceptance claim.",
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/photo-album-cover/native.json",
+      "bytes": 668105,
+      "sha256": "762f3fac02575e0255d84add334581ea17bdbd48f78bd5f5db25b7bdeb074728",
+      "required": true
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/photo-album-cover/input.json",
+      "bytes": 743,
+      "sha256": "a1cf44dbe2194f7ea37fd71febe21f923eafbc6f6410f0712bf21ffa4d685c09",
+      "required": true
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/photo-album-cover/Program.cs",
+      "bytes": 17185,
+      "sha256": "8e8224587d420c4bb8e9c7953b179301656be69b69de41d2c88c10bdd757dda0",
+      "required": true
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/photo-album-cover/Oracle.csproj",
+      "bytes": 550,
+      "sha256": "c67537c4ffeaadab175de283069c11d2b0b84a2286d0152ecc68f905f61b674f",
+      "required": true
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    "png": {
+      "path": "tests/images/fixtures/http/poster.png",
+      "bytes": 287,
+      "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+      "required": true
+    },
+    "jpeg": {
+      "path": "tests/images/fixtures/http/backdrop.jpg",
+      "bytes": 334,
+      "sha256": "0ae30be0bed4084a9251f37447a42ad4195654fc799f78c47be51eb77195c730",
+      "required": true
+    }
+  },
+  "sources": [
+    {
+      "relative": "Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+      "bytes": 2323,
+      "sha256": "a1e8b6934ba7f334898928cce6c81b9f118a0ac92a52c357be378a2b649d1f17",
+      "required": true
+    },
+    {
+      "relative": "Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+      "bytes": 717,
+      "sha256": "27838d005c4c38721087c5c3cdf4621db2e172b7f1195cd53f42c3f432cfaa71",
+      "required": true
+    },
+    {
+      "relative": "MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/PhotoAlbum.cs",
+      "bytes": 471,
+      "sha256": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895",
+      "required": true
+    },
+    {
+      "relative": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "relative": "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "bytes": 9940,
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "required": true
+    },
+    {
+      "relative": "MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "relative": "MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ImageSaver.cs",
+      "bytes": 27917,
+      "sha256": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+      "required": true
+    },
+    {
+      "relative": "MediaBrowser.Model/Net/MimeTypes.cs",
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Model/Net/MimeTypes.cs",
+      "bytes": 6995,
+      "sha256": "b39d95d05558262c7561b38206340afe61b62b9b14b4f8e0067ef05cbd0fab9a",
+      "required": true
+    }
+  ],
+  "sourceFilesSha256": "f64310a1abcca6dbb030c12c902de66825ad22fd9e55fd51cdde4161f0a24798",
+  "nativeRecordSha256": "a0e511ed26f9aa22a36d97154738fa2cda19042b8ed0dde594b5beca06899a44",
+  "proof": {
+    "rawRecording": {
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/native.json",
+      "bytes": 668105,
+      "sha256": "762f3fac02575e0255d84add334581ea17bdbd48f78bd5f5db25b7bdeb074728",
+      "required": true
+    },
+    "executionRecord": {
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/record.json",
+      "bytes": 4485,
+      "sha256": "a0e511ed26f9aa22a36d97154738fa2cda19042b8ed0dde594b5beca06899a44",
+      "required": true
+    },
+    "oracleAssembly": {
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Oracle.dll",
+      "bytes": 49152,
+      "sha256": "eeb7ff004d72bb6394a9e0b7ef0d286cddde24bf2d49dd51311e45f7e43769c6",
+      "required": true
+    },
+    "buildReceipt": {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    "buildClosure": {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/closure-files.json",
+      "bytes": 1877065,
+      "sha256": "11f5705709d3b5ae738aacd4826b8e5ffb2ab8724b3cdf55f39a668f7154f629",
+      "required": true
+    }
+  },
+  "assemblies": [
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "name": "Oracle",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Oracle.dll",
+      "bytes": 49152,
+      "sha256": "eeb7ff004d72bb6394a9e0b7ef0d286cddde24bf2d49dd51311e45f7e43769c6",
+      "required": true
+    },
+    {
+      "name": "System.Runtime",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Data",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
+      "required": true
+    },
+    {
+      "name": "System.Collections",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "bytes": 30544,
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "name": "System.Linq.Expressions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "bytes": 3639080,
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "bytes": 767784,
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "required": true
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "required": true
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "bytes": 976680,
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "name": "System.Text.Json",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "name": "System.Console",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Console.dll",
+      "bytes": 169808,
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "name": "netstandard",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "bytes": 100648,
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "name": "System.Memory",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "name": "System.Threading",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "name": "System.Private.Uri",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "bytes": 329552,
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "bytes": 141096,
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "required": true
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "bytes": 325416,
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "required": true
+    },
+    {
+      "name": "System.Net.Primitives",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "bytes": 210728,
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
+      "required": true
+    },
+    {
+      "name": "System.Data.Common",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "bytes": 2770728,
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "bytes": 79656,
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "bytes": 75560,
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "bytes": 227152,
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.DiagnosticSource",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "bytes": 501544,
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "name": "System.Transactions.Local",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "bytes": 640808,
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.Tracing",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "bytes": 16208,
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "required": true
+    },
+    {
+      "name": "System.Threading.ThreadPool",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "bytes": 15656,
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "bytes": 100176,
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "bytes": 141096,
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "bytes": 46888,
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "bytes": 100136,
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "bytes": 83752,
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.Annotations",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "bytes": 198480,
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "required": true
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "bytes": 21840,
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "required": true
+    },
+    {
+      "name": "System.Private.Xml",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "bytes": 7788328,
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "required": true
+    },
+    {
+      "name": "System.Net.NetworkInformation",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "bytes": 157520,
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.Intrinsics",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "name": "System.ObjectModel",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "bytes": 79656,
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "required": true
+    },
+    {
+      "name": "Polly",
+      "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-8/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "name": "System.Threading.Thread",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "bytes": 15696,
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "required": true
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "bytes": 1034064,
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "required": true
+    },
+    {
+      "name": "System.Threading.Channels",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "bytes": 157480,
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39",
+      "required": true
+    },
+    {
+      "name": "System.Linq.Queryable",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "bytes": 182056,
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "required": true
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.StackTrace",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.StackTrace.dll",
+      "bytes": 46888,
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Metadata",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Metadata.dll",
+      "bytes": 1156904,
+      "sha256": "82973e772017944a0548e445f30757595d95fe99e1f5c4a446df8c4db04b1c18",
+      "required": true
+    },
+    {
+      "name": "System.IO.MemoryMappedFiles",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.MemoryMappedFiles.dll",
+      "bytes": 83752,
+      "sha256": "6e8b281ecb2f0f5e7aad3980f61d8812caa6b37884737f542f95410a76663e0e",
+      "required": true
+    },
+    {
+      "name": "System.Net.Http",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "bytes": 1746768,
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "required": true
+    }
+  ],
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+    }
+  },
+  "sourceBuildIdentity": "new-designated-source-build; SHA474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26; retained old baseline is distinct",
+  "previousAttempts": [
+    {
+      "attempt": 1,
+      "scope": "Oracle compilation failed (missing ItemTypeLookup namespace and required Ancestor references).",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-1/record.json",
+        "bytes": 2789,
+        "sha256": "d2e0b0b8585cabf62f854006f404b766a94a78f106516aeafe74ca94ea5fc63c"
+      }
+    },
+    {
+      "attempt": 2,
+      "scope": "28 scenarios executed, but missing harness BaseItem.MediaSourceManager caused ImageSaver NullReferenceException; not accepted as provider evidence.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-2/record.json",
+        "bytes": 4485,
+        "sha256": "926a1ee93ab0d375eed42daf1b977c4a2d8d0f612f63efa503d4397ae9d3584b"
+      }
+    },
+    {
+      "attempt": 3,
+      "scope": "Error-stack diagnostic run confirmed the missing harness MediaSourceManager; not accepted as provider evidence.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-3/record.json",
+        "bytes": 4485,
+        "sha256": "d33aac567231a16b98e1a800b0298f97da8d254a8144f7b7cf34f1ea600f19a8"
+      }
+    },
+    {
+      "attempt": 4,
+      "scope": "28 valid scenarios using actual repository/provider/ImageSaver, before GUID/zero/MIME expansion.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-4/record.json",
+        "bytes": 4485,
+        "sha256": "c753e2680e51689160986c690f5d390089b0c16da4be73a35ba96debe47ac7a1"
+      }
+    },
+    {
+      "attempt": 5,
+      "scope": "Oracle run aborted at zero-key FK fixture setup because EF generated an ID for Guid.Empty.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-5/record.json",
+        "bytes": 4216,
+        "sha256": "3c0ac060d584909a90543eef10eab14fa9072d79d32ed85f9034835ffca3d801"
+      }
+    },
+    {
+      "attempt": 6,
+      "scope": "Second zero-key FK harness attempt aborted; original failure retained.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-6/record.json",
+        "bytes": 4216,
+        "sha256": "56da4f54302e6b20edbfe535db003f7fbd73f0e6b646f266dda8422c7497f2bf"
+      }
+    },
+    {
+      "attempt": 7,
+      "scope": "38 valid scenarios, but mixed-separator root made live-image path projection absolute; superseded by exact normalized-root run 8.",
+      "record": {
+        "path": "D:/mediamanager-validation/20261016-photo-stage/results/photo-album-native-7/record.json",
+        "bytes": 4485,
+        "sha256": "d87b4ed0e6662bc201bb2a6493a6fca942fac394083a834d99e507ae167fdb73"
+      }
+    }
+  ],
+  "notes": [
+    "Native JSON is copied byte-for-byte from raw execution 8; expected Node results were not used to produce it.",
+    "GUID ordering cases distinguish textual SQL GUID order from Guid.ToByteArray order; zero OwnerId and PrimaryVersionId remain non-null typed values.",
+    "The first SQL-selected child and first Primary image remain selected before remote/path/extension checks; later candidates are never fallback.",
+    "Actual synchronous native copy precedes cancellation-aware save: pre-cancelled copy creates a zero-byte destination, cleans temporary source, and does not add image state.",
+    "Known non-image MIME selection is intentional: .txt saves folder.txt, unknown extension falls back to image/png, and .heic/.tif/.tga/.jpe follow native MimeTypes.",
+    "All native helper build/run stdout and stderr remain beside their original immutable execution records."
+  ]
+}

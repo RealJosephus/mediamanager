@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "fixture": "collections",
+  "scope": "Same-run designated Native MVC/controller/binding/authorization and actual CollectionManager failure prefixes with isolated files; formal Node runtime and PostgreSQL compare public outcomes, complete business-table state, links, events and file preservation. Controlled principal/network/provider/repository seams are explicit; no full Native server or R9.",
+  "sourcePaths": [
+    "Jellyfin.Api/Controllers/CollectionController.cs",
+    "Jellyfin.Api/ModelBinders/CommaDelimitedCollectionModelBinder.cs",
+    "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+    "Jellyfin.Api/Auth/UserPermissionPolicy/UserPermissionHandler.cs",
+    "Jellyfin.Api/Auth/UserPermissionPolicy/UserPermissionRequirement.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "MediaBrowser.Controller/Dto/DtoOptions.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "Emby.Server.Implementations/Collections/CollectionManager.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 8927,
+      "sha256": "f775520f45637b0c41db00bb81464461add7cf4c6d50fa0afe5c9da465366cba"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 20041,
+      "sha256": "4934b002eafc779d45d296ed21f3a181016dedb5d8d2ad7fab2e83758cdef213"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

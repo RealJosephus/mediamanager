@@ -1,0 +1,55 @@
+Archive codec third-party notice
+
+The archive codec and its selected-entry bridge contain code from:
+
+* libarchive 3.8.10: BSD-style source-specific licenses and public-domain
+  portions, including PPMd code by Igor Pavlov and Dmitry Shkarin, and
+  XZ Embedded/XZ Utils filter code. The BLAKE2 reference implementation by
+  Samuel Neves is used under the offered CC0 1.0 Universal option.
+* SharpCompress source at commit c083c6efd843a844b0c8f7878787360e815be781,
+  by Adam Hathcock and contributors: MIT. RAR4 canonical Huffman decoding,
+  dictionary initialization, filename decoding and empty-password/AES
+  selected-entry behavior are adapted from its pinned source files.
+  The libarchive base notices and this separate MIT notice both apply
+  to the resulting project code.
+* zlib 1.3.1, by Jean-loup Gailly and Mark Adler: zlib license.
+* bzip2/libbzip2 1.0.8, by Julian Seward: bzip2 license.
+* XZ Utils/liblzma 5.8.2: BSD Zero Clause license for the linked library.
+* Emscripten 6.0.12-git runtime/glue: the offered MIT license, with the
+  original dual-license text, Node.js notice and AUTHORS retained in full.
+* musl libc: MIT and the original source-specific notices.
+* LLVM compiler-rt runtime portions: original Apache 2.0 with LLVM
+  Exceptions text, included legacy license notices and contributor credits.
+  The LLVM libc license is also retained conservatively; no LLVM libc C++
+  object appears in the recorded final link map.
+* Doug Lea's dlmalloc: its original public-domain dedication, together
+  with the Emscripten modifications covered by the Emscripten notice.
+
+Complete original distribution license texts and verbatim source notice
+blocks are retained in archive-codec-licenses.txt. Its libarchive sections
+cover every C member of the static library used as a link input and the
+associated source-directory headers. This deliberately retains notices for
+static-library members that a final linker may discard. Upstream copyright,
+license, author, public-domain and embedded third-party comment blocks are
+preserved rather than replacing them with an SPDX label or a generic author.
+
+The libarchive decoder sources contain project changes for independent
+selected-entry reading. Accompanying source patches and build provenance
+identify those changes. This codec is a project build and is not presented
+as an unmodified upstream release. No third-party author endorses it.
+
+The recorded final link map identifies the C and assembly runtime objects
+from musl/Emscripten libc, syscall stubs, dlmalloc and compiler-rt builtins.
+Their original source identities and any independent notice blocks are
+recorded in the provenance. No ambiguous runtime source mapping remains.
+
+The library codec links C libraries; C++ libraries and unrelated build-tool
+programs are not distributed as part of this codec. The XZ command-line
+tools, shell scripts and their separate licenses are not used by the codec.
+The included XZ COPYING overview retains that distinction in its own words.
+
+archive-codec-licenses-provenance.json records original source/archive
+identities, byte ranges, exact section digests and output digests. Those
+external paths describe the capture environment; consuming the distributed
+codec does not require that environment. This notice covers attribution
+resources, not protocol, metadata, archive correctness or release acceptance.

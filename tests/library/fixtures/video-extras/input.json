@@ -1,0 +1,45 @@
+[
+  {
+    "name": "direct-suffixes-and-filenames",
+    "ownerPath": "Z:\\Movies\\Up\\Up.mkv",
+    "paths": [
+      "Z:\\Movies\\Up\\Up - trailer.mkv",
+      "Z:\\Movies\\Up\\Up-trailer2.mp4",
+      "Z:\\Movies\\Up\\Up - sample.mkv",
+      "Z:\\Movies\\Up\\Up-extra.mkv",
+      "Z:\\Movies\\Up\\Recording the audio[Bluray]-behindthescenes.mkv",
+      "Z:\\Movies\\Up\\Interview with the dog-interview.mkv",
+      "Z:\\Movies\\Up\\trailer.mkv",
+      "Z:\\Movies\\Elsewhere\\trailer.mkv",
+      "Z:\\Movies\\Up\\not an extra.mkv"
+    ]
+  },
+  {
+    "name": "typed-extra-directories",
+    "ownerPath": "Z:\\Movies\\Up\\Up.mkv",
+    "paths": [
+      "Z:\\Movies\\Up\\trailers\\Teaser.mkv",
+      "Z:\\Movies\\Up\\backdrops\\Backdrop.mkv",
+      "Z:\\Movies\\Up\\behind the scenes\\Making Of.mkv",
+      "Z:\\Movies\\Up\\deleted scenes\\Lost.mkv",
+      "Z:\\Movies\\Up\\interviews\\Cast.mkv",
+      "Z:\\Movies\\Up\\scenes\\Opening.mkv",
+      "Z:\\Movies\\Up\\samples\\Sample.mkv",
+      "Z:\\Movies\\Up\\shorts\\Short.mkv",
+      "Z:\\Movies\\Up\\featurettes\\Feature.mkv",
+      "Z:\\Movies\\Up\\extras\\Bonus.mkv",
+      "Z:\\Movies\\Up\\clips\\Clip.mkv",
+      "Z:\\Movies\\Elsewhere\\trailers\\Wrong.mkv"
+    ]
+  },
+  {
+    "name": "year-and-version-prefixes",
+    "ownerPath": "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2014) - [2160p].mkv",
+    "paths": [
+      "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2014) - [1080p]-trailer.mkv",
+      "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2014) - [2160p]-trailer.mkv",
+      "Z:\\Movies\\Dragon 2 (2014)\\trailers\\Trailer 1 (2013).mkv",
+      "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2015)-trailer.mkv"
+    ]
+  }
+]

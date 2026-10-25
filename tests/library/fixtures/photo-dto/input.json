@@ -1,0 +1,2225 @@
+{
+  "fields": [
+    "CameraMake",
+    "CameraModel",
+    "Software",
+    "ExposureTime",
+    "FocalLength",
+    "ImageOrientation",
+    "Aperture",
+    "ShutterSpeed",
+    "Latitude",
+    "Longitude",
+    "Altitude",
+    "IsoSpeedRating",
+    "Album",
+    "AlbumId"
+  ],
+  "dtoCases": [
+    {
+      "name": "no-values",
+      "values": {},
+      "parents": []
+    },
+    {
+      "name": "empty-values",
+      "values": {
+        "CameraMake": "",
+        "CameraModel": "",
+        "Software": "",
+        "ExposureTime": 0,
+        "FocalLength": 0,
+        "Orientation": 0,
+        "Aperture": 0,
+        "ShutterSpeed": 0,
+        "Latitude": 0,
+        "Longitude": 0,
+        "Altitude": 0,
+        "IsoSpeedRating": 0
+      },
+      "parents": []
+    },
+    {
+      "name": "fields-no-album",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "direct-album",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": "Nearest album",
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        },
+        {
+          "Id": "df100000-0000-0000-0000-000000000003",
+          "Type": "PhotoAlbum",
+          "Name": "Outer album"
+        }
+      ],
+      "parentId": "df100000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "through-folder",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": "Nearest album",
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        },
+        {
+          "Id": "df100000-0000-0000-0000-000000000003",
+          "Type": "PhotoAlbum",
+          "Name": "Outer album"
+        },
+        {
+          "Id": "df100000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": "Intervening folder",
+          "ParentId": "df100000-0000-0000-0000-000000000002"
+        }
+      ],
+      "parentId": "df100000-0000-0000-0000-000000000004"
+    },
+    {
+      "name": "owner-only",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": "Nearest album",
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        },
+        {
+          "Id": "df100000-0000-0000-0000-000000000003",
+          "Type": "PhotoAlbum",
+          "Name": "Outer album"
+        }
+      ],
+      "ownerId": "df100000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "missing-parent",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": "Nearest album",
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        },
+        {
+          "Id": "df100000-0000-0000-0000-000000000003",
+          "Type": "PhotoAlbum",
+          "Name": "Outer album"
+        }
+      ],
+      "parentId": "df100000-0000-0000-0000-000000000009"
+    },
+    {
+      "name": "album-null-name",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": null,
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        }
+      ],
+      "parentId": "df100000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "album-empty-name",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": [
+        {
+          "Id": "df100000-0000-0000-0000-000000000002",
+          "Type": "PhotoAlbum",
+          "Name": "",
+          "ParentId": "df100000-0000-0000-0000-000000000003"
+        }
+      ],
+      "parentId": "df100000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "orientation-null",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": null,
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-TopLeft",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "TopLeft",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-TopRight",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "TopRight",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-BottomRight",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "BottomRight",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-BottomLeft",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "BottomLeft",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-LeftTop",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "LeftTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-RightTop",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightTop",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-RightBottom",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "RightBottom",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-LeftBottom",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": "LeftBottom",
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    },
+    {
+      "name": "orientation-99",
+      "values": {
+        "CameraMake": "Camera 制造商",
+        "CameraModel": "Model 1",
+        "Software": "Camera software",
+        "ExposureTime": 0.125,
+        "FocalLength": 25,
+        "Orientation": 99,
+        "Aperture": 2.8,
+        "ShutterSpeed": -3,
+        "Latitude": 25.033,
+        "Longitude": 121.5654,
+        "Altitude": -12,
+        "IsoSpeedRating": 400
+      },
+      "parents": []
+    }
+  ],
+  "aspectCases": [
+    {
+      "name": "aspect-null-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": null,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-null-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": null,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopLeft-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-TopRight-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "TopRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomRight-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomRight",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-BottomLeft-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "BottomLeft",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftTop-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightTop-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightTop",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-RightBottom-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "RightBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-LeftBottom-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": "LeftBottom",
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-none-40-20",
+      "kind": "none",
+      "width": 40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-none-0-20",
+      "kind": "none",
+      "width": 0,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-none-40-0",
+      "kind": "none",
+      "width": 40,
+      "height": 0,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-none--40-20",
+      "kind": "none",
+      "width": -40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-remote-40-20",
+      "kind": "remote",
+      "width": 40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-remote-0-20",
+      "kind": "remote",
+      "width": 0,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-remote-40-0",
+      "kind": "remote",
+      "width": 40,
+      "height": 0,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-remote--40-20",
+      "kind": "remote",
+      "width": -40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-local-40-20",
+      "kind": "local",
+      "width": 40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-local-0-20",
+      "kind": "local",
+      "width": 0,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-local-40-0",
+      "kind": "local",
+      "width": 40,
+      "height": 0,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-local--40-20",
+      "kind": "local",
+      "width": -40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-zero-40-20",
+      "kind": "zero",
+      "width": 40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-zero-0-20",
+      "kind": "zero",
+      "width": 0,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-zero-40-0",
+      "kind": "zero",
+      "width": 40,
+      "height": 0,
+      "orientation": 99,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-zero--40-20",
+      "kind": "zero",
+      "width": -40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 0,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-error-40-20",
+      "kind": "error",
+      "width": 40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-error-0-20",
+      "kind": "error",
+      "width": 0,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-error-40-0",
+      "kind": "error",
+      "width": 40,
+      "height": 0,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    },
+    {
+      "name": "aspect-99-error--40-20",
+      "kind": "error",
+      "width": -40,
+      "height": 20,
+      "orientation": 99,
+      "imageWidth": 9,
+      "imageHeight": 6
+    }
+  ]
+}

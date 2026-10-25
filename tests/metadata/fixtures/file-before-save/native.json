@@ -1,0 +1,1925 @@
+{
+  "results": [
+    {
+      "name": "Movie: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000001"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000001"
+      }
+    },
+    {
+      "name": "Video: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000002"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000002"
+      }
+    },
+    {
+      "name": "MusicVideo: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000003"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000003"
+      }
+    },
+    {
+      "name": "Trailer: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000004"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000004"
+      }
+    },
+    {
+      "name": "Audio: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000005"
+      }
+    },
+    {
+      "name": "AudioBook: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000006"
+      }
+    },
+    {
+      "name": "Book: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000007"
+      }
+    },
+    {
+      "name": "Folder: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000008"
+      }
+    },
+    {
+      "name": "MusicAlbum: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000009"
+      }
+    },
+    {
+      "name": "MusicArtist: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "Artist-Metadata file control"
+      }
+    },
+    {
+      "name": "Series: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000011"
+      }
+    },
+    {
+      "name": "Season: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000012"
+      }
+    },
+    {
+      "name": "Episode: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000013"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000013"
+      }
+    },
+    {
+      "name": "Photo: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000014"
+      }
+    },
+    {
+      "name": "PhotoAlbum: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000015"
+      }
+    },
+    {
+      "name": "CollectionFolder: changed file",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000016"
+      }
+    },
+    {
+      "name": "Movie: same",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000017"
+      }
+    },
+    {
+      "name": "Audio: same",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000018"
+      }
+    },
+    {
+      "name": "Folder: same",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000019"
+      }
+    },
+    {
+      "name": "Movie: plus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000020"
+      }
+    },
+    {
+      "name": "Audio: plus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000021"
+      }
+    },
+    {
+      "name": "Folder: plus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000022"
+      }
+    },
+    {
+      "name": "Movie: plus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:01.0000001Z",
+            "DateCreated": "2026-01-02T03:04:05Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000023"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:01.0000001Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000023"
+      }
+    },
+    {
+      "name": "Audio: plus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:01.0000001Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000024"
+      }
+    },
+    {
+      "name": "Folder: plus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:01.0000001Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000025"
+      }
+    },
+    {
+      "name": "Movie: minus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000026"
+      }
+    },
+    {
+      "name": "Audio: minus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000027"
+      }
+    },
+    {
+      "name": "Folder: minus one second",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000028"
+      }
+    },
+    {
+      "name": "Movie: minus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T11:59:58.9999999Z",
+            "DateCreated": "2026-01-02T03:04:05Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000029"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T11:59:58.9999999Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000029"
+      }
+    },
+    {
+      "name": "Audio: minus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T11:59:58.9999999Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000030"
+      }
+    },
+    {
+      "name": "Folder: minus one second and tick",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T11:59:58.9999999Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000031"
+      }
+    },
+    {
+      "name": "Movie: minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "0001-01-01T00:00:00Z",
+            "DateCreated": "2026-01-02T03:04:05Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000032"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "0001-01-01T00:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000032"
+      }
+    },
+    {
+      "name": "Audio: minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "0001-01-01T00:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000033"
+      }
+    },
+    {
+      "name": "Folder: minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "0001-01-01T00:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000034"
+      }
+    },
+    {
+      "name": "Movie: creation disabled",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": false
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-01-02T03:04:05Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000035"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000035"
+      }
+    },
+    {
+      "name": "Movie: creation minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-01-02T03:04:05Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000036"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000036"
+      }
+    },
+    {
+      "name": "Movie: file missing",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000037"
+      }
+    },
+    {
+      "name": "Movie: null path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": null,
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000038"
+      }
+    },
+    {
+      "name": "Movie: empty path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000039"
+      }
+    },
+    {
+      "name": "Movie: stat failure after key",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000040"
+      }
+    },
+    {
+      "name": "Audio: creation disabled",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": false
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000041"
+      }
+    },
+    {
+      "name": "Audio: creation minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000042"
+      }
+    },
+    {
+      "name": "Audio: file missing",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000043"
+      }
+    },
+    {
+      "name": "Audio: null path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": null,
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000044"
+      }
+    },
+    {
+      "name": "Audio: empty path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000045"
+      }
+    },
+    {
+      "name": "Audio: stat failure after key",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000046"
+      }
+    },
+    {
+      "name": "Folder: creation disabled",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": false
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000047"
+      }
+    },
+    {
+      "name": "Folder: creation minimum",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000048"
+      }
+    },
+    {
+      "name": "Folder: file missing",
+      "updateType": 1,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000049"
+      }
+    },
+    {
+      "name": "Folder: null path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": null,
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000050"
+      }
+    },
+    {
+      "name": "Folder: empty path",
+      "updateType": 1,
+      "exception": null,
+      "calls": [],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000051"
+      }
+    },
+    {
+      "name": "Folder: stat failure after key",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000052"
+      }
+    },
+    {
+      "name": "Movie: cleanup failure retains dates and key",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000053"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000053"
+      }
+    },
+    {
+      "name": "Movie: existing edit flag survives file import",
+      "updateType": 19,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000054"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000054"
+      }
+    },
+    {
+      "name": "Movie: minimum modified date",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000055"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000055"
+      }
+    },
+    {
+      "name": "Movie: locked metadata still updates dates",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000056"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000056"
+      }
+    },
+    {
+      "name": "MusicAlbum: child edit survives file import",
+      "updateType": 19,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000057"
+      }
+    },
+    {
+      "name": "Series: child edit survives file import",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000058"
+      }
+    },
+    {
+      "name": "MusicAlbum: None child edit and file import",
+      "updateType": 27,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 27,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000059"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000059"
+      }
+    },
+    {
+      "name": "Movie: None existing refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000060"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 99,
+            "PresentationUniqueKey": "d9999999999999999999000000000060"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 99,
+        "PresentationUniqueKey": "d9999999999999999999000000000060"
+      }
+    },
+    {
+      "name": "Movie: None first refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000061"
+          }
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000061"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 99,
+            "PresentationUniqueKey": "d9999999999999999999000000000061"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 99,
+        "PresentationUniqueKey": "d9999999999999999999000000000061"
+      }
+    },
+    {
+      "name": "Audio: None existing refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 99,
+            "PresentationUniqueKey": "d9999999999999999999000000000062"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 99,
+        "PresentationUniqueKey": "d9999999999999999999000000000062"
+      }
+    },
+    {
+      "name": "Audio: None first refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000063"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 99,
+            "PresentationUniqueKey": "d9999999999999999999000000000063"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 99,
+        "PresentationUniqueKey": "d9999999999999999999000000000063"
+      }
+    },
+    {
+      "name": "Folder: None existing refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000064"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000064"
+      }
+    },
+    {
+      "name": "Folder: None first refresh",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000065"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000065"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000065"
+      }
+    },
+    {
+      "name": "Movie: None final directory lookup failure",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000066"
+          }
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000066"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000066"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000066"
+      }
+    },
+    {
+      "name": "Audio: None final directory lookup failure",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000067"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000067"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000067"
+      }
+    },
+    {
+      "name": "Folder: None final directory lookup failure",
+      "updateType": 3,
+      "exception": null,
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "save",
+          "updateType": 2,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000068"
+          }
+        },
+        {
+          "phase": "directory"
+        },
+        {
+          "phase": "save",
+          "updateType": 3,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\Folder",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000068"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\Folder",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000068"
+      }
+    },
+    {
+      "name": "Movie: None cleanup failure saves nothing",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        },
+        {
+          "phase": "configuration",
+          "enabled": true
+        },
+        {
+          "phase": "external",
+          "cancellable": false,
+          "item": {
+            "Name": "Metadata file control",
+            "Path": "Z:\\ChildrenMetadata\\file.mkv",
+            "DateModified": "2026-10-04T12:00:02Z",
+            "DateCreated": "2026-03-04T05:06:07Z",
+            "Size": 7,
+            "PresentationUniqueKey": "d9999999999999999999000000000069"
+          }
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:02Z",
+        "DateCreated": "2026-03-04T05:06:07Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000069"
+      }
+    },
+    {
+      "name": "Audio: None stat failure saves nothing",
+      "updateType": null,
+      "exception": "IOException",
+      "calls": [
+        {
+          "phase": "file"
+        }
+      ],
+      "item": {
+        "Name": "Metadata file control",
+        "Path": "Z:\\ChildrenMetadata\\file.mkv",
+        "DateModified": "2026-10-04T12:00:00Z",
+        "DateCreated": "2026-01-02T03:04:05Z",
+        "Size": 7,
+        "PresentationUniqueKey": "d9999999999999999999000000000070"
+      }
+    }
+  ],
+  "candidateVerified": false,
+  "managedDirectory": {
+    "Exists": true,
+    "IsDirectory": true,
+    "LastWriteTimeUtc": "0001-01-01T00:00:00",
+    "CreationTimeUtc": "0001-01-01T00:00:00"
+  },
+  "managedMissing": [
+    {
+      "name": ".hidden",
+      "Exists": false,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00",
+      "CreationTimeUtc": "0001-01-01T00:00:00",
+      "Length": 0
+    },
+    {
+      "name": "file.mkv",
+      "Exists": false,
+      "IsDirectory": true,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00",
+      "CreationTimeUtc": "0001-01-01T00:00:00",
+      "Length": 0
+    },
+    {
+      "name": "file.",
+      "Exists": false,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00",
+      "CreationTimeUtc": "0001-01-01T00:00:00",
+      "Length": 0
+    },
+    {
+      "name": "folder",
+      "Exists": false,
+      "IsDirectory": false,
+      "LastWriteTimeUtc": "0001-01-01T00:00:00",
+      "CreationTimeUtc": "0001-01-01T00:00:00",
+      "Length": 0
+    }
+  ],
+  "mappedNullDates": {
+    "DateCreated": "0001-01-01T00:00:00Z",
+    "DateModified": "0001-01-01T00:00:00Z",
+    "DateLastRefreshed": "0001-01-01T00:00:00Z",
+    "DateLastSaved": "0001-01-01T00:00:00Z"
+  },
+  "savedNullDates": {
+    "DateCreated": null,
+    "DateModified": null,
+    "DateLastRefreshed": null,
+    "DateLastSaved": null
+  },
+  "inputSha256": "3c8e0d971886882b48cd00ba02a9ac263545cac53ca13a93c415fc7bb80d817e",
+  "boundary": "Actual typed MetadataService.BeforeSaveInternal and Movie/Audio/Folder/Album None RefreshMetadata with actual ProviderManager; actual ManagedFileSystem.GetFileSystemInfo reads the isolated output directory, and actual BaseItemMapper records nullable date hydration and saving. FileSystemMetadata, metadata configuration, empty child/repository results, File protocol callback, external-data callback and repository saves are controlled. Records one-second thresholds, creation gate, reason flags, mutation/cleanup/save order and failures. Album After sees empty artist arrays. ExternalDataManager internals, actual native SQL/NFO writes and media file operations are excluded."
+}

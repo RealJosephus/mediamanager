@@ -1,0 +1,1509 @@
+{
+  "candidateVerified": false,
+  "recordedAt": "2026-10-09T20:41:38.933Z",
+  "jellyfin": {
+    "source": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source",
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "packages": {
+      "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Directory.Packages.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 6235,
+      "sha256": "c7d55b81db4f822ef152e6a939764322c1fdafbc966d5db42e05c50103653282"
+    }
+  },
+  "upstream": {
+    "source": "D:\\mediamanager-validation\\20261010\\utf-unknown-source",
+    "commit": "fd4c6fab634ef3783f8b5cb88e9ae9b2cc295ad5",
+    "sources": [
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\CharsetDetector.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 20374,
+        "sha256": "2ef2d43617d04b02774f1def26b76e7c6e67e78c54264b88e3edcef9842ca1ce"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\CharDistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5234,
+        "sha256": "f4c57f662f5cf94fa7c9bef274dd5fbd7857e95353d30d425d71155938b7dc1b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Chinese\\BIG5DistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 89338,
+        "sha256": "b4771cf878adfd8503d09f9eb6d6ac8fc51f3126e7b9bcf273bc5449a4a26f5d"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Chinese\\EUCTWDistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 38508,
+        "sha256": "3f62fa7dfdc03f74468ce55ff8c9e5e47a023b9aba5283debd718746d65bac5a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Chinese\\GB18030DistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 39178,
+        "sha256": "9820aceca7645a965c8448f870cf9707afc137c59dbe03cb14dd3473479af5c6"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Japanese\\EUCJPContextAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 1094,
+        "sha256": "7f8a1bf5a17c80cd755576c4844cfb928168af21b5a2de76b3c6b10d2ccf361d"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Japanese\\EUCJPDistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 520,
+        "sha256": "efa85ea50c39d9d3a8dcacbc7cbcfec6d108c73a82089dfbf0196f4fcb63dbbe"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Japanese\\JapaneseContextAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 20681,
+        "sha256": "67f7de6d1211270d4bee408e52fb02aee9279771bfe15a2c30e8c42b71df1717"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Japanese\\SJISContextAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 1043,
+        "sha256": "d09f52ac7dfc8745862a68d927f1965afb3c61fd61a875ec084db85ee9a39fdd"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Japanese\\SJISDistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 51779,
+        "sha256": "2916e2242c29cae9e62cbd6aa7e68829defb976281f79677de72de0fbe696e8b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Analyzers\\MultiByte\\Korean\\EUCKRDistributionAnalyser.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 49025,
+        "sha256": "9d4bfd79dfdde1ea4974c1c584db76ae0f18671c8adfa24f679161a492bc6334"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\BitPackage.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3540,
+        "sha256": "270e83dbf615a0c5456b91908d4c29b5154f04b4fd859ca30fa4e0301d947adc"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\CodepageName.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 13627,
+        "sha256": "ac246b6ac4bffb42abc6034c6acdfd08112ad425f0fd381cdbc5ca161b8a1910"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\InputState.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 268,
+        "sha256": "89b2d09d775c80ac027c6ac3ae9f38da84eed9d6e77313274acefe89021f831a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Chinese\\BIG5SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 2957,
+        "sha256": "847dc4ef5d0d93c25b4d231182a93fe47aef46c07e3feb80577990c13f57f10f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Chinese\\EUCTWSMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3236,
+        "sha256": "1caed3e0b45641e1506ef644bbc9a642c410b8f40ecfe98392f74a7f188f1850"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Chinese\\GB18030_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3546,
+        "sha256": "c567d1c10844687c57456d37ebfbfc0018563af5e45888543af86a1e5b66d632"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Chinese\\HZ_GB_2312_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5161,
+        "sha256": "3aa91d43dfb5b66e0088d29657303d0ddfb4c11ac473ea1a10ad4d391d16669f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Chinese\\Iso_2022_CN_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3433,
+        "sha256": "615848aab45a6e4f15af51c94ea9a00a3910bcde092ee69b12e7bf64384754cd"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Japanese\\EUCJPSMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3210,
+        "sha256": "48ab92881ed12ee49c1f45ecf626b092a1b3177d48ddf112591a6f4e3da74407"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Japanese\\Iso_2022_JP_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3548,
+        "sha256": "51b951842604da16f45c8ee95d791936783540bd84c28f2e00e2a33aec19def7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Japanese\\SJIS_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3163,
+        "sha256": "73a0be8b6f4c62460ea6be94b838b30cba21e629cb4b6cd474a37a03afad7445"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Korean\\CP949SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4982,
+        "sha256": "771a17c3119cccd346c019e1cd6a99220c324716c7fbc6910c40c2d2e03ddf12"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Korean\\EUCKRSMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 2941,
+        "sha256": "287da6ae67f1c7c33a43050d9ab9f3b1c35081e190e0c0697dccd9e4020bbcb1"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\Korean\\Iso_2022_KR_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3161,
+        "sha256": "87b1646bb3189bd7179d178b78aef906932f295f4576ed5330bd240092c4b208"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\UCS2BE_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3326,
+        "sha256": "6915f46a56ea1ae34dba336bb08102247985aa60f31e56acb9ae4a6cbb898dbd"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\UCS2LE_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3326,
+        "sha256": "81a28072da1df4c04ada8ce96ca8bd3361453796e92c2b9a9d88675427c2e90d"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\MultiByte\\UTF8_SMModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 6878,
+        "sha256": "5f14b0e74b8a180186cf041e5202484f3a30c0d8618fbcaa966f6a0801f2e0db"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SequenceModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3950,
+        "sha256": "e3909df2d695642413cc6d7c647d2bf557f1dfd047132245b337e8d095aa5760"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Arabic\\ArabicModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 12075,
+        "sha256": "9ea10e45a4fc83bf7156cd4df801769b328e944465b930085d025e45a4b30ba5"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Arabic\\Iso_8859_6_ArabicModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4581,
+        "sha256": "66ce957ce76bd84c49079a3fe58131556730e54448d8542cd56ff14897ed09ca"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Arabic\\Windows_1256_ArabicModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "c0c785d303d18d5af163fba86c714c74409b9c55d3bbe3eed221bf7a72decf83"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Bulgarian\\BulgarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 12046,
+        "sha256": "9a884dc086bdf081e0db2cdd11d5ba62a9f9e5df9dd1c7a05776be1b40cb222b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Bulgarian\\Iso_8859_5_BulgarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4070,
+        "sha256": "eca4ca1d10df1131f2e473f6da0209cd53e303118654b1245dbf6070d5fab841"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Bulgarian\\Windows_1251_BulgarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4076,
+        "sha256": "095aeec4c9e709d10efd679579f87378e11214b0391a524d9e104535ea4dcb18"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4843,
+        "sha256": "bf62d8028fd798b0ea9d1fcc0375bd73c766311ea8722ec26969a25799313a3c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Ibm852_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4576,
+        "sha256": "9d08573cecf5caddb3cc910c5fc2e50bcecc56d202780f79196a6f5fc2932efa"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Iso_8859_13_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4594,
+        "sha256": "36f9436e663906e8e3563053def17831b4969fff9f0d7ab5598f839ba495e71b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Iso_8859_16_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4592,
+        "sha256": "a64c497b79f9447e02139b34b3115fdeb771257fa350c43f59451a846d5118d7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Iso_8859_2_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4591,
+        "sha256": "01be386e47f7fec1a790f11e077bbcbb9a3109418f33051e1afc1a6785ebf1fe"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Mac_Centraleurope_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4604,
+        "sha256": "e462570c459720582041181768660d3e41ba7df1dd89d08577d792418cf54909"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Croatian\\Windows_1250_CroatianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4595,
+        "sha256": "d98785818a973561c4c74dcff7698238700032447f50708a11971054fa68b5ff"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Czech\\CzechModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 6780,
+        "sha256": "9e6f22befde30506668bd7e54e1db0bac2e607e574983ac3d8c25290d01ef796"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Czech\\Ibm852_CzechModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4561,
+        "sha256": "0f85dce8dd8cf31f4c2ba504d7b78a80ae7e508225494c2fd9193682c1202c4c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Czech\\Iso_8859_2_CzechModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4576,
+        "sha256": "77e803422679d6d7f5556c224632c8ca80f1e9b3bc78ae95a47879e4b917a72c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Czech\\Mac_Centraleurope_CzechModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "d77cd1e69efd7a2b83181156eada7f376cb0eeb4659d272ffb2d52f7e8dac9cb"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Czech\\Windows_1250_CzechModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4578,
+        "sha256": "7128ec4695b2cd70210aabe380ecec0699122170e1a9d297beafbf3832aa956b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Danish\\DanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4702,
+        "sha256": "0bf47188ef255f8484178b92e46448139f0bed8e56c7fa2dc81e58be87ce896c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Danish\\Iso_8859_15_DanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4582,
+        "sha256": "9d25b75eb4debf62d23795dabe9645038a74037b646b1f333d08780813ae89d0"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Danish\\Iso_8859_1_DanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4579,
+        "sha256": "f21f5925fcb2768f86e622ab105fb281dbf09dbe341e28c416c9a4703e50c7fe"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Danish\\Windows_1252_DanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4585,
+        "sha256": "a89bea66bf2aa86ced5e4b7ae7b3c30165087a8bb548b0ece938b08936ba3d59"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Esperanto\\EsperantoModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5417,
+        "sha256": "a985771114e7c1e04f24c4521ad276ccec19565b138b30b3e11469f95097f822"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Esperanto\\Iso_8859_3_EsperantoModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4596,
+        "sha256": "47fd6aa50e5c79b61d54040c586d53690124dbcf952777f0fbf657ca44dbecd6"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5119,
+        "sha256": "709151c35202b0df377795bca5eb4f1926756f9f5923b817246977e2209023d1"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\Iso_8859_13_EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4594,
+        "sha256": "d67bd185ec7d6e6de77ab9efac7d06350e6c4b47e55490e769325b55618345bc"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\Iso_8859_15_EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4592,
+        "sha256": "d7f6126c0f5380a52332e03f46d20d655a4c7e6d4fc399dd4607a4dced32a531"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\Iso_8859_4_EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4589,
+        "sha256": "79842774df49ce759667dd6fe0174be1597faa1476f72dde08e82342f74a0051"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\Windows_1252_EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4595,
+        "sha256": "471e6df17c5819eda284906a4019fb5beef2bc0ff0399ff08b69459035f12331"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Estonian\\Windows_1257_EstonianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4597,
+        "sha256": "931052562987ec997079c8f0283053c6df8e0443b38d31a20633885d844e3930"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4706,
+        "sha256": "2904bbed964b0d6b1e6b1b44e6df4c068a44b9de5a3e661e88de6b73ef9be758"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Iso_8859_13_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4589,
+        "sha256": "e063006fe8d8ce240bec211fd2a9235288012542049b461c84f4ba76bccf5b01"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Iso_8859_15_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "a43cedd01ae38537cde0c3c399dcd2fb1f98344778848d440f8701e6a5cc5a78"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Iso_8859_1_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "8448d36cee13d669e36f223b25dd168fdccf1d1fc9b1a2ace64be07ff16f9556"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Iso_8859_4_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "26de54139b3b28137653ac3ac745583b3571e41146ff6a5899c760e044d957e4"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Iso_8859_9_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "19c89bf41558efa4fba1f082eaa141176d92f980247f7558092ee8b3949a75ca"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Finnish\\Windows_1252_FinnishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4591,
+        "sha256": "9c08e33fd6273a63fd837d5ed84d34ffafb494b6555c295dcdfaefe8c7e4ae9c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\French\\FrenchModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5868,
+        "sha256": "c45e5ac381b384e14ab29414ede1d40486de2ae575630c2f6ec3f6088f39245b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\French\\Iso_8859_15_FrenchModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4582,
+        "sha256": "0c3a0a23bde803d3d1af9acb9629982fbe564d08a0b5e1fcbc88ff6cd1564ba5"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\French\\Iso_8859_1_FrenchModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4579,
+        "sha256": "3586716cdb92b2886075b8e5f8c3c5e7b3a5b6d8731449d01d211b07a22368b3"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\French\\Windows_1252_FrenchModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4585,
+        "sha256": "cb3dc15b0ee28e1ddd9df6f93fa4541000c095a9a6e0575571acf8f6e741c645"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\German\\GermanModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4840,
+        "sha256": "73a82d48da86430f1265706ddb18d50a173f0448cff7a33b331cb8f4868e34e5"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\German\\Ibm850_GermanModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 2517,
+        "sha256": "15d59a5825e72b4794a61c5399ce0157dbe24889ab21918d090e9c9478710582"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\German\\Iso_8859_1_GermanModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4579,
+        "sha256": "bfcbc2008faf1820f320f5f632faaafad9205cdf8d9b61bb9c8e2bec1c5c4766"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\German\\Windows_1252_GermanModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4585,
+        "sha256": "1d91e69c8bf9a302e807c9ba9e8460a7e43466f865b9d01a716b990bb8e210a7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Greek\\GreekModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7754,
+        "sha256": "8df98a35a4a1aa707b0d7245624b5d10bdc41f90d8f7d2cfd2498916bc45a84e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Greek\\Iso_8859_7_GreekModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4738,
+        "sha256": "a290521878ede8fe56a4a04ea0acc78fbd0f8ff481460125db1aa0f27007a53e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Greek\\Windows_1253_GreekModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4744,
+        "sha256": "78d27baccf6aefe5466bc6ba3930c8b07903ac5b3d324b248661061338e7b5ee"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Hebrew\\HebrewModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 12159,
+        "sha256": "7c850a3769fa750bcdac62560ab548870a2816ccd64db8aadef8f8b6f4f7cb7a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Hebrew\\Windows_1255_HebrewModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4101,
+        "sha256": "4978faf03c8163b5db6f21c09ec9313fa31040bcb8b47af754d2f4dd0b7a2876"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Hungarian\\HungarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5112,
+        "sha256": "290dea2551dcd731d9cad971acd231484de0c1f48894080300b2c3144ee9fffb"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Hungarian\\Iso_8859_2_HungarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4644,
+        "sha256": "2528192565374ed3ec404cefcb97cbeba3eb9d74d6f3430e6d3d0b485222a61a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Hungarian\\Windows_1250_HungarianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4650,
+        "sha256": "a13185e314188c31ef7149c1951b5da125ed77f5bdfe58edcd6b05e982386eb1"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Irish\\IrishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4832,
+        "sha256": "38fd2540e85ada6ea7841fcec754c1af748afc8f83944d2784460ce66029b18f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Irish\\Iso_8859_15_IrishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4581,
+        "sha256": "2d761a1be94193620d07e01be2ec2ace22cdd42f7ac57d8087e75441861fe6ba"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Irish\\Iso_8859_1_IrishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4574,
+        "sha256": "26ce4cb00f5c704576f9d13a32ab9e057a7b81b698cb1306194222625bada42f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Irish\\Iso_8859_9_IrishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4578,
+        "sha256": "3835a1c3569e3f441fc1ec7fc7a2cc069444fe97342a95e0c7dbd40625543c40"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Irish\\Windows_1252_IrishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4581,
+        "sha256": "71c41eecf02d2a5ad2bc15c53647e263a6780200a213b7ef83406c19f525a2e8"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\Iso_8859_15_ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "6a98768a60008b7895520ae8b97c0f4185b860a29441b34e278465484cd2e709"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\Iso_8859_1_ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "f0b6955f34603ad996dcda50c59f89e837a395d945116bcd7c43d288b4c508a4"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\Iso_8859_3_ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "8e06f887bc01e1ba749e3768257d34f4807350f0d1655dd659c721767644a4a7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\Iso_8859_9_ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "6654121d5ad4a2d8d17d3189669d29f81279cd161dfe38a95a5a516ab0d7f896"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5259,
+        "sha256": "750f18c2a16d126f8b002902ba16bc2d622488a556ed20b0c6aacd85eaeb2da7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Italian\\Windows_1252_ItalianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4590,
+        "sha256": "946821217d0b9a1ebfe791b3268c8cc5c32c279f0394a9fc5d88c7e4e9042913"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Latvian\\Iso_8859_10_LatvianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4585,
+        "sha256": "0338c4405b8a081fee97853a3963eef68d0c2dbb6ef3b75da1aa5ad431ebbc18"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Latvian\\Iso_8859_13_LatvianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4589,
+        "sha256": "592633d66621998c896526031aff25f9d865fa98801076f754f1d1d1ee354609"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Latvian\\Iso_8859_4_LatvianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4582,
+        "sha256": "89be96f21f94b836affd3c6567eb583e1877f923bd2207d64c7cd8f61fc77d8f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Latvian\\LatvianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 6038,
+        "sha256": "0edbbe2bcb3a4e52872a72e080d44b1b676298d9f0f29a7eb303783ab909d192"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Lithuanian\\Iso_8859_10_LithuanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4602,
+        "sha256": "53954445d79478d55b95f547877d1373eb7a4ab0a7930b496f1deb92a5376d77"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Lithuanian\\Iso_8859_13_LithuanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4602,
+        "sha256": "c001a737ac19bf67f2a062ef84557feab59a15b977bc78bcb000e695ec0496f0"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Lithuanian\\Iso_8859_4_LithuanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4599,
+        "sha256": "139414870050de9c8a5efef931dd897ad594154d54f99ee951077faa8ed9f215"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Lithuanian\\LithuanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5887,
+        "sha256": "506c867913c7f4d3e4fb628c611af0eab16d65b1b7442dee355a11530941df95"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Maltese\\Iso_8859_3_MalteseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "e914734f09d0432e0699ff1facd0c3ec062634297fa80d27bfb4d791197c2662"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Maltese\\MalteseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4838,
+        "sha256": "2022c196c3cf5787a3c85ac51320c8a95fb6e89d92d41f89b222d8983a19fa84"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Ibm852_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4566,
+        "sha256": "1bf40417be92c7dba4b5a5a9f681b859db8e4d9a4e4f7627c426795f2fc8c1e0"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Iso_8859_13_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4582,
+        "sha256": "4a34ef4bdcd5c4af2d25431c07bfab6dd3903675049350abe39c940fd73cb467"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Iso_8859_16_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4582,
+        "sha256": "5258790b191d744bd879a9bcfe15be7aff18205e19addec90b76f921efcdc311"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Iso_8859_2_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4581,
+        "sha256": "cc97c6b48761b352ae9e7cca87717ac2dc6f84b33c3c35e26cfb5104e3c96e00"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Mac_Centraleurope_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4592,
+        "sha256": "bb5ea9a4cafda16204fd3f5f6f0ac4ac13f202bf77f6a9f052cc306985f79a8d"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5710,
+        "sha256": "1e90a74c351e263f5b83f0d0022e72291105ce75380a6103e604f03416e70637"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Polish\\Windows_1250_PolishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "7305e27ce90021a32611cb1e1c9ce07f0229c2a5b06bfbe6941ab8d9a930279a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Portuguese\\Iso_8859_15_PortugueseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4602,
+        "sha256": "2b533a5ec3d340957b5a655a78b7178f65335c7fdff6b077577e1bdffe49363b"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Portuguese\\Iso_8859_1_PortugueseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4599,
+        "sha256": "a2258c5d2f2e343d96392b7d67259a9e0c1ba1e913087e252794c778d33ea2e4"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Portuguese\\Iso_8859_9_PortugueseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4599,
+        "sha256": "d8d2cd47f16163dd502de76aba689f679a4e2a031fadf1fff33efe922b48a064"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Portuguese\\PortugueseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5886,
+        "sha256": "22f1f97097e87cbf2b47c6f1e49e9d4d2e2dd32a2cd40201e69aed8cc1257f64"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Portuguese\\Windows_1252_PortugueseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4605,
+        "sha256": "b4942214c4d5f0a59181d6ca85e72f843df42fd29bd04d49fe3a13449103cc20"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Romanian\\Ibm852_RomanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4576,
+        "sha256": "fbf3d971856ca0d1a913907268309cfe1d3d1c46a9505cb2a1ccf773dc6c1424"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Romanian\\Iso_8859_16_RomanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4592,
+        "sha256": "50a377f3ecf95dafa16555613b7e27ef81b782d69c6a92d4bd22ef2af9e760a8"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Romanian\\Iso_8859_2_RomanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4590,
+        "sha256": "bc4a08a0ab0eced11c49162e7aebdc8993af6917acb4d8719617132ce91cd781"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Romanian\\RomanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5116,
+        "sha256": "7b4cba32716ebfe9d44d05a33d6c4f598d3ebe851fd08d1cf33da2696000c2b3"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Romanian\\Windows_1250_RomanianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4597,
+        "sha256": "147c3fe8590aab45aa28a1419efa54d54134f36a2bf0212f8a966608f1905e63"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\Ibm855_RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3553,
+        "sha256": "bae2cbcca249a5f1f12769b0e14951a6cb09665a2b3f3315f656bb80dba4ebc7"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\Ibm866_RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3552,
+        "sha256": "e97b4af187905060d1cf6165845411d9d559fb7f60d51d8e7b6d91e3a55bfbdd"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\Iso_8859_5_RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3733,
+        "sha256": "2efb00d45bf731c8af0a83a2f7883ef9f12ed326749aab4322ab5774c633a827"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\Koi8r_Model.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3707,
+        "sha256": "03ae26a56b8211597073aa7847b18235861bbb1f53983cd4bf9d105a2dd06114"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 12052,
+        "sha256": "d11f31a420e7b67730b4ed0ed3238bcdba1e968df79ca876ae60d8fd9ea655b5"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\Windows_1251_RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3739,
+        "sha256": "5c6c6acd480fb73d5b7e150598a07bdc8be19a815ed3ac946abb754d83550855"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Russian\\X_Mac_Cyrillic_RussianModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3745,
+        "sha256": "524f14c4ed1fc9ab87bda528c97f98e614d0c514fd73d7a208e863d4ceade51a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovak\\Ibm852_SlovakModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4566,
+        "sha256": "7966fb2680a142a0910efb4c96a847bf27db8e7653b7e615e039406f106ea508"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovak\\Iso_8859_2_SlovakModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4579,
+        "sha256": "a811e79d485f0e5536f7a9d0201ba3453b34c10737867557d3b415ce187d7bc1"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovak\\Mac_Centraleurope_SlovakModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4593,
+        "sha256": "014224c44dbdf1654f4a12ebaf0b8095313e05b72662d41e27fd8ff1f92280f8"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovak\\SlovakModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7552,
+        "sha256": "2dfed47ee59b1d22501e81a816fa3e878a60a2938ef760b08fe25f03f9996bfa"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovak\\Windows_1250_SlovakModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4585,
+        "sha256": "a37f7f1be2bef89c763e330c9f1fdc9b6f2910f1f90b6b5d4c68d12f1de2e62a"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\Ibm852_SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4572,
+        "sha256": "32b41b650fea9dfc8487d6a5f01c4dbae6edf07fc7b083c2de0d8a7d7d12f29e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\Iso_8859_16_SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4591,
+        "sha256": "a6ce494e0902e31218458beb7b827186529fed9fb98fd1a6d71ecf1b9a38bfa9"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\Iso_8859_2_SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "2341092f380c94530fbf87398e5fc0e4698d8a49000b10898ecb60e078552db6"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\Mac_Centraleurope_SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4600,
+        "sha256": "4cafa34c475ef1a28ce2c94a21bc2f5e83ffecb4eaae38276a190b74965f8107"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4579,
+        "sha256": "6a22594a0bd650a1fd5be4bc4d0cb743890017b30d8643361306344220b012c4"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Slovene\\Windows_1250_SloveneModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4594,
+        "sha256": "d64bbc78eb2e2f6155e601334bc6aa64d03117484f9a3690ccd37df02250c64e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Spanish\\Iso_8859_15_SpanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "26b72e57c02a7ca4b6fa2f4174c6d3c4998fe839b8d749ddd1edba11acd5e963"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Spanish\\Iso_8859_1_SpanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "532574578d2e748394fdf293edd7eaf571853a9782dfe4316f634974b9375508"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Spanish\\SpanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5114,
+        "sha256": "a57be74569b0c9c01cf377e1c1eb3ffd654e055b2b33e1e12b40e1e3dd7a239e"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Spanish\\Windows_1252_SpanishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4590,
+        "sha256": "799683e01d6c7158b9f7bee0419e7bd36f6b8ee858e77ece15eb1552fd928423"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\Iso_8859_15_SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4591,
+        "sha256": "9643e8e9b25fde510c3fe4f888b30a8112c9ec0f43cfafbcc8f656dab32d31f8"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\Iso_8859_1_SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4588,
+        "sha256": "07e1ca49fb4044e840750da91189b102b51755932ea3077c58c03b30e5b2fc50"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\Iso_8859_4_SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "27765c218206bced33f7f0c3c52913a1bdb567c8354123d78eefc27230e5f2d6"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\Iso_8859_9_SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4587,
+        "sha256": "e491595fc3487c672652faf7473534eb684140b5d0fa7e321298314128648463"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4837,
+        "sha256": "22e81947cbb89d7317c12d1c921a5b13a6a00892fffb2a6b33af655e065fd19f"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Swedish\\Windows_1252_SwedishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4590,
+        "sha256": "0d676da6319332d99c0221f7dfd304dabe585b97ac36099de1cafacf687bf895"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Thai\\Iso_8859_11_ThaiModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4597,
+        "sha256": "aeaf17654690bd7341dcc299b3df9f10d34f65a8de9958153276d72bccbad692"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Thai\\ThaiModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 12061,
+        "sha256": "66da5de7bedde0b788b103c38125d077ffd9575be3c37287afcc2aa57bd695a3"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Thai\\Tis_620_ThaiModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "cd0f072e386acfb444c5778789905ba1032aedcb4f5aa2e2d120f52dd0f66bfd"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Turkish\\Iso_8859_3_TurkishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4586,
+        "sha256": "a3ab0bc6ea7508f4c86176922326f021c59b474d31aafd1828d4d1b5bfe2f1a8"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Turkish\\Iso_8859_9_TurkishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4584,
+        "sha256": "253e10ae838cf410b65657efe981394aba00fac50e8074c86c5596ae7eb26b21"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Turkish\\TurkishModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5556,
+        "sha256": "02758f95f57a157637d6fe2747f88f23748671416b9ade6cdf869defc563f2eb"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Vietnamese\\VietnameseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 9768,
+        "sha256": "bbdcb92acf088e88502e7aef2a3c52507cca5ae97da93cd362a7861f545ea72c"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Vietnamese\\Viscii_VietnameseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4583,
+        "sha256": "380b2996da8628946af6e0a9c601f9f7a03f127baa865ec42a4f3be9984d2c41"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\SingleByte\\Vietnamese\\Windows_1258_VietnameseModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4605,
+        "sha256": "0c863b6b077c5528918d04af096bb198f425b3473eac80bf0defeea059a527ef"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Models\\StateMachineModel.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 2988,
+        "sha256": "473579bcc6a2a540d84ac7607cf181cbb5ad3d650e6027839771b86824f44244"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\CharsetProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 6736,
+        "sha256": "abe1d348c125d3621d2693b48562190854ed248e867d03169ffd54321aade469"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\CodingStateMachine.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3135,
+        "sha256": "651e7979c855cd67df19b7e670fafe84b713b918ec1dfa41ad2fd284c7de80ad"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\EscCharsetProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4389,
+        "sha256": "cf1ba4ab667f5b06049f705f0089ecd8c591cfaf3d2879f08bf52b44f50b8b88"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\HebrewProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 14999,
+        "sha256": "98489e04154f4da0d1ceb172412ec6d7d7ad26abf90baa7cfa94e6acb51535cb"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\Latin1Prober.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7337,
+        "sha256": "2e49d00fc68f95fc09741dc636960a27f3a5640d24bf39e19a5db8ae4ce17d85"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MBCSGroupProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7584,
+        "sha256": "e0e60dcf8ed9056472cbde7b86f759ecedf7a7baf7179111cece7803de459752"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Chinese\\Big5Prober.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4198,
+        "sha256": "bd5ff9f862be670a63a057099f0a1f716e786ade6a90d00a1e480f2705b64d57"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Chinese\\EUCTWProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4166,
+        "sha256": "e95b29a17a0281b90d4dda20ed16d3a61ef9b46a47ffa8d0fd124d3f4e24a194"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Chinese\\GB18030Prober.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4182,
+        "sha256": "698dac13f444831e824f028a496969722d0367f30bf9c16734778259d4cadc44"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Japanese\\EUCJPProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4578,
+        "sha256": "6b6efd844f15ff5563af3cd73e62ce2db5b8fa50e90b6e3c093cffa11628c9d6"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Japanese\\SJISProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4885,
+        "sha256": "b88f44f4905bf6d93152d537262e005f7aaa16c47d70c0be57b1f952400bf965"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Korean\\CP949Prober.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4306,
+        "sha256": "148db64a3e89d5c82f5d75484354dd2d2a571aac163f293479d52c64ef4ac296"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\Korean\\EUCKRProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 4195,
+        "sha256": "51fed3cb9830476270081891e243bf2b8edc1da8123d5050307b9819f1c34d26"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\MultiByte\\UTF8Prober.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3923,
+        "sha256": "2231ef87b77cfbae7601d54b4402bcfcb76eee6e2cbe0019ca9ce1421b918594"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\ProbingState.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 351,
+        "sha256": "4f655e6874c5c02d3623718c72b769030e7719b418491d825a0b0aa04e07bab3"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\SBCSGroupProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 17786,
+        "sha256": "1e7a7b471fe66930eb5f9c2660ebd17f102e5ee05043007491bb5c2154557bb0"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\Core\\Probers\\SingleByteCharSetProber.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 7487,
+        "sha256": "90230542707d1ce952666ed462ea1e3dcd0f8898bd1eebe1800bbe60ea91eb38"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\DetectionDetail.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3196,
+        "sha256": "c81b08fc411db56e2811ed3ef6fc2e9247b1e731c65712abf4f9acf0fd3bb5fc"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\DetectionResult.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 1149,
+        "sha256": "490dc541c2e04c861c94bac3492bcae41d446c042862dd79f10abdf73246d4ab"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\src\\UTF-unknown.csproj",
+        "available": true,
+        "kind": "file",
+        "bytes": 4376,
+        "sha256": "e330184365d5cf980a37702e59f1f9bacc6a92a3c06aa6b2fab53820c06e01ac"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\license\\gpl-2.0.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 18326,
+        "sha256": "9f2e250993c6206fac643824e05e5a0d7d3e0895d9e09a5ce4b12bc2610afc11"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\license\\lgpl-2.1.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 26940,
+        "sha256": "319daefe38ebeead3df178e5937898a52d67c0c795f54f1c0bb10ac3b9cffb63"
+      },
+      {
+        "filename": "D:\\mediamanager-validation\\20261010\\utf-unknown-source\\license\\MPL-1.1.txt",
+        "available": true,
+        "kind": "file",
+        "bytes": 26225,
+        "sha256": "fa01277004aff314888151ea523bdf390992892e13523984f221695d48c7455b"
+      }
+    ]
+  },
+  "files": [
+    {
+      "filename": "tests\\core\\fixtures\\native-charset\\input.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4443,
+      "sha256": "ffdf3c1e120090ca7cd4d8dcc667ef4815f068cecdacf96dcad883efd30bf9a9"
+    },
+    {
+      "filename": "tests\\core\\fixtures\\native-charset\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 7223,
+      "sha256": "758d087d14f07d9b25d11847ded589dd0f35c28d0d768465d7cd41c8fae4c094"
+    },
+    {
+      "filename": "tests\\core\\fixtures\\native-charset\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 400,
+      "sha256": "9c3dc5f92e6902ccf592c9b1bc60d585e5482bd301049c924552a190670575eb"
+    },
+    {
+      "filename": "tests\\core\\fixtures\\native-charset\\README.md",
+      "available": true,
+      "kind": "file",
+      "bytes": 947,
+      "sha256": "fc52a64b651e520aead24ad3029e90c3e8f4139b9346a2489e8f388d39754148"
+    }
+  ],
+  "resolution": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\bin\\Release\\net10.0\\Oracle.deps.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 801,
+      "sha256": "9b9cdd7f71fe1b3c4095919fa1ae03bd2087d38d6f877156c5c5b5cef8de5018"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\bin\\Release\\net10.0\\Oracle.runtimeconfig.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 342,
+      "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+    }
+  ],
+  "repeat": {
+    "sampleProjectionEqual": true,
+    "tablesByteEqual": true,
+    "record": {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v6\\record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4423,
+      "sha256": "c53722a317948aecb0ad8cd8bcb08271d7d9164e82d3792115b0bef5c39b0b85"
+    },
+    "raw": {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v6\\native.raw.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 1828435,
+      "sha256": "b5636d5f0eb96d15b60375592af669012f4cc2f9852b5f81045102fefe6a84d4"
+    },
+    "models": {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v6\\tables.raw.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 686017,
+      "sha256": "b2cf04b458d60c38fc6c8ef5521e0db6c6062ef300f35b461e317c3b75131cbf"
+    }
+  },
+  "record": {
+    "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4423,
+    "sha256": "ef38b8c8633ab48d668f9d94e0d4239a1003093da57056fcfb2139fd19a4cc19"
+  },
+  "raw": {
+    "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\native.raw.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 1828435,
+    "sha256": "d991eef18f86c60115cb945cc401d2a8f94fcd04798bb117a25d3271b9fbef2f"
+  },
+  "native": {
+    "filename": "tests/core/fixtures/native-charset/native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 1828435,
+    "sha256": "d991eef18f86c60115cb945cc401d2a8f94fcd04798bb117a25d3271b9fbef2f"
+  },
+  "tables": {
+    "filename": "src/core/resources/native-charset-models.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 686017,
+    "sha256": "b2cf04b458d60c38fc6c8ef5521e0db6c6062ef300f35b461e317c3b75131cbf"
+  },
+  "modelRaw": {
+    "filename": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\tables.raw.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 686017,
+    "sha256": "b2cf04b458d60c38fc6c8ef5521e0db6c6062ef300f35b461e317c3b75131cbf"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "loadedAssemblies": [
+    {
+      "name": "Oracle",
+      "path": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "595fa87253ba44e7b080c1573ee933b2054457da5a758a9848ce9ed7df0a30eb"
+    },
+    {
+      "name": "System.Collections",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipelines.dll",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.CodePages",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.CodePages.dll",
+      "sha256": "226e216e33c94ef7594bdffe670ba4dc5907151c113cb41ac9e9d570227e1765"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Threading",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "UtfUnknown",
+      "path": "D:\\mediamanager-validation\\20261010\\results\\native-charset-v5\\bin\\Release\\net10.0\\UtfUnknown.dll",
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+    }
+  ],
+  "runtimeScope": "Actual UTF.Unknown process, runtime-loaded assemblies and all pinned upstream detector/model source files; not the complete native build-input closure."
+}

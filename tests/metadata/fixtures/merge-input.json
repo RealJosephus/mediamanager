@@ -1,0 +1,472 @@
+{
+  "fields": [
+    "Name",
+    "OriginalTitle",
+    "HomePageUrl",
+    "OriginalLanguage",
+    "CommunityRating",
+    "EndDate",
+    "Genres",
+    "IndexNumber",
+    "OfficialRating",
+    "CustomRating",
+    "Tagline",
+    "Overview",
+    "ParentIndexNumber",
+    "PremiereDate",
+    "ProductionYear",
+    "RunTimeTicks",
+    "Studios",
+    "Tags",
+    "ProductionLocations",
+    "ProviderIds",
+    "CriticRating",
+    "RemoteTrailers",
+    "ForcedSortName",
+    "IsLocked",
+    "LockedFields",
+    "PreferredMetadataCountryCode",
+    "PreferredMetadataLanguage",
+    "CollectionName",
+    "AirTime",
+    "Status",
+    "AirDays",
+    "DisplayOrder",
+    "AirsBeforeSeasonNumber",
+    "AirsAfterSeasonNumber",
+    "AirsBeforeEpisodeNumber",
+    "IndexNumberEnd"
+  ],
+  "cases": [
+    {
+      "id": "movie-fill",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "Name": "New",
+          "OriginalTitle": "Original",
+          "Overview": "Incoming",
+          "RunTimeTicks": 99,
+          "Genres": [
+            "Drama"
+          ],
+          "Studios": [
+            "ACME"
+          ],
+          "Tags": [
+            "blue"
+          ],
+          "ProductionLocations": [
+            "US"
+          ],
+          "ProviderIds": {
+            "Tmdb": "7",
+            "Imdb": "tt22"
+          },
+          "CollectionName": "Set"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "Name": "Old",
+          "RunTimeTicks": 100,
+          "Studios": [
+            "Acme",
+            "Other"
+          ],
+          "Tags": [
+            "Blue"
+          ],
+          "ProviderIds": {
+            "Tmdb": "bad",
+            "Custom": "keep"
+          }
+        },
+        "People": null
+      },
+      "options": {}
+    },
+    {
+      "id": "movie-replace-locked",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "Name": "New",
+          "Overview": "New plot",
+          "Genres": [
+            "Drama"
+          ],
+          "OfficialRating": "R",
+          "RunTimeTicks": 99,
+          "ProviderIds": {
+            "Tmdb": "9"
+          },
+          "OriginalTitle": "New original"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "Name": "Old",
+          "Overview": "Old plot",
+          "Genres": [
+            "Comedy"
+          ],
+          "OfficialRating": "PG",
+          "RunTimeTicks": 100,
+          "ProviderIds": {
+            "Tmdb": "5"
+          },
+          "OriginalTitle": "Old original"
+        },
+        "People": null
+      },
+      "options": {
+        "replaceData": true,
+        "lockedFields": [
+          "Name",
+          "Overview",
+          "Genres",
+          "OfficialRating"
+        ]
+      }
+    },
+    {
+      "id": "empty-name-is-safe",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "Name": "   ",
+          "Overview": ""
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "Name": "Kept",
+          "Overview": "Old"
+        },
+        "People": null
+      },
+      "options": {
+        "replaceData": true
+      }
+    },
+    {
+      "id": "invalid-id-removal",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "ProviderIds": {
+            "Tmdb": " 12 ",
+            "Imdb": "not-id",
+            " custom ": "anything",
+            "a=b": "allowed-in-merge"
+          }
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "ProviderIds": {
+            "Tmdb": "garbage",
+            "Imdb": "tt1",
+            "MusicBrainzArtist": "bad",
+            "Custom": "persist"
+          }
+        },
+        "People": null
+      },
+      "options": {}
+    },
+    {
+      "id": "people-fill",
+      "type": "Movie",
+      "source": {
+        "Item": {},
+        "People": [
+          {
+            "Name": "Jose",
+            "Role": "Lead",
+            "Type": "Actor",
+            "SortOrder": 2,
+            "ImageUrl": "https://fixture/actor",
+            "ProviderIds": {
+              "Tmdb": "33"
+            }
+          },
+          {
+            "Name": "New person",
+            "Type": "Actor"
+          }
+        ]
+      },
+      "target": {
+        "Item": {},
+        "People": [
+          {
+            "Name": "José",
+            "Type": "Actor",
+            "ProviderIds": {
+              "Tmdb": "bad",
+              "Imdb": "nm5"
+            }
+          },
+          {
+            "Name": "José",
+            "Type": "Director",
+            "Role": "Director",
+            "ProviderIds": {}
+          }
+        ]
+      },
+      "options": {}
+    },
+    {
+      "id": "people-replace-null",
+      "type": "Movie",
+      "source": {
+        "Item": {},
+        "People": null
+      },
+      "target": {
+        "Item": {},
+        "People": [
+          {
+            "Name": "Remove",
+            "Type": "Actor"
+          }
+        ]
+      },
+      "options": {
+        "replaceData": true
+      }
+    },
+    {
+      "id": "people-locked",
+      "type": "Movie",
+      "source": {
+        "Item": {},
+        "People": [
+          {
+            "Name": "New",
+            "Type": "Actor"
+          }
+        ]
+      },
+      "target": {
+        "Item": {},
+        "People": [
+          {
+            "Name": "Old",
+            "Type": "Actor",
+            "ProviderIds": {
+              "Tmdb": "bad"
+            }
+          }
+        ]
+      },
+      "options": {
+        "replaceData": true,
+        "lockedFields": [
+          "Cast"
+        ]
+      }
+    },
+    {
+      "id": "metadata-settings",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "IsLocked": true,
+          "LockedFields": [
+            "Name"
+          ],
+          "PreferredMetadataLanguage": "zh-CN",
+          "PreferredMetadataCountryCode": "CN"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "LockedFields": [
+            "Overview"
+          ],
+          "PreferredMetadataLanguage": "en"
+        },
+        "People": null
+      },
+      "options": {
+        "mergeMetadataSettings": true
+      }
+    },
+    {
+      "id": "episode-explicit-season",
+      "type": "Episode",
+      "source": {
+        "Item": {
+          "IndexNumber": 4,
+          "ParentIndexNumber": 2,
+          "IndexNumberEnd": 5,
+          "AirsBeforeSeasonNumber": 3
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "IndexNumber": 3,
+          "ParentIndexNumber": 1
+        },
+        "People": null
+      },
+      "options": {
+        "mergeMetadataSettings": true
+      }
+    },
+    {
+      "id": "episode-backfill-season",
+      "type": "Episode",
+      "source": {
+        "Item": {
+          "ParentIndexNumber": 2
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "ParentIndexNumber": 1
+        },
+        "People": null
+      },
+      "options": {
+        "mergeMetadataSettings": false
+      }
+    },
+    {
+      "id": "series-fill",
+      "type": "Series",
+      "source": {
+        "Item": {
+          "Name": "Series",
+          "Status": "Continuing",
+          "AirTime": "20:00",
+          "AirDays": [
+            "Monday",
+            "Friday"
+          ],
+          "RunTimeTicks": 600000000,
+          "DisplayOrder": "DVD"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "RunTimeTicks": 900000000
+        },
+        "People": null
+      },
+      "options": {}
+    },
+    {
+      "id": "series-replace",
+      "type": "Series",
+      "source": {
+        "Item": {
+          "Status": "Ended",
+          "AirDays": [],
+          "RunTimeTicks": 600000000,
+          "DisplayOrder": "DVD"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "Status": "Continuing",
+          "AirDays": [
+            "Monday"
+          ],
+          "RunTimeTicks": 900000000,
+          "DisplayOrder": "Absolute"
+        },
+        "People": null
+      },
+      "options": {
+        "replaceData": true
+      }
+    },
+    {
+      "id": "season-display-order",
+      "type": "Season",
+      "source": {
+        "Item": {
+          "Name": "Season 2",
+          "DisplayOrder": "DVD"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "Name": "Old",
+          "DisplayOrder": "Absolute"
+        },
+        "People": null
+      },
+      "options": {
+        "replaceData": true
+      }
+    },
+    {
+      "id": "trailers-distinct",
+      "type": "Movie",
+      "source": {
+        "Item": {
+          "RemoteTrailers": [
+            {
+              "Url": "https://fixture/a",
+              "Name": "new duplicate"
+            },
+            {
+              "Url": "https://fixture/b",
+              "Name": "new"
+            }
+          ]
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "RemoteTrailers": [
+            {
+              "Url": "https://fixture/a",
+              "Name": "old"
+            }
+          ]
+        },
+        "People": null
+      },
+      "options": {}
+    },
+    {
+      "id": "series-absent-airdays",
+      "type": "Series",
+      "source": {
+        "Item": {
+          "Name": "Imported"
+        },
+        "People": null
+      },
+      "target": {
+        "Item": {
+          "AirDays": [
+            "Monday"
+          ]
+        },
+        "People": null
+      },
+      "options": {
+        "replaceData": true
+      }
+    }
+  ]
+}

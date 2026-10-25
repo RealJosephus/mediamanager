@@ -1,0 +1,59 @@
+{
+  "cases": [
+    {
+      "name": "empty",
+      "text": "<LiveTvOptions/>"
+    },
+    {
+      "name": "full",
+      "text": "<LiveTvOptions><GuideDays>12</GuideDays><RecordingPath>preserved/recordings</RecordingPath><MovieRecordingPath>preserved/movies</MovieRecordingPath><SeriesRecordingPath>preserved/series</SeriesRecordingPath><EnableRecordingSubfolders>true</EnableRecordingSubfolders><EnableOriginalAudioWithEncodedRecordings>true</EnableOriginalAudioWithEncodedRecordings><PrePaddingSeconds>10</PrePaddingSeconds><PostPaddingSeconds>20</PostPaddingSeconds><RecordingPostProcessor>preserved-never-executed</RecordingPostProcessor><RecordingPostProcessorArguments>\"{path}\" --preserved</RecordingPostProcessorArguments><SaveRecordingNFO>false</SaveRecordingNFO><SaveRecordingImages>false</SaveRecordingImages><MediaLocationsCreated><string>A</string><string>B</string></MediaLocationsCreated><TunerHosts><TunerHostInfo><Id>source-id</Id><Url>controlled://guide</Url><Type>unregistered</Type><TunerCount>2</TunerCount><IgnoreDts>false</IgnoreDts><ReadAtNativeFramerate>true</ReadAtNativeFramerate><AllowHWTranscoding>false</AllowHWTranscoding><AllowFmp4TranscodingContainer>true</AllowFmp4TranscodingContainer><AllowStreamSharing>false</AllowStreamSharing><ImportFavoritesOnly>true</ImportFavoritesOnly><EnableStreamLooping>true</EnableStreamLooping><FallbackMaxStreamingBitrate>12345</FallbackMaxStreamingBitrate><DeviceId>device-id</DeviceId><FriendlyName>Test tuner</FriendlyName><Source>external</Source><UserAgent>Guide consumer</UserAgent></TunerHostInfo></TunerHosts><ListingProviders><ListingsProviderInfo><Id>listings-id</Id><Type>unregistered</Type><Username>test-user</Username><Password>controlled-placeholder</Password><ListingsId>catalog</ListingsId><ZipCode>00000</ZipCode><Country>TW</Country><Path>preserved/listings.xml</Path><EnabledTuners><string>source-id</string></EnabledTuners><EnableAllTuners>false</EnableAllTuners><NewsCategories><string>news-override</string></NewsCategories><SportsCategories/><KidsCategories/><MovieCategories/><ChannelMappings><NameValuePair><Name>channel</Name><Value>external-channel</Value></NameValuePair></ChannelMappings><MoviePrefix>Film</MoviePrefix><PreferredLanguage>zh</PreferredLanguage><UserAgent>List consumer</UserAgent></ListingsProviderInfo></ListingProviders></LiveTvOptions>"
+    },
+    {
+      "name": "missing"
+    },
+    {
+      "name": "days -2147483648",
+      "text": "<LiveTvOptions><GuideDays>-2147483648</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "days 0",
+      "text": "<LiveTvOptions><GuideDays>0</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "days 1",
+      "text": "<LiveTvOptions><GuideDays>1</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "days 14",
+      "text": "<LiveTvOptions><GuideDays>14</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "days 2147483647",
+      "text": "<LiveTvOptions><GuideDays>2147483647</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "nil days and arrays",
+      "text": "<LiveTvOptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><GuideDays xsi:nil=\"true\"/><TunerHosts xsi:nil=\"true\"/><ListingProviders xsi:nil=\"true\"/></LiveTvOptions>"
+    },
+    {
+      "name": "duplicate fields",
+      "text": "<LiveTvOptions><GuideDays>2</GuideDays><GuideDays>13</GuideDays><TunerHosts><TunerHostInfo><Id>first</Id></TunerHostInfo></TunerHosts><TunerHosts><TunerHostInfo><Id>last</Id></TunerHostInfo></TunerHosts></LiveTvOptions>"
+    },
+    {
+      "name": "unknown subtree",
+      "text": "<LiveTvOptions><Unknown><GuideDays>bad</GuideDays></Unknown><GuideDays>5</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "bad integer",
+      "text": "<LiveTvOptions><GuideDays>2147483648</GuideDays></LiveTvOptions>"
+    },
+    {
+      "name": "bad known boolean",
+      "text": "<LiveTvOptions><TunerHosts><TunerHostInfo><IgnoreDts>maybe</IgnoreDts></TunerHostInfo></TunerHosts></LiveTvOptions>"
+    },
+    {
+      "name": "wrong root",
+      "text": "<ServerConfiguration/>"
+    }
+  ]
+}

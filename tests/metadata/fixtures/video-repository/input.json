@@ -1,0 +1,2087 @@
+[
+  {
+    "name": "locked-alternate-edit",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "parent-reason-1-child-download",
+    "reason": 1,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "parent-reason-2-child-download",
+    "reason": 2,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "parent-reason-4-child-download",
+    "reason": 4,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "parent-reason-8-child-download",
+    "reason": 8,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "nullable-fields-clear-child",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [],
+        "Overview": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "CommunityRating": null,
+        "OfficialRating": null,
+        "ProviderIds": {},
+        "ImageInfos": [],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "null-genres-retained-as-native-null",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": null,
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "duplicate-links-save-child-twice",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate",
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "missing-linked-entity-is-skipped",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "missing",
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "no-links-no-alternate-save",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": []
+    }
+  },
+  {
+    "name": "nonvideo-owner-does-not-propagate",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Audio",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "nonvideo-linked-child-is-not-filtered",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Audio",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "nested-local-versions-propagate-depth-first",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "nested",
+        "type": "Video",
+        "Name": "Nested",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000003"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ],
+      "alternate": [
+        "nested"
+      ]
+    }
+  },
+  {
+    "name": "failed-parent-stops-before-copy",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "failSave": "owner"
+  },
+  {
+    "name": "failed-child-retains-parent",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "failSave": "alternate"
+  },
+  {
+    "name": "failed-second-child-retains-first",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      },
+      {
+        "key": "second",
+        "type": "Movie",
+        "Name": "Second",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000003"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate",
+        "second"
+      ]
+    },
+    "failSave": "second"
+  },
+  {
+    "name": "cancel-after-parent-stops-child-commit",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "cancelAfterSave": "owner"
+  },
+  {
+    "name": "already-cancelled-parent-has-no-commit",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "cancelled": true
+  },
+  {
+    "name": "metadata-save-item-reattaches-after-family",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "saveItem": true
+  },
+  {
+    "name": "metadata-save-item-child-failure-skips-reattach-people",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "saveItem": true,
+    "failSave": "alternate"
+  },
+  {
+    "name": "parent-save-removes-link-before-selection",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "replaceLinksAfterSave": {
+      "key": "owner",
+      "links": []
+    }
+  },
+  {
+    "name": "parent-save-adds-link-before-selection",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": []
+    },
+    "replaceLinksAfterSave": {
+      "key": "owner",
+      "links": [
+        "alternate"
+      ]
+    }
+  },
+  {
+    "name": "inherited-arrays-dictionaries-share-live-reference",
+    "reason": 16,
+    "items": [
+      {
+        "key": "owner",
+        "type": "Movie",
+        "Name": "Owner",
+        "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+        "Genres": [
+          "Drama",
+          "drama"
+        ],
+        "Overview": "Owner overview",
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+        "CommunityRating": 7.5,
+        "OfficialRating": "PG",
+        "ProviderIds": {
+          "Tmdb": "101",
+          "tmdb": "102"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Primary",
+            "Path": "Z:\\ChildrenMetadata\\poster.png",
+            "Width": 80,
+            "Height": 60,
+            "DateModified": "2026-10-01T00:00:00Z"
+          }
+        ],
+        "Studios": [
+          "Owner studio"
+        ],
+        "Tags": [
+          "Owner tag"
+        ],
+        "CriticRating": 81,
+        "CustomRating": "TV-14",
+        "Id": "98b80000-0000-0000-0000-000000000001"
+      },
+      {
+        "key": "alternate",
+        "type": "Movie",
+        "Name": "Locked version",
+        "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+        "Genres": [
+          "Comedy"
+        ],
+        "Overview": "Old version",
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "CommunityRating": 4,
+        "OfficialRating": "R",
+        "ProviderIds": {
+          "Imdb": "tt202"
+        },
+        "ImageInfos": [
+          {
+            "Type": "Thumb",
+            "Path": "Z:\\ChildrenMetadata\\old.png"
+          }
+        ],
+        "Studios": [
+          "Keep studio"
+        ],
+        "Tags": [
+          "Keep tag"
+        ],
+        "CriticRating": 22,
+        "CustomRating": "Keep custom",
+        "OriginalTitle": "Keep original",
+        "RunTimeTicks": "9007199254740995",
+        "IsLocked": true,
+        "LockedFields": [
+          "Overview",
+          "Genres"
+        ],
+        "Id": "98b80000-0000-0000-0000-000000000002"
+      }
+    ],
+    "links": {
+      "owner": [
+        "alternate"
+      ]
+    },
+    "mutateAfterSave": {
+      "key": "alternate"
+    }
+  }
+]

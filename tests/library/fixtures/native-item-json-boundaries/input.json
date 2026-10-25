@@ -1,0 +1,30 @@
+{
+  "cases": [
+    { "id": "date-invalid-nonleap-feb29", "kind": "date", "valueJson": "\"2025-02-29T01:02:03Z\"" },
+    { "id": "date-invalid-april31", "kind": "date", "valueJson": "\"2025-04-31T01:02:03Z\"" },
+    { "id": "date-invalid-year-zero", "kind": "date", "valueJson": "\"0000-01-01T00:00:00Z\"" },
+    { "id": "date-invalid-hour24", "kind": "date", "valueJson": "\"2025-01-01T24:00:00Z\"" },
+    { "id": "date-no-offset", "kind": "date", "valueJson": "\"2025-01-01T00:00:00\"" },
+    { "id": "date-plus08", "kind": "date", "valueJson": "\"2025-01-01T00:00:00+08:00\"" },
+    { "id": "date-z-baseline", "kind": "date", "valueJson": "\"2025-01-01T00:00:00.1234567Z\"" },
+
+    { "id": "enum-number-exponent", "kind": "enum", "valueJson": "1e0" },
+    { "id": "enum-number-decimal", "kind": "enum", "valueJson": "1.0" },
+    { "id": "enum-comma-names", "kind": "enum", "valueJson": "\"Iso, Dvd\"" },
+    { "id": "enum-unknown-number", "kind": "enum", "valueJson": "99" },
+    { "id": "enum-name-baseline", "kind": "enum", "valueJson": "\"Iso\"" },
+
+    { "id": "int-quoted-exponent", "kind": "int", "valueJson": "\"1e3\"" },
+    { "id": "long-quoted-exponent", "kind": "long", "valueJson": "\"1e3\"" },
+    { "id": "int-quoted-plus", "kind": "int", "valueJson": "\"+1\"" },
+    { "id": "long-quoted-plus", "kind": "long", "valueJson": "\"+1\"" },
+    { "id": "int-quoted-space", "kind": "int", "valueJson": "\" 1 \"" },
+    { "id": "long-quoted-space", "kind": "long", "valueJson": "\" 1 \"" },
+    { "id": "int-quoted-baseline", "kind": "int", "valueJson": "\"1000\"" },
+    { "id": "long-quoted-baseline", "kind": "long", "valueJson": "\"1000\"" },
+
+    { "id": "double-1e20", "kind": "double", "valueJson": "1e20" },
+    { "id": "double-1e-7", "kind": "double", "valueJson": "1e-7" },
+    { "id": "double-negative-zero", "kind": "double", "valueJson": "-0" }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-10T14:53:23.500Z",
+  "candidateVerified": false,
+  "jellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "selectedCleanSources": [
+      {
+        "path": "Emby.Server.Implementations/Dto/DtoService.cs",
+        "sha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55"
+      },
+      {
+        "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "path": "MediaBrowser.Controller/Playlists/Playlist.cs",
+        "sha256": "3d7488cbfa751ccba0e2debc7d9a34e4dc390a9f4ed7b8031c60750a76774d97"
+      }
+    ],
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/playlist-items-v4/bin/Release/net10.0"
+  },
+  "assemblies": [
+    {
+      "name": "Jellyfin.Api",
+      "sha256": "8d2a876ea77cb003227a4da23a52f3cdcced097a4ae659126f6c795ec7226a65"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5f4cf0ff15958cea5887fdec9183be392f29332a8776c29594dd75e0c5f1a252"
+    },
+    {
+      "name": "jellyfin",
+      "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+    }
+  ],
+  "runtime": {
+    "dotnet": {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "bytes": 167208
+    },
+    "sdk": "10.0.401",
+    "oracleAssembly": {
+      "filename": "D:/mediamanager-validation/20261010/results/delete-dto-permission-v3/bin/Oracle.dll",
+      "sha256": "82659cd69faf067afdd22984f0f5b7e2ede5ad5fbb5665e5762acebcd5cc97e8",
+      "bytes": 38912
+    }
+  },
+  "sourceControl": {
+    "path": "tests/http/fixtures/item-deletion/Program.cs",
+    "sha256": "6e427257f60d21c9ea54e7b136358a9449e2e9dea96320ce39f7673015e82235",
+    "scope": "Imports and sealed class controls only; the standalone main invokes the actual precomputed overload without hosting HTTP."
+  },
+  "files": {
+    "input.json": {
+      "filename": "input.json",
+      "sha256": "86785ff2adda02a1872e162fcfd950b6abe5c479ae30e7196aef8f72bd0a95a8",
+      "bytes": 157
+    },
+    "Program.cs": {
+      "filename": "Program.cs",
+      "sha256": "d2c3081bbd18c96a36bc1e905ea23124ab2d792ac4f6354f318b684850fe847e",
+      "bytes": 3831
+    },
+    "Controls.cs": {
+      "filename": "Controls.cs",
+      "sha256": "489b5c6e3d143e5636d67ecf0e33ee14ac0da4e21c89fbbcec1c3169c2fec920",
+      "bytes": 17349
+    },
+    "Oracle.csproj": {
+      "filename": "Oracle.csproj",
+      "sha256": "e41b6184c2615ac4473534429029ad3201550b68eff02738ebc387386d6a53ed",
+      "bytes": 586
+    },
+    "README.md": {
+      "filename": "README.md",
+      "sha256": "22a1b9a14dea3193920f52a4a5d9cb17db18c1439a7bb09d3698e548873c106e",
+      "bytes": 845
+    },
+    "native.json": {
+      "filename": "native.json",
+      "sha256": "322dfc0b6474e8f48fe618482f67837e39fa0161ebd8afb0c47a163644d0dae1",
+      "bytes": 89958
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261010/results/delete-dto-permission-v3/native.raw.json",
+      "sha256": "30001007f82af5dbdfee4eb0945ba6fc47c8ca262a7cb9cfb3eec7ebe3bfb5d5",
+      "bytes": 93243
+    }
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261010/results/delete-dto-permission-v4/native.raw.json",
+    "sha256": "30001007f82af5dbdfee4eb0945ba6fc47c8ca262a7cb9cfb3eec7ebe3bfb5d5",
+    "rawByteEqual": true
+  },
+  "counts": {
+    "policies": 6,
+    "claims": 2,
+    "items": 37,
+    "precomputedComparisons": 444
+  },
+  "boundary": "Actual native CanDelete(), CanDelete(User) and CanDelete(User,List<Folder>), over explicit entity/user/repository/recording/path controls. The final overload is the DtoService precomputed branch; this is not full DTO service execution, authentication, deletion, channels/live recording or dirty-workspace complete build-input closure."
+}

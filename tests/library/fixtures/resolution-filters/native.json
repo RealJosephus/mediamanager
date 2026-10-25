@@ -1,0 +1,1288 @@
+{
+  "schemaVersion": 1,
+  "frozenJellyfin": true,
+  "sourceEvidence": ".test-input/evidence/continuation-20260927/resolution-filter-native-v3/native-contract.json",
+  "fixtureInputSha256": "8021fdaaa4995d0f4b59d10a289126bc76efc355849dd875e45ca3733ac550c0",
+  "endpoints": [
+    "/Items",
+    "/Users/{userId}/Items"
+  ],
+  "cases": [
+    {
+      "name": "bucket-sd",
+      "query": "IsHD=false",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary",
+        "unprobed"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "belowHd",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "bucket-hd",
+      "query": "IsHD=true",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary",
+        "unprobed"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "fullHd",
+        "hdBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "bucket-4k",
+      "query": "Is4K=true",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary",
+        "unprobed"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "uhdHeightBoundary",
+        "uhdWidthBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "is4k-false-alone",
+      "query": "Is4K=false",
+      "scope": [
+        "sd",
+        "hdBoundary",
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "bucket-hd-or-4k",
+      "query": "IsHD=true&Is4K=true",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 4,
+      "keys": [
+        "fullHd",
+        "hdBoundary",
+        "uhdHeightBoundary",
+        "uhdWidthBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "bucket-sd-or-4k",
+      "query": "IsHD=false&Is4K=true",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 4,
+      "keys": [
+        "belowHd",
+        "sd",
+        "uhdHeightBoundary",
+        "uhdWidthBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "min-width-inclusive",
+      "query": "MinWidth=1200",
+      "scope": [
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 3,
+      "keys": [
+        "fullHd",
+        "hdBoundary",
+        "uhdWidthBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "max-width-inclusive",
+      "query": "MaxWidth=1200",
+      "scope": [
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "belowHd",
+        "hdBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "min-height-inclusive",
+      "query": "MinHeight=2100",
+      "scope": [
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "uhdHeightBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "max-height-inclusive",
+      "query": "MaxHeight=1080",
+      "scope": [
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "fullHd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "dimension-range-intersection",
+      "query": "MinWidth=1200&MaxWidth=3000&MinHeight=720&MaxHeight=2100",
+      "scope": [
+        "sd",
+        "belowHd",
+        "hdBoundary",
+        "fullHd",
+        "uhdWidthBoundary",
+        "uhdHeightBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 3,
+      "keys": [
+        "fullHd",
+        "hdBoundary",
+        "uhdHeightBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-4k-bucket",
+      "query": "Is4K=true",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "version4kPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-4k-excluded-from-sd",
+      "query": "IsHD=false",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "version-min-width",
+      "query": "MinWidth=3000",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "version4kPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-max-width",
+      "query": "MaxWidth=1920",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "version-min-height",
+      "query": "MinHeight=2000",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "version4kPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "version-max-height",
+      "query": "MaxHeight=1080",
+      "scope": [
+        "version4kPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "unprobed-primary-hd-by-version",
+      "query": "IsHD=true",
+      "scope": [
+        "versionHdPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "versionHdPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "unprobed-primary-sd-by-version",
+      "query": "IsHD=false",
+      "scope": [
+        "versionSdPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "versionSdPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "mixed-version-not-hd",
+      "query": "IsHD=true",
+      "scope": [
+        "versionMixedPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "mixed-version-is-4k",
+      "query": "Is4K=true",
+      "scope": [
+        "versionMixedPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "versionMixedPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "ordinary-folder-descendant-4k",
+      "query": "Is4K=true",
+      "scope": [
+        "descendantFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "descendantFolder"
+      ],
+      "problem": null
+    },
+    {
+      "name": "ordinary-folder-dimension-does-not-descend",
+      "query": "MinWidth=3000",
+      "scope": [
+        "descendantFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "direct-linked-media-child-4k",
+      "query": "Is4K=true",
+      "scope": [
+        "linkedBoxSet"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "linkedBoxSet"
+      ],
+      "problem": null
+    },
+    {
+      "name": "direct-linked-dimension-does-not-descend",
+      "query": "MinWidth=3000",
+      "scope": [
+        "linkedBoxSet"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-bool-case-insensitive",
+      "query": "isHd=TrUe",
+      "scope": [
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "hdBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-empty-nullable-bool",
+      "query": "IsHD=",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-invalid-bool",
+      "query": "IsHD=1",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "isHd": [
+            "The value '1' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-invalid-integer",
+      "query": "MinWidth=abc",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value 'abc' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-int32-max",
+      "query": "MinWidth=2147483647",
+      "scope": [
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-int32-overflow",
+      "query": "MinWidth=2147483648",
+      "scope": [
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '2147483648' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-repeated-integer",
+      "query": "MinWidth=1200&MinWidth=3800",
+      "scope": [
+        "hdBoundary",
+        "uhdWidthBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "uhdWidthBoundary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "tall-self-is-sd-by-width",
+      "query": "IsHD=false",
+      "scope": [
+        "tall4kSelf"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "tall4kSelf"
+      ],
+      "problem": null
+    },
+    {
+      "name": "tall-self-is-also-4k-by-height",
+      "query": "Is4K=true",
+      "scope": [
+        "tall4kSelf"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "tall4kSelf"
+      ],
+      "problem": null
+    },
+    {
+      "name": "tall-alternate-excludes-primary-from-sd",
+      "query": "IsHD=false",
+      "scope": [
+        "tall4kVersionPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "tall-alternate-makes-primary-4k",
+      "query": "Is4K=true",
+      "scope": [
+        "tall4kVersionPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "tall4kVersionPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-folder-matches-own-grandchild",
+      "query": "Is4K=true",
+      "scope": [
+        "linkedGrandchildFolder"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "linkedGrandchildFolder"
+      ],
+      "problem": null
+    },
+    {
+      "name": "linked-grandparent-does-not-traverse-folder",
+      "query": "Is4K=true",
+      "scope": [
+        "linkedGrandparentBoxSet"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "split-alternates-satisfy-combined-minima",
+      "query": "MinWidth=3000&MinHeight=2000",
+      "scope": [
+        "versionSplitPrimary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "versionSplitPrimary"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-empty-nullable-integer",
+      "query": "MinWidth=",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-whitespace-nullable-integer",
+      "query": "MinWidth=%20%20",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-floating-integer",
+      "query": "MinWidth=1.5",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '1.5' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-hex-integer",
+      "query": "MinWidth=0x4B0",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-hash-hex-integer",
+      "query": "MinWidth=%234B0",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-negative-hex-integer",
+      "query": "MinWidth=-0x4B0",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '-0x4B0' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-positive-hex-integer",
+      "query": "MinWidth=%2B0x4B0",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '+0x4B0' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-hex-int32-max",
+      "query": "MinWidth=0x7FFFFFFF",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    },
+    {
+      "name": "binding-hex-int32-sign-bit",
+      "query": "MinWidth=0x80000000",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-hex-uint32-max",
+      "query": "MinWidth=0xFFFFFFFF",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-hex-uint32-overflow",
+      "query": "MinWidth=0x100000000",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '0x100000000' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-int32-min",
+      "query": "MinWidth=-2147483648",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-int32-negative-overflow",
+      "query": "MinWidth=-2147483649",
+      "scope": [
+        "sd"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "minWidth": [
+            "The value '-2147483649' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-repeated-bool-first-empty",
+      "query": "IsHD=&IsHD=true",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "hdBoundary",
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-repeated-bool-first-valid",
+      "query": "IsHD=false&IsHD=true",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "binding-repeated-bool-first-invalid",
+      "query": "IsHD=1&IsHD=true",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 400,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": null,
+      "keys": [],
+      "problem": {
+        "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+        "title": "One or more validation errors occurred.",
+        "status": 400,
+        "errors": {
+          "isHd": [
+            "The value '1,true' is not valid."
+          ]
+        }
+      }
+    },
+    {
+      "name": "binding-mixed-case-repeated-key",
+      "query": "IsHD=false&ishd=true",
+      "scope": [
+        "sd",
+        "hdBoundary"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "sd"
+      ],
+      "problem": null
+    },
+    {
+      "name": "user-presentation-grouping",
+      "query": "Is4K=true",
+      "scope": [
+        "groupFirst",
+        "groupSecond",
+        "groupThird"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "groupFirst",
+        "groupThird"
+      ],
+      "problem": null
+    },
+    {
+      "name": "user-grouping-before-count-and-pagination",
+      "query": "Is4K=true&StartIndex=1&Limit=1",
+      "scope": [
+        "groupFirst",
+        "groupSecond",
+        "groupThird"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 2,
+      "keys": [
+        "groupThird"
+      ],
+      "problem": null
+    },
+    {
+      "name": "api-key-does-not-group-presentation-keys",
+      "query": "Is4K=true",
+      "scope": [
+        "groupFirst",
+        "groupSecond",
+        "groupThird"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 3,
+      "keys": [
+        "groupFirst",
+        "groupSecond",
+        "groupThird"
+      ],
+      "problem": null
+    },
+    {
+      "name": "bucket-filter-includes-owned-item",
+      "query": "Is4K=true",
+      "scope": [
+        "owner4k"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 1,
+      "keys": [
+        "owner4k"
+      ],
+      "problem": null
+    },
+    {
+      "name": "numeric-filter-keeps-owned-item-hidden",
+      "query": "MinWidth=3000",
+      "scope": [
+        "owner4k"
+      ],
+      "auth": "user",
+      "endpoints": [
+        "items",
+        "legacy"
+      ],
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "totalRecordCount": 0,
+      "keys": [],
+      "problem": null
+    }
+  ]
+}

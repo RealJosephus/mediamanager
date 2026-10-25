@@ -1,0 +1,82 @@
+{
+  "scope": "Actual native library scheduler, controlled delegates/configuration/lifetime/gates and inline Progress synchronization context; no SQL, provider chain or complete scan.",
+  "requiredInputs": [
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/ILimitedConcurrencyLibraryScheduler.cs",
+      "sha256": "948ed9cdb18f10570d5fb2685a48e0f78fcd5beee1b0a485be8313e19602912c",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "required": true
+    }
+  ],
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/Program.cs",
+      "bytes": 17393,
+      "sha256": "4852d78fb5bbff0730de4191f2d86461eba188e482c74f896f5d059287e15fa4"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/Oracle.csproj",
+      "bytes": 443,
+      "sha256": "59cbda83887e0cac6f2acc4cd1ea475f9230aed1fff034f6eedbf64574a27f54"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4.json",
+      "bytes": 4881,
+      "sha256": "a6ff5f9be111430789277b166d0c5b4dab92ef71f058cb0939a55ec8056895fa"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4-record.json",
+      "bytes": 4226,
+      "sha256": "c61b78ecdecf6f2cddc1fe1b535892f39c8f6dbf1222ba38ee5d9deaf314580b"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4-source.json",
+      "bytes": 1160,
+      "sha256": "f7c6becfcb976254802695ae8317a3df421eb2df30abde63f4f350064858e5c2"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu3.json",
+      "bytes": 4878,
+      "sha256": "0203ddee137bcf4021cd84812288bdfdfa9a89ce769d5efb43d02d6373622525"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu3-record.json",
+      "bytes": 4226,
+      "sha256": "eac109174fa3ba4f2212a21064aafb2e7063c51c80d948076f57d50c0728f268"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu3-source.json",
+      "bytes": 1160,
+      "sha256": "87e1c097d4cb6ecaa8b81708d8f815764b422b93821608f034ec4e928c5d3bd2"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4-repeat.json",
+      "bytes": 4881,
+      "sha256": "d0928e8ccdf9c03905ad3968203fac1a1b9ffec69910aeb7dc3adb14c729622a"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4-repeat-record.json",
+      "bytes": 4226,
+      "sha256": "bb6124439592b2a1ed3676606e1accea6a3ad630fcbb276ac534bf3312e1f603"
+    },
+    {
+      "path": "tests/library/fixtures/library-task-scheduler/cpu4-repeat-source.json",
+      "bytes": 1160,
+      "sha256": "f7c6becfcb976254802695ae8317a3df421eb2df30abde63f4f350064858e5c2"
+    }
+  ]
+}

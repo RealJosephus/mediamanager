@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs for same-run Node password-reset files consumed through the current designated Native public provider.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current-input.json",
+      "bytes": 541,
+      "sha256": "70bf50821f2f78020ff0ed141043dea4b37eeb2ad0e5df73587cd5382bec16e6"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 4126,
+      "sha256": "72cc9fd8f4c32d0e17d3aa81afca41e2c50ef381ae3bc25e42dfd383a38def96"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

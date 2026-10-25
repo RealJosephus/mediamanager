@@ -1,0 +1,657 @@
+{
+  "roots": {
+    "livetv": {
+      "type": {
+        "kind": "object",
+        "reference": "LiveTvOptions"
+      },
+      "element": "LiveTvOptions",
+      "defaults": {
+        "GuideDays": null,
+        "RecordingPath": null,
+        "MovieRecordingPath": null,
+        "SeriesRecordingPath": null,
+        "EnableRecordingSubfolders": false,
+        "EnableOriginalAudioWithEncodedRecordings": false,
+        "TunerHosts": [],
+        "ListingProviders": [],
+        "PrePaddingSeconds": 0,
+        "PostPaddingSeconds": 0,
+        "MediaLocationsCreated": [],
+        "RecordingPostProcessor": null,
+        "RecordingPostProcessorArguments": "\"{path}\"",
+        "SaveRecordingNFO": true,
+        "SaveRecordingImages": true
+      }
+    }
+  },
+  "definitions": {
+    "LiveTvOptions": {
+      "xmlType": "LiveTvOptions",
+      "fields": {
+        "GuideDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": true
+          },
+          "element": "GuideDays",
+          "nullable": true,
+          "defaultValue": null
+        },
+        "RecordingPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "RecordingPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MovieRecordingPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "MovieRecordingPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SeriesRecordingPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "SeriesRecordingPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableRecordingSubfolders": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableRecordingSubfolders",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableOriginalAudioWithEncodedRecordings": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableOriginalAudioWithEncodedRecordings",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TunerHosts": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "TunerHostInfo"
+            },
+            "element": "TunerHostInfo",
+            "nullableItem": true
+          },
+          "element": "TunerHosts",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ListingProviders": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "ListingsProviderInfo"
+            },
+            "element": "ListingsProviderInfo",
+            "nullableItem": true
+          },
+          "element": "ListingProviders",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PrePaddingSeconds": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "PrePaddingSeconds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PostPaddingSeconds": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "PostPaddingSeconds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MediaLocationsCreated": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "MediaLocationsCreated",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "RecordingPostProcessor": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "RecordingPostProcessor",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "RecordingPostProcessorArguments": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "RecordingPostProcessorArguments",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SaveRecordingNFO": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SaveRecordingNFO",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SaveRecordingImages": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SaveRecordingImages",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "GuideDays",
+        "RecordingPath",
+        "MovieRecordingPath",
+        "SeriesRecordingPath",
+        "EnableRecordingSubfolders",
+        "EnableOriginalAudioWithEncodedRecordings",
+        "TunerHosts",
+        "ListingProviders",
+        "PrePaddingSeconds",
+        "PostPaddingSeconds",
+        "MediaLocationsCreated",
+        "RecordingPostProcessor",
+        "RecordingPostProcessorArguments",
+        "SaveRecordingNFO",
+        "SaveRecordingImages"
+      ],
+      "defaults": {
+        "GuideDays": null,
+        "RecordingPath": null,
+        "MovieRecordingPath": null,
+        "SeriesRecordingPath": null,
+        "EnableRecordingSubfolders": false,
+        "EnableOriginalAudioWithEncodedRecordings": false,
+        "TunerHosts": [],
+        "ListingProviders": [],
+        "PrePaddingSeconds": 0,
+        "PostPaddingSeconds": 0,
+        "MediaLocationsCreated": [],
+        "RecordingPostProcessor": null,
+        "RecordingPostProcessorArguments": "\"{path}\"",
+        "SaveRecordingNFO": true,
+        "SaveRecordingImages": true
+      }
+    },
+    "TunerHostInfo": {
+      "xmlType": "TunerHostInfo",
+      "fields": {
+        "Id": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Id",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Url": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Url",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Type": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Type",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DeviceId": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "DeviceId",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "FriendlyName": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "FriendlyName",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImportFavoritesOnly": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ImportFavoritesOnly",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowHWTranscoding": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowHWTranscoding",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowFmp4TranscodingContainer": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowFmp4TranscodingContainer",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowStreamSharing": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowStreamSharing",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "FallbackMaxStreamingBitrate": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "FallbackMaxStreamingBitrate",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableStreamLooping": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableStreamLooping",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Source": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Source",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TunerCount": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "TunerCount",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "UserAgent": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "UserAgent",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IgnoreDts": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IgnoreDts",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ReadAtNativeFramerate": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "ReadAtNativeFramerate",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Id",
+        "Url",
+        "Type",
+        "DeviceId",
+        "FriendlyName",
+        "ImportFavoritesOnly",
+        "AllowHWTranscoding",
+        "AllowFmp4TranscodingContainer",
+        "AllowStreamSharing",
+        "FallbackMaxStreamingBitrate",
+        "EnableStreamLooping",
+        "Source",
+        "TunerCount",
+        "UserAgent",
+        "IgnoreDts",
+        "ReadAtNativeFramerate"
+      ],
+      "defaults": {
+        "Id": null,
+        "Url": null,
+        "Type": null,
+        "DeviceId": null,
+        "FriendlyName": null,
+        "ImportFavoritesOnly": false,
+        "AllowHWTranscoding": true,
+        "AllowFmp4TranscodingContainer": false,
+        "AllowStreamSharing": true,
+        "FallbackMaxStreamingBitrate": 30000000,
+        "EnableStreamLooping": false,
+        "Source": null,
+        "TunerCount": 0,
+        "UserAgent": null,
+        "IgnoreDts": true,
+        "ReadAtNativeFramerate": false
+      }
+    },
+    "ListingsProviderInfo": {
+      "xmlType": "ListingsProviderInfo",
+      "fields": {
+        "Id": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Id",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Type": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Type",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Username": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Username",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Password": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Password",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ListingsId": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ListingsId",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ZipCode": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ZipCode",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Country": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Country",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Path": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Path",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnabledTuners": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "EnabledTuners",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableAllTuners": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableAllTuners",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "NewsCategories": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "NewsCategories",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SportsCategories": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "SportsCategories",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "KidsCategories": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "KidsCategories",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MovieCategories": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "MovieCategories",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ChannelMappings": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "NameValuePair"
+            },
+            "element": "NameValuePair",
+            "nullableItem": true
+          },
+          "element": "ChannelMappings",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MoviePrefix": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "MoviePrefix",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PreferredLanguage": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "PreferredLanguage",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "UserAgent": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "UserAgent",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Id",
+        "Type",
+        "Username",
+        "Password",
+        "ListingsId",
+        "ZipCode",
+        "Country",
+        "Path",
+        "EnabledTuners",
+        "EnableAllTuners",
+        "NewsCategories",
+        "SportsCategories",
+        "KidsCategories",
+        "MovieCategories",
+        "ChannelMappings",
+        "MoviePrefix",
+        "PreferredLanguage",
+        "UserAgent"
+      ],
+      "defaults": {
+        "Id": null,
+        "Type": null,
+        "Username": null,
+        "Password": null,
+        "ListingsId": null,
+        "ZipCode": null,
+        "Country": null,
+        "Path": null,
+        "EnabledTuners": [],
+        "EnableAllTuners": true,
+        "NewsCategories": [
+          "news",
+          "journalism",
+          "documentary",
+          "current affairs"
+        ],
+        "SportsCategories": [
+          "sports",
+          "basketball",
+          "baseball",
+          "football"
+        ],
+        "KidsCategories": [
+          "kids",
+          "family",
+          "children",
+          "childrens",
+          "disney"
+        ],
+        "MovieCategories": [
+          "movie"
+        ],
+        "ChannelMappings": [],
+        "MoviePrefix": null,
+        "PreferredLanguage": null,
+        "UserAgent": null
+      }
+    },
+    "NameValuePair": {
+      "xmlType": "NameValuePair",
+      "fields": {
+        "Name": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Name",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Value": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Value",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Name",
+        "Value"
+      ],
+      "defaults": {
+        "Name": null,
+        "Value": null
+      }
+    }
+  }
+}

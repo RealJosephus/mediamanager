@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "fixture": "nfo-partial-reader",
+  "scope": "Same-run designated Native NFO parser values, failure prefixes and current Node consumers; component evidence only.",
+  "baseCases": 41,
+  "layoutCases": 0,
+  "sourcePaths": [
+    "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/MovieNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/EpisodeNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/SeriesNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/SeasonNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/SeriesNfoSeasonParser.cs",
+    "MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs",
+    "MediaBrowser.XbmcMetadata/Configuration/NfoConfigurationExtension.cs",
+    "MediaBrowser.Controller/Providers/MetadataResult.cs",
+    "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs",
+    "MediaBrowser.Model/Entities/ProviderIdsExtensions.cs",
+    "MediaBrowser.Common/Providers/ProviderIdParsers.cs",
+    "Jellyfin.Data/Enums/PersonKind.cs",
+    "MediaBrowser.Controller/Library/TVUtils.cs",
+    "Emby.Naming/TV/TvParserHelpers.cs",
+    "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/TV/Season.cs",
+    "MediaBrowser.Controller/Entities/TV/Episode.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 7442,
+      "sha256": "7eb3f76ee22b6c2ac4c97855f12807a5984e8cea270338dc9cc175b9519e8db9"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 14765,
+      "sha256": "68065d3f0ef68383d497d2421ef1bdca75b1c6471d821c9f897d609637ddef8b"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 536,
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

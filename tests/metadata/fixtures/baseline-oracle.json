@@ -1,0 +1,484 @@
+{
+  "Source": "D:/jellyfin current workspace, isolated build, 208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "Names": [
+    {
+      "Input": "WALL-E",
+      "Clean": "WALL E",
+      "Normalized": "wall e"
+    },
+    {
+      "Input": "WALL\u00B7E",
+      "Clean": "WALL\u00B7E",
+      "Normalized": "wall e"
+    },
+    {
+      "Input": "Mulan (2020)",
+      "Clean": "Mulan 2020",
+      "Normalized": "mulan 2020"
+    },
+    {
+      "Input": "\u4E2D\u6587_\u7535\u5F71.2026",
+      "Clean": "\u4E2D\u6587 \u7535\u5F71 2026",
+      "Normalized": "\u4E2D\u6587 \u7535\u5F71 2026"
+    },
+    {
+      "Input": "Caf\u00E9 / A\u002BB",
+      "Clean": "Caf\u00E9 A B",
+      "Normalized": "caf\u00E9 a b"
+    },
+    {
+      "Input": "Stra\u00DFe",
+      "Clean": "Stra\u00DFe",
+      "Normalized": "stra\u00DFe"
+    },
+    {
+      "Input": "I\u0130\u0131i",
+      "Clean": "I\u0130\u0131i",
+      "Normalized": "i\u0130\u0131i"
+    },
+    {
+      "Input": "A\u0301",
+      "Clean": "A\u0301",
+      "Normalized": "a\u0301"
+    }
+  ],
+  "Languages": [
+    {
+      "Language": "es-419",
+      "Country": "AR",
+      "Normalized": "es-AR",
+      "Images": "es-AR,null,en"
+    },
+    {
+      "Language": "es-419",
+      "Country": "CL",
+      "Normalized": "es-MX",
+      "Images": "es-MX,null,en"
+    },
+    {
+      "Language": "es-419",
+      "Country": "",
+      "Normalized": "es-419",
+      "Images": "es-419,null,en"
+    },
+    {
+      "Language": "de-CH",
+      "Country": "CH",
+      "Normalized": "de",
+      "Images": "de,null,en"
+    },
+    {
+      "Language": "fr-ch",
+      "Country": "FR",
+      "Normalized": "fr",
+      "Images": "fr,null,en"
+    },
+    {
+      "Language": "zh-cn",
+      "Country": "CN",
+      "Normalized": "zh-CN",
+      "Images": "zh-CN,null,en"
+    },
+    {
+      "Language": "en",
+      "Country": "US",
+      "Normalized": "en",
+      "Images": "en,null"
+    },
+    {
+      "Language": "en-us",
+      "Country": "US",
+      "Normalized": "en-US",
+      "Images": "en-US,null,en"
+    },
+    {
+      "Language": "",
+      "Country": "US",
+      "Normalized": "",
+      "Images": "null,en"
+    },
+    {
+      "Language": "zh-Hant-TW",
+      "Country": "TW",
+      "Normalized": "zh-Hant-TW",
+      "Images": "zh-Hant-TW,null,en"
+    }
+  ],
+  "Ids": [
+    {
+      "Input": "1",
+      "Value": 1
+    },
+    {
+      "Input": "0",
+      "Value": null
+    },
+    {
+      "Input": "-1",
+      "Value": null
+    },
+    {
+      "Input": "\u002B1",
+      "Value": null
+    },
+    {
+      "Input": " 1",
+      "Value": null
+    },
+    {
+      "Input": "2147483647",
+      "Value": 2147483647
+    },
+    {
+      "Input": "2147483648",
+      "Value": null
+    },
+    {
+      "Input": "tt1234567",
+      "Value": null
+    },
+    {
+      "Input": "001",
+      "Value": 1
+    },
+    {
+      "Input": "\u0661",
+      "Value": null
+    }
+  ],
+  "Metadata": [
+    {
+      "Fixture": "Justice League",
+      "Name": "Justice League",
+      "OriginalTitle": "Justice League",
+      "Overview": "Fueled by his restored faith in humanity and inspired by Superman\u0027s selfless act, Bruce Wayne enlists the help of his newfound ally, Diana Prince, to face an even greater enemy. Together, Batman and Wonder Woman work quickly to find and recruit a team of meta-humans to stand against this newly awakened threat. But despite the formation of this unprecedented league of heroes-Batman, Wonder Woman, Aquaman, Cyborg and The Flash-it may already be too late to save the planet from an assault of catastrophic proportions.",
+      "ProductionYear": 2017,
+      "RunTimeTicks": "62680000000",
+      "IndexNumber": null,
+      "IndexNumberEnd": null,
+      "ParentIndexNumber": null,
+      "ProviderIds": {
+        "Tmdb": "141052",
+        "Imdb": "tt0974015",
+        "TmdbCollection": "702342"
+      },
+      "People": [
+        {
+          "Name": "Jerry Siegel",
+          "Type": "Writer",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Joe Shuster",
+          "Type": "Writer",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Zack Snyder",
+          "Type": "Director",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Test",
+          "Type": "Writer",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Ben Affleck",
+          "Type": "Actor",
+          "Role": "Batman",
+          "SortOrder": 0,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTI4MzIxMTk0Nl5BMl5BanBnXkFtZTcwOTU5NjA0Mg@@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Henry Cavill",
+          "Type": "Actor",
+          "Role": "Superman",
+          "SortOrder": 1,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTUxNTExMzUzOF5BMl5BanBnXkFtZTgwOTI1MjA3OTE@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Amy Adams",
+          "Type": "Actor",
+          "Role": "Lois Lane",
+          "SortOrder": 2,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTg2NTk2MTgxMV5BMl5BanBnXkFtZTgwNjcxMjAzMTI@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Gal Gadot",
+          "Type": "Actor",
+          "Role": "Wonder Woman",
+          "SortOrder": 3,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjUzZTJmZDItODRjYS00ZGRhLTg2NWQtOGE0YjJhNWVlMjNjXkEyXkFqcGdeQXVyMTg4NDI0NDM@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Ezra Miller",
+          "Type": "Actor",
+          "Role": "The Flash",
+          "SortOrder": 4,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjEwMjQ3ODgxOV5BMl5BanBnXkFtZTgwNzc4NjE4NTE@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Jason Momoa",
+          "Type": "Actor",
+          "Role": "Aquaman",
+          "SortOrder": 5,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTI5MTU5NjM1MV5BMl5BanBnXkFtZTcwODc4MDk0Mw@@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Ray Fisher",
+          "Type": "Actor",
+          "Role": "Cyborg",
+          "SortOrder": 6,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYzdhMzkyYTgtMjQzMC00ODhmLWExZmItNTU4MDVlMzY2NzgwXkEyXkFqcGdeQXVyNzA5NjQ5MDk@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Jeremy Irons",
+          "Type": "Actor",
+          "Role": "Alfred",
+          "SortOrder": 7,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTY5Mzg2NDY5OV5BMl5BanBnXkFtZTcwMDQwNzA0Mg@@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Diane Lane",
+          "Type": "Actor",
+          "Role": "Martha Kent",
+          "SortOrder": 8,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMzM5ODM1ZWMtZjcyYy00MzgzLWJmMGQtZWY5OGQyNTRiODIxXkEyXkFqcGdeQXVyOTE0NjgwMjY@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Connie Nielsen",
+          "Type": "Actor",
+          "Role": "Queen Hippolyta",
+          "SortOrder": 9,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BYzZiYTQ4YTAtMzRkMi00ZDZlLWFkZWItNGI2ZTIyODRiYTc4XkEyXkFqcGdeQXVyMjUzMjc2MjE@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "J.K. Simmons",
+          "Type": "Actor",
+          "Role": "Commissioner Gordon",
+          "SortOrder": 10,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMzg2NTI5NzQ1MV5BMl5BanBnXkFtZTgwNjI1NDEwMDI@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Ciar\u00E1n Hinds",
+          "Type": "Actor",
+          "Role": "Steppenwolf",
+          "SortOrder": 11,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTIyNjM0MzU0NF5BMl5BanBnXkFtZTcwOTIxMzg1MQ@@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Amber Heard",
+          "Type": "Actor",
+          "Role": "Mera",
+          "SortOrder": 12,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMjA4NDkyODA3M15BMl5BanBnXkFtZTgwMzUzMjYzNzM@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Joe Morton",
+          "Type": "Actor",
+          "Role": "Silas Stone",
+          "SortOrder": 13,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BMTQ1MjYwMTQ2MF5BMl5BanBnXkFtZTgwNzI4MTA0NDE@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Lisa Loven Kongsli",
+          "Type": "Actor",
+          "Role": "Menalippe",
+          "SortOrder": 14,
+          "ImageUrl": "https://m.media-amazon.com/images/M/MV5BOTFjOTFhNTgtZjk3Ny00MTNjLWE3MWUtMWI3ZWM5NDljZjQwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_SX1024_SY1024_.jpg"
+        },
+        {
+          "Name": "Test Lyricist",
+          "Type": "Lyricist",
+          "Role": "",
+          "SortOrder": 15,
+          "ImageUrl": null
+        }
+      ],
+      "RemoteImageCount": 7
+    },
+    {
+      "Fixture": "Rising-Reversed",
+      "Name": "Rising (1) / Rising (2)",
+      "OriginalTitle": "",
+      "Overview": "A new Stargate team embarks on a dangerous mission to a distant galaxy, where they discover a mythical lost city -- and a deadly new enemy. / Sheppard tries to convince Weir to mount a rescue mission to free Colonel Sumner, Teyla, and the others captured by the Wraith.",
+      "ProductionYear": 2004,
+      "RunTimeTicks": null,
+      "IndexNumber": 1,
+      "IndexNumberEnd": 2,
+      "ParentIndexNumber": 1,
+      "ProviderIds": {},
+      "People": [
+        {
+          "Name": "Joe Flanigan",
+          "Type": "Actor",
+          "Role": "John Sheppard",
+          "SortOrder": 0,
+          "ImageUrl": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/5AA1ORKIsnMakT6fCVy3JKlzMs6.jpg"
+        },
+        {
+          "Name": "David Hewlett",
+          "Type": "Actor",
+          "Role": "Rodney McKay",
+          "SortOrder": 1,
+          "ImageUrl": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/hUcYyssAPCqnZ4GjolhOWXHTWSa.jpg"
+        }
+      ],
+      "RemoteImageCount": 1
+    },
+    {
+      "Fixture": "Stargate Atlantis S01E01-E04",
+      "Name": "Rising / Hide and Seek / Thirty-Eight Minutes",
+      "OriginalTitle": "Rising (1) / Rising (2) / Hide and Seek / Thirty-Eight Minutes",
+      "Overview": "A new Stargate team embarks on a dangerous mission to a distant galaxy, where they discover a mythical lost city -- and a deadly new enemy.",
+      "ProductionYear": 2004,
+      "RunTimeTicks": null,
+      "IndexNumber": 1,
+      "IndexNumberEnd": 4,
+      "ParentIndexNumber": 1,
+      "ProviderIds": {},
+      "People": [
+        {
+          "Name": "Joe Flanigan",
+          "Type": "Actor",
+          "Role": "John Sheppard",
+          "SortOrder": 0,
+          "ImageUrl": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/5AA1ORKIsnMakT6fCVy3JKlzMs6.jpg"
+        },
+        {
+          "Name": "David Hewlett",
+          "Type": "Actor",
+          "Role": "Rodney McKay",
+          "SortOrder": 1,
+          "ImageUrl": "https://image.tmdb.org/t/p/w300_and_h450_bestv2/hUcYyssAPCqnZ4GjolhOWXHTWSa.jpg"
+        }
+      ],
+      "RemoteImageCount": 1
+    },
+    {
+      "Fixture": "The Bone Orchard",
+      "Name": "The Bone Orchard",
+      "OriginalTitle": null,
+      "Overview": "When Shadow Moon is released from prison early after the death of his wife, he meets Mr. Wednesday and is recruited as his bodyguard. Shadow discovers that this may be more than he bargained for.",
+      "ProductionYear": 2017,
+      "RunTimeTicks": "0",
+      "IndexNumber": 1,
+      "IndexNumberEnd": 1,
+      "ParentIndexNumber": 1,
+      "ProviderIds": {
+        "Tmdb": "1276153",
+        "Imdb": "tt5017734"
+      },
+      "People": [
+        {
+          "Name": "Bryan Fuller",
+          "Type": "Writer",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Michael Green",
+          "Type": "Writer",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "David Slade",
+          "Type": "Director",
+          "Role": null,
+          "SortOrder": null,
+          "ImageUrl": null
+        },
+        {
+          "Name": "Jonathan Tucker",
+          "Type": "Actor",
+          "Role": "\u0027Low Key\u0027 Lyesmith",
+          "SortOrder": 10,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/jvJpYDbwmUTACw7Yn7PKOP6CdlJ.jpg"
+        },
+        {
+          "Name": "Demore Barnes",
+          "Type": "Actor",
+          "Role": "Mr. Ibis",
+          "SortOrder": 11,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/4rEVzSIFPgiN14xYQnjKcKQ7tYE.jpg"
+        },
+        {
+          "Name": "Betty Gilpin",
+          "Type": "Actor",
+          "Role": "Audrey",
+          "SortOrder": 12,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/xFeqyem5i4Kf0nFjBZ4Oi9NM26k.jpg"
+        },
+        {
+          "Name": "Beth Grant",
+          "Type": "Actor",
+          "Role": "Jack",
+          "SortOrder": 13,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/zAT9GvzJE0ytL3C36L461cgKI9p.jpg"
+        },
+        {
+          "Name": "Joel Murray",
+          "Type": "Actor",
+          "Role": "Paunch",
+          "SortOrder": 14,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/t5syYfCgxbTC7XPrNeXhhhQULUf.jpg"
+        },
+        {
+          "Name": "Ricky Whittle",
+          "Type": "Actor",
+          "Role": "Shadow Moon",
+          "SortOrder": 0,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/cjeDbVfBp6Qvb3C74Dfy7BKDTQN.jpg"
+        },
+        {
+          "Name": "Ian McShane",
+          "Type": "Actor",
+          "Role": "Mr. Wednesday",
+          "SortOrder": 1,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/pY9ud4BJwHekNiO4MMItPbgkdAy.jpg"
+        },
+        {
+          "Name": "Emily Browning",
+          "Type": "Actor",
+          "Role": "Laura Moon",
+          "SortOrder": 2,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/fa1Kyj02wxwcdS6EHb2i27TNXvU.jpg"
+        },
+        {
+          "Name": "Pablo Schreiber",
+          "Type": "Actor",
+          "Role": "Mad Sweeney",
+          "SortOrder": 3,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/uo8YljeePz3pbj7gvWXdB4gOOW4.jpg"
+        },
+        {
+          "Name": "Bruce Langley",
+          "Type": "Actor",
+          "Role": "Technical Boy",
+          "SortOrder": 4,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/f4EOWUmznLqboq8Ce7jnlkHVK3Y.jpg"
+        },
+        {
+          "Name": "Yetide Badaki",
+          "Type": "Actor",
+          "Role": "Bilquis",
+          "SortOrder": 5,
+          "ImageUrl": "http://image.tmdb.org/t/p/original/qfzkREHuI1JvMxBteIAjKX8qMEr.jpg"
+        }
+      ],
+      "RemoteImageCount": 1
+    }
+  ]
+}

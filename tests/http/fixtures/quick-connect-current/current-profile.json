@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "fixture": "quick-connect",
+  "scope": "Two independent current designated Native Quick Connect HTTP and direct-authentication consumers; public expiry/repeated reads plus candidate PostgreSQL authentication effects. Controlled principals and Native persistence seams, not a full Native instance.",
+  "cases": {
+    "httpCases": 74,
+    "directCases": 9,
+    "expiryCases": 6
+  },
+  "sourcePaths": [
+    "Emby.Server.Implementations/QuickConnect/QuickConnectManager.cs",
+    "Emby.Server.Implementations/Session/SessionManager.cs",
+    "Jellyfin.Server.Implementations/Users/UserManager.cs",
+    "Jellyfin.Api/Controllers/QuickConnectController.cs",
+    "Jellyfin.Api/Controllers/UserController.cs",
+    "MediaBrowser.Model/QuickConnect/QuickConnectResult.cs",
+    "Jellyfin.Api/Models/UserDtos/QuickConnectDto.cs",
+    "Jellyfin.Api/Helpers/RequestHelpers.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "4310e175b438d096cd45f28a8cf3a61daa30c8c6db45dee93bfdd671960fe07b",
+      "bytes": 11916,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "394ecc9baa2bd7b537ebb80433e8da42bd7cb5169a8d3ba6b59c1bef9ddd2937",
+      "bytes": 14698,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Direct.cs",
+      "sha256": "8d89287b30c17317eb800e2fa8c1c6daec8849651a1afc5f108eb0cbd03f6b74",
+      "bytes": 5969,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1",
+      "bytes": 526,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    }
+  ]
+}

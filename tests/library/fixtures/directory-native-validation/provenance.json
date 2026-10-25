@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T04:57:28.776Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/directory-native-validation/input.json",
+      "sha256": "4f667b3a9ab877ac402ad58f50c0ef19950888ca10c911f5f79633f9f10c8736"
+    },
+    {
+      "path": "tests/library/fixtures/directory-native-validation/Program.cs",
+      "sha256": "e1b39f01651ce64e11779cb4cf969333da50848f4f8b24afc3f07639b04c6b51"
+    },
+    {
+      "path": "tests/library/fixtures/directory-native-validation/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/directory-native-validation/native.json",
+      "sha256": "a3b1e9abcd2647602b2aafca3b4b2b733b718672465b0aed1b7646032678e876"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.ResolvePaths/ResolvePath, MovieResolver/VideoListResolver/ResolverHelper and FolderResolver with Core/Dot ignore rules, real nested filesystem and distinct fixed directory/file dates. Actual ManagedFileSystem omits directory timestamps; Folder DateCreated is asserted inside the native resolve UTC window and projected as $UTC_RESOLVE, while DateModified remains minimum and every video timestamp remains exact. Records complete resolved-item and multi/single/fallback dispatch, unchanged EF row/Data/link/file/cache/event projections. Only MovieResolver and FolderResolver are registered. The protected actual Folder.ValidateChildrenInternal is called without recursive or child metadata refresh on an initially empty real EF child set, with the same explicit collection-type control. Finish-before-mutation enumeration, CreateItems/ItemPersistenceService saves and parent cache boundaries run. Actual AncestorIds and BaseItemProviders are additionally projected in full. Newly created Folder UTC is asserted and projected as $UTC_RESOLVE. No provider child refresh, recursive folder scan, full collection topology or MetadataService runs; providers, collection membership, media-source/external dispatch and known ancestor namespace are controls. Every EF mapped BaseItems scalar column and complete created GetItemById projection are captured, retaining all preceding fields. Provider-path attributes, inherited locks and DateAdded resolve-clock configuration are included. Repeated validation, cancellation before enumeration, three real insert/link SQL failures, physical AggregateFolder chains and three exceptions on the second lazy resolved child are controlled and recorded. The actual protected method runs without overriding its child enumeration or implementation. No full resolver list, recursive ValidateChildren, MetadataService, disc/network/concurrent-cache/migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+    "files": [
+      {
+        "path": "MediaBrowser.Controller/Entities/Folder.cs",
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      }
+    ]
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/directory-native-validation-lifecycle-oracle-20261007/record.json",
+    "source": "D:/mediamanager-validation/20261005/results/directory-native-validation-lifecycle-source-20261007",
+    "sourceFilesSha256": "891fb53498d5baa9a45c268ff4eff653e6e4c0ea885b313e6709d7e1683a7c6b",
+    "jellyfinDllSha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767",
+    "oracleAssemblySha256": "1cdff2c1f81271a566ecb97dd9f05ffd88430e49fc60b54fe6ae5e21e4adf681",
+    "buildWarnings": 0,
+    "buildErrors": 0
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 47 frozen native scenarios are compared through the production FolderValidationService on real SQLite and PostgreSQL, preserving all 72 scalar columns and every original resolved/dispatch/row/Data/link/file/cache/event/ancestor/provider/created-lookup projection. This is nonrecursive validation without child metadata, not full library scanning or release acceptance."
+}

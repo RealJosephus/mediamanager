@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "itemId": "f8500000-0000-0000-0000-000000000001",
+  "asset": { "filename": "assets/upstream/subset/60 - mono audio.flac", "bytes": 47782, "sha256": "20539fbbd6ae28cea2b2182a4c60c6c70cbb710a136199fc83200c4e5fa00b1c" },
+  "segmentLength": 3,
+  "cases": [
+    { "name": "http-copy", "protocol": "http", "container": "mp4", "codec": "flac", "maxBitrate": 1000000000, "directStream": true, "execute": true },
+    { "name": "hls-copy", "protocol": "hls", "container": "mp4", "codec": "flac", "maxBitrate": 1000000000, "directStream": true, "execute": true },
+    { "name": "hls-ts", "protocol": "hls", "container": "ts", "codec": "flac", "maxBitrate": 1000000000, "directStream": true },
+    { "name": "first-profile-keeps-ts", "protocol": "hls", "container": "mp4", "codec": "flac", "directPlayContainers": ["ts", "mp4"], "maxBitrate": 1000000000, "directStream": true },
+    { "name": "different-codec", "protocol": "http", "container": "mp4", "codec": "aac", "maxBitrate": 1000000000, "directStream": true },
+    { "name": "bitrate-limit", "protocol": "http", "container": "mp4", "codec": "flac", "maxBitrate": 1, "directStream": true },
+    { "name": "source-disallows-direct-stream", "protocol": "http", "container": "mp4", "codec": "flac", "maxBitrate": 1000000000, "directStream": false }
+  ],
+  "nativeSourcePaths": [
+    "MediaBrowser.Model/Dlna/StreamBuilder.cs", "MediaBrowser.Model/Dlna/StreamInfo.cs", "MediaBrowser.Model/Dlna/MediaOptions.cs",
+    "MediaBrowser.Model/Dlna/DirectPlayProfile.cs", "MediaBrowser.Model/Dto/MediaSourceInfo.cs",
+    "MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs", "MediaBrowser.MediaEncoding/Encoder/EncoderValidator.cs",
+    "MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs", "MediaBrowser.Controller/Streaming/StreamState.cs",
+    "Jellyfin.Api/Controllers/AudioController.cs", "Jellyfin.Api/Controllers/DynamicHlsController.cs",
+    "Jellyfin.Api/Helpers/AudioHelper.cs", "Jellyfin.Api/Helpers/DynamicHlsHelper.cs", "Jellyfin.Api/Helpers/HlsCodecStringHelpers.cs"
+  ]
+}

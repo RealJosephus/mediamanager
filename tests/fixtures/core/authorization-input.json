@@ -1,0 +1,14 @@
+[
+  "",
+  "Client=\"A,B\", Token=\"a%2Bb+c\", token=\"lower\"",
+  "Token=\"one\",Token=\"two\"",
+  "Token=\" x \"",
+  "Token=abc",
+  "Token=\"a%zzb\"",
+  "Token=\"%ff\"",
+  "Token=\"a&b#c\"",
+  "Device=\"中文 测试\", Version=\"1\"",
+  "Token=\"x\",",
+  " x =\" y \"",
+  "Token=\"a=b,c\""
+]

@@ -1,0 +1,55 @@
+{
+  "readers": [
+    {
+      "name": "entity-markup",
+      "file": "entity-markup.opf"
+    },
+    {
+      "name": "entity-markup-whitespace",
+      "file": "entity-markup-whitespace.opf"
+    },
+    {
+      "name": "entity-markup-attribute",
+      "file": "entity-markup-attribute.opf"
+    },
+    {
+      "name": "entity-duplicate",
+      "file": "entity-duplicate.opf"
+    },
+    {
+      "name": "entity-comment-literal",
+      "file": "entity-comment-literal.opf"
+    },
+    {
+      "name": "entity-recursive",
+      "file": "entity-recursive.opf"
+    },
+    {
+      "name": "dtd-default-attribute",
+      "file": "dtd-default-attribute.opf"
+    },
+    {
+      "name": "parameter-entity",
+      "file": "parameter-entity.opf"
+    },
+    {
+      "name": "namespace-duplicate-attribute",
+      "file": "namespace-duplicate-attribute.opf"
+    },
+    {
+      "name": "namespace-invalid-xml",
+      "file": "namespace-invalid-xml.opf"
+    },
+    {
+      "name": "deep-xml",
+      "file": "deep-xml.opf"
+    },
+    {
+      "name": "entity-long",
+      "file": "entity-long.opf"
+    }
+  ],
+  "opf": [],
+  "epubs": [],
+  "archives": []
+}

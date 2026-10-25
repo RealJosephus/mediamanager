@@ -1,0 +1,717 @@
+{
+  "lookups": [
+    {
+      "name": "lookup-0",
+      "seriesName": null,
+      "parents": []
+    },
+    {
+      "name": "lookup-1",
+      "seriesName": null,
+      "parents": [
+        "Physical parent"
+      ]
+    },
+    {
+      "name": "lookup-2",
+      "seriesName": null,
+      "parents": [
+        null,
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-3",
+      "seriesName": null,
+      "parents": [
+        "",
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-4",
+      "seriesName": "",
+      "parents": []
+    },
+    {
+      "name": "lookup-5",
+      "seriesName": "",
+      "parents": [
+        "Physical parent"
+      ]
+    },
+    {
+      "name": "lookup-6",
+      "seriesName": "",
+      "parents": [
+        null,
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-7",
+      "seriesName": "",
+      "parents": [
+        "",
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-8",
+      "seriesName": " ",
+      "parents": []
+    },
+    {
+      "name": "lookup-9",
+      "seriesName": " ",
+      "parents": [
+        "Physical parent"
+      ]
+    },
+    {
+      "name": "lookup-10",
+      "seriesName": " ",
+      "parents": [
+        null,
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-11",
+      "seriesName": " ",
+      "parents": [
+        "",
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-12",
+      "seriesName": "Curated series",
+      "parents": []
+    },
+    {
+      "name": "lookup-13",
+      "seriesName": "Curated series",
+      "parents": [
+        "Physical parent"
+      ]
+    },
+    {
+      "name": "lookup-14",
+      "seriesName": "Curated series",
+      "parents": [
+        null,
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-15",
+      "seriesName": "Curated series",
+      "parents": [
+        "",
+        "Named grandparent"
+      ]
+    },
+    {
+      "name": "lookup-owner-is-not-parent",
+      "seriesName": null,
+      "parents": [],
+      "ownerOnly": true
+    }
+  ],
+  "merges": [
+    {
+      "name": "merge-0",
+      "source": null,
+      "target": null,
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-1",
+      "source": null,
+      "target": null,
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-2",
+      "source": null,
+      "target": null,
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-3",
+      "source": null,
+      "target": null,
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-4",
+      "source": null,
+      "target": "",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-5",
+      "source": null,
+      "target": "",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-6",
+      "source": null,
+      "target": "",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-7",
+      "source": null,
+      "target": "",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-8",
+      "source": null,
+      "target": " ",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-9",
+      "source": null,
+      "target": " ",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-10",
+      "source": null,
+      "target": " ",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-11",
+      "source": null,
+      "target": " ",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-12",
+      "source": null,
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-13",
+      "source": null,
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-14",
+      "source": null,
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-15",
+      "source": null,
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-16",
+      "source": "",
+      "target": null,
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-17",
+      "source": "",
+      "target": null,
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-18",
+      "source": "",
+      "target": null,
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-19",
+      "source": "",
+      "target": null,
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-20",
+      "source": "",
+      "target": "",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-21",
+      "source": "",
+      "target": "",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-22",
+      "source": "",
+      "target": "",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-23",
+      "source": "",
+      "target": "",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-24",
+      "source": "",
+      "target": " ",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-25",
+      "source": "",
+      "target": " ",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-26",
+      "source": "",
+      "target": " ",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-27",
+      "source": "",
+      "target": " ",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-28",
+      "source": "",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-29",
+      "source": "",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-30",
+      "source": "",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-31",
+      "source": "",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-32",
+      "source": " ",
+      "target": null,
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-33",
+      "source": " ",
+      "target": null,
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-34",
+      "source": " ",
+      "target": null,
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-35",
+      "source": " ",
+      "target": null,
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-36",
+      "source": " ",
+      "target": "",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-37",
+      "source": " ",
+      "target": "",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-38",
+      "source": " ",
+      "target": "",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-39",
+      "source": " ",
+      "target": "",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-40",
+      "source": " ",
+      "target": " ",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-41",
+      "source": " ",
+      "target": " ",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-42",
+      "source": " ",
+      "target": " ",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-43",
+      "source": " ",
+      "target": " ",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-44",
+      "source": " ",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-45",
+      "source": " ",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-46",
+      "source": " ",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-47",
+      "source": " ",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-48",
+      "source": "Incoming series",
+      "target": null,
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-49",
+      "source": "Incoming series",
+      "target": null,
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-50",
+      "source": "Incoming series",
+      "target": null,
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-51",
+      "source": "Incoming series",
+      "target": null,
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-52",
+      "source": "Incoming series",
+      "target": "",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-53",
+      "source": "Incoming series",
+      "target": "",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-54",
+      "source": "Incoming series",
+      "target": "",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-55",
+      "source": "Incoming series",
+      "target": "",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-56",
+      "source": "Incoming series",
+      "target": " ",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-57",
+      "source": "Incoming series",
+      "target": " ",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-58",
+      "source": "Incoming series",
+      "target": " ",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-59",
+      "source": "Incoming series",
+      "target": " ",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-60",
+      "source": "Incoming series",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-61",
+      "source": "Incoming series",
+      "target": "Stored series",
+      "replace": false,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-62",
+      "source": "Incoming series",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": false,
+      "mergeMetadataSettings": false
+    },
+    {
+      "name": "merge-63",
+      "source": "Incoming series",
+      "target": "Stored series",
+      "replace": true,
+      "nameLocked": true,
+      "mergeMetadataSettings": false
+    }
+  ],
+  "refresh": [
+    {
+      "name": "first-full-fill",
+      "first": true,
+      "mode": "FullRefresh",
+      "seriesName": null,
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "full-keeps-curated",
+      "mode": "FullRefresh",
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "default-replaces-curated",
+      "mode": "Default",
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "replace-clears-series",
+      "mode": "FullRefresh",
+      "replace": true,
+      "removeOld": true,
+      "seriesName": "Stored series",
+      "sourceSeries": null
+    },
+    {
+      "name": "name-lock-preserves-series-merge",
+      "mode": "Default",
+      "nameLocked": true,
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "local-series-import",
+      "mode": "ValidationOnly",
+      "provider": "local",
+      "seriesName": null,
+      "sourceSeries": "Local series"
+    },
+    {
+      "name": "locked-item-skips-provider",
+      "mode": "FullRefresh",
+      "locked": true,
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "none-force-save",
+      "mode": "None",
+      "force": true,
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "failed-first-provider-retains-first-save",
+      "first": true,
+      "mode": "FullRefresh",
+      "failure": "provider",
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "cancelled-first-provider-retains-first-save",
+      "first": true,
+      "mode": "FullRefresh",
+      "failure": "cancel",
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    },
+    {
+      "name": "failed-final-repository-retains-first-save",
+      "first": true,
+      "mode": "FullRefresh",
+      "failure": "repository",
+      "seriesName": "Stored series",
+      "sourceSeries": "Provider series"
+    }
+  ]
+}

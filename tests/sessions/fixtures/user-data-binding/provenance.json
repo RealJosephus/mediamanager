@@ -1,0 +1,130 @@
+{
+  "recordedAt": "2026-09-27T14:10:14.467Z",
+  "head": "d7f87ad3636fe0f21c32035cbce6a16af4a6ff7a",
+  "reference": {
+    "source": ".test-input/baselines/jellyfin-current/source",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "timeZone": "Asia/Shanghai"
+  },
+  "oracle": {
+    "inputs": 298,
+    "accepted": 149,
+    "rejected": 149,
+    "source": "Frozen DLL and JsonDefaults.Options with MVC case-insensitive property binding."
+  },
+  "http": {
+    "inputs": 311,
+    "origins": [
+      "http://127.0.0.1:18401"
+    ],
+    "comparison": "Parsed HTTP body, status, content type, language and GET state after every request. Only traceId is normalized; raw text is retained.",
+    "seedSanitization": "The tracked test-derived seed retains only CoreFlowAdmin, CoreFlowReader, required media relationships, and a synthetic aggregate-root path; personal users, devices, activity logs, permissions, preferences, and access tokens are removed."
+  },
+  "datePolicy": "Use standard JavaScript date/time conversion as requested. Do not override time zone offsets or read Windows registry rules. Preserve all raw differences from Windows CLR.",
+  "remaining": [
+    "Historical local time differences",
+    "Malformed JSON syntax diagnostics and all MVC limits",
+    "Other local time zones and ambiguous/nonexistent local date coverage",
+    "Nested playback Item binding",
+    "Real client and full phase acceptance"
+  ],
+  "artifacts": [
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Model/Dto/UpdateUserItemDataDto.cs",
+      "sha256": "dff0b04b2c2f021e2077b2da190a3d95aa0a9100bc7576160d9d31e3b49df3d6"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Api/Controllers/ItemsController.cs",
+      "sha256": "ea5c492f96dd9ca90e8b0723f76d188a90a26b6c645266eed284db18f8c68419"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/UserDataManager.cs",
+      "sha256": "476e1e7e2643b1fb1104efb8e21363a07280e608783561f6302d6317871e496b"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserItemData.cs",
+      "sha256": "d2bc72683cd94f673f33658a2ef0dffcd629df2b6049a89680a8fd1ee5ba8010"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/src/Jellyfin.Extensions/Json/Converters/JsonNullableStructConverter.cs",
+      "sha256": "c3545807889bebef41f2688cc1db206a1a17c1f7a98466b3c291c09a72ee3aff"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs",
+      "sha256": "683124924193a063631d4956df963b5c383b7202ac5a8581a28a1c8637083fe3"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/ValueConverters/DateTimeKindValueConverter.cs",
+      "sha256": "347453508f521cdd1888da8504fe42a30eb8ee71ca5f9e77e409b5ed9ef433c3"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "sha256": "31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Api.dll",
+      "sha256": "8e1f9aeef644d8924be306d804880cf52804a947b52a5991406d8928fe4999d2"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+    },
+    {
+      "path": "tools/compat/UserDataBindingOracle.cs",
+      "sha256": "d9177f175508f9e11c0260fa9b1a3cf72e69406dfcf6734ee7ab40bf0066a8c4"
+    },
+    {
+      "path": "tools/compat/record-user-data-binding.js",
+      "sha256": "b75e49002e77683556d360746ed7f409955a3c2afa1f37c3ca27cd5f09036d9b"
+    },
+    {
+      "path": "tools/compat/record-user-data-http.js",
+      "sha256": "60e0b50b61a78d7c412de45721d55c1bcb0e9d3139afb0f0046596dc3a2aa976"
+    },
+    {
+      "path": "tests/sessions/user-data-binding-cases.js",
+      "sha256": "e446d9d6d0cd11f624ec43ebc28664d31e932067bbe1ac9dd8b9ca6e0850395e"
+    },
+    {
+      "path": "tests/sessions/user-data-binding-scenario.js",
+      "sha256": "ffd17ea8715a021faac8a36991c03e4968c378e2ab838ad6bbe333470762846f"
+    },
+    {
+      "path": "tests/sessions/fixtures/user-data-binding/seed.json",
+      "sha256": "9988817df037029a4d3c53e4ca801bb6a7d4e813a4462ee1b4d0ce5a4196a725"
+    },
+    {
+      "path": "tests/sessions/fixtures/user-data-binding/dto-reference.json",
+      "sha256": "30890591cf798c3ae5806a7bcf7065dba199195d689cdccd88432281fbabc30c"
+    },
+    {
+      "path": "tests/sessions/fixtures/user-data-binding/http-reference.json",
+      "sha256": "9e4e938674d49caf863aec27464ee8bf74ae9caea9e752b338468718467989ff"
+    },
+    {
+      "path": "tests/sessions/fixtures/runtime-date-differences.json",
+      "sha256": "f0e801e2c46d0af1bf7fea4a31fa5ac47eae9dfcb50ed2389bf7e933e9d6c083"
+    },
+    {
+      "path": ".test-input/evidence/user-data-binding-20260927/initial.db",
+      "sha256": "6911f64ccf7e61bcd2a07ab930f1043d7e1e308dd1476885051a3ab93c96cb57"
+    },
+    {
+      "path": ".test-input/evidence/user-data-binding-20260927/oracle.json.stdout.jsonl",
+      "sha256": "2e9d0198e5278bbffe4cd7e0c1fd07b0da5f9b68873bdbf7f2aa1f25824abd4d"
+    },
+    {
+      "path": ".test-input/evidence/user-data-binding-20260927/native-http.json",
+      "sha256": "9e4e938674d49caf863aec27464ee8bf74ae9caea9e752b338468718467989ff"
+    }
+  ]
+}

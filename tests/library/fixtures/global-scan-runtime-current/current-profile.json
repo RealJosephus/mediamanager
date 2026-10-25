@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "fixture": "global-scan-runtime-current",
+  "kind": "same-workflow-current-native-global-scan-runtime",
+  "scope": "Eighteen actual current Native scans with full72-column SQL and relationship effects, real cancellation outcome, two cold-reader variants, release evidence and candidate ignore-boundary consumers.",
+  "cases": 18,
+  "historicalRecordingReused": false,
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/AggregateFolder.cs",
+    "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/IO/FileData.cs",
+    "MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Jellyfin.Server/CoreAppHost.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+    "MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 2250,
+      "sha256": "b21b0bd297d30306a38716f3f23a239110c3a3bc21eb6f2b865222b4df91cd26",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 5024,
+      "sha256": "656726a45fe366c7acce047efe8d99bad4ed0a159996c5fe2eaa6eb6edeff2d4",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "NativeScanHost.cs",
+      "bytes": 32497,
+      "sha256": "7b06b879da257a486b2e3c4a3b3230cfde754d66a546cedf5adaab712880fcbe",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "capture.js",
+      "bytes": 6387,
+      "sha256": "82b2f424a193dbc7ec79d625d0b1312ea7287281086c675f66806603275ae45f",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 2270,
+      "sha256": "a1395a84c1922b6ba5c077b5653bb54f1fcb1b46ec2767d0b46f9316f17215d2",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "../global-scan-runtime/input.json",
+      "bytes": 6841,
+      "sha256": "b824aa99e7e4979efac038ac8fbd48425f39c30521ac840b6fcde673f842bd05",
+      "role": "current-global-scan-runtime-input"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "role": "current-global-scan-runtime-input"
+    }
+  ]
+}

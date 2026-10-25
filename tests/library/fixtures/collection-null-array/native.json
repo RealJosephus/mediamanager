@@ -1,0 +1,1973 @@
+{
+  "phaseAcceptance": false,
+  "nativeVerified": true,
+  "schemaVersion": 1,
+  "rows": [
+    {
+      "name": "CollectionFolder:different:omitted:constructor",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:different:omitted:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:different:empty:constructor",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:different:empty:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:different:null-array:constructor",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "CollectionFolder:different:null-array:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:omitted:constructor",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:omitted:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:empty:constructor",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:empty:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:null-array:constructor",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:same-oic:null-array:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:omitted:constructor",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:omitted:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:empty:constructor",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:empty:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:null-array:constructor",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:both-null:null-array:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:omitted:constructor",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:omitted:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:empty:constructor",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:empty:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:null-array:constructor",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "CollectionFolder:null-vs-empty:null-array:json-deserialize",
+      "type": "CollectionFolder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "AggregateFolder:different:omitted:constructor",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:different:omitted:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:different:empty:constructor",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:different:empty:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:different:null-array:constructor",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "AggregateFolder:different:null-array:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:omitted:constructor",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:omitted:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:empty:constructor",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:empty:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:null-array:constructor",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:same-oic:null-array:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:omitted:constructor",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:omitted:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:empty:constructor",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:empty:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:null-array:constructor",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:both-null:null-array:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:omitted:constructor",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:omitted:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:empty:constructor",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:empty:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": [],
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:null-array:constructor",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "AggregateFolder:null-vs-empty:null-array:json-deserialize",
+      "type": "AggregateFolder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": true,
+        "locationsList": null,
+        "physicalLocations": null
+      },
+      "outcome": {
+        "exceptionType": "ArgumentNullException",
+        "exceptionFullName": "System.ArgumentNullException",
+        "message": "Value cannot be null. (Parameter 'source')",
+        "parameterName": "source",
+        "stack": "   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at Jellyfin.Extensions.EnumerableExtensions.Contains(IEnumerable`1 source, ReadOnlySpan`1 value, StringComparison stringComparison) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\src\\Jellyfin.Extensions\\EnumerableExtensions.cs:line 22\r\n   at Emby.Server.Implementations.Library.LibraryManager.<>c__DisplayClass186_0.<GetCollectionFoldersInternal>b__0(Folder i) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2881\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList(ReadOnlySpan`1 source, Func`2 predicate)\r\n   at System.Linq.Enumerable.ArrayWhereIterator`1.ToList()\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFoldersInternal(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2880\r\n   at Emby.Server.Implementations.Library.LibraryManager.GetCollectionFolders(BaseItem item, IEnumerable`1 allUserRootChildren) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs:line 2875\r\n   at Program.<Main>$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Program.cs:line 34"
+      }
+    },
+    {
+      "name": "Folder:different:omitted:constructor",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:different:omitted:json-deserialize",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:different:empty:constructor",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:different:empty:json-deserialize",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:different:null-array:constructor",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:different:null-array:json-deserialize",
+      "type": "Folder",
+      "pair": "different",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "Z:\\Library",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "Z:\\Library"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:same-oic:omitted:constructor",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:same-oic:omitted:json-deserialize",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:same-oic:empty:constructor",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:same-oic:empty:json-deserialize",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:same-oic:null-array:constructor",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:same-oic:null-array:json-deserialize",
+      "type": "Folder",
+      "pair": "same-oic",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES"
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": "Z:\\Movies",
+        "folderPath": "z:\\mOVIES",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": [
+          "z:\\mOVIES"
+        ]
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:omitted:constructor",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:omitted:json-deserialize",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:empty:constructor",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:empty:json-deserialize",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:null-array:constructor",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:both-null:null-array:json-deserialize",
+      "type": "Folder",
+      "pair": "both-null",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": null
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": null,
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": [
+          "aa040404-1111-2222-3333-000000000002"
+        ]
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:omitted:constructor",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "constructor",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:omitted:json-deserialize",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "omitted",
+      "creation": "json-deserialize",
+      "json": "{}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:empty:constructor",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:empty:json-deserialize",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "empty",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":[]}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:null-array:constructor",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "constructor",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    },
+    {
+      "name": "Folder:null-vs-empty:null-array:json-deserialize",
+      "type": "Folder",
+      "pair": "null-vs-empty",
+      "mode": "null-array",
+      "creation": "json-deserialize",
+      "json": "{\"PhysicalLocationsList\":null}",
+      "input": {
+        "itemPath": null,
+        "folderPath": ""
+      },
+      "readback": {
+        "itemId": "aa040404-1111-2222-3333-000000000001",
+        "folderId": "aa040404-1111-2222-3333-000000000002",
+        "itemPath": null,
+        "folderPath": "",
+        "hasLocationsListProperty": false,
+        "locationsList": null,
+        "physicalLocations": []
+      },
+      "outcome": {
+        "collectionFolders": []
+      }
+    }
+  ],
+  "processId": 10672,
+  "runtime": ".NET 10.0.12",
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    }
+  ],
+  "boundary": "Actual frozen LibraryManager.GetCollectionFolders(item, explicitFolders), entity constructors/getters and native JsonSerializer deserialize. Only entity lookup supplied; no membership or exception result mocked. Explicit folders deliberately do not prove UserRoot cached/virtual Children or repository loading. No HTTP/PG/ports used. Candidate typed-domain exception markers compare native type/message/parameter; this does not prove HTTP error transport equivalence.",
+  "provenance": {
+    "phaseAcceptance": false,
+    "command": {
+      "executable": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "args": [
+        "run",
+        "--project",
+        "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\Oracle.csproj",
+        "--",
+        "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\native.json"
+      ],
+      "cwd": "D:\\mediamanager",
+      "windowsHide": true
+    },
+    "process": {
+      "launcherPid": 22964,
+      "code": 0,
+      "signal": null,
+      "oraclePid": 10672,
+      "launcherAlive": false,
+      "oracleAlive": false
+    },
+    "sourceBefore": [
+      {
+        "name": "src/library/collection-membership.js",
+        "sha256": "7964bb39e467c0a1b20b45b04e377d922d29aa4d59c07c7d3ae8b4d5351493b8"
+      },
+      {
+        "name": "src/library/records.js",
+        "sha256": "71bdbb4574f40003acde042324c87a0c07fcd807dda5391ffa02dd0954cf448a"
+      },
+      {
+        "name": "src/storage/ordinal-comparer.js",
+        "sha256": "da6d2877bef004dbc2922a01f67195c069d54e2445cdbebeb54a6f071d6cc6f5"
+      }
+    ],
+    "sourceAfter": [
+      {
+        "name": "src/library/collection-membership.js",
+        "sha256": "7964bb39e467c0a1b20b45b04e377d922d29aa4d59c07c7d3ae8b4d5351493b8"
+      },
+      {
+        "name": "src/library/records.js",
+        "sha256": "71bdbb4574f40003acde042324c87a0c07fcd807dda5391ffa02dd0954cf448a"
+      },
+      {
+        "name": "src/storage/ordinal-comparer.js",
+        "sha256": "da6d2877bef004dbc2922a01f67195c069d54e2445cdbebeb54a6f071d6cc6f5"
+      }
+    ],
+    "sourceStable": true,
+    "assemblies": [
+      {
+        "name": "Emby.Server.Implementations",
+        "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\Emby.Server.Implementations.dll",
+        "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a",
+        "frozenSha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\MediaBrowser.Controller.dll",
+        "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644",
+        "frozenSha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+      },
+      {
+        "name": "Jellyfin.Extensions",
+        "path": "D:\\mediamanager\\.test-input\\evidence\\collection-null-array-native-v1\\native-v3\\bin\\Debug\\net10.0\\Jellyfin.Extensions.dll",
+        "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde",
+        "frozenSha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+      }
+    ],
+    "programSha256": "6fe87ac9a2f10db02966c460d239c514df0fa59a31c805d8af12e7cfcf0fd9ae",
+    "projectSha256": "412b0187257af7ea6902abb67bba97cdea466a7d4c1c3efd4a22a15644689271",
+    "nativeSha256": "190d85114da87a928a452aa92c2497c3c82db9d2f66a9958d9f67d33d6a939d7",
+    "postgresUsed": false,
+    "portsStarted": 0,
+    "trackedFilesChanged": false,
+    "rows": 72
+  },
+  "rawNativeSha256": "190d85114da87a928a452aa92c2497c3c82db9d2f66a9958d9f67d33d6a939d7"
+}

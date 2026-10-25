@@ -1,0 +1,94 @@
+[
+  {
+    "name": "complete actor commits before immediate truncated token",
+    "paths": ["/people/0"]
+  },
+  {
+    "name": "complete actor commits before unclosed root eof",
+    "paths": ["/people/0"]
+  },
+  {
+    "name": "season scalar nested element propagates and does not commit",
+    "paths": ["/exception", "/hasMetadata", "/item/Name"]
+  },
+  {
+    "name": "movie scalar nested element is swallowed and does not commit",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "critic rating nested element is swallowed and does not commit",
+    "paths": ["/item/CriticRating"]
+  },
+  {
+    "name": "series-season skips ratings subtree",
+    "paths": ["/item/CommunityRating"]
+  },
+  {
+    "name": "series-season skips actor scalar rules before named season",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "non-video fileinfo ignores nested video fields",
+    "paths": ["/exception", "/hasMetadata"]
+  },
+  {
+    "name": "complete ratings commits before immediate truncated token",
+    "paths": ["/item/CommunityRating"]
+  },
+  {
+    "name": "rating value commits before ratings subtree truncation",
+    "paths": ["/item/CommunityRating"]
+  },
+  {
+    "name": "first rating commits before second rating truncates",
+    "paths": ["/item/CommunityRating"]
+  },
+  {
+    "name": "critic rating commits independently before later community truncates",
+    "paths": ["/item/CriticRating"]
+  },
+  {
+    "name": "complete fileinfo commits before immediate truncated token",
+    "paths": ["/item/aspectRatio", "/item/hasSubtitles", "/item/height", "/item/runTimeTicks", "/item/video3DFormat", "/item/width"]
+  },
+  {
+    "name": "video width commits before height lookahead fails",
+    "paths": ["/item/width"]
+  },
+  {
+    "name": "complete video fields survive streamdetails truncation",
+    "paths": ["/item/aspectRatio", "/item/height", "/item/width"]
+  },
+  {
+    "name": "subtitle flag commits after complete subtitle before truncation",
+    "paths": ["/item/hasSubtitles"]
+  },
+  {
+    "name": "undeclared namespace prefix is rejected after prefix commit",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "invalid element name start is rejected after prefix commit",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "duplicate expanded namespace attribute is rejected",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "literal less than in attribute is rejected",
+    "paths": ["/item/providers/Imdb"]
+  },
+  {
+    "name": "illegal xml namespace binding is rejected",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "double hyphen in comment is rejected after prefix commit",
+    "paths": ["/item/Name"]
+  },
+  {
+    "name": "cdata terminator in text is rejected after prefix commit",
+    "paths": ["/item/Overview"]
+  }
+]

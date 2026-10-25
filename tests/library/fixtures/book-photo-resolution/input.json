@@ -1,0 +1,124 @@
+{
+  "parser": [
+    null,
+    "The Novel (Saga, #2) (2024)",
+    "Chronicles (1999) #3 (of 8) (2025)",
+    "01 - First (2020)",
+    "Issue v4 c12",
+    "Unadorned Title"
+  ],
+  "resolvers": [
+    {
+      "name": "book-file",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "The Novel (Saga, #2) (2024).epub",
+      "files": ["The Novel (Saga, #2) (2024).epub"]
+    },
+    {
+      "name": "book-single-file-directory",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Chronicles #3",
+      "directories": ["Chronicles #3"],
+      "files": ["Chronicles #3/edition.pdf"]
+    },
+    {
+      "name": "book-file-parent-series",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Unadorned.pdf",
+      "files": ["Unadorned.pdf"]
+    },
+    {
+      "name": "book-multi-file-directory",
+      "resolver": "book",
+      "collectionType": "books",
+      "target": "Shelf",
+      "directories": ["Shelf"],
+      "files": ["Shelf/First.pdf", "Shelf/Second.mobi"]
+    },
+    {
+      "name": "book-wrong-collection",
+      "resolver": "book",
+      "collectionType": "movies",
+      "target": "Novel.epub",
+      "files": ["Novel.epub"]
+    },
+    {
+      "name": "photo-file",
+      "resolver": "photo",
+      "collectionType": "photos",
+      "target": "standalone.AVIF",
+      "files": ["standalone.AVIF"]
+    },
+    {
+      "name": "photo-artwork-prefix",
+      "resolver": "photo",
+      "collectionType": "photos",
+      "target": "poster-trip.jpg",
+      "files": ["poster-trip.jpg"]
+    },
+    {
+      "name": "photo-owned-by-video",
+      "resolver": "photo",
+      "collectionType": "photos",
+      "target": "clip-poster.jpg",
+      "files": ["clip.mp4", "clip-poster.jpg"]
+    },
+    {
+      "name": "photo-owned-by-stream",
+      "resolver": "photo",
+      "collectionType": "photos",
+      "target": "clip-poster.jpg",
+      "files": ["clip.strm", "clip-poster.jpg"]
+    },
+    {
+      "name": "photo-not-owned-by-stub",
+      "resolver": "photo",
+      "collectionType": "photos",
+      "target": "clip-poster.jpg",
+      "files": ["clip.disc", "clip-poster.jpg"]
+    },
+    {
+      "name": "home-video-photo-enabled",
+      "resolver": "photo",
+      "collectionType": "homevideos",
+      "enablePhotos": true,
+      "target": "still.webp",
+      "files": ["still.webp"]
+    },
+    {
+      "name": "home-video-photo-disabled",
+      "resolver": "photo",
+      "collectionType": "homevideos",
+      "enablePhotos": false,
+      "target": "still.webp",
+      "files": ["still.webp"]
+    },
+    {
+      "name": "photo-album",
+      "resolver": "photoAlbum",
+      "collectionType": "photos",
+      "target": "Album",
+      "directories": ["Album"],
+      "files": ["Album/sunset.webp", "Album/poster-art.jpg", "Album/clip.mp4", "Album/clip-poster.jpg"]
+    },
+    {
+      "name": "photo-album-only-owned",
+      "resolver": "photoAlbum",
+      "collectionType": "photos",
+      "target": "Owned",
+      "directories": ["Owned"],
+      "files": ["Owned/clip.mp4", "Owned/clip-poster.jpg"]
+    },
+    {
+      "name": "photo-album-stub-sibling",
+      "resolver": "photoAlbum",
+      "collectionType": "photos",
+      "target": "Stubbed",
+      "directories": ["Stubbed"],
+      "files": ["Stubbed/clip.disc", "Stubbed/clip-poster.jpg"]
+    }
+  ]
+}

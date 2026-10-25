@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "version": "3.0.0",
+  "repository": "https://github.com/jellyfin/TMDbLib",
+  "commit": "7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6",
+  "files": [
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Client/TMDbClient.cs",
+      "path": "dependency-source/TMDbClient.cs.txt",
+      "repositoryPath": "TMDbLib/Client/TMDbClient.cs",
+      "sha256": "a5ad385d94454c73357ef9b4d8ec58937a4253fbdafadb197705199e2834fee7",
+      "bytes": 15386
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Rest/RestClient.cs",
+      "path": "dependency-source/RestClient.cs.txt",
+      "repositoryPath": "TMDbLib/Rest/RestClient.cs",
+      "sha256": "ae7450ea91668a1aa09e682d742ba533cc5c15a45a520947d628752103df402b",
+      "bytes": 2148
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Rest/RestRequest.cs",
+      "path": "dependency-source/RestRequest.cs.txt",
+      "repositoryPath": "TMDbLib/Rest/RestRequest.cs",
+      "sha256": "eb2cbc9aa100505b700c914b244616b16d652a9befda8cc827588d82104ae659",
+      "bytes": 8604
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Rest/RestResponseOfT.cs",
+      "path": "dependency-source/RestResponseOfT.cs.txt",
+      "repositoryPath": "TMDbLib/Rest/RestResponseOfT.cs",
+      "sha256": "eb2010801e975d35081ccc06a0efdda04c176a10aaae8e96f28253ed9844cdef",
+      "bytes": 794
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Rest/RestRequestExtensions.cs",
+      "path": "dependency-source/RestRequestExtensions.cs.txt",
+      "repositoryPath": "TMDbLib/Rest/RestRequestExtensions.cs",
+      "sha256": "ebd891c9f0cf99d34bab49c2496c7a2e6175671f3423e170a9b3d9924c181bac",
+      "bytes": 1182
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/TMDbLib/Utilities/Serializer/TMDbJsonSerializer.cs",
+      "path": "dependency-source/TMDbJsonSerializer.cs.txt",
+      "repositoryPath": "TMDbLib/Utilities/Serializer/TMDbJsonSerializer.cs",
+      "sha256": "1da6c9fcd26b0a4d6c0d7a3ff3c7cc0fbf1904c2a62f2fb65b02b98dbd193c3e",
+      "bytes": 2283
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jellyfin/TMDbLib/7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6/LICENSE.txt",
+      "path": "dependency-source/LICENSE.txt",
+      "repositoryPath": "LICENSE.txt",
+      "sha256": "936c3bc75630c609dcff2494de1a19e16eb2b3434ec975f6bfd830b45aa8bf2c",
+      "bytes": 1072
+    },
+    {
+      "sha256": "9cb0f6d5be83538c61c8cd903f41681f0eb256b7e94742400eb4c00a7fc9ece5",
+      "path": "dependency-source/tmdblib.nuspec",
+      "bytes": 1356,
+      "packagePath": "tmdblib.nuspec"
+    }
+  ],
+  "package": "TMDbLib"
+}

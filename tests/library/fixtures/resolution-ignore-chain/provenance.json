@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T02:40:18.110Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/resolution-ignore-chain/input.json",
+      "sha256": "05e77af96000a955f62504700e647d5adaf52894b6ae47b6327f079e2beb504c"
+    },
+    {
+      "path": "tests/library/fixtures/resolution-ignore-chain/Program.cs",
+      "sha256": "833f8d743588ab6177c94efd9b78a328b801b2efe52b9178024fd85b3d4c2b2a"
+    },
+    {
+      "path": "tests/library/fixtures/resolution-ignore-chain/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/resolution-ignore-chain/native.json",
+      "sha256": "e91548d4d3f898890c2e9d789029d91e75b7281a73448af7c53adaf5a9ce3bac"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.ResolvePaths with registered CoreResolutionIgnoreRule and DotIgnoreIgnoreRule, actual MovieResolver/VideoListResolver/ResolverHelper, real filesystem and unchanged EF rows. Records pre-multi ignore filtering, complete resolved-item projections, multi/single dispatch, files, row/Data/link/cache/event outputs. Resolver list is intentionally limited to MovieResolver, no item save or full ValidateChildren/MetadataService, providers/collection/media-source/external dispatch and ancestor namespace are controls. No complete scanner/network/symlink/concurrent cache or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/resolution-ignore-chain-expanded-oracle-20261007/record.json",
+    "sourceFilesSha256": "970e52647e8373e63c4eecbb7c57e5ab17559a401d71b4c1a05906da59fb6208"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 21 actual scenes are compared in SQLite and PostgreSQL without dropping any original complete resolved-item, multi/single call, row/Data/link/file/cache/event projection. The first 18 original native projections are byte-for-byte unchanged. After the first 96-file strict exposed two missing fixture ancestor namespaces and a real forward-slash UNC path classification defect, the related eight-file direct batch passes all 367 tests, including shared runtime, cancellation, unknown ancestors, cache boundaries, renumbering, weak-family preservation and separate nested-extra provenance guards. MovieResolver registration, providers and collection/media-source/external dispatch remain controls; no full scanner/MetadataService, network fault, migration or release acceptance."
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T00:53:12.221Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/owned-extra-ignore/input.json",
+      "sha256": "795aa45b64559459d31469d8037711f7ee4d25213884d2d1457f521c0b8ea0db"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-ignore/Program.cs",
+      "sha256": "30b08e9bac34d7c7e3456388db31211a7124b28180da307ab160a48f7d52155e"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-ignore/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/metadata/fixtures/owned-extra-ignore/native.json",
+      "sha256": "2e70ba8545572ac0012d39ccdf3eee90a9138c0e2206f8b80a13aa44bae82343"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen FindExtras/RefreshExtras with the same DotIgnoreIgnoreRule instance in root filtering and ResolvePath, plus CoreResolutionIgnoreRule. Executes actual file enumeration, dedicated extra/audio resolvers, cached item correction, independent missing deletion, ItemPersistenceService/EF SQLite, files and events. Rules cover root/ancestor/nearest, empty/comments/invalid/negation, nested exclusions and unchanged mixed counts, localized numbering, Unicode and UTF-16 BOM. Single-item provider performs no save; collection/saver/media-source/extracted-file dispatch and parent namespace are controls. No complete MetadataService, generic deletion, full scanner/network/symlink/concurrent cache or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/owned-extra-ignore-oracle-20261007/record.json",
+    "sourceFilesSha256": "f4dc06fceee0342289feaa42fafacf082988ea4a0a8b85a51782fc2446ebd9d4"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 14 native cases with both core and dot-ignore resolution rules are compared in real SQLite and PostgreSQL, retaining every selected column, complete stored Data, instance and media file hashes, dispatch, cache and events. The declared known ancestor namespace is mapped only for ignore searches. Provider saves and other collaborators remain controls. Production host cases separately verify incomplete ancestor rejection and isolated D3 preview caches. No complete scanner/network/MetadataService, generic deletion or release acceptance."
+}

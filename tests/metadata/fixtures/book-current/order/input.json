@@ -1,0 +1,7 @@
+{
+  "contexts": [
+    { "name": "default", "globalOrder": [], "libraryOrder": null },
+    { "name": "global-order", "globalOrder": ["Open Packaging Format"], "libraryOrder": null },
+    { "name": "library-order", "globalOrder": [], "libraryOrder": ["EPUB Metadata"] }
+  ]
+}

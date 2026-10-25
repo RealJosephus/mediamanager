@@ -1,0 +1,62 @@
+{
+  "initial": {
+    "ServerName": "Initial server",
+    "PreviousVersionStr": "1.2.3",
+    "MetadataPath": "@/metadata-initial",
+    "CachePath": "@/cache-initial",
+    "ContentTypes": [{"Name":"@/media","Value":"movies"}]
+  },
+  "next": {"ServerName":"Replacement server","MetadataPath":"@/metadata-next","CachePath":"@/cache-next"},
+  "directories": ["metadata-initial","cache-initial","metadata-next","cache-next","preselected-cache"],
+  "cases": [
+    {"name":"replace-complete-values-and-events","operation":"replace","next":{"LogFileRetentionDays":17,"CacheSize":345,"RemoteClientBitrateLimit":18000000,"SlowResponseThresholdMs":9007199254740993,"MinResumePct":7,"EnableMetrics":true,"PreviousVersion":"2.3.4","PreviousVersionStr":"2.3.4","SortRemoveWords":["one","two"],"ContentTypes":[{"Name":"@/media","Value":"tvshows"}],"MetadataOptions":[{"ItemType":"Movie","DisabledMetadataSavers":["Nfo"],"LocalMetadataReaderOrder":[],"DisabledMetadataFetchers":[],"MetadataFetcherOrder":["TheMovieDb"],"DisabledImageFetchers":[],"ImageFetcherOrder":[]}]},"updating":{"ServerName":"Changed by updating"}},
+    {"name":"replace-null-known-values","operation":"replace","next":{"ServerName":null,"UICulture":null,"PreviousVersion":null,"PreviousVersionStr":null,"MetadataOptions":null,"ContentTypes":null,"TrickplayOptions":null,"SortRemoveWords":null}},
+    {"name":"replace-clears-old-known-keeps-unmodeled-input","operation":"replace","before":["add-unmodeled"],"next":{"ServerName":null,"MetadataOptions":null,"PreviousVersion":null,"PreviousVersionStr":null}},
+    {"name":"replace-retained-incoming-current-and-detached-roots","operation":"replace","next":{"PreviousVersionStr":"2.3.4","ContentTypes":[{"Name":"@/incoming-original","Value":"movies"}]},"continuation":[
+      {"name":"late incoming scalar version and content root","target":"incoming","changes":{"ServerName":"Late incoming","PreviousVersionStr":" +4 . 05 .6 ","ContentTypes":[{"Name":"@/incoming-late","Value":"tvshows"}]}},
+      {"name":"current writes retained scalar version and content root","target":"current","changes":{"ServerName":"Current writes retained","PreviousVersion":"6.7.8","ContentTypes":[{"Name":"@/current-root","Value":"music"}]}},
+      {"name":"previous configuration writes stay detached","target":"previous","changes":{"ServerName":"Detached previous","PreviousVersionStr":"9.9.9","ContentTypes":[{"Name":"@/previous-root","Value":"books"}]}},
+      {"name":"replaced incoming content root stays detached","target":"originalIncomingContentTypes","value":"Detached original incoming types"},
+      {"name":"save the current retained configuration","target":"save"}
+    ]},
+    {"name":"replace-save-io-failure-retains-incoming-and-recovers","operation":"replace","before":["configuration-target-directory"],"next":{"PreviousVersionStr":"2.3.4","ContentTypes":[{"Name":"@/incoming-original","Value":"movies"}]},"continuation":[
+      {"name":"late incoming after save IO failure","target":"incoming","changes":{"ServerName":"Late incoming after failed save","PreviousVersionStr":"4.5.6","ContentTypes":[{"Name":"@/incoming-late","Value":"tvshows"}]}},
+      {"name":"current writes retained after save IO failure","target":"current","changes":{"ServerName":"Current after failed save","PreviousVersion":"6.7.8","ContentTypes":[{"Name":"@/current-root","Value":"music"}]}},
+      {"name":"previous configuration stays detached after failure","target":"previous","changes":{"ServerName":"Detached previous","PreviousVersionStr":"9.9.9","ContentTypes":[{"Name":"@/previous-root","Value":"books"}]}},
+      {"name":"replaced content root stays detached after failure","target":"originalIncomingContentTypes","value":"Detached original incoming types"},
+      {"name":"remove the real blocking directory","target":"filesystem","action":"remove-configuration-target-directory"},
+      {"name":"save retained current after physical recovery","target":"save"}
+    ]},
+    {"name":"metadata-missing-before-updating","operation":"replace","next":{"MetadataPath":"@/missing-metadata"}},
+    {"name":"metadata-file-before-updating","operation":"replace","before":["metadata-file"],"next":{"MetadataPath":"@/metadata-file"}},
+    {"name":"updating-failure-keeps-old-live-and-bytes","operation":"replace","updatingFailure":true},
+    {"name":"updating-mutates-cache-before-validation","operation":"replace","updating":{"CachePath":"@/missing-cache"}},
+    {"name":"updating-metadata-mutation-is-not-revalidated","operation":"replace","updating":{"MetadataPath":"@/created-after-updating"}},
+    {"name":"updating-version-text-updates-public-value-and-xml","operation":"replace","updating":{"PreviousVersionStr":"3.4.5"}},
+    {"name":"updating-invalid-version-text-keeps-public-value-and-xml","operation":"replace","next":{"PreviousVersion":"2.3.4","PreviousVersionStr":"2.3.4"},"updating":{"PreviousVersionStr":"not-a-version"}},
+    {"name":"updating-null-version-clears-public-text-and-xml","operation":"replace","next":{"PreviousVersion":"2.3.4","PreviousVersionStr":"2.3.4"},"updating":{"PreviousVersion":null}},
+    {"name":"cache-missing-after-updating","operation":"replace","next":{"CachePath":"@/missing-cache"}},
+    {"name":"unknown-enum-keeps-new-live-and-real-xml-prefix","operation":"replace","next":{"LogFileRetentionDays":23,"ImageSavingConvention":9,"ServerName":"After enum"}},
+    {"name":"save-recreates-config-directory","operation":"replace","before":["remove-config-directory"]},
+    {"name":"save-target-directory-keeps-new-live","operation":"replace","before":["configuration-target-directory"]},
+    {"name":"save-readonly-keeps-new-live-and-old-file","operation":"replace","before":["readonly-system"]},
+    {"name":"metadata-post-save-failure-keeps-xml","operation":"replace","duringUpdating":["metadata-next-file"]},
+    {"name":"cache-post-save-failure-follows-metadata","operation":"replace","initial":{"CachePath":"@/cache-next"},"updating":{"MetadataPath":"@/created-before-cache-failure"},"duringUpdating":["cache-next-file"]},
+    {"name":"cache-other-marker-after-save-keeps-xml","operation":"replace","before":["cache-other-marker"]},
+    {"name":"cache-existing-marker-and-tag-preserve-bytes","operation":"replace","before":["cache-marker-and-tag"]},
+    {"name":"cache-own-marker-case-and-directory-markers","operation":"replace","before":["cache-own-marker-case","cache-marker-directory"]},
+    {"name":"blank-cache-retains-active-metadata-resets-default","operation":"replace","next":{"CachePath":"\u0085 ","MetadataPath":"\u0085 "}},
+    {"name":"startup-partial-save-has-no-updating-event","operation":"startup","changes":{"ServerName":"Startup saved","UICulture":"fr-FR","MetadataCountryCode":"FR","PreferredMetadataLanguage":"fr","IsStartupWizardCompleted":true}},
+    {"name":"content-types-partial-direct-save","operation":"contentTypes","changes":{"ContentTypes":[{"Name":"@/media","Value":"music"},{"Name":"@/second","Value":"tvshows"}]}},
+    {"name":"partial-save-unknown-enum-keeps-truncated-file","operation":"save","changes":{"ImageSavingConvention":9,"ServerName":"Live partial failure"}},
+    {"name":"partial-save-same-metadata-is-created-without-precheck","operation":"save","changes":{"MetadataPath":"@/created-by-direct-save","ServerName":"Direct path save"}},
+    {"name":"updated-handler-failure-keeps-commit","operation":"replace","updatedFailure":true},
+    {"name":"named-network-keeps-system-and-skips-server-path-effects","operation":"network","before":["live-metadata-file"],"changes":{"EnableRemoteAccess":false},"namedUpdating":{"BaseUrl":"/named"}},
+    {"name":"named-updating-failure-keeps-mutated-live-network","operation":"network","changes":{"EnableRemoteAccess":false},"namedUpdatingFailure":true},
+    {"name":"initialize-configuration-overrides-preselected-paths","operation":"initialize"},
+    {"name":"initialize-empty-cache-uses-preselected-path","operation":"initialize","initial":{"CachePath":"","MetadataPath":""}},
+    {"name":"initialize-empty-cache-without-preselection-uses-program-default","operation":"initialize","initial":{"CachePath":null,"MetadataPath":null},"preselectedCache":""},
+    {"name":"initialize-cache-marker-failure-precedes-metadata","operation":"initialize","seed":["initial-cache-other-marker"]},
+    {"name":"initialize-metadata-failure-keeps-cache-markers","operation":"initialize","initial":{"MetadataPath":"@/metadata-file"},"seed":["metadata-file"]}
+  ]
+}

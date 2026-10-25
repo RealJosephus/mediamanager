@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "repository": "https://github.com/RealJosephus/mediamanager",
+    "runId": "40162626589",
+    "candidate": "a16d687edd7b212f3a752f99a9dda6919fd1c0f4",
+    "runner": "windows-2025",
+    "artifact": {
+      "filename": "validation-windows-2025-shard-1-1.zip",
+      "bytes": 223205418,
+      "sha256": "d5bed08b3d1932a5b70b23392cfc4765a07be8a599ea32bc13e09c167beeff2a"
+    },
+    "producer": {
+      "filename": "producer-source.txt",
+      "path": "tests/storage/bluray-disc-info.test.js",
+      "gitBlob": "78bf434bfdc6612139a6d3d80d1e6a83f8aa394a",
+      "bytes": 22638,
+      "sha256": "b6c072908b3a027fa1d08fe066e1bb1c06c2a8c3bbd71075953ffa8b9056e0d8"
+    },
+    "license": {
+      "filename": "producer-license.txt",
+      "gitBlob": "4522ba065934f53f9d4b7fde1953d9f332fe1abb",
+      "sha256": "f371b80469fb235bc500ec29e0e85b682d4a6157a158567d828ff0be544d4f1d"
+    }
+  },
+  "files": [
+    {
+      "filename": "source.m2ts",
+      "bytes": 110592,
+      "sha256": "719919ca910fdaf4b035d2dac56cdbb4c95efe7c5a465f93303901e8b747f027",
+      "member": "bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954/source.m2ts"
+    },
+    {
+      "filename": "original-generation.json",
+      "bytes": 616,
+      "sha256": "9e5dd58a272691b08dd0e6a388777dd23d9aa4f8da5cd67509024d1742d4fdec",
+      "member": "bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954/generate.json"
+    },
+    {
+      "filename": "original-probe.json",
+      "bytes": 21891,
+      "sha256": "4b8c82d898900f00897f4f2a7799dd243cfc237645d94e7dd59c79ec0691ea2c",
+      "member": "bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954/probe-merge.json"
+    },
+    {
+      "filename": "original-native.json",
+      "bytes": 15808,
+      "sha256": "6e5cbcbd3366120d771887ce196ce4de99ba1fb56291b36de1357f9b54bc65b8",
+      "member": "bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954/native/native.json"
+    },
+    {
+      "filename": "original-record.json",
+      "bytes": 4602,
+      "sha256": "3189b5d80486087c06e47c19d9072767d21b6f32365beae370af1d727c0ab4b0",
+      "member": "bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954/native/record.json"
+    },
+    {
+      "filename": "dual-avc.m2ts",
+      "bytes": 92160,
+      "sha256": "39c02b66aa2fe6d4f6fd7b4e13a8bda304774919db06c60b9001d096198c99d1",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/generated-avc.m2ts"
+    },
+    {
+      "filename": "original-dual-avc-generation.json",
+      "bytes": 823,
+      "sha256": "85fac0331f60aa15465f833f4eb3271e77fcea7bd76ef4d870b8be27e50446ad",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/generate.json"
+    },
+    {
+      "filename": "original-mvc-declaration.json",
+      "bytes": 5565,
+      "sha256": "99e2825474f6a17647496b9a4e60b72b1d13f305ed1106122eb724efcc1be97c",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/transport-declaration.json"
+    },
+    {
+      "filename": "original-mvc-with-ssif-native.json",
+      "bytes": 17722,
+      "sha256": "0ee59204c726032f9fd62739827694565ff3f504025acd58091edf474b1c3142",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/with-ssif/native/native.json"
+    },
+    {
+      "filename": "original-mvc-with-ssif-record.json",
+      "bytes": 4666,
+      "sha256": "ed38c0f479a734b4beb48f9baeea9f8953d4067d4741800ac6e04002d54dd54c",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/with-ssif/native/record.json"
+    },
+    {
+      "filename": "original-mvc-with-ssif-probe.json",
+      "bytes": 11458,
+      "sha256": "e42070f02c16e7b70cf5a67d368bbcb69cf27e94c385ebb451d260c939813526",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/with-ssif/probe-raw.json"
+    },
+    {
+      "filename": "original-mvc-without-ssif-native.json",
+      "bytes": 12949,
+      "sha256": "4e186f753ffd0c183a4937c2293f2e9fc90b6bb1428c3595e347eb6b1a46b69f",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/without-ssif/native/native.json"
+    },
+    {
+      "filename": "original-mvc-without-ssif-record.json",
+      "bytes": 4702,
+      "sha256": "efa2194b16c173decabd582c180da71c3f8a90c493ee93ab4477234210b5d85f",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/without-ssif/native/record.json"
+    },
+    {
+      "filename": "original-mvc-without-ssif-probe.json",
+      "bytes": 11458,
+      "sha256": "d02198c9ebc52660122363bc988603b0e6d01c3119170f87b993a54ac098425f",
+      "member": "bluray-mvc-fa0973ec-5381-4852-a813-cc5d4d33c461/without-ssif/probe-raw.json"
+    }
+  ],
+  "scope": "Unchanged historical controlled MPEG-2/AC-3 and dual AVC/AC-3 inputs with original observations. Current consumers only read originals or explicitly copy selected packets; historical generation is never executed."
+}

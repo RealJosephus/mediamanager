@@ -1,0 +1,16 @@
+{
+  "format": 1,
+  "projectorSha256": "bb085e0715d9289b5da72e12667443718d30800dfd8708e0d96c409b4012ec61",
+  "files": [
+    {
+      "path": "input.json",
+      "bytes": 123892,
+      "sha256": "a4e77c6dd0328e33c60319124000a27f889093d9bddc0d6bfa380f796d3686c9"
+    },
+    {
+      "path": "native.json",
+      "bytes": 971190,
+      "sha256": "d9a371ceb0b9965a8f368f5b5ce598564ebffb281e9da47d2cfd27edeb8b4e1b"
+    }
+  ]
+}

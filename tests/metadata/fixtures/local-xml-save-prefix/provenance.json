@@ -1,0 +1,156 @@
+{
+  "recordedAt": "2026-10-13T19:18:40.689Z",
+  "rawRecording": "D:/mediamanager-validation/20261014-release-text-xml-prefix-mv72dklx/native.json",
+  "nativeSha256": "a04f1728824dbc6a336a8adf1c5aa4315079fed967516817cfd22f4768e8cdaf",
+  "oracleAssembly": {
+    "filename": "D:/mediamanager-validation/20261014-release-text-xml-prefix-mv72dklx/oracle/bin/Release/net10.0/Oracle.dll",
+    "sha256": "5cb84efcdf5b2289998f499790b10117a353bfce589e22fcfb473cd588d7e2a4"
+  },
+  "sources": [
+    {
+      "relative": "MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+      "designated": "D:/jellyfin/MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+      "isolated": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+      "sha256": "98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c"
+    },
+    {
+      "relative": "MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+      "designated": "D:/jellyfin/MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+      "isolated": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.LocalMetadata/Savers/BoxSetXmlSaver.cs",
+      "sha256": "dfc48dd91326d0d84efd06db983cbc98383098bca3b6436f01578bddfb9bddc2"
+    },
+    {
+      "relative": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "designated": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "isolated": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e"
+    }
+  ],
+  "loadedAssemblies": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.LocalMetadata.dll",
+      "sha256": "f2a102fe8490aa1d39551b1fbb6d9a99654d82bd65186c15a180e7a603e46868"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261014-release-text-xml-prefix-mv72dklx\\oracle\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "5cb84efcdf5b2289998f499790b10117a353bfce589e22fcfb473cd588d7e2a4"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Program.cs",
+      "sha256": "4335b96bac78e165b79fe6873590c3a504c5d814e76f095019459e081bffdf62"
+    },
+    {
+      "name": "Oracle.csproj",
+      "sha256": "4d5a5d2e98b07cea837799e1680861530704c9e935a9b727151efcee75d6051e"
+    }
+  ],
+  "actualNativeFilePrefix": true,
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

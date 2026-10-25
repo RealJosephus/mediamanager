@@ -1,0 +1,1607 @@
+{
+  "actualFrozenMetadataSaveImages": true,
+  "inputSha256": "092d5abcd260916afc15250c59b0adc9cf72775e663d31e5b657af3f0524c8e3",
+  "imageSha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+  "results": [
+    {
+      "name": "local-outdated-null-images",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "local-current-null-images",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "local-current-force-image-update",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 4
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "local-missing-removed",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "images",
+          "images": []
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [],
+      "liveImages": [],
+      "files": []
+    },
+    {
+      "name": "explicit-empty-images-clear",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [],
+      "liveImages": [],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "empty-current-images",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [],
+      "liveImages": [],
+      "files": []
+    },
+    {
+      "name": "remote-success-independent-save",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "remote-unavailable-independent-removal",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/404",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "images": []
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [],
+      "liveImages": [],
+      "files": []
+    },
+    {
+      "name": "remote-retryable-kept",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/500",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "https://isolated.invalid/500",
+              "type": "Primary",
+              "width": 0,
+              "height": 0,
+              "blurhash": null,
+              "date": "0001-01-01T00:00:00.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "https://isolated.invalid/500",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": null,
+          "date": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "https://isolated.invalid/500",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": null,
+          "date": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "remote-fallback-keeps-order",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/404",
+          "cancellable": false
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "two-remotes-nested-independent-saves",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            },
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+              "type": "Backdrop",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            },
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+              "type": "Backdrop",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            },
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+              "type": "Backdrop",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        },
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+          "type": "Backdrop",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        },
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+          "type": "Backdrop",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\backdrop.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        },
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "dimensions-failure-retains-blurhash",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 0,
+              "height": 0,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "blurhash-failure-retains-dimensions",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "item-sql-failure-keeps-image-commit",
+      "exception": "DbUpdateException",
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Stored name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "image-sql-failure-keeps-independent-delete",
+      "exception": "DbUpdateException",
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        }
+      ],
+      "storedName": "Stored name",
+      "images": [],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "cancel-in-saver-keeps-image-commit",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Stored name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "already-cancelled-keeps-saver-image-effects",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Stored name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "cancelled-remote-keeps-conversion-commit",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "saver",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": false
+        },
+        {
+          "action": "event",
+          "reason": 4
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\metadata\\library\\98\\98b90000000000000000000000000001\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "channel-with-library-parent-processes",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "channel-with-channel-parent-skips",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": null,
+          "date": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 0,
+          "height": 0,
+          "blurhash": null,
+          "date": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "library-with-channel-parent-processes",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "channel-with-default-parent-processes",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "local-current-exact-one-second-kept",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:04.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:04.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    },
+    {
+      "name": "local-current-over-one-second-refreshed",
+      "exception": null,
+      "calls": [
+        {
+          "action": "saver",
+          "reason": 2
+        },
+        {
+          "action": "dimensions",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "blurhash",
+          "path": "$STATE\\media\\poster.png"
+        },
+        {
+          "action": "images",
+          "images": [
+            {
+              "path": "$STATE\\media\\poster.png",
+              "type": "Primary",
+              "width": 1,
+              "height": 1,
+              "blurhash": "controlled",
+              "date": "2025-01-02T03:04:05.0000000Z"
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "reason": 2
+        }
+      ],
+      "storedName": "Updated name",
+      "images": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "liveImages": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "type": "Primary",
+          "width": 1,
+          "height": 1,
+          "blurhash": "controlled",
+          "date": "2025-01-02T03:04:05.0000000Z"
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE\\media\\poster.png",
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+        }
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.UpdateItemAsync/RunMetadataSavers/UpdateImagesAsync/ConvertImageToLocal and ItemPersistenceService over EF SQLite. Tests unconditional images, independent conversion commits/events, local freshness/live-TV gates, cancellation and real SQL failures. Metadata saver, SaveImage HTTP/file destination and image dimensions/BlurHash are controls. Real files and exact image projections are compared; no complete providers, real network/NFO, full scalar mapper, version creation or release acceptance."
+}

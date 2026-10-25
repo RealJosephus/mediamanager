@@ -1,0 +1,4619 @@
+{
+  "evidence": "source-derived with three migration-retained defaults; validated against isolated EF runtime schema",
+  "efProductVersion": "10.0.11",
+  "tables": [
+    {
+      "name": "AccessSchedules",
+      "entity": "Jellyfin.Database.Implementations.Entities.AccessSchedule",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "DayOfWeek",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EndHour",
+          "clrType": "double",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StartHour",
+          "clrType": "double",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_AccessSchedules_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "ActivityLogs",
+      "entity": "Jellyfin.Database.Implementations.Entities.ActivityLog",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "DateCreated",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LogSeverity",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Name",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Overview",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RowVersion",
+          "clrType": "uint",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": true
+        },
+        {
+          "name": "ShortOverview",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Type",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_ActivityLogs_DateCreated",
+          "columns": [
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "AncestorIds",
+      "entity": "Jellyfin.Database.Implementations.Entities.AncestorId",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ParentItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "ParentItemId"
+      ],
+      "indices": [
+        {
+          "name": "IX_AncestorIds_ParentItemId",
+          "columns": [
+            "ParentItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        },
+        {
+          "columns": [
+            "ParentItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "ApiKeys",
+      "entity": "Jellyfin.Database.Implementations.Entities.Security.ApiKey",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "AccessToken",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateCreated",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateLastActivity",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Name",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_ApiKeys_AccessToken",
+          "columns": [
+            "AccessToken"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "AttachmentStreamInfos",
+      "entity": "Jellyfin.Database.Implementations.Entities.AttachmentStreamInfo",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Index",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Codec",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CodecTag",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Comment",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Filename",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MimeType",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "Index"
+      ],
+      "indices": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "BaseItemImageInfos",
+      "entity": "Jellyfin.Database.Implementations.Entities.BaseItemImageInfo",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Blurhash",
+          "clrType": "byte[]",
+          "type": "BLOB",
+          "pgType": "bytea",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateModified",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Height",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ImageType",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Path",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Width",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_BaseItemImageInfos_ItemId_ImageType",
+          "columns": [
+            "ItemId",
+            "ImageType"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "BaseItemMetadataFields",
+      "entity": "Jellyfin.Database.Implementations.Entities.BaseItemMetadataField",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id",
+        "ItemId"
+      ],
+      "indices": [
+        {
+          "name": "IX_BaseItemMetadataFields_ItemId",
+          "columns": [
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "BaseItemProviders",
+      "entity": "Jellyfin.Database.Implementations.Entities.BaseItemProvider",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ProviderId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ProviderValue",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "ProviderId"
+      ],
+      "indices": [
+        {
+          "name": "IX_BaseItemProviders_ProviderId_ItemId_ProviderValue",
+          "columns": [
+            "ProviderId",
+            "ItemId",
+            "ProviderValue"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "BaseItemTrailerTypes",
+      "entity": "Jellyfin.Database.Implementations.Entities.BaseItemTrailerType",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id",
+        "ItemId"
+      ],
+      "indices": [
+        {
+          "name": "IX_BaseItemTrailerTypes_ItemId",
+          "columns": [
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "BaseItems",
+      "entity": "Jellyfin.Database.Implementations.Entities.BaseItemEntity",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Album",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AlbumArtists",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Artists",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Audio",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ChannelId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CleanName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CommunityRating",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CriticRating",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CustomRating",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Data",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateCreated",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateLastMediaAdded",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateLastRefreshed",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateLastSaved",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateModified",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EndDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EpisodeTitle",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ExternalId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ExternalSeriesId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ExternalServiceId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ExtraType",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ForcedSortName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Genres",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Height",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IndexNumber",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "InheritedParentalRatingSubValue",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "InheritedParentalRatingValue",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsFolder",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsInMixedFolder",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsLocked",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsMovie",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsRepeat",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsSeries",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsVirtualItem",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LUFS",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MediaType",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Name",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "NormalizationGain",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "OfficialRating",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "OriginalLanguage",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "OriginalTitle",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Overview",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "OwnerId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ParentId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ParentIndexNumber",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Path",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PreferredMetadataCountryCode",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PreferredMetadataLanguage",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PremiereDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PresentationUniqueKey",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PrimaryVersionId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ProductionLocations",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ProductionYear",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RunTimeTicks",
+          "clrType": "long?",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SeasonId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SeasonName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SeriesId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SeriesName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SeriesPresentationUniqueKey",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ShowId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Size",
+          "clrType": "long?",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SortName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StartDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Studios",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Tagline",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Tags",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TopParentId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TotalBitrate",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Type",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UnratedType",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Width",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_BaseItems_Name",
+          "columns": [
+            "Name"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_OwnerId",
+          "columns": [
+            "OwnerId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_ParentId",
+          "columns": [
+            "ParentId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Path",
+          "columns": [
+            "Path"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_PresentationUniqueKey",
+          "columns": [
+            "PresentationUniqueKey"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_PrimaryVersionId",
+          "columns": [
+            "PrimaryVersionId"
+          ],
+          "unique": false,
+          "filter": "\"PrimaryVersionId\" IS NOT NULL"
+        },
+        {
+          "name": "IX_BaseItems_SeasonId",
+          "columns": [
+            "SeasonId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_SeriesId",
+          "columns": [
+            "SeriesId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_SeriesName",
+          "columns": [
+            "SeriesName"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_ExtraType_OwnerId",
+          "columns": [
+            "ExtraType",
+            "OwnerId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_TopParentId_Id",
+          "columns": [
+            "TopParentId",
+            "Id"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_CleanName",
+          "columns": [
+            "Type",
+            "CleanName"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_TopParentId_Type_IsVirtualItem",
+          "columns": [
+            "TopParentId",
+            "Type",
+            "IsVirtualItem"
+          ],
+          "unique": false,
+          "filter": "\"PrimaryVersionId\" IS NULL AND (\"OwnerId\" IS NULL OR \"ExtraType\" IS NOT NULL)"
+        },
+        {
+          "name": "IX_BaseItems_Type_TopParentId_Id",
+          "columns": [
+            "Type",
+            "TopParentId",
+            "Id"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_TopParentId_PresentationUniqueKey",
+          "columns": [
+            "Type",
+            "TopParentId",
+            "PresentationUniqueKey"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_TopParentId_SortName",
+          "columns": [
+            "Type",
+            "TopParentId",
+            "SortName"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_TopParentId_StartDate",
+          "columns": [
+            "Type",
+            "TopParentId",
+            "StartDate"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_MediaType_TopParentId_IsVirtualItem_PresentationUniqueKey",
+          "columns": [
+            "MediaType",
+            "TopParentId",
+            "IsVirtualItem",
+            "PresentationUniqueKey"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_TopParentId_IsFolder_IsVirtualItem_DateCreated",
+          "columns": [
+            "TopParentId",
+            "IsFolder",
+            "IsVirtualItem",
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_TopParentId_MediaType_IsVirtualItem_DateCreated",
+          "columns": [
+            "TopParentId",
+            "MediaType",
+            "IsVirtualItem",
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_TopParentId_Type_IsVirtualItem_DateCreated",
+          "columns": [
+            "TopParentId",
+            "Type",
+            "IsVirtualItem",
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_SeriesPresentationUniqueKey_IsFolder_IsVirtualItem",
+          "columns": [
+            "Type",
+            "SeriesPresentationUniqueKey",
+            "IsFolder",
+            "IsVirtualItem"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_SeriesPresentationUniqueKey_ParentIndexNumber_IndexNumber",
+          "columns": [
+            "Type",
+            "SeriesPresentationUniqueKey",
+            "ParentIndexNumber",
+            "IndexNumber"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_SeriesPresentationUniqueKey_PresentationUniqueKey_SortName",
+          "columns": [
+            "Type",
+            "SeriesPresentationUniqueKey",
+            "PresentationUniqueKey",
+            "SortName"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_IsFolder_TopParentId_IsVirtualItem_PresentationUniqueKey_DateCreated",
+          "columns": [
+            "IsFolder",
+            "TopParentId",
+            "IsVirtualItem",
+            "PresentationUniqueKey",
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_BaseItems_Type_TopParentId_IsVirtualItem_PresentationUniqueKey_DateCreated",
+          "columns": [
+            "Type",
+            "TopParentId",
+            "IsVirtualItem",
+            "PresentationUniqueKey",
+            "DateCreated"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "OwnerId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "NO ACTION"
+        },
+        {
+          "columns": [
+            "ParentId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "Chapters",
+      "entity": "Jellyfin.Database.Implementations.Entities.Chapter",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ChapterIndex",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ImageDateModified",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ImagePath",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Name",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StartPositionTicks",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "ChapterIndex"
+      ],
+      "indices": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "CustomItemDisplayPreferences",
+      "entity": "Jellyfin.Database.Implementations.Entities.CustomItemDisplayPreferences",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "Client",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Key",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Value",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_CustomItemDisplayPreferences_UserId_ItemId_Client_Key",
+          "columns": [
+            "UserId",
+            "ItemId",
+            "Client",
+            "Key"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "DeviceOptions",
+      "entity": "Jellyfin.Database.Implementations.Entities.Security.DeviceOptions",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "CustomName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DeviceId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_DeviceOptions_DeviceId",
+          "columns": [
+            "DeviceId"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "Devices",
+      "entity": "Jellyfin.Database.Implementations.Entities.Security.Device",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "AccessToken",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AppName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AppVersion",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateCreated",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateLastActivity",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DateModified",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DeviceId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DeviceName",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsActive",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_Devices_AccessToken_DateLastActivity",
+          "columns": [
+            "AccessToken",
+            "DateLastActivity"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_Devices_DeviceId_DateLastActivity",
+          "columns": [
+            "DeviceId",
+            "DateLastActivity"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_Devices_UserId_DeviceId",
+          "columns": [
+            "UserId",
+            "DeviceId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "DisplayPreferences",
+      "entity": "Jellyfin.Database.Implementations.Entities.DisplayPreferences",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "ChromecastVersion",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Client",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DashboardTheme",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EnableNextVideoInfoOverlay",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IndexBy",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false,
+          "default": "'00000000-0000-0000-0000-000000000000'"
+        },
+        {
+          "name": "ScrollDirection",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ShowBackdrop",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ShowSidebar",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SkipBackwardLength",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SkipForwardLength",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TvHome",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_DisplayPreferences_UserId_ItemId_Client",
+          "columns": [
+            "UserId",
+            "ItemId",
+            "Client"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "HomeSection",
+      "entity": "Jellyfin.Database.Implementations.Entities.HomeSection",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "DisplayPreferencesId",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Order",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Type",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_HomeSection_DisplayPreferencesId",
+          "columns": [
+            "DisplayPreferencesId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "DisplayPreferencesId"
+          ],
+          "table": "DisplayPreferences",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "ImageInfos",
+      "entity": "Jellyfin.Database.Implementations.Entities.ImageInfo",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "LastModified",
+          "clrType": "DateTime",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Path",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_ImageInfos_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "ItemDisplayPreferences",
+      "entity": "Jellyfin.Database.Implementations.Entities.ItemDisplayPreferences",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "Client",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IndexBy",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RememberIndexing",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RememberSorting",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SortBy",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SortOrder",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ViewType",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_ItemDisplayPreferences_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "ItemValues",
+      "entity": "Jellyfin.Database.Implementations.Entities.ItemValue",
+      "columns": [
+        {
+          "name": "ItemValueId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CleanValue",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Type",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Value",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemValueId"
+      ],
+      "indices": [
+        {
+          "name": "IX_ItemValues_Type_CleanValue",
+          "columns": [
+            "Type",
+            "CleanValue"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_ItemValues_Type_Value",
+          "columns": [
+            "Type",
+            "Value"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "ItemValuesMap",
+      "entity": "Jellyfin.Database.Implementations.Entities.ItemValueMap",
+      "columns": [
+        {
+          "name": "ItemValueId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemValueId",
+        "ItemId"
+      ],
+      "indices": [
+        {
+          "name": "IX_ItemValuesMap_ItemId",
+          "columns": [
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        },
+        {
+          "columns": [
+            "ItemValueId"
+          ],
+          "table": "ItemValues",
+          "referencedColumns": [
+            "ItemValueId"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "KeyframeData",
+      "entity": "Jellyfin.Database.Implementations.Entities.KeyframeData",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "KeyframeTicks",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false,
+          "primitiveCollection": true
+        },
+        {
+          "name": "TotalDuration",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId"
+      ],
+      "indices": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "LinkedChildren",
+      "entity": "Jellyfin.Database.Implementations.Entities.LinkedChildEntity",
+      "columns": [
+        {
+          "name": "ParentId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SortOrder",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ChildId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ChildType",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ParentId",
+        "SortOrder"
+      ],
+      "indices": [
+        {
+          "name": "IX_LinkedChildren_ChildId_ChildType",
+          "columns": [
+            "ChildId",
+            "ChildType"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_LinkedChildren_ParentId_ChildType",
+          "columns": [
+            "ParentId",
+            "ChildType"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ChildId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "NO ACTION"
+        },
+        {
+          "columns": [
+            "ParentId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "NO ACTION"
+        }
+      ]
+    },
+    {
+      "name": "MediaSegments",
+      "entity": "Jellyfin.Database.Implementations.Entities.MediaSegment",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EndTicks",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SegmentProviderId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StartTicks",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Type",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [],
+      "foreignKeys": []
+    },
+    {
+      "name": "MediaStreamInfos",
+      "entity": "Jellyfin.Database.Implementations.Entities.MediaStreamInfo",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StreamIndex",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AspectRatio",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AverageFrameRate",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "BitDepth",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "BitRate",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "BlPresentFlag",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ChannelLayout",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Channels",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Codec",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CodecTag",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CodecTimeBase",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ColorPrimaries",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ColorSpace",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ColorTransfer",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Comment",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DvBlSignalCompatibilityId",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DvLevel",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DvProfile",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DvVersionMajor",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DvVersionMinor",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ElPresentFlag",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Hdr10PlusPresentFlag",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Height",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsAnamorphic",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsAvc",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsDefault",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsExternal",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsForced",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsHearingImpaired",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsInterlaced",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsOriginal",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false,
+          "default": "0"
+        },
+        {
+          "name": "KeyFrames",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Language",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Level",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "NalLengthSize",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Path",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PixelFormat",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Profile",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RealFrameRate",
+          "clrType": "float?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RefFrames",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Rotation",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RpuPresentFlag",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SampleRate",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "StreamType",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TimeBase",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Title",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Width",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "StreamIndex"
+      ],
+      "indices": [
+        {
+          "name": "IX_MediaStreamInfos_StreamType_ItemId_Language_IsExternal",
+          "columns": [
+            "StreamType",
+            "ItemId",
+            "Language",
+            "IsExternal"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "PeopleBaseItemMap",
+      "entity": "Jellyfin.Database.Implementations.Entities.PeopleBaseItemMap",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PeopleId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Role",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ListOrder",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SortOrder",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "PeopleId",
+        "Role"
+      ],
+      "indices": [
+        {
+          "name": "IX_PeopleBaseItemMap_ItemId_ListOrder",
+          "columns": [
+            "ItemId",
+            "ListOrder"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_PeopleBaseItemMap_ItemId_SortOrder",
+          "columns": [
+            "ItemId",
+            "SortOrder"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_PeopleBaseItemMap_PeopleId_ItemId",
+          "columns": [
+            "PeopleId",
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        },
+        {
+          "columns": [
+            "PeopleId"
+          ],
+          "table": "Peoples",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "Peoples",
+      "entity": "Jellyfin.Database.Implementations.Entities.People",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Name",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PersonType",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_Peoples_Name",
+          "columns": [
+            "Name"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_Peoples_NameLower",
+          "columns": [],
+          "expression": "lower(\"Name\")",
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "name": "Permissions",
+      "entity": "Jellyfin.Database.Implementations.Entities.Permission",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "Kind",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RowVersion",
+          "clrType": "uint",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": true
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Value",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_Permissions_UserId_Kind",
+          "columns": [
+            "UserId",
+            "Kind"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "Preferences",
+      "entity": "Jellyfin.Database.Implementations.Entities.Preference",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": true,
+          "concurrency": false
+        },
+        {
+          "name": "Kind",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RowVersion",
+          "clrType": "uint",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": true
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Value",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_Preferences_UserId_Kind",
+          "columns": [
+            "UserId",
+            "Kind"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "TrickplayInfos",
+      "entity": "Jellyfin.Database.Implementations.Entities.TrickplayInfo",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Width",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Bandwidth",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Height",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Interval",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "ThumbnailCount",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TileHeight",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "TileWidth",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "Width"
+      ],
+      "indices": [],
+      "foreignKeys": []
+    },
+    {
+      "name": "UserData",
+      "entity": "Jellyfin.Database.Implementations.Entities.UserData",
+      "columns": [
+        {
+          "name": "ItemId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "UserId",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CustomDataKey",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AudioStreamIndex",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "IsFavorite",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LastPlayedDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Likes",
+          "clrType": "bool?",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PlayCount",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PlaybackPositionTicks",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Played",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Rating",
+          "clrType": "double?",
+          "type": "REAL",
+          "pgType": "double precision",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RetentionDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SubtitleStreamIndex",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "ItemId",
+        "UserId",
+        "CustomDataKey"
+      ],
+      "indices": [
+        {
+          "name": "IX_UserData_ItemId_UserId_IsFavorite",
+          "columns": [
+            "ItemId",
+            "UserId",
+            "IsFavorite"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_ItemId_UserId_LastPlayedDate",
+          "columns": [
+            "ItemId",
+            "UserId",
+            "LastPlayedDate"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_ItemId_UserId_PlaybackPositionTicks",
+          "columns": [
+            "ItemId",
+            "UserId",
+            "PlaybackPositionTicks"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_ItemId_UserId_Played",
+          "columns": [
+            "ItemId",
+            "UserId",
+            "Played"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_UserId_IsFavorite_ItemId",
+          "columns": [
+            "UserId",
+            "IsFavorite",
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_UserId_ItemId_LastPlayedDate",
+          "columns": [
+            "UserId",
+            "ItemId",
+            "LastPlayedDate"
+          ],
+          "unique": false,
+          "filter": null
+        },
+        {
+          "name": "IX_UserData_UserId_Played_ItemId",
+          "columns": [
+            "UserId",
+            "Played",
+            "ItemId"
+          ],
+          "unique": false,
+          "filter": null
+        }
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "ItemId"
+          ],
+          "table": "BaseItems",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        },
+        {
+          "columns": [
+            "UserId"
+          ],
+          "table": "Users",
+          "referencedColumns": [
+            "Id"
+          ],
+          "onDelete": "CASCADE"
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "entity": "Jellyfin.Database.Implementations.Entities.User",
+      "columns": [
+        {
+          "name": "Id",
+          "clrType": "Guid",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AudioLanguagePreference",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "AuthenticationProviderId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "CastReceiverId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DisplayCollectionsView",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "DisplayMissingEpisodes",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EnableAutoLogin",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EnableLocalPassword",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EnableNextEpisodeAutoPlay",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "EnableUserPreferenceAccess",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "HidePlayedInLatest",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "InternalId",
+          "clrType": "long",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "InvalidLoginAttemptCount",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LastActivityDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LastLoginDate",
+          "clrType": "DateTime?",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "LoginAttemptsBeforeLockout",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MaxActiveSessions",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MaxParentalRatingScore",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MaxParentalRatingSubScore",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "MustUpdatePassword",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "NormalizedUsername",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false,
+          "default": "''"
+        },
+        {
+          "name": "Password",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PasswordResetProviderId",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "PlayDefaultAudioTrack",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RememberAudioSelections",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RememberSubtitleSelections",
+          "clrType": "bool",
+          "type": "INTEGER",
+          "pgType": "boolean",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RemoteClientBitrateLimit",
+          "clrType": "int?",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "RowVersion",
+          "clrType": "uint",
+          "type": "INTEGER",
+          "pgType": "bigint",
+          "nullable": false,
+          "generated": false,
+          "concurrency": true
+        },
+        {
+          "name": "SubtitleLanguagePreference",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": true,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SubtitleMode",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "SyncPlayAccess",
+          "clrType": "int",
+          "type": "INTEGER",
+          "pgType": "integer",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        },
+        {
+          "name": "Username",
+          "clrType": "string",
+          "type": "TEXT",
+          "pgType": "text",
+          "nullable": false,
+          "generated": false,
+          "concurrency": false
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "indices": [
+        {
+          "name": "IX_Users_NormalizedUsername",
+          "columns": [
+            "NormalizedUsername"
+          ],
+          "unique": true,
+          "filter": null
+        },
+        {
+          "name": "IX_Users_Username",
+          "columns": [
+            "Username"
+          ],
+          "unique": true,
+          "filter": null
+        }
+      ],
+      "foreignKeys": []
+    }
+  ],
+  "migrations": [
+    "20200514181226_AddActivityLog",
+    "20200613202153_AddUsers",
+    "20200728005145_AddDisplayPreferences",
+    "20200905220533_FixDisplayPreferencesIndex",
+    "20201004171403_AddMaxActiveSessions",
+    "20201204223655_AddCustomDisplayPreferences",
+    "20210320181425_AddIndexesAndCollations",
+    "20210407110544_NullableCustomPrefValue",
+    "20210814002109_AddDevices",
+    "20221022080052_AddIndexActivityLogsDateCreated",
+    "20230526173516_RemoveEasyPassword",
+    "20230626233818_AddTrickplayInfos",
+    "20230923170422_UserCastReceiver",
+    "20240729140605_AddMediaSegments",
+    "20240928082930_MarkSegmentProviderIdNonNullable",
+    "20241020103111_LibraryDbMigration",
+    "20241111131257_AddedCustomDataKey",
+    "20241111135439_AddedCustomDataKeyKey",
+    "20241112152323_FixAncestorIdConfig",
+    "20241112232041_FixMediaStreams",
+    "20241112234144_FixMediaStreams2",
+    "20241113133548_EnforceUniqueItemValue",
+    "20250202021306_FixedCollation",
+    "20250204092455_MakeStartEndDateNullable",
+    "20250214031148_ChannelIdGuid",
+    "20250326065026_AddInheritedParentalRatingSubValue",
+    "20250327101120_AddKeyframeData",
+    "20250327171413_AddHdr10PlusFlag",
+    "20250331182844_FixAttachmentMigration",
+    "20250401142247_FixAncestors",
+    "20250405075612_FixItemValuesIndices",
+    "20250609115616_DetachUserDataInsteadOfDelete",
+    "20250622170802_BaseItemImageInfoDateModifiedNullable",
+    "20250714044826_ResetJournalMode",
+    "20250913211637_AddProperParentChildRelationBaseItemWithCascade",
+    "20250925203415_ExtendPeopleMapKey",
+    "20260113102337_AddLinkedChildrenTable",
+    "20260113203012_ChangeOwnerIdToGuid",
+    "20260113233000_AddForeignKeyToOwnerId",
+    "20260113233500_DropExtraIdsColumn",
+    "20260116114245_AddLatestItemsDateCreatedIndexes",
+    "20260118182305_AddIndicesToImageInfo",
+    "20260130232147_AddBaseItemNameIndex",
+    "20260206224832_IndexOptimizations",
+    "20260215201634_ChangePrimaryVersionIdToGuid",
+    "20260308123920_AddTypeCleanNameIndex",
+    "20260504075755_AddPartialIndexForItemCounts",
+    "20260522092303_AddNormalizedUsername",
+    "20260524120336_AddUniqueNormalizedUsernameIndex",
+    "20260723111547_AllowDuplicatePlaylistChildren",
+    "20260724185102_AddPrimaryVersionIdIndex",
+    "20260728170000_AddPeopleNameLowerIndex",
+    "20260728182152_AddPeopleItemMapCoveringIndex",
+    "20260812050902_AddMediaStreamFilterIndex",
+    "20260815063607_RemoveOrphanedUserPermissionsAndPreferences"
+  ],
+  "dataMigrations": [
+    "20250420000000_CreateNetworkConfiguration",
+    "20250420010000_MigrateNetworkConfiguration",
+    "20250420020000_MigrateMusicBrainzTimeout",
+    "20250420030000_MigrateEncodingOptions",
+    "20250420040000_RenameEnableGroupingIntoCollections",
+    "20250420050000_DisableTranscodingThrottling",
+    "20250420060000_CreateUserLoggingConfigFile",
+    "20250420070000_MigrateActivityLogDb",
+    "20250420080000_RemoveDuplicateExtras",
+    "20250420090000_AddDefaultPluginRepository",
+    "20250420100000_MigrateUserDb",
+    "20250420110000_ReaddDefaultPluginRepository",
+    "20250420120000_MigrateDisplayPreferencesDb",
+    "20250420130000_RemoveDownloadImagesInAdvance",
+    "20250420140000_MigrateAuthenticationDb",
+    "20250420150000_FixPlaylistOwner",
+    "20250420160000_AddDefaultCastReceivers",
+    "20250420170000_UpdateDefaultPluginRepository",
+    "20250420180000_FixAudioData",
+    "20250420193000_MigrateLibraryDbCompatibilityCheck",
+    "20250420200000_MigrateLibraryDb",
+    "20250420210000_MoveExtractedFiles",
+    "20250420230000_MoveTrickplayFiles",
+    "20250420230000_RefreshInternalDateModified",
+    "20250421000000_MigrateKeyframeData",
+    "20250618010000_MigrateLibraryUserData",
+    "20250620180000_FixDates",
+    "20250730215000_ReseedFolderFlag",
+    "20251009200000_CleanMusicArtist",
+    "20260113120000_MigrateLinkedChildren",
+    "20260113230000_CleanupOrphanedExtras",
+    "20260115120000_FixIncorrectOwnerIdRelationships",
+    "20260206200000_FixLibrarySubtitleDownloadLanguages",
+    "20260508120000_MergeDuplicateMusicArtists",
+    "20260508130000_MergeDuplicatePeople",
+    "20260522092304_UpdateNormalizedUsername",
+    "20260525010000_CleanupOrphanedExternalData",
+    "20260531160000_DisableLegacyAuthorization",
+    "20260610120000_RefreshCleanNamesAndValues",
+    "20260722120000_RefreshForcedSortNames",
+    "20260729120000_RestorePlaylistChildrenFromMetadata",
+    "20260821120000_RecomputeSeriesPresentationKey",
+    "20260825200000_ConsolidateLocalizedUserViews",
+    "20260831100000_EnableLocalSimilarityProviders",
+    "20260908120000_RepairAlternateVersionLinks",
+    "20260910120000_MigrateRatingLevels",
+    "20260911120000_StripEmbeddedLinkedChildren"
+  ],
+  "sources": [
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/JellyfinDbModelSnapshot.cs",
+      "sha256": "8d77990cd96bf1ce29a7e3e6152f9744fd40bad59b06aa76783b4a268c764ed4"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20200514181226_AddActivityLog.cs",
+      "sha256": "660a30d304878aba0c3a21dcd9df461b0e5710affa4ccf408e55f6871aa8f7e1"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20200613202153_AddUsers.cs",
+      "sha256": "c820e4a7e3b494f9e2c88f4921d768354034a284f684f4f97cad43944a4114f6"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20200728005145_AddDisplayPreferences.cs",
+      "sha256": "960c8d853205f6806c23ece227012b6f3cf2e0a96c0812106105c82220ad83c4"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20200905220533_FixDisplayPreferencesIndex.cs",
+      "sha256": "4c47cee601b5296293b5fe0e1b20bbfda729f9e2af1c7c45c7834f27b55fcdbe"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20201004171403_AddMaxActiveSessions.cs",
+      "sha256": "bcfde43a86a80e5fc6f25f4d788487c3ab2c5efdc74234eb353cc62efadcfce9"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20201204223655_AddCustomDisplayPreferences.cs",
+      "sha256": "24db7232da01b51bafa51bd6e877b5860c263b32114aa4958896d8e8caa371dd"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20210320181425_AddIndexesAndCollations.cs",
+      "sha256": "0aead99943c367efac44587b8c9d6f880e3ce0d3756506bf9fd5d7100c3ef413"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20210407110544_NullableCustomPrefValue.cs",
+      "sha256": "48fd46c611de1c9d0df1c7c574c47b01779244e924a372b32df9a127babaccbc"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20210814002109_AddDevices.cs",
+      "sha256": "2e7aa7944f83a7f3ef41483874d969fd8a06e0be4c8e5d33b1360c66412bde1d"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20221022080052_AddIndexActivityLogsDateCreated.cs",
+      "sha256": "98e335065b937eae0cd00b3933b18c2a71b6f9f024f809d2d9fe77b30c5dfd97"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20230526173516_RemoveEasyPassword.cs",
+      "sha256": "ccbd0eacb235f499d43d1c48da62dec5cc0b63c02814102dffe0dcefd1512956"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20230626233818_AddTrickplayInfos.cs",
+      "sha256": "654be143bfaa08637660388e1e3b0b5bd52654d2937eab125625b88680f0c26c"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20230923170422_UserCastReceiver.cs",
+      "sha256": "e1e06b6c9974d863549e6ad6a09b9e78eaf26fe2a7574836b19fb3baadeea687"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20240729140605_AddMediaSegments.cs",
+      "sha256": "6cb56b99a688deed3dacf82be0461f165c9bb20a4032b06df200848c5b8ad030"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20240928082930_MarkSegmentProviderIdNonNullable.cs",
+      "sha256": "b209c3e1a015eae9af39abd5cd333fb89d82cea45b8950cefefb0076516f3ec0"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241020103111_LibraryDbMigration.cs",
+      "sha256": "300ffe1eac029b1f0367e579bf2528d3beafb3bce10701b3d87aebf24a84f70a"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241111131257_AddedCustomDataKey.cs",
+      "sha256": "c95d524bda5deaa39468bdc76226230562cca5b9d90fb3c74a2390bd19c2914e"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241111135439_AddedCustomDataKeyKey.cs",
+      "sha256": "983008f4fc7f07da3cf62e9a6c6dd897bc4cf338a7292e98168712ed5834304f"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241112152323_FixAncestorIdConfig.cs",
+      "sha256": "a16f2382b9c91ca9648a77df94b98d5d081f3cca6e60ff214d8b20b00bda712b"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241112232041_fixMediaStreams.cs",
+      "sha256": "95c42ef4a47c21746e1841559e3d3c08dad21c1aead196c975ec35e0482ec1fb"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241112234144_FixMediaStreams2.cs",
+      "sha256": "374edaaf6640e59ac90b340b23e797f1299a116e2f4d918237457aed940e0801"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20241113133548_EnforceUniqueItemValue.cs",
+      "sha256": "d5fb807e34bb526039692f8378738327bea691cf12e42a1aef1808db4ce61fdf"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250202021306_FixedCollation.cs",
+      "sha256": "f7d6b0c9bc37f74de1871eabbfc9573af6f77b4c11085ca102e8adb6a1192d72"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250204092455_MakeStartEndDateNullable.cs",
+      "sha256": "2b7253f4cfb7d9be01bcb0f67848bf9f438ce494a848f729aa2f69981b0d346f"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250214031148_ChannelIdGuid.cs",
+      "sha256": "4d724ba437c7b19b128e4b7b221be9ab8a1a6e3719c4e0849dc2902e717489c1"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250326065026_AddInheritedParentalRatingSubValue.cs",
+      "sha256": "ee724d117be9d3d1e1224d1c09b73e581bfe64f289506e9b4bfa37db8dfad1b1"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250327101120_AddKeyframeData.cs",
+      "sha256": "4f009302428aedc85e76694d45f1eaa35607579973a3332f1ec9c0ee18ef2edd"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250327171413_AddHdr10PlusFlag.cs",
+      "sha256": "54e7c3f57abfc4081ed34b16500b2f8210351e8cad0c6815f25bcef95475c1e6"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250331182844_FixAttachmentMigration.cs",
+      "sha256": "e49a15ccef3ae5d859b36dc196574e2b78034bfffeb2eec802f235b1852546e8"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250401142247_FixAncestors.cs",
+      "sha256": "efd2b8ea833ed7d47fc919cfd7f66aca9fce6896855b25b862e0abe8de55cf11"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250405075612_FixItemValuesIndices.cs",
+      "sha256": "9d1ee31e9ef4f463e236124063f0f110b894d76ebe3feca80e1c19412cdbbddc"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250609115616_DetachUserDataInsteadOfDelete.cs",
+      "sha256": "88ee2ba635f68c1da00fde8a95b32fddbb232b42ca4c95c4fa44005f3f9f0503"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250622170802_BaseItemImageInfoDateModifiedNullable.cs",
+      "sha256": "e3c30dd44a07e5c453fbfce5e1dda25dd812999d71bbb91f8bdddf490aeaff0e"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250714044826_ResetJournalMode.cs",
+      "sha256": "d0bfd4d5d4c2a2786d499b8519869d47b09a191af24be9959660d5f708901265"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250913211637_AddProperParentChildRelationBaseItemWithCascade.cs",
+      "sha256": "9ec297e5431998dc1a5f1069b5ab34cf5fc7122242921aa21fa9ef8358e34bbd"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20250925203415_ExtendPeopleMapKey.cs",
+      "sha256": "c109bf23f7d963320884f746548608a4213ce0c576f91bc177cc0f8acb15d250"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113102337_AddLinkedChildrenTable.cs",
+      "sha256": "c3f731af1ccd4796711c1784d299c6275fad0d53b4a515caf104125f4ed432a4"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113203012_ChangeOwnerIdToGuid.cs",
+      "sha256": "09fed5bb722789d7b33df5e9a6dc96cd418792d66d0da1fe019c9d18ac3c3f11"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113233000_AddForeignKeyToOwnerId.cs",
+      "sha256": "edfa19f1f0d5d9109cd7cb8812c1f229821bdea84f564005eae0bfe754196d2b"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260113233500_DropExtraIdsColumn.cs",
+      "sha256": "67872bc02c29225d39e16c6905c7af7397ee02a683daceb84d101f223982ddfe"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260116114245_AddLatestItemsDateCreatedIndexes.cs",
+      "sha256": "8d8b15eb8b69d40fa1259e0a43b07e47b5f3d10d1fa26b50692dc4cf1750d60f"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260118182305_AddIndicesToImageInfo.cs",
+      "sha256": "755bd65f06438c7b24dd8dd1936939657769dce6b65c8d7ca3575721527a5747"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260130232147_AddBaseItemNameIndex.cs",
+      "sha256": "d4e9631a3cb53c3df44260d1b333e1db828cd538fe7cdedc7cd27e28c764a536"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260206224832_IndexOptimizations.cs",
+      "sha256": "08e5a52c21a7a67176b3dfe53d92232638d71b27a7e5272500223a6efc535da7"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260215201634_ChangePrimaryVersionIdToGuid.cs",
+      "sha256": "9b70e1ded502864e37fafa604cb5637d166b17ab1e41e8d66e0d337660fafa3c"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260308123920_AddTypeCleanNameIndex.cs",
+      "sha256": "d82fb1fb1941b6949904bea8d37dd063f31af203eb74ac50b32e964358e0a26b"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260504075755_AddPartialIndexForItemCounts.cs",
+      "sha256": "896a74fcf73b8bce5fc5cce6855f93a32b2d7f7b1d74b9920955bc15f3879775"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260522092303_AddNormalizedUsername.cs",
+      "sha256": "cf76bf684e4f2905aa0a89e2f2012fc19bc625b9f6a2fc05aa6abc6bb3796765"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260524120336_AddUniqueNormalizedUsernameIndex.cs",
+      "sha256": "29d7b5ebb3ee082d7ecb02090e0ba18cab86321c23eab4f53bcf0036343dfba2"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260723111547_AllowDuplicatePlaylistChildren.cs",
+      "sha256": "dcf1514fd7f8b5e249aa33279f0bc1b17107e62be395dd4f1e7c3fa508481662"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260724185102_AddPrimaryVersionIdIndex.cs",
+      "sha256": "1e63baf19d14ae69b074e3c0e0858ff97aabbb3feaa819e5ffea28d649d6ca3a"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260728170000_AddPeopleNameLowerIndex.cs",
+      "sha256": "e6076f79abcfd610ab9eacc69049ef2379d72ddbfe4656f9c0ffb08a47971d87"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260728182152_AddPeopleItemMapCoveringIndex.cs",
+      "sha256": "90f05c06eb160aeecf679c9d08fda946a000151268967c88e5d4013bd8ac074a"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260812050902_AddMediaStreamFilterIndex.cs",
+      "sha256": "8f101aa4885ea3de75d386e393cbe0b8fdda713fd0186c0204119b481f4362a7"
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/Migrations/20260815063607_RemoveOrphanedUserPermissionsAndPreferences.cs",
+      "sha256": "6114faa2392de3172127a9044d186fbce8615f8063e17acf314ee87afeb6cbb1"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420050000_DisableTranscodingThrottling.cs",
+      "sha256": "17fe4b88702eb9617f5c6833ab054c37bad5b0925f815bf22e6df359d04e8168"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420060000_CreateUserLoggingConfigFile.cs",
+      "sha256": "f61b8fe14ef82d3b7057598b6bbecd0f98017f3cd3ee309d192566ceea8ce6a2"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420070000_MigrateActivityLogDb.cs",
+      "sha256": "a7a4caaf252b95e283081de407db28693499f7a1e51169cc1aa2d07a766d2256"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420080000_RemoveDuplicateExtras.cs",
+      "sha256": "5c9e7c895b2abaa14f31023769d8e8570033a7e196abc80ddf95bc787e118dea"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420090000_AddDefaultPluginRepository.cs",
+      "sha256": "2af65427af75c7ed8f7c0198120d5bcee59c0afec89e4d831828ba2d2ff5210c"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420100000_MigrateUserDb.cs",
+      "sha256": "dcefdbfb2bb4421e99186945ba66b4c534f22f9ec8e881ba4fe6e0853d571295"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420110000_ReaddDefaultPluginRepository.cs",
+      "sha256": "c2c67b359af8a09699f523235c5bc422b3f6dbef9f75d0f306bf563eb2818825"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420120000_MigrateDisplayPreferencesDb.cs",
+      "sha256": "04aeccd95659dff55da56379a5d50f129120f79d95e52631368f52c93f76a6c2"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420130000_RemoveDownloadImagesInAdvance.cs",
+      "sha256": "2bf3203b22b6b481cdebd174ed21280de0fe524a0ed52c948a7567226173f030"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420140000_MigrateAuthenticationDb.cs",
+      "sha256": "4fa6c0ac2b7679ce9319ace02458f823c5806604e9ac8e9a9fbc5391b28f4636"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420150000_FixPlaylistOwner.cs",
+      "sha256": "fe52508541158b7a2a56e277d91241ac82eb1dca35b733932663ac4a1d57a532"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420160000_AddDefaultCastReceivers.cs",
+      "sha256": "7a9f8940d4c48ecf066513adae551504535ce50e80c347c0326b02bc13dd87a3"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420170000_UpdateDefaultPluginRepository.cs",
+      "sha256": "443c9398310abc73c8ec030b87bdddf794b760f106ba3fcc568c66e36833145f"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420180000_FixAudioData.cs",
+      "sha256": "f2e6331936feca3ddeb6cbf1084392418c28284c158cc6cd394625d3f5450f0f"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420193000_MigrateLibraryDbCompatibilityCheck.cs",
+      "sha256": "5b799c2338ad6328798ed8f269bff15ff238c2378381c751728bac924174438b"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420200000_MigrateLibraryDb.cs",
+      "sha256": "0b8b6eafdb77b5e9fc28852fe233c8b8e0721e8b3085c6b760854e88824345a8"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420210000_MoveExtractedFiles.cs",
+      "sha256": "7733e032e9afebab675e74ca98e2aa10450415e691ed0f3ab58275ca75306d19"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420230000_MoveTrickplayFiles.cs",
+      "sha256": "d540993973dd98a68945f35fdb85fe720f248d7023133e5605b9c86381bd1aa5"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250420230000_RefreshInternalDateModified.cs",
+      "sha256": "6d96dfc4daa533ff2bbb9d91e5f01a2012fc3c516f43fe7c2db6d191f976517e"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250421000000_MigrateKeyframeData.cs",
+      "sha256": "c58bbf85a46dda3861698878a04c5c129ccf7497077b04d9ef9e1934889b7b21"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250618010000_MigrateLibraryUserData.cs",
+      "sha256": "6a8b6408db68236450308113f080059873f4215c0307256538e3e24c46205d73"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250620180000_FixDates.cs",
+      "sha256": "1ca3561901151ff5149a5bf60b21da6293477214e659ee98705b82a2ca334f24"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20250730215000_ReseedFolderFlag.cs",
+      "sha256": "ccab5dae99c9c573970b9645fd4cb654dced1dc43f64e9f976737d080456778c"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20251009200000_CleanMusicArtist.cs",
+      "sha256": "83c3c826bdfae27a42dd261520ee8c78dbb1c814615ff62c3bbf5d538d84a475"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260113120000_MigrateLinkedChildren.cs",
+      "sha256": "9c685fe22a2d9a7e55cc4c7d00a98a811c12fb9bcfb17005690fc72e97ed02e2"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260113230000_CleanupOrphanedExtras.cs",
+      "sha256": "0ab590750795aeea56418cdf5df616e6668b3e89d717c69d5f3fc7d437905a90"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260115120000_FixIncorrectOwnerIdRelationships.cs",
+      "sha256": "dacde20d072cf8e914b3ca0f42c8cfe041c1d6a23ea5765ceade4282648301b9"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260206200000_FixLibrarySubtitleDownloadLanguages.cs",
+      "sha256": "69c4f311b0ba2ff5057702b9b6430b6fc220ecfb0a4e795bcb65bddaa1b3b485"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260508120000_MergeDuplicateMusicArtists.cs",
+      "sha256": "922b18434e51835224d63b51dcd16fe9374814ef6bc97d88505ba20f14e30376"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260508130000_MergeDuplicatePeople.cs",
+      "sha256": "c67de9f1f8db13007b9d6cfb746bbe806b34629407539143deb6d77d071dd7b3"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260522092304_UpdateNormalizedUsername.cs",
+      "sha256": "ce23676e913473dce6ef69de0126345d65142674c04fa36e425aa2a54d1f9e81"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260525010000_CleanupOrphanedExternalData.cs",
+      "sha256": "babd08bc1c0cdc7e5b8dda940b0ad2bc65a2cf05fe1d9bd6e499917fd314ee5b"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260531160000_DisableLegacyAuthorization.cs",
+      "sha256": "535ec1f548970bd64aecaa681db7a72f7b1919a379b7b2195e8cbba22a73a6ee"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260610120000_RefreshCleanNamesAndValues.cs",
+      "sha256": "b27b2ef8ce1294b48fd462cb73365ade3a4b0e9a1ac166c3ea99302acdb90a10"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260722120000_RefreshForcedSortNames.cs",
+      "sha256": "869ee51df66fbce7cbff8df0b66d9cd3cc230e4642ef8eee6ecb9f7dd8dfad34"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260729120000_RestorePlaylistChildrenFromMetadata.cs",
+      "sha256": "5ed2f0195653a49b5f4cc8bc1e67854153f92b6f804aa1e02231226fc3e87ea9"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260821120000_RecomputeSeriesPresentationKey.cs",
+      "sha256": "d42d45a4b543597ec1dbc68c099b313fc39a4b51cedc26d1c62196eb7077a3a0"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260825200000_ConsolidateLocalizedUserViews.cs",
+      "sha256": "780c26e3bee3355e5accc312671911b8d54811b080a875e4f61e1b0791dda114"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260831100000_EnableLocalSimilarityProviders.cs",
+      "sha256": "f6e0b454224d57defa527a3fbeaa1ded36c52b854c9e252c70bc57dac4e40fdc"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260908120000_RepairAlternateVersionLinks.cs",
+      "sha256": "287137d314ec0b33e32bff4e9b7516b843b6167078ebde3a79d4599128aa38f5"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260910120000_MigrateRatingLevels.cs",
+      "sha256": "78f7d02ff7e1afb3fb4ffa733f1856ac8d9238f81c66ac06694244ef38411d11"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/Routines/20260911120000_StripEmbeddedLinkedChildren.cs",
+      "sha256": "04d6bf244790622aa57039f64cc00958a3593ffc1a019c81cd02ea2b283c6c10"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/PreStartupRoutines/CreateNetworkConfiguration.cs",
+      "sha256": "25c7b68ed87524fdd4b131b1a54a98eeba6ee5bfba8a7db2e1d385501d3713b5"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateEncodingOptions.cs",
+      "sha256": "77908593739a2d55c8e5d2a8e3b6dfb3a032be4c6947342184d5d3f0fb5be1b6"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateMusicBrainzTimeout.cs",
+      "sha256": "01f546de460bbffa070b3fb15a14dcce6f57875ecc654f91a1bc74f3c677b9ab"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/PreStartupRoutines/MigrateNetworkConfiguration.cs",
+      "sha256": "2f5eec7487dcb4e69fe6587d0d679f986c49e3b55b13f88ad127029a2c05f6ed"
+    },
+    {
+      "path": "Jellyfin.Server/Migrations/PreStartupRoutines/RenameEnableGroupingIntoCollections.cs",
+      "sha256": "dc6b120be2488bfab756b3f3a27c5785e3ffa062165bb4f66963d809468ad464"
+    }
+  ]
+}

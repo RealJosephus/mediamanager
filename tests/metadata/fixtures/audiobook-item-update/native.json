@@ -1,0 +1,371 @@
+{
+  "results": [
+    {
+      "name": "AudioBook-empty",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "AudioBook-artists",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Album": "Series",
+        "Artists": [
+          "Artist",
+          "Second"
+        ],
+        "AlbumArtists": [
+          "Album artist"
+        ]
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "AudioBook-null",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "AudioBook-clear",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        },
+        "Artists": [],
+        "AlbumArtists": []
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "AudioBook-null-element-name",
+      "error": "NullReferenceException",
+      "Message": "Object reference not set to an instance of an object."
+    },
+    {
+      "name": "Book-empty",
+      "value": {
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "Book-artists",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "Book-null",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "Book-clear",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    },
+    {
+      "name": "Book-null-element-name",
+      "value": {
+        "Name": "Book",
+        "Genres": [
+          "Old genre"
+        ],
+        "Tagline": "Old tagline",
+        "Studios": [
+          "Old studio"
+        ],
+        "DateCreated": "2020-01-01T00:00:00.0000000Z",
+        "Tags": [
+          "Old",
+          "keep"
+        ],
+        "ProductionLocations": [
+          "Old country"
+        ],
+        "IsLocked": false,
+        "LockedFields": [
+          "Name"
+        ],
+        "RunTimeTicks": 9007199254740993,
+        "ProviderIds": {
+          "Custom": "old"
+        }
+      },
+      "saves": [
+        {
+          "Id": "81000000000000000000000000000001",
+          "reason": "MetadataEdit"
+        }
+      ],
+      "people": [],
+      "queued": 0
+    }
+  ],
+  "sourceBoundary": "Unmodified ItemUpdateController.UpdateItem, native BaseItemDto JSON converters, physical Children, recursive lock propagation and OnMetadataChanged; ILibraryManager repository writes and IProviderManager.QueueRefresh are recorded callbacks, not real database or NFO evidence. Children are supplied explicitly by scenarios; alternate versions are empty.",
+  "runtime": ".NET 10.0.12",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\validation\\audiobook-item-update-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "f0bbaba2c4564bf7f04329d728df65a7a3ef54c96936374292db0beb311c87c5"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\validation\\audiobook-item-update-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "candidateVerified": false
+,"schemaVersion":1,"inputSha256":"4c9c3e047adb4b5f147eda07d23eafaf1155c4b52b084434c7d0275122610098","sourceFilesSha256":"bb2caade8bd71cd930a420588e0aa5d817e3d74672081e52d3d2e783a2c7cdea"}

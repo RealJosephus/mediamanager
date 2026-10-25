@@ -1,0 +1,678 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "79000000-0000-0000-0000-000000000001",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "name": "root",
+      "sortName": "root",
+      "type": "AggregateFolder",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "presentationUniqueKey": "collapse-aggregate"
+    },
+    {
+      "key": "root",
+      "id": "79000000-0000-0000-0000-000000000001",
+      "name": "Collapse Root",
+      "sortName": "collapse root",
+      "type": "Folder",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-root"
+    },
+    {
+      "key": "collections",
+      "id": "79000000-0000-0000-0000-000000000002",
+      "name": "Collections Physical Root",
+      "sortName": "collections physical root",
+      "type": "Folder",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-collections"
+    },
+    {
+      "key": "movieA",
+      "id": "79000000-0000-0000-0000-000000000003",
+      "name": "21 Jump Street",
+      "sortName": "21 jump street",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-movieA"
+    },
+    {
+      "key": "movieB",
+      "id": "79000000-0000-0000-0000-000000000004",
+      "name": "22 Jump Street",
+      "sortName": "22 jump street",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-movieB"
+    },
+    {
+      "key": "solo",
+      "id": "79000000-0000-0000-0000-000000000005",
+      "name": "Solo Movie",
+      "sortName": "solo movie",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-solo"
+    },
+    {
+      "key": "series",
+      "id": "79000000-0000-0000-0000-000000000006",
+      "name": "Alpha Series",
+      "sortName": "alpha series",
+      "type": "Series",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-series",
+      "mediaType": "Video"
+    },
+    {
+      "key": "audio",
+      "id": "79000000-0000-0000-0000-000000000007",
+      "name": "Beta Audio",
+      "sortName": "beta audio",
+      "type": "Audio",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-audio"
+    },
+    {
+      "key": "sameFirst",
+      "id": "79000000-0000-0000-0000-000000000008",
+      "name": "Gamma Same First",
+      "sortName": "gamma same first",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-same-key"
+    },
+    {
+      "key": "sameSecond",
+      "id": "79000000-0000-0000-0000-000000000009",
+      "name": "Gamma Same Second",
+      "sortName": "gamma same second",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-same-key"
+    },
+    {
+      "key": "nonmanual",
+      "id": "79000000-0000-0000-0000-000000000010",
+      "name": "Hotel Nonmanual",
+      "sortName": "hotel nonmanual",
+      "type": "Movie",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-nonmanual"
+    },
+    {
+      "key": "looseBox",
+      "id": "79000000-0000-0000-0000-000000000011",
+      "name": "Loose Empty Collection",
+      "sortName": "loose empty collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000001",
+      "topParentId": "79000000-0000-0000-0000-000000000001",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000001",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-looseBox"
+    },
+    {
+      "key": "movieSet",
+      "id": "79000000-0000-0000-0000-000000000012",
+      "name": "Jump Street Collection",
+      "sortName": "jump street collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-movieSet"
+    },
+    {
+      "key": "sharedSet",
+      "id": "79000000-0000-0000-0000-000000000013",
+      "name": "Zulu Shared Collection",
+      "sortName": "zulu shared collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-sharedSet"
+    },
+    {
+      "key": "seriesSet",
+      "id": "79000000-0000-0000-0000-000000000014",
+      "name": "Series Collection",
+      "sortName": "series collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-seriesSet"
+    },
+    {
+      "key": "audioSet",
+      "id": "79000000-0000-0000-0000-000000000015",
+      "name": "Audio Collection",
+      "sortName": "audio collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-audioSet"
+    },
+    {
+      "key": "sameSet",
+      "id": "79000000-0000-0000-0000-000000000016",
+      "name": "Grouped Movie Collection",
+      "sortName": "grouped movie collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-sameSet"
+    },
+    {
+      "key": "nonmanualSet",
+      "id": "79000000-0000-0000-0000-000000000017",
+      "name": "Remote Link Collection",
+      "sortName": "remote link collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-nonmanualSet"
+    },
+    {
+      "key": "nestedSet",
+      "id": "79000000-0000-0000-0000-000000000018",
+      "name": "Nested Collection",
+      "sortName": "nested collection",
+      "type": "BoxSet",
+      "parentId": "79000000-0000-0000-0000-000000000002",
+      "topParentId": "79000000-0000-0000-0000-000000000002",
+      "ancestorIds": [
+        "79000000-0000-0000-0000-000000000002",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "presentationUniqueKey": "collapse-nestedSet"
+    }
+  ],
+  "links": [
+    {
+      "parentId": "79000000-0000-0000-0000-000000000012",
+      "childId": "79000000-0000-0000-0000-000000000003",
+      "childType": 0,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000012",
+      "childId": "79000000-0000-0000-0000-000000000004",
+      "childType": 0,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000013",
+      "childId": "79000000-0000-0000-0000-000000000003",
+      "childType": 0,
+      "sortOrder": 2
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000014",
+      "childId": "79000000-0000-0000-0000-000000000006",
+      "childType": 0,
+      "sortOrder": 3
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000015",
+      "childId": "79000000-0000-0000-0000-000000000007",
+      "childType": 0,
+      "sortOrder": 4
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000016",
+      "childId": "79000000-0000-0000-0000-000000000009",
+      "childType": 0,
+      "sortOrder": 5
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000017",
+      "childId": "79000000-0000-0000-0000-000000000010",
+      "childType": 2,
+      "sortOrder": 6
+    },
+    {
+      "parentId": "79000000-0000-0000-0000-000000000018",
+      "childId": "79000000-0000-0000-0000-000000000012",
+      "childType": 0,
+      "sortOrder": 7
+    }
+  ],
+  "configurations": [
+    {
+      "name": "disabled",
+      "EnableGroupingMoviesIntoCollections": false,
+      "EnableGroupingShowsIntoCollections": false
+    },
+    {
+      "name": "movies",
+      "EnableGroupingMoviesIntoCollections": true,
+      "EnableGroupingShowsIntoCollections": false
+    },
+    {
+      "name": "series",
+      "EnableGroupingMoviesIntoCollections": false,
+      "EnableGroupingShowsIntoCollections": true
+    },
+    {
+      "name": "both",
+      "EnableGroupingMoviesIntoCollections": true,
+      "EnableGroupingShowsIntoCollections": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "repository-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7"
+    },
+    {
+      "name": "repository-explicit-true",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-explicit-false",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=false"
+    },
+    {
+      "name": "repository-empty-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems="
+    },
+    {
+      "name": "repository-first-false",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=false&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-invalid",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=invalid",
+      "expectedStatus": 400,
+      "expectRuntimeError": false
+    },
+    {
+      "name": "repository-movies",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Movie"
+    },
+    {
+      "name": "repository-series",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Series"
+    },
+    {
+      "name": "repository-audio-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Audio&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-movies-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Movie&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-name-collection",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&NameStartsWith=Jump&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-name-child",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&NameStartsWith=21&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-name-range",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&NameStartsWithOrGreater=Jump&NameLessThan=K&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-page",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&StartIndex=1&Limit=2"
+    },
+    {
+      "name": "repository-page-total-off",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&StartIndex=1&Limit=2&EnableTotalRecordCount=false"
+    },
+    {
+      "name": "repository-limit-zero",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&Limit=0"
+    },
+    {
+      "name": "repository-favorite-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IsFavorite=false"
+    },
+    {
+      "name": "repository-favorite-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IsFavorite=false&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-overview-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&HasOverview=false&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-rating-sort-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "sortBy": "CommunityRating,SortName"
+    },
+    {
+      "name": "repository-rating-sort-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true",
+      "sortBy": "CommunityRating,SortName"
+    },
+    {
+      "name": "repository-ids-suppress",
+      "scope": [
+        "movieA",
+        "movieB",
+        "series",
+        "audio",
+        "solo"
+      ],
+      "omitIds": false,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "repository-search-suppress",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&SearchTerm=Solo"
+    },
+    {
+      "name": "memory-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7"
+    },
+    {
+      "name": "memory-explicit-true",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "memory-explicit-false",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=false"
+    },
+    {
+      "name": "memory-movies",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Movie"
+    },
+    {
+      "name": "memory-series",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Series"
+    },
+    {
+      "name": "memory-audio-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IncludeItemTypes=Audio&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "memory-name-collection",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&NameStartsWith=Jump&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "memory-name-child",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&NameStartsWith=21&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "memory-page",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&StartIndex=1&Limit=2"
+    },
+    {
+      "name": "memory-page-total-off",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&StartIndex=1&Limit=2&EnableTotalRecordCount=false"
+    },
+    {
+      "name": "memory-limit-zero",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true&Limit=0"
+    },
+    {
+      "name": "memory-favorite-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&IsFavorite=false&CollapseBoxSetItems=true"
+    },
+    {
+      "name": "boxset-memory-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true",
+      "parentKey": "movieSet"
+    },
+    {
+      "name": "boxset-repository-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7&CollapseBoxSetItems=true",
+      "parentKey": "movieSet"
+    },
+    {
+      "name": "userless-repository-default",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "",
+      "auth": "apiKey"
+    },
+    {
+      "name": "userless-repository-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": true,
+      "assertOrder": true,
+      "query": "CollapseBoxSetItems=true",
+      "auth": "apiKey"
+    },
+    {
+      "name": "userless-memory-explicit",
+      "scope": [],
+      "omitIds": true,
+      "recursive": false,
+      "assertOrder": true,
+      "query": "CollapseBoxSetItems=true",
+      "auth": "apiKey"
+    }
+  ]
+}

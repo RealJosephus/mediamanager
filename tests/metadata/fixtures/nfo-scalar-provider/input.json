@@ -1,0 +1,370 @@
+[
+  {
+    "name": "movie dispatches id set aspect and ignores music fields",
+    "type": "Movie",
+    "text": "<movie><title> Movie </title><id TMDB=\"101\" TVDB=\"tv-any\" IMDB=\"tt1234567\">tt7654321</id><set tmdbcolid=\"202\"><name>Collection</name></set><artist>Ignored</artist><album>Ignored</album><aspectratio> 2.39:1 </aspectratio><displayorder>Ignored</displayorder></movie>"
+  },
+  {
+    "name": "video dispatches movie id but not movie collection",
+    "type": "Video",
+    "text": "<video><id TMDB=\"303\" TVDB=\"tv-video\">tt2345678</id><set tmdbcolid=\"404\">Ignored collection</set><artist>Ignored</artist><album>Ignored</album><aspectratio> 16:9 </aspectratio></video>"
+  },
+  {
+    "name": "music video appends artists and overwrites album",
+    "type": "MusicVideo",
+    "text": "<musicvideo><artist> First </artist><artist/><artist>Second</artist><artist>first</artist><album>Old</album><album> New </album><id IMDB=\"tt3456789\"/><aspectratio>4:3</aspectratio></musicvideo>"
+  },
+  {
+    "name": "series dispatches television fields and skips named season",
+    "type": "Series",
+    "text": "<tvshow><id TMDB=\"505\" TVDB=\"series-any\">tt4567890</id><airs_time> 21:30 </airs_time><airs_dayofweek>Monday,Tuesday</airs_dayofweek><status>Returning Series</status><displayorder> dvd </displayorder><namedseason number=\"2\">Ignored</namedseason><aspectratio>Ignored</aspectratio></tvshow>"
+  },
+  {
+    "name": "season dispatches name and integer only",
+    "type": "Season",
+    "text": "<season><seasonname> Season Two </seasonname><seasonnumber> +2 </seasonnumber><showtitle>Ignored</showtitle><id TMDB=\"606\">tt5678901</id><aspectratio>Ignored</aspectratio></season>"
+  },
+  {
+    "name": "series season selects matching raw named season only",
+    "type": "SeriesSeason",
+    "indexNumber": 2,
+    "initialName": "Initial",
+    "text": "<tvshow><title>Ignored</title><namedseason number=\"1\">Wrong</namedseason><namedseason number=\"+2\">  Matching Raw  </namedseason><namedseason number=\"bad\">Bad</namedseason><tmdbid>707</tmdbid></tvshow>"
+  },
+  {
+    "name": "episode dispatches numbering and show title",
+    "type": "Episode",
+    "text": "<episodedetails><season> 3 </season><episode>4</episode><episodenumberend>5</episodenumberend><airsbefore_episode>6</airsbefore_episode><displayepisode>7</displayepisode><airsafter_season>8</airsafter_season><displayafterseason>9</displayafterseason><airsbefore_season>10</airsbefore_season><displayseason>11</displayseason><showtitle> Show </showtitle><id TMDB=\"808\">tt6789012</id><aspectratio>1.85:1</aspectratio></episodedetails>"
+  },
+  {
+    "name": "music album uses generic scalar parser",
+    "type": "MusicAlbum",
+    "text": "<album><title> Album title </title><artist>Ignored</artist><album>Ignored</album><displayorder>Ignored</displayorder><aspectratio>Ignored</aspectratio><musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid></album>"
+  },
+  {
+    "name": "music artist uses generic scalar parser",
+    "type": "MusicArtist",
+    "text": "<artist><name> Artist name </name><biography> Bio </biography><artist>Ignored</artist><album>Ignored</album><musicbrainzartistid>abcdefab-cdef-abcd-efab-cdefabcdefab</musicbrainzartistid></artist>"
+  },
+  {
+    "name": "normalized scalars use CLR whitespace trimming",
+    "type": "Movie",
+    "text": "<movie><title>\u0085CLR title\u0085</title><originaltitle>\u00a0Original\u00a0</originaltitle><sorttitle>\u202fForced\u202f</sorttitle><sortname>\u2007Sort\u2007</sortname><plot>\u3000Overview\u3000</plot><language> en </language><countrycode> US </countrycode><tagline> tag </tagline><mpaa> PG </mpaa><customrating> custom </customrating></movie>"
+  },
+  {
+    "name": "empty nil and repeated scalars overwrite prior values",
+    "type": "Movie",
+    "initialName": "Initial",
+    "initialOverview": "Initial overview",
+    "text": "<movie xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><title>First</title><title/><plot>First plot</plot><plot xsi:nil=\"true\"/><sortname>First sort</sortname><sortname>   </sortname><language>en</language><language/></movie>"
+  },
+  {
+    "name": "lock fields parse whitespace casing numerics and preserve on empty",
+    "type": "Movie",
+    "text": "<movie><lockedfields> Genres |name|9|bogus| Cast |-1|2147483648</lockedfields><lockedfields>   </lockedfields><lockdata>TRUE</lockdata><lockdata> true </lockdata></movie>"
+  },
+  {
+    "name": "collections trim split deduplicate and preserve order",
+    "type": "Movie",
+    "text": "<movie><studio> Studio A </studio><studio>studio a</studio><studio>Studio B</studio><genre> Drama / comedy / /DRAMA</genre><genre>Thriller</genre><style> Style A </style><tag>style a</tag><tag>Tag B</tag><country> US / / CA /\u0085GB\u0085</country></movie>"
+  },
+  {
+    "name": "integer scalar boundaries preserve last valid value",
+    "type": "Movie",
+    "text": "<movie><runtime>+12 minutes</runtime><runtime>13\tminutes</runtime><runtime>2147483648</runtime><year>1851</year><year>1850</year><year>-1</year></movie>"
+  },
+  {
+    "name": "rating grammars and bounds preserve last valid value",
+    "type": "Movie",
+    "text": "<movie><criticrating>1,234.5</criticrating><criticrating>bad</criticrating><rating>.5</rating><rating>1e2</rating><communityrating>10</communityrating><communityrating>11</communityrating><communityrating>-1</communityrating></movie>"
+  },
+  {
+    "name": "director writer and credits delimiter rules",
+    "type": "Movie",
+    "text": "<movie><director> One, Jr., Two </director><director>Three|Four;Five</director><writer> Writer One, Writer Two </writer><writer>Writer Three;Writer Four</writer><credits> Credit One / / Credit Two </credits></movie>"
+  },
+  {
+    "name": "actors accept the complete PersonKind enum and unknown fallback",
+    "type": "Movie",
+    "text": "<movie><actor><name>Arranger Person</name><type>arranger</type><role>Arrangement</role><order>4</order><thumb> https://example.test/a.jpg </thumb></actor><actor><Name>Narrator Person</Name><Type>NARRATOR</Type></actor><actor><name>Invalid Person</name><type>NotAType</type></actor><actor><name>Default Person</name></actor><actor><name>   </name><type>Editor</type></actor></movie>"
+  },
+  {
+    "name": "actor type accepts defined numeric PersonKind",
+    "type": "Movie",
+    "text": "<movie><actor><name>Numeric Arranger</name><type>9</type></actor></movie>"
+  },
+  {
+    "name": "actor type preserves undefined positive numeric PersonKind",
+    "type": "Movie",
+    "text": "<movie><actor><name>Numeric Twenty Seven</name><type>27</type></actor></movie>"
+  },
+  {
+    "name": "actor type preserves undefined negative numeric PersonKind",
+    "type": "Movie",
+    "text": "<movie><actor><name>Numeric Minus One</name><type>-1</type></actor></movie>"
+  },
+  {
+    "name": "actor type combines comma separated named PersonKinds",
+    "type": "Movie",
+    "text": "<movie><actor><name>Named Composite</name><type> Actor, Director </type></actor></movie>"
+  },
+  {
+    "name": "actor type locks named numeric comma composite behavior",
+    "type": "Movie",
+    "text": "<movie><actor><name>Named Numeric Composite</name><type>Actor, 8</type></actor></movie>"
+  },
+  {
+    "name": "actor type locks numeric comma composite behavior",
+    "type": "Movie",
+    "text": "<movie><actor><name>Numeric Composite</name><type>1, 2</type></actor></movie>"
+  },
+  {
+    "name": "actor type invalid comma composite resets to unknown",
+    "type": "Movie",
+    "text": "<movie><actor><name>Invalid Composite</name><type>Actor, NotAType</type></actor></movie>"
+  },
+  {
+    "name": "actor type accepts maximum Int32 numeric PersonKind",
+    "type": "Movie",
+    "text": "<movie><actor><name>Maximum Int32</name><type>2147483647</type></actor></movie>"
+  },
+  {
+    "name": "actor type accepts minimum Int32 numeric PersonKind",
+    "type": "Movie",
+    "text": "<movie><actor><name>Minimum Int32</name><type>-2147483648</type></actor></movie>"
+  },
+  {
+    "name": "actor type positive Int32 overflow resets to unknown",
+    "type": "Movie",
+    "text": "<movie><actor><name>Positive Overflow</name><type>2147483648</type></actor></movie>"
+  },
+  {
+    "name": "actor type negative Int32 overflow resets to unknown",
+    "type": "Movie",
+    "text": "<movie><actor><name>Negative Overflow</name><type>-2147483649</type></actor></movie>"
+  },
+  {
+    "name": "trailers convert both youtube plugin forms and deduplicate",
+    "type": "Movie",
+    "text": "<movie><trailer>plugin://plugin.video.youtube/?action=play_video&amp;videoid=abc123</trailer><trailer>PLUGIN://PLUGIN.VIDEO.YOUTUBE/PLAY/?VIDEO_ID=def456</trailer><trailer>plugin://plugin.video.youtube/play/?video_id=abc123</trailer><trailer>https://example.test/trailer</trailer></movie>"
+  },
+  {
+    "name": "series enum numerics aliases invalids and empty air days",
+    "type": "Series",
+    "text": "<tvshow><airs_dayofweek>Daily</airs_dayofweek><airs_dayofweek> 6 </airs_dayofweek><airs_dayofweek>invalid</airs_dayofweek><status>Cancelled</status><status> 2 </status><status>invalid</status><airs_time>   </airs_time></tvshow>"
+  },
+  {
+    "name": "xml element names stay case sensitive except configured provider nodes",
+    "type": "Movie",
+    "text": "<movie><TITLE>Ignored</TITLE><Title>Also ignored</Title><title>Kept</title><TMDBID>901</TMDBID><ImDb_Id>tt7890123</ImDb_Id><UNIQUEID type=\"Tmdb\">902</UNIQUEID></movie>"
+  },
+  {
+    "name": "release date aliases overwrite premiere and derive first year",
+    "type": "Movie",
+    "text": "<movie><aired>2020-01-02</aired><formed>2021-02-03</formed><premiered>2022-03-04</premiered><releasedate>2023-04-05</releasedate></movie>"
+  },
+  {
+    "name": "explicit year prevents premiere year derivation",
+    "type": "Movie",
+    "text": "<movie><year>1999</year><premiered>2024-05-06</premiered><year>1850</year></movie>"
+  },
+  {
+    "name": "custom release format adjusts positive offset across previous year",
+    "type": "Movie",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<movie><premiered>2024-01-01T00:30:00+14:00</premiered></movie>"
+  },
+  {
+    "name": "custom release format adjusts negative offset across next year",
+    "type": "Series",
+    "releaseDateFormat": "yyyy-MM-dd'T'HH:mm:ssK",
+    "text": "<tvshow><formed>2024-12-31T23:30:00-14:00</formed><enddate>2025-01-01T00:15:00+14:00</enddate></tvshow>"
+  },
+  {
+    "name": "invalid exact date keeps prior valid premiere and year",
+    "type": "Movie",
+    "text": "<movie><premiered>2020-02-29</premiered><releasedate>2021-02-29</releasedate><aired>not-a-date</aired></movie>"
+  },
+  {
+    "name": "end date never derives production year",
+    "type": "Series",
+    "text": "<tvshow><enddate>2030-12-31</enddate></tvshow>"
+  },
+  {
+    "name": "dateadded accepts invariant date time and invalid preserves prior",
+    "type": "Movie",
+    "text": "<movie><dateadded>2019-08-06 09:01:18</dateadded><dateadded>not-a-date</dateadded></movie>"
+  },
+  {
+    "name": "dateadded adjusts explicit timezone offsets",
+    "type": "Movie",
+    "text": "<movie><dateadded>2024-01-01T00:30:00+14:00</dateadded><dateadded>2024-12-31T23:30:00-14:00</dateadded></movie>"
+  },
+  {
+    "name": "dateadded trims CLR whitespace and accepts month names",
+    "type": "Movie",
+    "text": "<movie><dateadded>\u0085January 2, 2024 03:04:05Z\u0085</dateadded></movie>"
+  },
+  {
+    "name": "dateadded preserves seven fractional digits",
+    "type": "Movie",
+    "text": "<movie><dateadded>2024-02-03T04:05:06.1234567Z</dateadded></movie>"
+  },
+  {
+    "name": "dateadded preserves a single 100ns tick",
+    "type": "Movie",
+    "text": "<movie><dateadded>2024-02-03T04:05:06.0000001Z</dateadded></movie>"
+  },
+  {
+    "name": "dateadded preserves fractional ticks while adjusting offset",
+    "type": "Movie",
+    "text": "<movie><dateadded>2024-01-01T00:30:00.7654321+14:00</dateadded></movie>"
+  },
+  {
+    "name": "dateadded canonicalizes no fraction to seven zero digits",
+    "type": "Movie",
+    "text": "<movie><dateadded>2024-02-03T04:05:06Z</dateadded></movie>"
+  },
+  {
+    "name": "direct provider nodes aliases and configured mappings",
+    "type": "Movie",
+    "text": "<movie><imdbid> tt1234567 </imdbid><tmdbid>101</tmdbid><tvdbid>tv-any</tvdbid><collectionnumber>202</collectionnumber><tmdbcolid>203</tmdbcolid><tmdbcol>204</tmdbcol><imdb_id>tt2345678</imdb_id><custommappedid> custom-value </custommappedid></movie>"
+  },
+  {
+    "name": "provider node lookup is case insensitive and invalid overwrite is rejected",
+    "type": "Movie",
+    "initialProviderIds": { "Tmdb": "77", "Imdb": "tt7654321" },
+    "text": "<movie><TMDBID>88</TMDBID><tmdbid>0</tmdbid><TmDbId>2147483648</TmDbId><IMDBID>tt8765432</IMDBID><imdbid>wrong</imdbid><TVDBID>  anything  </TVDBID></movie>"
+  },
+  {
+    "name": "uniqueid maps configured types and preserves custom key casing",
+    "type": "Movie",
+    "text": "<movie><uniqueid type=\"TMDBID\"> 301 </uniqueid><uniqueid type=\"imdb_id\"> tt3456789 </uniqueid><uniqueid type=\"Custom Source\"> first </uniqueid><uniqueid type=\"custom source\"> second </uniqueid></movie>"
+  },
+  {
+    "name": "uniqueid ignores empty missing and forbidden provider names",
+    "type": "Movie",
+    "text": "<movie><uniqueid type=\"Tmdb\"/><uniqueid type=\"Tmdb\"></uniqueid><uniqueid>value</uniqueid><uniqueid type=\"Bad=Name\">value</uniqueid><uniqueid type=\"   \">value</uniqueid><uniqueid type=\"Custom\">   </uniqueid></movie>"
+  },
+  {
+    "name": "provider numeric and imdb validators enforce native ranges",
+    "type": "Movie",
+    "text": "<movie><uniqueid type=\"Tmdb\">+1</uniqueid><uniqueid type=\"Tmdb\">01</uniqueid><uniqueid type=\"TmdbCollection\">2147483647</uniqueid><uniqueid type=\"TmdbCollection\">2147483648</uniqueid><uniqueid type=\"AudioDbArtist\">42</uniqueid><uniqueid type=\"AudioDbAlbum\">-2</uniqueid><uniqueid type=\"Imdb\">NM0000123</uniqueid><uniqueid type=\"Imdb\">tt</uniqueid></movie>"
+  },
+  {
+    "name": "musicbrainz validators accept guid forms and reject arbitrary text",
+    "type": "MusicAlbum",
+    "text": "<album><musicbrainzalbumid>{12345678-1234-1234-1234-1234567890ab}</musicbrainzalbumid><uniqueid type=\"MusicBrainzArtist\">123456781234123412341234567890ab</uniqueid><uniqueid type=\"MusicBrainzRecording\">(abcdefab-cdef-abcd-efab-cdefabcdefab)</uniqueid><uniqueid type=\"MusicBrainzTrack\">not-a-guid</uniqueid></album>"
+  },
+  {
+    "name": "movie id attributes precede content and validate independently",
+    "type": "Movie",
+    "text": "<movie><id TMDB=\"401\" TVDB=\"tv-401\">tt4012345</id><id TMDB=\"bad\" TVDB=\"tv-402\" IMDB=\"bad\">tt4023456</id><id> tt4034567</id><id>tt4045678</id></movie>"
+  },
+  {
+    "name": "movie id attribute names and content prefix are case sensitive",
+    "type": "Movie",
+    "text": "<movie><id tmdb=\"501\" tvdb=\"tv-501\" imdb=\"tt5012345\">TT5023456</id><id>tt5034567 </id></movie>"
+  },
+  {
+    "name": "movie trailing urls extract imdb and movie tmdb only",
+    "type": "Movie",
+    "text": "<movie><title>Body</title></movie>\nhttps://www.imdb.com/title/tt123456789\nhttps://www.themoviedb.org/movie/30287-slug\nhttps://www.themoviedb.org/tv/1668-show\nhttps://www.thetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "series trailing urls extract imdb series tmdb and tvdb",
+    "type": "Series",
+    "text": "<tvshow><title>Body</title></tvshow>\ntext tt2345678 more\nthemoviedb.org/tv/1668-show\nthetvdb.com/?tab=series&id=121361\nthemoviedb.org/movie/30287"
+  },
+  {
+    "name": "video music video and series season trailing urls only extract imdb",
+    "type": "Video",
+    "text": "<video><title>Body</title></video>\ntt3456789\nthemoviedb.org/movie/30287\nthemoviedb.org/tv/1668\nthetvdb.com/?tab=series&id=121361"
+  },
+  {
+    "name": "provider url scanning is ordinal and resumes after short imdb ids",
+    "type": "Series",
+    "text": "TT1234567 THEMovieDB.org/tv/999 thetvdb.com/?tab=series&amp;id=888 tt123456Xtt7654321 themoviedb.org/tv/x1668 thetvdb.com/?tab=series&id=x121361"
+  },
+  {
+    "name": "custom external id availability controls direct node recognition",
+    "type": "Movie",
+    "externalIds": ["Imdb", "PluginKey"],
+    "text": "<movie><tmdbid>601</tmdbid><pluginKeyId> plugin-value </pluginKeyId><uniqueid type=\"PluginKeyId\">unique-value</uniqueid><uniqueid type=\"Tmdb\">602</uniqueid></movie>"
+  },
+  {
+    "name": "pre-cancelled movie scalar throws before first node",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie><title>Changed</title></movie>"
+  },
+  {
+    "name": "pre-cancelled movie empty root completes",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie/>"
+  },
+  {
+    "name": "pre-cancelled movie url only commits providers and completes",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "tt4567890 themoviedb.org/movie/701"
+  },
+  {
+    "name": "pre-cancelled movie trailing urls commit before cancellation",
+    "type": "Movie",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<movie><title>Changed</title></movie>\ntt5678901 themoviedb.org/movie/702"
+  },
+  {
+    "name": "pre-cancelled strict season empty root completes",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season/>"
+  },
+  {
+    "name": "pre-cancelled strict season scalar throws before first node",
+    "type": "Season",
+    "preCanceled": true,
+    "initialName": "Initial",
+    "text": "<season><seasonname>Changed</seasonname></season>"
+  },
+  {
+    "name": "movie malformed id content preserves start-tag providers",
+    "type": "Movie",
+    "text": "<movie><title>Before</title><id TMDB=\"801\" TVDB=\"tv-801\">tt8012345"
+  },
+  {
+    "name": "strict album malformed tail exposes committed scalar and provider prefix",
+    "type": "MusicAlbum",
+    "text": "<album><title>Before</title><musicbrainzalbumid>12345678-1234-1234-1234-1234567890ab</musicbrainzalbumid><plot>unfinished"
+  },
+  {
+    "name": "pre-cancelled movie paired empty root observes cancellation",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie></movie>"
+  },
+  {
+    "name": "pre-cancelled strict season direct text observes cancellation",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season>direct text</season>"
+  },
+  {
+    "name": "pre-cancelled strict malformed setup fails before cancellation",
+    "type": "Season",
+    "preCanceled": true,
+    "text": "<season"
+  },
+  {
+    "name": "pre-cancelled movie no-closing malformed setup is treated as url only",
+    "type": "Movie",
+    "preCanceled": true,
+    "text": "<movie"
+  }
+]

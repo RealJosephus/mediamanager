@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native DeviceId lifecycle, held-file access and independent accessible controls, persisted identities and bidirectional cold readers.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Devices/DeviceId.cs",
+    "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
+    "Emby.Server.Implementations/ServerApplicationPaths.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 2902,
+      "sha256": "89319125677621ddd9672b194abf2b7282aa7fd5f2e2cec57050398a65304cfe"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 3462,
+      "sha256": "76c98eaba255e7092dce3431b40849c47bfa3cd950cfffa3f90512a11c2aad48"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 495,
+      "sha256": "5ed92a85e7848b44ffe00822e8ca6fd3246e71ababbc9474ab2228381c82fa8b"
+    },
+    {
+      "role": "consumerSource",
+      "filename": "current-consumer/Program.cs",
+      "bytes": 1769,
+      "sha256": "41126c0bf3aed58650170ef75e26c1a984af683862e63965b48e0f92facebb7a"
+    },
+    {
+      "role": "consumerProject",
+      "filename": "current-consumer/Oracle.csproj",
+      "bytes": 495,
+      "sha256": "5ed92a85e7848b44ffe00822e8ca6fd3246e71ababbc9474ab2228381c82fa8b"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "fileSharingSource",
+      "filename": "current/FileSharingProbe.cs",
+      "bytes": 1916,
+      "sha256": "a3cdecdda630df59c7086d8b2420d88776169c7271b5f9ab4c8483a39b56da9d"
+    },
+    {
+      "role": "fileSharingHarness",
+      "filename": "../../native-file-holder.js",
+      "bytes": 4935,
+      "sha256": "6e5336f01b045506090b947ef62f33b6c2361f598f0b0d5daa6cbf5b6b5c75b7"
+    },
+    {
+      "role": "functionalObservations",
+      "filename": "current/observations.js",
+      "bytes": 3466,
+      "sha256": "677c2d84a467be30391ba5ff459e21f69e22fa04d3d385573de9aa095c3e1685"
+    }
+  ]
+}

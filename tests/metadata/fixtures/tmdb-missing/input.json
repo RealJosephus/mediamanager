@@ -1,0 +1,48 @@
+{
+  "items": [
+    { "name": "aggregate", "type": "AggregateFolder", "path": "Z:\\" },
+    { "name": "root", "type": "UserRootFolder", "path": "D:\\unused-instance\\root\\default" },
+    { "name": "physical", "type": "Folder", "parent": "aggregate", "path": "Z:\\Series" },
+    { "name": "library", "type": "CollectionFolder", "parent": "root", "path": "D:\\unused-instance\\root\\default\\Series", "locations": ["Z:\\Series"] },
+    { "name": "otherLibrary", "type": "CollectionFolder", "parent": "root", "path": "D:\\unused-instance\\root\\default\\Other", "locations": ["Z:\\Other"] },
+    { "name": "series", "type": "Series", "parent": "physical", "provider": "Tmdb", "providerValue": "42" },
+    { "name": "season", "type": "Season", "parent": "series" },
+    { "name": "owned", "type": "Episode", "parent": "season", "virtual": true, "provider": "tmDB", "providerValue": "101" },
+    { "name": "otherFolder", "type": "Folder", "parent": "aggregate", "path": "Z:\\Other" },
+    { "name": "outside", "type": "Episode", "parent": "otherFolder", "virtual": true, "provider": "Tmdb", "providerValue": "201" }
+  ],
+  "cases": [
+    { "name": "global-off", "configuration": {} },
+    { "name": "global-off-cancelled-token-still-cleans", "configuration": {}, "cancelled": true },
+    { "name": "missing-disabled-library", "configuration": { "ImportMissingEpisodes": true } },
+    { "name": "unaired-disabled-library", "configuration": { "ImportUnairedEpisodes": true } },
+    { "name": "query-ancestor-is-not-membership", "configuration": { "ImportMissingEpisodes": true }, "enabled": ["otherLibrary"], "ancestors": [["series", "otherLibrary"]] },
+    { "name": "top-parent-is-not-membership", "configuration": { "ImportUnairedEpisodes": true }, "enabled": ["otherLibrary"], "overrides": { "series": { "topParent": "otherLibrary" } } },
+    { "name": "physical-cache-id-is-not-membership", "configuration": { "ImportMissingEpisodes": true }, "enabled": ["otherLibrary"], "overrides": { "otherLibrary": { "physicalIds": ["physical"] } } },
+    { "name": "entity-parent-is-not-user-root-library-membership", "configuration": { "ImportMissingEpisodes": true }, "enabled": ["otherLibrary"], "overrides": { "series": { "parent": "otherLibrary" } } },
+    { "name": "query-ancestor-episode-is-not-child", "configuration": {}, "ancestors": [["outside", "series"]] },
+    { "name": "top-level-direct-link-is-a-child", "configuration": {}, "links": [["series", "outside"]] },
+    { "name": "duplicate-physical-and-linked-id", "configuration": {}, "links": [["series", "owned"], ["series", "owned"]] },
+    { "name": "season-link-does-not-expand", "configuration": {}, "links": [["season", "outside"]] },
+    { "name": "linked-folder-does-not-expand", "configuration": {}, "links": [["series", "otherFolder"]] },
+    { "name": "non-folder-child-does-not-expand", "configuration": {}, "overrides": { "season": { "type": "Episode", "virtual": false } } },
+    { "name": "physical-episode-is-retained", "configuration": {}, "overrides": { "owned": { "virtual": false } } },
+    { "name": "foreign-provider-is-retained", "configuration": {}, "overrides": { "owned": { "provider": "Tvdb" } } },
+    { "name": "empty-provider-id-is-retained", "configuration": {}, "overrides": { "owned": { "providerValue": "" } } },
+    { "name": "real-library-opt-in", "configuration": { "ImportMissingEpisodes": true }, "enabled": ["library"] },
+    { "name": "uppercase-library-opt-in", "configuration": { "ImportUnairedEpisodes": true }, "enabled": ["library"], "enabledFormat": "uppercase" },
+    { "name": "hyphenated-library-id-is-not-opt-in", "configuration": { "ImportMissingEpisodes": true }, "enabled": ["library"], "enabledFormat": "hyphenated" },
+    { "name": "global-off-ignores-library-opt-in", "configuration": {}, "enabled": ["library"] },
+    { "name": "series-without-tmdb-is-not-changed", "configuration": {}, "overrides": { "series": { "providerValue": "" } } }
+  ],
+  "monitorCases": [
+    { "name": "global-off", "type": "Series", "providerValue": "42", "configuration": {} },
+    { "name": "missing-without-library", "type": "Series", "providerValue": "42", "configuration": { "ImportMissingEpisodes": true } },
+    { "name": "unaired-without-library", "type": "Series", "providerValue": "42", "configuration": { "ImportUnairedEpisodes": true } },
+    { "name": "both-on", "type": "Series", "providerValue": "42", "configuration": { "ImportMissingEpisodes": true, "ImportUnairedEpisodes": true } },
+    { "name": "enabled-library", "type": "Series", "providerValue": "42", "configuration": { "ImportMissingEpisodes": true, "EnabledMissingEpisodeLibraries": ["f2222222222222222222000000000004"] } },
+    { "name": "plugin-absent", "type": "Series", "providerValue": "42", "configuration": null },
+    { "name": "season-is-not-series", "type": "Season", "providerValue": "42", "configuration": {} },
+    { "name": "empty-provider-id", "type": "Series", "providerValue": "", "configuration": {} }
+  ]
+}

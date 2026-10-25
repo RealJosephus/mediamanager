@@ -1,0 +1,166 @@
+import { validationFileUrl } from '../../tools/validation/paths.js';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import test from 'node:test';
+import { nativeUserViewIdentity } from '../../src/library/identity.js';
+import { dateText, idKey } from '../../src/library/records.js';
+import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { loadNativeByNameFilterScenario, projectNativeByNameCandidateInput, seedNativeByNameFilterInput,
+  writeCompleteByNameFilterEvidence } from './native-byname-filter-scenario.js';
+
+const input = JSON.parse(await readFile(validationFileUrl('./fixtures/album-filters/input.json', import.meta.url), 'utf8'));
+const candidateInput = projectNativeByNameCandidateInput(input);
+const nativeScenario = await loadNativeByNameFilterScenario('album');
+const nativeUrl = validationFileUrl('./fixtures/album-filters/native.json', import.meta.url);
+const native = JSON.parse(await readFile(nativeUrl, 'utf8'));
+const expectedByName = new Map(native.cases.map(entry => [entry.name, entry]));
+const expectedHttpCases = native.cases.reduce((total, entry) => total + entry.endpoints.length, 0);
+const nativeContractUrl = validationFileUrl('../../' + native.sourceEvidence, import.meta.url);
+// This mandatory stage snapshot must be visible to the dependency preflight,
+// not hidden behind the contract's dynamic sourceEvidence field.
+const stagesUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/album-filter-restoration-v1/database-stages.json', import.meta.url);
+assert.equal(stagesUrl.href, validationFileUrl('database-stages.json', nativeContractUrl).href);
+const nativeStages = JSON.parse(await readFile(stagesUrl, 'utf8'));
+const triggerCase = 'user-root-album-filter-dispatches-repository-query';
+const nativeBeforeIds = new Set(nativeStages.beforePlaylistUserViewCreate.tables.BaseItems.map(row => idKey(row.Id)));
+const [nativeView] = nativeStages.afterPlaylistUserViewCreate.tables.BaseItems
+  .filter(row => !nativeBeforeIds.has(idKey(row.Id)));
+assert.ok(nativeView);
+const playlistParentId = input.items.find(item => item.key === 'playlistsRoot').id;
+assert.equal(idKey(nativeUserViewIdentity(input.userId, playlistParentId, 'playlists', {
+  programDataPath: 'Z:\\ItemFilterHttpState\\album_filter',
+}).Id), idKey(nativeView.Id), 'native UserView identity must reproduce the frozen reference id');
+
+function responseProjection(contract) {
+  return {
+    status: contract.status,
+    contentType: contract.contentType,
+    startIndex: contract.startIndex,
+    totalRecordCount: contract.totalRecordCount,
+    keys: contract.keys,
+    orderedKeys: contract.orderedKeys,
+    items: contract.items,
+    problem: contract.problem,
+  };
+}
+
+function stableViewRow(row) {
+  return Object.fromEntries(Object.entries(row).map(([key, value]) => {
+    if (['Id', 'PresentationUniqueKey'].includes(key)) return [key, '<view-id>'];
+    if (key === 'Path') return [key, '%MetadataPath%\\views\\<view-id>'];
+    if (['DateCreated', 'DateLastRefreshed', 'DateLastSaved'].includes(key)) return [key, '<time>'];
+    if (key === 'Data') return [key, { ...JSON.parse(value), UserId: '<user-id>', DateLastSaved: '<time>' }];
+    return [key, typeof value === 'boolean' ? Number(value) : value];
+  }));
+}
+
+for (const dialect of ['postgres']) {
+  test(`${dialect}: album-filter Items requests match frozen Jellyfin`, {
+    skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  }, async () => {
+    const actual = await recordItemFilterCandidate({
+      dialect,
+      fixture: candidateInput,
+      connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
+      scenarioName: 'album-filter',
+      fields: 'ParentId',
+      captureResponseBodies: true,
+      captureOrder: true,
+      captureParentItems: true,
+      captureStartIndex: true,
+      trackFilesystem: true,
+      trackSideEffectCase: triggerCase,
+      // Native %AppDataPath% expands to this instance's data directory.
+      prepareScenario: context => seedNativeByNameFilterInput(context, nativeScenario),
+      // The frozen first-write snapshot is already refreshed. Explicitly wait
+      // for the real queue; do not fill timestamps or hide pending fields.
+      afterEndpoint: async ({ testCase, runtime }) => {
+        if (testCase.name === triggerCase) await runtime.library.userViews.drain();
+      },
+    });
+    await writeCompleteByNameFilterEvidence(actual, nativeScenario, { scenarioName: 'album-filter' });
+    assert.equal(expectedByName.size, native.cases.length);
+    assert.equal(actual.cases.length, native.cases.length);
+    assert.equal(actual.httpCases, expectedHttpCases);
+    assert.deepEqual(actual.cases.map(entry => entry.name), native.cases.map(entry => entry.name));
+    for (const actualCase of actual.cases) {
+      const expected = expectedByName.get(actualCase.name);
+      const source = input.cases.find(entry => entry.name === actualCase.name);
+      assert.ok(expected, actualCase.name);
+      assert.ok(source, actualCase.name);
+      assert.equal(actualCase.query, source.query, actualCase.name);
+      assert.deepEqual(actualCase.scope, source.scope, actualCase.name);
+      assert.equal(actualCase.parentKey ?? null, expected.parentKey, actualCase.name);
+      assert.equal(actualCase.auth, source.auth ?? 'user', actualCase.name);
+      const controlDefaults = {
+        omitScope: false,
+        omitParentId: false,
+        omitIds: false,
+        recursive: true,
+        omitSortBy: false,
+        assertOrder: false,
+        expectedStatus: 200,
+      };
+      for (const [field, fallback] of Object.entries(controlDefaults)) {
+        assert.equal(Object.hasOwn(actualCase, field) ? actualCase[field] : fallback,
+          expected[field], `${actualCase.name}:${field}`);
+      }
+      assert.deepEqual(actualCase.endpoints.map(entry => entry.endpoint), expected.endpoints, actualCase.name);
+      for (const endpoint of actualCase.endpoints) {
+        assert.deepEqual(responseProjection(endpoint.contract), responseProjection(expected),
+          `${dialect}:${actualCase.name}:${endpoint.endpoint}`);
+      }
+    }
+    const stages = actual.sideEffect;
+    assert.deepEqual(stages.before, actual.beforeReads, `${dialect}: writes before UserView trigger`);
+    assert.deepEqual(stages.filesystemBefore, actual.filesystemBeforeReads);
+    const originalIds = new Set(stages.before.BaseItems.map(row => idKey(row.Id)));
+    const added = stages.afterFirst.BaseItems.filter(row => !originalIds.has(idKey(row.Id)));
+    assert.equal(added.length, 1, `${dialect}: exactly one UserView was created`);
+    const identity = nativeUserViewIdentity(actual.userId, playlistParentId, 'playlists', {
+      programDataPath: 'Z:\\ItemFilterHttpState\\album_filter',
+    });
+    assert.equal(idKey(added[0].Id), idKey(identity.Id));
+    assert.deepEqual(stableViewRow(added[0]), stableViewRow(nativeView),
+      `${dialect}: created UserView differs from frozen native row`);
+    assert.match(added[0].DateCreated, /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d(?:\.\d{1,7})?$/u);
+    for (const column of ['DateLastRefreshed', 'DateLastSaved']) {
+      assert.match(added[0][column], /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d{1,7}$/u);
+    }
+    // Native JSON trims trailing fractional zeros for nonzero milliseconds;
+    // compare the complete 100 ns value with the repository timestamp.
+    assert.equal(dateText(JSON.parse(added[0].Data).DateLastSaved), dateText(added[0].DateLastSaved));
+    assert.equal(idKey(JSON.parse(added[0].Data).UserId), idKey(actual.userId));
+    assert.deepEqual(stages.afterFirst.BaseItems.filter(row => idKey(row.Id) !== idKey(identity.Id)),
+      stages.before.BaseItems, `${dialect}: original BaseItems rows changed`);
+    for (const table of Object.keys(stages.before).filter(name => name !== 'BaseItems')) {
+      assert.deepEqual(stages.afterFirst[table], stages.before[table], `${dialect}:${table}`);
+    }
+    assert.deepEqual(stages.afterRepeat, stages.afterFirst, `${dialect}: repeat request mutated the view`);
+    assert.deepEqual(actual.afterReads, stages.afterFirst, `${dialect}: later requests mutated the view`);
+    assert.deepEqual(stages.filesystemBefore, []);
+    const expectedDirectories = [
+      { path: 'views', type: 'directory' },
+      { path: `views/${idKey(identity.Id)}`, type: 'directory' },
+    ];
+    assert.deepEqual(stages.filesystemAfterFirst, expectedDirectories);
+    assert.deepEqual(stages.filesystemAfterRepeat, expectedDirectories);
+    assert.deepEqual(actual.filesystemAfterReads, expectedDirectories);
+    assert.deepEqual(actual.filesystemAfterShutdown, expectedDirectories);
+    assert.deepEqual(actual.runtimeErrors, []);
+    assert.deepEqual(actual.handledExpectedRuntimeErrors, input.cases
+      .filter(entry => (entry.expectedStatus ?? 200) >= 400)
+      .flatMap(entry => (entry.endpoints ?? ['items', 'legacy']).map(endpoint => ({
+        caseName: entry.name,
+        endpoint,
+        error: { name: 'Error', message: 'Error processing request.' },
+      }))));
+    assert.deepEqual(actual.cleanup, {
+      runtimeClosed: true,
+      databaseClosed: true,
+      portReleased: true,
+      postgresSchemasRemoved: dialect === 'postgres' ? true : null,
+      programDataDirectoryRemoved: true,
+    });
+  });
+}

@@ -1,0 +1,103 @@
+{
+  "nativeSha256": "4fe669a76ff243ce05643f4469d6fbadbf8234505286f0b214aa7b1841f39527",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "sha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Library/NameExtensions.cs",
+      "sha256": "58dbce701d53e74124ad4342c396ae14894b208316868a8210d9c4de5afd9c5f",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/ItemsController.cs",
+      "sha256": "ea5c492f96dd9ca90e8b0723f76d188a90a26b6c645266eed284db18f8c68419",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "4596af7aad2df693595f5a0af0953691b434499d2d2d28474054e162e8e580d5"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 49152,
+    "sha256": "62164a52f0681b02fd9d50ebd03e923a5effeb9c2fc8c5fbdcb15bfd855355e0"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native/instances",
+      "D:\\mediamanager-validation\\20261012-artist-creation-native-1\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "cases": 20,
+  "evidence": "D:\\mediamanager-validation\\20261012-artist-creation-native-1",
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

@@ -1,0 +1,106 @@
+{
+  "repository": "https://github.com/ietf-wg-cellar/flac-test-files",
+  "commit": "aa7b0c6cf32994c106ae517a08134c28a96ff5b2",
+  "tree": "aa7b0c6cf32994c106ae517a08134c28a96ff5b2",
+  "metadataDirectory": "C:\\mediamanager-validation\\asset-sources\\flac-test-files\\20261025T040658686268Z",
+  "smallestSubsetAssets": [
+    {
+      "path": "subset/60 - mono audio.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ca8a6721a5e9192ec74d97c61d7c57ce80379f0",
+      "size": 47782,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/9ca8a6721a5e9192ec74d97c61d7c57ce80379f0"
+    },
+    {
+      "path": "subset/38 - 3 channels (3.0).flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf75b7ea5ef0546206593345fda604973458f48a",
+      "size": 63893,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/bf75b7ea5ef0546206593345fda604973458f48a"
+    },
+    {
+      "path": "subset/64 - rice partitions with escape code zero.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aa0961749bd02a6d1d41168537b077f79a16030",
+      "size": 89138,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/9aa0961749bd02a6d1d41168537b077f79a16030"
+    },
+    {
+      "path": "subset/39 - 4 channels (4.0).flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61d43efef4bfa5345d4c710080f4c61a128aa081",
+      "size": 94931,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/61d43efef4bfa5345d4c710080f4c61a128aa081"
+    },
+    {
+      "path": "subset/40 - 5 channels (5.0).flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de82c4f8a5e3710b60e1e74662be4bfec7d3cc3d",
+      "size": 116017,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/de82c4f8a5e3710b60e1e74662be4bfec7d3cc3d"
+    },
+    {
+      "path": "subset/61 - predictor overflow check, 16-bit.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47884ed395612edec08cd461b3bb19ce50deef75",
+      "size": 117020,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/47884ed395612edec08cd461b3bb19ce50deef75"
+    },
+    {
+      "path": "subset/62 - predictor overflow check, 20-bit.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "853a37d7b847d13c269f2189fbe633f5be58b166",
+      "size": 156871,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/853a37d7b847d13c269f2189fbe633f5be58b166"
+    },
+    {
+      "path": "subset/41 - 6 channels (5.1).flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfbd28dc69efe0be9160c7f0f03a66f209c99093",
+      "size": 171527,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/dfbd28dc69efe0be9160c7f0f03a66f209c99093"
+    },
+    {
+      "path": "subset/23 - 8 bit per sample.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a36391332a21478d27625e5931f06ec2808977f8",
+      "size": 181470,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/a36391332a21478d27625e5931f06ec2808977f8"
+    },
+    {
+      "path": "subset/63 - predictor overflow check, 24-bit.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a74029394c46c9b7663f11f0bfe337e9bf2b107",
+      "size": 204107,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/3a74029394c46c9b7663f11f0bfe337e9bf2b107"
+    },
+    {
+      "path": "subset/42 - 7 channels (6.1).flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43028e364ef16011b941d6ef1d65a2fb8783d29b",
+      "size": 212398,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/43028e364ef16011b941d6ef1d65a2fb8783d29b"
+    },
+    {
+      "path": "subset/14 - wasted bits.flac",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ab0e77a88c56dd63add9823ba577c773e092dd0",
+      "size": 231596,
+      "url": "https://api.github.com/repos/ietf-wg-cellar/flac-test-files/git/blobs/3ab0e77a88c56dd63add9823ba577c773e092dd0"
+    }
+  ],
+  "productExecutedLocally": false,
+  "assetDownloaded": false
+}

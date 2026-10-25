@@ -1,0 +1,223 @@
+[
+  {
+    "name": "new-remote-primary",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "new-missing-primary-removed",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/404"
+      }
+    ]
+  },
+  {
+    "name": "new-retryable-primary-retained",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/500"
+      }
+    ]
+  },
+  {
+    "name": "new-image-io-retained",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/io"
+      }
+    ]
+  },
+  {
+    "name": "new-fallback-primary",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/404|https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "existing-primary-kept",
+    "existing": [
+      {
+        "Name": "Existing",
+        "primary": "local"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "existing-local-primary-with-provider-change",
+    "existing": [
+      {
+        "Name": "Existing",
+        "primary": "local"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Custom": "ABC"
+        }
+      }
+    ]
+  },
+  {
+    "name": "existing-local-primary-force-dimensions",
+    "dimensions": {
+      "Width": 3,
+      "Height": 2
+    },
+    "existing": [
+      {
+        "Name": "Existing",
+        "primary": "local"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Custom": "ABC"
+        }
+      }
+    ]
+  },
+  {
+    "name": "new-local-image-dimension-failure",
+    "dimensionFailure": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "new-local-image-blur-failure",
+    "blurFailure": true,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "image-update-save-io-continues-final-save",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  },
+  {
+    "name": "final-save-io-retains-local-image",
+    "failure": "person",
+    "failureAt": 3,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "final-save-io-retains-retryable-stub",
+    "failure": "person",
+    "failureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/500"
+      }
+    ],
+    "expectException": "IOException"
+  },
+  {
+    "name": "existing-image-insert-failure-retains-deletion",
+    "imageFailureAt": 1,
+    "existing": [
+      {
+        "Name": "Existing",
+        "primary": "local"
+      }
+    ],
+    "people": [
+      {
+        "Name": "Existing",
+        "Type": "Actor",
+        "ProviderIds": {
+          "Custom": "ABC"
+        }
+      }
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "new-image-first-insert-failure",
+    "imageFailureAt": 1,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "new-image-second-insert-failure",
+    "imageFailureAt": 2,
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "save-item-then-person-local-image",
+    "mode": "save-item",
+    "people": [
+      {
+        "Name": "First",
+        "Type": "Actor",
+        "ImageUrl": "https://isolated.invalid/ok"
+      }
+    ]
+  }
+]

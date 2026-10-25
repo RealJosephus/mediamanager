@@ -1,0 +1,343 @@
+[
+  {
+    "name": "full",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "head-main",
+    "status": 405,
+    "headers": {
+      "content-type": null,
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": "GET"
+    },
+    "size": 0,
+    "body": ""
+  },
+  {
+    "name": "head-segment",
+    "status": 405,
+    "headers": {
+      "content-type": null,
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": "GET"
+    },
+    "size": 0,
+    "body": ""
+  },
+  {
+    "name": "range",
+    "status": 206,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "90",
+      "accept-ranges": "bytes",
+      "content-range": "bytes 10-99/359644",
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 90
+  },
+  {
+    "name": "suffix",
+    "status": 206,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "32",
+      "accept-ranges": "bytes",
+      "content-range": "bytes 359612-359643/359644",
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 32
+  },
+  {
+    "name": "beyond",
+    "status": 416,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "0",
+      "accept-ranges": "bytes",
+      "content-range": "bytes */359644",
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 0,
+    "body": ""
+  },
+  {
+    "name": "zero",
+    "status": 416,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "0",
+      "accept-ranges": "bytes",
+      "content-range": "bytes */359644",
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 0,
+    "body": ""
+  },
+  {
+    "name": "reversed",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "multiple",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "malformed",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "if-range-current",
+    "status": 206,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "10",
+      "accept-ranges": "bytes",
+      "content-range": "bytes 0-9/359644",
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 10
+  },
+  {
+    "name": "if-range-old",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "modified-current",
+    "status": 304,
+    "headers": {
+      "content-type": null,
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 0
+  },
+  {
+    "name": "modified-future",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "unmodified-old",
+    "status": 412,
+    "headers": {
+      "content-type": null,
+      "content-length": "0",
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 0,
+    "body": ""
+  },
+  {
+    "name": "if-none-match",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "if-match",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "missing-ticks",
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": null
+    },
+    "size": 337,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "runtimeTicks": [
+          "The runtimeTicks field is required."
+        ],
+        "actualSegmentLengthTicks": [
+          "The actualSegmentLengthTicks field is required."
+        ]
+      }
+    }
+  },
+  {
+    "name": "forbidden-start",
+    "status": 400,
+    "headers": {
+      "content-type": "text/plain",
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": null
+    },
+    "size": 25,
+    "body": "Error processing request."
+  },
+  {
+    "name": "stop-missing-device",
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": null
+    },
+    "size": 250,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "deviceId": [
+          "The deviceId field is required."
+        ]
+      }
+    }
+  },
+  {
+    "name": "stop-wrong-device",
+    "status": 204,
+    "headers": {
+      "content-type": null,
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": null
+    },
+    "size": 0
+  },
+  {
+    "name": "cross-user-segment",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "playback-disabled-segment",
+    "status": 200,
+    "headers": {
+      "content-type": "video/mp2t",
+      "content-length": "359644",
+      "accept-ranges": "bytes",
+      "content-range": null,
+      "last-modified": "<date>",
+      "allow": null
+    },
+    "size": 359644
+  },
+  {
+    "name": "cross-user-stop",
+    "status": 204,
+    "headers": {
+      "content-type": null,
+      "content-length": null,
+      "accept-ranges": null,
+      "content-range": null,
+      "last-modified": null,
+      "allow": null
+    },
+    "size": 0
+  }
+]

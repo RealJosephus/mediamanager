@@ -1,0 +1,495 @@
+{
+  "schemaVersion": 1,
+  "identity": "rar-entry-current-independent-20261024",
+  "culture": "en-US",
+  "directoryCases": [
+    {
+      "name": "rar4-separator-collision",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "a/cover.png",
+          "text": "slash entry"
+        },
+        {
+          "key": "a\\cover.png",
+          "text": "backslash entry"
+        }
+      ]
+    },
+    {
+      "name": "rar4-separator-collision-reversed",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "a\\cover.png",
+          "text": "backslash first"
+        },
+        {
+          "key": "a/cover.png",
+          "text": "slash second"
+        }
+      ]
+    },
+    {
+      "name": "rar4-dash-order",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "a/cover.png",
+          "text": "slash sort"
+        },
+        {
+          "key": "a-cover.png",
+          "text": "dash sort"
+        }
+      ]
+    },
+    {
+      "name": "rar4-backslash-dash-duplicate",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "a\\cover.png",
+          "text": "backslash sort"
+        },
+        {
+          "key": "a-cover.png",
+          "text": "dash distinct bytes"
+        }
+      ]
+    },
+    {
+      "name": "rar4-directory-before-file",
+      "format": "rar4",
+      "entries": [
+        {
+          "directory": true,
+          "key": "a.png",
+          "text": ""
+        },
+        {
+          "key": "b.png",
+          "text": "nonempty second file"
+        }
+      ]
+    },
+    {
+      "name": "rar4-directory-cover",
+      "format": "rar4",
+      "entries": [
+        {
+          "directory": true,
+          "key": "cover.png",
+          "text": ""
+        },
+        {
+          "key": "z.png",
+          "text": "later image"
+        }
+      ]
+    },
+    {
+      "name": "rar4-directory-slash",
+      "format": "rar4",
+      "entries": [
+        {
+          "directory": true,
+          "key": "images/",
+          "text": ""
+        },
+        {
+          "key": "images/cover.jpg",
+          "text": "nested selected image"
+        }
+      ]
+    },
+    {
+      "name": "rar4-trailing-directory-slash",
+      "format": "rar4",
+      "entries": [
+        {
+          "directory": true,
+          "key": "cover.png/",
+          "text": ""
+        },
+        {
+          "key": "z.png",
+          "text": "trailing directory fallback"
+        }
+      ]
+    },
+    {
+      "name": "rar4-dots",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "./cover.png",
+          "text": "dot image"
+        },
+        {
+          "key": "../cover.png",
+          "text": "parent image"
+        },
+        {
+          "key": "z.png",
+          "text": "ordinary image"
+        }
+      ]
+    },
+    {
+      "name": "rar4-duplicate-first",
+      "format": "rar4",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "first duplicate image"
+        },
+        {
+          "key": "cover.png",
+          "text": "second duplicate image"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-mode2",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicode": {
+            "text": "封面.png",
+            "mode": 2
+          },
+          "key": "fallback.png",
+          "text": "mode two"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-mode0",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicode": {
+            "text": "cover.png",
+            "mode": 0
+          },
+          "key": "fallback.png",
+          "text": "mode zero"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-mode1",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicode": {
+            "suffix": ".png",
+            "text": "Āā",
+            "mode": 1
+          },
+          "key": "fallback.png",
+          "text": "mode one"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-copy",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicode": {
+            "copyLength": 9
+          },
+          "key": "cover.png",
+          "text": "copy bytes"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-correction",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicode": {
+            "correction": 1,
+            "copyLength": 9
+          },
+          "key": "bnudq-omf",
+          "text": "corrected bytes"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-no-nul",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicodeFlag": true,
+          "key": "封面.png",
+          "text": "UTF8 without nul"
+        }
+      ]
+    },
+    {
+      "name": "rar4-invalid-utf8",
+      "format": "rar4",
+      "entries": [
+        {
+          "nameHex": "ff636f7665722e706e67",
+          "text": "invalid UTF8 replacement"
+        }
+      ]
+    },
+    {
+      "name": "rar4-unicode-truncated",
+      "format": "rar4",
+      "entries": [
+        {
+          "unicodeFlag": true,
+          "text": "truncated filename",
+          "nameHex": "7800008001"
+        }
+      ]
+    },
+    {
+      "name": "rar4-full-upstream-catalog",
+      "format": "asset",
+      "asset": "normal",
+      "entries": []
+    },
+    {
+      "name": "rar5-separator-collision",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "a/cover.png",
+          "text": "slash entry"
+        },
+        {
+          "key": "a\\cover.png",
+          "text": "backslash entry"
+        }
+      ]
+    },
+    {
+      "name": "rar5-separator-collision-reversed",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "a\\cover.png",
+          "text": "backslash first"
+        },
+        {
+          "key": "a/cover.png",
+          "text": "slash second"
+        }
+      ]
+    },
+    {
+      "name": "rar5-dash-order",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "a/cover.png",
+          "text": "slash sort"
+        },
+        {
+          "key": "a-cover.png",
+          "text": "dash sort"
+        }
+      ]
+    },
+    {
+      "name": "rar5-backslash-dash-duplicate",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "a\\cover.png",
+          "text": "backslash sort"
+        },
+        {
+          "key": "a-cover.png",
+          "text": "dash distinct bytes"
+        }
+      ]
+    },
+    {
+      "name": "rar5-directory-before-file",
+      "format": "rar5",
+      "entries": [
+        {
+          "directory": true,
+          "key": "a.png",
+          "text": ""
+        },
+        {
+          "key": "b.png",
+          "text": "nonempty second file"
+        }
+      ]
+    },
+    {
+      "name": "rar5-directory-cover",
+      "format": "rar5",
+      "entries": [
+        {
+          "directory": true,
+          "key": "cover.png",
+          "text": ""
+        },
+        {
+          "key": "z.png",
+          "text": "later image"
+        }
+      ]
+    },
+    {
+      "name": "rar5-directory-slash",
+      "format": "rar5",
+      "entries": [
+        {
+          "directory": true,
+          "key": "images/",
+          "text": ""
+        },
+        {
+          "key": "images/cover.jpg",
+          "text": "nested selected image"
+        }
+      ]
+    },
+    {
+      "name": "rar5-trailing-directory-slash",
+      "format": "rar5",
+      "entries": [
+        {
+          "directory": true,
+          "key": "cover.png/",
+          "text": ""
+        },
+        {
+          "key": "z.png",
+          "text": "trailing directory fallback"
+        }
+      ]
+    },
+    {
+      "name": "rar5-dots",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "./cover.png",
+          "text": "dot image"
+        },
+        {
+          "key": "../cover.png",
+          "text": "parent image"
+        },
+        {
+          "key": "z.png",
+          "text": "ordinary image"
+        }
+      ]
+    },
+    {
+      "name": "rar5-duplicate-first",
+      "format": "rar5",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "first duplicate image"
+        },
+        {
+          "key": "cover.png",
+          "text": "second duplicate image"
+        }
+      ]
+    },
+    {
+      "name": "rar5-full-upstream-catalog",
+      "format": "asset",
+      "asset": "rar5",
+      "entries": []
+    }
+  ],
+  "selectedCases": [
+    {
+      "asset": "normal",
+      "name": "normal"
+    },
+    {
+      "name": "bad-crc",
+      "mutation": "bad-crc",
+      "asset": "normal"
+    },
+    {
+      "asset": "solid",
+      "name": "solid"
+    }
+  ],
+  "edgeCases": [
+    {
+      "name": "native-default-null",
+      "mode": "provider",
+      "asset": "encrypted"
+    },
+    {
+      "name": "native-explicit-empty",
+      "mode": "explicit",
+      "password": "",
+      "asset": "encrypted"
+    },
+    {
+      "name": "native-explicit-wrong",
+      "mode": "explicit",
+      "password": "wrong",
+      "asset": "encrypted"
+    },
+    {
+      "name": "wrong-salt-native-default",
+      "mode": "provider",
+      "mutation": "wrong-salt",
+      "asset": "encrypted"
+    },
+    {
+      "name": "native-pre-cancelled",
+      "mode": "provider",
+      "cancel": "pre",
+      "asset": "encrypted"
+    },
+    {
+      "name": "native-cancel-after-1ms",
+      "mode": "provider",
+      "cancel": "after-1ms",
+      "asset": "encrypted"
+    },
+    {
+      "name": "no-salt-native-default",
+      "mode": "provider",
+      "mutation": "no-salt",
+      "asset": "encrypted"
+    }
+  ],
+  "cryptoCases": [
+    {
+      "name": "encrypted-exe",
+      "ordinal": 0
+    },
+    {
+      "name": "unsalted-jpg",
+      "ordinal": 1
+    },
+    {
+      "name": "encrypted-text",
+      "ordinal": 2
+    }
+  ],
+  "assets": {
+    "normal": "../../../metadata/fixtures/book-comic-current/assets/Rar.rar",
+    "rar5": "../../../metadata/fixtures/book-comic-current/assets/Rar5.rar",
+    "encrypted": "../../../metadata/fixtures/book-comic-current/assets/Rar.encrypted_filesOnly.rar",
+    "solid": "assets/Rar.solid.rar"
+  }
+}

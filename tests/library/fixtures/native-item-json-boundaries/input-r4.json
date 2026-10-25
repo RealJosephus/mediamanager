@@ -1,0 +1,13 @@
+{
+  "cases": [
+    { "id": "int-invalid-first", "kind": "int", "valueJson": "\"bad\",\"Value\":1" },
+    { "id": "int-invalid-last", "kind": "int", "valueJson": "1,\"Value\":\"bad\"" },
+    { "id": "int-valid-last-wins", "kind": "int", "valueJson": "1,\"Value\":2" },
+    { "id": "enum-invalid-first", "kind": "enum", "valueJson": "null,\"Value\":\"Iso\"" },
+    { "id": "enum-invalid-last", "kind": "enum", "valueJson": "\"Iso\",\"Value\":null" },
+    { "id": "enum-valid-last-wins", "kind": "enum", "valueJson": "\"Iso\",\"Value\":\"Dvd\"" },
+    { "id": "date-invalid-first", "kind": "date", "valueJson": "\"bad\",\"Value\":\"2025-01-01T00:00:00Z\"" },
+    { "id": "date-invalid-last", "kind": "date", "valueJson": "\"2025-01-01T00:00:00Z\",\"Value\":\"bad\"" },
+    { "id": "date-valid-last-wins", "kind": "date", "valueJson": "\"2025-01-01T00:00:00Z\",\"Value\":\"2026-01-01T00:00:00Z\"" }
+  ]
+}

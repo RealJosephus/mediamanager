@@ -1,0 +1,121 @@
+{
+  "phaseAcceptance": false,
+  "native": {
+    "bytes": 26993,
+    "sha256": "f74e8996f02c70ba85517b6a758e2cb2f892ab14b735e7bc017f56ab9365d7af"
+  },
+  "program": {
+    "bytes": 17764,
+    "sha256": "1501f70fc7c07de45e447f42a43dc958ed23795b9f1692623ea3509ae03cd535"
+  },
+  "project": {
+    "bytes": 434,
+    "sha256": "c30d8f1aff8c88b044e3e51db47fe9551cb138fd48de2d13f84e70a7e41d7d17"
+  },
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.agent-temp\\reference\\fixture-rebind-20261003\\user-view-refresh-queue\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "ba138e7822fb224fd9e5bc56a14e9725063870e438da8cbf13c9c7ccec646605"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.agent-temp\\reference\\fixture-rebind-20261003\\user-view-refresh-queue\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "sources": [
+    {
+      "path": "Jellyfin.Api/Controllers/UserViewsController.cs",
+      "bytes": 6942,
+      "sha256": "5304c74baf2c8c9dfe4d6004c50fde4b48f6366673f75d589eaa8872d9ede9c3"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/UserViewManager.cs",
+      "bytes": 16348,
+      "sha256": "3098650710fb5f3da8a3044c109364f0d5efde8e39f15714773e70e662018ead"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserView.cs",
+      "bytes": 5990,
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55"
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/MetadataService.cs",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5"
+    },
+    {
+      "path": "MediaBrowser.Providers/Folders/UserViewMetadataService.cs",
+      "bytes": 1883,
+      "sha256": "115a944369b28f88c9160030d943582ff97a4d170d23b00ef289e4fdfe8ee5e9"
+    },
+    {
+      "path": "Emby.Server.Implementations/Images/DynamicImageProvider.cs",
+      "bytes": 4551,
+      "sha256": "6482437c4781991e9bedca5350dd7ea00884d7fd71c00b416b49d7ceef9726d1"
+    },
+    {
+      "path": "Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+      "bytes": 11108,
+      "sha256": "5ae8c13987a0f86202ed4c501f2d07a5a37a69a625d8eb1ad24c7e80327b4da7"
+    },
+    {
+      "path": "MediaBrowser.Controller/Library/ItemUpdateType.cs",
+      "bytes": 275,
+      "sha256": "f418ea69855fb572fb8fd021d32c4f3f440dfe6cff0449bfc3b16fd62055f453"
+    }
+  ],
+  "inheritedOracle": {
+    "native": {
+      "bytes": 24463,
+      "sha256": "9762bb2b01b77d765a285cdd8f1cd7d6fb5a8027e71bb2fdbf98286179bd4449"
+    },
+    "program": {
+      "bytes": 15179,
+      "sha256": "0773757580e08a584b565f867019e26f5bcb35bb1725b54e28e8181c2662dc9a"
+    }
+  },
+  "scope": "Actual frozen ProviderManager, UserView and UserViewMetadataService; controlled metadata/library dependencies. Eleven native controls include five queue controls. Queue regression projects only service events, errors, concurrency and disposal milestones; no actual SQL or HTTP host.",
+  "limitations": [
+    "Native disposal leaves pending entries; candidate disposal stops taking them and host close releases references.",
+    "The queue tests use a real DomainStore with controlled SQLite-shaped dependencies; they do not execute SQLite or PostgreSQL statements.",
+    "The queue fixtures alone do not prove native host shutdown waiting, provider filtering or persistence equivalence.",
+    "Only the Normal priority used by UserView named-view requests is supported here. Other priorities remain with the general metadata queue."
+  ],
+  "recordedAt": "2026-10-03T13:48:46.415Z",
+  "baseline": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "revalidation": {
+    "rawPath": ".agent-temp/reference/fixture-rebind-20261003/user-view-refresh-queue/native.json",
+    "buildLog": ".agent-temp/reference/fixture-rebind-20261003/user-view-refresh-queue/build.log",
+    "normalized": [
+      "Process ID identifies this new process.",
+      "Assembly paths and digests identify the freshly built specified source.",
+      "UtcNow DateLastRefreshed values use rank tokens, preserving timestamp equality, distinctness, relative order and every minimum date."
+    ],
+    "semanticsEqual": true
+  }
+}

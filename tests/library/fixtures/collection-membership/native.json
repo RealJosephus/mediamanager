@@ -1,0 +1,804 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "nativeVerified": true,
+    "candidateVerified": false,
+    "phaseAcceptance": false,
+    "cases": 30,
+    "processResult": {
+      "code": 0,
+      "signal": null
+    },
+    "portsStarted": 0,
+    "postgresUsed": false
+  },
+  "input": {
+    "ids": {
+      "aggregate": "83000000-0000-0000-0000-000000000001",
+      "userRoot": "83000000-0000-0000-0000-000000000002",
+      "physical": "83000000-0000-0000-0000-000000000003",
+      "collection": "83000000-0000-0000-0000-000000000004",
+      "movie": "83000000-0000-0000-0000-000000000005",
+      "user": "83000000-0000-0000-0000-000000000006"
+    },
+    "paths": {
+      "aggregate": "Z:\\",
+      "userRoot": "D:\\unused-instance\\root\\default",
+      "physical": "Z:\\Movies",
+      "collection": "D:\\unused-instance\\root\\default\\Movies",
+      "movie": "Z:\\Movies\\feature.mkv"
+    },
+    "collectionType": "movies",
+    "unrelatedPhysicalId": "83000000-0000-0000-0000-000000000098",
+    "unrelatedBlockedId": "83000000-0000-0000-0000-000000000099"
+  },
+  "runtime": {
+    "framework": ".NET 10.0.12",
+    "assemblies": [
+      {
+        "name": "Emby.Server.Implementations",
+        "version": "13.0.0.0",
+        "sha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d"
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "version": "13.0.0.0",
+        "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+      },
+      {
+        "name": "MediaBrowser.Model",
+        "version": "13.0.0.0",
+        "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+      },
+      {
+        "name": "Jellyfin.Database.Implementations",
+        "version": "13.0.0.0",
+        "sha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc"
+      },
+      {
+        "name": "System.Private.CoreLib",
+        "version": "10.0.0.0",
+        "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+      },
+      {
+        "name": "System.Linq",
+        "version": "10.0.0.0",
+        "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+      }
+    ]
+  },
+  "source": {
+    "oracleFiles": {
+      "PolicyOracle.cs": "c3961e56afa9dbbaf905a23ecde2f2e515e63b90c55588458df1d34dade83350",
+      "PolicyOracle.csproj": "c30d8f1aff8c88b044e3e51db47fe9551cb138fd48de2d13f84e70a7e41d7d17",
+      "../../../Directory.Build.props": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "frozenSource": {
+      "Emby.Server.Implementations/Library/LibraryManager.cs": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "MediaBrowser.Controller/Entities/BaseItem.cs": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "MediaBrowser.Controller/Entities/Folder.cs": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "MediaBrowser.Controller/Entities/CollectionFolder.cs": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "MediaBrowser.Controller/Entities/Video.cs": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "Emby.Server.Implementations/Library/MediaSourceManager.cs": "1e69414e32db4871f0866218959a50dba8e23d19e171ab71666f28ac6de21951",
+      "Emby.Server.Implementations/IO/ManagedFileSystem.cs": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e"
+    },
+    "frozenAssemblies": [
+      {
+        "name": "Emby.Server.Implementations",
+        "sha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d",
+        "originalSha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d",
+        "loadedEqualsFrozen": true
+      },
+      {
+        "name": "MediaBrowser.Controller",
+        "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f",
+        "originalSha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f",
+        "loadedEqualsFrozen": true
+      },
+      {
+        "name": "MediaBrowser.Model",
+        "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737",
+        "originalSha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737",
+        "loadedEqualsFrozen": true
+      },
+      {
+        "name": "Jellyfin.Database.Implementations",
+        "sha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc",
+        "originalSha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc",
+        "loadedEqualsFrozen": true
+      }
+    ],
+    "rawNativeSha256": "23ae772a843bd4fd48819c251f9c89808698cdc227cba61499948170bc8e8c46",
+    "sourceBoundary": "Actual frozen LibraryManager.GetCollectionFolders(item,allUserRootChildren) and its private GetCollectionFoldersInternal run unmodified. Actual MediaSourceManager.GetPathProtocol delegates to actual ManagedFileSystem.IsPathFile. DispatchProxy only provides entity lookup/user root and delegates membership to that actual method; XML serializer returns default enabled options; recordings manager returns no active recording. Uninitialized managers are used only for methods whose relevant fields are supplied or unused. No path-match, visibility, deletion or inherited-tag result is mocked.",
+    "replay": {
+      "recordedAt": "2026-10-03T13:44:54.366Z",
+      "rawNativeSha256": "23ae772a843bd4fd48819c251f9c89808698cdc227cba61499948170bc8e8c46",
+      "priorTrackedSha256": "d56c46cf19de87ea97ef0895d2a787665e2df75dfe5e02e96f1269f7aa56c26b",
+      "comparedFields": [
+        "results"
+      ],
+      "semanticFieldsEqual": true,
+      "normalization": "Only runtime assembly paths and process identity are outside the semantic comparison; all selected result arrays and field values remain exact.",
+      "rawEvidence": ".test-output/validation/oracle-rebind-20261003/membership/native.json",
+      "processRecordSha256": "7f1ba25f465bddb236b2930454777dbe0f7156e19efcf70949262f8a78ccb5f1",
+      "sources": [
+        {
+          "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+          "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+          "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/Folder.cs",
+          "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+          "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487"
+        },
+        {
+          "path": "MediaBrowser.Controller/Entities/Video.cs",
+          "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+        },
+        {
+          "path": "Emby.Server.Implementations/Library/MediaSourceManager.cs",
+          "sha256": "1e69414e32db4871f0866218959a50dba8e23d19e171ab71666f28ac6de21951"
+        },
+        {
+          "path": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+          "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e"
+        }
+      ]
+    }
+  },
+  "results": [
+    {
+      "pathMode": "matching-path",
+      "storedMode": "path-only",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "path-only",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "path-only",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "path-only",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "path-only",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [
+        "blocked-library"
+      ],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": false,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "matching-physical-id",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "matching-physical-id",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [
+        "blocked-library"
+      ],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": false,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": true
+    },
+    {
+      "pathMode": "matching-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\Movies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [
+        "83000000-0000-0000-0000-000000000004"
+      ],
+      "inheritedTags": [
+        "blocked-library"
+      ],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": false,
+      "itemVisibleStandalone": false,
+      "canDelete": true
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "path-only",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "path-only",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "path-only",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "path-only",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "path-only",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "matching-physical-id",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "matching-physical-id",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "matching-physical-id",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000003"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "all-folders",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "enabled-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-library",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-unrelated",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": true,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    },
+    {
+      "pathMode": "unrelated-path",
+      "storedMode": "unrelated-physical-id",
+      "policy": "blocked-library-tag",
+      "physicalLocations": [
+        "Z:\\OtherMovies"
+      ],
+      "physicalFolderIds": [
+        "83000000-0000-0000-0000-000000000098"
+      ],
+      "collectionFolders": [],
+      "inheritedTags": [],
+      "parents": [
+        "83000000-0000-0000-0000-000000000003",
+        "83000000-0000-0000-0000-000000000001"
+      ],
+      "collectionVisible": false,
+      "itemVisible": true,
+      "itemVisibleStandalone": true,
+      "canDelete": false
+    }
+  ]
+}

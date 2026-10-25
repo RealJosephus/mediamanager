@@ -1,0 +1,807 @@
+[
+  {
+    "name": "get--Startup-Configuration",
+    "method": "GET",
+    "path": "/Startup/Configuration"
+  },
+  {
+    "name": "get--Startup-User",
+    "method": "GET",
+    "path": "/Startup/User"
+  },
+  {
+    "name": "get--Startup-FirstUser",
+    "method": "GET",
+    "path": "/Startup/FirstUser"
+  },
+  {
+    "name": "get--startup-user-",
+    "method": "GET",
+    "path": "/startup/user/"
+  },
+  {
+    "name": "first-existing",
+    "method": "GET",
+    "path": "/Startup/FirstUser",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "first-native-insertion-order",
+    "method": "GET",
+    "path": "/Startup/User",
+    "users": [
+      {
+        "index": 2,
+        "name": "Beta",
+        "internalId": 9
+      },
+      {
+        "index": 1,
+        "name": "Alpha",
+        "internalId": 1
+      }
+    ]
+  },
+  {
+    "name": "complete",
+    "method": "POST",
+    "path": "/Startup/Complete"
+  },
+  {
+    "name": "complete-locks-later-anonymous-requests",
+    "steps": [
+      {
+        "method": "POST",
+        "path": "/Startup/Complete"
+      },
+      {
+        "method": "GET",
+        "path": "/Startup/Configuration"
+      },
+      {
+        "method": "POST",
+        "path": "/Startup/Complete"
+      }
+    ]
+  },
+  {
+    "name": "configuration-empty",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{}"
+  },
+  {
+    "name": "configuration-strings",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"媒体 & <Name>\",\"UICulture\":\"zh-CN\",\"MetadataCountryCode\":\"TW\",\"PreferredMetadataLanguage\":\"zh\"}"
+  },
+  {
+    "name": "configuration-nulls",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":null,\"UICulture\":null,\"MetadataCountryCode\":null,\"PreferredMetadataLanguage\":null}"
+  },
+  {
+    "name": "configuration-coerce",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":123,\"UICulture\":false,\"MetadataCountryCode\":3.2,\"PreferredMetadataLanguage\":true}"
+  },
+  {
+    "name": "configuration-duplicate",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"first\",\"servername\":\"last\",\"Future\":{\"x\":true}}"
+  },
+  {
+    "name": "configuration-nul",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"X\\u0000Y\"}"
+  },
+  {
+    "name": "configuration-malformed",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"\\ud800\"}"
+  },
+  {
+    "name": "configuration-nested",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":[]}"
+  },
+  {
+    "name": "configuration-root-null",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "null"
+  },
+  {
+    "name": "configuration-root-array",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "[]"
+  },
+  {
+    "name": "configuration-root-number",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "1"
+  },
+  {
+    "name": "configuration-empty-content",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": ""
+  },
+  {
+    "name": "remote-empty",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{}"
+  },
+  {
+    "name": "remote-true",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"EnableRemoteAccess\":true}"
+  },
+  {
+    "name": "remote-false",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"EnableRemoteAccess\":false}"
+  },
+  {
+    "name": "remote-null",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"EnableRemoteAccess\":null}"
+  },
+  {
+    "name": "remote-string",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"EnableRemoteAccess\":\"true\"}"
+  },
+  {
+    "name": "remote-case-duplicate",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"enableremoteaccess\":true,\"EnableRemoteAccess\":false}"
+  },
+  {
+    "name": "remote-root-null",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "null"
+  },
+  {
+    "name": "user-empty",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-password-only",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-rename",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-same",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Alpha\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-case",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"ALPHA\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-empty-name",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-invalid-name",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"bad/name\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-null-name",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":null,\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-blank-password",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":\" \\t　\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-bom-password",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":\"﻿\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-null-password",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":null}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-numeric-name",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":123,\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-numeric-password",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":123}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-root-null",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "null",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-root-array",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "[]",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-malformed",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"\\ud800\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-missing",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":\"new password\"}"
+  },
+  {
+    "name": "user-already-set",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "password": "initial password"
+      }
+    ]
+  },
+  {
+    "name": "user-insertion-order",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"First\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 2,
+        "name": "Beta",
+        "internalId": 9
+      },
+      {
+        "index": 1,
+        "name": "Alpha",
+        "internalId": 1
+      }
+    ]
+  },
+  {
+    "name": "user-duplicate-name",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Beta\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      },
+      {
+        "index": 2,
+        "name": "Beta"
+      }
+    ]
+  },
+  {
+    "name": "user-repeat-forbidden",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "steps": [
+      {
+        "method": "POST",
+        "path": "/Startup/User",
+        "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}"
+      },
+      {
+        "method": "POST",
+        "path": "/Startup/User",
+        "body": "{\"Name\":\"Again\",\"Password\":\"another\"}"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-48",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"café\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "café"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-49",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"A\\u0000lpha\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-50",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Sam\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "ſam"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-51",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Karl\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Karl"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-52",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"STRASSE\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Straße"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-53",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Alpha\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Ａlpha"
+      }
+    ]
+  },
+  {
+    "name": "failure-save-user",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "fail": "save-user"
+  },
+  {
+    "name": "failure-rename",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "fail": "rename"
+  },
+  {
+    "name": "failure-password",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "fail": "password"
+  },
+  {
+    "name": "failure-event-UserUpdated",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "fail": "event-UserUpdated"
+  },
+  {
+    "name": "failure-event-UserPasswordChanged",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"Renamed\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha"
+      }
+    ],
+    "fail": "event-UserPasswordChanged"
+  },
+  {
+    "name": "failure-readOnlySystem-Configuration",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"Changed\"}",
+    "readOnlySystem": true
+  },
+  {
+    "name": "failure-readOnlySystem-Complete",
+    "method": "POST",
+    "path": "/Startup/Complete",
+    "readOnlySystem": true
+  },
+  {
+    "name": "failure-readOnlyNetwork-RemoteAccess",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{\"EnableRemoteAccess\":false}",
+    "readOnlyNetwork": true
+  },
+  {
+    "name": "authorization-anonymous-true-false-false",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "anonymous",
+    "completed": true,
+    "remote": false,
+    "denyRemote": false
+  },
+  {
+    "name": "authorization-user-false-false-false",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "user",
+    "completed": false,
+    "remote": false,
+    "denyRemote": false,
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "admin": false
+      }
+    ]
+  },
+  {
+    "name": "authorization-user-true-false-false",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "user",
+    "completed": true,
+    "remote": false,
+    "denyRemote": false,
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "admin": false
+      }
+    ]
+  },
+  {
+    "name": "authorization-admin-true-false-false",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "admin",
+    "completed": true,
+    "remote": false,
+    "denyRemote": false,
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "admin": true
+      }
+    ]
+  },
+  {
+    "name": "authorization-api-true-false-false",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "api",
+    "completed": true,
+    "remote": false,
+    "denyRemote": false
+  },
+  {
+    "name": "authorization-user-false-true-true",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "user",
+    "completed": false,
+    "remote": true,
+    "denyRemote": true,
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "admin": false
+      }
+    ]
+  },
+  {
+    "name": "authorization-admin-false-true-true",
+    "method": "GET",
+    "path": "/Startup/Configuration",
+    "identity": "admin",
+    "completed": false,
+    "remote": true,
+    "denyRemote": true,
+    "users": [
+      {
+        "index": 1,
+        "name": "Alpha",
+        "admin": true
+      }
+    ]
+  },
+  {
+    "name": "head",
+    "method": "HEAD",
+    "path": "/Startup/Configuration"
+  },
+  {
+    "name": "wrong-method",
+    "method": "GET",
+    "path": "/Startup/Complete"
+  },
+  {
+    "name": "no-body-Configuration",
+    "method": "POST",
+    "path": "/Startup/Configuration"
+  },
+  {
+    "name": "wrong-content-Configuration",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "no-body-RemoteAccess",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess"
+  },
+  {
+    "name": "wrong-content-RemoteAccess",
+    "method": "POST",
+    "path": "/Startup/RemoteAccess",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "no-body-User",
+    "method": "POST",
+    "path": "/Startup/User"
+  },
+  {
+    "name": "wrong-content-User",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "user-comparison-greek-final",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"ςigma\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Σigma"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-greek-mixed",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"μάϊος\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "ΜάϊΟΣ"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-dotted-i",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"ivan\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "İvan"
+      }
+    ]
+  },
+  {
+    "name": "user-comparison-dotless-i",
+    "method": "POST",
+    "path": "/Startup/User",
+    "body": "{\"Name\":\"ıvan\",\"Password\":\"new password\"}",
+    "users": [
+      {
+        "index": 1,
+        "name": "Ivan"
+      }
+    ]
+  },
+  {
+    "name": "configuration-line-breaks",
+    "method": "POST",
+    "path": "/Startup/Configuration",
+    "body": "{\"ServerName\":\"one\\r\\ntwo\\rtab\\tend\",\"UICulture\":\"en-US\",\"MetadataCountryCode\":\"US\",\"PreferredMetadataLanguage\":\"en\"}"
+  }
+]

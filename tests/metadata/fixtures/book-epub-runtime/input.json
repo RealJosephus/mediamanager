@@ -1,0 +1,384 @@
+{
+  "timeZone": "Asia/Taipei",
+  "timeZoneOffsetMinutes": 480,
+  "timeZoneInstant": "2024-03-02T23:04:05Z",
+  "epubs": [
+    {
+      "name": "standard-slashes",
+      "path": "epub/standard-slashes.epub",
+      "cancelled": false
+    },
+    {
+      "name": "back-container-slash-cover",
+      "path": "epub/back-container-slash-cover.epub",
+      "cancelled": false
+    },
+    {
+      "name": "back-container-back-cover",
+      "path": "epub/back-container-back-cover.epub",
+      "cancelled": false
+    },
+    {
+      "name": "all-backslashes",
+      "path": "epub/all-backslashes.epub",
+      "cancelled": false
+    },
+    {
+      "name": "root-opf",
+      "path": "epub/root-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "missing-container",
+      "path": "epub/missing-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "wrong-container-namespace",
+      "path": "epub/wrong-container-namespace.epub",
+      "cancelled": false
+    },
+    {
+      "name": "first-rootfile-missing",
+      "path": "epub/first-rootfile-missing.epub",
+      "cancelled": false
+    },
+    {
+      "name": "missing-opf",
+      "path": "epub/missing-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "empty-root-path",
+      "path": "epub/empty-root-path.epub",
+      "cancelled": false
+    },
+    {
+      "name": "malformed-container",
+      "path": "epub/malformed-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "malformed-opf",
+      "path": "epub/malformed-opf.epub",
+      "cancelled": false
+    },
+    {
+      "name": "corrupt-zip",
+      "path": "epub/corrupt-zip.epub",
+      "cancelled": false
+    },
+    {
+      "name": "wrong-extension",
+      "path": "epub/wrong-extension.zip",
+      "cancelled": false
+    },
+    {
+      "name": "upper-extension",
+      "path": "epub/upper-extension.EPUB",
+      "cancelled": false
+    },
+    {
+      "name": "directory",
+      "path": "epub/directory.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cancelled-valid",
+      "path": "epub/cancelled-valid.epub",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-missing-container",
+      "path": "epub/cancelled-missing-container.epub",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-malformed-opf",
+      "path": "epub/cancelled-malformed-opf.epub",
+      "cancelled": true
+    },
+    {
+      "name": "duplicate-container",
+      "path": "epub/duplicate-container.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-tokens",
+      "path": "epub/cover-tokens.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-literal-star",
+      "path": "epub/cover-literal-star.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-id-cover-real-mime",
+      "path": "epub/cover-id-cover-real-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-id-cover-wild-mime",
+      "path": "epub/cover-id-cover-wild-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-meta-id",
+      "path": "epub/cover-meta-id.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-webp-mime",
+      "path": "epub/cover-webp-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-plain-mime",
+      "path": "epub/cover-plain-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-unknown-mime",
+      "path": "epub/cover-unknown-mime.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-first-invalid",
+      "path": "epub/cover-first-invalid.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-apostrophe",
+      "path": "epub/cover-apostrophe.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-href-dot",
+      "path": "epub/cover-href-dot.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-href-percent",
+      "path": "epub/cover-href-percent.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-gif",
+      "path": "epub/cover-format-gif.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-bmp",
+      "path": "epub/cover-format-bmp.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-jpeg",
+      "path": "epub/cover-format-jpeg.epub",
+      "cancelled": false
+    },
+    {
+      "name": "cover-format-png-parameters",
+      "path": "epub/cover-format-png-parameters.epub",
+      "cancelled": false
+    },
+    {
+      "name": "nested-opf-directory",
+      "path": "epub/nested-opf-directory.epub",
+      "cancelled": false
+    },
+    {
+      "name": "rich-with-cover",
+      "path": "epub/rich-with-cover.epub",
+      "cancelled": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "epub/standard-slashes.epub",
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311",
+      "length": 735
+    },
+    {
+      "path": "epub/back-container-slash-cover.epub",
+      "sha256": "efb0034600a15c1ceaaef76c0e91bf007cfc54712663fa24469c774fb3b0275b",
+      "length": 735
+    },
+    {
+      "path": "epub/back-container-back-cover.epub",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04",
+      "length": 735
+    },
+    {
+      "path": "epub/all-backslashes.epub",
+      "sha256": "8efd97728a6a242903f06dd54fa012fe48a094cf21a04ba1b0cea68c609c631a",
+      "length": 735
+    },
+    {
+      "path": "epub/root-opf.epub",
+      "sha256": "7f64e0786a69f1c3a8e4769351c66b750e1b5ffd892b254ca4cab46d1aa6e28c",
+      "length": 712
+    },
+    {
+      "path": "epub/missing-container.epub",
+      "sha256": "fd1ac75091641cf98c31604ee4f3c13f9c78cd988076e4ccb1f034ee0d74838a",
+      "length": 663
+    },
+    {
+      "path": "epub/wrong-container-namespace.epub",
+      "sha256": "6e10f004be717aadf9d046fddc625a5451f37083433407ab7c459056ab54e28f",
+      "length": 1035
+    },
+    {
+      "path": "epub/first-rootfile-missing.epub",
+      "sha256": "e2ab23ab2650364043e5206c8d560402f054bda1d22a4cd266d718af3f73143a",
+      "length": 1091
+    },
+    {
+      "path": "epub/missing-opf.epub",
+      "sha256": "c8f69ceae58021cce9f652cf2bb0d998a9fe1a9b7c37e5635eb614850a7cf3c6",
+      "length": 1073
+    },
+    {
+      "path": "epub/empty-root-path.epub",
+      "sha256": "e547dd6ea5a4f0d51628a2353d1ad738011f9bcd9bd39c95f7a991d3d5e0ce28",
+      "length": 1065
+    },
+    {
+      "path": "epub/malformed-container.epub",
+      "sha256": "12f0c43abb3a57b9bb135a1a99bef498a3bbf1b760ab7e3cf9d9e477030f756f",
+      "length": 989
+    },
+    {
+      "path": "epub/malformed-opf.epub",
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a",
+      "length": 557
+    },
+    {
+      "path": "epub/corrupt-zip.epub",
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be",
+      "length": 17
+    },
+    {
+      "path": "epub/wrong-extension.zip",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04",
+      "length": 735
+    },
+    {
+      "path": "epub/upper-extension.EPUB",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04",
+      "length": 735
+    },
+    {
+      "path": "epub/cancelled-valid.epub",
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04",
+      "length": 735
+    },
+    {
+      "path": "epub/cancelled-missing-container.epub",
+      "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+      "length": 22
+    },
+    {
+      "path": "epub/cancelled-malformed-opf.epub",
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a",
+      "length": 557
+    },
+    {
+      "path": "epub/duplicate-container.epub",
+      "sha256": "7c163b706c1196ec148626e708f093c7670b63012bd03730a6d9550edc4fef1a",
+      "length": 753
+    },
+    {
+      "path": "epub/cover-tokens.epub",
+      "sha256": "b8090b4715f0d8d676576559768aba66db72b9b94b25b6f7b64103864e42fc6d",
+      "length": 736
+    },
+    {
+      "path": "epub/cover-literal-star.epub",
+      "sha256": "0b3a90fafa05c822d8b030f0219438f84ee532ac83f5d4c413e09b24a6d3817e",
+      "length": 731
+    },
+    {
+      "path": "epub/cover-id-cover-real-mime.epub",
+      "sha256": "13484f0c6a477041836299a07340c140a8db7aa78d2dc7be25476332ba07cdff",
+      "length": 724
+    },
+    {
+      "path": "epub/cover-id-cover-wild-mime.epub",
+      "sha256": "99db142b8e31776d64f198b738b46efbe7473267e83341ac948e7f7391fbba06",
+      "length": 726
+    },
+    {
+      "path": "epub/cover-meta-id.epub",
+      "sha256": "aa0aebb126cc940d4fe7891f512c5e1e64fbebf110be1a57f0cec2e2e452bc25",
+      "length": 740
+    },
+    {
+      "path": "epub/cover-webp-mime.epub",
+      "sha256": "2d7e39ca5f251c74961d36aaabf6d631350f763b1c889332872e6801ddceb988",
+      "length": 735
+    },
+    {
+      "path": "epub/cover-plain-mime.epub",
+      "sha256": "581785aa2f3aa9b411707831c70c4e057439ad4750263e0c676fa11bbc6f5e2f",
+      "length": 735
+    },
+    {
+      "path": "epub/cover-unknown-mime.epub",
+      "sha256": "9d9610731505f40b11d280390a5a8856bbfbaf5344e472f1251727a417b13e0f",
+      "length": 733
+    },
+    {
+      "path": "epub/cover-first-invalid.epub",
+      "sha256": "c95efca46a853be49ad606645b85121839a3623782c43d085f503350095c78fd",
+      "length": 739
+    },
+    {
+      "path": "epub/cover-apostrophe.epub",
+      "sha256": "f9ff2d207416c350835f2941bba46b048d0210ab9de9535ba1115b38ddbb46b7",
+      "length": 715
+    },
+    {
+      "path": "epub/cover-href-dot.epub",
+      "sha256": "3a8be76235fafd9a2754b3efd2330f22584e58d3562ac2f4524ae681aed7068b",
+      "length": 734
+    },
+    {
+      "path": "epub/cover-href-percent.epub",
+      "sha256": "a8fad01e41560b8a339a9955b10af63d81a3049bd65bc68ab4e1b3f66fa0b73a",
+      "length": 737
+    },
+    {
+      "path": "epub/cover-format-gif.epub",
+      "sha256": "b252b356e96045a263cc61ff279029829b48409bf8f499c4cac1a38513aa39b1",
+      "length": 716
+    },
+    {
+      "path": "epub/cover-format-bmp.epub",
+      "sha256": "8ccb63ed263312cf9cc0ce978a7c4ef8480ade1729949b21a7dc1d376ad1a007",
+      "length": 717
+    },
+    {
+      "path": "epub/cover-format-jpeg.epub",
+      "sha256": "c062f852f81a36d2cf9352ab9799b6f4e2d180ef5c8e31981783d2da208bdac4",
+      "length": 718
+    },
+    {
+      "path": "epub/cover-format-png-parameters.epub",
+      "sha256": "ce46abcfa4b75e19ccb825cd70a4eadca0f86ea9716d11d10c27ced3f589e983",
+      "length": 725
+    },
+    {
+      "path": "epub/nested-opf-directory.epub",
+      "sha256": "e31308bed775cb513b384f002b5169fd998cdca9cebb8ee00a6cd7b1ab1508cc",
+      "length": 763
+    },
+    {
+      "path": "epub/rich-with-cover.epub",
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228",
+      "length": 1119
+    }
+  ]
+}

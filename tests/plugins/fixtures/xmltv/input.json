@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "etagCases": [
+    { "name": "default-id", "program": {} },
+    { "name": "empty-channel", "program": { "Id": "p", "ChannelId": "　" } },
+    { "name": "default-start", "program": { "Id": "p", "ChannelId": "c" } },
+    { "name": "default-end", "program": { "Id": "p", "ChannelId": "c", "StartDate": "2026-10-21T01:02:03Z" } },
+    { "name": "equal-times", "program": { "Id": "p", "ChannelId": "c", "StartDate": "2026-10-21T01:02:03Z", "EndDate": "2026-10-21T01:02:03Z" } },
+    { "name": "complete", "program": { "Id": "guide|節目\n🦉", "ChannelId": "C1", "Name": "Name|\n中文", "OfficialRating": "TV-G", "Overview": "Overview", "StartDate": "2026-10-21T01:02:03.1234567Z", "EndDate": "2026-10-21T02:02:03.1234568Z", "Genres": ["Drama", "Action", null, ""], "OriginalAirDate": "2025-01-02T00:00:00.0000001", "IsHD": true, "Audio": "Atmos", "CommunityRating": 7.3, "IsRepeat": true, "EpisodeTitle": "Episode", "ImagePath": "Z:\\guide.png", "ImageUrl": "https://example.invalid/image", "ThumbImageUrl": "https://example.invalid/thumb", "LogoImageUrl": "https://example.invalid/logo", "BackdropImageUrl": "https://example.invalid/backdrop", "IsMovie": false, "IsSports": true, "IsSeries": true, "IsLive": true, "IsNews": true, "IsKids": true, "IsPremiere": true, "ProductionYear": 2026, "SeriesId": "series", "ShowId": "show", "SeasonNumber": 0, "EpisodeNumber": -1, "ProviderIds": { "z": "last", "A": null, "a": "lower", "🦉": "unicode" }, "SeriesProviderIds": { "Tvdb": "123", "imdb": "tt123" } } },
+    { "name": "undefined-audio-number", "program": { "Id": "p", "ChannelId": "c", "StartDate": "2026-10-21T01:02:03.0000001Z", "EndDate": "2026-10-21T01:02:03.0000002Z", "Audio": 88 } },
+    { "name": "null-genres", "program": { "Id": "p", "ChannelId": "c", "StartDate": "2026-10-21T01:02:03Z", "EndDate": "2026-10-21T02:02:03Z", "Genres": null } },
+    { "name": "null-provider-dictionary", "program": { "Id": "p", "ChannelId": "c", "StartDate": "2026-10-21T01:02:03Z", "EndDate": "2026-10-21T02:02:03Z", "ProviderIds": null } }
+  ]
+}

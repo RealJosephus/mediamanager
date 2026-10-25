@@ -1,0 +1,423 @@
+[
+  {
+    "name": "array",
+    "json": "[]"
+  },
+  {
+    "name": "primitive",
+    "json": "12"
+  },
+  {
+    "name": "UserId:\"\"",
+    "json": "{\"UserId\":\"\"}"
+  },
+  {
+    "name": "UserId:true",
+    "json": "{\"UserId\":true}"
+  },
+  {
+    "name": "UserId:false",
+    "json": "{\"UserId\":false}"
+  },
+  {
+    "name": "UserId:1",
+    "json": "{\"UserId\":1}"
+  },
+  {
+    "name": "UserId:-1",
+    "json": "{\"UserId\":-1}"
+  },
+  {
+    "name": "UserId:1.0",
+    "json": "{\"UserId\":1.0}"
+  },
+  {
+    "name": "UserId:1e3",
+    "json": "{\"UserId\":1e3}"
+  },
+  {
+    "name": "UserId:9007199254740993",
+    "json": "{\"UserId\":9007199254740993}"
+  },
+  {
+    "name": "UserId:9223372036854775808",
+    "json": "{\"UserId\":9223372036854775808}"
+  },
+  {
+    "name": "UserId:\"1\"",
+    "json": "{\"UserId\":\"1\"}"
+  },
+  {
+    "name": "UserId:\"+1\"",
+    "json": "{\"UserId\":\"+1\"}"
+  },
+  {
+    "name": "UserId:\" 1 \"",
+    "json": "{\"UserId\":\" 1 \"}"
+  },
+  {
+    "name": "UserId:\"true\"",
+    "json": "{\"UserId\":\"true\"}"
+  },
+  {
+    "name": "UserId:{}",
+    "json": "{\"UserId\":{}}"
+  },
+  {
+    "name": "UserId:[]",
+    "json": "{\"UserId\":[]}"
+  },
+  {
+    "name": "MaxStreamingBitrate:true",
+    "json": "{\"MaxStreamingBitrate\":true}"
+  },
+  {
+    "name": "MaxStreamingBitrate:false",
+    "json": "{\"MaxStreamingBitrate\":false}"
+  },
+  {
+    "name": "MaxStreamingBitrate:1.0",
+    "json": "{\"MaxStreamingBitrate\":1.0}"
+  },
+  {
+    "name": "MaxStreamingBitrate:1e3",
+    "json": "{\"MaxStreamingBitrate\":1e3}"
+  },
+  {
+    "name": "MaxStreamingBitrate:9007199254740993",
+    "json": "{\"MaxStreamingBitrate\":9007199254740993}"
+  },
+  {
+    "name": "MaxStreamingBitrate:9223372036854775808",
+    "json": "{\"MaxStreamingBitrate\":9223372036854775808}"
+  },
+  {
+    "name": "MaxStreamingBitrate:\" 1 \"",
+    "json": "{\"MaxStreamingBitrate\":\" 1 \"}"
+  },
+  {
+    "name": "MaxStreamingBitrate:\"true\"",
+    "json": "{\"MaxStreamingBitrate\":\"true\"}"
+  },
+  {
+    "name": "MaxStreamingBitrate:{}",
+    "json": "{\"MaxStreamingBitrate\":{}}"
+  },
+  {
+    "name": "MaxStreamingBitrate:[]",
+    "json": "{\"MaxStreamingBitrate\":[]}"
+  },
+  {
+    "name": "MaxStreamingBitrate:\"22222222-2222-2222-2222-222222222222\"",
+    "json": "{\"MaxStreamingBitrate\":\"22222222-2222-2222-2222-222222222222\"}"
+  },
+  {
+    "name": "MaxStreamingBitrate:\"00000000-0000-0000-0000-000000000000\"",
+    "json": "{\"MaxStreamingBitrate\":\"00000000-0000-0000-0000-000000000000\"}"
+  },
+  {
+    "name": "StartTimeTicks:true",
+    "json": "{\"StartTimeTicks\":true}"
+  },
+  {
+    "name": "StartTimeTicks:false",
+    "json": "{\"StartTimeTicks\":false}"
+  },
+  {
+    "name": "StartTimeTicks:1.0",
+    "json": "{\"StartTimeTicks\":1.0}"
+  },
+  {
+    "name": "StartTimeTicks:1e3",
+    "json": "{\"StartTimeTicks\":1e3}"
+  },
+  {
+    "name": "StartTimeTicks:9223372036854775808",
+    "json": "{\"StartTimeTicks\":9223372036854775808}"
+  },
+  {
+    "name": "StartTimeTicks:\" 1 \"",
+    "json": "{\"StartTimeTicks\":\" 1 \"}"
+  },
+  {
+    "name": "StartTimeTicks:\"true\"",
+    "json": "{\"StartTimeTicks\":\"true\"}"
+  },
+  {
+    "name": "StartTimeTicks:{}",
+    "json": "{\"StartTimeTicks\":{}}"
+  },
+  {
+    "name": "StartTimeTicks:[]",
+    "json": "{\"StartTimeTicks\":[]}"
+  },
+  {
+    "name": "StartTimeTicks:\"22222222-2222-2222-2222-222222222222\"",
+    "json": "{\"StartTimeTicks\":\"22222222-2222-2222-2222-222222222222\"}"
+  },
+  {
+    "name": "StartTimeTicks:\"00000000-0000-0000-0000-000000000000\"",
+    "json": "{\"StartTimeTicks\":\"00000000-0000-0000-0000-000000000000\"}"
+  },
+  {
+    "name": "EnableDirectPlay:1",
+    "json": "{\"EnableDirectPlay\":1}"
+  },
+  {
+    "name": "EnableDirectPlay:-1",
+    "json": "{\"EnableDirectPlay\":-1}"
+  },
+  {
+    "name": "EnableDirectPlay:1.0",
+    "json": "{\"EnableDirectPlay\":1.0}"
+  },
+  {
+    "name": "EnableDirectPlay:1e3",
+    "json": "{\"EnableDirectPlay\":1e3}"
+  },
+  {
+    "name": "EnableDirectPlay:9007199254740993",
+    "json": "{\"EnableDirectPlay\":9007199254740993}"
+  },
+  {
+    "name": "EnableDirectPlay:9223372036854775808",
+    "json": "{\"EnableDirectPlay\":9223372036854775808}"
+  },
+  {
+    "name": "EnableDirectPlay:\"1\"",
+    "json": "{\"EnableDirectPlay\":\"1\"}"
+  },
+  {
+    "name": "EnableDirectPlay:\"+1\"",
+    "json": "{\"EnableDirectPlay\":\"+1\"}"
+  },
+  {
+    "name": "EnableDirectPlay:\" 1 \"",
+    "json": "{\"EnableDirectPlay\":\" 1 \"}"
+  },
+  {
+    "name": "EnableDirectPlay:\"true\"",
+    "json": "{\"EnableDirectPlay\":\"true\"}"
+  },
+  {
+    "name": "EnableDirectPlay:{}",
+    "json": "{\"EnableDirectPlay\":{}}"
+  },
+  {
+    "name": "EnableDirectPlay:[]",
+    "json": "{\"EnableDirectPlay\":[]}"
+  },
+  {
+    "name": "EnableDirectPlay:\"22222222-2222-2222-2222-222222222222\"",
+    "json": "{\"EnableDirectPlay\":\"22222222-2222-2222-2222-222222222222\"}"
+  },
+  {
+    "name": "EnableDirectPlay:\"00000000-0000-0000-0000-000000000000\"",
+    "json": "{\"EnableDirectPlay\":\"00000000-0000-0000-0000-000000000000\"}"
+  },
+  {
+    "name": "MediaSourceId:{}",
+    "json": "{\"MediaSourceId\":{}}"
+  },
+  {
+    "name": "MediaSourceId:[]",
+    "json": "{\"MediaSourceId\":[]}"
+  },
+  {
+    "name": "profile-Name:{}",
+    "json": "{\"DeviceProfile\":{\"Name\":{}}}"
+  },
+  {
+    "name": "profile-Name:[]",
+    "json": "{\"DeviceProfile\":{\"Name\":[]}}"
+  },
+  {
+    "name": "profile-Name:[null]",
+    "json": "{\"DeviceProfile\":{\"Name\":[null]}}"
+  },
+  {
+    "name": "profile-Id:\"\"",
+    "json": "{\"DeviceProfile\":{\"Id\":\"\"}}"
+  },
+  {
+    "name": "profile-Id:42",
+    "json": "{\"DeviceProfile\":{\"Id\":42}}"
+  },
+  {
+    "name": "profile-Id:true",
+    "json": "{\"DeviceProfile\":{\"Id\":true}}"
+  },
+  {
+    "name": "profile-Id:{}",
+    "json": "{\"DeviceProfile\":{\"Id\":{}}}"
+  },
+  {
+    "name": "profile-Id:[]",
+    "json": "{\"DeviceProfile\":{\"Id\":[]}}"
+  },
+  {
+    "name": "profile-Id:[null]",
+    "json": "{\"DeviceProfile\":{\"Id\":[null]}}"
+  },
+  {
+    "name": "profile-MaxStreamingBitrate:true",
+    "json": "{\"DeviceProfile\":{\"MaxStreamingBitrate\":true}}"
+  },
+  {
+    "name": "profile-MaxStreamingBitrate:{}",
+    "json": "{\"DeviceProfile\":{\"MaxStreamingBitrate\":{}}}"
+  },
+  {
+    "name": "profile-MaxStreamingBitrate:[]",
+    "json": "{\"DeviceProfile\":{\"MaxStreamingBitrate\":[]}}"
+  },
+  {
+    "name": "profile-MaxStreamingBitrate:[null]",
+    "json": "{\"DeviceProfile\":{\"MaxStreamingBitrate\":[null]}}"
+  },
+  {
+    "name": "profile-DirectPlayProfiles:\"\"",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":\"\"}}"
+  },
+  {
+    "name": "profile-DirectPlayProfiles:42",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":42}}"
+  },
+  {
+    "name": "profile-DirectPlayProfiles:true",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":true}}"
+  },
+  {
+    "name": "profile-DirectPlayProfiles:{}",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":{}}}"
+  },
+  {
+    "name": "profile-CodecProfiles:\"\"",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":\"\"}}"
+  },
+  {
+    "name": "profile-CodecProfiles:42",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":42}}"
+  },
+  {
+    "name": "profile-CodecProfiles:true",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":true}}"
+  },
+  {
+    "name": "profile-CodecProfiles:{}",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":{}}}"
+  },
+  {
+    "name": "profile-SubtitleProfiles:\"\"",
+    "json": "{\"DeviceProfile\":{\"SubtitleProfiles\":\"\"}}"
+  },
+  {
+    "name": "profile-SubtitleProfiles:42",
+    "json": "{\"DeviceProfile\":{\"SubtitleProfiles\":42}}"
+  },
+  {
+    "name": "profile-SubtitleProfiles:true",
+    "json": "{\"DeviceProfile\":{\"SubtitleProfiles\":true}}"
+  },
+  {
+    "name": "profile-SubtitleProfiles:{}",
+    "json": "{\"DeviceProfile\":{\"SubtitleProfiles\":{}}}"
+  },
+  {
+    "name": "enum:null",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":null}]}}"
+  },
+  {
+    "name": "enum:1.0",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":1.0}]}}"
+  },
+  {
+    "name": "enum:1e0",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":1e0}]}}"
+  },
+  {
+    "name": "enum:\"unknown\"",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":\"unknown\"}]}}"
+  },
+  {
+    "name": "enum:{}",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":{}}]}}"
+  },
+  {
+    "name": "enum:[]",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":[]}]}}"
+  },
+  {
+    "name": "enum:true",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Type\":true}]}}"
+  },
+  {
+    "name": "condition-enum:null",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":[{\"Conditions\":[{\"Property\":null}]}]}}"
+  },
+  {
+    "name": "condition-enum:\"unknown\"",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":[{\"Conditions\":[{\"Property\":\"unknown\"}]}]}}"
+  },
+  {
+    "name": "duplicate-invalid-first",
+    "json": "{\"MaxStreamingBitrate\":\"invalid\",\"MaxStreamingBitrate\":2}"
+  },
+  {
+    "name": "unicode-location",
+    "json": "{\n\"MediaSourceId\":\"中文🎞\",\n\"DeviceProfile\":{\"CodecProfiles\":[{\"Conditions\":[{\"IsRequired\":\"true\"}]}]}}"
+  },
+  {
+    "name": "nullable-empty",
+    "json": "{\"EnableDirectPlay\":\"\",\"StartTimeTicks\":\"\",\"MaxStreamingBitrate\":\"\"}"
+  },
+  {
+    "name": "query-overridden-body-invalid",
+    "json": "{\"EnableDirectPlay\":\"false\"}",
+    "query": "?enableDirectPlay=true"
+  },
+  {
+    "name": "query-empty-body-source",
+    "json": "{\"MediaSourceId\":\"missing\"}",
+    "query": "?mediaSourceId="
+  },
+  {
+    "name": "query-empty-body-bitrate",
+    "json": "{\"MaxStreamingBitrate\":1000000}",
+    "query": "?maxStreamingBitrate="
+  },
+  {
+    "name": "profile-null-arrays",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":null}}"
+  },
+  {
+    "name": "profile-null-item",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[null]}}"
+  },
+  {
+    "name": "profile-null-container",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{\"Container\":null,\"Type\":\"Video\"}]}}"
+  },
+  {
+    "name": "profile-empty-item",
+    "json": "{\"DeviceProfile\":{\"DirectPlayProfiles\":[{}]}}"
+  },
+  {
+    "name": "profile-nested-null-condition",
+    "json": "{\"DeviceProfile\":{\"CodecProfiles\":[{\"Conditions\":null}]}}"
+  },
+  {
+    "name": "profile-null",
+    "json": "{\"DeviceProfile\":null}"
+  },
+  {
+    "name": "invalid-query-bitrate",
+    "json": "{}",
+    "query": "?maxStreamingBitrate=bad"
+  },
+  {
+    "name": "invalid-query-ticks",
+    "json": "{}",
+    "query": "?startTimeTicks=9223372036854775808"
+  }
+]

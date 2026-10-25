@@ -1,0 +1,6 @@
+{
+  "recordedAt": "2026-10-15T20:42:40.194Z",
+  "rawModifiedAt": "2026-10-15T20:42:40.115Z",
+  "scope": "Native per-field wall clocks are bounded independently by the actual pre-build input-pin file modification time and final execution receipt. Candidate Playlist clocks additionally equal actual filesystem birth/modified metadata.",
+  "inputsPinnedAt": "2026-10-15T20:42:10.508Z"
+}

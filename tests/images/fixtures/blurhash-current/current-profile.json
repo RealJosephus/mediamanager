@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "fixture": "blurhash-current",
+  "scope": "Two independent same-run Native captures retain all ten original image bytes and strictly compare complete final BlurHashes and public image dimensions. Full normalized RGBA, SHA and per-channel pixel differences remain diagnostics, with no independent internal buffer or Alpha equality gate. Portable JPEG runtime build/source identities, actual invalid input, cancellation, recovery and normal owner close remain bound. No release acceptance claimed.",
+  "sourcePaths": [
+    "src/Jellyfin.Drawing/ImageProcessor.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 2184,
+      "sha256": "98f0039331de1bd8d5dd7c0f632cb8aab265a91dfccc3d5b535179b67cea41dc"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 3964,
+      "sha256": "53561d2b7377a13033acfba7f513163489148dede22607c1f59fa6fe21c8d772"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "Oracle.csproj",
+      "bytes": 886,
+      "sha256": "308b9e487513a6a75b1201d10fa23f1bd552443eb7fb60a499b6d7d067e465a9"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "license",
+      "filename": "../../../../src/images/BlurHashSharp.LICENSE",
+      "bytes": 1065,
+      "sha256": "5dc74fd61053965e3a41eff83ea6fe47217bf175abb2da512a24855b13d2c48c"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/large.png",
+      "bytes": 5373,
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/wide.png",
+      "bytes": 2791,
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/large.webp",
+      "bytes": 30142,
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/wide.webp",
+      "bytes": 20262,
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/large.jpg",
+      "bytes": 37527,
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/wide.jpg",
+      "bytes": 25186,
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/coordinates-129x131.png",
+      "bytes": 54434,
+      "sha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    },
+    {
+      "role": "image",
+      "filename": "../blurhash-resampling/inputs/coordinates-411x129.png",
+      "bytes": 106789,
+      "sha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/index.js",
+      "bytes": 1861,
+      "sha256": "872f7fd171201f4ff9719828cc02009270fbf1c2fd62910d5ef7685d36018068"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/worker.js",
+      "bytes": 1231,
+      "sha256": "47e056b13c01b60215929b313318f0a9ad951257e1ed1d37ac8306c5b7ee6c22"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/jpeg-codec.mjs",
+      "bytes": 11582,
+      "sha256": "e50bcf26bb5487b85a9b740e87ee43b697883cd1827ce60edcf2a5b936a8bb83"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/jpeg-codec.wasm",
+      "bytes": 178450,
+      "sha256": "5ccd7fb7a3b1aca8593edd85211a1c69e3339bd291588c8f99b6d8cef4a3d550"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/bridge.c",
+      "bytes": 6766,
+      "sha256": "aad456c175f8f50a8ef60111899b86e682b7b70db0606f3879b09a20149b60e8"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/source-offer.json",
+      "bytes": 6935,
+      "sha256": "448b258af2fe2252745c3e6ad5794a0d161d8bbec1a1eab5f53f74252c19f5b3"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/runtime-source-offer.json",
+      "bytes": 1057828,
+      "sha256": "ff49029789699aaaf95cc179380a431fc6b30fc78aa2a44c5e65f38352e5b576"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/build-receipt.json",
+      "bytes": 79988,
+      "sha256": "09c03d395104fba8afda471be4df2afaa2ee3e53b11d24011f43fcaa9b166945"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.emscripten",
+      "bytes": 5093,
+      "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.musl",
+      "bytes": 6204,
+      "sha256": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.compiler-rt",
+      "bytes": 16708,
+      "sha256": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.libcxx",
+      "bytes": 16703,
+      "sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.skcms",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/LICENSE.Skia",
+      "bytes": 1507,
+      "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/NOTICE.txt",
+      "bytes": 816,
+      "sha256": "657d27677b327c75297aaa8d004101871c570ec4190544fb786a6863b138c834"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/source-archives/libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/source-archives/skcms-1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "bytes": 10038666,
+      "sha256": "3e4f1f48034717cce3cc2ef3cd58e878a22cc52a4db5de7a1a11f0234a7a5807"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/source-archives/emscripten-runtime-4.0.22.tar.gz",
+      "bytes": 5245078,
+      "sha256": "d28f656e918552b518f7a5342fd41e243ff042fa47d3935647a64a14728fd784"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/source-archives/emsdk-15915cad554b707837024dc2758b6a1c5b94b036.tar.gz",
+      "bytes": 208128,
+      "sha256": "b61f041e9cb38a0d439d8ad62c6c4459028348ed2c1d25d090e6fa65b629d358"
+    },
+    {
+      "role": "inputProvenance",
+      "filename": "capture.js",
+      "bytes": 5657,
+      "sha256": "66ead278379119993aa821970826a60c4c918769a980fe8dcb55250bf28c1c45"
+    },
+    {
+      "role": "inputProvenance",
+      "filename": "README.md",
+      "bytes": 1906,
+      "sha256": "5c51b349f004f7d60cd553b019615c0e12edb0b449c9b18a9c168fc4728ee6a5"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/SkJpegDecoderMgr.reference.cpp",
+      "bytes": 5153,
+      "sha256": "0b8cade96f3b0eb5dfe36b7a56d98a67669c51156a50011ad8bf70702bcaec3d"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/SkJpegSourceMgr.reference.cpp",
+      "bytes": 17501,
+      "sha256": "806d75a1ed5c8bc53f2741411fc31b6c270ceb8ea1985219a7432f9bb5317e1f"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/SkCodec.reference.cpp",
+      "bytes": 36498,
+      "sha256": "17ca5074174fd199b7e1a6573191d638b1dfcb212186a0bb925ce09d0413dc44"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/SkSampler.reference.cpp",
+      "bytes": 2251,
+      "sha256": "5eb4a481401fd6fd7e903c98a861bd91d6f3f7e938ce0a41b78f6d53d5754d24"
+    },
+    {
+      "role": "jpegCodec",
+      "filename": "../../../../src/images/jpeg-codec/README.md",
+      "bytes": 2707,
+      "sha256": "c49c3b6bd69e53944132a0a61dbe3583dd05104393162df349226638606043e4"
+    }
+  ]
+}

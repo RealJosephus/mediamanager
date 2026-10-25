@@ -1,0 +1,24 @@
+{
+  "schemaVersion":1,
+  "scope":"Current designated ServerConfigurationManager complete replacement, retained incoming/current writes and detached old values, direct partial saves, named network saves, actual serializer truncation and save IO failure/recovery, path validation and path/event effects.",
+  "sourcePaths":[
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
+    "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
+    "Emby.Server.Implementations/ServerApplicationPaths.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Common/Events/EventHelper.cs",
+    "MediaBrowser.Model/Configuration/BaseApplicationConfiguration.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+    "MediaBrowser.Model/Dto/NameValuePair.cs",
+    "MediaBrowser.Common/Net/NetworkConfigurationFactory.cs",
+    "MediaBrowser.Common/Net/NetworkConfigurationStore.cs",
+    "MediaBrowser.Common/Net/NetworkConfiguration.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonVersionConverter.cs",
+    "Jellyfin.Api/Controllers/StartupController.cs",
+    "Jellyfin.Api/Controllers/ItemUpdateController.cs",
+    "src/Jellyfin.Extensions/FileHelper.cs"
+  ]
+}

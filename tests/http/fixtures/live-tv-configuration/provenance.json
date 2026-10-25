@@ -1,0 +1,32 @@
+{
+  "kind": "current-designated-source-http-and-native-xml-consumer",
+  "test": "tests/http/live-tv-configuration-native.test.js",
+  "oracle": "tests/library/fixtures/live-tv-configuration/Oracle.csproj",
+  "input": "Same-workflow designated native build, stopped instance and current native SQLite, verified by currentNativeReference and createWebServerFixture.",
+  "binding": "Runtime sourceBindings validate exact executing-source bytes against the immutable build source manifest; XML consumer evidence records loaded assembly hashes and input SHA-256.",
+  "sourcePaths": [
+    "Jellyfin.Api/Controllers/ConfigurationController.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonStringConverter.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonNullableStructConverter.cs",
+    "MediaBrowser.Model/LiveTv/LiveTvOptions.cs",
+    "MediaBrowser.Model/LiveTv/TunerHostInfo.cs",
+    "MediaBrowser.Model/LiveTv/ListingsProviderInfo.cs",
+    "MediaBrowser.Model/Dto/NameValuePair.cs",
+    "src/Jellyfin.LiveTv/Configuration/LiveTvConfigurationFactory.cs",
+    "src/Jellyfin.LiveTv/Recordings/RecordingsManager.cs",
+    "Jellyfin.Api/Controllers/LiveTvController.cs",
+    "src/Jellyfin.LiveTv/LiveTvManager.cs",
+    "src/Jellyfin.LiveTv/Guide/GuideManager.cs",
+    "Emby.Server.Implementations/Library/UserViewManager.cs",
+    "Jellyfin.Api/Controllers/UserViewsController.cs"
+  ],
+  "license": "Jellyfin GPL-2.0 sources; original evidence is recorded privately and credentials are filtered on publication.",
+  "historicalRecordingReused": false,
+  "recordingExecution": false,
+  "phaseAcceptance": false,
+  "releaseAcceptance": false
+}

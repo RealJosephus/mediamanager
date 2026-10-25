@@ -1,0 +1,7 @@
+# Native Collection HTTP boundary
+
+The input is a neutral request matrix. `Program.cs` hosts the actual loaded `CollectionController`, native Jellyfin MVC options and formatters, Guid/comma collection binding, `ExceptionMiddleware`, `DefaultAuthorizationHandler` and `UserPermissionHandler` on an isolated loopback listener. Principal and user/network lookup are controlled. Most cases control manager and DTO dependencies; DTO returns a different ID to establish that the action returns its projected ID after manager completion.
+
+Eight error cases additionally execute the actual `CollectionManager`, `BoxSet` and `ManagedFileSystem`, with real isolated directories. They distinguish missing collection/type/member `ArgumentException` (HTTP 400), delayed malformed creation-member `FormatException` (HTTP 500), and null-name failure (HTTP 500). Creation-member failures retain the directory and `CreateItem` prefix without member assignment, save, refresh queue or collection event. Repository persistence, provider, root navigation and DTO are controls. Native SQLite, full server authentication and browser behavior are outside this fixture; candidate PostgreSQL runtime tests cover actual rows, XML, user/device authentication and events.
+
+Selected designated workspace sources, isolated build copies, loaded DLLs and oracle sources are bound by `provenance.json`. This proves the stated boundary, not complete reference build closure or release acceptance. Re-record with `tools/compat/record-collection-http.js` into a new evidence directory.

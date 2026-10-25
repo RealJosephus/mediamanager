@@ -1,0 +1,928 @@
+{
+  "scope": "Actual native OPF/EPUB metadata and cover source/file/archive observations; generic host/SQL/HTTP separately validated.",
+  "timezone": "Asia/Taipei",
+  "nativeDll": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+  },
+  "sources": [
+    {
+      "relativePath": "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+        "bytes": 13824,
+        "sha256": "d00ffa71989d38d87b0f89f1a64a9aafe567a59463ba1849ac1babd4bd406756",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+        "bytes": 13824,
+        "sha256": "d00ffa71989d38d87b0f89f1a64a9aafe567a59463ba1849ac1babd4bd406756",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+        "bytes": 3646,
+        "sha256": "606238b16c2515fa8a4f6511bf8d663e91fcc675f770aae5cf2c3e9f6686049d",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+        "bytes": 3646,
+        "sha256": "606238b16c2515fa8a4f6511bf8d663e91fcc675f770aae5cf2c3e9f6686049d",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+        "bytes": 3101,
+        "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+        "bytes": 3101,
+        "sha256": "52bd9ea94f92b6b466b179e3ad426a6446768d6daea9a5c08b3beb4c0519db83",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+        "bytes": 1134,
+        "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+        "bytes": 1134,
+        "sha256": "499e3d7fd76a345663ac16399c0b24ae96047d0c208fbe8060bc172f757d4b6c",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+        "bytes": 4216,
+        "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+        "bytes": 4216,
+        "sha256": "78671dbef0d358e85a0fd5d2a0088fcffc938f1025c8935d9597b2d0e7315137",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "original": {
+        "filename": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+        "bytes": 27461,
+        "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+        "bytes": 27461,
+        "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Controller/Entities/PeopleHelper.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/PeopleHelper.cs",
+        "bytes": 3674,
+        "sha256": "e1be24d333c1ef6ec86f70c18cd16424f77f9e8365b1ae9e4e2d0c5f82262c09",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/PeopleHelper.cs",
+        "bytes": 3674,
+        "sha256": "e1be24d333c1ef6ec86f70c18cd16424f77f9e8365b1ae9e4e2d0c5f82262c09",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Controller/Providers/MetadataResult.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Controller/Providers/MetadataResult.cs",
+        "bytes": 1897,
+        "sha256": "71fb22c6a4da1e4ec2af9e872eede684af560c5f5dcf17b9dde83dd4f644d856",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/MetadataResult.cs",
+        "bytes": 1897,
+        "sha256": "71fb22c6a4da1e4ec2af9e872eede684af560c5f5dcf17b9dde83dd4f644d856",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+      "original": {
+        "filename": "D:/jellyfin/MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+        "bytes": 1103,
+        "sha256": "ff6eb45caa6c8b97a7dd24fbc3a1a00dc9a0e1461608b04547b0362f4e8a7b38",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+        "bytes": 1103,
+        "sha256": "ff6eb45caa6c8b97a7dd24fbc3a1a00dc9a0e1461608b04547b0362f4e8a7b38",
+        "required": true
+      }
+    },
+    {
+      "relativePath": "Jellyfin.Server/Helpers/StartupHelpers.cs",
+      "original": {
+        "filename": "D:/jellyfin/Jellyfin.Server/Helpers/StartupHelpers.cs",
+        "bytes": 13123,
+        "sha256": "f84596accbcb871dd5c0da44543732bace3451c4cec90139a8d038034050d7eb",
+        "required": true
+      },
+      "captured": {
+        "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/Helpers/StartupHelpers.cs",
+        "bytes": 13123,
+        "sha256": "f84596accbcb871dd5c0da44543732bace3451c4cec90139a8d038034050d7eb",
+        "required": true
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    }
+  ],
+  "files": [
+    {
+      "filename": "assets/archive/duplicate-reversed-central.zip",
+      "bytes": 239,
+      "sha256": "9086e3eae8f69b1b0834023eb584cd59c69214d0283ee98bbc512a5d7ac2d99e"
+    },
+    {
+      "filename": "assets/archive/local-central-name-mismatch.zip",
+      "bytes": 128,
+      "sha256": "fa7031a1fdcf958c41653823ed068937ad4dab2ef3eb820af8306e7d4be77fe7"
+    },
+    {
+      "filename": "assets/archive/non-utf8-byte.zip",
+      "bytes": 116,
+      "sha256": "b4821975c0b37dd80b073f2cfb303408e5bb89b8e15f937cde76b8e11d45d643"
+    },
+    {
+      "filename": "assets/archive/non-utf8-valid-utf8.zip",
+      "bytes": 116,
+      "sha256": "59be18d144860dd9e42b66f09b15fe0254b432c9e1e52ad6adb267bdceccc8e6"
+    },
+    {
+      "filename": "assets/archive/unicode-path-extra.zip",
+      "bytes": 135,
+      "sha256": "37ec08c360b0524c561de00cd27b597c41fafe01ff67dc8dca1f5133ecc02d5a"
+    },
+    {
+      "filename": "assets/cover.png",
+      "bytes": 95,
+      "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+    },
+    {
+      "filename": "assets/epub/all-backslashes.epub",
+      "bytes": 735,
+      "sha256": "8efd97728a6a242903f06dd54fa012fe48a094cf21a04ba1b0cea68c609c631a"
+    },
+    {
+      "filename": "assets/epub/back-container-back-cover.epub",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "filename": "assets/epub/back-container-slash-cover.epub",
+      "bytes": 735,
+      "sha256": "efb0034600a15c1ceaaef76c0e91bf007cfc54712663fa24469c774fb3b0275b"
+    },
+    {
+      "filename": "assets/epub/cancelled-malformed-opf.epub",
+      "bytes": 557,
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "filename": "assets/epub/cancelled-missing-container.epub",
+      "bytes": 22,
+      "sha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+    },
+    {
+      "filename": "assets/epub/cancelled-valid.epub",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "filename": "assets/epub/corrupt-zip.epub",
+      "bytes": 17,
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be"
+    },
+    {
+      "filename": "assets/epub/cover-apostrophe.epub",
+      "bytes": 715,
+      "sha256": "f9ff2d207416c350835f2941bba46b048d0210ab9de9535ba1115b38ddbb46b7"
+    },
+    {
+      "filename": "assets/epub/cover-first-invalid.epub",
+      "bytes": 739,
+      "sha256": "c95efca46a853be49ad606645b85121839a3623782c43d085f503350095c78fd"
+    },
+    {
+      "filename": "assets/epub/cover-format-bmp.epub",
+      "bytes": 717,
+      "sha256": "8ccb63ed263312cf9cc0ce978a7c4ef8480ade1729949b21a7dc1d376ad1a007"
+    },
+    {
+      "filename": "assets/epub/cover-format-gif.epub",
+      "bytes": 716,
+      "sha256": "b252b356e96045a263cc61ff279029829b48409bf8f499c4cac1a38513aa39b1"
+    },
+    {
+      "filename": "assets/epub/cover-format-jpeg.epub",
+      "bytes": 718,
+      "sha256": "c062f852f81a36d2cf9352ab9799b6f4e2d180ef5c8e31981783d2da208bdac4"
+    },
+    {
+      "filename": "assets/epub/cover-format-png-parameters.epub",
+      "bytes": 725,
+      "sha256": "ce46abcfa4b75e19ccb825cd70a4eadca0f86ea9716d11d10c27ced3f589e983"
+    },
+    {
+      "filename": "assets/epub/cover-href-dot.epub",
+      "bytes": 734,
+      "sha256": "3a8be76235fafd9a2754b3efd2330f22584e58d3562ac2f4524ae681aed7068b"
+    },
+    {
+      "filename": "assets/epub/cover-href-percent.epub",
+      "bytes": 737,
+      "sha256": "a8fad01e41560b8a339a9955b10af63d81a3049bd65bc68ab4e1b3f66fa0b73a"
+    },
+    {
+      "filename": "assets/epub/cover-id-cover-real-mime.epub",
+      "bytes": 724,
+      "sha256": "13484f0c6a477041836299a07340c140a8db7aa78d2dc7be25476332ba07cdff"
+    },
+    {
+      "filename": "assets/epub/cover-id-cover-wild-mime.epub",
+      "bytes": 726,
+      "sha256": "99db142b8e31776d64f198b738b46efbe7473267e83341ac948e7f7391fbba06"
+    },
+    {
+      "filename": "assets/epub/cover-literal-star.epub",
+      "bytes": 731,
+      "sha256": "0b3a90fafa05c822d8b030f0219438f84ee532ac83f5d4c413e09b24a6d3817e"
+    },
+    {
+      "filename": "assets/epub/cover-meta-id.epub",
+      "bytes": 740,
+      "sha256": "aa0aebb126cc940d4fe7891f512c5e1e64fbebf110be1a57f0cec2e2e452bc25"
+    },
+    {
+      "filename": "assets/epub/cover-plain-mime.epub",
+      "bytes": 735,
+      "sha256": "581785aa2f3aa9b411707831c70c4e057439ad4750263e0c676fa11bbc6f5e2f"
+    },
+    {
+      "filename": "assets/epub/cover-tokens.epub",
+      "bytes": 736,
+      "sha256": "b8090b4715f0d8d676576559768aba66db72b9b94b25b6f7b64103864e42fc6d"
+    },
+    {
+      "filename": "assets/epub/cover-unknown-mime.epub",
+      "bytes": 733,
+      "sha256": "9d9610731505f40b11d280390a5a8856bbfbaf5344e472f1251727a417b13e0f"
+    },
+    {
+      "filename": "assets/epub/cover-webp-mime.epub",
+      "bytes": 735,
+      "sha256": "2d7e39ca5f251c74961d36aaabf6d631350f763b1c889332872e6801ddceb988"
+    },
+    {
+      "filename": "assets/epub/duplicate-container.epub",
+      "bytes": 753,
+      "sha256": "7c163b706c1196ec148626e708f093c7670b63012bd03730a6d9550edc4fef1a"
+    },
+    {
+      "filename": "assets/epub/empty-root-path.epub",
+      "bytes": 1065,
+      "sha256": "e547dd6ea5a4f0d51628a2353d1ad738011f9bcd9bd39c95f7a991d3d5e0ce28"
+    },
+    {
+      "filename": "assets/epub/first-rootfile-missing.epub",
+      "bytes": 1091,
+      "sha256": "e2ab23ab2650364043e5206c8d560402f054bda1d22a4cd266d718af3f73143a"
+    },
+    {
+      "filename": "assets/epub/malformed-container.epub",
+      "bytes": 989,
+      "sha256": "12f0c43abb3a57b9bb135a1a99bef498a3bbf1b760ab7e3cf9d9e477030f756f"
+    },
+    {
+      "filename": "assets/epub/malformed-opf.epub",
+      "bytes": 557,
+      "sha256": "e63065c0473b5370e33cf1b5566bbaa1b4fce88833e662f61edcff95a4212b0a"
+    },
+    {
+      "filename": "assets/epub/missing-container.epub",
+      "bytes": 663,
+      "sha256": "fd1ac75091641cf98c31604ee4f3c13f9c78cd988076e4ccb1f034ee0d74838a"
+    },
+    {
+      "filename": "assets/epub/missing-opf.epub",
+      "bytes": 1073,
+      "sha256": "c8f69ceae58021cce9f652cf2bb0d998a9fe1a9b7c37e5635eb614850a7cf3c6"
+    },
+    {
+      "filename": "assets/epub/nested-opf-directory.epub",
+      "bytes": 763,
+      "sha256": "e31308bed775cb513b384f002b5169fd998cdca9cebb8ee00a6cd7b1ab1508cc"
+    },
+    {
+      "filename": "assets/epub/rich-with-cover.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228"
+    },
+    {
+      "filename": "assets/epub/root-opf.epub",
+      "bytes": 712,
+      "sha256": "7f64e0786a69f1c3a8e4769351c66b750e1b5ffd892b254ca4cab46d1aa6e28c"
+    },
+    {
+      "filename": "assets/epub/standard-slashes.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311"
+    },
+    {
+      "filename": "assets/epub/upper-extension.EPUB",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "filename": "assets/epub/wrong-container-namespace.epub",
+      "bytes": 1035,
+      "sha256": "6e10f004be717aadf9d046fddc625a5451f37083433407ab7c459056ab54e28f"
+    },
+    {
+      "filename": "assets/epub/wrong-extension.zip",
+      "bytes": 735,
+      "sha256": "9ca236eb216ce09991b55221c6f401c3f1f34300f1d315053581d8f9712c6d04"
+    },
+    {
+      "filename": "assets/opf/cancelled-existing/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/cancelled-existing/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/cancelled-missing/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/content-second/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/content-second/content.opf",
+      "bytes": 228,
+      "sha256": "60e6e6e95a2a0da3e4a465c5ce26deca07bf6ec02f019739f73b914adaf7ac58"
+    },
+    {
+      "filename": "assets/opf/content-second/metadata.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/directory-specific/Volume/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/directory-specific/Volume/Volume.opf",
+      "bytes": 230,
+      "sha256": "8c222bd4803688a60e0a744ed3f6e55c1fbf701636fa8409a84cb50155cc6b41"
+    },
+    {
+      "filename": "assets/opf/locked-selected/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/locked-selected/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/malformed-specific/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/malformed-specific/book.opf",
+      "bytes": 8,
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "filename": "assets/opf/malformed-specific/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/metadata-last/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/metadata-last/metadata.opf",
+      "bytes": 228,
+      "sha256": "cccd46ab19955ef70652b0cc6401d10afdf16b9ffabf0acb87515fe43f23cdff"
+    },
+    {
+      "filename": "assets/opf/missing-all/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/missing-parent-source/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/mtime--1/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/mtime--1/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/mtime-0/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/mtime-0/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/mtime-1/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/mtime-1/book.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/specific-first/book.epub",
+      "bytes": 12,
+      "sha256": "224acdcf3636e42d27cbbc8b3dfae417ddf78b10d3aec5952cd5baffe2a56dae"
+    },
+    {
+      "filename": "assets/opf/specific-first/book.opf",
+      "bytes": 229,
+      "sha256": "19af7cc5dd1c2db350ba00b97e5ca97c467696ffffadf682be5dfc1b52e318bc"
+    },
+    {
+      "filename": "assets/opf/specific-first/content.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/opf/specific-first/metadata.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/reader/alternate-prefix.opf",
+      "bytes": 226,
+      "sha256": "717aea180950efe7c3eacdae23a5da3d91c0dc70d80277795409427c96021d56"
+    },
+    {
+      "filename": "assets/reader/attribute-whitespace.opf",
+      "bytes": 296,
+      "sha256": "8a16ed0a53d33680ce4f2b3f54cf72528c6a82423ad7b44bdeff2393353367d4"
+    },
+    {
+      "filename": "assets/reader/bom-declaration-conflict.opf",
+      "bytes": 460,
+      "sha256": "1b437eb9f5ac875fa7d24817f8196cc2b4f60def842af02b4b788fe035c07c5f"
+    },
+    {
+      "filename": "assets/reader/cancelled-malformed.opf",
+      "bytes": 8,
+      "sha256": "88de8e6e97a972c5e01968eef2e8c871e6ef8229cbd6505591b3bf3c31fc5b82"
+    },
+    {
+      "filename": "assets/reader/cancelled-valid.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/reader/cdata-comments.opf",
+      "bytes": 309,
+      "sha256": "6c0ed497784efec9adbff505a9a57a1413ac4f22ef8d1baa0c7ef1888ef09391"
+    },
+    {
+      "filename": "assets/reader/cp1252-declaration.opf",
+      "bytes": 238,
+      "sha256": "2dea144e29f6dd44e5bbee34c3e36d473ea78f359fe556fe773affb0f0e046f3"
+    },
+    {
+      "filename": "assets/reader/creator-roles.opf",
+      "bytes": 1034,
+      "sha256": "9e8a26c4361adade2d19422da6137b61b3733aa77b20e24ea3b3841edc383fc1"
+    },
+    {
+      "filename": "assets/reader/date-0.opf",
+      "bytes": 229,
+      "sha256": "978aa9dd8d1e2ec71614ac3b0c6b78af5bf06b9666fe7ef5ce316b5f620caea7"
+    },
+    {
+      "filename": "assets/reader/date-1.opf",
+      "bytes": 239,
+      "sha256": "f429ca54169d2fff63b220d2a4181db6f156ad1253d097b22b566c73f9f4336a"
+    },
+    {
+      "filename": "assets/reader/date-2.opf",
+      "bytes": 244,
+      "sha256": "067711fef582585ba476ba7b98a61090167b5682d3729fb3c1b4d214c490c401"
+    },
+    {
+      "filename": "assets/reader/date-3.opf",
+      "bytes": 229,
+      "sha256": "2cc995a8c7ac7c571edeb7ab7c34467b2ad3cb98015e0785c948f742bcd7cb8d"
+    },
+    {
+      "filename": "assets/reader/date-4.opf",
+      "bytes": 229,
+      "sha256": "55c97dad150c27c9ae7356f4539bcc23ac4c78a14248b46f941c597536e42753"
+    },
+    {
+      "filename": "assets/reader/date-5.opf",
+      "bytes": 223,
+      "sha256": "565a7636bfc5a9492afb66d8ab4743ced75de6738d83aa4f45f365a1ffc7f78a"
+    },
+    {
+      "filename": "assets/reader/date-6.opf",
+      "bytes": 229,
+      "sha256": "0d902865c671ae51a24cd9c73231c5e273fc96491a67cb7b7638cbeb6a566eb7"
+    },
+    {
+      "filename": "assets/reader/date-7.opf",
+      "bytes": 229,
+      "sha256": "34369231d851b240f747560ffaaafa51f6f540645a94fbab24f2b27b1a43fe8a"
+    },
+    {
+      "filename": "assets/reader/date-8.opf",
+      "bytes": 252,
+      "sha256": "bc212090dbefd4394d2f7271a061dd3f4166c9ca9079c51d9085eb6b0451b0ad"
+    },
+    {
+      "filename": "assets/reader/empty-main-fallback.opf",
+      "bytes": 362,
+      "sha256": "81edf2f3b5d774d69a133e35078cb993772635462920831b805a4aec95f93429"
+    },
+    {
+      "filename": "assets/reader/empty.opf",
+      "bytes": 11,
+      "sha256": "7dce060dfa286d6c10a2f73103995027f58a1bf02bd89b81320b4677e03b0c4d"
+    },
+    {
+      "filename": "assets/reader/external-dtd.opf",
+      "bytes": 279,
+      "sha256": "8604c37b5d7d642333e79f5c8be896b89f0b24940e39be8396e7f5da34f0822e"
+    },
+    {
+      "filename": "assets/reader/external-entity-attribute.opf",
+      "bytes": 321,
+      "sha256": "092fc3d9ae3a1ae694ce6464e9719360d05b15b48cd8ae23fef6fd5690615f20"
+    },
+    {
+      "filename": "assets/reader/external-entity.opf",
+      "bytes": 302,
+      "sha256": "d698aa6f321669e78cf0d78e7d8fac99587131fd38533b4b66653bbea07b4347"
+    },
+    {
+      "filename": "assets/reader/first-whitespace.opf",
+      "bytes": 486,
+      "sha256": "5f83ac170b880a6fa79af1ba3d1b331e4220fa82f9cc2ca44db2a1202db1430f"
+    },
+    {
+      "filename": "assets/reader/ids-case-duplicate.opf",
+      "bytes": 471,
+      "sha256": "b5548dc72edbb749037bb83a39cb209f7aaec8d522ff4fd2ccdaf9a43ec3bd6b"
+    },
+    {
+      "filename": "assets/reader/internal-dtd.opf",
+      "bytes": 249,
+      "sha256": "0bd146525b3dceb4da13e05b185ff3f8febaca44f22130d5e6e8f8c7174d4f86"
+    },
+    {
+      "filename": "assets/reader/invalid-character.opf",
+      "bytes": 229,
+      "sha256": "ca84f67e787a9c5bfd5fbe86240de177c792c865c3e9afaf3d331593d5a213cf"
+    },
+    {
+      "filename": "assets/reader/invalid-utf8.opf",
+      "bytes": 223,
+      "sha256": "0988e2747ae046a8b56e0044333d4cb2bf315aaeaf457e770ab6390e3ca62602"
+    },
+    {
+      "filename": "assets/reader/last-main-first-sort.opf",
+      "bytes": 528,
+      "sha256": "0442c61c2b92c8101358c1d7a5b591cca854449dec0e6a1b39b1fd32d78844a1"
+    },
+    {
+      "filename": "assets/reader/latin1-declaration.opf",
+      "bytes": 232,
+      "sha256": "812c2da063de81af5141e8b499b8666a35f87619163dbb8c4bfca0dcaa496492"
+    },
+    {
+      "filename": "assets/reader/literal-cr.opf",
+      "bytes": 240,
+      "sha256": "90672703334715f35ddb9cc8b055b259e814c78194dbc091ee4b222f4cfcff82"
+    },
+    {
+      "filename": "assets/reader/literal-crlf.opf",
+      "bytes": 273,
+      "sha256": "a58a11363b4c4b3f8144588eb7f4e42e077954178bd86f83d419189209f1b2dd"
+    },
+    {
+      "filename": "assets/reader/malformed.opf",
+      "bytes": 27,
+      "sha256": "0aeeb62763cee61c581810061679b13ba905399acaea389b0821abb3930e02b4"
+    },
+    {
+      "filename": "assets/reader/nested-entity.opf",
+      "bytes": 248,
+      "sha256": "70bbd7f0400eea737019bf266cad74c5606f53b4edeef6589275140202720d26"
+    },
+    {
+      "filename": "assets/reader/numbers-0.opf",
+      "bytes": 333,
+      "sha256": "9cca99fb33771bf653209ceec8348de95008739c772a53abe70abd0ab0d06ca5"
+    },
+    {
+      "filename": "assets/reader/numbers-1.opf",
+      "bytes": 333,
+      "sha256": "6514fe25cfc9b9564d56ea9a0856d16619890f13acef97345f41605a8f6a7fd2"
+    },
+    {
+      "filename": "assets/reader/numbers-10.opf",
+      "bytes": 333,
+      "sha256": "aea11bee366a09d28f3c801b6ea625a5459b83627c5c5a9906d2e619bd1c4320"
+    },
+    {
+      "filename": "assets/reader/numbers-11.opf",
+      "bytes": 333,
+      "sha256": "34760e5cff4566a62bd71ebb61cb76f8963f9c9d76c23105dd6fb38181845b2a"
+    },
+    {
+      "filename": "assets/reader/numbers-12.opf",
+      "bytes": 351,
+      "sha256": "4c3076205c64abe52429d2b33bbc9193bddfc72b2e694b5683daabb5d4818f4f"
+    },
+    {
+      "filename": "assets/reader/numbers-13.opf",
+      "bytes": 327,
+      "sha256": "2b0a7619fb005eae8cc3c263ba1fd31a4c874f4bb7a78feb9f752f8310170ad1"
+    },
+    {
+      "filename": "assets/reader/numbers-2.opf",
+      "bytes": 335,
+      "sha256": "bfcecd186790ac4e921c1c1507bc4ca8de73c517aac07adb43cd2d2e5b0a5ef1"
+    },
+    {
+      "filename": "assets/reader/numbers-3.opf",
+      "bytes": 335,
+      "sha256": "ec177f5b56391354367b18f279eab23ada7e369fc9b3e958074c99f114688b76"
+    },
+    {
+      "filename": "assets/reader/numbers-4.opf",
+      "bytes": 347,
+      "sha256": "0d75f03112e2b07c56dbc823b46e38ef4daf5ac02030a3875231c7325efebd29"
+    },
+    {
+      "filename": "assets/reader/numbers-5.opf",
+      "bytes": 333,
+      "sha256": "08cd18cd7b51a3434e185ab058efbd8996bbec7a41fcc2dd868ef851e7c0645a"
+    },
+    {
+      "filename": "assets/reader/numbers-6.opf",
+      "bytes": 343,
+      "sha256": "bd9d6fa43fdd1ef2f5c963b66d2160f2874b07ab8b5fa0e83b76e2a7a99bc5c3"
+    },
+    {
+      "filename": "assets/reader/numbers-7.opf",
+      "bytes": 351,
+      "sha256": "d91d481845eb674ce452ec9b9d8daec9e68b8263127fa3581c01be1d79baaa8b"
+    },
+    {
+      "filename": "assets/reader/numbers-8.opf",
+      "bytes": 351,
+      "sha256": "ef8236d5af7bb4c047869038a128f6fec50ccdea231d2063f99e9f9e8d9e1b20"
+    },
+    {
+      "filename": "assets/reader/numbers-9.opf",
+      "bytes": 353,
+      "sha256": "e22c6130044bc7dcd78a9d2d27e658d824b4a7d6c02a81cf27a8afad15087ede"
+    },
+    {
+      "filename": "assets/reader/numeric-references.opf",
+      "bytes": 276,
+      "sha256": "de246851cadf03cb92dc1b48226cb5b08db1304d4daa148b5d60cb79cfcf1223"
+    },
+    {
+      "filename": "assets/reader/reference-control.opf",
+      "bytes": 225,
+      "sha256": "8f3b113c9c099ed402579b76cc08f50a960100e2ee9047c9f0b0134ebca4819f"
+    },
+    {
+      "filename": "assets/reader/reference-noncharacter.opf",
+      "bytes": 229,
+      "sha256": "688b6e01fdeda7fc7ea578f50daa7b51d0d57da21afc88489eaa2ee4bb09b3f3"
+    },
+    {
+      "filename": "assets/reader/reference-null.opf",
+      "bytes": 225,
+      "sha256": "a7d55fa44cb7a6ac56ec1324d3eaa93f46645805ba5604362fd7cedcc62c5b02"
+    },
+    {
+      "filename": "assets/reader/reference-surrogate.opf",
+      "bytes": 229,
+      "sha256": "e728c3ed2c3b5f4026bfc631b29dc469433ab622ed27ddbcef909d5ae200e8ae"
+    },
+    {
+      "filename": "assets/reader/reference-too-large.opf",
+      "bytes": 231,
+      "sha256": "038f0d02658d3b4058759c1fb5cec01d7fdaff7acaf57318f4dd39effb8f9170"
+    },
+    {
+      "filename": "assets/reader/refinement-apostrophe.opf",
+      "bytes": 292,
+      "sha256": "0553b65109550749e17a7d9e13e5bce129994b117c0ec633c5901772d6cb4cc9"
+    },
+    {
+      "filename": "assets/reader/rich.opf",
+      "bytes": 1120,
+      "sha256": "087c1661cb3679b1833725de0dd7eae8a1dd5fb5f471b93bc086030fc84c899b"
+    },
+    {
+      "filename": "assets/reader/unbound-prefix.opf",
+      "bytes": 50,
+      "sha256": "f0c86bef1107db4bd27579eca6d4edbdbc1a7a6345ebc0c4f301752ee01f6c61"
+    },
+    {
+      "filename": "assets/reader/unknown-entity.opf",
+      "bytes": 230,
+      "sha256": "66dc5eb00e0288e512762d587ea12cadd99de5e65d9f1978245d47cc5e0f78ab"
+    },
+    {
+      "filename": "assets/reader/utf16be-bom.opf",
+      "bytes": 460,
+      "sha256": "76de87a4201e133feb1d4001af23463d821a9ad36bd67f0038822586195e0276"
+    },
+    {
+      "filename": "assets/reader/utf16be-no-bom.opf",
+      "bytes": 462,
+      "sha256": "7480aa4899b5dc59d299e963122fcf26e6ced7d0c564d2189b780704def4554b"
+    },
+    {
+      "filename": "assets/reader/utf16le-bom.opf",
+      "bytes": 460,
+      "sha256": "39f102176a07152dcc19f622fc54be9712384a6692c37cbb3e27bd2ad4c3abd1"
+    },
+    {
+      "filename": "assets/reader/utf16le-no-bom.opf",
+      "bytes": 462,
+      "sha256": "176bbcb56054e5d0e281ffee60f6f49c73fe3ee3c21d74bb8dc5484f97c9fc6a"
+    },
+    {
+      "filename": "assets/reader/utf32be-bom.opf",
+      "bytes": 908,
+      "sha256": "70e2b160c36edb438ae2fda3afe3813cd9eb2c47749c016c6bcf27d5a2cb2e99"
+    },
+    {
+      "filename": "assets/reader/utf32be-explicit.opf",
+      "bytes": 944,
+      "sha256": "2ce933af962d6e8f0c31af7cdbc9323b7fd322661764c70ab5d302702497b394"
+    },
+    {
+      "filename": "assets/reader/utf32le-bom.opf",
+      "bytes": 908,
+      "sha256": "474b0d3eeeed31c072b6410ba9a79ccb4cb59264d98730c41d44a1788915334e"
+    },
+    {
+      "filename": "assets/reader/utf8-bom.opf",
+      "bytes": 236,
+      "sha256": "d1fb6935c160a18dae3a59df61f709d42101f8a40572cd4b75879ca4bf1ee2dd"
+    },
+    {
+      "filename": "assets/reader/wrong-namespace.opf",
+      "bytes": 62,
+      "sha256": "0f75408a31beec7951f0434c6757f0d43f6d9dc50cd2f1a5ad5135b07416eac2"
+    },
+    {
+      "filename": "assets/reader/xml-space-cdata.opf",
+      "bytes": 266,
+      "sha256": "72c6ea12ecc56517af181ab00e5aea99b08344bfb00253bb5f932e1f6b108d5a"
+    },
+    {
+      "filename": "assets/reader/xml-space-preserve.opf",
+      "bytes": 275,
+      "sha256": "773512b19de484bf003904682ba9bafed5b315cc130a953c037eecca5c7edba1"
+    },
+    {
+      "filename": "create-assets.mjs",
+      "bytes": 18243,
+      "sha256": "0a3921e7ec106a14b10f270cad90dd09455ee5184891ea555c7acd390eed4523"
+    },
+    {
+      "filename": "input.json",
+      "bytes": 13295,
+      "sha256": "cd3a3f5a4641d2b1e9c6b820cc9100c9ee7e78666c37ba08fc3e20d2e87f4d87"
+    },
+    {
+      "filename": "native.json",
+      "bytes": 109049,
+      "sha256": "a2aa805ca7ca983d559acc2051fe0ef6ecd3ba254452486d4c1639ebc7ec1b4c"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 8325,
+      "sha256": "00fbcaabae9f4255ff956070d0273974b5bf30657f3d517dd984a8c9fa184cac"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 2071,
+      "sha256": "e8a78f7b36e7859499adbf9e8024325d39153a67ef0fd6d3e368b2471aa1908e"
+    },
+    {
+      "filename": "record.json",
+      "bytes": 4255,
+      "sha256": "e2bdcc2d2cfd8b538740ca52e624f429e4078ad5523dfbf76d8a076e98638cd4"
+    }
+  ]
+}

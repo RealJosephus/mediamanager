@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "11111111-1111-1111-1111-111111111111",
+  "items": [
+    {
+      "key": "aggregateRoot", "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "name": "root", "type": "AggregateFolder", "parentId": null, "topParentId": null
+    },
+    {
+      "key": "physicalRoot", "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Core Flow Movies", "type": "Folder", "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "11111111-1111-1111-1111-111111111111", "customRating": "R"
+    },
+    {
+      "key": "alpha", "id": "22222222-2222-2222-2222-222222222222",
+      "name": "Alpha 中文", "sortName": "alpha 中文", "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111", "topParentId": "11111111-1111-1111-1111-111111111111",
+      "presentationUniqueKey": "rating-permission-alpha"
+    },
+    {
+      "key": "beta", "id": "33333333-3333-3333-3333-333333333333",
+      "name": "Beta Film", "sortName": "beta film", "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111", "topParentId": "11111111-1111-1111-1111-111111111111",
+      "customRating": "PG", "inheritedParentalRatingValue": 10, "inheritedParentalRatingSubValue": 0,
+      "presentationUniqueKey": "rating-permission-beta"
+    },
+    {
+      "key": "gamma", "id": "44444444-4444-4444-4444-444444444444",
+      "name": "Gamma Film", "sortName": "gamma film", "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111", "topParentId": "11111111-1111-1111-1111-111111111111",
+      "customRating": "NC-17", "inheritedParentalRatingValue": 10, "inheritedParentalRatingSubValue": 0,
+      "presentationUniqueKey": "rating-permission-gamma"
+    }
+  ],
+  "cases": []
+}

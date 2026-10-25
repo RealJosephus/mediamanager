@@ -1,0 +1,14 @@
+This software is based in part on the work of the Independent JPEG Group.
+
+The portable JPEG decoder uses libjpeg-turbo 2.1.5.1 at Chromium revision
+927aabfcd26897abb9776ecf2a6c38ea5bb52ab6, with the original complete source
+archive, LICENSE.md and README.ijg supplied in this directory.
+
+ICC conversion uses skcms revision 1323db7bd0b43b2b4d90aebc0cd4ba6409f689de,
+the version shipped by the referenced Skia revision. Its complete source and
+BSD license are supplied alongside the decoder source offer.
+
+Generated JavaScript and WebAssembly use the fixed Emscripten toolchain recorded
+in the new build receipt. The generated runtime includes its Emscripten license;
+the build artifact preserves complete compiler/runtime sources and actual SDK
+download identities. No historical binary or build identity is reused.

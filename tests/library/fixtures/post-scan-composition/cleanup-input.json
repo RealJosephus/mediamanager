@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "nonempty-final-database-and-file-playlist-cleanup",
+    "Libraries": [],
+    "Directories": [],
+    "Fanout": 1,
+    "Seed": {
+      "SourceName": "Post-scan cleanup keeper",
+      "OrphanValue": "Unmapped final database cleanup value"
+    },
+    "Cleanup": {
+      "PresentPlaylist": "Existing composition playlist",
+      "MissingPlaylist": "Missing composition playlist"
+    }
+  }
+]

@@ -1,0 +1,461 @@
+[
+  {
+    "name": "dvd-secondary-remove",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview", "ProductionYear": 1999 },
+    "afterFiles": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-secondary-add",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview", "ProductionYear": 1999 },
+    "afterFiles": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"]
+  },
+  {
+    "name": "bluray-secondary-remove",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/BDMV/index.bdmv",
+      "Film/Film Disc 2/BDMV/index.bdmv",
+      "Film/Film Disc 3/BDMV/index.bdmv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Film Disc 1", "Film/Film Disc 1/BDMV",
+      "Film/Film Disc 2", "Film/Film Disc 2/BDMV",
+      "Film/Film Disc 3", "Film/Film Disc 3/BDMV"
+    ],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated BluRay", "Overview": "Preserved overview", "ProductionYear": 1999 },
+    "afterFiles": [
+      "Film/Film Disc 1/BDMV/index.bdmv",
+      "Film/Film Disc 2/BDMV/index.bdmv"
+    ],
+    "afterDirectories": [
+      "Film",
+      "Film/Film Disc 1", "Film/Film Disc 1/BDMV",
+      "Film/Film Disc 2", "Film/Film Disc 2/BDMV"
+    ]
+  },
+  {
+    "name": "dvd-nonpadded-order-remove",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 10/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 10", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated ordered DVD", "Overview": "Preserved overview" },
+    "afterFiles": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 10/video_ts.ifo"
+    ],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 10"]
+  },
+  {
+    "name": "dvd-qualified-stray-remove",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Other Disc 9/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Other Disc 9"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated stray DVD", "Overview": "Preserved overview" },
+    "afterFiles": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-secondary-saver-failure",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "failSaver": true,
+    "expectException": "InvalidOperationException"
+  },
+  {
+    "name": "dvd-secondary-repository-save-failure",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "failUpdate": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "dvd-secondary-cancel-from-saver",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "cancellable": true,
+    "cancelFromSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "dvd-secondary-event-failure",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "failEvent": true
+  },
+  {
+    "name": "dvd-primary-remove-three-to-two-control",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo",
+      "Film/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2", "Film/Film Disc 3"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo", "Film/Film Disc 3/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2", "Film/Film Disc 3"]
+  },
+  {
+    "name": "dvd-two-to-folder-control",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-primary-remove-three-to-two-migration",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film [imdbid=tt7654321]"],
+    "files": [
+      "Film [imdbid=tt7654321]/Film Disc 1/video_ts.ifo",
+      "Film [imdbid=tt7654321]/Film Disc 2/video_ts.ifo",
+      "Film [imdbid=tt7654321]/Film Disc 3/video_ts.ifo"
+    ],
+    "directories": [
+      "Film [imdbid=tt7654321]",
+      "Film [imdbid=tt7654321]/Film Disc 1",
+      "Film [imdbid=tt7654321]/Film Disc 2",
+      "Film [imdbid=tt7654321]/Film Disc 3"
+    ],
+    "ignoreFiles": [],
+    "mutationPath": "Film [imdbid=tt7654321]/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": [
+      "Film [imdbid=tt7654321]/Film Disc 2/video_ts.ifo",
+      "Film [imdbid=tt7654321]/Film Disc 3/video_ts.ifo"
+    ],
+    "afterDirectories": [
+      "Film [imdbid=tt7654321]",
+      "Film [imdbid=tt7654321]/Film Disc 2",
+      "Film [imdbid=tt7654321]/Film Disc 3"
+    ],
+    "migrationEvidence": true
+  },
+  {
+    "name": "bluray-primary-remove-three-to-two",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/BDMV/index.bdmv",
+      "Film/Film Disc 2/BDMV/index.bdmv",
+      "Film/Film Disc 3/BDMV/index.bdmv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Film Disc 1", "Film/Film Disc 1/BDMV",
+      "Film/Film Disc 2", "Film/Film Disc 2/BDMV",
+      "Film/Film Disc 3", "Film/Film Disc 3/BDMV"
+    ],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated BluRay", "Overview": "Preserved overview" },
+    "afterFiles": [
+      "Film/Film Disc 2/BDMV/index.bdmv",
+      "Film/Film Disc 3/BDMV/index.bdmv"
+    ],
+    "afterDirectories": [
+      "Film",
+      "Film/Film Disc 2", "Film/Film Disc 2/BDMV",
+      "Film/Film Disc 3", "Film/Film Disc 3/BDMV"
+    ]
+  },
+  {
+    "name": "dvd-two-to-folder-recursive",
+    "recursiveValidation": true,
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": [
+      "Film/Film Disc 1/video_ts.ifo",
+      "Film/Film Disc 2/video_ts.ifo"
+    ],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-two-to-folder-recursive-shared-user-data",
+    "recursiveValidation": true,
+    "migrationEvidence": true,
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film [imdbid=tt7654321]"],
+    "files": [
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 1/video_ts.ifo",
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 2/video_ts.ifo"
+    ],
+    "directories": [
+      "Film [imdbid=tt7654321]",
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 1",
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 2"
+    ],
+    "ignoreFiles": [],
+    "mutationPath": "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview", "ProductionYear": 1999 },
+    "afterFiles": [
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 2/video_ts.ifo"
+    ],
+    "afterDirectories": [
+      "Film [imdbid=tt7654321]",
+      "Film [imdbid=tt7654321]/Film [imdbid=tt7654321] Disc 2"
+    ]
+  },
+  {
+    "name": "dvd-two-to-folder-outer-create-failure",
+    "recursiveValidation": true,
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-two-to-folder-nested-create-failure",
+    "recursiveValidation": true,
+    "failNestedCreate": true,
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2"]
+  },
+  {
+    "name": "dvd-two-to-folder-cancel-after-outer-added",
+    "recursiveValidation": true,
+    "cancellable": true,
+    "cancelAfterOuterAdded": true,
+    "expectException": "OperationCanceledException",
+    "useResolveTime": true,
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": ["Film"],
+    "files": ["Film/Film Disc 1/video_ts.ifo", "Film/Film Disc 2/video_ts.ifo"],
+    "directories": ["Film", "Film/Film Disc 1", "Film/Film Disc 2"],
+    "ignoreFiles": [],
+    "mutationPath": "Film/Film Disc 1",
+    "mutation": { "Name": "Curated DVD", "Overview": "Preserved overview" },
+    "afterFiles": ["Film/Film Disc 2/video_ts.ifo"],
+    "afterDirectories": ["Film", "Film/Film Disc 2"]
+  }
+]

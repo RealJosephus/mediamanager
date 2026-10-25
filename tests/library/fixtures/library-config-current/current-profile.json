@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "same-workflow-current-native-library-mutations",
+  "scope": "Complete virtual-library path and removal mutation matrix; real file admission, failure prefixes, cache invalidation, cold reads and bidirectional file consumption.",
+  "historicalRecordingReused": false,
+  "nativeRepetitions": 2,
+  "originalCases": 59,
+  "accessibleControls": 2,
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+    "MediaBrowser.Controller/IO/FileSystemHelper.cs",
+    "src/Jellyfin.Extensions/FileHelper.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Model/Configuration/LibraryOptions.cs",
+    "Jellyfin.Api/Controllers/LibraryStructureController.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+    "MediaBrowser.Controller/Entities/AggregateFolder.cs",
+    "MediaBrowser.Model/Configuration/MediaPathInfo.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 410,
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca",
+      "role": "oracleProject"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 18949,
+      "sha256": "cc823d810dcee903aac470b9f1deb7fe0b59289dcbc81cf5128b94a9fb35ce46",
+      "role": "nativeMutationConsumer"
+    },
+    {
+      "filename": "FileSharingProbe.cs",
+      "bytes": 3553,
+      "sha256": "4bb64b5d2ab6ad2a77063cc0357fe97feed771334042d62ac167d61f5a87c7e0",
+      "role": "nativeFileAdmission"
+    },
+    {
+      "filename": "capture.js",
+      "bytes": 8879,
+      "sha256": "d3e2726ea6fd855925556c3402ad9ffc7cee451011e87808fae882aebe9066ad",
+      "role": "currentCaptureConsumer"
+    },
+    {
+      "filename": "held-file.js",
+      "bytes": 5745,
+      "sha256": "a4eab4dfe1ea1e276a59db383b01ddd3570b28f37894e5e2e43dc9b58d5c3baa",
+      "role": "realNodeAdmissionAndHolder"
+    },
+    {
+      "filename": "observations.js",
+      "bytes": 3403,
+      "sha256": "575e728408ee05118555b93a99302ba4ba141f32369dcfd6f88a1718847ce802",
+      "role": "functionalObservationContract"
+    },
+    {
+      "filename": "../library-configuration-mutations/input.json",
+      "bytes": 29523,
+      "sha256": "3d6b0d249c82992a1a45f4f023f1a46b88a82f1bacfed1df39ced9a036724d7c",
+      "role": "unchangedOriginalNeutralInput"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "role": "oracleBuildConfiguration"
+    }
+  ],
+  "phaseAcceptance": false,
+  "releaseAcceptance": false,
+  "fileEnumerationInput": "Original neutral files declaration order; real raw and ordered entries retained, no fabricated entries."
+}

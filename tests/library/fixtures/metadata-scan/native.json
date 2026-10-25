@@ -1,0 +1,614 @@
+{
+  "results": [
+    {
+      "name": "ordinary folders refresh before their descendants",
+      "calls": [
+        {
+          "name": "nested",
+          "type": "Folder",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "movie",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "sibling",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "series refreshes seasons before episodes and skips old virtual episodes",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "season2",
+          "type": "Season",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "season1",
+          "type": "Season",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "direct",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "future",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "physical",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "full refresh includes old missing episodes",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "FullRefresh",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": true,
+          "refreshPaths": []
+        },
+        {
+          "name": "season",
+          "type": "Season",
+          "metadataMode": "FullRefresh",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": true,
+          "refreshPaths": []
+        },
+        {
+          "name": "old",
+          "type": "Episode",
+          "metadataMode": "FullRefresh",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": true,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "FullRefresh",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": true
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "replace metadata includes old missing episodes in default mode",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": true,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "old",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": true,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": true,
+          "forceSave": false
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "series filters child paths but always refreshes itself twice",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "HTTPS://MEDIA.INVALID/EPISODE"
+          ]
+        },
+        {
+          "name": "episode",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "HTTPS://MEDIA.INVALID/EPISODE"
+          ]
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "HTTPS://MEDIA.INVALID/EPISODE"
+          ]
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "container root links are deduplicated and nested links do not recurse",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "season",
+          "type": "Season",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "episode",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "linked",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "linkedFolder",
+          "type": "Folder",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "album promotes itself after changed child and ignores refresh paths",
+      "calls": [
+        {
+          "name": "disc",
+          "type": "Folder",
+          "metadataMode": "ValidationOnly",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "https://media.invalid/unrelated"
+          ]
+        },
+        {
+          "name": "track",
+          "type": "Audio",
+          "metadataMode": "ValidationOnly",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "https://media.invalid/unrelated"
+          ]
+        },
+        {
+          "name": "other",
+          "type": "Audio",
+          "metadataMode": "ValidationOnly",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "https://media.invalid/unrelated"
+          ]
+        },
+        {
+          "name": "album",
+          "type": "MusicAlbum",
+          "metadataMode": "FullRefresh",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "https://media.invalid/unrelated"
+          ]
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "album preserves parent mode when children report none",
+      "calls": [
+        {
+          "name": "track",
+          "type": "Audio",
+          "metadataMode": "None",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "album",
+          "type": "MusicAlbum",
+          "metadataMode": "None",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "manual album refresh resolves distinct artists and refreshes only by name",
+      "calls": [
+        {
+          "name": "track",
+          "type": "Audio",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": false,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "album",
+          "type": "MusicAlbum",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": false,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "Artist",
+          "type": "MusicArtist",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": false,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "Other",
+          "type": "MusicArtist",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": false,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        }
+      ],
+      "artistLookups": [
+        "Artist",
+        "Physical",
+        "Other"
+      ],
+      "errors": []
+    },
+    {
+      "name": "filtered folder still descends to matching paths",
+      "calls": [
+        {
+          "name": "movie",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            "https://media.invalid/movie"
+          ]
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "leaf failure is logged while sibling work continues",
+      "calls": [
+        {
+          "name": "nested",
+          "type": "Folder",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "movie",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "remaining",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        }
+      ],
+      "artistLookups": [],
+      "errors": [
+        {
+          "type": "IOException",
+          "message": "Injected refresh failure",
+          "log": "Error while performing a library operation"
+        }
+      ]
+    },
+    {
+      "name": "series cancellation preserves completed calls and omits its final refresh",
+      "calls": [
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "season",
+          "type": "Season",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        }
+      ],
+      "artistLookups": [],
+      "errors": [
+        {
+          "type": "OperationCanceledException",
+          "message": "The operation was canceled.",
+          "log": "Error while performing a library operation"
+        }
+      ]
+    },
+    {
+      "name": "nonrecursive traversal still expands metadata containers",
+      "calls": [
+        {
+          "name": "nested",
+          "type": "Folder",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "episode",
+          "type": "Episode",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": []
+        },
+        {
+          "name": "series",
+          "type": "Series",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    },
+    {
+      "name": "empty refresh path matches a null item path",
+      "calls": [
+        {
+          "name": "noPath",
+          "type": "Movie",
+          "metadataMode": "Default",
+          "imageMode": "None",
+          "automated": true,
+          "replaceAllMetadata": false,
+          "forceSave": false,
+          "refreshPaths": [
+            ""
+          ]
+        }
+      ],
+      "artistLookups": [],
+      "errors": []
+    }
+  ],
+  "candidateVerified": false,
+  "sourceBoundary": "Actual Folder.RefreshMetadataRecursive, RefreshChildMetadata, Series and MusicAlbum.RefreshAllMetadata, BaseItem.RefreshMetadata and native sequential LimitedConcurrencyLibraryScheduler. Repository child lists, linked-child lookup, artist lookup and RefreshSingleItem results are controlled callbacks. Metadata providers, owned-item/file enumeration, structural reconciliation, persistence, image writes and top-level configuration are excluded. Paths use a synthetic non-file protocol; IsAutomated and RefreshPaths are explicit inputs.",
+  "inputSha256": "3c1fb9b8628a215cfe1800a5d17749b1f7e0284c96aacd812f981dabe23ebbfe",
+  "assemblies": [
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\metadata-scan-final-20261004\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-output\\recordings-current\\metadata-scan-final-20261004\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "4c7e829198517d21067d524a1d7271f91c6d5808c355ecefdc5d1e2356c0cc34"
+    }
+  ]
+}

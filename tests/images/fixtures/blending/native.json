@@ -1,0 +1,1107 @@
+{
+  "source": ".test-input\\evidence\\remaining-differences-20260927\\images\\native-v4\\native.json",
+  "sourceSha256": "522d8a873ca46d0ddff507cdacf771a2e168d911bfa6e5ed41c867b9b3898cb8",
+  "scope": "All expected hashes are actual frozen DLL outputs. Primitive BGRA pixels cover complete channel/alpha ramps. End-to-end byte assertions cover 87 of 99 foreground cases; the remaining 12 transparent PNG round-off differences remain in the complete differential report.",
+  "width": 256,
+  "height": 256,
+  "blends": [
+    {
+      "alpha": 0,
+      "sha256": "5c68eaa257766199b858b4425e1ffac37a4a03e96f74b10282c1d3e6659e87f8"
+    },
+    {
+      "alpha": 1,
+      "sha256": "09d6655473c1ce1a092b2e2116693aeef54d2380b8bde1c42b506eae85031c14"
+    },
+    {
+      "alpha": 2,
+      "sha256": "ca3371149ca1697e6ab6a8bcbaf564a93cc7f24f43991211e7ad44aa29564b33"
+    },
+    {
+      "alpha": 63,
+      "sha256": "3f4da0d1a74f2a766e9cf1a5119ce687f2a385d3cfcbf5c764aaa6e4b0857838"
+    },
+    {
+      "alpha": 64,
+      "sha256": "03f0ca6e65e6da99f3094ef800a3acd21bc51e404d402aa3a98d359e0f69afb9"
+    },
+    {
+      "alpha": 126,
+      "sha256": "dffdc4a267f9b88ae4b37c6e557bf191a9801e8f6de860b61d34e44d15016e3c"
+    },
+    {
+      "alpha": 127,
+      "sha256": "b60ef9465ec81e2b0142657fb41fc9ceb92151b17137e5f922f912905332e35c"
+    },
+    {
+      "alpha": 128,
+      "sha256": "b4699884b8c0923e02d96a38f65f435d78f05281630d0d930b17d67e7aaa0fb7"
+    },
+    {
+      "alpha": 129,
+      "sha256": "d1dfb8dceca424ed4cf1ac1a1bda9995ff9a3afa178f9a5ed84dfdae620817b8"
+    },
+    {
+      "alpha": 254,
+      "sha256": "d11dfa1c725225277d455a35aab3a7fe87da8436bc7388753ab2148a3a7c4e79"
+    },
+    {
+      "alpha": 255,
+      "sha256": "b7997c60612a8f60f104b19583162aaac7dde1f1ab2e8ef7c9b935550e2b0aa8"
+    }
+  ],
+  "backgrounds": [
+    {
+      "color": "#00000000",
+      "destinationPixel": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "sha256": "5c68eaa257766199b858b4425e1ffac37a4a03e96f74b10282c1d3e6659e87f8"
+    },
+    {
+      "color": "#ffabcdef",
+      "destinationPixel": [
+        239,
+        205,
+        171,
+        255
+      ],
+      "sha256": "e52ed326b8c97b4becc9326746a48ad6e9fe02a2a51df92f06c1ae17fab52c57"
+    },
+    {
+      "color": "#80abcdef",
+      "destinationPixel": [
+        120,
+        103,
+        86,
+        128
+      ],
+      "sha256": "6f3cb73effa1fa8bb7d5acc3a0d55c379789f85c62eb2af1612c539f8ed130a4"
+    },
+    {
+      "color": "#010af039",
+      "destinationPixel": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "sha256": "c26645c79c7a754adb2b2a0e1e1d8e0570d20597991ef828f1cd5de9fca6f7ae"
+    },
+    {
+      "color": "#fe0af039",
+      "destinationPixel": [
+        57,
+        239,
+        10,
+        254
+      ],
+      "sha256": "7bcf9a86291fecd3dcbf004460d6b0c536108005411ab1d56334f971b4165fbe"
+    },
+    {
+      "color": "#ffffffff",
+      "destinationPixel": [
+        255,
+        255,
+        255,
+        255
+      ],
+      "sha256": "785e50a49dab5146b961d91a0c78373a56dc8b24e83ce7fe8e467e5151fc7f78"
+    }
+  ],
+  "foreground": [
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\8\\89c14c50-5d84-7743-bb74-36c148ffe61a.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\cd008caf-3329-c99f-5c10-34cce5288b5b.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\0\\0628f366-f985-8320-b7aa-8f2c4d1cd50b.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": null,
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\8\\89877141-4c05-ce19-059c-8fae64225b6d.png",
+      "sha256": "9fc7a9dbeb306ef54d14e0348bbbafa574039994a47bacc58a5ecc57df1447ac",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\925bd7b3-00df-8086-014f-23472e1ca435.png",
+      "sha256": "9fc7a9dbeb306ef54d14e0348bbbafa574039994a47bacc58a5ecc57df1447ac",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\6f8f65d9-5fe2-71c7-6e2d-4fe68c29687d.png",
+      "sha256": "9fc7a9dbeb306ef54d14e0348bbbafa574039994a47bacc58a5ecc57df1447ac",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\0\\0aeedf26-0191-3613-0714-e605651cff4f.png",
+      "sha256": "bbe2ec9a704f3bb3390d7ef7147b0eb42dba6d9638c1949e365c78ea6a2802f6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\adc35092-77ab-b8dc-c086-b8e1d9c94a55.png",
+      "sha256": "bbe2ec9a704f3bb3390d7ef7147b0eb42dba6d9638c1949e365c78ea6a2802f6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\1\\186dc317-76bd-a43a-70b5-f14926148db0.png",
+      "sha256": "bbe2ec9a704f3bb3390d7ef7147b0eb42dba6d9638c1949e365c78ea6a2802f6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": null,
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\5\\5fce11f3-628e-3037-9ab9-f1b94deb8696.png",
+      "sha256": "2b3285b887b71039caeaff79ad48f61f75f282e07aac389c30f3a200e5d4bbd5",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a9e094c7-088d-a68a-0484-654480784bfb.png",
+      "sha256": "2b3285b887b71039caeaff79ad48f61f75f282e07aac389c30f3a200e5d4bbd5",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\cdf3b2f2-4c23-ff9c-e831-7124ed82851d.png",
+      "sha256": "2b3285b887b71039caeaff79ad48f61f75f282e07aac389c30f3a200e5d4bbd5",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": null,
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a7dcbfb4-8629-6886-5190-3a5f5c5d6316.png",
+      "sha256": "f7bf4d5f4c57811f1dfdea750edacf5669a7f16446c6379142ac363259535a1c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a25fa1dc-6b0c-a397-0f0a-40a70468e68f.png",
+      "sha256": "f7bf4d5f4c57811f1dfdea750edacf5669a7f16446c6379142ac363259535a1c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\4ae51130-1039-5b05-c510-6b5d070bb8d0.png",
+      "sha256": "f7bf4d5f4c57811f1dfdea750edacf5669a7f16446c6379142ac363259535a1c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": null,
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\0\\012bce0d-a47d-c416-86e8-638df0405840.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\5\\5b09d690-e1d4-9dc9-5836-3361382db041.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\c\\c5f12e32-5c63-1729-ce73-082b5eac684a.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\6e55b398-2fd8-a9d2-c551-b14e288e8acd.png",
+      "sha256": "28c8b7804ad65a1b236b2b355e17a269ed28110ec12d11ccd22695b320597ddb",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\641eb02c-8f79-72cb-e843-d34989dbee3b.png",
+      "sha256": "28c8b7804ad65a1b236b2b355e17a269ed28110ec12d11ccd22695b320597ddb",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\25c1c976-52c5-1542-4004-12d2a7aa0dec.png",
+      "sha256": "28c8b7804ad65a1b236b2b355e17a269ed28110ec12d11ccd22695b320597ddb",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\1\\1a60bfaa-3c1a-7a40-2914-5513b6e40613.png",
+      "sha256": "8e57e32facb651f1f31089fda3f5efde7e4b26f78134b66d9b927837fcab49a2",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\e\\ea3cc742-fec8-5f67-8fbd-3e42ca0f90a8.png",
+      "sha256": "8e57e32facb651f1f31089fda3f5efde7e4b26f78134b66d9b927837fcab49a2",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\2e384e7d-b538-fb91-f5a8-73f5efaf56fe.png",
+      "sha256": "8e57e32facb651f1f31089fda3f5efde7e4b26f78134b66d9b927837fcab49a2",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a314912d-1b9f-2e63-8060-1a50b9a40ace.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\b1d1ab8b-b322-f3a7-1f05-d1535e29df91.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\5\\546606da-d3b9-9b9d-ba11-62e9b140ceda.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a1d917f4-223a-06e4-f7e8-f0afa071c051.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\d\\d9050f14-506c-75bf-fbe1-5b9a1af6850a.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\b32af35d-d4ce-86b9-0a5f-fde91705c47f.png",
+      "sha256": "dae6cccb9c43213b28013b3877bc48ae64c8613d8dfbde6efabdb4529ba7cd1e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\6c8e36b1-0328-3b0c-2f13-86aeea37bfe9.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\42211aed-7715-4af7-af33-6a6626d02123.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\f\\f88dc6bf-a888-461c-d17e-8d2334c13817.png",
+      "sha256": "f90453e536d2c5e49bfbb1a2b4ea4456515bf21e2e6f2808a5220b95ca2e272d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\a\\a1e55ca2-f3a1-2edd-5ff1-911101eff8ca.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\e\\e72576a4-49cf-fecb-4b87-1a4ab9a570b1.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\4\\4d6e3bb2-272d-41fe-df9f-e95c5974ee1c.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": null,
+      "effectiveAlpha": 1,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\6\\68238c04-b4a2-aa66-88fc-cf25adf1f7df.jpg",
+      "sha256": "2f83368d2ccd9c568a62c1ec2bf4f945a3504ff9c9ea6f1e68d58775934b790a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\5\\5e04445c-7eb6-8050-89a9-3561040e270d.jpg",
+      "sha256": "2f83368d2ccd9c568a62c1ec2bf4f945a3504ff9c9ea6f1e68d58775934b790a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\9\\9cd5d834-c68d-10ac-ca5b-31a519b6d702.jpg",
+      "sha256": "2f83368d2ccd9c568a62c1ec2bf4f945a3504ff9c9ea6f1e68d58775934b790a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 127,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\8\\8c422af2-142f-f604-b87d-d69fcd7faa66.jpg",
+      "sha256": "fba6862b8fce9bef33bebdac7d9b72f5b661b3c237448528c7f79a7798696bcd",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\a\\a3ae39dc-25cc-7b47-e2cb-7d7c9dff20b1.jpg",
+      "sha256": "fba6862b8fce9bef33bebdac7d9b72f5b661b3c237448528c7f79a7798696bcd",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\5\\5ab5a919-2e35-0d34-5a1e-55c1d18ed022.jpg",
+      "sha256": "fba6862b8fce9bef33bebdac7d9b72f5b661b3c237448528c7f79a7798696bcd",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": null,
+      "effectiveAlpha": 128,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\3\\39f66c08-d747-c908-064c-5dcaff445926.jpg",
+      "sha256": "9de31d3365a09b47e1122555f403d05b3a7dc84b873cd7e09ade1b11eecbeaa6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\1\\107b7a79-46fe-2903-3e2b-bc0a7ca03671.jpg",
+      "sha256": "9de31d3365a09b47e1122555f403d05b3a7dc84b873cd7e09ade1b11eecbeaa6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\1\\11609746-14d5-4c0e-b5d6-cdc3b0ec484b.jpg",
+      "sha256": "9de31d3365a09b47e1122555f403d05b3a7dc84b873cd7e09ade1b11eecbeaa6",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": null,
+      "effectiveAlpha": 254,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\f\\fa7b2005-2e2e-e79f-e9af-3eabd25cb0ea.jpg",
+      "sha256": "9dc47fe7d8876e574d24a6c478877b1d0135844b9a9e7653eab459fd1a3cad60",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\6\\609d8aa6-30df-3d3e-f03f-49060f1a75af.jpg",
+      "sha256": "9dc47fe7d8876e574d24a6c478877b1d0135844b9a9e7653eab459fd1a3cad60",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\e\\e3d0431f-b702-52d3-376c-b54d96874775.jpg",
+      "sha256": "9dc47fe7d8876e574d24a6c478877b1d0135844b9a9e7653eab459fd1a3cad60",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0",
+      "BackgroundColor": null,
+      "effectiveAlpha": 255,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\3\\31a20fb7-ffe7-73d0-00a6-4cd2e7fcb902.jpg",
+      "sha256": "8756cd7337088c3dfe46a2b3c7828ad8b85159a11f32c500ae2a0eadef385e0c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\1\\13d367da-b5f8-6d6e-f730-419f3d304068.jpg",
+      "sha256": "8756cd7337088c3dfe46a2b3c7828ad8b85159a11f32c500ae2a0eadef385e0c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\dbf4abb6-33c0-b68c-7aa2-5753a916a03e.jpg",
+      "sha256": "8756cd7337088c3dfe46a2b3c7828ad8b85159a11f32c500ae2a0eadef385e0c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 126,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\c\\cc26cdc0-b4a7-3f5f-ff5c-0b9beeb7b786.jpg",
+      "sha256": "6c1ff648587198893083084ab85256b811667354cbc2ccbb86f37a933623499a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\d05a0a36-6982-d496-62db-6c70ed95a295.jpg",
+      "sha256": "6c1ff648587198893083084ab85256b811667354cbc2ccbb86f37a933623499a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\4\\4efc0b5a-0a38-6dc6-8ef1-f623c4a7ec91.jpg",
+      "sha256": "6c1ff648587198893083084ab85256b811667354cbc2ccbb86f37a933623499a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 129,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\7\\76ff1000-3c50-3c8b-bb2c-be93ab8ff015.jpg",
+      "sha256": "249074f1bca2747816899e7f8d67852b5897b930d39b18af627a59aede9c1a22",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\7\\795d04dd-7b5f-4f94-0c77-eba38c7bbeda.jpg",
+      "sha256": "249074f1bca2747816899e7f8d67852b5897b930d39b18af627a59aede9c1a22",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\5\\5ae48c38-cbb9-dfae-e59b-97c57af6e8ed.jpg",
+      "sha256": "249074f1bca2747816899e7f8d67852b5897b930d39b18af627a59aede9c1a22",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\e\\e28815ef-4a08-0902-a24b-68d976aa6207.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\f\\fdd36292-935c-6161-97b0-2c5ef0a9ebb7.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\e\\e78fdd61-f59c-6528-84f7-11bbc56d8f9f.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\5\\5ed78f39-41d7-92fc-5ce1-d796324b9956.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\9\\9a7d90c0-b305-771b-806c-3774fc6ac0e6.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\d\\d741a0c8-51bf-85ee-61d5-3a25cd23b17d.jpg",
+      "sha256": "27878d95ab76488e1f1b65eb59865cec00446bd4311c834a187294769a1314ff",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\8\\8b449b39-b22e-4931-1bbb-db1f1bd3b95e.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\3\\335c8b9a-3b60-9a3f-8c8e-313da852c9fb.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "grid.jpg",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/jpeg",
+      "path": "cache\\resized-images\\9\\9a5e09ae-396a-c849-f907-0c378e08ab63.jpg",
+      "sha256": "f065703ffa701629f86ad7db5191f0a8e8285c1de60302dd6db00a59af4c8344",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\323679b3-450a-b664-95d0-4ddf9ba38dba.png",
+      "sha256": "bf2ec5e6ece1c944b47e72765c9891b22689d5935c37e71dbb8fcead4e715afd",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\3133c7e4-cdef-d8b5-1657-0b3a0a9b1a78.png",
+      "sha256": "d17fafeb072e55119a7006f5bfaefc00ce470f04652a2345b3cd84301eb77d46",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\3468889a-c621-6817-d52c-56e1a66cb0f5.png",
+      "sha256": "e65799b0a107208ec52520c96db421c0aa78c67107e00e8f822ebe5fb4265a15",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": null,
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\77407dc8-c65a-97c5-243b-a630c8b1691b.png",
+      "sha256": "c49edcb331c3ad7a50cc0bdbe972bcce310d84fde5d96c494a89361079978b17",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\2c4e98ed-2b21-3ddb-b662-c0370690afa4.png",
+      "sha256": "62ee44cc208be446800e0c9f8ee1789cc34b64a372d3afdf668fecef6cbc228c",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.995",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 1,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\d\\d7d51172-b367-fbd5-7b38-3c04ae2b2740.png",
+      "sha256": "ddf5eb529fe4e239bc7a3389a5c2c9b978484f14dec74fdecd4dbee554cd874f",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\26863be1-b7fc-bc21-9932-23ed1f675c46.png",
+      "sha256": "5850f4d05802d2d77621592bac22cf5ac85be8723c6736a6841d391cf3b25983",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\8\\8bb71e97-08a8-dc38-0d00-fee0ffd3eec9.png",
+      "sha256": "b43e6d37a21323979babaa5da414b95258e9428f4fe3336bcac14ff4fafb055e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 127,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\8\\85755195-1cd9-a89e-42ca-6d6bbfe61647.png",
+      "sha256": "ccc7dc8733dba8cc5249bef0d2f89e6fdb11be5cfaefe696f9fa521b46f96aec",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": null,
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\70441390-da03-b430-c253-0ead120d7d44.png",
+      "sha256": "2f8cae86485634a570bc9afd1f823aff03847affb3027210dff0eddeb50e0136",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\70294fbd-39da-f891-9cc6-c096cd7b2823.png",
+      "sha256": "f0043215c8a044b43fbfff4f132f376c2c600112f1e74b3194cc84c2f37b00a9",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.495",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 128,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a6877df4-efed-f271-970b-a0d82a6fc2a3.png",
+      "sha256": "cb1c71c21b3bc0dfde1db7f92bf1f3fec272ff2ee58c99e45611cb7a45d4d667",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": null,
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\9c7f52e3-715d-5a5b-f5a7-06688c61b61c.png",
+      "sha256": "14d4cf54020a7821f47abf01bc1b4f8684f68708c06fe1b0d8f365fab57c55f8",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\d\\dce66c4f-cf1e-717b-6056-aba2e72a40f3.png",
+      "sha256": "caf945aa0b81dbe92408ca32321ceca0f31b450dd0e979d0f98bcebf8d70acfa",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0.001",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 254,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\3b8c9ba2-0bd3-cb42-ee5e-86f6bd82c31c.png",
+      "sha256": "f0949c6efee54d7c6a18c203d870160adaa3212a29d593a30669171f635b73d0",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": null,
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\e\\e29cdaac-8db7-85d6-1127-cfab6aa68c5f.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\0\\093701d3-f34a-4f4b-2110-f3e0c09cd192.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "0",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 255,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\aad953ab-beb7-1c15-f1e1-f221c980119f.png",
+      "sha256": "26167ab10dc8c06d61098cecafd3b746eb61c627651760adf3dfca782343c5ae",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\3\\3104ca20-14b8-db5f-ffcf-b122cbe0f039.png",
+      "sha256": "a0845a280f5332d01910d77ce4aadf2417b3e68d55fcf3fd2843a2098f475a57",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\1\\1ca48e1b-b373-aedf-76a2-d6feb56436cc.png",
+      "sha256": "13061df80ffb4292018878923c379b2d6c648758313ed0de34d18e9a6e305f7a",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "-0.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 126,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\6\\6c590813-d292-0645-dff0-470c1006cb4c.png",
+      "sha256": "c247c0ecb6297d2a69c9e37c9293f9637c231b552ede1b6b15b50b29d18a7730",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": null,
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\b223581a-e323-fd4a-34b0-8a9e5400dd01.png",
+      "sha256": "d0e8f7a134d1b78f676d0bc0914876f4ee4d5c4244eab1f0124a4c4ae245c98d",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\b\\bf1facb9-14e1-8f09-0d14-c44325b8769f.png",
+      "sha256": "79d7e2b2f31ab00a5afce2384db3840b0785dfc9f3282ec5d868c10e8085120e",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "1.5",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 129,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\1\\1a0041ee-1b62-3d86-168c-c0751f058feb.png",
+      "sha256": "8e9864761c9e30a61eae5f70319f02845b9e66b93c7af6f85390da3d0c2e0a14",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\7\\73f24a14-cbdd-c46c-73b9-4a1f3d73017f.png",
+      "sha256": "6b92ce0471476e85fa83afe4afab5a4c5070c23c83f303f25244a8b45f4cc4fc",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\ac5c35ff-e043-80e9-2de9-1d607dac2a65.png",
+      "sha256": "ad4ab685e45a6aa6bcadcabf9c2d4b08cde9575890b81001d4e299f573e6b2bf",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "bad",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\4\\45f3f37e-658a-5058-8f8c-031f81f44658.png",
+      "sha256": "0d25440929cc94cfe62ea052d26add38615ce1c0e44741574496d4e5cd548aaf",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": null,
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\f\\f5906bb8-a4b4-e1c2-807d-848ff371eaae.png",
+      "sha256": "bf2ec5e6ece1c944b47e72765c9891b22689d5935c37e71dbb8fcead4e715afd",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\962e62ea-44d1-75f5-ffb1-d9078ce90143.png",
+      "sha256": "d17fafeb072e55119a7006f5bfaefc00ce470f04652a2345b3cd84301eb77d46",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "NaN",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 0,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\2\\28b83cf7-ab5e-77a5-7151-4f5415d75af2.png",
+      "sha256": "e65799b0a107208ec52520c96db421c0aa78c67107e00e8f822ebe5fb4265a15",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": null,
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\5\\5b610fe8-6260-c0ac-e472-41f0b9222bdb.png",
+      "sha256": "6b92ce0471476e85fa83afe4afab5a4c5070c23c83f303f25244a8b45f4cc4fc",
+      "byteExactCoverage": false
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\9\\9a635fef-d595-d633-0498-7319f55f28cd.png",
+      "sha256": "ad4ab685e45a6aa6bcadcabf9c2d4b08cde9575890b81001d4e299f573e6b2bf",
+      "byteExactCoverage": true
+    },
+    {
+      "filename": "alpha.png",
+      "ForegroundLayer": "Infinity",
+      "BackgroundColor": "#80abcdef",
+      "effectiveAlpha": 153,
+      "MimeType": "image/png",
+      "path": "cache\\resized-images\\a\\a9263d47-6f49-8534-e388-b9327e8581d3.png",
+      "sha256": "0d25440929cc94cfe62ea052d26add38615ce1c0e44741574496d4e5cd548aaf",
+      "byteExactCoverage": true
+    }
+  ]
+}

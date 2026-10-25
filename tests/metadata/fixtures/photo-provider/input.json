@@ -1,0 +1,269 @@
+{
+  "cases": [
+    {
+      "name": "plain-jpeg",
+      "file": "plain.jpg"
+    },
+    {
+      "name": "plain-png",
+      "file": "plain.png"
+    },
+    {
+      "name": "exif-complete",
+      "file": "exif.jpg"
+    },
+    {
+      "name": "exif-name-lock",
+      "file": "exif.jpg",
+      "nameLocked": true
+    },
+    {
+      "name": "xmp-complete",
+      "file": "xmp.jpg"
+    },
+    {
+      "name": "xmp-name-lock",
+      "file": "xmp.jpg",
+      "nameLocked": true
+    },
+    {
+      "name": "xmp-before-exif",
+      "file": "combined.jpg"
+    },
+    {
+      "name": "exif-before-xmp",
+      "file": "combined-reverse.jpg"
+    },
+    {
+      "name": "iptc-only",
+      "file": "iptc.jpg"
+    },
+    {
+      "name": "iptc-xmp-missing",
+      "file": "iptc-xmp.jpg"
+    },
+    {
+      "name": "iptc-xmp-before",
+      "file": "xmp-iptc.jpg"
+    },
+    {
+      "name": "jpeg-comment",
+      "file": "comment.jpg"
+    },
+    {
+      "name": "orientation-0",
+      "file": "orientation-0.jpg"
+    },
+    {
+      "name": "orientation-1",
+      "file": "orientation-1.jpg"
+    },
+    {
+      "name": "orientation-2",
+      "file": "orientation-2.jpg"
+    },
+    {
+      "name": "orientation-3",
+      "file": "orientation-3.jpg"
+    },
+    {
+      "name": "orientation-4",
+      "file": "orientation-4.jpg"
+    },
+    {
+      "name": "orientation-5",
+      "file": "orientation-5.jpg"
+    },
+    {
+      "name": "orientation-6",
+      "file": "orientation-6.jpg"
+    },
+    {
+      "name": "orientation-7",
+      "file": "orientation-7.jpg"
+    },
+    {
+      "name": "orientation-8",
+      "file": "orientation-8.jpg"
+    },
+    {
+      "name": "orientation-9",
+      "file": "orientation-9.jpg"
+    },
+    {
+      "name": "unsigned-shutter",
+      "file": "unsigned-shutter.jpg"
+    },
+    {
+      "name": "zero-rational",
+      "file": "zero-rational.jpg"
+    },
+    {
+      "name": "iso-overflow",
+      "file": "iso-overflow.jpg"
+    },
+    {
+      "name": "iso-array",
+      "file": "iso-array.jpg"
+    },
+    {
+      "name": "invalid-date",
+      "file": "invalid-date.jpg"
+    },
+    {
+      "name": "datetime-only",
+      "file": "datetime-only.jpg"
+    },
+    {
+      "name": "blank-title",
+      "file": "blank-title.jpg"
+    },
+    {
+      "name": "xmp-iso-overflow",
+      "file": "xmp-iso-overflow.jpg"
+    },
+    {
+      "name": "png-text",
+      "file": "text.png"
+    },
+    {
+      "name": "png-ztext",
+      "file": "ztext.png"
+    },
+    {
+      "name": "png-itext",
+      "file": "itext.png"
+    },
+    {
+      "name": "png-xmp",
+      "file": "xmp.png"
+    },
+    {
+      "name": "png-exif-ignored",
+      "file": "exif.png"
+    },
+    {
+      "name": "png-xmp-ztext-failure",
+      "file": "xmp-ztext.png"
+    },
+    {
+      "name": "png-bad-crc",
+      "file": "bad-crc.png"
+    },
+    {
+      "name": "tiff-complete",
+      "file": "photo.tiff"
+    },
+    {
+      "name": "tif-extension-skips-tags",
+      "file": "photo.tif"
+    },
+    {
+      "name": "cr2-complete",
+      "file": "photo.cr2"
+    },
+    {
+      "name": "webp-format",
+      "file": "photo.webp"
+    },
+    {
+      "name": "avif-format",
+      "file": "photo.avif"
+    },
+    {
+      "name": "gif-format",
+      "file": "photo.gif"
+    },
+    {
+      "name": "uppercase-extension",
+      "file": "upper.JPG"
+    },
+    {
+      "name": "invalid-jpeg",
+      "file": "invalid.jpg"
+    },
+    {
+      "name": "invalid-retains-size",
+      "file": "invalid.jpg",
+      "width": 4,
+      "height": 3
+    },
+    {
+      "name": "unsupported-format",
+      "file": "opaque.raw"
+    },
+    {
+      "name": "fallback-argument",
+      "file": "opaque.raw",
+      "fallback": "ArgumentException"
+    },
+    {
+      "name": "fallback-io",
+      "file": "opaque.raw",
+      "fallback": "IOException"
+    },
+    {
+      "name": "fallback-zero",
+      "file": "opaque.raw",
+      "fallback": "zero"
+    },
+    {
+      "name": "cancelled-fetch",
+      "file": "exif.jpg",
+      "cancelled": true
+    },
+    {
+      "name": "existing-primary",
+      "file": "exif.jpg",
+      "existingPrimary": true
+    },
+    {
+      "name": "utc-date",
+      "file": "utc-date.jpg"
+    },
+    {
+      "name": "utc-new-year",
+      "file": "utc-new-year.jpg"
+    },
+    {
+      "name": "xmp-fraction",
+      "file": "xmp-fraction.jpg"
+    },
+    {
+      "name": "minimum-date",
+      "file": "minimum-date.jpg"
+    },
+    {
+      "name": "maximum-date",
+      "file": "maximum-date.jpg"
+    },
+    {
+      "name": "big-endian-exif",
+      "file": "big-endian.jpg"
+    },
+    {
+      "name": "big-endian-tiff",
+      "file": "big-endian.tiff"
+    },
+    {
+      "name": "gps-clamp-unknown-reference",
+      "file": "gps-clamp.jpg"
+    },
+    {
+      "name": "xmp-whitespace-iptc",
+      "file": "whitespace-iptc.jpg"
+    },
+    {
+      "name": "png-duplicate-title",
+      "file": "duplicate-title.png"
+    },
+    {
+      "name": "rating-large",
+      "file": "rating-large.jpg"
+    },
+    {
+      "name": "exif-entry-outside-file",
+      "file": "outside.jpg"
+    }
+  ]
+}

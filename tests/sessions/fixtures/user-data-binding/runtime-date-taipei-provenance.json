@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-03T14:39:40.777Z",
+  "sourceBoundary": "Actual reference JsonDefaults and UpdateUserItemDataDto date-295/date-296 binding, DateTime.ToUniversalTime and stored text. Native HTTP, migration, other dates and other native timezone environments are not recorded here.",
+  "timezone": {
+    "nodeTimezone": "Asia/Taipei",
+    "native": {
+      "type": "environment",
+      "runtime": ".NET 10.0.12",
+      "operatingSystem": "Microsoft Windows 10.0.26300",
+      "timezoneId": "Taipei Standard Time",
+      "baseUtcOffset": "08:00:00",
+      "pid": 4616,
+      "assemblies": [
+        {
+          "name": "Jellyfin.Extensions",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+          "sha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23"
+        },
+        {
+          "name": "MediaBrowser.Model",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+          "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+        }
+      ]
+    }
+  },
+  "reference": {
+    "source": "D:\\jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "verifiedFiles": 2620,
+    "contentUnchanged": true,
+    "statusUnchanged": true,
+    "fileDiscoveryUnchanged": true,
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "identity": {
+    "manifestSha256": "779885e632e0d6614ca883191d883d6a11e1d02e6e8b2f849370469e227e57eb",
+    "extensionsSha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23",
+    "modelSha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+  },
+  "node": "v24.16.0",
+  "dotnetExecutable": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+  "dotnetVersion": "10.0.401",
+  "recorderSha256": "3f0037bf52aec94d59cce656dc14805872cb305e5f86ded10538078401307da0",
+  "oracleSourceSha256": "a31b44e83294b97e96f5c6df8535753d5975647725c84429390ce6e6504f4ebd",
+  "oracleProjectSha256": "cdd6f0b4e4b9c72196431282fc7f42508e52e0f6a10b88a948a157bbdabd220b",
+  "oracleDllSha256": "4f334053ffeb3ea5ad4ab1d89072720255a9322f487abbbff7be0f12afc7b4f8",
+  "bindingCasesSha256": "e446d9d6d0cd11f624ec43ebc28664d31e932067bbe1ac9dd8b9ca6e0850395e",
+  "fixtureSha256": "eed5a7ea972c3cc115bac686247d22c80d432f2cfc11239636bd49887c25e9b2",
+  "nativeStdoutSha256": "75eeec41496ea98d0dfd2d3dbfe0064d6b820b4c2de01016efee756db1c99b9f",
+  "sourceUnchanged": true,
+  "inputAssembliesUnchanged": true,
+  "phaseAcceptance": false
+}

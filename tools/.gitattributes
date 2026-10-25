@@ -1,0 +1,5 @@
+archive-codec* -text
+build-archive-codec.mjs -text
+README-archive-codec.md -text
+compat/prepare-http-filter-reference.mjs text eol=lf
+compat/record-item-filter-native.mjs text eol=lf

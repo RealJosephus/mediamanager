@@ -1,0 +1,108 @@
+{
+  "nativeSha256": "ba83c87bfef4a58f88a40e147cc5d0d9582f3332df751a86c3eb129f49a06bb9",
+  "inputSha256": "7cc0992ec20727a57bdf77388206b4de9aec183787c0d1482f2deda0bead5ff9",
+  "sources": [
+    {
+      "path": "Jellyfin.Api/Controllers/BrandingController.cs",
+      "sha256": "b57c289d8d576934c81df5779d9fa960f547a2f39093a95812b244d2abd306c5",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/ConfigurationController.cs",
+      "sha256": "0cccc5668d3cebaef00c2701cb02729e32ec3c522480902a8ae9efe134282a80",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/ImageController.cs",
+      "sha256": "4b979f3fca700e8b8ab0a8b3680cbb46b358fea60a59f1090f2e65912c8ee8c5",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+      "sha256": "51c546bf97148fb942ee44b3e413d1dc3a3b5a18e3601acb68786b91a0bc3cec",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+      "sha256": "580c2fc5efb256d6245963861859c1b936cae014fae514985cdfcdffb69c45f6",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Model/Branding/BrandingOptions.cs",
+      "sha256": "17b39ea5b5dbf338e0a3a7cbc7d2ed0ff928f86ceee1c4569ee585f274d89947",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Model/Branding/BrandingOptionsDto.cs",
+      "sha256": "4f39f83aaee423a43ddf2fab873ddf967688db49ed0cfb6aa335d733b7fcb86b",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Model/Net/MimeTypes.cs",
+      "sha256": "b39d95d05558262c7561b38206340afe61b62b9b14b4f8e0067ef05cbd0fab9a",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "023b03a8a00e20c99e51517c25f40e306c5b8525d43fddfb4138509b65b5ab46"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261013-release-branding-native-6\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 47616,
+    "sha256": "99bbf566eec1414213b90b3194e2da44dee6511b20088a74c9fd928df274af6e"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261013-release-branding-native-6\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261013-release-branding-native-6\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261013-release-branding-native-6\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261013-release-branding-native-6\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager-validation\\20261013-release-branding-native-6",
+      "D:\\mediamanager-validation\\20261013-release-branding-native-6/input.json",
+      "D:\\mediamanager-validation\\20261013-release-branding-native-6\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

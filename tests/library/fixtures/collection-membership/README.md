@@ -1,0 +1,9 @@
+Frozen Jellyfin entity-method oracle for collection membership and policy consumers.
+
+`native.json` contains 30 actual DLL rows: exact PhysicalLocations match versus a different path, empty/correct/unrelated PhysicalFolderIds, and all-folders/enabled-library/blocked-library/blocked-unrelated/blocked-library-tag policies. It preserves the actual member IDs, parent IDs, inherited tags, collection and item visibility, standalone visibility, and CanDelete results. The test uses those rows on SQLite and PostgreSQL, including single-item record/DTO access.
+
+`PolicyOracle.cs` calls the frozen LibraryManager.GetCollectionFolders implementation and actual BaseItem/Folder/CollectionFolder/Movie methods. Entity lookup and UserRootFolder.Children are supplied explicitly. Library options are default enabled, and recordings lookup reports no active recording. Actual MediaSourceManager.GetPathProtocol and ManagedFileSystem.IsPathFile run unchanged. The oracle does not start a server or exercise controller binding. Its assembly and source hashes are in the fixture; phaseAcceptance remains false.
+
+To rerun, use the existing .tools/dotnet runtime and the absolute frozen DLL references in PolicyOracle.csproj. Set OutputPath and BaseIntermediateOutputPath to a fresh ignored evidence directory before running so this fixture directory receives no build artifacts. Pass an absolute output filename after `--`; retain stdout/stderr, process result, source hashes and loaded-vs-frozen assembly hashes before projecting new evidence. Do not replace the original rows from inferred candidate results.
+
+The 30 rows cover nonempty Windows paths, one explicit root child, one Movie and default enabled library options. They do not establish native HTTP responses, PostgreSQL-native Jellyfin behavior, null/empty path equivalence, channel/recording policy, library-option variants, Episode/Season parent getters, or the complete permission contract.

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current designated Native XML configuration defaults, decoding, helper recovery, held-file access with independent controls and complete bidirectional file reads and continuation.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
+    "Jellyfin.Server/Helpers/StartupHelpers.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+    "MediaBrowser.Model/Configuration/BaseApplicationConfiguration.cs",
+    "MediaBrowser.Common/Net/NetworkConfiguration.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptions.cs",
+    "MediaBrowser.Model/Configuration/MetadataOptions.cs",
+    "MediaBrowser.Model/Configuration/TrickplayOptions.cs",
+    "MediaBrowser.Model/Configuration/MetadataConfiguration.cs",
+    "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/Configuration/PluginConfiguration.cs",
+    "MediaBrowser.Common/Plugins/BasePluginOfT.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/Plugin.cs",
+    "MediaBrowser.Model/Branding/BrandingOptions.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 339010,
+      "sha256": "dd2202f147bb589a234e564015f157f823c6a301dca44b5a4d2f01e3c4080b41"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 12330,
+      "sha256": "cabad02c51c781409351914a76a84533f6e423d84e28abfff3bfe8d71b598f32"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "fileSharingSource",
+      "filename": "current/FileSharingProbe.cs",
+      "bytes": 1916,
+      "sha256": "a3cdecdda630df59c7086d8b2420d88776169c7271b5f9ab4c8483a39b56da9d"
+    },
+    {
+      "role": "fileSharingHarness",
+      "filename": "../../native-file-holder.js",
+      "bytes": 4935,
+      "sha256": "6e5336f01b045506090b947ef62f33b6c2361f598f0b0d5daa6cbf5b6b5c75b7"
+    }
+  ]
+}

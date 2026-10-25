@@ -1,0 +1,2840 @@
+{
+  "results": [
+    {
+      "name": "valid-unknown-node",
+      "exception": null,
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 408,
+          "sha256": "df3e052134fc995002bbb56bc239ed6636fd2151574fefbe845bdebf7367d0a2",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "truncated-before-unknown",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "complete-unknown-before-truncated",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 408,
+          "sha256": "df3e052134fc995002bbb56bc239ed6636fd2151574fefbe845bdebf7367d0a2",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-start-before-eof",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 408,
+          "sha256": "df3e052134fc995002bbb56bc239ed6636fd2151574fefbe845bdebf7367d0a2",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "nested-unknown-before-eof",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 436,
+          "sha256": "8f611d74239223d597a2b42d238e45840558066a06ab15453c51a874c73ead98",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022\u003Eprefix\u003Cchild\u003Evalue\u003C/child\u003Esuffix\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "known-before-truncated-unknown",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-before-truncated-known",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-before-root-mismatch",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-with-mismatched-child",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 415,
+          "sha256": "e91aa78a39f2128763f92116a4567bc1b1053864c91db813aa180a53276d3d25",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Eprefix\u003Cchild\u003Evalue\u003C/child\u003E\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-with-incomplete-entity",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 379,
+          "sha256": "978d4c3e0bdb34f10c209e52a1eae2ed25a9eae31c4eaf3f2da8d151b895e22c",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension /\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "complete-cdata-before-truncated",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 415,
+          "sha256": "e0d2ac1e1f6a6a860962b7a0d5053001381a40399a48d6d59f5de945de649587",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003E\u003C![CDATA[\u003Ckeep\u003E\u0026literal]]\u003E\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "truncated-cdata",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 379,
+          "sha256": "978d4c3e0bdb34f10c209e52a1eae2ed25a9eae31c4eaf3f2da8d151b895e22c",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension /\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-namespace-before-truncated",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 436,
+          "sha256": "ba7c11a9ee2e70a1203b7ac02f79ffbe6e5e82f06aed25550f71dde1fc311346",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cx:extension x:attr=\u0022literal\u0022 xmlns:x=\u0022urn:control\u0022\u003Ekeep\u003C/x:extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-after-second-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "prohibited-dtd",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing xml tags from $STATE\\media\\movie.nfo."
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-invalid-control",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 379,
+          "sha256": "978d4c3e0bdb34f10c209e52a1eae2ed25a9eae31c4eaf3f2da8d151b895e22c",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension /\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-newline-and-comment",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 420,
+          "sha256": "3942c8980a66218c31b6cf1218c2bb61235e32976d251086e8d780be3beaef3a",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Efirst\r\nsecond\u003C![CDATA[\u0026third]]\u003E\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unbound-element-prefix",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unbound-attribute-prefix",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "wrong-xml-namespace",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing xml tags from $STATE\\media\\movie.nfo."
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "multiple-name-colons",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unused-root-namespace",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "default-root-namespace",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 413,
+          "sha256": "0a8e15cec0b5188713e0e399ae5c6d597224d78cfd2c1d51a4752d860c2df5ed",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension xmlns=\u0022urn:control\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "explicit-unknown-namespace",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 414,
+          "sha256": "df5a5c250cf638e62727354f8d2bde34e3d658f30096eb82b32d061611fbad7f",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension xmlns:x=\u0022urn:unused\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "namespace-only-attribute",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 430,
+          "sha256": "923cc22ec33eaace5b8e49719bdd204e98ed04b411bf09061304612545648941",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension x:attr=\u0022keep\u0022 xmlns:x=\u0022urn:control\u0022\u003Evalue\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "qualified-nested-namespace",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 445,
+          "sha256": "5e2b11cb79fb2f1f64e9b6b49034573e8a61a7b50d709e3eff111df3eee58f1a",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003E\r\n    \u003Cx:child xmlns:x=\u0022urn:control\u0022\u003Evalue\u003C/x:child\u003E\r\n  \u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "comment-before-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "incomplete-comment-before-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing xml tags from $STATE\\media\\movie.nfo."
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "xml-instruction-after-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unicode-space-before-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing xml tags from $STATE\\media\\movie.nfo."
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "numeric-entity-before-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing xml tags from $STATE\\media\\movie.nfo."
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "entity-in-unknown-text",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 379,
+          "sha256": "978d4c3e0bdb34f10c209e52a1eae2ed25a9eae31c4eaf3f2da8d151b895e22c",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension /\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "invalid-numeric-entity",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "ArgumentException",
+          "message": "Error in metadata saver"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 57,
+          "sha256": "475aa876ed2dfbce716595474544444479230ba100f00ae0fbc5b379c0dc11c0",
+          "text": "\u003Cmovie\u003E\u003Cextension\u003Eprefix \u0026#x1; suffix\u003C/extension\u003E\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "invalid-zero-entity",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "ArgumentException",
+          "message": "Error in metadata saver"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 56,
+          "sha256": "9aee8be48e03327f6be7a1880cfbaedf15dad22ee196de342772fbd184d46cb0",
+          "text": "\u003Cmovie\u003E\u003Cextension\u003Eprefix \u0026#0; suffix\u003C/extension\u003E\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "invalid-surrogate-entity",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "ArgumentException",
+          "message": "Error in metadata saver"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 60,
+          "sha256": "18bca09ac3e4ea2883ab300b5c5e29d3440fa0f539ece3da671a8162d4d8ba8c",
+          "text": "\u003Cmovie\u003E\u003Cextension\u003Eprefix \u0026#xD800; suffix\u003C/extension\u003E\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "numeric-carriage-return",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 405,
+          "sha256": "cfe954fd037733b4cf63772ce97431b5bec094d19b539b462c92029e419e809a",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Eprefix \r\n suffix\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "incomplete-entity-in-attribute",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unknown-entity-in-attribute",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "attribute-literal-newline",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 413,
+          "sha256": "ac1106c8d8ad16c7e5632aa956360cf1e9565f691b54f1fb8b252ebcc72a4635",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022first second\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "attribute-literal-tab",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 413,
+          "sha256": "ac1106c8d8ad16c7e5632aa956360cf1e9565f691b54f1fb8b252ebcc72a4635",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022first second\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "attribute-numeric-newline",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 417,
+          "sha256": "0e509e805f4687f1f599f8339336af888abc50e61be73934a8ce86a11d2d5436",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022first\u0026#xA;second\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "duplicate-attribute",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "partial-attribute",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "partial-end-tag",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "eof-after-empty-element",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 394,
+          "sha256": "1c2cd19bba1c57e643f80dd96fd00b25bbaab2439ec314eaf9503cc95b5fd7e0",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022 /\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "multiple-complete-unknown-before-error",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 420,
+          "sha256": "630bff8223309055422d87dcda833a4a4ffc02649afa629fc005ce059bfd1edd",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Efirst\u003C/extension\u003E\r\n  \u003Csecond\u003Evalue\u003C/second\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "known-tag-uppercase",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "unicode-unknown-name",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 389,
+          "sha256": "1d245ac5a4b9a3f34433f0312cdac7d385168b29efa523223003c9a0d69eb36d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003C\u8CC7\u6599\u003E\u4FDD\u7559\u003C/\u8CC7\u6599\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "wrong-original-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "text-after-closed-root",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": []
+        }
+      ],
+      "credits": [],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 393,
+          "sha256": "86881a89e91fecbba334edc35a756651226be9822805966a718fc5e48fab762d",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "ab3bf527aec1112b383a642d075c8f8555e91e3a5610c6ecfad422839b1204dc",
+  "imageSha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+  "boundary": "Actual LibraryManager people/image lifecycle, ProviderManager/HttpClient/ImageSaver file writes, MovieNfoSaver, ConvertImageToLocal/UpdateImages/UpdateItems/CreateItems and real EF SQLite writes. Real directories/files; controlled HTTP handler responses and dimensions/BlurHash, not actual sockets/image decoder/full HTTP refresh."
+}

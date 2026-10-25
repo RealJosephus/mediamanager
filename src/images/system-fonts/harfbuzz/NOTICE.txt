@@ -1,0 +1,17 @@
+HarfBuzz 14.6.0 with the harfbuzzjs 1.6.3 JavaScript bridge.
+
+Source and build provenance: build.json.
+Build recipe: tools/ci/build-harfbuzz.py and .github/workflows/build-harfbuzz.yml.
+Original artifact: https://github.com/RealJosephus/mediamanager/actions/runs/39175865595
+
+The upstream Makefile is used with only -DHB_TINY removed, enabling the
+AAT tables needed by macOS system fonts and composed emoji. The JavaScript
+bridge is copied unchanged from the pinned official npm package. No fallback
+to the tiny npm binary is used.
+
+HarfBuzz: LICENSE.harfbuzz
+harfbuzzjs: LICENSE.harfbuzzjs
+Emscripten generated runtime: LICENSE.emscripten
+
+The Emscripten license was retrieved from the exact compiler source revision:
+https://raw.githubusercontent.com/emscripten-core/emscripten/2659582941bef14008476903f48941909db1b196/LICENSE

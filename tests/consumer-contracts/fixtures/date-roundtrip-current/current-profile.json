@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "fixture": "date-roundtrip",
+  "scope": "Current designated Native JSON/SQLite date consumer and real Native HTTP to production PostgreSQL Node timezone processes, cold restart, complete SQLite export, Native continuation and fresh PostgreSQL reimport. Eight-Photo UserData scenario only.",
+  "cases": 8,
+  "zones": 3,
+  "sourcePaths": [
+    "Jellyfin.Api/Controllers/ItemsController.cs",
+    "Emby.Server.Implementations/Library/UserDataManager.cs",
+    "MediaBrowser.Model/Dto/UpdateUserItemDataDto.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDateTimeConverter.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Providers.Sqlite/ValueConverters/DateTimeKindValueConverter.cs",
+    "Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs",
+    "Emby.Server.Implementations/EntryPoints/UserDataChangeNotifier.cs",
+    "Emby.Server.Implementations/Session/SessionManager.cs",
+    "Emby.Server.Implementations/Session/SessionWebSocketListener.cs",
+    "Emby.Server.Implementations/HttpServer/WebSocketManager.cs",
+    "Jellyfin.Api/Helpers/RequestHelpers.cs",
+    "Jellyfin.Api/Middleware/WebSocketHandlerMiddleware.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "27846958d2a58e3aeab4498a9b910c0b57c4579ccff2151b4879c4ad387057d1",
+      "bytes": 1162,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "8a794e53c1c8f1702aae87c282606bacd5747ae08b88d5b846395c615c49a4f4",
+      "bytes": 2101,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f",
+      "bytes": 536,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "node-host.js",
+      "sha256": "d545d17e011620f746102665f6c7d8b4b4e53d1c538554b7587752f2b089b40b",
+      "bytes": 2204,
+      "role": "productionHost"
+    },
+    {
+      "filename": "scenario.js",
+      "sha256": "dcd3cbe51404360f7ede2d37b6afc346e53301e5d70d86198a6b8b1733ba97b8",
+      "bytes": 5002,
+      "role": "exchangeContract"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    },
+    {
+      "filename": "../../../images/fixtures/processor/single.png",
+      "sha256": "7ce78e46a0340f336b19b46c5ae401650bd9ef87073dc096b22d8f523c8e9ca3",
+      "bytes": 86,
+      "role": "photoInput"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 15ceebe..266c320 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -216,3 +216,6 @@ if(ZLIB_BUILD_EXAMPLES)
+         set_target_properties(minigzip64 PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64")
+     endif()
+ endif()
++
++# Separate the unused shared target when Emscripten emits static archives.
++set_target_properties(zlib PROPERTIES OUTPUT_NAME z-unused)

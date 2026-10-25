@@ -1,0 +1,161 @@
+[
+  {
+    "name": "flat thumb commits at root end",
+    "text": "<movie><thumb aspect=\"poster\">https://example.test/flat-root.jpg</thumb></movie>"
+  },
+  {
+    "name": "flat thumb waits for immediate malformed sibling token",
+    "text": "<movie><thumb aspect=\"poster\">https://example.test/flat-wait.jpg</thumb><broken</movie>"
+  },
+  {
+    "name": "flat thumb commits before later scalar truncation",
+    "text": "<movie><thumb aspect=\"poster\">https://example.test/flat-prefix.jpg</thumb><plot>Tail</plot><broken"
+  },
+  {
+    "name": "flat thumb nested content does not commit",
+    "text": "<movie><thumb aspect=\"poster\">https://example.test/<inner/>flat.jpg</thumb></movie>"
+  },
+  {
+    "name": "flat dotted aspect does not block later valid thumb",
+    "text": "<movie><thumb aspect=\"season.poster\">https://example.test/skipped.jpg</thumb><thumb aspect=\"poster\">https://example.test/accepted.jpg</thumb></movie>"
+  },
+  {
+    "name": "flat duplicate remote image type keeps first",
+    "text": "<movie><thumb aspect=\"poster\">https://example.test/first.jpg</thumb><thumb aspect=\"poster\">https://example.test/second.jpg</thumb></movie>"
+  },
+  {
+    "name": "empty fanart advances to following flat thumb",
+    "text": "<movie><fanart/><thumb aspect=\"poster\">https://example.test/after-empty.jpg</thumb></movie>"
+  },
+  {
+    "name": "fanart without thumb is skipped before following title",
+    "initialName": "Initial",
+    "text": "<movie><fanart><unknown>Ignored</unknown></fanart><title>After Fanart</title></movie>"
+  },
+  {
+    "name": "fanart direct thumb commits as backdrop",
+    "text": "<movie><fanart><thumb>https://example.test/backdrop.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart considers only first thumb",
+    "text": "<movie><fanart><thumb>https://example.test/first-backdrop.jpg</thumb><thumb aspect=\"landscape\">https://example.test/ignored-landscape.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart finds nested descendant thumb",
+    "text": "<movie><fanart><wrapper><thumb>https://example.test/nested-backdrop.jpg</thumb></wrapper></fanart></movie>"
+  },
+  {
+    "name": "fanart uppercase Thumb is ignored",
+    "text": "<movie><fanart><Thumb>https://example.test/ignored-case.jpg</Thumb></fanart><thumb aspect=\"poster\">https://example.test/after-case.jpg</thumb></movie>"
+  },
+  {
+    "name": "fanart explicit landscape thumb preserves type",
+    "text": "<movie><fanart><thumb aspect=\"landscape\">https://example.test/landscape.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart dotted first thumb prevents later candidate",
+    "text": "<movie><fanart><thumb aspect=\"movie.poster\">https://example.test/skipped-first.jpg</thumb><thumb>https://example.test/not-visited.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart thumb waits for malformed immediate token",
+    "text": "<movie><fanart><thumb>https://example.test/not-committed.jpg</thumb><broken</fanart></movie>"
+  },
+  {
+    "name": "fanart thumb commits before later subtree mismatch",
+    "text": "<movie><fanart><thumb>https://example.test/committed-before-mismatch.jpg</thumb><unknown></bad></fanart></movie>"
+  },
+  {
+    "name": "fanart thumb commits before malformed root sibling",
+    "text": "<movie><fanart><thumb>https://example.test/committed-before-root-error.jpg</thumb></fanart><broken></movie>"
+  },
+  {
+    "name": "fanart completed thumb at truncated eof waits",
+    "text": "<movie><fanart><thumb>https://example.test/eof-wait.jpg</thumb>"
+  },
+  {
+    "name": "fanart malformed subtree before thumb retains no image",
+    "text": "<movie><fanart><unknown></bad><thumb>https://example.test/never.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart nested thumb waits for malformed next token",
+    "text": "<movie><fanart><wrapper><thumb>https://example.test/nested-wait.jpg</thumb><broken</wrapper></fanart></movie>"
+  },
+  {
+    "name": "fanart thumb nested content does not commit",
+    "text": "<movie><fanart><thumb>https://example.test/<inner/>bad.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "fanart comment before thumb still commits",
+    "text": "<movie><fanart><!-- ignored --><thumb>https://example.test/commented.jpg</thumb></fanart></movie>"
+  },
+  {
+    "name": "set direct text commits",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set>Direct Collection</set></movie>"
+  },
+  {
+    "name": "set name child commits",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><name>Named Collection</name></set></movie>"
+  },
+  {
+    "name": "set attribute commits while truncated inner name does not",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set tmdbcolid=\"401\"><name>Truncated Collection</bad></set></movie>"
+  },
+  {
+    "name": "set nested name content leaves initial name but commits attribute",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set tmdbcolid=\"402\"><name>Outer<inner/>Tail</name></set></movie>"
+  },
+  {
+    "name": "set first name persists before later nested name error",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><name>First Collection</name><unknown/><name>Outer<inner/>Tail</name></set></movie>"
+  },
+  {
+    "name": "set inherited prefixed child follows committed name",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set xmlns:p=\"urn:test\"><name>Waiting Collection</name><p:bad/></set></movie>"
+  },
+  {
+    "name": "set name persists across spacer and inherited prefixed child",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set xmlns:p=\"urn:test\"><name>Prefix Collection</name><unknown/><p:bad/></set></movie>"
+  },
+  {
+    "name": "set direct text short circuits later nested error",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set>Direct Prefix<name>Outer<inner/>Tail</name></set></movie>"
+  },
+  {
+    "name": "set cdata is skipped before following name",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><![CDATA[Ignored CData]]><name>After CData</name></set></movie>"
+  },
+  {
+    "name": "set later name overwrites first name",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><name>First Collection</name><name>Second Collection</name></set></movie>"
+  },
+  {
+    "name": "set name waits for malformed immediate root token",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set tmdbcolid=\"403\"><name>Waiting Collection</name></set><broken</movie>"
+  },
+  {
+    "name": "set name commits before later sibling mismatch",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><name>Committed Collection</name></set><plot>Tail</plot><broken></movie>"
+  },
+  {
+    "name": "set completed at truncated movie eof",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><name>Eof Collection</name></set>"
+  },
+  {
+    "name": "set skips unknown subtree before name",
+    "initialCollectionName": "Initial Collection",
+    "text": "<movie><set><unknown><inner/></unknown><name>After Unknown</name></set></movie>"
+  }
+]

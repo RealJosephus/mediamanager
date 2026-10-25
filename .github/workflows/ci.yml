@@ -1,0 +1,490 @@
+name: Cross-platform validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      validation_profile:
+        description: Available tests for development, or strict full with no exclusions for release validation
+        type: choice
+        required: true
+        default: available
+        options:
+          - available
+          - full
+      release_pair:
+        description: Run strict full twice per platform against one supplied candidate and input set; product release acceptance remains separate
+        type: boolean
+        required: false
+        default: false
+      test_files:
+        description: Exact test paths separated by commas or newlines; leave empty for all available tests
+        type: string
+        required: false
+        default: ''
+      diagnostic_timeout_ms:
+        description: Optional timeout in milliseconds for an explicit diagnostic subset; empty keeps the standard limit
+        type: string
+        required: false
+        default: ''
+      test_concurrency:
+        description: Number of isolated test file processes; shared fixtures retain exclusive resource ownership
+        type: choice
+        required: false
+        default: '1'
+        options: ['1', '2', '3', '4']
+      native_reference:
+        description: Build the sealed native reference runtime for selected native consumers
+        type: boolean
+        required: false
+        default: false
+      native_instance:
+        description: Initialize a fresh stopped native instance and a separate controlled media seed (requires native_reference)
+        type: boolean
+        required: false
+        default: false
+      native_sqlite:
+        description: Supply a separate current stopped-instance SQLite input, never historical recordings (requires native_instance)
+        type: boolean
+        required: false
+        default: false
+      web_clients:
+        description: Build the designated Jellyfin Web and install fixed Chromium for real browser validation (requires native_sqlite)
+        type: boolean
+        required: false
+        default: false
+      emby_web:
+        description: Capture the designated hosted Emby Web and use fixed Chromium (requires native_sqlite)
+        type: boolean
+        required: false
+        default: false
+      alist_reference:
+        description: Build the designated AList Go source with the controlled API-only test frontend (Web UI unvalidated)
+        type: boolean
+        required: false
+        default: false
+      platform:
+        description: Platforms for this validation batch; use one OS for a platform-specific diagnosis
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - windows
+          - linux
+          - macos
+
+permissions:
+  contents: read
+
+concurrency:
+  # Independent manual subsets must retain their own evidence. A newer push
+  # still supersedes an older automatic run on the same ref.
+  group: validation-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: ${{ matrix.os }} / shard ${{ matrix.shard }} / Node 24 / PostgreSQL 17
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ inputs.release_pair && 360 || 120 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.release_pair && '["ubuntu-24.04","windows-2025","macos-15"]' || inputs.platform == 'windows' && '["windows-2025"]' || inputs.platform == 'linux' && '["ubuntu-24.04"]' || inputs.platform == 'macos' && '["macos-15"]' || '["ubuntu-24.04","windows-2025","macos-15"]') }}
+        shard: ${{ fromJSON((inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '[1]' || '[1,2,3,4]') }}
+    env:
+      TZ: Asia/Taipei
+      MEDIAMANAGER_TEST_POSTGRES: postgresql://validation@127.0.0.1:5432/postgres
+      MEDIAMANAGER_CI_TEST_FILES: ${{ inputs.test_files || '' }}
+      MEDIAMANAGER_CI_TIMEOUT_MS: ${{ inputs.diagnostic_timeout_ms || '' }}
+      MEDIAMANAGER_CI_TEST_CONCURRENCY: ${{ inputs.test_concurrency || '1' }}
+      MEDIAMANAGER_CI_PROFILE: ${{ inputs.release_pair && 'full' || inputs.validation_profile || 'available' }}
+      MEDIAMANAGER_CI_RELEASE_PAIR: ${{ inputs.release_pair && 'true' || 'false' }}
+      MEDIAMANAGER_CI_PLATFORM: ${{ inputs.platform || 'all' }}
+      MEDIAMANAGER_CI_MATRIX_OS: ${{ matrix.os }}
+      MEDIAMANAGER_CI_SHARD: ${{ matrix.shard }}
+      MEDIAMANAGER_CI_SHARDS: ${{ (inputs.release_pair || inputs.validation_profile == 'full' || inputs.test_files) && '1' || '4' }}
+      MEDIAMANAGER_CI_NATIVE_REFERENCE: ${{ inputs.native_reference && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_INSTANCE: ${{ inputs.native_instance && 'true' || 'false' }}
+      MEDIAMANAGER_CI_NATIVE_SQLITE: ${{ inputs.native_sqlite && 'true' || 'false' }}
+      MEDIAMANAGER_CI_WEB_CLIENTS: ${{ inputs.web_clients && 'true' || 'false' }}
+      MEDIAMANAGER_CI_EMBY_WEB: ${{ inputs.emby_web && 'true' || 'false' }}
+      MEDIAMANAGER_CI_ALIST_REFERENCE: ${{ inputs.alist_reference && 'true' || 'false' }}
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - name: Configure isolated evidence output
+        shell: bash
+        run: |
+          printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-results" >> "$GITHUB_ENV"
+          printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/mediamanager-dotnet" >> "$GITHUB_ENV"
+      - name: Align Windows system timezone with the declared runtime timezone
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-TimeZone -Id 'Taipei Standard Time'
+          $zone = Get-TimeZone
+          if ($zone.Id -ne 'Taipei Standard Time' -or $zone.BaseUtcOffset.TotalHours -ne 8) {
+            throw 'The native Windows timezone does not match TZ=Asia/Taipei.'
+          }
+          New-Item -ItemType Directory -Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT -Force | Out-Null
+          $zone | Select-Object Id, BaseUtcOffset | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'system-timezone.json') -Encoding utf8
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Bind exact checkout HEAD and tree
+        if: inputs.native_reference == true
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $head = (git rev-parse --verify HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $head -cne $env:GITHUB_SHA) { throw 'Checked-out HEAD differs from GITHUB_SHA.' }
+          $tree = (git rev-parse --verify 'HEAD^{tree}').Trim()
+          if ($LASTEXITCODE -ne 0 -or $tree -notmatch '^[a-f0-9]{40}$') { throw 'Cannot identify the checked-out tree.' }
+          "MEDIAMANAGER_CHECKOUT_HEAD=$head" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_CHECKOUT_TREE=$tree" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Validate exact requested test paths before provisioning
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:MEDIAMANAGER_CI_RELEASE_PAIR -eq 'true' -and ($env:GITHUB_EVENT_NAME -ne 'workflow_dispatch' -or $env:MEDIAMANAGER_CI_PLATFORM -ne 'all')) {
+            throw 'Release pairs require an explicit dispatch with platform=all.'
+          }
+          if ($env:MEDIAMANAGER_CI_PROFILE -eq 'full' -and ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+' | Where-Object { $_.Trim() })) {
+            throw 'The full profile cannot be combined with an explicit test subset.'
+          }
+          if ($env:MEDIAMANAGER_CI_NATIVE_INSTANCE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_REFERENCE -ne 'true') {
+            throw 'native_instance requires native_reference.'
+          }
+          if ($env:MEDIAMANAGER_CI_NATIVE_SQLITE -eq 'true' -and $env:MEDIAMANAGER_CI_NATIVE_INSTANCE -ne 'true') {
+            throw 'native_sqlite requires native_instance.'
+          }
+          if (($env:MEDIAMANAGER_CI_WEB_CLIENTS -eq 'true' -or $env:MEDIAMANAGER_CI_EMBY_WEB -eq 'true') -and $env:MEDIAMANAGER_CI_NATIVE_SQLITE -ne 'true') {
+            throw 'Web client validation requires native_sqlite.'
+          }
+          $trackedFiles = git ls-files -- tests
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot list candidate test files.' }
+          $tracked = [Collections.Generic.HashSet[string]]::new([string[]]$trackedFiles, [StringComparer]::Ordinal)
+          $requested = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          foreach ($entry in ($env:MEDIAMANAGER_CI_TEST_FILES -split '[,\r\n]+')) {
+            $filename = $entry.Trim()
+            if (-not $filename) { continue }
+            if (-not $filename.EndsWith('.test.js', [StringComparison]::Ordinal) -or -not $tracked.Contains($filename)) {
+              throw "Unknown requested test: $filename"
+            }
+            if (-not $requested.Add($filename)) { throw "Duplicate requested test: $filename" }
+          }
+          if ($env:MEDIAMANAGER_CI_TIMEOUT_MS) {
+            if ($requested.Count -eq 0 -or $env:MEDIAMANAGER_CI_PROFILE -eq 'full' -or $env:MEDIAMANAGER_CI_RELEASE_PAIR -eq 'true') {
+              throw 'A diagnostic timeout requires an explicit subset and cannot change full or release-pair limits.'
+            }
+            if ($env:MEDIAMANAGER_CI_TIMEOUT_MS -notmatch '^[1-9][0-9]{0,6}$') {
+              throw 'The diagnostic timeout must be a decimal integer.'
+            }
+            $diagnosticTimeout = [long]$env:MEDIAMANAGER_CI_TIMEOUT_MS
+            if ($diagnosticTimeout -lt 1000 -or $diagnosticTimeout -gt 6000000) {
+              throw 'The diagnostic timeout must be between 1000 and 6000000 milliseconds.'
+            }
+          }
+          Write-Output "Validated $($requested.Count) exact requests; an empty list retains automatic scope selection."
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+          cache: npm
+      - name: Provision fixed WebDAV executable
+        shell: pwsh
+        timeout-minutes: 5
+        run: ./tools/ci/setup-webdav.ps1
+      - name: Build designated AList API-only test host
+        if: inputs.alist_reference == true
+        shell: pwsh
+        timeout-minutes: 30
+        run: ./tools/ci/build-alist.ps1
+      - name: Prepare and verify macOS loopback alias
+        id: loopback
+        if: runner.os == 'macOS'
+        shell: bash
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          mkdir -p "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning"
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-before.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            printf 'created=false\n' >> "$GITHUB_OUTPUT"
+          else
+            # Apple ifconfig(8): same-subnet aliases use a non-conflicting /32 mask.
+            sudo /sbin/ifconfig lo0 inet 127.0.0.2 netmask 255.255.255.255 alias up
+            printf 'created=true\n' >> "$GITHUB_OUTPUT"
+          fi
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-ready.txt"
+          node --input-type=module <<'NODE'
+          import net from 'node:net';
+          import { writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          const servers = [net.createServer(), net.createServer()];
+          const listen = (server, host, port) => new Promise((resolve, reject) => {
+            server.once('error', reject);
+            server.listen(port, host, resolve);
+          });
+          try {
+            await listen(servers[0], '127.0.0.1', 0);
+            const port = servers[0].address().port;
+            await listen(servers[1], '127.0.0.2', port);
+            const record = { addresses: servers.map(server => server.address()), samePort: true };
+            await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/loopback-bind.json'), JSON.stringify(record, null, 2) + '\n');
+            console.log(`Verified 127.0.0.1 and 127.0.0.2 both bind port ${port}.`);
+          } finally {
+            await Promise.all(servers.filter(server => server.listening).map(server => new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
+          }
+          NODE
+      - name: Prepare and verify macOS limited broadcast routing
+        if: runner.os == 'macOS'
+        run: node tools/ci/macos-network-context.js setup
+      - name: Set up .NET oracle runtime
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.401
+      - name: Verify isolated .NET installation
+        shell: pwsh
+        run: ./tools/ci/verify-dotnet.ps1
+      - name: Build and immediately verify isolated native reference from sealed source
+        if: inputs.native_reference == true
+        shell: pwsh
+        run: |
+          ./tools/ci/build-native.ps1
+          $env:MEDIAMANAGER_NATIVE_BUILD_ROOT = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
+          $env:MEDIAMANAGER_JELLYFIN_DLL = Join-Path $env:MEDIAMANAGER_NATIVE_BUILD_ROOT 'runtime/jellyfin.dll'
+          node --input-type=module --eval "const { verifyNativeBuild } = await import('./tools/validation/native-build-inputs.js'); await verifyNativeBuild();"
+          "MEDIAMANAGER_NATIVE_BUILD_ROOT=$env:MEDIAMANAGER_NATIVE_BUILD_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_JELLYFIN_DLL=$env:MEDIAMANAGER_JELLYFIN_DLL" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Set up PostgreSQL
+        uses: ankane/setup-postgres@b1a598d92f86cb2ed364411898d150d4eac6d5ca # v1
+        with:
+          postgres-version: '17'
+          user: validation
+      - name: Provision pinned media tools
+        shell: pwsh
+        timeout-minutes: 5
+        run: ./tools/ci/setup-media.ps1
+      - name: Install locked dependencies
+        run: npm ci --bin-links=false
+      - name: Initialize isolated native instance and controlled media seed
+        if: inputs.native_instance == true
+        shell: pwsh
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $instanceRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-native-instance'
+          $empty = Join-Path $instanceRoot 'empty'
+          $seeded = Join-Path $instanceRoot 'seeded'
+          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
+          try {
+            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $instanceRoot
+            node tools/compat/initialize-reference.mjs $empty
+            if ($LASTEXITCODE -ne 0) { throw 'Native instance initialization failed.' }
+            node tools/compat/prepare-media-reference.mjs $empty $seeded
+            if ($LASTEXITCODE -ne 0) { throw 'Controlled native media seed preparation failed.' }
+          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
+          "MEDIAMANAGER_NATIVE_INSTANCE_ROOT=$instanceRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_TEST_NATIVE_INSTANCE=$(Join-Path $seeded 'instance')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Supply current stopped-instance SQLite input
+        if: inputs.native_sqlite == true
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sqliteOutput = Join-Path $env:RUNNER_TEMP 'mediamanager-current-sqlite'
+          New-Item -ItemType Directory -Path $sqliteOutput | Out-Null
+          $sqliteRoot = Join-Path $sqliteOutput 'input'
+          $validationOutput = $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT
+          try {
+            $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $sqliteOutput
+            node tools/compat/prepare-current-sqlite.mjs $sqliteRoot
+            if ($LASTEXITCODE -ne 0) { throw 'Current native SQLite supply failed.' }
+          } finally { $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT = $validationOutput }
+          "MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE=$(Join-Path $sqliteRoot 'input.db')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          'MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON={"mounts":[]}' | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Build the designated Jellyfin Web client
+        if: inputs.web_clients == true
+        shell: pwsh
+        timeout-minutes: 25
+        run: ./tools/ci/build-jellyfin-web.ps1
+      - name: Install the fixed browser for actual Web interaction
+        if: inputs.web_clients == true || inputs.emby_web == true
+        shell: pwsh
+        timeout-minutes: 10
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $browserRoot = Join-Path $env:RUNNER_TEMP 'mediamanager-browsers'
+          if (Test-Path -LiteralPath $browserRoot) { throw 'Browser installation requires a fresh isolated directory.' }
+          $env:PLAYWRIGHT_BROWSERS_PATH = $browserRoot
+          "PLAYWRIGHT_BROWSERS_PATH=$browserRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $log = Join-Path $env:MEDIAMANAGER_VALIDATION_OUTPUT_ROOT 'provisioning/browser-install.log'
+          node node_modules/playwright/cli.js install --with-deps --no-shell chromium *> $log
+          if ($LASTEXITCODE -ne 0) { throw 'The fixed Chromium installation failed; see browser-install.log.' }
+          @'
+          import { appendFile, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          import { chromium } from 'playwright';
+          const executable = chromium.executablePath();
+          await appendFile(process.env.GITHUB_ENV, `MEDIAMANAGER_BROWSER_EXECUTABLE=${executable}\n`);
+          await writeFile(path.join(process.env.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, 'provisioning/browser-install.json'),
+            JSON.stringify({ candidate: process.env.GITHUB_SHA, runId: process.env.GITHUB_RUN_ID,
+              runAttempt: process.env.GITHUB_RUN_ATTEMPT, node: process.execPath,
+              command: ['node_modules/playwright/cli.js', 'install', '--with-deps', '--no-shell', 'chromium'],
+              exitCode: 0, root: process.env.PLAYWRIGHT_BROWSERS_PATH, executable,
+              webInteractionValidated: false }, null, 2) + '\n', { flag: 'wx' });
+          '@ | node --input-type=module
+          if ($LASTEXITCODE -ne 0) { throw 'Browser installation receipt failed.' }
+      - name: Capture the unmodified designated hosted Emby Web client
+        if: inputs.emby_web == true
+        timeout-minutes: 15
+        run: node tools/ci/fetch-emby-web.js
+      - name: Record runner and database identity
+        id: environment
+        run: node tools/ci/environment.js capture
+      - name: Check syntax
+        run: npm run check
+      # GITHUB_EVENT_NAME/PATH supply the push base or PR merge parents. Manual
+      # dispatch with an empty test_files input still requests all available tests.
+      - name: Run affected or explicitly requested strict validation
+        timeout-minutes: ${{ inputs.release_pair && 290 || 110 }}
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == 'macOS' ]]; then
+            node tools/ci/macos-network-context.js strict
+          else
+            node tools/ci/run.js
+          fi
+      - name: Audit database resources
+        if: always() && steps.environment.outcome == 'success'
+        run: node tools/ci/environment.js audit
+      - name: Remove owned macOS limited broadcast route
+        if: always() && runner.os == 'macOS'
+        run: node tools/ci/macos-broadcast.js cleanup
+      - name: Remove created macOS loopback alias
+        if: always() && runner.os == 'macOS' && steps.loopback.outputs.created == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo /sbin/ifconfig lo0 inet 127.0.0.2 -alias
+          /sbin/ifconfig lo0 | tee "$MEDIAMANAGER_VALIDATION_OUTPUT_ROOT/provisioning/loopback-after.txt"
+          if /sbin/ifconfig lo0 | awk '$1 == "inet" && $2 == "127.0.0.2" { found = 1 } END { exit !found }'; then
+            echo 'The created loopback alias remained after cleanup.' >&2
+            exit 1
+          fi
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: validation-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-results
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 14
+      - name: Preserve same-run native reference and build evidence
+        if: always() && inputs.native_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-reference-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-build/runtime
+            ${{ runner.temp }}/mediamanager-native-build/source-offer
+            ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve native initialization receipts and redacted log
+        if: always() && inputs.native_instance == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-instance-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.json
+            ${{ runner.temp }}/mediamanager-native-instance/empty/initialization.log
+            ${{ runner.temp }}/mediamanager-native-instance/seeded/synthetic-media-fixture.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve same-run AList API host source and build evidence
+        if: always() && inputs.alist_reference == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: alist-api-host-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-alist-build/runtime
+            ${{ runner.temp }}/mediamanager-alist-build/source-offer
+            ${{ runner.temp }}/mediamanager-alist-build/receipts
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve current SQLite supply receipt without database credentials
+        if: always() && inputs.native_sqlite == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: current-native-sqlite-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-current-sqlite/input/receipt.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Preserve designated Jellyfin Web assets and build evidence
+        if: always() && inputs.web_clients == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jellyfin-web-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-jellyfin-web/runtime
+            ${{ runner.temp }}/mediamanager-jellyfin-web/receipts
+            ${{ runner.temp }}/mediamanager-jellyfin-web/source-offer
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
+      - name: Preserve hosted Emby resource identities without redistributing client assets
+        if: always() && inputs.emby_web == true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: emby-web-input-${{ matrix.os }}-shard-${{ matrix.shard }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-emby-web/receipts
+          if-no-files-found: error
+          retention-days: 14
+
+  strict-pair-receipt:
+    name: Verify all three strict full pairs
+    if: ${{ always() && inputs.release_pair }}
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    env:
+      MEDIAMANAGER_CI_VALIDATION_RESULT: ${{ needs.validate.result }}
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+      - name: Download every current-attempt pair with its original evidence
+        id: evidence
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: validation-*-shard-1-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-artifacts
+      - name: Recheck candidate, inputs, full scope, TAP, registration and database cleanup
+        if: always()
+        shell: pwsh
+        run: node tools/ci/release-pair-aggregate.js "$env:RUNNER_TEMP/strict-pair-artifacts" "$env:RUNNER_TEMP/strict-pair-receipt"
+      - name: Preserve the bounded strict-pair conclusion
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: strict-pair-receipt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strict-pair-receipt
+          if-no-files-found: error
+          retention-days: 14

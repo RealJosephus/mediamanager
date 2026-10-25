@@ -1,0 +1,176 @@
+{
+  "Cases": [
+    {
+      "Name": "PhysicalFolderIds-plain",
+      "Value": "cb210000-0000-0000-0000-000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-space",
+      "Value": " cb210000-0000-0000-0000-000000000002 "
+    },
+    {
+      "Name": "PhysicalFolderIds-FEFF-prefix",
+      "Value": "﻿cb210000-0000-0000-0000-000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-FEFF-suffix",
+      "Value": "cb210000-0000-0000-0000-000000000002﻿"
+    },
+    {
+      "Name": "PhysicalFolderIds-FEFF-both",
+      "Value": "﻿cb210000-0000-0000-0000-000000000002﻿"
+    },
+    {
+      "Name": "PhysicalFolderIds-NEL-prefix",
+      "Value": "cb210000-0000-0000-0000-000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-NEL-suffix",
+      "Value": "cb210000-0000-0000-0000-000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-NEL-both",
+      "Value": "cb210000-0000-0000-0000-000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-N",
+      "Value": "cb210000000000000000000000000002"
+    },
+    {
+      "Name": "PhysicalFolderIds-B",
+      "Value": "{cb210000-0000-0000-0000-000000000002}"
+    },
+    {
+      "Name": "PhysicalFolderIds-P",
+      "Value": "(cb210000-0000-0000-0000-000000000002)"
+    },
+    {
+      "Name": "PhysicalFolderIds-X",
+      "Value": "{0xcb210000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-X-short",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-X-NEL",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-X-FEFF",
+      "Value": "{0xcb210000,﻿0x0,﻿0x0,﻿{0x0,﻿0x0,﻿0x0,﻿0x0,﻿0x0,﻿0x0,﻿0x0,﻿0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-empty-D",
+      "Value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "Name": "PhysicalFolderIds-empty-N",
+      "Value": "00000000000000000000000000000000"
+    },
+    {
+      "Name": "PhysicalFolderIds-json-null",
+      "Value": null
+    },
+    {
+      "Name": "PhysicalFolderIds-empty-string",
+      "Value": ""
+    },
+    {
+      "Name": "PhysicalFolderIds-invalid-guid",
+      "Value": "not-guid"
+    },
+    {
+      "Name": "PhysicalFolderIds-number-token",
+      "Value": 42
+    },
+    {
+      "Name": "PhysicalFolderIds-first-target",
+      "Value": "{0x00000000cb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-first-one",
+      "Value": "{0x0000000000000001,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-zero",
+      "Value": "{0xcb210000,0x0000000000,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-one",
+      "Value": "{0xcb210000,0x0000000001,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-third-zero",
+      "Value": "{0xcb210000,0x0,0x0000000000,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-byte-target",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x002}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-byte-one",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x001}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-first-overflow",
+      "Value": "{0x1cb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-overflow",
+      "Value": "{0xcb210000,0x10000,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-byte-overflow",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x100}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-max",
+      "Value": "{0xcb210000,0xffffffff,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-highzero",
+      "Value": "{0xcb210000,0xffff0000,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-third-max",
+      "Value": "{0xcb210000,0x0,0xffffffff,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-third-lowword",
+      "Value": "{0xcb210000,0x0,0x12345678,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-second-uint32-overflow",
+      "Value": "{0xcb210000,0x100000000,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-third-uint32-overflow",
+      "Value": "{0xcb210000,0x0,0x100000000,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-first-max",
+      "Value": "{0xffffffff,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-byte-max",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x000000000ff}}"
+    },
+    {
+      "Name": "PhysicalFolderIds-byte-leading-overflow",
+      "Value": "{0xcb210000,0x0,0x0,{0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x00000000100}}"
+    },
+    {
+      "Name": "boolean-token",
+      "Value": false
+    },
+    {
+      "Name": "object-token",
+      "Value": {}
+    },
+    {
+      "Name": "array-token",
+      "Value": []
+    }
+  ]
+}

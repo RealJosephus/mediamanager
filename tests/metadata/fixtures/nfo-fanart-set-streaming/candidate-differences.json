@@ -1,0 +1,26 @@
+[
+  {
+    "name": "fanart finds nested descendant thumb",
+    "paths": ["/remoteImages/0"]
+  },
+  {
+    "name": "fanart thumb commits before later subtree mismatch",
+    "paths": ["/remoteImages/0"]
+  },
+  {
+    "name": "fanart thumb nested content does not commit",
+    "paths": ["/remoteImages/0"]
+  },
+  {
+    "name": "set nested name content leaves initial name but commits attribute",
+    "paths": ["/item/collectionName"]
+  },
+  {
+    "name": "set cdata is skipped before following name",
+    "paths": ["/item/collectionName"]
+  },
+  {
+    "name": "set later name overwrites first name",
+    "paths": ["/item/collectionName"]
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-07T03:41:57.343Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/directory-video-resolution/input.json",
+      "sha256": "14e4d8c4d7113870cdbab4a07abae4fb969fd50f499915846624216255167249"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-resolution/Program.cs",
+      "sha256": "9b8ea4a07084dc15b65eea076f94d0d410d564bed2b736b84df86437481c1d16"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-resolution/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/directory-video-resolution/native.json",
+      "sha256": "86228368d5956126e2fc7e12b15f1d9984100d52864847b4601835c882004692"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen LibraryManager.ResolvePaths/ResolvePath, MovieResolver/VideoListResolver/ResolverHelper and FolderResolver with Core/Dot ignore rules, real nested filesystem and distinct fixed directory/file dates. Actual ManagedFileSystem omits directory timestamps; Folder DateCreated is asserted inside the native resolve UTC window and projected as $UTC_RESOLVE, while DateModified remains minimum and file dates remain exact unless UseFileCreationTimeForDateAdded is false, in which case creation time is also asserted inside the UTC resolve window. Includes native bracketed provider aliases/precedence, IMDb matching and inherited parent locks. Records complete resolved-item and multi/single/fallback dispatch, unchanged EF row/Data/link/file/cache/event projections. Only MovieResolver and FolderResolver are registered. Items are not saved and children are not recursively scanned; providers, collection membership, media-source/external dispatch and known ancestor namespace are controls. No full resolver list, ValidateChildren/MetadataService, disc/network/concurrent-cache/migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261005/results/directory-video-resolution-initial-values-oracle-20261007/record.json",
+    "sourceFilesSha256": "4f026d6bdf0ba37b7c48884c61fae656c451047e7e4f8b32cfcd721d19033194"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All 34 original scenes are compared in SQLite and PostgreSQL, retaining every resolved-item, dispatch, unchanged row/full Data/link/file/cache/event field. The first 24 earlier native results are unchanged. Three-file direct comparison passes 175 tests, resolver guards pass 162, and 18 real SQL scan tests verify the declared initial fields and provider relations after a six-case red/fix; runtime passes eight. Actual CreateItems/ValidateChildren full save/owned/event projections remain separate unimplemented evidence; no full scan or release acceptance."
+}

@@ -1,0 +1,5592 @@
+[
+  {
+    "name": "absent cache is computed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "null cache is computed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": null
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "matching cache remains",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "uppercase Guid cache remains",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8D000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "empty cache is recomputed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "stale cache is replaced",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "cached duplicates are removed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "cached reverse order is corrected",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA",
+          "movieB"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "link order controls affiliation order",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieB",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "duplicate links keep distinct affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA",
+          "movieA",
+          "movieB",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "locked box still recomputes",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "IsLocked": true,
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "metadata field locks do not gate affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LockedFields": [
+          "Name",
+          "Genres",
+          "OfficialRating"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "nested box is flattened",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "nested cache never supplies affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ],
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "cycle returns each affiliation once",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "box",
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "self link terminates",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "box",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "ordinary linked folder is not flattened",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "physicalB"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "unknown affiliation becomes empty",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "orphan"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "empty null cache becomes empty array",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "empty matching cache has no import",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "physical folder IDs do not supply membership",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\Other"
+        ],
+        "PhysicalFolderIds": [
+          "8d000000-0000-0000-0000-000000000003"
+        ]
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "membership retains ordinal path semantics",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "z:\\CHILDRENmetadata\\a",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "slash normalization is not performed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:/ChildrenMetadata/A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "root order controls overlapping affiliations",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "before"
+  },
+  {
+    "name": "null physical locations fail before save",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": null,
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "expectException": "ArgumentNullException",
+    "mode": "before"
+  },
+  {
+    "name": "missing member lookup is dropped",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "missingLinks": [
+          "8d000000-0000-0000-0000-000000000099"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "pureOnly": true,
+    "mode": "before"
+  },
+  {
+    "name": "refresh absent cache is computed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh null cache is computed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": null
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh matching cache remains",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh uppercase Guid cache remains",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8D000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh empty cache is recomputed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh stale cache is replaced",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh cached duplicates are removed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005",
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh cached reverse order is corrected",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA",
+          "movieB"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000006",
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh link order controls affiliation order",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieB",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh duplicate links keep distinct affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA",
+          "movieA",
+          "movieB",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh locked box still recomputes",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "IsLocked": true,
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh metadata field locks do not gate affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LockedFields": [
+          "Name",
+          "Genres",
+          "OfficialRating"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh nested box is flattened",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh nested cache never supplies affiliation",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ],
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh cycle returns each affiliation once",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "nested",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "box",
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh self link terminates",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "box",
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh ordinary linked folder is not flattened",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "physicalB"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh unknown affiliation becomes empty",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "orphan"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": [
+          "8d000000-0000-0000-0000-000000000005"
+        ]
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh empty null cache becomes empty array",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh empty matching cache has no import",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z",
+        "LibraryFolderIds": []
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh physical folder IDs do not supply membership",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\Other"
+        ],
+        "PhysicalFolderIds": [
+          "8d000000-0000-0000-0000-000000000003"
+        ]
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh membership retains ordinal path semantics",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "z:\\CHILDRENmetadata\\a",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh slash normalization is not performed",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:/ChildrenMetadata/A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh root order controls overlapping affiliations",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\A"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "mode": "refresh"
+  },
+  {
+    "name": "refresh null physical locations fail before save",
+    "target": "box",
+    "items": [
+      {
+        "key": "aggregate",
+        "Id": "8d000000-0000-0000-0000-000000000001",
+        "type": "AggregateFolder",
+        "Name": "Aggregate",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "userRoot",
+        "Id": "8d000000-0000-0000-0000-000000000002",
+        "type": "UserRootFolder",
+        "Name": "User root",
+        "Path": null
+      },
+      {
+        "key": "physicalA",
+        "Id": "8d000000-0000-0000-0000-000000000003",
+        "type": "Folder",
+        "Name": "Physical A",
+        "Path": "Z:\\ChildrenMetadata\\A",
+        "parent": "aggregate"
+      },
+      {
+        "key": "physicalB",
+        "Id": "8d000000-0000-0000-0000-000000000004",
+        "type": "Folder",
+        "Name": "Physical B",
+        "Path": "Z:\\ChildrenMetadata\\B",
+        "parent": "aggregate"
+      },
+      {
+        "key": "libraryA",
+        "Id": "8d000000-0000-0000-0000-000000000005",
+        "type": "CollectionFolder",
+        "Name": "Library A",
+        "Path": "Z:\\ChildrenMetadata\\LibraryA",
+        "parent": "userRoot",
+        "SortName": "000",
+        "PhysicalLocationsList": null,
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "libraryB",
+        "Id": "8d000000-0000-0000-0000-000000000006",
+        "type": "CollectionFolder",
+        "Name": "Library B",
+        "Path": "Z:\\ChildrenMetadata\\LibraryB",
+        "parent": "userRoot",
+        "SortName": "001",
+        "PhysicalLocationsList": [
+          "Z:\\ChildrenMetadata\\B"
+        ],
+        "PhysicalFolderIds": []
+      },
+      {
+        "key": "movieA",
+        "Id": "8d000000-0000-0000-0000-000000000007",
+        "type": "Movie",
+        "Name": "Movie A",
+        "Path": "Z:\\ChildrenMetadata\\A\\Movie.mkv",
+        "parent": "physicalA"
+      },
+      {
+        "key": "movieB",
+        "Id": "8d000000-0000-0000-0000-000000000008",
+        "type": "Movie",
+        "Name": "Movie B",
+        "Path": "Z:\\ChildrenMetadata\\B\\Movie.mkv",
+        "parent": "physicalB"
+      },
+      {
+        "key": "box",
+        "Id": "8d000000-0000-0000-0000-000000000009",
+        "type": "BoxSet",
+        "Name": "Collection",
+        "Path": null,
+        "PresentationUniqueKey": "8d000000000000000000000000000009",
+        "links": [
+          "movieA"
+        ],
+        "DateLastRefreshed": "2025-01-01T00:00:00Z"
+      },
+      {
+        "key": "nested",
+        "Id": "8d000000-0000-0000-0000-000000000010",
+        "type": "BoxSet",
+        "Name": "Nested",
+        "Path": null,
+        "links": [
+          "movieB"
+        ]
+      },
+      {
+        "key": "orphan",
+        "Id": "8d000000-0000-0000-0000-000000000011",
+        "type": "Movie",
+        "Name": "Orphan",
+        "Path": "Z:\\Unrelated\\Movie.mkv"
+      }
+    ],
+    "expectException": "ArgumentNullException",
+    "mode": "refresh"
+  }
+]

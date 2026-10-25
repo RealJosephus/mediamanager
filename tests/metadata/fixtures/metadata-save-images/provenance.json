@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T20:11:23.538Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/metadata/fixtures/metadata-save-images/input.json",
+      "sha256": "092d5abcd260916afc15250c59b0adc9cf72775e663d31e5b657af3f0524c8e3"
+    },
+    {
+      "path": "tests/metadata/fixtures/metadata-save-images/Program.cs",
+      "sha256": "1eab38a636ee20116db8d0950536f6886a91dd8795f783b0b631dce5d7b5bd83"
+    },
+    {
+      "path": "tests/metadata/fixtures/metadata-save-images/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/metadata/fixtures/metadata-save-images/native.json",
+      "sha256": "87f807d5739aefecff37ede167a213c5f353c4fb8b1b6790274d8fdfd16408b1"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "tests/images/fixtures/processor/original-http.png",
+      "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "ebe2e6e8ed273384734516b5e444d5f904db22d230fe9f2857f7c710a08060ea",
+    "originalNativeSha256": "fca7588a3bbbd770e2f9f515a8f291d1091c80cfc29b22e759816b9740216693",
+    "portableNativeLineEndings": "LF"
+  },
+  "controls": "Initial typed entities, empty UserRoot children/collection folders, library options, identity virtual paths, metadata saver, HTTP/SaveImage file destination, dimensions/BlurHash, request cancellation and SQL triggers.",
+  "scope": "Actual frozen LibraryManager.UpdateItemAsync/RunMetadataSavers/UpdateImagesAsync/ConvertImageToLocal and ItemPersistenceService over EF SQLite. Tests unconditional images, independent conversion commits/events, local freshness/live-TV gates, cancellation and real SQL failures. Metadata saver, SaveImage HTTP/file destination and image dimensions/BlurHash are controls. Real files and exact image projections are compared; no complete providers, real network/NFO, full scalar mapper, version creation or release acceptance."
+}

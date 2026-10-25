@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "fixture": "mime-types-current",
+  "scope": "Two independent same-run designated native MIME map and method captures; complete original 3706 filename/default/path probes and 4826 MIME/semicolon probes, complete JavaScript resource and generic image path/upload validation consumers. Full original NuGet archive/template/manifest and unchanged production license/notice retained. This binds current runtime sources and does not claim recreation of historical generated files, DLLs, build receipts, HTTP transactions or image decoding.",
+  "sourcePaths": [
+    "MediaBrowser.Model/Net/MimeTypes.cs",
+    "src/Jellyfin.Extensions/StringExtensions.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 611731,
+      "sha256": "2ad106f65123fbfa10b0249a3785d5db5c2a4ae7de223be79e540953738546e0"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 3557,
+      "sha256": "fee9a0e533e105bc4f58b65e5848d540b0fb505b0e99774d68e2f8a4f396e84e"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "Oracle.csproj",
+      "bytes": 410,
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "packageArchive",
+      "filename": "source-offer/mimetypes.2.5.2.nupkg",
+      "bytes": 89121,
+      "sha256": "4b76984c15dcffb422ef908ef7eda206b239b5116474ce50dd5079aba32d850a"
+    },
+    {
+      "role": "packageManifest",
+      "filename": "source-offer/mimetypes.nuspec",
+      "bytes": 1161,
+      "sha256": "9518e4b5a93fb8d46697ec80a2c8d7740021784cd727fcf680ae825beddb4453"
+    },
+    {
+      "role": "packageSourceTemplate",
+      "filename": "source-offer/MimeTypes.Nullable.cs.pp",
+      "bytes": 68622,
+      "sha256": "bd20b96b8041e07264be0ab5077993280bf80101d22e6a3edab42cd05eca661b"
+    },
+    {
+      "role": "productionMappings",
+      "filename": "../../../../src/http/resources/mime-types.json",
+      "bytes": 85328,
+      "sha256": "ac147f5b9b3e79c7df8be9f48041889d9564dceeb1917fdba5edc2eeba31d1d3"
+    },
+    {
+      "role": "license",
+      "filename": "../../../../src/http/resources/mime-types-license.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "role": "notice",
+      "filename": "../../../../src/http/resources/mime-types-notice.txt",
+      "bytes": 555,
+      "sha256": "077087f3c63a74534ea675bbee133e7e41eb34bfdb946c3d39f5c29f61342322"
+    }
+  ]
+}

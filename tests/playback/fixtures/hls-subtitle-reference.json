@@ -1,0 +1,93 @@
+{
+  "playbackInfo": {
+    "status": 200,
+    "source": {
+      "SupportsTranscoding": true,
+      "DefaultSubtitleStreamIndex": 3,
+      "TranscodingUrl": "/videos/22222222-2222-2222-2222-222222222222/master.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=aac&AudioStreamIndex=1&SubtitleStreamIndex=3&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=True&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=Hls&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported",
+      "subtitles": [
+        {
+          "Index": 3,
+          "Codec": "subrip",
+          "DisplayTitle": "English - Default - SUBRIP - External",
+          "Language": "eng",
+          "IsForced": false,
+          "IsTextSubtitleStream": true,
+          "DeliveryMethod": "Hls"
+        },
+        {
+          "Index": 4,
+          "Codec": "webvtt",
+          "DisplayTitle": "Chinese - Forced - WEBVTT - External",
+          "Language": "zho",
+          "IsForced": true,
+          "IsTextSubtitleStream": true,
+          "DeliveryMethod": "Hls"
+        }
+      ]
+    }
+  },
+  "master": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "1337",
+    "text": "#EXTM3U\r\n#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",NAME=\"English - Default - SUBRIP - External\",DEFAULT=YES,FORCED=NO,AUTOSELECT=YES,URI=\"22222222222222222222222222222222/Subtitles/3/subtitles.m3u8?SegmentLength=30&ApiKey=<token>\",LANGUAGE=\"eng\"\r\n#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",NAME=\"Chinese - Forced - WEBVTT - External\",DEFAULT=NO,FORCED=YES,AUTOSELECT=YES,URI=\"22222222222222222222222222222222/Subtitles/4/subtitles.m3u8?SegmentLength=30&ApiKey=<token>\",LANGUAGE=\"zho\"\r\n#EXT-X-STREAM-INF:BANDWIDTH=1400232,AVERAGE-BANDWIDTH=1400232,VIDEO-RANGE=SDR,CODECS=\"avc1.4D400D,mp4a.40.2\",RESOLUTION=320x240,FRAME-RATE=29.97,SUBTITLES=\"subs\"\r\nmain.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=copy&AudioStreamIndex=1&SubtitleStreamIndex=3&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=True&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=Hls&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported\r\n",
+    "sha256": "c1d023aab4f9da815c1accf1e1862f0a95541030a1cdbf4e9258d747a4169305"
+  },
+  "externalEnabled": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "796",
+    "text": "#EXTM3U\r\n#EXT-X-STREAM-INF:BANDWIDTH=1400232,AVERAGE-BANDWIDTH=1400232,VIDEO-RANGE=SDR,CODECS=\"avc1.4D400D,mp4a.40.2\",RESOLUTION=320x240,FRAME-RATE=29.97\r\nmain.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=copy&AudioStreamIndex=1&SubtitleStreamIndex=3&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=true&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=External&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported\r\n",
+    "sha256": "5230da48678e135a81d74d1214c42853d56ace55d8994073cc7e665aebdbc6e3"
+  },
+  "externalDisabled": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "797",
+    "text": "#EXTM3U\r\n#EXT-X-STREAM-INF:BANDWIDTH=1400232,AVERAGE-BANDWIDTH=1400232,VIDEO-RANGE=SDR,CODECS=\"avc1.4D400D,mp4a.40.2\",RESOLUTION=320x240,FRAME-RATE=29.97\r\nmain.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=copy&AudioStreamIndex=1&SubtitleStreamIndex=3&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=false&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=External&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported\r\n",
+    "sha256": "b19299b1348bf7ef5823d6c30cb0f89252f901f442ff8fc996cb839fcf48d454"
+  },
+  "selectedForced": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "1337",
+    "text": "#EXTM3U\r\n#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",NAME=\"English - Default - SUBRIP - External\",DEFAULT=NO,FORCED=NO,AUTOSELECT=YES,URI=\"22222222222222222222222222222222/Subtitles/3/subtitles.m3u8?SegmentLength=30&ApiKey=<token>\",LANGUAGE=\"eng\"\r\n#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=\"subs\",NAME=\"Chinese - Forced - WEBVTT - External\",DEFAULT=YES,FORCED=YES,AUTOSELECT=YES,URI=\"22222222222222222222222222222222/Subtitles/4/subtitles.m3u8?SegmentLength=30&ApiKey=<token>\",LANGUAGE=\"zho\"\r\n#EXT-X-STREAM-INF:BANDWIDTH=1400232,AVERAGE-BANDWIDTH=1400232,VIDEO-RANGE=SDR,CODECS=\"avc1.4D400D,mp4a.40.2\",RESOLUTION=320x240,FRAME-RATE=29.97,SUBTITLES=\"subs\"\r\nmain.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=copy&AudioStreamIndex=1&SubtitleStreamIndex=4&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=True&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=Hls&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported\r\n",
+    "sha256": "7dbbd39e613e3f82885e807371a3561977501944296a3d78b51d93167bb3d90b"
+  },
+  "dropEnabled": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "792",
+    "text": "#EXTM3U\r\n#EXT-X-STREAM-INF:BANDWIDTH=1400232,AVERAGE-BANDWIDTH=1400232,VIDEO-RANGE=SDR,CODECS=\"avc1.4D400D,mp4a.40.2\",RESOLUTION=320x240,FRAME-RATE=29.97\r\nmain.m3u8?DeviceId=subtitle-manifest&MediaSourceId=22222222222222222222222222222222&VideoCodec=h264&AudioCodec=copy&AudioStreamIndex=1&SubtitleStreamIndex=3&VideoBitrate=9808000&AudioBitrate=192000&AudioSampleRate=44100&MaxFramerate=29.97003&SegmentContainer=ts&PlaySessionId=<session>&ApiKey=<token>&EnableSubtitlesInManifest=true&RequireAvc=false&EnableAudioVbrEncoding=true&Tag=b0bb246c056d549f0003c6e60385415e&SubtitleMethod=Drop&h264-level=13&h264-videobitdepth=8&h264-profile=main&h264-audiochannels=2&aac-profile=lc&TranscodeReasons=ContainerNotSupported,SubtitleCodecNotSupported\r\n",
+    "sha256": "6c2d2d2480920ea8cd4ce910dde73a509c350d5bfc562cd26e697757768908f1"
+  },
+  "subtitlePlaylist": {
+    "status": 200,
+    "contentType": "application/vnd.apple.mpegurl",
+    "contentLength": "435",
+    "text": "#EXTM3U\r\n#EXT-X-TARGETDURATION:30\r\n#EXT-X-VERSION:3\r\n#EXT-X-MEDIA-SEQUENCE:0\r\n#EXT-X-PLAYLIST-TYPE:VOD\r\n#EXTINF:30,\r\nstream.vtt?CopyTimestamps=true&AddVttTimeMap=true&StartPositionTicks=0&EndPositionTicks=300000000&ApiKey=<token>\r\n#EXTINF:0.021,\r\nstream.vtt?CopyTimestamps=true&AddVttTimeMap=true&StartPositionTicks=300000000&EndPositionTicks=300210000&ApiKey=<token>\r\n#EXT-X-ENDLIST\r\n",
+    "sha256": "a3dbbcd84c9f028fddfc96168d29c209b8fc4ff24a8d076e17ec2a97abcb6a53"
+  },
+  "subtitleSegment": {
+    "status": 200,
+    "contentType": "text/vtt",
+    "contentLength": "150",
+    "text": "WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.000 --> 00:00:03.000\r\nEnglish first\r\n\r\n00:00:30.000 --> 00:00:30.021\r\nEnglish tail",
+    "sha256": "8c61a95583decffc6ed0e591b5372d6ae9e6d747a0760bc1f82aadb708351655"
+  },
+  "missingLength": {
+    "status": 400,
+    "contentType": "application/json; charset=utf-8",
+    "contentLength": null,
+    "text": "{\"type\":\"https://tools.ietf.org/html/rfc9110#section-15.5.1\",\"title\":\"One or more validation errors occurred.\",\"status\":400,\"errors\":{\"segmentLength\":[\"The segmentLength field is required.\"]},\"traceId\":\"00-b69c0668b836ba4913c97428647b00a2-a984774a3f47c0fd-00\"}",
+    "sha256": "9b4bd617775d8dad4bb001a8f77c279ecda5f6230cacd34fac92e6f626fdc776"
+  },
+  "zeroLength": {
+    "status": 400,
+    "contentType": "text/plain",
+    "contentLength": null,
+    "text": "Error processing request.",
+    "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f"
+  }
+}

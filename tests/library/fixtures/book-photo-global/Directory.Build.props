@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <JellyfinDllDirectory Condition="'$(JellyfinDllDirectory)' == ''">$(MEDIAMANAGER_JELLYFIN_DLL_DIRECTORY)</JellyfinDllDirectory>
+    <JellyfinDllDirectory Condition="'$(JellyfinDllDirectory)' == '' And '$(MEDIAMANAGER_JELLYFIN_DLL)' != ''">$([System.IO.Path]::GetDirectoryName('$(MEDIAMANAGER_JELLYFIN_DLL)'))</JellyfinDllDirectory>
+  </PropertyGroup>
+  <Target Name="ValidateJellyfinOracleInput" BeforeTargets="ResolveReferences" Condition="'$(RequiresJellyfinAssemblies)' == 'true'">
+    <Error Condition="'$(JellyfinDllDirectory)' == '' Or !Exists('$(JellyfinDllDirectory)/jellyfin.dll')" Text="Set JellyfinDllDirectory, MEDIAMANAGER_JELLYFIN_DLL_DIRECTORY, or MEDIAMANAGER_JELLYFIN_DLL to the isolated baseline build." />
+  </Target>
+</Project>

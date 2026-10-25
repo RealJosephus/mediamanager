@@ -1,0 +1,307 @@
+{
+  "actualFrozenOwnedItemSupport": true,
+  "inputSha256": "bfed160b757881ba2682b4c63b0544cad59a2cec66627a2abc38f7292f830710",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "results": [
+    {
+      "name": "Movie-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Movie-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Movie-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Movie-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Video-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Video-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Video-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Video-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-parent-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Audio-parent-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Audio-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Audio-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Audio-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AudioBook-parent-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AudioBook-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AudioBook-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AudioBook-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Folder-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Folder-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Folder-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Folder-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Season-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Season-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Season-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Season-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "UserRootFolder-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "UserRootFolder-root-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "UserRootFolder-parent-remote",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "UserRootFolder-parent-virtual",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AggregateFolder-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AggregateFolder-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AggregateFolder-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "AggregateFolder-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "CollectionFolder-parent-file",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "CollectionFolder-root-file",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "CollectionFolder-parent-remote",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "CollectionFolder-parent-virtual",
+      "supportsOwnedItems": false,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": null
+    },
+    {
+      "name": "Movie-parent-file-mixed",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-stack-with-parent",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-stack-without-parent",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-local-array-without-parent",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 1
+    },
+    {
+      "name": "Episode-local-link",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 2
+    },
+    {
+      "name": "Episode-group-link",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 2
+    },
+    {
+      "name": "Episode-alternate-follows-primary-count",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 2
+    },
+    {
+      "name": "Episode-primary-cycle-count",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": true,
+      "mediaSourceCount": 2
+    },
+    {
+      "name": "Episode-remote-group-still-supports-owned",
+      "supportsOwnedItems": true,
+      "searchesContainingFolderForExtras": false,
+      "mediaSourceCount": 2
+    }
+  ],
+  "scope": "Actual frozen virtual BaseItem/Folder/Audio/Episode SupportsOwnedItems, SearchesContainingFolderForExtras and Video.MediaSourceCount getters. Typed native entities execute; path protocol and linked-version arrays are controls. No refresh dispatch, discovery, provider/probe/image execution or persistence."
+}

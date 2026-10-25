@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-11T17:15:10.946Z",
+  "files": [
+    {
+      "filename": "input.json",
+      "source": "D:/mediamanager-validation/20261012-r23-playlist-readers/input.json",
+      "sha256": "cd079c4da0d5eaf7c2bd0c6f823254fe12a914217588d3874c568ca4f5365638"
+    },
+    {
+      "filename": "native.json",
+      "source": "D:/mediamanager-validation/20261012-r23-playlist-readers/native/native.json",
+      "sha256": "f16ab97d895e9092b9660c68387412df42e41abc5a683833ea365b4b50df94bd"
+    }
+  ],
+  "references": [
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-playlist-readers/native/record.json",
+      "sha256": "d778acf9d1424a6ba03f8c4cba24363fa4261f6b13fda2fa5e70e6abdd1f86e6"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-playlist-readers/input.json",
+      "sha256": "cd079c4da0d5eaf7c2bd0c6f823254fe12a914217588d3874c568ca4f5365638"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-playlist-readers/native/native.json",
+      "sha256": "f16ab97d895e9092b9660c68387412df42e41abc5a683833ea365b4b50df94bd"
+    }
+  ],
+  "candidateVerified": false,
+  "phaseAcceptance": false,
+  "originalFixturesUnchanged": true
+}

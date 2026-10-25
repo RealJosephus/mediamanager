@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral Startup scenarios used with the current designated Native HTTP and XML readers.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 16789,
+      "sha256": "7561da59b7bf5a8545781a44f4481a57c185e15564bc3ae73ff67c64e1a4ab1a"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 17436,
+      "sha256": "09e66ceb688da0a0215e48ce39c1fd30a5d919753b70a96c9e538219f1241fde"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1396,
+      "sha256": "c5936b638687cacfe334bd87f44813ff790ff5cb0708e981702d45fbdcc94916"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

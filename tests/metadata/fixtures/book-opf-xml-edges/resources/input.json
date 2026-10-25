@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "name": "expanded-9-million",
+      "file": "expanded-9-million.opf"
+    },
+    {
+      "name": "expanded-10-million",
+      "file": "expanded-10-million.opf"
+    },
+    {
+      "name": "single-entity-10000000",
+      "file": "single-entity-10000000.opf"
+    },
+    {
+      "name": "single-entity-10000001",
+      "file": "single-entity-10000001.opf"
+    },
+    {
+      "name": "literal-10000001",
+      "file": "literal-10000001.opf"
+    },
+    {
+      "name": "entity-depth-300",
+      "file": "entity-depth-300.opf"
+    },
+    {
+      "name": "entity-depth-2048",
+      "file": "entity-depth-2048.opf"
+    },
+    {
+      "name": "entity-self-cycle",
+      "file": "entity-self-cycle.opf"
+    },
+    {
+      "name": "entity-mutual-cycle",
+      "file": "entity-mutual-cycle.opf"
+    }
+  ]
+}

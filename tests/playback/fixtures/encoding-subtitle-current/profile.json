@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current named manager and actual MediaEncoder/StreamBuilder subtitle negotiation. Actual SubtitleEncoder public stream results and separately identified RunSubtitleExtractionProcess helper, using existing original container bytes with subtitle copy only. No A/V generation or full server HTTP claim.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Library/PathManager.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationFactory.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationStore.cs",
+    "MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEditParser.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptions.cs",
+    "MediaBrowser.Model/Dlna/StreamBuilder.cs",
+    "MediaBrowser.Model/Entities/MediaStream.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+  ]
+}

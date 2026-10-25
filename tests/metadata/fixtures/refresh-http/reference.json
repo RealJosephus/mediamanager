@@ -1,0 +1,162 @@
+[
+  {
+    "name": "none",
+    "status": 204,
+    "body": ""
+  },
+  {
+    "name": "none-lowercase",
+    "status": 204,
+    "body": ""
+  },
+  {
+    "name": "invalid-mode",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "metadataRefreshMode": [
+          "The value 'banana' is not valid."
+        ]
+      },
+      "traceId": "00-936ff3d3cfae9fee5c0a2815c2a2f317-1fe3931143ea5e7e-00"
+    }
+  },
+  {
+    "name": "undefined-mode",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "metadataRefreshMode": [
+          "The value '17' is invalid."
+        ]
+      },
+      "traceId": "00-088b0dfe702f7aa5fe3bc7d88021f64b-de0dab4f99163f0e-00"
+    }
+  },
+  {
+    "name": "negative-mode",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "metadataRefreshMode": [
+          "The value '-1' is invalid."
+        ]
+      },
+      "traceId": "00-0fe3a62d1b579a6665a2641d8519ccd6-a431ebc6c1f55c87-00"
+    }
+  },
+  {
+    "name": "empty-mode",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "metadataRefreshMode": [
+          "The value '' is invalid."
+        ]
+      },
+      "traceId": "00-e5957ecd363320fc45ce52f9b6baae86-c26a903d34e1a4ef-00"
+    }
+  },
+  {
+    "name": "mode-combined",
+    "status": 204,
+    "body": ""
+  },
+  {
+    "name": "image-invalid",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "imageRefreshMode": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-d82d452959c497ff064036622356d8f7-b31ec91200cf49e4-00"
+    }
+  },
+  {
+    "name": "replace-invalid",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "replaceAllMetadata": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-25e4bd4b056bd6ff3e8069652004eebb-3274643d2679410a-00"
+    }
+  },
+  {
+    "name": "replace-empty",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "replaceAllMetadata": [
+          "The value '' is invalid."
+        ]
+      },
+      "traceId": "00-4e31c8d51d09d91d7184d42c3ae1da71-aaf1b8a0b1193353-00"
+    }
+  },
+  {
+    "name": "trickplay-invalid",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "regenerateTrickplay": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-fd54f13a540315694ebee7d53c22fc10-b9b3758228998f7c-00"
+    }
+  },
+  {
+    "name": "missing",
+    "status": 404,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Not Found",
+      "status": 404,
+      "traceId": "00-0987f79fc05f6cd41927de176274a78a-fdf067d832f5f2a2-00"
+    }
+  },
+  {
+    "name": "bad-id",
+    "status": 400,
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "itemId": [
+          "The value 'bad-id' is not valid."
+        ]
+      },
+      "traceId": "00-4d496a2d0b285c02b975333971e5e39f-2a8c0d2b75a2e827-00"
+    }
+  }
+]

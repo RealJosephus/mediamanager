@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-15T16:53:30.986Z",
+  "files": {
+    "input": {
+      "filename": "input.json",
+      "sha256": "a655b639bc67eaca9f5194c1d4b5f5c76bd2db26ce67e61a6d0a71946b69bb38",
+      "bytes": 3471
+    },
+    "native": {
+      "filename": "native.json",
+      "sha256": "e85534bb96aeee612139ab1d39802de3fc1a478d661225a798f7311075e76da0",
+      "bytes": 6761
+    },
+    "oracle": {
+      "filename": "Program.cs",
+      "sha256": "429917ebdd9e76a3ed3eeca5be56fea985755ebda206f29889894824195b2516",
+      "bytes": 8414
+    },
+    "project": {
+      "filename": "Oracle.csproj",
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee",
+      "bytes": 403
+    },
+    "readme": {
+      "filename": "README.md",
+      "sha256": "f635bf8ad4a918724f5ff9bfea04766e6499cda2b6949e89b2b9501662530e6e",
+      "bytes": 1283
+    },
+    "buildProperties": {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780
+    }
+  },
+  "sources": [
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5"
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Model/Entities/ProviderIdsExtensions.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 11372,
+      "sha256": "207b7be1a46d73caf5d84e4f95db19c3fb15de7346478b166edb12b4d54aeecf"
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Movies/MovieMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2441,
+      "sha256": "d6fd7dd740af719246cdfb56cd8a01fb08b845c08285f691f554a8154ed841b2"
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/TV/SeasonMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 4753,
+      "sha256": "2d1378254180ef77dc0e426e6dcfbfd5113046d09132bc06aa2c95730cb02541"
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/TV/EpisodeMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 6153,
+      "sha256": "ef0ab37e5ea4beb0959b4768a39af393cd87984a5bb0283f5d5498f3053acb8f"
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "record": {
+      "filename": "D:/mediamanager-validation/20261016-release-validation/results/metadata-search-native-4/record.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4378,
+      "sha256": "133c7811fb094257dd23a0d67f175bfb6b88e13c3a41772b1cd4a25430400079"
+    },
+    "sourceFilesSha256": "0d6c68a3f5369d8e65641379f317d7a77b530ad7ce5bbcc1a7866faeb5b4add7",
+    "jellyfinDll": {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\inputs\\native-oracle-runtime\\jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    }
+  }
+}

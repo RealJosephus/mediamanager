@@ -1,0 +1,188 @@
+{
+  "recordedAt": "2026-09-26T15:35:37.754Z",
+  "source": "D:/jellyfin",
+  "baseline": "D:/mediamanager/.test-input/baselines/jellyfin-current/source",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Dto/DtoService.cs",
+      "currentSha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55",
+      "frozenSha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55",
+      "exact": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "currentSha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "frozenSha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "currentSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "frozenSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Person.cs",
+      "currentSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "frozenSha256": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/PersonInfo.cs",
+      "currentSha256": "83f4895cbe7239130d512136b33c68977572293445d60d48e4e9f76607a23653",
+      "frozenSha256": "83f4895cbe7239130d512136b33c68977572293445d60d48e4e9f76607a23653",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/ItemImageInfo.cs",
+      "currentSha256": "be1aba32e54524fdafe744b04bb28782fc6075b1d089c93366bbf78f51318030",
+      "frozenSha256": "be1aba32e54524fdafe744b04bb28782fc6075b1d089c93366bbf78f51318030",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Genre.cs",
+      "currentSha256": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+      "frozenSha256": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Studio.cs",
+      "currentSha256": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+      "frozenSha256": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/Audio.cs",
+      "currentSha256": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+      "frozenSha256": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "currentSha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "frozenSha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs",
+      "currentSha256": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+      "frozenSha256": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "currentSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "frozenSha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/AudioBook.cs",
+      "currentSha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+      "frozenSha256": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/MusicVideo.cs",
+      "currentSha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd",
+      "frozenSha256": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Model/Dto/BaseItemDto.cs",
+      "currentSha256": "7924b8d26ee8c6efa3b54eed0e7a6832d028a1e4f03edeeaaee616a85cac2889",
+      "frozenSha256": "7924b8d26ee8c6efa3b54eed0e7a6832d028a1e4f03edeeaaee616a85cac2889",
+      "exact": true
+    },
+    {
+      "path": "MediaBrowser.Model/Dto/BaseItemPerson.cs",
+      "currentSha256": "0008c9e278569291f8d49509cd6ab7afe9ba5fee3a3f8708f10d1bd0cf19bc27",
+      "frozenSha256": "0008c9e278569291f8d49509cd6ab7afe9ba5fee3a3f8708f10d1bd0cf19bc27",
+      "exact": true
+    },
+    {
+      "path": "src/Jellyfin.Drawing/ImageProcessor.cs",
+      "currentSha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "frozenSha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "exact": true
+    },
+    {
+      "path": "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+      "currentSha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815",
+      "frozenSha256": "c0ab4cfad71ceade367d061f5a4ee04d001018155378713cd076df292bf3c815",
+      "exact": true
+    },
+    {
+      "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/User.cs",
+      "currentSha256": "66283a001640450d95c460a4b3225d932c62dfc02152a8aeaec9645735075104",
+      "frozenSha256": "66283a001640450d95c460a4b3225d932c62dfc02152a8aeaec9645735075104",
+      "exact": true
+    }
+  ],
+  "dlls": [
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Drawing.dll",
+      "sha256": "cd4201fae065a9396c1cf757af479f2f68020dbdb05bc5e1a89db733039b5fbb"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+    }
+  ],
+  "files": [
+    {
+      "path": "input.json",
+      "sha256": "51243e59de49e81eb3ecfe4c7dc6f6cd83bcee417ca1d29c262c6a3b96832897"
+    },
+    {
+      "path": "native.json",
+      "sha256": "613b65900bc2389f0f24b9631d46a6b2f060e680baaae23d1005bc9c4f351d5b"
+    },
+    {
+      "path": "create-input.mjs",
+      "sha256": "faafa7cd4cabf53e825d427d6d91cba130ac39752852eca190fe4c61221e26d1"
+    },
+    {
+      "path": "oracle/Program.cs",
+      "sha256": "fe25b23b8a06c239aa17964175a9b3eda8e50e60cfa44a15c55e35144b9a647d"
+    },
+    {
+      "path": "oracle/Oracle.csproj",
+      "sha256": "39c0304e25fe93708a4debef4e941628905e1dc51606b7c006cd07f202e5524f"
+    }
+  ],
+  "caseCount": 30,
+  "tools": {
+    "dotnet": "10.0.401",
+    "node": "v24.16.0"
+  },
+  "commands": [
+    "node .test-input/evidence/capability-completion-20260926/library/dto-details/create-input.mjs",
+    ".tools/dotnet/dotnet.exe run --project .test-input/evidence/capability-completion-20260926/library/dto-details/oracle/Oracle.csproj -- .test-input/evidence/capability-completion-20260926/library/dto-details/input.json .test-input/evidence/capability-completion-20260926/library/dto-details/native.json",
+    "node .test-input/evidence/capability-completion-20260926/library/dto-details/record-provenance.mjs"
+  ],
+  "method": "Actual frozen LibraryManager.GetPerson/GetPersonId/GetGenreId/GetMusicGenreId/GetStudioId, DtoService.AttachPeople/AttachBasicFields/AttachGenreItems/AttachStudios, Person.IsVisible, ImageProcessor.GetImageCacheTag and JsonDefaults serialization. People attachment precedes basic fields, matching the native production order.",
+  "isolation": "Synthetic in-memory BaseItem repository and interface stubs. No reference database, actual media, image bytes or user state are read or written. Native reference source is read only for hash comparison.",
+  "limits": [
+    "Private methods are called by reflection, not through full HTTP.",
+    "Repository rows and collection folders are stubbed.",
+    "Permission cases cover tags, missing people and by-name exemptions; textual parental rating/country recomputation is not covered.",
+    "Image tests exercise stored descriptors, blurhash aggregation and native cache tags; no image decoding or downloading.",
+    "Other DTO fields and native database persistence are outside these samples."
+  ]
+}

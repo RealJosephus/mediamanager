@@ -1,0 +1,1376 @@
+{
+  "actualFrozenInternalFolderResolve": true,
+  "results": [
+    {
+      "name": "AggregateFolder-empty-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "AggregateFolder-empty-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "AggregateFolder-plain-tree-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\one\\deeper\\deepest",
+            "Name": "deepest",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\one\\inside.txt",
+            "Name": "inside.txt",
+            "IsDirectory": false,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\root.txt",
+            "Name": "root.txt",
+            "IsDirectory": false,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-plain-tree-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\one\\deeper\\deepest",
+            "Name": "deepest",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\one\\inside.txt",
+            "Name": "inside.txt",
+            "IsDirectory": false,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\root.txt",
+            "Name": "root.txt",
+            "IsDirectory": false,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-local-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-local-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-virtual-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE\\data/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\data\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-virtual-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE\\data/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE\\data/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\data\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-empty-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "AggregateFolder-link-empty-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "AggregateFolder-link-missing-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/absent"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\absent",
+            "Name": "absent",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-missing-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/absent"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/absent"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\absent",
+            "Name": "absent",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-nested-targets-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media/nested",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-nested-targets-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media/nested",
+            "$STATE/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media/nested",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-duplicate-target-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-duplicate-target-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media",
+            "$STATE/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-case-target-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media",
+          "$STATE/MEDIA"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\MEDIA",
+            "Name": "MEDIA",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-case-target-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media",
+            "$STATE/MEDIA"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media",
+          "$STATE/MEDIA"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\MEDIA",
+            "Name": "MEDIA",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-depth-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\one\\deeper\\deepest",
+            "Name": "deepest",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-depth-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\one\\deeper\\deepest",
+            "Name": "deepest",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-newline-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media\n"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\n",
+            "Name": "media\n",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-newline-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "$STATE/media\n"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "$STATE/media\n"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\n",
+            "Name": "media\n",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-url-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "https://invalid.example/media"
+        ],
+        "files": [
+          {
+            "Path": "D:\\mediamanager\\https:\\invalid.example\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "AggregateFolder-link-url-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root",
+          "refreshFlag": true,
+          "cacheCleared": true,
+          "locations": [
+            "$STATE\\root",
+            "https://invalid.example/media"
+          ],
+          "physicalIds": null
+        },
+        "locations": [
+          "$STATE\\root",
+          "https://invalid.example/media"
+        ],
+        "files": [
+          {
+            "Path": "D:\\mediamanager\\https:\\invalid.example\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "CollectionFolder-empty-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "CollectionFolder-plain-tree-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\default\\library\\one",
+            "Name": "one",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\default\\library\\root.txt",
+            "Name": "root.txt",
+            "IsDirectory": false,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\default\\library\\two",
+            "Name": "two",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-plain-tree-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\default\\library\\one",
+            "Name": "one",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\default\\library\\root.txt",
+            "Name": "root.txt",
+            "IsDirectory": false,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\root\\default\\library\\two",
+            "Name": "two",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-local-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-local-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/media"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-virtual-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE\\data/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\data\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-virtual-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE\\data/media"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE\\data/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\data\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-empty-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "CollectionFolder-link-empty-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": []
+      }
+    },
+    {
+      "name": "CollectionFolder-link-missing-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/absent"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\absent",
+            "Name": "absent",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-missing-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/absent"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/absent"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\absent",
+            "Name": "absent",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-nested-targets-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media/nested",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\\nested",
+            "Name": "nested",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-nested-targets-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/media/nested",
+            "$STATE/media"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media/nested",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\\nested",
+            "Name": "nested",
+            "IsDirectory": true,
+            "Exists": true
+          },
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-duplicate-target-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-duplicate-target-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/media",
+            "$STATE/media"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media",
+          "$STATE/media"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-case-target-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media",
+          "$STATE/MEDIA"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\MEDIA",
+            "Name": "MEDIA",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-case-target-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/media",
+            "$STATE/MEDIA"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media",
+          "$STATE/MEDIA"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\MEDIA",
+            "Name": "MEDIA",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-depth-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\default\\library\\one",
+            "Name": "one",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-depth-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\root\\default\\library\\one",
+            "Name": "one",
+            "IsDirectory": true,
+            "Exists": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-newline-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media\n"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\n",
+            "Name": "media\n",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-newline-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "$STATE/media\n"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "$STATE/media\n"
+        ],
+        "files": [
+          {
+            "Path": "$STATE\\media\n",
+            "Name": "media\n",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-url-false",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "https://invalid.example/media"
+        ],
+        "files": [
+          {
+            "Path": "D:\\mediamanager\\https:\\invalid.example\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CollectionFolder-link-url-true",
+      "exception": null,
+      "result": {
+        "state": {
+          "Name": "Named",
+          "Path": "$STATE/root/default/library",
+          "refreshFlag": true,
+          "cacheCleared": null,
+          "locations": [
+            "$STATE\\root\\default\\library",
+            "https://invalid.example/media"
+          ],
+          "physicalIds": []
+        },
+        "locations": [
+          "$STATE\\root\\default\\library",
+          "https://invalid.example/media"
+        ],
+        "files": [
+          {
+            "Path": "D:\\mediamanager\\https:\\invalid.example\\media",
+            "Name": "media",
+            "IsDirectory": true,
+            "Exists": false
+          }
+        ]
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "0255068ec9ff524c916c99aebd4553290141bb7b87e17da3a80c007b3b6fb129"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "jellyfin",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\internal-folder-resolve-oracle-20261005-1\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual AggregateFolder/CollectionFolder CreateResolveArgs, FileData, MbLinkShortcutHandler, CoreAppHost virtual expansion and NormalizeRootPathList on isolated instance directories. Configuration, parent/collection lookup and empty physical-root children remain controlled. Captures resolve locations/children, refresh flag and location assignment. Does not resolve media entities, ValidateChildren, network snapshots or complete library acceptance."
+,"schemaVersion":1,"candidateVerified":false,"inputSha256":"bf90042886739a3523329972236720a126c2dc14433a7b4bd7747c74810ce9d4","sourceFilesSha256":"2ef9603cd9bcc4773abef6933d8616689b6985ab63052508d19b831785ac4097"}

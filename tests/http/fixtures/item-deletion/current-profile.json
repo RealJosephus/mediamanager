@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Tracked neutral inputs used to record the current designated Native Item DELETE HTTP and permission observation in the same validation run.",
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 9576,
+      "sha256": "af810f6226223cfdb3d01138c47c225684cba212818aecae0a3172d71106eac5"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 22659,
+      "sha256": "6e427257f60d21c9ea54e7b136358a9449e2e9dea96320ce39f7673015e82235"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "Oracle.csproj",
+      "bytes": 526,
+      "sha256": "e21b6718889dadbf4dbb13a4a07c09a5b2fc53b18bb5a8419ad1afac5ff957f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

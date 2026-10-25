@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-10-11T17:15:10.940Z",
+  "files": [
+    {
+      "filename": "input.json",
+      "source": "D:/mediamanager-validation/20261012-r23-readers-v4/input.json",
+      "sha256": "ab25bd97940eb90d423a9642e091f87898e6022527cf774833b2374c012c798f"
+    },
+    {
+      "filename": "native.json",
+      "source": "D:/mediamanager-validation/20261012-r23-readers-v4/native/native.json",
+      "sha256": "42d795b7b978b5ff41f25b161ba1e012deb6c7f12e9c30d0aae1958a4968486e"
+    },
+    {
+      "filename": "binding.json",
+      "source": "D:/mediamanager-validation/20261012-r23-readers-v4/binding.json",
+      "sha256": "88817c59218393013fdf79de06f29f291a7b73ab9006bbaa1760273dd498c554"
+    }
+  ],
+  "references": [
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-readers-v4/native/record.json",
+      "sha256": "0c9e5f0aaa6e6a33891ef1005f105cb1e36d05021d98851dfcf9b3ef4a526587"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-readers-v4/input.json",
+      "sha256": "ab25bd97940eb90d423a9642e091f87898e6022527cf774833b2374c012c798f"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-readers-v4/native/native.json",
+      "sha256": "42d795b7b978b5ff41f25b161ba1e012deb6c7f12e9c30d0aae1958a4968486e"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-readers-v4/binding.json",
+      "sha256": "88817c59218393013fdf79de06f29f291a7b73ab9006bbaa1760273dd498c554"
+    }
+  ],
+  "candidateVerified": false,
+  "phaseAcceptance": false,
+  "originalFixturesUnchanged": true
+}

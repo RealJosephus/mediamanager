@@ -1,0 +1,1058 @@
+[
+  {
+    "name": "empty rating and empty scores remain unchanged",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "empty rating retains a stale subscore when the main score is null",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "empty rating clears both scores when the main score exists",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "unknown rating clears an existing main score",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "Unknown Rating",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 14,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "unknown rating preserves a lone subscore",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "Unknown Rating",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "unrated custom rating blocks a known official rating",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": "NR",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 14,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "whitespace custom rating blocks official fallback",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": " ",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "US G initializes both zero scores",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "G",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "US PG initializes both scores",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "unchanged PG scores produce None",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "changed PG subscore alone produces Import",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "missing PG main score alone produces Import",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "missing PG subscore alone produces Import",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "US TV-MA includes its nonzero subscore",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "TV-MA",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "numeric rating has a null subscore",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "12+",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "numeric rating clears only the stale subscore",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "12",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 12,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "custom rating takes priority over the item official rating",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "G",
+        "CustomRating": "R",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "locks do not prevent inherited rating updates",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": true,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "LockedFields": [
+          "OfficialRating"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "preferred country precedes the global country",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": "AU",
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "unknown country falls back to the US rating system",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": "Unknown Country",
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "null global country fails before mutating scores",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 14,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "globalCountry": null,
+    "expectException": "ArgumentNullException"
+  },
+  {
+    "name": "unrated value returns before null country lookup",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": "NR",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "globalCountry": null
+  },
+  {
+    "name": "a later provider rating replaces previously inherited scores",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "changes": [
+      {
+        "key": "target",
+        "fields": {
+          "OfficialRating": "R"
+        }
+      }
+    ]
+  },
+  {
+    "name": "removing a rating on the second call clears both scores",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "changes": [
+      {
+        "key": "target",
+        "fields": {
+          "OfficialRating": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "a new rating replaces a lone stale subscore",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "changes": [
+      {
+        "key": "target",
+        "fields": {
+          "OfficialRating": "PG"
+        }
+      }
+    ]
+  },
+  {
+    "name": "unknown custom rating prevents an official score until cleared",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "TV-MA",
+        "CustomRating": "unknown",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ],
+    "changes": [
+      {
+        "key": "target",
+        "fields": {
+          "CustomRating": ""
+        }
+      }
+    ]
+  },
+  {
+    "name": "inherited custom rating precedes the item official rating",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "parent",
+        "OfficialRating": null,
+        "CustomRating": "R",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "parent",
+        "type": "Folder"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "target",
+        "OfficialRating": "G",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "target",
+        "type": "Movie",
+        "parent": "parent"
+      }
+    ]
+  },
+  {
+    "name": "physical parent supplies an absent movie official rating",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "parent",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "parent",
+        "type": "Folder"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "target",
+        "type": "Movie",
+        "parent": "parent"
+      }
+    ]
+  },
+  {
+    "name": "episode rating uses its display season rather than its physical parent",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "physical",
+        "OfficialRating": "G",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "physical",
+        "type": "Season"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "display",
+        "OfficialRating": "TV-MA",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "display",
+        "type": "Season"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000003",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000003",
+        "key": "target",
+        "type": "Episode",
+        "parent": "physical",
+        "SeasonId": "8a000000-0000-0000-0000-000000000002"
+      }
+    ]
+  },
+  {
+    "name": "season rating uses its display series rather than its physical parent",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "physical",
+        "OfficialRating": "G",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "physical",
+        "type": "Series"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "display",
+        "OfficialRating": null,
+        "CustomRating": "R",
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "display",
+        "type": "Series"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000003",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000003",
+        "key": "target",
+        "type": "Season",
+        "parent": "physical",
+        "SeriesId": "8a000000-0000-0000-0000-000000000002"
+      }
+    ]
+  },
+  {
+    "name": "country inheritance uses the physical parent of an episode",
+    "mode": "change",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "physical",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": "AU",
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "physical",
+        "type": "Season"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "display",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": "US",
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "display",
+        "type": "Season"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000003",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000003",
+        "key": "target",
+        "type": "Episode",
+        "parent": "physical",
+        "SeasonId": "8a000000-0000-0000-0000-000000000002"
+      }
+    ]
+  },
+  {
+    "name": "editing no rating retains a lone stale subscore",
+    "mode": "edit",
+    "target": "target",
+    "request": {
+      "Name": "Edited",
+      "LockData": false
+    },
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "editing PG changes the inherited subscore before repository update",
+    "mode": "edit",
+    "target": "target",
+    "request": {
+      "Name": "Edited",
+      "OfficialRating": "PG",
+      "LockData": false
+    },
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie"
+      }
+    ]
+  },
+  {
+    "name": "album propagation retains a track lone subscore after rating removal",
+    "mode": "edit",
+    "target": "target",
+    "request": {
+      "Name": "Edited",
+      "LockData": false
+    },
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "MusicAlbum"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "track",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": 9,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "track",
+        "type": "Audio",
+        "parent": "target"
+      }
+    ]
+  },
+  {
+    "name": "series child ratings observe edited parent fields before its later country assignment",
+    "mode": "edit",
+    "target": "target",
+    "request": {
+      "Name": "Edited",
+      "OfficialRating": "PG",
+      "PreferredMetadataCountryCode": "AU",
+      "LockData": true
+    },
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "R",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": "US",
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Series"
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000002",
+        "Name": "season",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000002",
+        "key": "season",
+        "type": "Season",
+        "parent": "target",
+        "SeriesId": "8a000000-0000-0000-0000-000000000001",
+        "LockedFields": [
+          "OfficialRating"
+        ]
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000003",
+        "Name": "episode",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000003",
+        "key": "episode",
+        "type": "Episode",
+        "parent": "season",
+        "SeriesId": "8a000000-0000-0000-0000-000000000001",
+        "SeasonId": "8a000000-0000-0000-0000-000000000002",
+        "LockedFields": [
+          "OfficialRating"
+        ]
+      },
+      {
+        "Id": "8a000000-0000-0000-0000-000000000004",
+        "Name": "unrelated",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 17,
+        "InheritedParentalRatingSubValue": 1,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000004",
+        "key": "unrelated",
+        "type": "Folder",
+        "parent": "target"
+      }
+    ]
+  },
+  {
+    "name": "successful Default runs the second rating call and saves an unreported provider rating",
+    "metadataMode": "Default",
+    "mode": "refresh",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "ProductionYear": 2000,
+        "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      }
+    ]
+  },
+  {
+    "name": "ValidationOnly force save retains scores from the first rating call",
+    "metadataMode": "ValidationOnly",
+    "force": true,
+    "mode": "refresh",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "ProductionYear": 2000,
+        "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      }
+    ]
+  },
+  {
+    "name": "provider failure suppresses the second rating call even with force save",
+    "metadataMode": "FullRefresh",
+    "force": true,
+    "fail": true,
+    "mode": "refresh",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "ProductionYear": 2000,
+        "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      }
+    ]
+  },
+  {
+    "name": "local image failure suppresses the second rating call",
+    "metadataMode": "FullRefresh",
+    "imageFail": true,
+    "providerUpdate": 2,
+    "mode": "refresh",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": 10,
+        "InheritedParentalRatingSubValue": 0,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "ProductionYear": 2000,
+        "DateLastRefreshed": "2025-01-01T00:00:00.0000000Z"
+      }
+    ]
+  },
+  {
+    "name": "first save includes inherited ratings before provider cancellation",
+    "mode": "refresh",
+    "metadataMode": "Default",
+    "cancel": true,
+    "expectException": "OperationCanceledException",
+    "target": "target",
+    "items": [
+      {
+        "Id": "8a000000-0000-0000-0000-000000000001",
+        "Name": "target",
+        "OfficialRating": "PG",
+        "CustomRating": null,
+        "PreferredMetadataCountryCode": null,
+        "InheritedParentalRatingValue": null,
+        "InheritedParentalRatingSubValue": null,
+        "IsLocked": false,
+        "PresentationUniqueKey": "8a000000000000000000000000000001",
+        "key": "target",
+        "type": "Movie",
+        "ProductionYear": 2000,
+        "DateLastRefreshed": "0001-01-01T00:00:00.0000000Z"
+      }
+    ]
+  }
+]

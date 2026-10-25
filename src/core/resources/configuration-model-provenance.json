@@ -1,0 +1,22 @@
+{
+  "input": "tests/core/fixtures/configuration/input.json",
+  "native": "tests/core/fixtures/configuration/native.json",
+  "proof": "tests/core/fixtures/configuration/provenance.json",
+  "resources": [
+    {
+      "filename": "src/core/resources/configuration-model.json",
+      "bytes": 75664,
+      "sha256": "16f3dfcf0e3d0d21430ce64ecb78343ac87d63b5fbfc60258edc8989b6f63e39"
+    },
+    {
+      "filename": "plugins/nfo/configuration-model.json",
+      "bytes": 1959,
+      "sha256": "927869aaafe0f5d88e4efb9458c9f8465805f91e7f05838d10e3a5aa274103ee"
+    },
+    {
+      "filename": "plugins/tmdb/configuration-model.json",
+      "bytes": 7352,
+      "sha256": "f7bae8b62ce56b32c4e08a4d662990415e82fa34a44d759123d87e185f135724"
+    }
+  ]
+}

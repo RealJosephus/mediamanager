@@ -1,0 +1,220 @@
+{
+  "actualFrozenVideoVersionDiscovery": true,
+  "inputSha256": "85aea7177fd342d42b0d88ad4d006bafd49041deeba29f17674370f606bbb98c",
+  "results": [
+    {
+      "name": "update-nested-nearest",
+      "exception": null,
+      "resolved": null,
+      "calls": [
+        {
+          "action": "saver",
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "reason": 2
+        },
+        {
+          "action": "resolve",
+          "path": "$STATE/media/nested/Film.mkv"
+        },
+        {
+          "action": "save",
+          "items": [
+            {
+              "id": "98c00000-0000-0000-0000-000000000001",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Updated owner",
+              "path": "$STATE/media/primary.mkv",
+              "parentId": "98c00000-0000-0000-0000-000000000002",
+              "ownerId": "00000000-0000-0000-0000-000000000000",
+              "primaryVersionId": null,
+              "mixed": true,
+              "locked": false,
+              "productionYear": null,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": true,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": []
+            },
+            {
+              "id": "42781587-c23e-fc49-ca6e-1c56b94eccc8",
+              "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+              "name": "Film",
+              "path": "$STATE/media/nested/Film.mkv",
+              "parentId": "00000000-0000-0000-0000-000000000000",
+              "ownerId": "98c00000-0000-0000-0000-000000000001",
+              "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+              "mixed": true,
+              "locked": false,
+              "productionYear": null,
+              "size": null,
+              "runTimeTicks": null,
+              "dateCreated": "0001-01-01T00:00:00.0000000Z",
+              "dateModified": "0001-01-01T00:00:00.0000000Z",
+              "dateLastSavedSet": false,
+              "videoType": "VideoFile",
+              "extraType": null,
+              "parts": []
+            }
+          ],
+          "cancellable": true
+        },
+        {
+          "action": "event",
+          "kind": "updated",
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "reason": 2
+        }
+      ],
+      "rows": [
+        {
+          "id": "42781587-c23e-fc49-ca6e-1c56b94eccc8",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Film",
+          "path": "$STATE/media/nested/Film.mkv",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": "98c00000-0000-0000-0000-000000000001",
+          "primaryVersionId": "98c00000-0000-0000-0000-000000000001",
+          "presentationUniqueKey": "98c00000000000000000000000000001",
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000001",
+          "type": "MediaBrowser.Controller.Entities.Movies.Movie",
+          "name": "Updated owner",
+          "path": "$STATE/media/primary.mkv",
+          "parentId": "98c00000-0000-0000-0000-000000000002",
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": true,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": true,
+          "data": {
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "$STATE/media/nested/Film.mkv"
+            ],
+            "LinkedAlternateVersions": [],
+            "SubtitleFiles": [],
+            "AudioFiles": [],
+            "HasSubtitles": false,
+            "IsPlaceHolder": false,
+            "VideoType": "VideoFile",
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "$UTC_SAVE",
+            "RemoteTrailers": []
+          }
+        },
+        {
+          "id": "98c00000-0000-0000-0000-000000000002",
+          "type": "MediaBrowser.Controller.Entities.Folder",
+          "name": "Parent",
+          "path": "$STATE/media",
+          "parentId": null,
+          "topParentId": null,
+          "ownerId": null,
+          "primaryVersionId": null,
+          "presentationUniqueKey": null,
+          "mixed": false,
+          "locked": false,
+          "productionYear": null,
+          "size": null,
+          "runTimeTicks": null,
+          "dateCreated": null,
+          "dateModified": null,
+          "dateLastSavedSet": false,
+          "data": {
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        }
+      ],
+      "links": [
+        {
+          "parentId": "98c00000-0000-0000-0000-000000000001",
+          "childId": "42781587-c23e-fc49-ca6e-1c56b94eccc8",
+          "childType": 2,
+          "sortOrder": 0
+        }
+      ],
+      "files": [
+        {
+          "path": "$STATE/media/.ignore",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "$STATE/media/nested/.ignore",
+          "sha256": "50ad1ba41175bd56697907ddfca69cc4802060af7d20f69954b4a2826c80437c"
+        },
+        {
+          "path": "$STATE/media/nested/Film.mkv",
+          "sha256": "20d135778ff4bce6a02da7101c78d3c81af427a9134fe9a68cb2e83983069438"
+        },
+        {
+          "path": "$STATE/media/primary.mkv",
+          "sha256": "efc6fc578b2bde66195463684cd6933af46c4856a14606d7a14bf1a481ce57b5"
+        }
+      ],
+      "parentChildrenCleared": true,
+      "parentUserDataCleared": true,
+      "oldLookupName": null
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "457b9370ab3c7b23438c3a0c07c03f97965dd60aba99ccfc83a7f7241e507ce4"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "c1578ecca8355741fbbab1c68ed6be27bf4528fb84aaa7b7aec25842ae2d68c3"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "b9bbf0f337e7602732d8ee168324d2e9e92b90663a7b0116797cc151004106bb"
+    }
+  ],
+  "scope": "Actual frozen ordinary video resolution with registered CoreResolutionIgnoreRule and DotIgnoreIgnoreRule, real files and ItemPersistenceService/EF SQLite. Version cases execute ResolveAlternateVersion and UpdateItemAsync; owned cases execute the RefreshMetadata/RefreshedOwnedItems wrapper, CreateItem and independent deletion. Records all original row/Data/file/cache/event projections, ignore-before-resolution, lookup bypass and wrong-type deletion order. Single-item provider saves, collection membership, saver/media-source/external file dispatch and ancestor namespace are controls. No complete resolver/scanner, MetadataService, network/symlink/concurrent cache or release acceptance."
+}

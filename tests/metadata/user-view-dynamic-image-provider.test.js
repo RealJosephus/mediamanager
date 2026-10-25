@@ -1,0 +1,453 @@
+import { testFileSystem } from '../storage/plugin-files.js';
+import { openMetadataRelations, trackMetadataContexts, attachMetadataItemCreation } from './relations-fixture.js';
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import sharp from 'sharp';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { createHash, randomUUID } from 'node:crypto';
+import pg from 'pg';
+import { PostgresDatabase } from '../../src/database/postgres.js';
+import { DomainStore } from '../../src/database/domain-store.js';
+import { quoteIdentifier, tableDefinition } from '../../src/database/model.js';
+import { LibraryService } from '../../src/library/library-service.js';
+import { createUserViewDynamicImagePlugin } from '../../src/metadata/user-view-dynamic-image-provider.js';
+import { ItemUpdateType } from '../../src/metadata/save-manager.js';
+import { dateTicks, idKey, MIN_DATE } from '../../src/library/records.js';
+import { internalImagePath } from '../../src/metadata/image-paths.js';
+import { withUserViewImageCandidates } from '../../src/library/user-view-image-query.js';
+import { nativeTextBytes } from '../../src/database/native-text.js';
+import { observeComparison } from '../comparison-observations.js';
+
+const nativeBytes = await readFile(new URL('./fixtures/user-view-dynamic/native.json', import.meta.url));
+assert.equal(createHash('sha256').update(nativeBytes).digest('hex'), 'f7aa818d0a90e15994a42723385e1ed3045ab7b46923a722e05291de0c517d2a');
+const native = JSON.parse(nativeBytes);
+const lifecycleBytes = await readFile(new URL('./fixtures/user-view-refresh-lifecycle/native.json', import.meta.url));
+assert.equal(createHash('sha256').update(lifecycleBytes).digest('hex'), '9762bb2b01b77d765a285cdd8f1cd7d6fb5a8027e71bb2fdbf98286179bd4449');
+const lifecycle = JSON.parse(lifecycleBytes);
+assert.equal(lifecycle.actualFrozenUserViewMetadataService, true);
+assert.equal(native.schemaVersion, 1);
+assert.deepEqual(native.verified, { nativeProcessExit: 0, actualFrozenDynamicProvider: true, actualManagedFileSystem: true,
+  controlledSourceQuery: true, controlledCollageProcessor: true });
+assert.deepEqual(native.output.map(value => value.name), ['missing-managed-primary', 'missing-min-managed-primary',
+  'cancelled-empty-query', 'cancelled-failing-query', 'cancelled-local-source']);
+assert.equal(native.sourceBindings.length, 8);
+assert.ok(native.sourceBindings.every(value => /^[a-f0-9]{64}$/u.test(value.sha256) && value.bytes > 0));
+
+const id = value => `98200000-0000-0000-0000-${String(value).padStart(12, '0')}`;
+const empty = Object.fromEntries(tableDefinition('BaseItems').columns.filter(column => !column.generated).map(column =>
+  [column.name, column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : 0]));
+const item = (number, Type, values = {}) => ({ ...empty, Id: id(number), Type: 'MediaBrowser.Controller.Entities.' + Type,
+  Name: Type, SortName: Type.toLowerCase(), CleanName: Type.toLowerCase(), Data: '{}', Tags: '', Studios: '', Genres: '',
+  ProductionLocations: '', MediaType: 'Unknown', UnratedType: 'Other', IsFolder: Type !== 'Movie', ...values });
+async function fixture(t) {
+  const schema = 'dynamic_view_' + randomUUID().replaceAll('-', '').slice(0, 16);
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  const store = new DomainStore(database);
+  const directory = await mkdtemp(path.join(tmpdir(), 'mm-dynamic-view-'));
+  const errors = [], contexts = [], spoolRoot = path.join(directory, 'metadata-spool');
+  const linkedChildren = await openMetadataRelations(database, spoolRoot);
+  const library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'dynamic-test', programDataPath: directory, configuration: {}, onError: error => errors.push(error) });
+  const loadContext = trackMetadataContexts(library.userViews.metadata.loadContext, contexts);
+  library.userViews.metadata.loadContext = loadContext;
+  const itemCreation = attachMetadataItemCreation({ store, library, linkedChildren, loadContext });
+  t.after(async () => { try {
+    const failures = [];
+    for (const close of [() => library.close(), ...contexts.map(loader => () => loader.close()),
+      () => itemCreation.close(), () => linkedChildren.flushReleases(), () => linkedChildren.close(), () => store.close()]) {
+      try { await close(); } catch (error) { failures.push(error); }
+    }
+    if (failures.length) throw new AggregateError(failures, 'User view dynamic fixture ownership cleanup failed.');
+  } finally {
+    let databaseClosed = false;
+    try { await database.rows('BaseItems', { limit: 1 }); }
+    catch (error) { databaseClosed = ['database is not open', 'Client was closed and is not queryable'].includes(error.message); }
+    assert.equal(databaseClosed, true);
+    assert.ok(path.resolve(directory).startsWith(path.resolve(tmpdir()) + path.sep) && path.basename(directory).startsWith('mm-dynamic-view-'));
+    await rm(directory, { recursive: true, force: false });
+    await assert.rejects(stat(directory), error => error.code === 'ENOENT');
+    const client = new pg.Client({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES });
+    try { await client.connect(); for (const name of [schema, schema + '__mm']) await client.query(`DROP SCHEMA ${quoteIdentifier(name)} CASCADE`);
+      assert.equal((await client.query('SELECT schema_name FROM information_schema.schemata WHERE schema_name = ANY($1::text[])', [[schema, schema + '__mm']])).rows.length, 0);
+    } finally { await client.end(); }
+  } });
+  await database.insert('BaseItems', item(1, 'AggregateFolder'));
+  await database.insert('BaseItems', item(2, 'UserRootFolder'));
+  await database.insert('BaseItems', item(3, 'CollectionFolder', { ParentId: id(2), Data: JSON.stringify({ CollectionType: 'movies', PhysicalFolderIds: [id(4)] }) }));
+  await database.insert('BaseItems', item(4, 'Folder', { ParentId: id(1), TopParentId: id(4) }));
+  const view = item(5, 'UserView', { Data: JSON.stringify({ ViewType: 'movies', DisplayParentId: idKey(id(3)) }) });
+  await database.insert('BaseItems', view);
+  const user = { Id: id(100), Configuration: {}, Policy: { EnableAllFolders: true, EnabledFolders: [], BlockedMediaFolders: [], BlockedTags: [], AllowedTags: [], BlockUnratedItems: [] } };
+  const users = { getUser: async userId => { assert.equal(idKey(userId), idKey(user.Id)); return user; } };
+  const provider = createUserViewDynamicImagePlugin({ library, users }).providers[0];
+  const setViewType = async ViewType => {
+    await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ViewType, DisplayParentId: idKey(id(3)) }) });
+    // A direct fixture write has no metadata manager to publish its new live
+    // entity. Start the next consumer from the newly stored view instead.
+    itemCreation.unregisterItem(view.Id);
+    await linkedChildren.flushReleases();
+  };
+  return { database, library, provider, user, directory, errors, setViewType,
+    view: { Id: view.Id, Type: 'UserView', ViewType: 'movies', DisplayParentId: id(3) } };
+}
+test('dynamic images use actual recursive movie/TV queries, including the frozen null-user failure', async t => {
+  const { provider, view, setViewType } = await fixture(t);
+  for (const ViewType of ['movies', 'tvshows']) {
+    await setViewType(ViewType);
+    await assert.rejects(provider.fetch({ ...view, ViewType }), error => error.status === 500 && error.message === 'Error processing request.');
+    await assert.rejects(provider.hasChanged({ ...view, ViewType }), error => error.status === 500 && error.message === 'Error processing request.');
+  }
+});
+test('real user and playlist empty image sources return None without reporting a refresh failure', async t => {
+  const { provider, view, user, setViewType } = await fixture(t);
+  assert.equal(await provider.fetch({ ...view, UserId: user.Id }), ItemUpdateType.None);
+  assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), false);
+  await setViewType('playlists');
+  assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }), ItemUpdateType.None);
+  assert.equal(await provider.fetch({ ...view, ViewType: 'books' }), ItemUpdateType.None);
+});
+test('an existing remote or media-side primary image prevents the null-user query and replacement', async t => {
+  const { provider, view } = await fixture(t);
+  for (const Path of ['https://fixture.invalid/poster.jpg', 'Z:\\MediaLibrary\\poster.jpg']) {
+    const images = [{ Type: 'Primary', Path }];
+    assert.equal(await provider.fetch(view, { images }), ItemUpdateType.None);
+    assert.equal(await provider.hasChanged(view, { images }), false);
+  }
+});
+test('a genuine local source image creates and saves a UserView thumbnail for movies and playlists', async t => {
+  const { provider, database, library, view, user, directory, setViewType } = await fixture(t);
+  const Path = path.join(directory, 'source.png');
+  await writeFile(Path, await readFile(new URL('../images/fixtures/user-view-collage/assets/same.png', import.meta.url)));
+  await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
+  await database.insert('AncestorIds', { ItemId: id(6), ParentItemId: id(4) });
+  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path,
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), true);
+  const images = [];
+  assert.equal(await provider.fetch({ ...view, UserId: user.Id }, { images }), ItemUpdateType.ImageUpdate);
+  assert.equal(images.length, 1); assert.equal(images[0].Type, 'Primary');
+  assert.ok(images[0].Path.startsWith(internalImagePath(view, path.join(directory, 'metadata'))));
+  assert.deepEqual(await sharp(await readFile(images[0].Path)).metadata().then(({ width, height }) => ({ width, height })), { width: 960, height: 540 });
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+  assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }, { images }), false);
+  await setViewType('playlists');
+  assert.equal(await provider.fetch({ ...view, ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
+  const production = createUserViewDynamicImagePlugin({ library, users: { getUser: async () => user } }).providers[0];
+  assert.equal(await production.fetch({ ...view, Name: 'Movies 中影', ViewType: 'playlists' }, { images }), ItemUpdateType.ImageUpdate);
+  assert.deepEqual(await sharp(await readFile(images[0].Path)).metadata().then(({ width, height }) => ({ width, height })), { width: 960, height: 540 });
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+});
+test('a remote image source changes the candidate set but produces no local collage input', async t => {
+  const { provider, database, view, user } = await fixture(t);
+  await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
+  await database.insert('AncestorIds', { ItemId: id(6), ParentItemId: id(4) });
+  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path: 'https://fixture.invalid/poster.jpg',
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  assert.equal(await provider.hasChanged({ ...view, UserId: user.Id }), true);
+  assert.equal(await provider.fetch({ ...view, UserId: user.Id }), ItemUpdateType.None);
+});
+
+test('UserView cancelled image save retains the native truncated destination and removes its temporary source', async t => {
+  const { provider, database, view, user, directory } = await fixture(t);
+  const source = path.join(directory, 'source.png');
+  await writeFile(source, await readFile(new URL('../images/fixtures/user-view-collage/assets/same.png', import.meta.url)));
+  await database.insert('BaseItems', item(6, 'Movies.Movie', { ParentId: id(4), TopParentId: id(4), IsFolder: false }));
+  await database.insert('BaseItemImageInfos', { Id: id(7), ItemId: id(6), ImageType: 0, Path: source,
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  const images = [], signal = AbortSignal.abort(new Error('Controlled save cancellation'));
+  await assert.rejects(provider.fetch({ ...view, UserId: user.Id }, { images, signal }), error => error === signal.reason);
+  assert.deepEqual(images, []);
+  assert.equal((await stat(path.join(internalImagePath(view, path.join(directory, 'metadata')), 'poster.png'))).size, 0);
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+});
+
+test('UserView image membership remains SQL-owned across 260 items and first-image local fallback', async t => {
+  const { database, library, view, user } = await fixture(t);
+  const rows = Array.from({ length: 260 }, (_, index) => item(index + 1000, 'Movies.Movie', {
+    ParentId: id(4), TopParentId: id(4), IsFolder: false, PresentationUniqueKey: idKey(id(index + 1000)) }));
+  await database.insertBatch('BaseItems', rows);
+  const images = rows.flatMap((value, index) => [
+    { Id: id(index * 4 + 10000), ItemId: value.Id, ImageType: 0, Path: 'https://fixture.invalid/primary.png',
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null },
+    { Id: id(index * 4 + 10001), ItemId: value.Id, ImageType: 0, Path: `D:\\wrong-${index}.png`,
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null },
+    { Id: id(index * 4 + 10002), ItemId: value.Id, ImageType: 5, Path: `D:\\thumb-${index}.png`,
+      DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null }
+  ]);
+  await database.insertBatch('BaseItemImageInfos', images);
+  const selection = await withUserViewImageCandidates(library, view, user, async candidates => {
+    assert.equal(await candidates.hasItems(), true);
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename);
+    return paths;
+  });
+  assert.equal(selection.length, 260);
+  assert.deepEqual(new Set(selection), new Set(rows.map((_, index) => `D:\\thumb-${index}.png`)));
+});
+
+test('UserView image candidates replace repeated episodes and seasons by their real series', async t => {
+  const { database, library, view, user, setViewType } = await fixture(t);
+  await setViewType('tvshows');
+  await database.insertBatch('BaseItems', [
+    item(6, 'TV.Series', { ParentId: id(4), TopParentId: id(4) }),
+    item(7, 'TV.Season', { ParentId: id(6), TopParentId: id(4) }),
+    item(8, 'TV.Episode', { ParentId: id(7), TopParentId: id(4), SeriesId: id(6), IsFolder: false })
+  ]);
+  await database.insert('BaseItemImageInfos', { Id: id(9), ItemId: id(6), ImageType: 0, Path: 'D:\\series.png',
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  const selected = await withUserViewImageCandidates(library, { ...view, ViewType: 'tvshows' }, user, async candidates => {
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename); return paths;
+  });
+  assert.deepEqual(selected, ['D:\\series.png']);
+});
+
+test('UserView audio candidates resolve the nearest album across intermediate folders', async t => {
+  const { database, library, view, user } = await fixture(t);
+  await database.insertBatch('BaseItems', [
+    item(6, 'Audio.MusicAlbum', { ParentId: id(4), TopParentId: id(4) }),
+    item(7, 'Folder', { ParentId: id(6), TopParentId: id(4) }),
+    item(8, 'Audio.Audio', { ParentId: id(7), TopParentId: id(4), IsFolder: false })
+  ]);
+  await database.insert('BaseItemImageInfos', { Id: id(9), ItemId: id(6), ImageType: 0, Path: 'D:\\album.png',
+    DateModified: '2026-10-01T00:00:00.0000000Z', Width: 960, Height: 540, Blurhash: null });
+  // Isolate candidate mapping from the view dispatch: a playlist can supply
+  // an Audio child whose MusicAlbum is not its immediate parent.
+  const source = { options: library.options, withItemQueryPlan: (_input, _options, operation) => library.store.run(db => operation(db, {
+    text: `SELECT "Id",1::bigint AS "__ordinal" FROM "${db.schemaName}"."BaseItems" WHERE "Id"=$1`,
+    values: [nativeTextBytes(id(8))]
+  })) };
+  const selected = await withUserViewImageCandidates(source, view, user, async candidates => {
+    const paths = []; for await (const filename of candidates.paths()) paths.push(filename); return paths;
+  });
+  assert.deepEqual(selected, ['D:\\album.png']);
+});
+
+for (const dialect of ['postgres']) {
+  const options = {};
+  test(`${dialect}: missing managed primary images compare against the native minimum file date`, options, async t => {
+    const { provider, view, directory } = await fixture(t, dialect);
+    const Path = path.join(internalImagePath(view, path.join(directory, 'metadata')), 'missing.jpg');
+    const images = [{ Type: 'Primary', Path, DateModified: '2026-10-01T00:00:00.0000000Z' }];
+    const signal = AbortSignal.abort(new Error('Native HasChanged has no cancellation token'));
+    assert.equal(await provider.hasChanged(view, { images }), native.output[0].changed);
+    assert.equal(await provider.hasChanged(view, { images, signal }), native.output[0].changed);
+    images[0].DateModified = '0001-01-01T00:00:00.0000000Z';
+    assert.equal(await provider.hasChanged(view, { images }), native.output[1].changed);
+    assert.equal(await provider.hasChanged(view, { images, signal }), native.output[1].changed);
+    assert.equal(dateTicks(native.output[0].date), dateTicks(MIN_DATE));
+    assert.equal(dateTicks(native.output[1].date), dateTicks(MIN_DATE));
+  });
+  test(`${dialect}: dynamic provider cancellation leaves synchronous query outcomes observable`, options, async t => {
+    const { provider, view, user, database } = await fixture(t, dialect);
+    // BaseItemMapper returns null for an exact discriminator that is no longer
+    // loadable; the provider's all-items image lookup skips that record.
+    await database.insert('BaseItems', item(999, 'RemovedPlugin.UnknownItem'));
+    const signal = AbortSignal.abort(new Error('Controlled cancellation'));
+    assert.equal(await provider.fetch({ ...view, UserId: user.Id }, { signal }), ItemUpdateType.None);
+    await assert.rejects(provider.fetch(view, { signal }), error => error.status === 500 && error.message === 'Error processing request.');
+  });
+  test(`${dialect}: actual metadata host serializes real null-user query failures and cancels before persistence`, options, async t => {
+    const { database, library, view, user, directory, errors } = await fixture(t, dialect);
+    const Path = path.join(directory, 'metadata', 'views', idKey(view.Id));
+    await mkdir(Path, { recursive: true });
+    await database.update('BaseItems', { Id: view.Id }, { Path });
+    library.userViews.metadata.registry.register(createUserViewDynamicImagePlugin({ library, users: { getUser: async () => user } }));
+    const before = await database.rows('BaseItems'), beforeRelations = await database.rows('AncestorIds');
+    const refreshOptions = { MetadataRefreshMode: 'Default', ImageRefreshMode: 'Default', ForceSave: true };
+    const signal = AbortSignal.abort(Object.assign(new Error('Cancel metadata host before query'), { code: 'controlled-metadata-cancellation' }));
+    await assert.rejects(library.userViews.metadata.refresh(view.Id, { ...refreshOptions, signal }), error => {
+      observeComparison(t, 'metadata cancellation', { name: error.name, code: error.code, message: error.message, stack: error.stack },
+        { code: signal.reason.code, message: signal.reason.message });
+      assert.equal(signal.aborted, true); assert.equal(error.code, signal.reason.code); assert.equal(error.message, signal.reason.message);
+      return true;
+    });
+    assert.deepEqual(await database.rows('BaseItems'), before);
+    assert.deepEqual(await database.rows('AncestorIds'), beforeRelations);
+    const query = library.withItemQueryPlan.bind(library);
+    let active = 0, maximumActive = 0, calls = 0;
+    library.withItemQueryPlan = async (...args) => {
+      active++; calls++; maximumActive = Math.max(maximumActive, active);
+      try { await new Promise(resolve => setImmediate(resolve)); return await query(...args); }
+      finally { active--; }
+    };
+    const [first, second] = await Promise.all([library.userViews.metadata.refresh(view.Id, refreshOptions), library.userViews.metadata.refresh(view.Id, refreshOptions)]);
+    assert.equal(calls, 2); assert.equal(maximumActive, 1);
+    for (const result of [first, second]) {
+      assert.equal(result.Failures, 1); assert.equal(result.ErrorMessage, 'Error processing request.');
+      assert.equal(result.Item.DateLastRefreshed, '0001-01-01T00:00:00.0000000Z');
+    }
+    const failed = (await database.rows('BaseItems', { where: { Id: view.Id } }))[0];
+    assert.equal(failed.DateLastRefreshed, null); assert.ok(failed.DateLastSaved);
+    assert.equal(failed.PresentationUniqueKey, idKey(view.Id));
+    t.diagnostic('null-user diagnostics ' + JSON.stringify(errors.map(error => ({ name: error.name, status: error.status,
+      code: error.code, message: error.message, stack: error.stack }))));
+    for (const error of errors) { assert.equal(error.status, 500); assert.equal(error.message, 'Error processing request.'); }
+    assert.deepEqual(await database.rows('AncestorIds'), beforeRelations);
+    await database.update('BaseItems', { Id: view.Id }, { Data: JSON.stringify({ ...JSON.parse(failed.Data), UserId: idKey(user.Id) }) });
+    // This explicit fixture repository edit is followed by a cold lookup,
+    // rather than replacing the still-live null-user entity by ID.
+    library.itemCreation.unregisterItem(view.Id);
+    await library.options.linkedChildren.flushReleases();
+    const recovered = await library.userViews.metadata.refresh(view.Id, refreshOptions);
+    assert.equal(recovered.Failures, 0); assert.ok(recovered.Item.DateLastRefreshed);
+    assert.ok((await database.rows('BaseItems', { where: { Id: view.Id } }))[0].DateLastRefreshed);
+  });
+}
+
+test('the frozen dynamic provider controlled query executes before its cancellation-aware save stage', async t => {
+  const { provider, library, view, database, directory } = await fixture(t);
+  const queries = [], before = await database.rows('BaseItems'), beforeImages = await database.rows('BaseItemImageInfos');
+  const beforeFiles = (await readdir(directory, { recursive: true })).sort();
+  library.withItemQueryPlan = async (_query, _options, operation) => { queries.push('empty'); return library.store.run(db => operation(db,
+    { text: 'SELECT NULL::bytea AS "Id",0::bigint AS "__ordinal" WHERE FALSE', values: [] })); };
+  const signal = AbortSignal.abort(new Error('Controlled cancellation'));
+  const updateType = await provider.fetch(view, { signal });
+  assert.equal(updateType, native.output[2].updateType);
+  library.withItemQueryPlan = async () => { queries.push('failing'); throw Object.assign(new Error(native.output[3].Message), { code: 'controlled-query-failure' }); };
+  let error;
+  try { await provider.fetch(view, { signal }); } catch (failure) { error = failure; }
+  observeComparison(t, 'cancelled query failure', error && { name: error.name, code: error.code, message: error.message, stack: error.stack }, native.output[3]);
+  assert.equal(Boolean(error), Boolean(native.output[3].error));
+  assert.equal(error.code, 'controlled-query-failure'); assert.equal(error.message, native.output[3].Message);
+  assert.equal(signal.aborted, true); assert.deepEqual(queries, ['empty', 'failing']);
+  assert.deepEqual(await database.rows('BaseItems'), before); assert.deepEqual(await database.rows('BaseItemImageInfos'), beforeImages);
+  const expectedFiles = [...new Set([...beforeFiles, 'cache', path.join('cache', 'temp')])].sort();
+  assert.deepEqual((await readdir(directory, { recursive: true })).sort(), expectedFiles);
+  assert.deepEqual(await readdir(path.join(directory, 'cache', 'temp')), []);
+  // The fifth raw native record reaches a controlled collage processor and
+  // SaveImage; the real file-write prefix is covered separately below.
+  t.diagnostic('frozen local-source cancellation ' + JSON.stringify(native.output[4]));
+  assert.equal(native.output[4].name, 'cancelled-local-source'); assert.ok(native.output[4].error);
+});
+
+const lifecycleReason = reason => reason.split(', ').reduce((result, name) => result | ItemUpdateType[name], 0);
+const lifecycleEvents = events => events.filter(event => ['repository-save-attempt', 'custom-fetch', 'custom-fetch-start'].includes(event.kind))
+  .map(event => event.kind.startsWith('custom-fetch') ? 'fetch' : lifecycleReason(event.reason));
+async function lifecycleFixture(t, dialect) {
+  const value = await fixture(t, dialect);
+  const Path = path.join(value.directory, 'metadata', 'views', idKey(value.view.Id));
+  await mkdir(Path, { recursive: true });
+  await value.database.update('BaseItems', { Id: value.view.Id }, { Path });
+  return value;
+}
+
+for (const dialect of ['postgres']) {
+  const options = {};
+  for (const failure of ['none', 'error', 'cancel']) test(`${dialect}: first UserView ${failure} saves the native key and MetadataImport before the provider`, options, async t => {
+    const { database, library, view } = await lifecycleFixture(t, dialect);
+    const events = [], cancellation = new AbortController();
+    library.userViews.metadata.updates.on('ItemUpdated', event => events.push(event.UpdateReason));
+    library.userViews.metadata.registry.register({ id: 'lifecycle', name: 'Controlled lifecycle', providers: [{
+      id: 'lifecycle', name: 'Controlled lifecycle', kind: 'custom', itemTypes: ['UserView'],
+      async fetch(item) {
+        events.push('fetch');
+        const persisted = (await database.rows('BaseItems', { where: { Id: view.Id } }))[0];
+        assert.equal(item.PresentationUniqueKey, idKey(view.Id));
+        assert.equal(persisted.PresentationUniqueKey, item.PresentationUniqueKey);
+        assert.ok(persisted.DateLastSaved);
+        assert.equal(persisted.DateLastRefreshed, null);
+        if (failure === 'error') throw new Error('Controlled custom failure');
+        if (failure === 'cancel') {
+          cancellation.abort(Object.assign(new Error('Controlled custom cancellation'), { code: 'controlled-custom-cancellation' }));
+          cancellation.signal.throwIfAborted();
+        }
+        return ItemUpdateType.None;
+      }
+    }] });
+    const expected = lifecycle.results.find(value => value.name === `actual-metadata-first-refresh-${failure}`);
+    let result;
+    if (failure === 'cancel') await assert.rejects(library.userViews.metadata.refresh(view.Id, {
+      MetadataRefreshMode: 'Default', ImageRefreshMode: 'None', ForceSave: true, signal: cancellation.signal
+    }), error => {
+      observeComparison(t, 'custom cancellation', { name: error.name, message: error.message, code: error.code, stack: error.stack }, expected.error);
+      assert.equal(cancellation.signal.aborted, true); assert.equal(error.code, 'controlled-custom-cancellation');
+      return error.message === expected.error.Message;
+    });
+    else {
+      result = await library.userViews.metadata.refresh(view.Id, { MetadataRefreshMode: 'Default', ImageRefreshMode: 'None', ForceSave: true });
+      assert.equal(result.UpdateType, expected.updateType);
+      assert.equal(result.Failures, failure === 'error' ? 1 : 0);
+    }
+    assert.deepEqual(events, lifecycleEvents(expected.events));
+    const persisted = (await database.rows('BaseItems', { where: { Id: view.Id } }))[0];
+    assert.equal(persisted.PresentationUniqueKey, idKey(view.Id));
+    assert.ok(persisted.DateLastSaved);
+    assert.equal(Boolean(persisted.DateLastRefreshed), failure === 'none');
+  });
+  test(`${dialect}: initial refresh rollback preserves its conflict baseline and never calls the provider`, options, async t => {
+    const { database, library, view } = await lifecycleFixture(t, dialect);
+    const before = await database.rows('BaseItems'), relationships = await database.rows('AncestorIds');
+    const loadContext = library.userViews.metadata.loadContext;
+    let loaded, baseline;
+    library.userViews.metadata.loadContext = async reference => {
+      loaded = await loadContext(reference);
+      baseline = structuredClone({ snapshot: loaded.snapshot, relationships: loaded.relationships });
+      return loaded;
+    };
+    let calls = 0;
+    library.userViews.metadata.registry.register({ id: 'rollback', name: 'Rollback control', providers: [{
+      id: 'rollback', name: 'Rollback control', kind: 'custom', itemTypes: ['UserView'],
+      fetch() { calls++; return ItemUpdateType.None; }
+    }] });
+    const persist = database.update.bind(database);
+    database.update = async (...args) => {
+      const result = await persist(...args);
+      if (args[0] === 'BaseItems' && args[1].Id === view.Id) throw new Error('Controlled initial-save failure');
+      return result;
+    };
+    await assert.rejects(library.userViews.metadata.refresh(view.Id, { MetadataRefreshMode: 'Default', ForceSave: true }), /Controlled initial-save failure/);
+    database.update = persist;
+    assert.equal(calls, 0);
+    assert.deepEqual(await database.rows('BaseItems'), before);
+    assert.deepEqual(await database.rows('AncestorIds'), relationships);
+    assert.deepEqual({ snapshot: loaded.snapshot, relationships: loaded.relationships }, baseline);
+    const recovered = await library.userViews.metadata.refresh(view.Id, { MetadataRefreshMode: 'Default', ForceSave: true });
+    assert.equal(recovered.Failures, 0);
+    assert.equal(calls, 1);
+  });
+  test(`${dialect}: final refresh save rejects edits made after the initial committed save`, options, async t => {
+    const { database, library, view } = await lifecycleFixture(t, dialect);
+    const events = [];
+    library.userViews.metadata.updates.on('ItemUpdated', event => events.push(event.UpdateReason));
+    library.userViews.metadata.registry.register({ id: 'conflict', name: 'Conflict control', providers: [{
+      id: 'conflict', name: 'Conflict control', kind: 'custom', itemTypes: ['UserView'],
+      async fetch() {
+        await database.update('BaseItems', { Id: view.Id }, { Overview: 'Concurrent edit after initial save' });
+        return ItemUpdateType.None;
+      }
+    }] });
+    await assert.rejects(library.userViews.metadata.refresh(view.Id, { MetadataRefreshMode: 'Default', ForceSave: true }), error => error.code === 'metadata-conflict');
+    assert.deepEqual(events, [ItemUpdateType.MetadataImport]);
+    const persisted = (await database.rows('BaseItems', { where: { Id: view.Id } }))[0];
+    assert.equal(persisted.Overview, 'Concurrent edit after initial save');
+    assert.equal(persisted.PresentationUniqueKey, idKey(view.Id));
+    assert.ok(persisted.DateLastSaved);
+    assert.equal(persisted.DateLastRefreshed, null);
+  });
+  for (const scenario of ['all-custom-fail', 'first-cancel-then-success', 'first-success-already-queued']) {
+    test(`${dialect}: three serialized refreshes reproduce native ${scenario} provider and save ordering`, options, async t => {
+      const { library, view } = await lifecycleFixture(t, dialect);
+      const events = [];
+      let calls = 0;
+      library.userViews.metadata.updates.on('ItemUpdated', event => events.push(event.UpdateReason));
+      library.userViews.metadata.registry.register({ id: 'sequence', name: 'Controlled sequence', providers: [{
+        id: 'sequence', name: 'Controlled sequence', kind: 'custom', itemTypes: ['UserView'],
+        hasChanged: async () => false,
+        fetch() {
+          calls++; events.push('fetch');
+          if (scenario === 'all-custom-fail') throw new Error('Controlled custom failure');
+          if (scenario === 'first-cancel-then-success' && calls === 1) throw Object.assign(new Error('Controlled custom cancellation'), { name: 'AbortError' });
+          return ItemUpdateType.None;
+        }
+      }] });
+      const results = await Promise.allSettled(Array.from({ length: 3 }, () => library.userViews.metadata.refresh(view.Id, {
+        MetadataRefreshMode: 'Default', ImageRefreshMode: 'None', ForceSave: true
+      })));
+      const expected = lifecycle.results.find(value => value.name === `actual-metadata-queue-${scenario}`);
+      assert.deepEqual(events, lifecycleEvents(expected.events));
+      assert.equal(calls, expected.events.filter(event => event.kind === 'custom-fetch-start').length);
+      assert.equal(results.filter(value => value.status === 'rejected').length, scenario === 'first-cancel-then-success' ? 1 : 0);
+      assert.equal(results.filter(value => value.status === 'fulfilled' && value.value.Failures > 0).length, scenario === 'all-custom-fail' ? 3 : 0);
+    });
+  }
+}

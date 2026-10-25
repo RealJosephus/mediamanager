@@ -1,0 +1,836 @@
+{
+  "scope": "Ten actual native decoded-to-scaled RGBA comparisons and eight complete PNG/WebP BlurHash comparisons. The two actual JPEG decoder-scale differences remain explicitly unaccepted; their recorded scaled-pixel resize and core encoding are independently compared.",
+  "rawRecording": {
+    "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/native.json",
+    "bytes": 20624,
+    "sha256": "cf95a698cbaf368ace4be8a8ffb63bb541a2de396f9bb66b46521be4f4f08722",
+    "required": true
+  },
+  "files": [
+    {
+      "path": "native.json",
+      "bytes": 20624,
+      "sha256": "cf95a698cbaf368ace4be8a8ffb63bb541a2de396f9bb66b46521be4f4f08722"
+    },
+    {
+      "path": "Program.cs",
+      "bytes": 2522,
+      "sha256": "934e9723ebc0e9714e2366e97433ea9a6ce2a69376d8a22c9c45e28199946157"
+    },
+    {
+      "path": "Oracle.csproj",
+      "bytes": 492,
+      "sha256": "fb19aa9abf511b0631c528c7634935b53bd15a0cabbcf97e8051b3733f24b88d"
+    },
+    {
+      "path": "Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "path": "inputs/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "path": "cover.png.decoded.rgba.gz",
+      "bytes": 297133,
+      "sha256": "0698d092fc5343dcc9d9543bef4c48d2985a2240614394ed27ee126253fc58ea"
+    },
+    {
+      "path": "cover.png.scaled.rgba.gz",
+      "bytes": 27365,
+      "sha256": "7e72bf465621029c2f6d45abf321486aa71b3e0970167e38aed3ecf10f8b463c"
+    },
+    {
+      "path": "inputs/large.png",
+      "bytes": 5373,
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e"
+    },
+    {
+      "path": "large.png.decoded.rgba.gz",
+      "bytes": 169137,
+      "sha256": "2ccddc11511d37ca28fe0fbef366c31bd3ac0cf9252e251106f306ab9b91dee2"
+    },
+    {
+      "path": "large.png.scaled.rgba.gz",
+      "bytes": 37891,
+      "sha256": "5eaa900d2282753b9e6398dcfb196006143aaca6bc92708d010f8e36970227a2"
+    },
+    {
+      "path": "inputs/wide.png",
+      "bytes": 2791,
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e"
+    },
+    {
+      "path": "wide.png.decoded.rgba.gz",
+      "bytes": 57065,
+      "sha256": "e3b9a19f4064395afef373fe062a5743379da385a4211de2a4529af97bfdb008"
+    },
+    {
+      "path": "wide.png.scaled.rgba.gz",
+      "bytes": 3206,
+      "sha256": "7b6c4adf35b28d56a215940c10698edd9dea5c67f7d2d39e75b47de6e47b18dc"
+    },
+    {
+      "path": "inputs/large.webp",
+      "bytes": 30142,
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa"
+    },
+    {
+      "path": "large.webp.decoded.rgba.gz",
+      "bytes": 41463,
+      "sha256": "566ffd4097be60801eef1f4b846496ecb85cdbde3a6b7bbf64fe75249ee53adf"
+    },
+    {
+      "path": "large.webp.scaled.rgba.gz",
+      "bytes": 10046,
+      "sha256": "b881990a6c58f4af917c3282a0ff3fba58b3de735c520f7495c483c3c7e502c9"
+    },
+    {
+      "path": "inputs/wide.webp",
+      "bytes": 20262,
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7"
+    },
+    {
+      "path": "wide.webp.decoded.rgba.gz",
+      "bytes": 4089,
+      "sha256": "aba0c7e06d8ce600094fed1cf1f3eaba198dd4d6d054fcf9e6436c0b3780bbb6"
+    },
+    {
+      "path": "wide.webp.scaled.rgba.gz",
+      "bytes": 321,
+      "sha256": "503768b75573d1acf40d2082a1dc92525cd830a953318a0d9495e2569b088fb3"
+    },
+    {
+      "path": "inputs/large.jpg",
+      "bytes": 37527,
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7"
+    },
+    {
+      "path": "large.jpg.decoded.rgba.gz",
+      "bytes": 41614,
+      "sha256": "309e0a17ec18ab95c0153b41d5b56ea12ed341f9e67e88e669a776cbd1873c39"
+    },
+    {
+      "path": "large.jpg.scaled.rgba.gz",
+      "bytes": 7091,
+      "sha256": "fa338236654b754a53e67d49b398ba1a22fc2f120d048786484d6127b222ce75"
+    },
+    {
+      "path": "inputs/wide.jpg",
+      "bytes": 25186,
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd"
+    },
+    {
+      "path": "wide.jpg.decoded.rgba.gz",
+      "bytes": 3391,
+      "sha256": "064d52093a70a5ca0fdb0262c77f302f754679f8ce50272c9e72f46fd6a8eef3"
+    },
+    {
+      "path": "wide.jpg.scaled.rgba.gz",
+      "bytes": 269,
+      "sha256": "2f652bffad75cb86efaf5c96cb5f158faa1c642b976287f7b83bca473bba2560"
+    },
+    {
+      "path": "inputs/coordinates-129x131.png",
+      "bytes": 54434,
+      "sha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab"
+    },
+    {
+      "path": "coordinates-129x131.png.decoded.rgba.gz",
+      "bytes": 54171,
+      "sha256": "f55cd1e45a05a1ad17b3662d05c985a07b6e2bab326d7ae0594412e59c5a9af2"
+    },
+    {
+      "path": "coordinates-129x131.png.scaled.rgba.gz",
+      "bytes": 51769,
+      "sha256": "4abd43b175982f1a272fc26e996d0c239bb55074c6c747d5f3af3b5374aec58e"
+    },
+    {
+      "path": "inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    },
+    {
+      "path": "coordinates-257x193.png.decoded.rgba.gz",
+      "bytes": 157830,
+      "sha256": "102f4ff49522350eef8a7a49bb3717b8a0a3832e707296a95f790eb7f8ec8ecb"
+    },
+    {
+      "path": "coordinates-257x193.png.scaled.rgba.gz",
+      "bytes": 40298,
+      "sha256": "0951a55e122f41f7c8b37cf61d9dec7d6f50524b5909430fa7ab4adf6892768d"
+    },
+    {
+      "path": "inputs/coordinates-411x129.png",
+      "bytes": 106789,
+      "sha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c"
+    },
+    {
+      "path": "coordinates-411x129.png.decoded.rgba.gz",
+      "bytes": 106289,
+      "sha256": "f3b4c001de836fe9ffb51258a4b0930816e4146e562c56f82d0bdd822130bcf7"
+    },
+    {
+      "path": "coordinates-411x129.png.scaled.rgba.gz",
+      "bytes": 16168,
+      "sha256": "abd20857d93debca41fc70407cf726e45dceb3d8f5c7d90ad88ed902fd48e611"
+    }
+  ],
+  "inputs": [
+    {
+      "name": "cover.png",
+      "path": "inputs/cover.png",
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "name": "large.png",
+      "path": "inputs/large.png",
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e"
+    },
+    {
+      "name": "wide.png",
+      "path": "inputs/wide.png",
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e"
+    },
+    {
+      "name": "large.webp",
+      "path": "inputs/large.webp",
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa"
+    },
+    {
+      "name": "wide.webp",
+      "path": "inputs/wide.webp",
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7"
+    },
+    {
+      "name": "large.jpg",
+      "path": "inputs/large.jpg",
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7"
+    },
+    {
+      "name": "wide.jpg",
+      "path": "inputs/wide.jpg",
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd"
+    },
+    {
+      "name": "coordinates-129x131.png",
+      "path": "inputs/coordinates-129x131.png",
+      "sha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab"
+    },
+    {
+      "name": "coordinates-257x193.png",
+      "path": "inputs/coordinates-257x193.png",
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    },
+    {
+      "name": "coordinates-411x129.png",
+      "path": "inputs/coordinates-411x129.png",
+      "sha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c"
+    }
+  ],
+  "pixels": [
+    {
+      "name": "cover.png",
+      "kind": "decoded",
+      "path": "cover.png.decoded.rgba.gz",
+      "bytes": 345600,
+      "sha256": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206"
+    },
+    {
+      "name": "cover.png",
+      "kind": "scaled",
+      "path": "cover.png.scaled.rgba.gz",
+      "bytes": 43520,
+      "sha256": "9eb7a0ecb1b24fcea1b8244c0d88b6a7d1f73939890267481c07adf6237f6c4a"
+    },
+    {
+      "name": "large.png",
+      "kind": "decoded",
+      "path": "large.png.decoded.rgba.gz",
+      "bytes": 196608,
+      "sha256": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c"
+    },
+    {
+      "name": "large.png",
+      "kind": "scaled",
+      "path": "large.png.scaled.rgba.gz",
+      "bytes": 49152,
+      "sha256": "f62eb063443a18b2d1fda2d0aaeddb454d9f8a48c0dbb9c91efdd163590096c2"
+    },
+    {
+      "name": "wide.png",
+      "kind": "decoded",
+      "path": "wide.png.decoded.rgba.gz",
+      "bytes": 131072,
+      "sha256": "10d2975a8d699f05cfa0c5dd4050bcda35c7b6d1f9e2916b46a945533136722f"
+    },
+    {
+      "name": "wide.png",
+      "kind": "scaled",
+      "path": "wide.png.scaled.rgba.gz",
+      "bytes": 8192,
+      "sha256": "ba802d05bd0c80e1009994ddce0d1b3750a51352b9c692dcf880cefbdf14479a"
+    },
+    {
+      "name": "large.webp",
+      "kind": "decoded",
+      "path": "large.webp.decoded.rgba.gz",
+      "bytes": 49152,
+      "sha256": "adde4040791726d7c033c8c9fb541991f53494c8f5f699ce400fc87a10b7496f"
+    },
+    {
+      "name": "large.webp",
+      "kind": "scaled",
+      "path": "large.webp.scaled.rgba.gz",
+      "bytes": 12288,
+      "sha256": "a2fd5047f2939625785fa67b4ad18066a86cadcdc0601ede08714d55878d00dd"
+    },
+    {
+      "name": "wide.webp",
+      "kind": "decoded",
+      "path": "wide.webp.decoded.rgba.gz",
+      "bytes": 8192,
+      "sha256": "dd808a7bd4e44c732a446b9b335309a9ca8f144189372afae78b27c712d2f102"
+    },
+    {
+      "name": "wide.webp",
+      "kind": "scaled",
+      "path": "wide.webp.scaled.rgba.gz",
+      "bytes": 512,
+      "sha256": "2053c3794ddc8e6baa64e7b30cde04b23962eda2c1818448f0f7e4729e1c3bb0"
+    },
+    {
+      "name": "large.jpg",
+      "kind": "decoded",
+      "path": "large.jpg.decoded.rgba.gz",
+      "bytes": 49152,
+      "sha256": "095e8aa7f63241fa585e637d9de8cff418682f804c2f261b4b57405844bdb264"
+    },
+    {
+      "name": "large.jpg",
+      "kind": "scaled",
+      "path": "large.jpg.scaled.rgba.gz",
+      "bytes": 12288,
+      "sha256": "77da4ac44270b02e5c696f8adb93188387052a293dfbe3545600b68e89279bae"
+    },
+    {
+      "name": "wide.jpg",
+      "kind": "decoded",
+      "path": "wide.jpg.decoded.rgba.gz",
+      "bytes": 8192,
+      "sha256": "826eec185f367395968004f1ad6b36180f1590c7e6c48e6418bf8adebb42a983"
+    },
+    {
+      "name": "wide.jpg",
+      "kind": "scaled",
+      "path": "wide.jpg.scaled.rgba.gz",
+      "bytes": 512,
+      "sha256": "0a5a026f9eb2b30333270e6cdb4d1e6c7c84d703a79e858861ad99b08172c4a5"
+    },
+    {
+      "name": "coordinates-129x131.png",
+      "kind": "decoded",
+      "path": "coordinates-129x131.png.decoded.rgba.gz",
+      "bytes": 67596,
+      "sha256": "973150f6a0f97c952bc6b4bcbcafe50b1e13c5799de4b81fdcf9b24ac1a32a23"
+    },
+    {
+      "name": "coordinates-129x131.png",
+      "kind": "scaled",
+      "path": "coordinates-129x131.png.scaled.rgba.gz",
+      "bytes": 64512,
+      "sha256": "638944d131ecd303ca5a25e8453c0fb83540e6fb5dbc3966d19e063b7a1b1565"
+    },
+    {
+      "name": "coordinates-257x193.png",
+      "kind": "decoded",
+      "path": "coordinates-257x193.png.decoded.rgba.gz",
+      "bytes": 198404,
+      "sha256": "54b20347161d75f2140f989d34276b9b81617c61652ea7e9f646295605bd246b"
+    },
+    {
+      "name": "coordinates-257x193.png",
+      "kind": "scaled",
+      "path": "coordinates-257x193.png.scaled.rgba.gz",
+      "bytes": 49152,
+      "sha256": "4ca942b5ea73efe8c1d787008a297bd6bcc1844e16c61e73f55055d8f3bc818f"
+    },
+    {
+      "name": "coordinates-411x129.png",
+      "kind": "decoded",
+      "path": "coordinates-411x129.png.decoded.rgba.gz",
+      "bytes": 212076,
+      "sha256": "c904b9479431bc9e9eac48b3df4b7a9e7b334abf042b7bae5fd9d62ab7c72d74"
+    },
+    {
+      "name": "coordinates-411x129.png",
+      "kind": "scaled",
+      "path": "coordinates-411x129.png.scaled.rgba.gz",
+      "bytes": 20480,
+      "sha256": "97d0b6d7e9fab1572683a862ddff81a1081651d287f14bba3447709c811cf5c5"
+    }
+  ],
+  "requiredInputs": [
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/project/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/project/Oracle.csproj",
+      "bytes": 492,
+      "sha256": "fb19aa9abf511b0631c528c7634935b53bd15a0cabbcf97e8051b3733f24b88d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/project/Program.cs",
+      "bytes": 2522,
+      "sha256": "934e9723ebc0e9714e2366e97433ea9a6ce2a69376d8a22c9c45e28199946157",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-129x131.png.decoded.rgba",
+      "bytes": 67596,
+      "sha256": "973150f6a0f97c952bc6b4bcbcafe50b1e13c5799de4b81fdcf9b24ac1a32a23",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-129x131.png.scaled.rgba",
+      "bytes": 64512,
+      "sha256": "638944d131ecd303ca5a25e8453c0fb83540e6fb5dbc3966d19e063b7a1b1565",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-257x193.png.decoded.rgba",
+      "bytes": 198404,
+      "sha256": "54b20347161d75f2140f989d34276b9b81617c61652ea7e9f646295605bd246b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-257x193.png.scaled.rgba",
+      "bytes": 49152,
+      "sha256": "4ca942b5ea73efe8c1d787008a297bd6bcc1844e16c61e73f55055d8f3bc818f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-411x129.png.decoded.rgba",
+      "bytes": 212076,
+      "sha256": "c904b9479431bc9e9eac48b3df4b7a9e7b334abf042b7bae5fd9d62ab7c72d74",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/coordinates-411x129.png.scaled.rgba",
+      "bytes": 20480,
+      "sha256": "97d0b6d7e9fab1572683a862ddff81a1081651d287f14bba3447709c811cf5c5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/cover.png.decoded.rgba",
+      "bytes": 345600,
+      "sha256": "f3e3fb46665651b227dae4618e1a3726dbd913f4ec056cd4253c7ecbe166c206",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/cover.png.scaled.rgba",
+      "bytes": 43520,
+      "sha256": "9eb7a0ecb1b24fcea1b8244c0d88b6a7d1f73939890267481c07adf6237f6c4a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.jpg.decoded.rgba",
+      "bytes": 49152,
+      "sha256": "095e8aa7f63241fa585e637d9de8cff418682f804c2f261b4b57405844bdb264",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.jpg.scaled.rgba",
+      "bytes": 12288,
+      "sha256": "77da4ac44270b02e5c696f8adb93188387052a293dfbe3545600b68e89279bae",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.png.decoded.rgba",
+      "bytes": 196608,
+      "sha256": "145be83ba945246c6fd1f4175256d0fcbcec328c08ffb81a2c46ae5b1982581c",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.png.scaled.rgba",
+      "bytes": 49152,
+      "sha256": "f62eb063443a18b2d1fda2d0aaeddb454d9f8a48c0dbb9c91efdd163590096c2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.webp.decoded.rgba",
+      "bytes": 49152,
+      "sha256": "adde4040791726d7c033c8c9fb541991f53494c8f5f699ce400fc87a10b7496f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/large.webp.scaled.rgba",
+      "bytes": 12288,
+      "sha256": "a2fd5047f2939625785fa67b4ad18066a86cadcdc0601ede08714d55878d00dd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/native.json",
+      "bytes": 20624,
+      "sha256": "cf95a698cbaf368ace4be8a8ffb63bb541a2de396f9bb66b46521be4f4f08722",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.jpg.decoded.rgba",
+      "bytes": 8192,
+      "sha256": "826eec185f367395968004f1ad6b36180f1590c7e6c48e6418bf8adebb42a983",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.jpg.scaled.rgba",
+      "bytes": 512,
+      "sha256": "0a5a026f9eb2b30333270e6cdb4d1e6c7c84d703a79e858861ad99b08172c4a5",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.png.decoded.rgba",
+      "bytes": 131072,
+      "sha256": "10d2975a8d699f05cfa0c5dd4050bcda35c7b6d1f9e2916b46a945533136722f",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.png.scaled.rgba",
+      "bytes": 8192,
+      "sha256": "ba802d05bd0c80e1009994ddce0d1b3750a51352b9c692dcf880cefbdf14479a",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.webp.decoded.rgba",
+      "bytes": 8192,
+      "sha256": "dd808a7bd4e44c732a446b9b335309a9ca8f144189372afae78b27c712d2f102",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/pixels/wide.webp.scaled.rgba",
+      "bytes": 512,
+      "sha256": "2053c3794ddc8e6baa64e7b30cde04b23962eda2c1818448f0f7e4729e1c3bb0",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/record.json",
+      "bytes": 4175,
+      "sha256": "72d3cfeedca1057a8b9df2533db58f147f96bc13814a4e8fcfddfda75c1171bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/stdout.txt",
+      "bytes": 14,
+      "sha256": "c92582c44f37261405056bdbd21388bbacbebf5a3c5aa8c4a7fba654efe217d8",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/build.stdout.txt",
+      "bytes": 393,
+      "sha256": "a7e60380a5ee52e4abc665c1db0c225451b17fd9e814ccc9cb490b5734fccd5e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/bin/Release/net10.0/Oracle.dll",
+      "bytes": 17920,
+      "sha256": "e79b4808ed77c832579843d4d1c3060a6ca9acd48bc643c2728b82aec36183ae",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/prepare-blurhash-coordinates.mjs",
+      "bytes": 936,
+      "sha256": "895d499411a5c322c1ba79dde0a2ed444ecd53f576a997b15e5661d66e0f508d",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/input.json",
+      "bytes": 827,
+      "sha256": "704b670a06829c899b9d33529455cdf18586934692c08eaed58cc3ddecd32296",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-photo-global/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/large.png",
+      "bytes": 5373,
+      "sha256": "b49ee9b701533148ae845834d0793f6fa11791ca92871617ece302735bbe450e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/wide.png",
+      "bytes": 2791,
+      "sha256": "c8f1c42f2ea5da52244f5da98472b280832e20d8e7b0e5fe9e4cebc51590469e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/large.webp",
+      "bytes": 30142,
+      "sha256": "16473b85d90c7303613c7aa5ad93be608f206f72a3c40468ebd1b2bcca14cdaa",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/wide.webp",
+      "bytes": 20262,
+      "sha256": "4089ca7dbda7873c387457baa0bac8f56166dacf9899c8962efa8234b0d7daa7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/large.jpg",
+      "bytes": 37527,
+      "sha256": "836cd5dc667004fdd62546b348533c581a92d235902b39e1d27ab2b38bd774f7",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/images/fixtures/processor/wide.jpg",
+      "bytes": 25186,
+      "sha256": "dbbfdc198a408f7629a87810895c264c377dc1d30d3a6bcba0b344021fefd9bd",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-129x131.png",
+      "bytes": 54434,
+      "sha256": "75558cad793213ca7d6a1e9dd47e0e149253cfac281c9d5be152dd45c51f71ab",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/blurhash-pixels-native-2/inputs/coordinates-411x129.png",
+      "bytes": 106789,
+      "sha256": "35c32112c09fe7311e318561496e8f5215e5ada8cd3105569c35b74e939d858c",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "bytes": 17920,
+      "sha256": "e79b4808ed77c832579843d4d1c3060a6ca9acd48bc643c2728b82aec36183ae",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\SkiaSharp.dll",
+      "bytes": 489824,
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\BlurHashSharp.dll",
+      "bytes": 11776,
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\blurhash-pixels-native-3\\bin\\Release\\net10.0\\BlurHashSharp.SkiaSharp.dll",
+      "bytes": 7168,
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "bytes": 169808,
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/nuget/blurhashsharp.skiasharp/1.4.0-pre.1/src/BlurHashSharp.SkiaSharp/BlurHashEncoder.cs",
+      "bytes": 5741,
+      "sha256": "13c858a944737863d8e2efc59232b4806cf08500929edbbdffb3a1cdf9176a1e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/nuget/blurhashsharp/1.4.0-pre.1/src/BlurHashSharp/CoreBlurHashEncoder.cs",
+      "bytes": 9702,
+      "sha256": "e232355be58ab60074e2db9a4625f56e5f0100a0c92f53c748f2b3b208fe52af",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/.tools/nuget/blurhashsharp/1.4.0-pre.1/src/BlurHashSharp/ScaleHelper.cs",
+      "bytes": 2099,
+      "sha256": "eb247e06e3eed574d07e44b084fe751d83b50e884763ee5f3e3b62ac7e52238a",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing/ImageProcessor.cs",
+      "bytes": 18272,
+      "sha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/closure-files.json",
+      "bytes": 1877065,
+      "sha256": "11f5705709d3b5ae738aacd4826b8e5ffb2ab8724b3cdf55f39a668f7154f629",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/designated-localmods-build-binding.json",
+      "bytes": 11636,
+      "sha256": "83671401df5455b4085fee49b4a4a437974981250f74bf345ca730814938fdc2",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/blurhash-pixels-native-3/provenance.json",
+      "bytes": 19362,
+      "sha256": "e90630ff6e08da90d2f54159169b937523d3007b74c79f6243920ae2406c3eec",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/nearest-map-experiment-1.json",
+      "bytes": 10483,
+      "sha256": "d4956887cc1725fbe68c1385a566e9aeb76e3247421839550b966cd9ce83e891",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/jpeg-scale-experiment-1.json",
+      "bytes": 5811,
+      "sha256": "622ca24d708e1df99daf330f1b33f83c6a189a4b50711e529c40aeb933685e2a",
+      "required": true
+    }
+  ],
+  "runtimeSha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+  "fullImageFormats": [
+    "png",
+    "webp"
+  ],
+  "unresolvedDecoderScaleInputs": [
+    "large.jpg",
+    "wide.jpg"
+  ]
+}

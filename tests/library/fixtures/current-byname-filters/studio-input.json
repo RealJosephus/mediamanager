@@ -1,0 +1,801 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "75000000-0000-0000-0000-000000000100",
+  "items": [
+    {
+      "key": "aggregateRoot",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "name": "root",
+      "type": "AggregateFolder",
+      "parentId": null,
+      "topParentId": null,
+      "nativeExisting": true
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "name": "Media Folders",
+      "type": "UserRootFolder",
+      "parentId": null,
+      "topParentId": null,
+      "nativeManaged": true,
+      "pathKind": "userRoot",
+      "data": {
+        "PhysicalLocationsList": [],
+        "IsRoot": true
+      }
+    },
+    {
+      "key": "physicalRoot",
+      "id": "75000000-0000-0000-0000-000000000100",
+      "name": "Studio Filter Physical Root",
+      "type": "Folder",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "75000000-0000-0000-0000-000000000100",
+      "nativeManaged": true
+    },
+    {
+      "key": "collectionView",
+      "id": "75000000-0000-0000-0000-000000000101",
+      "name": "Studio Filter Library",
+      "type": "CollectionFolder",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "75000000-0000-0000-0000-000000000101",
+      "nativeManaged": true,
+      "pathKind": "collectionView",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "75000000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": [
+          "Z:\\StudioFilterOracle\\Library"
+        ]
+      }
+    },
+    {
+      "key": "studioRock",
+      "id": "75000000-0000-0000-0000-000000000010",
+      "name": "Rock",
+      "cleanName": "rock",
+      "sortName": "selector-studio-rock",
+      "type": "Studio",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "musicStudioRock",
+      "id": "75000000-0000-0000-0000-000000000011",
+      "name": "ROCK",
+      "cleanName": "rock",
+      "sortName": "selector-musicstudio-rock",
+      "type": "MusicGenre",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "wrongTypeRock",
+      "id": "75000000-0000-0000-0000-000000000012",
+      "name": "Rock",
+      "cleanName": "rock",
+      "sortName": "selector-wrong-type-rock",
+      "type": "Movie",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "studioNameRockCleanStored",
+      "id": "75000000-0000-0000-0000-000000000013",
+      "name": "Rock",
+      "cleanName": "stored only",
+      "sortName": "selector-name-rock-clean-stored",
+      "type": "Studio",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "musicStudioNameAliasCleanRock",
+      "id": "75000000-0000-0000-0000-000000000014",
+      "name": "Alias Display",
+      "cleanName": "rock",
+      "sortName": "selector-name-alias-clean-rock",
+      "type": "MusicGenre",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "studioJazz",
+      "id": "75000000-0000-0000-0000-000000000015",
+      "name": "Jazz",
+      "cleanName": "jazz",
+      "sortName": "selector-studio-jazz",
+      "type": "Studio",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "studioEmptyIdRock",
+      "id": "00000000-0000-0000-0000-000000000000",
+      "name": "Rock",
+      "cleanName": "rock",
+      "sortName": "selector-empty-id-rock",
+      "type": "Studio",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "emptyMemoryFolder",
+      "id": "75000000-0000-0000-0000-000000000110",
+      "name": "Empty Memory Folder",
+      "sortName": "empty-memory-folder",
+      "type": "Folder",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockBoth",
+      "id": "75000000-0000-0000-0000-000000000200",
+      "name": "Rock Both",
+      "sortName": "01-rock-both",
+      "type": "Movie",
+      "studiosText": "Rock",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "jazzBoth",
+      "id": "75000000-0000-0000-0000-000000000201",
+      "name": "Jazz Both",
+      "sortName": "02-jazz-both",
+      "type": "Movie",
+      "studiosText": "Jazz",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockJazzBoth",
+      "id": "75000000-0000-0000-0000-000000000202",
+      "name": "Rock Jazz Both",
+      "sortName": "03-rock-jazz-both",
+      "type": "Movie",
+      "studiosText": "Rock|Jazz",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "sciFiBoth",
+      "id": "75000000-0000-0000-0000-000000000203",
+      "name": "Sci-Fi Both",
+      "sortName": "04-sci-fi-both",
+      "type": "Movie",
+      "studiosText": "Sci-Fi",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockColumnOnly",
+      "id": "75000000-0000-0000-0000-000000000204",
+      "name": "Rock Column Only",
+      "sortName": "05-rock-column-only",
+      "type": "Movie",
+      "studiosText": "Rock",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockMapOnly",
+      "id": "75000000-0000-0000-0000-000000000205",
+      "name": "Rock Map Only",
+      "sortName": "06-rock-map-only",
+      "type": "Movie",
+      "studiosText": "Unrelated",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockColumnStoredMap",
+      "id": "75000000-0000-0000-0000-000000000206",
+      "name": "Rock Column Stored Map",
+      "sortName": "07-rock-column-stored-map",
+      "type": "Movie",
+      "studiosText": "Rock",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "compositeMapOnly",
+      "id": "75000000-0000-0000-0000-000000000207",
+      "name": "Composite Map Only",
+      "sortName": "08-composite-map-only",
+      "type": "Movie",
+      "studiosText": "Composite",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    },
+    {
+      "key": "rockEmptySegmentsColumnOnly",
+      "id": "75000000-0000-0000-0000-000000000208",
+      "name": "Rock Empty Segments Column Only",
+      "sortName": "09-rock-empty-segments-column-only",
+      "type": "Movie",
+      "studiosText": "Rock||Tail|",
+      "parentId": "75000000-0000-0000-0000-000000000100",
+      "topParentId": "75000000-0000-0000-0000-000000000100"
+    }
+  ],
+  "links": [],
+  "itemValues": [
+    {
+      "key": "valueRock",
+      "id": "75000000-0000-0000-0000-000000000300",
+      "type": "Studio",
+      "value": "Rock",
+      "cleanValue": "rock"
+    },
+    {
+      "key": "valueJazz",
+      "id": "75000000-0000-0000-0000-000000000301",
+      "type": "Studio",
+      "value": "Jazz",
+      "cleanValue": "jazz"
+    },
+    {
+      "key": "valueSciFi",
+      "id": "75000000-0000-0000-0000-000000000302",
+      "type": "Studio",
+      "value": "Sci-Fi",
+      "cleanValue": "sci fi"
+    },
+    {
+      "key": "valueStoredOnly",
+      "id": "75000000-0000-0000-0000-000000000303",
+      "type": "Studio",
+      "value": "Stored Only",
+      "cleanValue": "stored only"
+    },
+    {
+      "key": "valueRockJazz",
+      "id": "75000000-0000-0000-0000-000000000304",
+      "type": "Studio",
+      "value": "Rock Jazz",
+      "cleanValue": "rock jazz"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "rockBoth",
+      "valueKey": "valueRock"
+    },
+    {
+      "itemKey": "jazzBoth",
+      "valueKey": "valueJazz"
+    },
+    {
+      "itemKey": "rockJazzBoth",
+      "valueKey": "valueRock"
+    },
+    {
+      "itemKey": "rockJazzBoth",
+      "valueKey": "valueJazz"
+    },
+    {
+      "itemKey": "sciFiBoth",
+      "valueKey": "valueSciFi"
+    },
+    {
+      "itemKey": "rockMapOnly",
+      "valueKey": "valueRock"
+    },
+    {
+      "itemKey": "rockColumnStoredMap",
+      "valueKey": "valueStoredOnly"
+    },
+    {
+      "itemKey": "compositeMapOnly",
+      "valueKey": "valueRockJazz"
+    }
+  ],
+  "cases": [
+    {
+      "name": "studios-pipe-or",
+      "query": "Studios=Rock%7CJazz",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-clean-normalization",
+      "query": "Studios=Sci%20Fi",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-comma-is-literal",
+      "query": "Studios=Rock%2CJazz",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-repeated-does-not-split",
+      "query": "Studios=Rock%7CJazz&Studios=Jazz",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-single-double-pipe-removes-empty",
+      "query": "Studios=Rock%7C%7CJazz",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-empty-omits-filter",
+      "query": "Studios=",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-whitespace-is-active-empty",
+      "query": "Studios=%20",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-repeated-empty-is-active",
+      "query": "Studios=&Studios=",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-studio-selector",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000010",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-musicstudio-selector-api-key-routes",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000011",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "auth": "apiKey",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "studio-ids-do-not-validate-selector-type",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000012",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-repository-uses-selector-clean-name",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000013",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-comma-or",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000010,75000000-0000-0000-0000-000000000015",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-invalid-only-omits-filter",
+      "query": "StudioIds=not-a-guid",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-invalid-plus-valid-keeps-valid",
+      "query": "StudioIds=not-a-guid,75000000-0000-0000-0000-000000000010",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-empty-omits-filter",
+      "query": "StudioIds=",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-empty-guid-repository",
+      "query": "StudioIds=00000000-0000-0000-0000-000000000000",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-unknown-valid-repository",
+      "query": "StudioIds=75ffffff-ffff-ffff-ffff-ffffffffffff",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-pipe-is-invalid",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000010%7C75000000-0000-0000-0000-000000000015",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-repeated-comma-occurrence-not-split",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000010,75000000-0000-0000-0000-000000000015&StudioIds=75000000-0000-0000-0000-000000000015",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studio-ids-repeated-valid-occurrences-or",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000010&StudioIds=75000000-0000-0000-0000-000000000015",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "studios-and-studio-ids-repository",
+      "query": "Studios=Jazz&StudioIds=75000000-0000-0000-0000-000000000010",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ]
+    },
+    {
+      "name": "memory-studios-uses-baseitems-column-api-key-routes",
+      "query": "Studios=Rock",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false,
+      "auth": "apiKey",
+      "endpoints": [
+        "items",
+        "legacy"
+      ]
+    },
+    {
+      "name": "memory-studios-does-not-clean",
+      "query": "Studios=Sci%20Fi",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studios-raw-punctuation",
+      "query": "Studios=Sci-Fi",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studio-ids-uses-name-not-clean-name",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000013",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studio-ids-do-not-use-clean-name",
+      "query": "StudioIds=75000000-0000-0000-0000-000000000014",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studio-ids-empty-guid-is-bad-request",
+      "query": "StudioIds=00000000-0000-0000-0000-000000000000",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false,
+      "expectedStatus": 400
+    },
+    {
+      "name": "memory-studios-and-studio-ids",
+      "query": "Studios=Jazz&StudioIds=75000000-0000-0000-0000-000000000010",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studio-ids-unknown-valid",
+      "query": "StudioIds=75ffffff-ffff-ffff-ffff-ffffffffffff",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studio-ids-empty-guid-empty-folder-short-circuits",
+      "query": "StudioIds=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "parentKey": "emptyMemoryFolder",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studios-precondition-short-circuits-empty-guid",
+      "query": "Studios=Missing&StudioIds=00000000-0000-0000-0000-000000000000",
+      "scope": [
+        "rockBoth",
+        "jazzBoth",
+        "rockJazzBoth",
+        "sciFiBoth",
+        "rockColumnOnly",
+        "rockMapOnly",
+        "rockColumnStoredMap",
+        "compositeMapOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studios-whitespace-matches-empty-segment",
+      "query": "Studios=%20",
+      "scope": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    },
+    {
+      "name": "memory-studios-repeated-empty-matches-empty-segment",
+      "query": "Studios=&Studios=",
+      "scope": [
+        "rockEmptySegmentsColumnOnly"
+      ],
+      "parentKey": "physicalRoot",
+      "omitIds": true,
+      "recursive": false
+    }
+  ]
+}

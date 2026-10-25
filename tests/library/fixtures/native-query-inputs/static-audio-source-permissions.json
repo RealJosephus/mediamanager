@@ -1,0 +1,51 @@
+{
+  "originalNeutralFixture": {
+    "filename": "D:/mediamanager/tests/library/fixtures/rating-permissions/input.json",
+    "sha256": "f2317118cd990e48bb9337dbc32a6791571fc9d5f4fa5b9363d5bd3b797cd499"
+  },
+  "neutralFixture": {
+    "filename": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-input-v1/input.json",
+    "sha256": "ce88db7c19e262d371e36e63f8f7fb3541242151d481458999d4720cab9257db"
+  },
+  "recorderFixtureRelative": "../mediamanager-validation/20261011/filter-results/static-audio-source-input-v1/input.json",
+  "cases": [
+    { "name": "static-audio-source-permissions-0", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": false, "EnableAudioPlaybackTranscoding": false, "EnablePlaybackRemuxing": false } },
+    { "name": "static-audio-source-permissions-1", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": true, "EnableAudioPlaybackTranscoding": false, "EnablePlaybackRemuxing": false } },
+    { "name": "static-audio-source-permissions-2", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": false, "EnableAudioPlaybackTranscoding": true, "EnablePlaybackRemuxing": false } },
+    { "name": "static-audio-source-permissions-3", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": true, "EnableAudioPlaybackTranscoding": true, "EnablePlaybackRemuxing": false } },
+    { "name": "static-audio-source-permissions-4", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": false, "EnableAudioPlaybackTranscoding": false, "EnablePlaybackRemuxing": true } },
+    { "name": "static-audio-source-permissions-5", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": true, "EnableAudioPlaybackTranscoding": false, "EnablePlaybackRemuxing": true } },
+    { "name": "static-audio-source-permissions-6", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": false, "EnableAudioPlaybackTranscoding": true, "EnablePlaybackRemuxing": true } },
+    { "name": "static-audio-source-permissions-7", "query": "IncludeItemTypes=Audio", "scope": ["alpha"], "detailKey": "alpha", "maxRating": null, "blockUnrated": [], "detailExpectedStatus": 200, "endpoints": ["detail"], "transcodingPolicy": { "EnableVideoPlaybackTranscoding": true, "EnableAudioPlaybackTranscoding": true, "EnablePlaybackRemuxing": true } }
+  ],
+  "recordings": [
+    {
+      "evidenceRoot": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v1/rating-permissions-native-v1",
+      "oracle": {
+        "filename": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v1/rating-permissions-native-v1/oracle-validation.json",
+        "sha256": "55a353e4a25c671b39e1e7e75a2c146f3c96ee1355ac32034dae24dafeccd1de"
+      },
+      "directory": {
+        "path": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v1/rating-permissions-native-v1",
+        "entriesSha256": "bb28f1232023d181c3746658c51fcdcb4974b112d904900ae0422411dc6849b3"
+      }
+    },
+    {
+      "evidenceRoot": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v2/rating-permissions-native-v1",
+      "oracle": {
+        "filename": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v2/rating-permissions-native-v1/oracle-validation.json",
+        "sha256": "6c503e8cf181c848e92c7e7dd9f58fb25e0355ad993b06894beab6e813ac9ee6"
+      },
+      "directory": {
+        "path": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-native-v2/rating-permissions-native-v1",
+        "entriesSha256": "00bacdc63df5e99745e5f0c55c78976a5d1273a643489bcd06e88e388f3d77f2"
+      }
+    }
+  ],
+  "independentAudit": {
+    "filename": "D:/mediamanager-validation/20261011/filter-results/static-audio-source-repeat-audit-v1.json",
+    "sha256": "1075d2b4c66d66fdaaada63a3aa33ed1c7b5708f9d6351fc32e5781a872ecaf0"
+  },
+  "scenarioDefinitionSha256": "373062a0d911ca14c8e998242ab362e51a60b608cf0e10ffd52182e9f5130849",
+  "boundary": "Static Audio permission declaration, not encoder capability or playback negotiation. Exact original read/stop and preparation/artifact guards retained. Separate policy-GET all-table gate, actual Native PID seal and full build influence closure are not claimed."
+}

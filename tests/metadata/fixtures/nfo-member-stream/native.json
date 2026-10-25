@@ -1,0 +1,237 @@
+{
+  "actualNativeNfoCustomMembers": true,
+  "physicalChildrenControlled": true,
+  "culture": "zh-CN",
+  "results": [
+    {
+      "name": "album native sort/name tie and inherited audiobook",
+      "body": "\u003Ccustom\u003E\r\n  \u003Ctrack\u003E\r\n    \u003Cposition\u003E1\u003C/position\u003E\r\n    \u003Ctitle\u003E \u003C/title\u003E\r\n    \u003Cduration\u003E02:05\u003C/duration\u003E\r\n  \u003C/track\u003E\r\n  \u003Ctrack\u003E\r\n    \u003Cdisc\u003E1\u003C/disc\u003E\r\n    \u003Cposition\u003E1\u003C/position\u003E\r\n    \u003Ctitle\u003E Alpha \u003C/title\u003E\r\n    \u003Cduration\u003E01:01\u003C/duration\u003E\r\n  \u003C/track\u003E\r\n  \u003Ctrack\u003E\r\n    \u003Cdisc\u003E1\u003C/disc\u003E\r\n    \u003Cposition\u003E1\u003C/position\u003E\r\n    \u003Ctitle\u003E beta \u003C/title\u003E\r\n    \u003Cduration\u003E01:05\u003C/duration\u003E\r\n  \u003C/track\u003E\r\n\u003C/custom\u003E",
+      "members": [
+        {
+          "type": "track",
+          "fields": {
+            "position": "1",
+            "title": " ",
+            "duration": "02:05"
+          }
+        },
+        {
+          "type": "track",
+          "fields": {
+            "disc": "1",
+            "position": "1",
+            "title": " Alpha ",
+            "duration": "01:01"
+          }
+        },
+        {
+          "type": "track",
+          "fields": {
+            "disc": "1",
+            "position": "1",
+            "title": " beta ",
+            "duration": "01:05"
+          }
+        }
+      ]
+    },
+    {
+      "name": "physical artist albums use native recursive scope",
+      "body": "\u003Ccustom\u003E\r\n  \u003Calbum\u003E\r\n    \u003Ctitle\u003ENo year\u003C/title\u003E\r\n  \u003C/album\u003E\r\n  \u003Calbum\u003E\r\n    \u003Ctitle\u003E Alpha \u003C/title\u003E\r\n    \u003Cyear\u003E2000\u003C/year\u003E\r\n  \u003C/album\u003E\r\n  \u003Calbum\u003E\r\n    \u003Ctitle\u003E zeta \u003C/title\u003E\r\n    \u003Cyear\u003E2000\u003C/year\u003E\r\n  \u003C/album\u003E\r\n\u003C/custom\u003E",
+      "members": [
+        {
+          "type": "album",
+          "fields": {
+            "title": "No year"
+          }
+        },
+        {
+          "type": "album",
+          "fields": {
+            "title": " Alpha ",
+            "year": "2000"
+          }
+        },
+        {
+          "type": "album",
+          "fields": {
+            "title": " zeta ",
+            "year": "2000"
+          }
+        }
+      ]
+    },
+    {
+      "name": "by-name artist physical children remain empty",
+      "body": "\u003Ccustom /\u003E",
+      "members": []
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Diacritics",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\Diacritics.dll",
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "name": "J2N",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\J2N.dll",
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "MediaBrowser.XbmcMetadata",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\MediaBrowser.XbmcMetadata.dll",
+      "sha256": "82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Oracle",
+      "location": "D:\\mediamanager-validation\\20261014-release-nfo-member-formal-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "913f1ea4fbc293fcdf7d89f4a88260b49664e037b4c3ac074bc4aa4c0b9bb84c"
+    },
+    {
+      "name": "System.Collections",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Linq",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Xml",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "name": "System.Private.Xml.Linq",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.Linq.dll",
+      "sha256": "c832b73de9783e6929ca5ff4863fc313e13ef7cfb5965c52587c4f77f6e037a7"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Json",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "System.Threading.Thread",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930"
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    },
+    {
+      "name": "System.Xml.XDocument",
+      "location": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.XDocument.dll",
+      "sha256": "3ff858607de5146051498a7124ef983bea280d86e165f993516c6c26af81cfb5"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+export function ciSummary(scope, result) {
+  const lines = ['## Cross-platform CI validation', '',
+    `Platform: ${scope.platform}. Discovered: **${scope.discovered.length}**. Selected: **${scope.selected.length}**. Excluded: **${scope.excluded.length}**.`, '',
+    `Selection mode: **${scope.impact.mode}**. Event: ${scope.impact.event ?? 'local/manual'}.`, '',
+    ...(scope.sharding ? [`Shard: **${scope.sharding.index}/${scope.sharding.total}**; all shard scopes retain the same available-file manifest.`, ''] : []),
+    ...(scope.impact.baseSha ? [`Comparison: \`${scope.impact.baseSha}\` → \`${scope.impact.headSha}\`.`, ''] : []),
+    ...(scope.impact.fallbackReasons.length ? ['Automatic narrowing fell back to all available tests:', '',
+      ...scope.impact.fallbackReasons.slice(0, 12).map(reason => `- ${reason.code}: ${String(reason.path ?? reason.consumer ?? reason.detail ?? '').replaceAll('\n', ' ').slice(0, 240)}`),
+      ...(scope.impact.fallbackReasons.length > 12 ? ['- Further comparison details are in impact.json.'] : []), ''] : []),
+    ...(scope.impact.mode === 'not-applicable' ? ['No tests executed: every changed file is on the documentation allowlist and has no declared consumer.', ''] : []),
+    `Outcome: **${result.outcome}**. ${scope.releasePair
+      ? `Strict full pair acceptance on this platform: **${result.strictPairAcceptance === true}**. The cross-platform aggregation must verify all three artifacts; release acceptance remains false.`
+      : scope.profile === 'full'
+      ? 'The strict full profile retains every discovered test. Release acceptance still requires two independent runs of the same candidate and current release inputs.'
+      : 'This is an explicit available-input subset; release full-profile acceptance remains separate.'}`, '',
+    `Current release inputs ready: **${scope.currentReleaseInputReady === true}**. Historical archive complete: **${scope.historicalArchiveComplete === true}** (diagnostic only; it never changes selection, outcome, or release-pair acceptance).`, '',
+    'All selected tests retain the strict zero-failure, zero-skip, registration and unchanged-current-input gates. Test failures never change selection.', '',
+    '### Excluded files', '', '| Test | Dependency or scope reason |', '| --- | --- |'];
+  for (const record of scope.excluded) lines.push(`| ${record.path} | ${[...new Set(record.reasons.map(reason =>
+    [reason.code, reason.service ?? reason.tool].filter(Boolean).join(': ')))].join(', ').slice(0, 300).replaceAll('|', '\\|')} |`);
+  if (!scope.excluded.length) lines.push('| None | All discovered test files selected |');
+  if (scope.infrastructureErrors.length) lines.push('', '### Infrastructure errors', '',
+    ...scope.infrastructureErrors.slice(0, 20).map(error => `- ${error.code}: ${String(error.filename ?? '').slice(0, 240)}`));
+  if (scope.releasePair) {
+    lines.push('', '### Independent strict full runs', '', '| Run | Verified | Passed tests | Evidence directory |', '| --- | --- | --- | --- |');
+    for (const round of result.rounds ?? []) lines.push(`| ${round.index} | ${round.verified} | ${round.counts?.pass ?? 'Unavailable'} | strict-full-${round.index} |`);
+    if (!result.rounds?.length) lines.push('| None | false | 0 | Shared input preflight did not complete |');
+    lines.push('', 'The same protected current release input identity is required across the preflight and both runs. Historical archive diagnostics are excluded. Product and production-scale acceptance remain separate.');
+  }
+  lines.push('', 'Complete dependency ownership, paths and errors are preserved in the scope.json artifact.');
+  return lines.join('\n') + '\n';
+}

@@ -1,0 +1,295 @@
+{
+  "identity": "independent-jpeg-scale-boundary-inputs",
+  "maxDimension": 128,
+  "pattern": "(x*(17+channel*11)+y*(29+channel*7)+channel*53)&255",
+  "encoder": {
+    "inputColor": "RGB",
+    "jpegColor": "YCbCr",
+    "quality": 87,
+    "dct": "JDCT_ISLOW",
+    "sampling": "1x1",
+    "progressive": false
+  },
+  "images": [
+    {
+      "name": "scale-n2-width-floor",
+      "filename": "scale-n2-width-floor.jpg",
+      "n": 2,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 3
+      },
+      "scaleBoundary": {
+        "numerator": 3,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 682
+      },
+      "width": 682,
+      "height": 512
+    },
+    {
+      "name": "scale-n2-width-ceil",
+      "filename": "scale-n2-width-ceil.jpg",
+      "n": 2,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 3
+      },
+      "scaleBoundary": {
+        "numerator": 3,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 683
+      },
+      "width": 683,
+      "height": 512
+    },
+    {
+      "name": "scale-n3-width-floor",
+      "filename": "scale-n3-width-floor.jpg",
+      "n": 3,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 5
+      },
+      "scaleBoundary": {
+        "numerator": 5,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 409
+      },
+      "width": 409,
+      "height": 307
+    },
+    {
+      "name": "scale-n3-width-ceil",
+      "filename": "scale-n3-width-ceil.jpg",
+      "n": 3,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 5
+      },
+      "scaleBoundary": {
+        "numerator": 5,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 410
+      },
+      "width": 410,
+      "height": 307
+    },
+    {
+      "name": "scale-n4-width-floor",
+      "filename": "scale-n4-width-floor.jpg",
+      "n": 4,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 7
+      },
+      "scaleBoundary": {
+        "numerator": 7,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 292
+      },
+      "width": 292,
+      "height": 219
+    },
+    {
+      "name": "scale-n4-width-ceil",
+      "filename": "scale-n4-width-ceil.jpg",
+      "n": 4,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 7
+      },
+      "scaleBoundary": {
+        "numerator": 7,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 293
+      },
+      "width": 293,
+      "height": 220
+    },
+    {
+      "name": "scale-n5-width-floor",
+      "filename": "scale-n5-width-floor.jpg",
+      "n": 5,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 9
+      },
+      "scaleBoundary": {
+        "numerator": 9,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 227
+      },
+      "width": 227,
+      "height": 170
+    },
+    {
+      "name": "scale-n5-width-ceil",
+      "filename": "scale-n5-width-ceil.jpg",
+      "n": 5,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 9
+      },
+      "scaleBoundary": {
+        "numerator": 9,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 228
+      },
+      "width": 228,
+      "height": 171
+    },
+    {
+      "name": "scale-n6-width-floor",
+      "filename": "scale-n6-width-floor.jpg",
+      "n": 6,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 11
+      },
+      "scaleBoundary": {
+        "numerator": 11,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 186
+      },
+      "width": 186,
+      "height": 139
+    },
+    {
+      "name": "scale-n6-width-ceil",
+      "filename": "scale-n6-width-ceil.jpg",
+      "n": 6,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 11
+      },
+      "scaleBoundary": {
+        "numerator": 11,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 187
+      },
+      "width": 187,
+      "height": 140
+    },
+    {
+      "name": "scale-n7-width-floor",
+      "filename": "scale-n7-width-floor.jpg",
+      "n": 7,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 13
+      },
+      "scaleBoundary": {
+        "numerator": 13,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 157
+      },
+      "width": 157,
+      "height": 117
+    },
+    {
+      "name": "scale-n7-width-ceil",
+      "filename": "scale-n7-width-ceil.jpg",
+      "n": 7,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 13
+      },
+      "scaleBoundary": {
+        "numerator": 13,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 158
+      },
+      "width": 158,
+      "height": 118
+    },
+    {
+      "name": "scale-n8-width-floor",
+      "filename": "scale-n8-width-floor.jpg",
+      "n": 8,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 15
+      },
+      "scaleBoundary": {
+        "numerator": 15,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 136
+      },
+      "width": 136,
+      "height": 102
+    },
+    {
+      "name": "scale-n8-width-ceil",
+      "filename": "scale-n8-width-ceil.jpg",
+      "n": 8,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 15
+      },
+      "scaleBoundary": {
+        "numerator": 15,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 137
+      },
+      "width": 137,
+      "height": 102
+    }
+  ]
+}

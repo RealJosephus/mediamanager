@@ -1,0 +1,25 @@
+{
+  "totalDuration": "18014398509481993",
+  "keyframeTicks": [
+    "0",
+    "9007199254740993",
+    "18014398509481986"
+  ],
+  "desiredSegmentLengthMs": 86400000,
+  "formatted": [
+    "900719925.474099",
+    "900719925.474099",
+    "0.000001"
+  ],
+  "urlTicks": [
+    "9007199254740992",
+    "9007199254740992",
+    "7"
+  ],
+  "runtimeTicks": [
+    "0",
+    "9007199254740992",
+    "18014398509481984"
+  ],
+  "playlist": "#EXTM3U\r\n#EXT-X-PLAYLIST-TYPE:VOD\r\n#EXT-X-VERSION:3\r\n#EXT-X-TARGETDURATION:900719926\r\n#EXT-X-MEDIA-SEQUENCE:0\r\n#EXTINF:900719925.474099, nodesc\r\nhls1/main/0.ts?MediaSourceId=22222222222222222222222222222222\u0026SegmentContainer=ts\u0026runtimeTicks=0\u0026actualSegmentLengthTicks=9007199254740992\r\n#EXTINF:900719925.474099, nodesc\r\nhls1/main/1.ts?MediaSourceId=22222222222222222222222222222222\u0026SegmentContainer=ts\u0026runtimeTicks=9007199254740992\u0026actualSegmentLengthTicks=9007199254740992\r\n#EXTINF:0.000001, nodesc\r\nhls1/main/2.ts?MediaSourceId=22222222222222222222222222222222\u0026SegmentContainer=ts\u0026runtimeTicks=18014398509481984\u0026actualSegmentLengthTicks=7\r\n#EXT-X-ENDLIST\r\n"
+}

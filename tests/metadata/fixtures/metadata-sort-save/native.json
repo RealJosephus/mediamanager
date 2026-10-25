@@ -1,0 +1,260 @@
+{
+  "results": [
+    {
+      "name": "Movie cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Folder cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Series cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Season cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "0002",
+        "IndexNumber": 2,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Episode cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "003 - 0002 - The Title 12",
+        "IndexNumber": 2,
+        "ParentIndexNumber": 3
+      }
+    },
+    {
+      "name": "Audio cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "0003 - 0002 - The Title 12",
+        "IndexNumber": 2,
+        "ParentIndexNumber": 3
+      }
+    },
+    {
+      "name": "AudioBook cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "0003 - 0002 - The Title 12",
+        "IndexNumber": 2,
+        "ParentIndexNumber": 3
+      }
+    },
+    {
+      "name": "MusicAlbum cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "MusicArtist cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "MusicVideo cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Video cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Trailer cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "BoxSet cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "Person cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "The Title 12",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "UserView cold mapper invalidates the persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "unchanged forced name still invalidates a persisted sort cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": "The Forced 2",
+        "SortName": "forced 0000000002",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "unchanged title with a same-value setter still invalidates the cache",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "episode index-only changes generate a new cold sort value",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "003 - 0009 - The Title 12",
+        "IndexNumber": 9,
+        "ParentIndexNumber": 3
+      }
+    },
+    {
+      "name": "season index-only changes generate a new cold sort value",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "0009",
+        "IndexNumber": 9,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "audio disc-only changes generate a new cold sort value",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": null,
+        "SortName": "0004 - 0002 - The Title 12",
+        "IndexNumber": 2,
+        "ParentIndexNumber": 4
+      }
+    },
+    {
+      "name": "empty forced sort falls back to the native title",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": "",
+        "SortName": "title 0000000012",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "native Mandarin cold sort uses the supported portable spelling",
+      "hydratedCache": null,
+      "result": {
+        "Name": "\u5F20\u56FD\u8363",
+        "ForcedSortName": null,
+        "SortName": "zhang guo rong",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    },
+    {
+      "name": "person forced sort retains its native leading-only trimming",
+      "hydratedCache": null,
+      "result": {
+        "Name": "The Title 12",
+        "ForcedSortName": " Forced Name ",
+        "SortName": "Forced Name ",
+        "IndexNumber": null,
+        "ParentIndexNumber": null
+      }
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "41d4413690932351c265143f6bb56bd22a47ba5d5987352825f927ed0ca548a7",
+  "boundary": "Actual BaseItemMapper entity-to-item and item-to-entity mapping, actual type sort getters and Name/ForcedSortName setter invalidation. Pathless items, explicit scalar changes, empty collection lookup and inactive recording lookup are controlled. Repository persistence, a previously warmed item cache, full refresh hooks, providers, NFO and file operations are excluded."
+}

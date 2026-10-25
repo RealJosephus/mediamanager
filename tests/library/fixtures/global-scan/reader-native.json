@@ -1,0 +1,33 @@
+{
+  "actualBaseItemRepositoryReader": true,
+  "actualSqliteSource": true,
+  "results": [
+    {
+      "Name": "actual-persisted-aggregate",
+      "virtualChildren": 0,
+      "Id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\global-scan-native-4\\cases\\empty-no-configured-libraries\\program\\root",
+      "IsRoot": true,
+      "physicalLocations": [],
+      "serializedData": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00222026-10-15T20:42:16.3814083Z\u0022,\u0022RemoteTrailers\u0022:[]}"
+    },
+    {
+      "Name": "folder-IsRoot-extra",
+      "virtualChildren": 0,
+      "Id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\global-scan-native-4\\cases\\empty-no-configured-libraries\\program\\root",
+      "IsRoot": true,
+      "physicalLocations": [],
+      "serializedData": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00222026-10-15T20:42:16.3814083Z\u0022,\u0022RemoteTrailers\u0022:[]}"
+    },
+    {
+      "Name": "readonly-container-invalid-token",
+      "virtualChildren": 0,
+      "Id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "Path": "D:\\mediamanager-validation\\20261016-full-scan-stage\\results\\global-scan-native-4\\cases\\empty-no-configured-libraries\\program\\root",
+      "IsRoot": true,
+      "physicalLocations": [],
+      "serializedData": "{\u0022VirtualChildren\u0022:[],\u0022PhysicalLocationsList\u0022:[],\u0022IsRoot\u0022:true,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00222026-10-15T20:42:16.3814083Z\u0022,\u0022RemoteTrailers\u0022:[]}"
+    }
+  ]
+}

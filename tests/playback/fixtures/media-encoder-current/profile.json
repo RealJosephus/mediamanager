@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual MediaEncoder.SetFFmpegPath, EncoderValidator version processes, named manager/XML/events, public GetMediaInfo and SubtitleEncoder.GetSubtitles. Actual HLS command builder and original packet-copy execution. The fixture apphost blocks capability enumeration, lavfi and hardware probes required only by removed generation features. No whole server startup, hardware capability or full HLS controller/authentication claim.",
+  "sourcePaths": [
+    "Jellyfin.Server/StartupOptions.cs",
+    "Jellyfin.Server/Program.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "MediaBrowser.Controller/Extensions/ConfigurationExtensions.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationFactory.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationStore.cs",
+    "MediaBrowser.MediaEncoding/Encoder/MediaEncoder.cs",
+    "MediaBrowser.MediaEncoding/Encoder/EncoderValidator.cs",
+    "MediaBrowser.MediaEncoding/Probing/ProbeResultNormalizer.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEncoder.cs",
+    "MediaBrowser.MediaEncoding/Subtitles/SubtitleEditParser.cs",
+    "MediaBrowser.Controller/MediaEncoding/EncodingHelper.cs",
+    "MediaBrowser.Controller/MediaEncoding/EncodingJobInfo.cs",
+    "MediaBrowser.Controller/Streaming/StreamState.cs",
+    "Jellyfin.Api/Controllers/DynamicHlsController.cs",
+    "Jellyfin.Api/Controllers/SubtitleController.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptions.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+  ]
+}

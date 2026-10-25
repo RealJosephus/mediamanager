@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "name": "saved-models",
+      "timers": [
+        {"Id":"late","Name":"Late","StartDate":"2500-01-01T01:00:00.1234567Z","EndDate":"2500-01-01T02:00:00.1234568Z","ChannelId":"A","ProgramId":"P1","SeriesTimerId":"S2","Status":"New","Priority":-4,"PrePaddingSeconds":-20,"PostPaddingSeconds":30,"IsPrePaddingRequired":true,"KeepUntil":"UntilWatched"},
+        {"Id":"active","Name":"Active","StartDate":"2500-01-01T00:00:00Z","EndDate":"2500-01-01T00:01:00Z","Status":"InProgress","ChannelId":"A"},
+        {"Id":"cancelled","Name":"Cancelled","StartDate":"2500-01-01T00:00:00Z","EndDate":"2499-12-31T23:59:00Z","Status":"Cancelled","ChannelId":"A","ProgramId":"P1","SeriesTimerId":"S2"},
+        {"Id":"completed","Name":"Completed","Status":"Completed"},
+        {"Id":"error","Status":"Error","StartDate":"2500-01-01T00:00:00.1234567","EndDate":"2500-01-01T00:00:00.1234568","ProgramId":"P1"},
+        {"Id":"numeric","Status":18,"StartDate":"2500-01-01T00:00:00.321+02:00","EndDate":"2500-01-01T00:01:00.321+02:00"},
+        {"Id":null,"Name":"nul\u0000name","ChannelId":null,"StartDate":"2500-01-01T00:00:00.0000001Z","EndDate":"2500-01-01T00:00:00.0000002Z"}
+      ],
+      "seriesTimers": [
+        {"Id":"S10","Name":"Show10","Priority":1,"Days":["Sunday","Saturday"],"ChannelId":"A","ServiceName":"Ignored"},
+        {"Id":"S2","Name":"Show2","Priority":3,"Days":["Monday","Tuesday","Wednesday","Thursday","Friday"],"ProgramId":"P1","RecordAnyTime":true,"RecordAnyChannel":true,"KeepUpTo":4,"KeepUntil":"UntilDate","RecordNewOnly":true},
+        {"Id":"S3","Name":"Show2","Priority":3,"Days":["Monday","Monday","Monday","Monday","Monday","Monday","Monday"],"SkipEpisodesInLibrary":false},
+        {"Id":null,"Name":null}
+      ],
+      "requests": [
+        {"name":"all timers","operation":"timers"},
+        {"name":"active","operation":"timers","query":{"IsActive":true}},
+        {"name":"inactive","operation":"timers","query":{"IsActive":false}},
+        {"name":"scheduled","operation":"timers","query":{"IsScheduled":true}},
+        {"name":"not scheduled","operation":"timers","query":{"IsScheduled":false}},
+        {"name":"combined empty","operation":"timers","query":{"IsActive":true,"IsScheduled":true}},
+        {"name":"channel","operation":"timers","query":{"ChannelId":"@channel:A"}},
+        {"name":"series filter","operation":"timers","query":{"SeriesTimerId":"@series:S2"}},
+        {"name":"bad channel","operation":"timers","query":{"ChannelId":"bad-guid"}},
+        {"name":"timer detail","operation":"timer","id":"@timer:late"},
+        {"name":"missing timer","operation":"timer","id":"missing"},
+        {"name":"null external identity","operation":"timer","id":"@timer:"},
+        {"name":"series default order","operation":"series"},
+        {"name":"series descending","operation":"series","query":{"SortOrder":"Descending"}},
+        {"name":"priority ascending","operation":"series","query":{"SortBy":"pRiOrItY","SortOrder":"Ascending"}},
+        {"name":"priority descending","operation":"series","query":{"SortBy":"Priority","SortOrder":"Descending"}},
+        {"name":"unknown order","operation":"series","query":{"SortBy":"Unknown","SortOrder":17}},
+        {"name":"series detail","operation":"seriesTimer","id":"@series:S2"},
+        {"name":"missing series","operation":"seriesTimer","id":"missing"},
+        {"name":"unattached defaults","operation":"defaults"},
+        {"name":"program defaults","operation":"defaults","id":"@program:P1"}
+      ]
+    },
+    {"name":"null-timer-entry","timers":[null],"seriesTimers":[],"requests":[{"name":"all fails","operation":"timers"},{"name":"missing also fails","operation":"timer","id":"missing"}]},
+    {"name":"null-series-entry","timers":[],"seriesTimers":[null],"requests":[{"name":"series fails","operation":"series"},{"name":"missing also fails","operation":"seriesTimer","id":"missing"}]},
+    {"name":"null-days-nontarget","timers":[],"seriesTimers":[{"Id":"good","Name":"A"},{"Id":"bad","Name":"Z","Days":null}],"requests":[{"name":"list fails","operation":"series"},{"name":"target still evaluates bad days","operation":"seriesTimer","id":"@series:good"},{"name":"missing still evaluates bad days","operation":"seriesTimer","id":"missing"}]},
+    {"name":"null-documents","timers":null,"seriesTimers":null,"requests":[{"name":"empty timers","operation":"timers"},{"name":"empty series","operation":"series"}]}
+  ]
+}

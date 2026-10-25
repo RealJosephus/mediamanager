@@ -1,0 +1,3299 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000008",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "tagsText": null,
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "tagsText": "permit",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "tagsText": "permit",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "tagsText": "permit",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "tagsText": "permit",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "tagsText": "permit",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "tagsText": "permit",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "tagsText": "permit",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": null,
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "playlists",
+      "id": "1071671e-7bff-a053-2e93-0debee501d2e",
+      "type": "PlaylistsFolder",
+      "name": "Playlists",
+      "sortName": "playlists",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "1071671e-7bff-a053-2e93-0debee501d2e",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "playlists",
+      "existingNative": true,
+      "data": {
+        "CollectionType": "playlists"
+      }
+    },
+    {
+      "key": "next",
+      "id": "80200000-0000-0000-0000-000000000100",
+      "type": "UserView",
+      "name": "next",
+      "sortName": "next",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvnextup",
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7"
+      }
+    },
+    {
+      "key": "nextLibrary",
+      "id": "80200000-0000-0000-0000-000000000101",
+      "type": "UserView",
+      "name": "nextLibrary",
+      "sortName": "nextLibrary",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvnextup",
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000008"
+      }
+    },
+    {
+      "key": "nextPhysical",
+      "id": "80200000-0000-0000-0000-000000000102",
+      "type": "UserView",
+      "name": "nextPhysical",
+      "sortName": "nextPhysical",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvnextup",
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000007"
+      }
+    },
+    {
+      "key": "nextMixed",
+      "id": "80200000-0000-0000-0000-000000000103",
+      "type": "UserView",
+      "name": "nextMixed",
+      "sortName": "nextMixed",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvnextup",
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "DisplayParentId": "80200000-0000-0000-0000-000000000012"
+      }
+    },
+    {
+      "key": "nextInvalid",
+      "id": "80200000-0000-0000-0000-000000000104",
+      "type": "UserView",
+      "name": "nextInvalid",
+      "sortName": "nextInvalid",
+      "parentId": "80200000-0000-0000-0000-000000000008",
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvnextup",
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "DisplayParentId": "80200000-0000-0000-0000-000000999999"
+      }
+    },
+    {
+      "key": "basic",
+      "id": "80200000-0000-0000-0000-000000000105",
+      "type": "Series",
+      "name": "basic",
+      "sortName": "basic",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "basic",
+      "data": {}
+    },
+    {
+      "key": "basic1",
+      "id": "80200000-0000-0000-0000-000000000106",
+      "type": "Episode",
+      "name": "basic1",
+      "sortName": "basic1",
+      "parentId": "80200000-0000-0000-0000-000000000105",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000105",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000105",
+      "seriesPresentationUniqueKey": "basic",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "basic2",
+      "id": "80200000-0000-0000-0000-000000000107",
+      "type": "Episode",
+      "name": "basic2",
+      "sortName": "basic2",
+      "parentId": "80200000-0000-0000-0000-000000000105",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000105",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000105",
+      "seriesPresentationUniqueKey": "basic",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "virtual",
+      "id": "80200000-0000-0000-0000-000000000108",
+      "type": "Series",
+      "name": "virtual",
+      "sortName": "virtual",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "virtual",
+      "data": {}
+    },
+    {
+      "key": "virtual1",
+      "id": "80200000-0000-0000-0000-000000000109",
+      "type": "Episode",
+      "name": "virtual1",
+      "sortName": "virtual1",
+      "parentId": "80200000-0000-0000-0000-000000000108",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000108",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000108",
+      "seriesPresentationUniqueKey": "virtual",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "virtual3",
+      "id": "80200000-0000-0000-0000-000000000110",
+      "type": "Episode",
+      "name": "virtual3",
+      "sortName": "virtual3",
+      "parentId": "80200000-0000-0000-0000-000000000108",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000108",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000108",
+      "seriesPresentationUniqueKey": "virtual",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "virtual5",
+      "id": "80200000-0000-0000-0000-000000000111",
+      "type": "Episode",
+      "name": "virtual5",
+      "sortName": "virtual5",
+      "parentId": "80200000-0000-0000-0000-000000000108",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000108",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000108",
+      "seriesPresentationUniqueKey": "virtual",
+      "parentIndexNumber": 1,
+      "indexNumber": 5,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "isVirtualItem": true
+    },
+    {
+      "key": "virtual6",
+      "id": "80200000-0000-0000-0000-000000000112",
+      "type": "Episode",
+      "name": "virtual6",
+      "sortName": "virtual6",
+      "parentId": "80200000-0000-0000-0000-000000000108",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000108",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000108",
+      "seriesPresentationUniqueKey": "virtual",
+      "parentIndexNumber": 1,
+      "indexNumber": 6,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingIndex",
+      "id": "80200000-0000-0000-0000-000000000113",
+      "type": "Series",
+      "name": "missingIndex",
+      "sortName": "missingIndex",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "missingIndex",
+      "data": {}
+    },
+    {
+      "key": "missingIndex1",
+      "id": "80200000-0000-0000-0000-000000000114",
+      "type": "Episode",
+      "name": "missingIndex1",
+      "sortName": "missingIndex1",
+      "parentId": "80200000-0000-0000-0000-000000000113",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000113",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000113",
+      "seriesPresentationUniqueKey": "missingIndex",
+      "parentIndexNumber": 1,
+      "indexNumber": null,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingIndexNull",
+      "id": "80200000-0000-0000-0000-000000000115",
+      "type": "Episode",
+      "name": "missingIndexNull",
+      "sortName": "missingIndexNull",
+      "parentId": "80200000-0000-0000-0000-000000000113",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000113",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000113",
+      "seriesPresentationUniqueKey": "missingIndex",
+      "parentIndexNumber": 1,
+      "indexNumber": null,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingIndex2",
+      "id": "80200000-0000-0000-0000-000000000116",
+      "type": "Episode",
+      "name": "missingIndex2",
+      "sortName": "missingIndex2",
+      "parentId": "80200000-0000-0000-0000-000000000113",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000113",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000113",
+      "seriesPresentationUniqueKey": "missingIndex",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingSeason",
+      "id": "80200000-0000-0000-0000-000000000117",
+      "type": "Series",
+      "name": "missingSeason",
+      "sortName": "missingSeason",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "missingSeason",
+      "data": {}
+    },
+    {
+      "key": "missingSeason1",
+      "id": "80200000-0000-0000-0000-000000000118",
+      "type": "Episode",
+      "name": "missingSeason1",
+      "sortName": "missingSeason1",
+      "parentId": "80200000-0000-0000-0000-000000000117",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000117",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000117",
+      "seriesPresentationUniqueKey": "missingSeason",
+      "parentIndexNumber": null,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingSeasonNull",
+      "id": "80200000-0000-0000-0000-000000000119",
+      "type": "Episode",
+      "name": "missingSeasonNull",
+      "sortName": "missingSeasonNull",
+      "parentId": "80200000-0000-0000-0000-000000000117",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000117",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000117",
+      "seriesPresentationUniqueKey": "missingSeason",
+      "parentIndexNumber": null,
+      "indexNumber": null,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "missingSeason2",
+      "id": "80200000-0000-0000-0000-000000000120",
+      "type": "Episode",
+      "name": "missingSeason2",
+      "sortName": "missingSeason2",
+      "parentId": "80200000-0000-0000-0000-000000000117",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000117",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000117",
+      "seriesPresentationUniqueKey": "missingSeason",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "inactive",
+      "id": "80200000-0000-0000-0000-000000000121",
+      "type": "Series",
+      "name": "inactive",
+      "sortName": "inactive",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "inactive",
+      "data": {}
+    },
+    {
+      "key": "inactive1",
+      "id": "80200000-0000-0000-0000-000000000122",
+      "type": "Episode",
+      "name": "inactive1",
+      "sortName": "inactive1",
+      "parentId": "80200000-0000-0000-0000-000000000121",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000121",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000121",
+      "seriesPresentationUniqueKey": "inactive",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "inactive2",
+      "id": "80200000-0000-0000-0000-000000000123",
+      "type": "Episode",
+      "name": "inactive2",
+      "sortName": "inactive2",
+      "parentId": "80200000-0000-0000-0000-000000000121",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000121",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000121",
+      "seriesPresentationUniqueKey": "inactive",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "dateOnly",
+      "id": "80200000-0000-0000-0000-000000000124",
+      "type": "Series",
+      "name": "dateOnly",
+      "sortName": "dateOnly",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "dateOnly",
+      "data": {}
+    },
+    {
+      "key": "dateOnly1",
+      "id": "80200000-0000-0000-0000-000000000125",
+      "type": "Episode",
+      "name": "dateOnly1",
+      "sortName": "dateOnly1",
+      "parentId": "80200000-0000-0000-0000-000000000124",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000124",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000124",
+      "seriesPresentationUniqueKey": "dateOnly",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "dateOnly2",
+      "id": "80200000-0000-0000-0000-000000000126",
+      "type": "Episode",
+      "name": "dateOnly2",
+      "sortName": "dateOnly2",
+      "parentId": "80200000-0000-0000-0000-000000000124",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000124",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000124",
+      "seriesPresentationUniqueKey": "dateOnly",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "blockedActivation",
+      "id": "80200000-0000-0000-0000-000000000127",
+      "type": "Series",
+      "name": "blockedActivation",
+      "sortName": "blockedActivation",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "blockedActivation",
+      "data": {}
+    },
+    {
+      "key": "blockedActivation1",
+      "id": "80200000-0000-0000-0000-000000000128",
+      "type": "Episode",
+      "name": "blockedActivation1",
+      "sortName": "blockedActivation1",
+      "parentId": "80200000-0000-0000-0000-000000000127",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000127",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000127",
+      "seriesPresentationUniqueKey": "blockedActivation",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "tagsText": "blocked"
+    },
+    {
+      "key": "blockedActivation2",
+      "id": "80200000-0000-0000-0000-000000000129",
+      "type": "Episode",
+      "name": "blockedActivation2",
+      "sortName": "blockedActivation2",
+      "parentId": "80200000-0000-0000-0000-000000000127",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000127",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000127",
+      "seriesPresentationUniqueKey": "blockedActivation",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "crossScope",
+      "id": "80200000-0000-0000-0000-000000000130",
+      "type": "Series",
+      "name": "crossScope",
+      "sortName": "crossScope",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "crossScope",
+      "data": {}
+    },
+    {
+      "key": "crossScope1",
+      "id": "80200000-0000-0000-0000-000000000131",
+      "type": "Episode",
+      "name": "crossScope1",
+      "sortName": "crossScope1",
+      "parentId": "80200000-0000-0000-0000-000000000130",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000130",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000130",
+      "seriesPresentationUniqueKey": "crossScope",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "crossScopeOther",
+      "id": "80200000-0000-0000-0000-000000000132",
+      "type": "Series",
+      "name": "crossScopeOther",
+      "sortName": "crossScopeOther",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "crossScope",
+      "data": {}
+    },
+    {
+      "key": "crossScope2",
+      "id": "80200000-0000-0000-0000-000000000133",
+      "type": "Episode",
+      "name": "crossScope2",
+      "sortName": "crossScope2",
+      "parentId": "80200000-0000-0000-0000-000000000132",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000132",
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000132",
+      "seriesPresentationUniqueKey": "crossScope",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "anyKey",
+      "id": "80200000-0000-0000-0000-000000000134",
+      "type": "Series",
+      "name": "anyKey",
+      "sortName": "anyKey",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "anyKey",
+      "data": {}
+    },
+    {
+      "key": "anyKey1",
+      "id": "80200000-0000-0000-0000-000000000135",
+      "type": "Episode",
+      "name": "anyKey1",
+      "sortName": "anyKey1",
+      "parentId": "80200000-0000-0000-0000-000000000134",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000134",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000134",
+      "seriesPresentationUniqueKey": "anyKey",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "anyKey2",
+      "id": "80200000-0000-0000-0000-000000000136",
+      "type": "Episode",
+      "name": "anyKey2",
+      "sortName": "anyKey2",
+      "parentId": "80200000-0000-0000-0000-000000000134",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000134",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000134",
+      "seriesPresentationUniqueKey": "anyKey",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "anyKey3",
+      "id": "80200000-0000-0000-0000-000000000137",
+      "type": "Episode",
+      "name": "anyKey3",
+      "sortName": "anyKey3",
+      "parentId": "80200000-0000-0000-0000-000000000134",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000134",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000134",
+      "seriesPresentationUniqueKey": "anyKey",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "resumeVersion",
+      "id": "80200000-0000-0000-0000-000000000138",
+      "type": "Series",
+      "name": "resumeVersion",
+      "sortName": "resumeVersion",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "resumeVersion",
+      "data": {}
+    },
+    {
+      "key": "resumeVersion1",
+      "id": "80200000-0000-0000-0000-000000000139",
+      "type": "Episode",
+      "name": "resumeVersion1",
+      "sortName": "resumeVersion1",
+      "parentId": "80200000-0000-0000-0000-000000000138",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000138",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000138",
+      "seriesPresentationUniqueKey": "resumeVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "resumeVersion2",
+      "id": "80200000-0000-0000-0000-000000000140",
+      "type": "Episode",
+      "name": "resumeVersion2",
+      "sortName": "resumeVersion2",
+      "parentId": "80200000-0000-0000-0000-000000000138",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000138",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000138",
+      "seriesPresentationUniqueKey": "resumeVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "resumeVersion2alt",
+      "id": "80200000-0000-0000-0000-000000000141",
+      "type": "Episode",
+      "name": "resumeVersion2alt",
+      "sortName": "resumeVersion2alt",
+      "parentId": "80200000-0000-0000-0000-000000000138",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000138",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000138",
+      "seriesPresentationUniqueKey": "resumeVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "primaryVersionId": "80200000-0000-0000-0000-000000000140"
+    },
+    {
+      "key": "preferredVersion",
+      "id": "80200000-0000-0000-0000-000000000142",
+      "type": "Series",
+      "name": "preferredVersion",
+      "sortName": "preferredVersion",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "preferredVersion",
+      "data": {}
+    },
+    {
+      "key": "preferredVersion1",
+      "id": "80200000-0000-0000-0000-000000000143",
+      "type": "Episode",
+      "name": "preferredVersion1",
+      "sortName": "preferredVersion1",
+      "parentId": "80200000-0000-0000-0000-000000000142",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000142",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000142",
+      "seriesPresentationUniqueKey": "preferredVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "Show-S01E01 - Standard.mkv"
+    },
+    {
+      "key": "preferredVersion1alt",
+      "id": "80200000-0000-0000-0000-000000000144",
+      "type": "Episode",
+      "name": "preferredVersion1alt",
+      "sortName": "preferredVersion1alt",
+      "parentId": "80200000-0000-0000-0000-000000000142",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000142",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000142",
+      "seriesPresentationUniqueKey": "preferredVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "primaryVersionId": "80200000-0000-0000-0000-000000000143",
+      "fileName": "Show-S01E01 - Director.mkv"
+    },
+    {
+      "key": "preferredVersion2",
+      "id": "80200000-0000-0000-0000-000000000145",
+      "type": "Episode",
+      "name": "preferredVersion2",
+      "sortName": "preferredVersion2",
+      "parentId": "80200000-0000-0000-0000-000000000142",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000142",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000142",
+      "seriesPresentationUniqueKey": "preferredVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "Show-S01E02 - Standard.mkv"
+    },
+    {
+      "key": "preferredVersion2alt",
+      "id": "80200000-0000-0000-0000-000000000146",
+      "type": "Episode",
+      "name": "preferredVersion2alt",
+      "sortName": "preferredVersion2alt",
+      "parentId": "80200000-0000-0000-0000-000000000142",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000142",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000142",
+      "seriesPresentationUniqueKey": "preferredVersion",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "primaryVersionId": "80200000-0000-0000-0000-000000000145",
+      "fileName": "Show-S01E02 - Director.mkv"
+    },
+    {
+      "key": "special",
+      "id": "80200000-0000-0000-0000-000000000147",
+      "type": "Series",
+      "name": "special",
+      "sortName": "special",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "special",
+      "data": {}
+    },
+    {
+      "key": "special1",
+      "id": "80200000-0000-0000-0000-000000000148",
+      "type": "Episode",
+      "name": "special1",
+      "sortName": "special1",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "special2",
+      "id": "80200000-0000-0000-0000-000000000149",
+      "type": "Episode",
+      "name": "special2",
+      "sortName": "special2",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "specialBefore2",
+      "id": "80200000-0000-0000-0000-000000000150",
+      "type": "Episode",
+      "name": "specialBefore2",
+      "sortName": "specialBefore2",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 0,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "AirsBeforeSeasonNumber": 1,
+        "AirsBeforeEpisodeNumber": 2
+      }
+    },
+    {
+      "key": "specialNoPlacement",
+      "id": "80200000-0000-0000-0000-000000000151",
+      "type": "Episode",
+      "name": "specialNoPlacement",
+      "sortName": "specialNoPlacement",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 0,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "specialAfter1",
+      "id": "80200000-0000-0000-0000-000000000152",
+      "type": "Episode",
+      "name": "specialAfter1",
+      "sortName": "specialAfter1",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 0,
+      "indexNumber": 3,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "AirsAfterSeasonNumber": 1
+      }
+    },
+    {
+      "key": "specialVirtual",
+      "id": "80200000-0000-0000-0000-000000000153",
+      "type": "Episode",
+      "name": "specialVirtual",
+      "sortName": "specialVirtual",
+      "parentId": "80200000-0000-0000-0000-000000000147",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000147",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000147",
+      "seriesPresentationUniqueKey": "special",
+      "parentIndexNumber": 0,
+      "indexNumber": 4,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "AirsBeforeSeasonNumber": 1,
+        "AirsBeforeEpisodeNumber": 2
+      },
+      "isVirtualItem": true
+    },
+    {
+      "key": "specialOnly",
+      "id": "80200000-0000-0000-0000-000000000154",
+      "type": "Series",
+      "name": "specialOnly",
+      "sortName": "specialOnly",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "specialOnly",
+      "data": {}
+    },
+    {
+      "key": "specialOnly1",
+      "id": "80200000-0000-0000-0000-000000000155",
+      "type": "Episode",
+      "name": "specialOnly1",
+      "sortName": "specialOnly1",
+      "parentId": "80200000-0000-0000-0000-000000000154",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000154",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000154",
+      "seriesPresentationUniqueKey": "specialOnly",
+      "parentIndexNumber": 0,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "AirsBeforeSeasonNumber": 1
+      }
+    },
+    {
+      "key": "specialOnly2",
+      "id": "80200000-0000-0000-0000-000000000156",
+      "type": "Episode",
+      "name": "specialOnly2",
+      "sortName": "specialOnly2",
+      "parentId": "80200000-0000-0000-0000-000000000154",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000154",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000154",
+      "seriesPresentationUniqueKey": "specialOnly",
+      "parentIndexNumber": 0,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "AirsBeforeSeasonNumber": 2
+      }
+    },
+    {
+      "key": "emptyKey",
+      "id": "80200000-0000-0000-0000-000000000157",
+      "type": "Series",
+      "name": "emptyKey",
+      "sortName": "emptyKey",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "",
+      "data": {}
+    },
+    {
+      "key": "emptyKey1",
+      "id": "80200000-0000-0000-0000-000000000158",
+      "type": "Episode",
+      "name": "emptyKey1",
+      "sortName": "emptyKey1",
+      "parentId": "80200000-0000-0000-0000-000000000157",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000157",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000157",
+      "seriesPresentationUniqueKey": "",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "emptyKey2",
+      "id": "80200000-0000-0000-0000-000000000159",
+      "type": "Episode",
+      "name": "emptyKey2",
+      "sortName": "emptyKey2",
+      "parentId": "80200000-0000-0000-0000-000000000157",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000157",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000157",
+      "seriesPresentationUniqueKey": "",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "nullKey",
+      "id": "80200000-0000-0000-0000-000000000160",
+      "type": "Series",
+      "name": "nullKey",
+      "sortName": "nullKey",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": null,
+      "data": {}
+    },
+    {
+      "key": "nullKey1",
+      "id": "80200000-0000-0000-0000-000000000161",
+      "type": "Episode",
+      "name": "nullKey1",
+      "sortName": "nullKey1",
+      "parentId": "80200000-0000-0000-0000-000000000160",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000160",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000160",
+      "seriesPresentationUniqueKey": null,
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "nullKey2",
+      "id": "80200000-0000-0000-0000-000000000162",
+      "type": "Episode",
+      "name": "nullKey2",
+      "sortName": "nullKey2",
+      "parentId": "80200000-0000-0000-0000-000000000160",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000160",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000160",
+      "seriesPresentationUniqueKey": null,
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "owned",
+      "id": "80200000-0000-0000-0000-000000000163",
+      "type": "Series",
+      "name": "owned",
+      "sortName": "owned",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "owned",
+      "data": {}
+    },
+    {
+      "key": "owned1",
+      "id": "80200000-0000-0000-0000-000000000164",
+      "type": "Episode",
+      "name": "owned1",
+      "sortName": "owned1",
+      "parentId": "80200000-0000-0000-0000-000000000163",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000163",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000163",
+      "seriesPresentationUniqueKey": "owned",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "owned2",
+      "id": "80200000-0000-0000-0000-000000000165",
+      "type": "Episode",
+      "name": "owned2",
+      "sortName": "owned2",
+      "parentId": "80200000-0000-0000-0000-000000000163",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000163",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000163",
+      "seriesPresentationUniqueKey": "owned",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "ownerId": "80200000-0000-0000-0000-000000000163"
+    },
+    {
+      "key": "owned3",
+      "id": "80200000-0000-0000-0000-000000000166",
+      "type": "Episode",
+      "name": "owned3",
+      "sortName": "owned3",
+      "parentId": "80200000-0000-0000-0000-000000000163",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000163",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000163",
+      "seriesPresentationUniqueKey": "owned",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "ownerId": "80200000-0000-0000-0000-000000000163",
+      "extraType": 3
+    },
+    {
+      "key": "dangling",
+      "id": "80200000-0000-0000-0000-000000000167",
+      "type": "Series",
+      "name": "dangling",
+      "sortName": "dangling",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "dangling",
+      "data": {}
+    },
+    {
+      "key": "dangling1",
+      "id": "80200000-0000-0000-0000-000000000168",
+      "type": "Episode",
+      "name": "dangling1",
+      "sortName": "dangling1",
+      "parentId": "80200000-0000-0000-0000-000000000167",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000167",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000167",
+      "seriesPresentationUniqueKey": "dangling",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "dangling2",
+      "id": "80200000-0000-0000-0000-000000000169",
+      "type": "Episode",
+      "name": "dangling2",
+      "sortName": "dangling2",
+      "parentId": "80200000-0000-0000-0000-000000000167",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000167",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000167",
+      "seriesPresentationUniqueKey": "dangling",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "primaryVersionId": "80200000-0000-0000-0000-000000999998"
+    },
+    {
+      "key": "rating",
+      "id": "80200000-0000-0000-0000-000000000170",
+      "type": "Series",
+      "name": "rating",
+      "sortName": "rating",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "rating",
+      "data": {}
+    },
+    {
+      "key": "rating1",
+      "id": "80200000-0000-0000-0000-000000000171",
+      "type": "Episode",
+      "name": "rating1",
+      "sortName": "rating1",
+      "parentId": "80200000-0000-0000-0000-000000000170",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000170",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000170",
+      "seriesPresentationUniqueKey": "rating",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "rating2",
+      "id": "80200000-0000-0000-0000-000000000172",
+      "type": "Episode",
+      "name": "rating2",
+      "sortName": "rating2",
+      "parentId": "80200000-0000-0000-0000-000000000170",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000170",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000170",
+      "seriesPresentationUniqueKey": "rating",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "inheritedParentalRatingValue": 100
+    },
+    {
+      "key": "rating3",
+      "id": "80200000-0000-0000-0000-000000000173",
+      "type": "Episode",
+      "name": "rating3",
+      "sortName": "rating3",
+      "parentId": "80200000-0000-0000-0000-000000000170",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000170",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000170",
+      "seriesPresentationUniqueKey": "rating",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "inheritedParentalRatingValue": 5
+    },
+    {
+      "key": "mixed",
+      "id": "80200000-0000-0000-0000-000000000174",
+      "type": "Series",
+      "name": "mixed",
+      "sortName": "mixed",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "mixed",
+      "data": {}
+    },
+    {
+      "key": "mixed1",
+      "id": "80200000-0000-0000-0000-000000000175",
+      "type": "Episode",
+      "name": "mixed1",
+      "sortName": "mixed1",
+      "parentId": "80200000-0000-0000-0000-000000000174",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000174",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000174",
+      "seriesPresentationUniqueKey": "mixed",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "mixed2",
+      "id": "80200000-0000-0000-0000-000000000176",
+      "type": "Episode",
+      "name": "mixed2",
+      "sortName": "mixed2",
+      "parentId": "80200000-0000-0000-0000-000000000174",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000174",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000174",
+      "seriesPresentationUniqueKey": "mixed",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "primaryResume",
+      "id": "80200000-0000-0000-0000-000000000800",
+      "type": "Series",
+      "name": "primaryResume",
+      "sortName": "primaryResume",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "primaryResume",
+      "data": {}
+    },
+    {
+      "key": "primaryResume1",
+      "id": "80200000-0000-0000-0000-000000000801",
+      "type": "Episode",
+      "name": "primaryResume1",
+      "sortName": "primaryResume1",
+      "parentId": "80200000-0000-0000-0000-000000000800",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000800",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000800",
+      "seriesPresentationUniqueKey": "primaryResume",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "primaryResume2",
+      "id": "80200000-0000-0000-0000-000000000802",
+      "type": "Episode",
+      "name": "primaryResume2",
+      "sortName": "primaryResume2",
+      "parentId": "80200000-0000-0000-0000-000000000800",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000800",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000800",
+      "seriesPresentationUniqueKey": "primaryResume",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "sourceWidth",
+      "id": "80200000-0000-0000-0000-000000000810",
+      "type": "Series",
+      "name": "sourceWidth",
+      "sortName": "sourceWidth",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "sourceWidth",
+      "data": {}
+    },
+    {
+      "key": "sourceWidth1",
+      "id": "80200000-0000-0000-0000-000000000811",
+      "type": "Episode",
+      "name": "sourceWidth1",
+      "sortName": "sourceWidth1",
+      "parentId": "80200000-0000-0000-0000-000000000810",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000810",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000810",
+      "seriesPresentationUniqueKey": "sourceWidth",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceWidth1-primary.mkv"
+    },
+    {
+      "key": "sourceWidth1Alt",
+      "id": "80200000-0000-0000-0000-000000000812",
+      "type": "Episode",
+      "name": "sourceWidth1Alt",
+      "sortName": "sourceWidth1Alt",
+      "parentId": "80200000-0000-0000-0000-000000000810",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000810",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000810",
+      "seriesPresentationUniqueKey": "sourceWidth",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceWidth1-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000811"
+    },
+    {
+      "key": "sourceWidth2",
+      "id": "80200000-0000-0000-0000-000000000813",
+      "type": "Episode",
+      "name": "sourceWidth2",
+      "sortName": "sourceWidth2",
+      "parentId": "80200000-0000-0000-0000-000000000810",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000810",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000810",
+      "seriesPresentationUniqueKey": "sourceWidth",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceWidth2-primary.mkv"
+    },
+    {
+      "key": "sourceWidth2Alt0",
+      "id": "80200000-0000-0000-0000-000000000814",
+      "type": "Episode",
+      "name": "sourceWidth2Alt0",
+      "sortName": "sourceWidth2Alt0",
+      "parentId": "80200000-0000-0000-0000-000000000810",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000810",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000810",
+      "seriesPresentationUniqueKey": "sourceWidth",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceWidth2-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000813"
+    },
+    {
+      "key": "sourceWidth2Alt1",
+      "id": "80200000-0000-0000-0000-000000000815",
+      "type": "Episode",
+      "name": "sourceWidth2Alt1",
+      "sortName": "sourceWidth2Alt1",
+      "parentId": "80200000-0000-0000-0000-000000000810",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000810",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000810",
+      "seriesPresentationUniqueKey": "sourceWidth",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceWidth2-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000813"
+    },
+    {
+      "key": "sourceMissingStream",
+      "id": "80200000-0000-0000-0000-000000000820",
+      "type": "Series",
+      "name": "sourceMissingStream",
+      "sortName": "sourceMissingStream",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "presentationUniqueKey": "sourceMissingStream",
+      "data": {}
+    },
+    {
+      "key": "sourceMissingStream1",
+      "id": "80200000-0000-0000-0000-000000000821",
+      "type": "Episode",
+      "name": "sourceMissingStream1",
+      "sortName": "sourceMissingStream1",
+      "parentId": "80200000-0000-0000-0000-000000000820",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000820",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000820",
+      "seriesPresentationUniqueKey": "sourceMissingStream",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceMissingStream1-primary.mkv"
+    },
+    {
+      "key": "sourceMissingStream1Alt",
+      "id": "80200000-0000-0000-0000-000000000822",
+      "type": "Episode",
+      "name": "sourceMissingStream1Alt",
+      "sortName": "sourceMissingStream1Alt",
+      "parentId": "80200000-0000-0000-0000-000000000820",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000820",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000820",
+      "seriesPresentationUniqueKey": "sourceMissingStream",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceMissingStream1-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000821"
+    },
+    {
+      "key": "sourceMissingStream2",
+      "id": "80200000-0000-0000-0000-000000000823",
+      "type": "Episode",
+      "name": "sourceMissingStream2",
+      "sortName": "sourceMissingStream2",
+      "parentId": "80200000-0000-0000-0000-000000000820",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000820",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000820",
+      "seriesPresentationUniqueKey": "sourceMissingStream",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceMissingStream2-primary.mkv"
+    },
+    {
+      "key": "sourceMissingStream2Alt0",
+      "id": "80200000-0000-0000-0000-000000000824",
+      "type": "Episode",
+      "name": "sourceMissingStream2Alt0",
+      "sortName": "sourceMissingStream2Alt0",
+      "parentId": "80200000-0000-0000-0000-000000000820",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000820",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000820",
+      "seriesPresentationUniqueKey": "sourceMissingStream",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceMissingStream2-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000823"
+    },
+    {
+      "key": "sourceMissingStream2Alt1",
+      "id": "80200000-0000-0000-0000-000000000825",
+      "type": "Episode",
+      "name": "sourceMissingStream2Alt1",
+      "sortName": "sourceMissingStream2Alt1",
+      "parentId": "80200000-0000-0000-0000-000000000820",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000820",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "seriesId": "80200000-0000-0000-0000-000000000820",
+      "seriesPresentationUniqueKey": "sourceMissingStream",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "mediaType": "Video",
+      "runTimeTicks": "24000000000",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "fileName": "sourceMissingStream2-dub.mkv",
+      "primaryVersionId": "80200000-0000-0000-0000-000000000823"
+    }
+  ],
+  "links": [
+    {
+      "parentId": "80200000-0000-0000-0000-000000000140",
+      "childId": "80200000-0000-0000-0000-000000000141",
+      "childType": 2,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000143",
+      "childId": "80200000-0000-0000-0000-000000000144",
+      "childType": 2,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000145",
+      "childId": "80200000-0000-0000-0000-000000000146",
+      "childType": 2,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000811",
+      "childId": "80200000-0000-0000-0000-000000000812",
+      "childType": 3,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000813",
+      "childId": "80200000-0000-0000-0000-000000000814",
+      "childType": 3,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000813",
+      "childId": "80200000-0000-0000-0000-000000000815",
+      "childType": 3,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000821",
+      "childId": "80200000-0000-0000-0000-000000000822",
+      "childType": 3,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000823",
+      "childId": "80200000-0000-0000-0000-000000000824",
+      "childType": 3,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "80200000-0000-0000-0000-000000000823",
+      "childId": "80200000-0000-0000-0000-000000000825",
+      "childType": 3,
+      "sortOrder": 1
+    }
+  ],
+  "itemValues": [
+    {
+      "key": "tag-permit",
+      "id": "80200000-0000-0000-0000-000000000177",
+      "type": 4,
+      "value": "permit",
+      "cleanValue": "permit"
+    },
+    {
+      "key": "tag-blocked",
+      "id": "80200000-0000-0000-0000-000000000178",
+      "type": 4,
+      "value": "blocked",
+      "cleanValue": "blocked"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "userRoot",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "physicalT",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "libraryT",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "physicalK",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "libraryK",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "physicalM",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "libraryM",
+      "valueKey": "tag-permit"
+    },
+    {
+      "itemKey": "blockedActivation1",
+      "valueKey": "tag-blocked"
+    }
+  ],
+  "userData": [
+    {
+      "itemKey": "basic1",
+      "lastPlayedDate": "2026-09-10 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "virtual1",
+      "lastPlayedDate": "2026-09-12 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "virtual5",
+      "lastPlayedDate": "2026-09-11 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "missingIndex1",
+      "lastPlayedDate": "2026-09-13 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "missingSeason1",
+      "lastPlayedDate": "2026-09-14 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "inactive1",
+      "lastPlayedDate": null,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "dateOnly1",
+      "lastPlayedDate": "2026-09-15 12:00:00",
+      "played": false,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "blockedActivation1",
+      "lastPlayedDate": "2026-09-16 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "crossScope1",
+      "lastPlayedDate": "2026-09-17 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "anyKey1",
+      "lastPlayedDate": "2026-09-18 12:00:00",
+      "played": false,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "anyKey1",
+      "lastPlayedDate": "2026-09-21 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "customDataKey": "foreign-played"
+    },
+    {
+      "itemKey": "anyKey2",
+      "lastPlayedDate": null,
+      "played": false,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "anyKey2",
+      "lastPlayedDate": null,
+      "played": false,
+      "positionTicks": "1200000000",
+      "isFavorite": false,
+      "customDataKey": "foreign-resume"
+    },
+    {
+      "itemKey": "resumeVersion1",
+      "lastPlayedDate": "2026-09-19 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "resumeVersion2alt",
+      "lastPlayedDate": null,
+      "played": false,
+      "positionTicks": "1200000000",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "preferredVersion1",
+      "lastPlayedDate": null,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "preferredVersion1alt",
+      "lastPlayedDate": "2026-09-20 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "special1",
+      "lastPlayedDate": "2026-09-22 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "specialOnly1",
+      "lastPlayedDate": "2026-09-23 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "emptyKey1",
+      "lastPlayedDate": "2026-09-24 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "nullKey1",
+      "lastPlayedDate": "2026-09-25 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "owned1",
+      "lastPlayedDate": "2026-09-26 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "dangling1",
+      "lastPlayedDate": "2026-09-27 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "rating1",
+      "lastPlayedDate": "2026-09-28 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "mixed1",
+      "lastPlayedDate": "2026-09-29 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "primaryResume1",
+      "lastPlayedDate": "2026-09-30 12:00:00",
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "primaryResume2",
+      "lastPlayedDate": null,
+      "played": false,
+      "positionTicks": "1200000000",
+      "isFavorite": false
+    },
+    {
+      "itemKey": "sourceWidth1Alt",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 23:00:00",
+      "positionTicks": "0",
+      "played": true
+    },
+    {
+      "itemKey": "sourceMissingStream1Alt",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 23:00:00",
+      "positionTicks": "0",
+      "played": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "default",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "specials-disabled",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "serverConfiguration": {
+        "DisplaySpecialsWithinSeasons": false
+      }
+    },
+    {
+      "name": "specials-enabled",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "serverConfiguration": {
+        "DisplaySpecialsWithinSeasons": true
+      }
+    },
+    {
+      "name": "ignore-filters",
+      "parentKey": "next",
+      "query": "IsPlayed=true&IncludeItemTypes=Movie&ExcludeItemTypes=Episode&MinIndexNumber=200&MinDateLastSaved=2099-01-01T00:00:00Z",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "ignore-sorting",
+      "parentKey": "next",
+      "query": "SortBy=Name&SortOrder=Descending",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "ignore-count",
+      "parentKey": "next",
+      "query": "EnableTotalRecordCount=false",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "ignore-resumable",
+      "parentKey": "next",
+      "query": "EnableResumable=true",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "ignore-rewatch",
+      "parentKey": "next",
+      "query": "EnableRewatching=true",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "ignore-cutoff",
+      "parentKey": "next",
+      "query": "NextUpDateCutoff=2099-01-01T00:00:00Z",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "page",
+      "parentKey": "next",
+      "query": "StartIndex=2&Limit=3",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "limit-zero",
+      "parentKey": "next",
+      "query": "StartIndex=1&Limit=0",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "limit-negative",
+      "parentKey": "next",
+      "query": "Limit=-1",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "start-negative",
+      "parentKey": "next",
+      "query": "StartIndex=-1&Limit=2",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "page-beyond",
+      "parentKey": "next",
+      "query": "StartIndex=999&Limit=3",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "explicit-library",
+      "parentKey": "nextLibrary",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "physical-parent-native-empty",
+      "parentKey": "nextPhysical",
+      "query": "StartIndex=5",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "mixed-parent-direct",
+      "parentKey": "nextMixed",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "invalid-display-parent",
+      "parentKey": "nextInvalid",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "no-grouped-folders",
+      "parentKey": "next",
+      "query": "StartIndex=3",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": []
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "mixed-only-grouped",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "blocked-tag-activation",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "rating-filter",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "denied-nonparent-library",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000008"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "api-key-explicit-user",
+      "parentKey": "next",
+      "query": "UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "api-key-no-user",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400
+    },
+    {
+      "name": "userdata-enabled",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "enableUserData": true,
+      "serverConfiguration": {
+        "DisplaySpecialsWithinSeasons": true
+      }
+    },
+    {
+      "name": "userdata-enabled-specials-disabled",
+      "parentKey": "next",
+      "query": "",
+      "scope": [],
+      "omitIds": true,
+      "recursive": null,
+      "omitSortBy": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ]
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "enableUserData": true,
+      "serverConfiguration": {
+        "DisplaySpecialsWithinSeasons": false
+      }
+    }
+  ],
+  "mediaStreams": [
+    {
+      "itemKey": "sourceWidth2Alt0",
+      "index": 0,
+      "type": "Video",
+      "width": 720
+    },
+    {
+      "itemKey": "sourceWidth2Alt1",
+      "index": 0,
+      "type": "Video",
+      "width": 1920
+    },
+    {
+      "itemKey": "sourceMissingStream2Alt1",
+      "index": 0,
+      "type": "Video",
+      "width": 0
+    }
+  ]
+}

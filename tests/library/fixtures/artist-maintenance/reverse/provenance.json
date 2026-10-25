@@ -1,0 +1,112 @@
+{
+  "nativeSha256": "7bbbae2b7986a9a7473394a955030c27082e46382be46731ea42b69247b768bb",
+  "inputSha256": "08017dcaac64255eec1b331f47593a0c17f401f8bb670ff784b5c18cde88f95e",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/ArtistsPostScanTask.cs",
+      "sha256": "c8e51387a331e10563b321ddd04779e4ee945ca225c1b9e3fc9aa7fdfe73bce2",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/ArtistsValidator.cs",
+      "sha256": "4b7d841b1c5831c93f4e9df5adc4e56d78ec84d9b7de31de35d6b1027e344b43",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs",
+      "sha256": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.ByName.cs",
+      "sha256": "7f6eee4731947677354fbbdd3cc3cad8a991fb8d7789a869dafd9f0309ad1c07",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/LinkedChildrenService.cs",
+      "sha256": "abc952dc619666b5be99a49dbc770821967e9a5c1f3404accf7af368647aa63b",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "e27203463eaf2072b27a976ef47ffd93488e19629688ad0d5351b10e20372ee8"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 72192,
+    "sha256": "0baee00bf2068732d4c590e102e8554e884ed79eb635b308772fee346ba2e5cc"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager-validation/20261012-artists-post-scan-draft-8/input.json",
+      "D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native/instances",
+      "D:\\mediamanager-validation\\20261012-artists-post-scan-native-8\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "sqliteRuntime": {
+    "name": "e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

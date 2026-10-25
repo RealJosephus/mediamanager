@@ -1,0 +1,118 @@
+{
+  "recordedAt": "2026-10-10T11:00:14.975Z",
+  "candidateVerified": false,
+  "jellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "sources": [
+      {
+        "path": "MediaBrowser.LocalMetadata/BaseXmlProvider.cs",
+        "sha256": "fd399c96f06be8c726802522779159f5db0e5b874723989259b3e7b1bdfa042e"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Parsers/BaseItemXmlParser.cs",
+        "sha256": "d2b8211198b9e4cb9b9f93c920577653c65fc94e9ad26a8693e21bc14bd5124f"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Parsers/BoxSetXmlParser.cs",
+        "sha256": "2871d58af2e40b56a659a6a802747eb97d611d08e788c4441cff8a340451ab12"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Parsers/PlaylistXmlParser.cs",
+        "sha256": "5d3613a94c45757a88f119a67d0261d180cb70e140e86893c111911ae57c4615"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Providers/BoxSetXmlProvider.cs",
+        "sha256": "6e82d6ad03954fff2246e6b14bed803a74815f0694c307d549fecd9695a54c5d"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Providers/PlaylistXmlProvider.cs",
+        "sha256": "f305a35e30fc3eff2c44fbdbc9d5b15ab37374416552ddd409c25f4f12e530a4"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Savers/BaseXmlSaver.cs",
+        "sha256": "98d19c4e13d59268f36304545546904bfec802bdb73ed9e8063b8a81c29be85c"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata/Savers/PlaylistXmlSaver.cs",
+        "sha256": "f18deef71cb71e2d9092fcc1213dc054d080ec798a12f35b807ba28eb9ad1762"
+      },
+      {
+        "path": "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs",
+        "sha256": "45e5ecd70806044d4d803f2d7b9a2b9c370d9ba21c232234f2d7de61f7ca446c"
+      },
+      {
+        "path": "MediaBrowser.Providers/BoxSets/BoxSetMetadataService.cs",
+        "sha256": "5eccd8d75cc8775ebea83495a560cc5fbbdefb2d9367a858561a46704d3a7faf"
+      },
+      {
+        "path": "MediaBrowser.Providers/Playlists/PlaylistMetadataService.cs",
+        "sha256": "a90ebc584483f9d01f23aeb42a0f406ae7c5e177d0c9a91b58f2436129405b16"
+      },
+      {
+        "path": "MediaBrowser.Providers/Manager/MetadataService.cs",
+        "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+      }
+    ],
+    "assemblyDirectory": "D:/mediamanager-validation/20261010/results/playlist-items-v4/bin/Release/net10.0"
+  },
+  "sdk": "10.0.401",
+  "platform": "win32",
+  "files": {
+    "input": {
+      "filename": "input.json",
+      "sha256": "eb57b89abe0fb9c45de844acf8dc6834a4755b6e5a1f30ed62ee87ac3ffb75ba"
+    },
+    "native": {
+      "filename": "native.json",
+      "sha256": "3051ccd13e3ccb3af2252615290852f45829b39198edf0c72dfc1d4d99f68c7c"
+    },
+    "oracle": {
+      "filename": "Program.cs",
+      "sha256": "9b21de106139c3f48559a125825af175bbe023bca61f21892c6c26f82958f174"
+    },
+    "project": {
+      "filename": "Oracle.csproj",
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    "rawRecording": {
+      "filename": "D:/mediamanager-validation/20261010/results/local-xml-provider-v9/native.raw.json",
+      "sha256": "7a47365a3ba97b46ebad0ef37f24557ea3c6c6aa64ea282d5ffcc7688198852b"
+    }
+  },
+  "assemblies": [
+    {
+      "name": "MediaBrowser.LocalMetadata",
+      "sha256": "5c1efdf7375a9e9690b978318912cdb4e247f92ea13067d79ec1501cbdf27365"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "be90abd0dfa246d4ea142c543586f86416747058d06329f950164ee02845ecaf"
+    }
+  ],
+  "counts": {
+    "parserCases": 46,
+    "parserResults": 92,
+    "providerCases": 10,
+    "mergeCases": 6,
+    "pipelineCases": 5
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261010/results/local-xml-provider-v10/native.raw.json",
+    "rawSha256": "7a47365a3ba97b46ebad0ef37f24557ea3c6c6aa64ea282d5ffcc7688198852b",
+    "projectionEqual": true,
+    "byteEqual": true
+  },
+  "boundary": "Actual pinned BaseItemXmlParser, BoxSetXmlParser, PlaylistXmlParser, BaseXmlProvider, BoxSetXmlProvider, PlaylistXmlProvider, ManagedFileSystem, DirectoryService, and BoxSet/Playlist MetadataService.MergeData. Neutral files and controlled external-ID registry/library/configuration responses. Pipeline cases invoke the actual three merge calls with their native flags, not a complete MetadataService refresh or native repository save. Floats are cast to Double for exact Single value comparison; only the fresh MinValue DateCreated Kind is normalized. Selected source and loaded assembly seals are not a complete dirty-reference build-input closure, POSIX recording, full scan, HTTP/two-client, instance exchange or release acceptance claim."
+}

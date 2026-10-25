@@ -1,0 +1,776 @@
+import { nativeByNameFilterBinding, verifyNativeByNameFilterRecording, resolveNativeByNameFilterInput } from './native-byname-filter-inputs.js';
+import { validationFileUrl } from '../../tools/validation/paths.js';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { lstat, mkdtemp, readFile, readdir, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+
+const recordingBinding = await verifyNativeByNameFilterRecording('artist');
+
+const sourceEvidence = '.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/native-contract.json';
+const sideDefinitions = [
+  { key: 'unknown-credit', path: '.test-input/evidence/byname-filter-inputs/artist-filter-restoration-unknown-v1/native-contract.json' },
+  { key: 'bom-credit', path: '.test-input/evidence/byname-filter-inputs/artist-filter-restoration-bom-credit-v1/native-contract.json' },
+  { key: 'request-order', path: '.test-input/evidence/byname-filter-inputs/artist-filter-restoration-request-order-v1/native-contract.json' },
+  { key: 'bom-order', path: '.test-input/evidence/byname-filter-inputs/artist-filter-restoration-bom-order-v1/native-contract.json' }
+];
+const projectionSpec = Object.freeze({
+  id: 'artist-filter-native-v2-contract-projection',
+  version: 2,
+  main: 'Attach the exact source path and SHA-256; copy frozenJellyfin, fixtureInputSha256, endpoints, and cases.',
+  sideEffects: 'Project the ordered unknown-credit, bom-credit, request-order, and bom-order contracts with their exact source paths and SHA-256 values.',
+  caseTransform: 'Remove only discoveryOnly from every case and preserve every other JSON field and array order verbatim.'
+});
+
+const inputUrl = validationFileUrl('./fixtures/artist-filters/input.json', import.meta.url);
+const nativeUrl = validationFileUrl('./fixtures/artist-filters/native.json', import.meta.url);
+const testUrl = validationFileUrl(import.meta.url);
+const sourceContractUrl = validationFileUrl('../../' + sourceEvidence, import.meta.url);
+const projectionBindingUrl = validationFileUrl('./fixtures/artist-filters/projection.json', import.meta.url);
+const summaryUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/summary.json', import.meta.url);
+const databaseStagesUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/database-stages.json', import.meta.url);
+const filesystemStagesUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/filesystem-stages.json', import.meta.url);
+const nativeHttpUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/native-http.json', import.meta.url);
+const provenanceUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/provenance.json', import.meta.url);
+const runtimeManifestUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/reference-runtime-manifest.json', import.meta.url);
+const recorderUrl = validationFileUrl('../../tools/compat/record-artist-filters.js', import.meta.url);
+const projectorUrl = validationFileUrl('../../tools/compat/project-artist-filter-fixture.js', import.meta.url);
+const evidenceRootUrl = validationFileUrl('../../.test-input/evidence/byname-filter-inputs/artist-filter-restoration-v1/', import.meta.url);
+const evidenceRoot = fileURLToPath(evidenceRootUrl);
+const currentNativeRoot = path.dirname(nativeByNameFilterBinding.reference.sourceDatabase.filename);
+const currentSourceDatabase = nativeByNameFilterBinding.reference.sourceDatabase.filename;
+const currentRuntimeRoot = nativeByNameFilterBinding.runtimeDirectory.filename;
+const sourceConfigEntriesSha256 = recordingBinding.configuration.sourceEntriesSha256;
+const preparedConfigEntriesSha256 = recordingBinding.configuration.preparedEntriesSha256;
+const finalConfigEntriesSha256 = recordingBinding.configuration.finalEntriesSha256;
+const finalEncodingEntry = Object.freeze(recordingBinding.configuration.finalEncodingEntry);
+const expectedArtifacts = recordingBinding.artifacts;
+
+const sha256 = value => createHash('sha256').update(value).digest('hex');
+const inputBytes = await readFile(inputUrl);
+const nativeBytes = await readFile(nativeUrl);
+const input = JSON.parse(inputBytes);
+const native = JSON.parse(nativeBytes);
+const sideContractUrls = sideDefinitions.map(definition => validationFileUrl('../../' + definition.path, import.meta.url));
+const sideSummaryUrls = sideDefinitions.map(definition => validationFileUrl('../../' + definition.path.slice(0, definition.path.lastIndexOf('/')) + '/summary.json', import.meta.url));
+let testBytes, sourceContractBytes, recorderBytes, projectorBytes, sourceContract, projectionBinding, mainSummary,
+  databaseStages, filesystemStages, nativeHttp, provenance, runtimeManifest, sideSources = [];
+{
+  [testBytes, sourceContractBytes, recorderBytes, projectorBytes] = await Promise.all([
+    readFile(testUrl), readFile(sourceContractUrl), readFile(recorderUrl), readFile(projectorUrl),
+  ]);
+  sourceContract = JSON.parse(sourceContractBytes);
+  [projectionBinding, mainSummary, databaseStages, filesystemStages, nativeHttp, provenance, runtimeManifest] = await Promise.all([
+    projectionBindingUrl, summaryUrl, databaseStagesUrl, filesystemStagesUrl, nativeHttpUrl, provenanceUrl, runtimeManifestUrl,
+  ].map(async url => JSON.parse(await readFile(url))));
+  sideSources = await Promise.all(sideDefinitions.map(async definition => {
+    const bytes = await readFile(validationFileUrl('../../' + definition.path, import.meta.url));
+    return { ...definition, bytes, contract: JSON.parse(bytes) };
+  }));
+}
+
+const cases = new Map(native.cases.map(entry => [entry.name, entry]));
+const itemByKey = new Map(input.items.map(item => [item.key, item]));
+const idKey = value => String(value).replaceAll('-', '').toLowerCase();
+const projectCases = contract => contract.cases.map(({ discoveryOnly, ...entry }) => entry);
+const projectNative = () => ({
+  schemaVersion: 2,
+  frozenJellyfin: sourceContract.frozenJellyfin,
+  sourceEvidence,
+  sourceEvidenceSha256: sha256(sourceContractBytes),
+  fixtureInputSha256: sourceContract.fixtureInputSha256,
+  endpoints: sourceContract.endpoints,
+  cases: projectCases(sourceContract),
+  sideEffects: sideSources.map(source => ({
+    key: source.key,
+    sourceEvidence: source.path,
+    sourceEvidenceSha256: sha256(source.bytes),
+    frozenJellyfin: source.contract.frozenJellyfin,
+    mode: source.contract.mode,
+    fixtureInputSha256: source.contract.fixtureInputSha256,
+    endpoints: source.contract.endpoints,
+    cases: projectCases(source.contract)
+  }))
+});
+
+function assertRuntimeEvidence(summary, nativeHttp, provenance) {
+  const process = summary.process;
+  const { preferredPort, selectedPort } = process;
+  assert.equal(Number.isInteger(preferredPort) && preferredPort >= 1024 && preferredPort <= 65535, true);
+  assert.equal(Number.isInteger(selectedPort) && selectedPort >= 1024 && selectedPort <= 65535, true);
+  assert.equal(typeof process.preferredPortInitiallyAvailable, 'boolean');
+  if (process.preferredPortInitiallyAvailable) {
+    assert.equal(selectedPort, preferredPort);
+  } else {
+    assert.equal(selectedPort > preferredPort, true);
+    assert.equal(selectedPort <= Math.min(65535, preferredPort + 101), true);
+  }
+  assert.equal(process.portInitiallyAvailable, true);
+  assert.equal(process.portFinallyAvailable, true);
+  assert.equal(Number.isInteger(process.pid) && process.pid > 0, true);
+
+  const origin = `http://127.0.0.1:${selectedPort}`;
+  assert.equal(summary.mode, 'main');
+  assert.equal(summary.origin, origin);
+  assert.equal(nativeHttp.mode, summary.mode);
+  assert.equal(nativeHttp.origin, origin);
+  assert.deepEqual(provenance.result.process, process);
+
+  for (const key of ['preferredPort', 'preferredPortInitiallyAvailable', 'selectedPort',
+    'portInitiallyAvailable', 'portFinallyAvailable']) {
+    assert.equal(provenance.isolation[key], process[key], key);
+  }
+  assert.equal(provenance.isolation.loopbackOnly, true);
+  assert.equal(provenance.isolation.autoDiscovery, false);
+  assert.equal(provenance.isolation.frozenInputsWereNotRunInPlace, true);
+
+  const invocation = provenance.recorderInvocation;
+  assert.equal(invocation.length, 5);
+  assert.match(invocation[0].replaceAll('\\', '/'), /(?:^|\/)node(?:\.exe)?$/iu);
+  assert.equal(invocation[1], 'tools/compat/record-artist-filters.js');
+  assert.equal(invocation[2].replaceAll('\\', '/'), recordingBinding.recorderInvocation[2].replaceAll('\\', '/'));
+  assert.equal(invocation[3], String(preferredPort));
+  assert.equal(invocation[4], summary.mode);
+  assert.equal(provenance.recorder.path, invocation[1]);
+  assert.equal(provenance.isolation.clonedInstance.replaceAll('\\', '/'), `${invocation[2].replaceAll('\\', '/')}/reference`);
+}
+
+function isWithin(root, filename) {
+  const relative = path.relative(root, filename);
+  return relative !== '' && relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative);
+}
+
+function isSameOrWithin(root, filename) {
+  return path.resolve(root) === path.resolve(filename) || isWithin(root, filename);
+}
+
+async function resolveContainedRegularFile(root, relative) {
+  assert.equal(typeof relative, 'string');
+  const absoluteRoot = path.resolve(root);
+  const filename = path.resolve(absoluteRoot, relative);
+  assert.ok(isWithin(absoluteRoot, filename), `File escapes its logical root: ${relative}`);
+  const [resolvedRoot, resolvedFile, metadata] = await Promise.all([
+    realpath(absoluteRoot), realpath(filename), lstat(filename),
+  ]);
+  assert.equal(metadata.isSymbolicLink(), false, `File cannot be a link: ${relative}`);
+  assert.equal(metadata.isFile(), true, `Expected a regular file: ${relative}`);
+  assert.ok(isWithin(resolvedRoot, resolvedFile), `File escapes its real root: ${relative}`);
+  return { filename, metadata };
+}
+
+async function resolveContainedDirectory(root, relative) {
+  const absoluteRoot = path.resolve(root);
+  const filename = path.resolve(absoluteRoot, relative);
+  assert.ok(isSameOrWithin(absoluteRoot, filename), `Directory escapes its logical root: ${relative}`);
+  const [resolvedRoot, resolvedDirectory, metadata] = await Promise.all([
+    realpath(absoluteRoot), realpath(filename), lstat(filename),
+  ]);
+  assert.equal(metadata.isSymbolicLink(), false, `Directory cannot be a link: ${relative}`);
+  assert.equal(metadata.isDirectory(), true, `Expected a directory: ${relative}`);
+  assert.ok(isSameOrWithin(resolvedRoot, resolvedDirectory), `Directory escapes its real root: ${relative}`);
+  return filename;
+}
+
+async function listRegularFiles(root, relative = '') {
+  const directory = await resolveContainedDirectory(root, relative);
+  const files = [];
+  for (const entry of (await readdir(directory, { withFileTypes: true }))
+    .sort((left, right) => left.name.localeCompare(right.name))) {
+    const child = path.join(relative, entry.name);
+    const metadata = await lstat(path.join(root, child));
+    assert.equal(metadata.isSymbolicLink(), false, `Directory tree cannot contain links: ${child}`);
+    if (metadata.isDirectory()) files.push(...await listRegularFiles(root, child));
+    else {
+      assert.equal(metadata.isFile(), true, `Directory tree entries must be regular files: ${child}`);
+      files.push(child.replaceAll('\\', '/'));
+    }
+  }
+  return files.sort((left, right) => left.localeCompare(right));
+}
+
+const bindArtifactSizes = artifacts => artifacts.map((entry, index) => ({
+  ...entry,
+  size: expectedArtifacts[index]?.size,
+}));
+
+async function verifyArtifactManifest(candidate = bindArtifactSizes(provenance.artifacts)) {
+  assert.deepEqual(candidate, expectedArtifacts,
+    'Artist evidence artifacts must be the exact canonical path/size/SHA list in recording order.');
+  for (const artifact of candidate) {
+    const { filename, metadata } = await resolveContainedRegularFile(evidenceRoot, artifact.path);
+    const bytes = await readFile(filename);
+    assert.equal(metadata.size, artifact.size, `${artifact.path}: stat size`);
+    assert.equal(bytes.length, artifact.size, `${artifact.path}: byte size`);
+    assert.equal(sha256(bytes), artifact.sha256, `${artifact.path}: sha256`);
+  }
+}
+
+function sealRuntimeManifest(candidate) {
+  candidate.fileCount = candidate.entries.length;
+  candidate.dllCount = candidate.entries.filter(entry => entry.path.toLowerCase().endsWith('.dll')).length;
+  candidate.depsJsonCount = candidate.entries.filter(entry => entry.path.toLowerCase().endsWith('.deps.json')).length;
+  candidate.runtimeConfigCount = candidate.entries
+    .filter(entry => entry.path.toLowerCase().endsWith('.runtimeconfig.json')).length;
+  candidate.entriesSha256 = sha256(JSON.stringify(candidate.entries));
+  return candidate;
+}
+
+async function verifyRuntimeManifest(candidate = runtimeManifest, binding = provenance.referenceRuntime) {
+  assert.equal(candidate.root,
+    recordingBinding.runtimeManifestRoot);
+  assert.ok(Array.isArray(candidate.entries) && candidate.entries.length > 0, 'Runtime manifest cannot be empty.');
+  assert.equal(candidate.fileCount, candidate.entries.length);
+  assert.equal(candidate.entriesSha256, sha256(JSON.stringify(candidate.entries)));
+  assert.deepEqual({
+    root: binding.root,
+    fileCount: binding.fileCount,
+    dllCount: binding.dllCount,
+    depsJsonCount: binding.depsJsonCount,
+    runtimeConfigCount: binding.runtimeConfigCount,
+    entriesSha256: binding.entriesSha256,
+  }, {
+    root: candidate.root,
+    fileCount: candidate.fileCount,
+    dllCount: candidate.dllCount,
+    depsJsonCount: candidate.depsJsonCount,
+    runtimeConfigCount: candidate.runtimeConfigCount,
+    entriesSha256: candidate.entriesSha256,
+  });
+  const paths = candidate.entries.map(entry => entry.path);
+  assert.equal(new Set(paths).size, paths.length, 'Runtime manifest paths must be unique.');
+  assert.deepEqual(paths, [...paths].sort((left, right) => left.localeCompare(right)),
+    'Runtime manifest must remain in canonical order.');
+  assert.deepEqual(await listRegularFiles(currentRuntimeRoot), paths,
+    'Runtime manifest must be the exact current logical runtime file set.');
+  for (const entry of candidate.entries) {
+    assert.deepEqual(Object.keys(entry).sort(), ['path', 'sha256', 'size']);
+    assert.equal(Number.isSafeInteger(entry.size) && entry.size >= 0, true, `${entry.path}: size`);
+    assert.match(entry.sha256, /^[0-9a-f]{64}$/u, `${entry.path}: sha256`);
+    const { filename, metadata } = await resolveContainedRegularFile(currentRuntimeRoot, entry.path);
+    const bytes = await readFile(filename);
+    assert.equal(metadata.size, entry.size, `${entry.path}: stat size`);
+    assert.equal(bytes.length, entry.size, `${entry.path}: byte size`);
+    assert.equal(sha256(bytes), entry.sha256, `${entry.path}: sha256`);
+  }
+}
+
+function resolveBoundInput(filename) {
+  return resolveNativeByNameFilterInput('artist', null, filename);
+}
+
+function verifyDirectoryManifestShape(candidate, expectedEntriesSha256) {
+  assert.deepEqual(Object.keys(candidate).sort(), ['entries', 'entriesSha256', 'exists']);
+  assert.equal(candidate.exists, true);
+  assert.ok(Array.isArray(candidate.entries) && candidate.entries.length > 0);
+  assert.equal(candidate.entriesSha256, sha256(JSON.stringify(candidate.entries)));
+  assert.equal(candidate.entriesSha256, expectedEntriesSha256);
+  const paths = candidate.entries.map(entry => entry.path);
+  assert.equal(new Set(paths).size, paths.length);
+  assert.deepEqual(paths, [...paths].sort((left, right) => left.localeCompare(right)));
+  for (const entry of candidate.entries) {
+    assert.deepEqual(Object.keys(entry).sort(), ['path', 'sha256', 'size', 'type']);
+    assert.equal(entry.type, 'file');
+    assert.equal(Number.isSafeInteger(entry.size) && entry.size >= 0, true, `${entry.path}: size`);
+    assert.match(entry.sha256, /^[0-9a-f]{64}$/u, `${entry.path}: sha256`);
+  }
+  return paths;
+}
+
+async function verifyDirectoryManifest(candidate, root, expectedEntriesSha256) {
+  const paths = verifyDirectoryManifestShape(candidate, expectedEntriesSha256);
+  assert.deepEqual(await listRegularFiles(root), paths);
+  for (const entry of candidate.entries) {
+    const { filename, metadata } = await resolveContainedRegularFile(root, entry.path);
+    const bytes = await readFile(filename);
+    assert.equal(metadata.size, entry.size, `${entry.path}: size`);
+    assert.equal(bytes.length, entry.size, `${entry.path}: byte size`);
+    assert.equal(sha256(bytes), entry.sha256, `${entry.path}: sha256`);
+  }
+}
+
+function changedConfigPaths(before, after) {
+  assert.deepEqual(after.entries.map(entry => entry.path), before.entries.map(entry => entry.path));
+  return before.entries.flatMap((entry, index) => (
+    JSON.stringify(entry) === JSON.stringify(after.entries[index]) ? [] : [entry.path]
+  ));
+}
+
+function assertConfigTransition(before, after, allowedChanges, message) {
+  assert.deepEqual(changedConfigPaths(before, after), allowedChanges, message);
+}
+
+function finalConfigManifest(preparedConfig, encodingEntry = finalEncodingEntry) {
+  const entries = preparedConfig.entries.map(entry => (
+    entry.path === 'encoding.xml' ? { ...encodingEntry } : { ...entry }
+  ));
+  return { exists: true, entries, entriesSha256: sha256(JSON.stringify(entries)) };
+}
+
+async function verifyConfigLifecycle(sourceConfig, preparedConfig) {
+  const sourceRoot = path.join(currentNativeRoot, 'config');
+  const finalRoot = path.join(evidenceRoot, 'reference/config');
+  const sourcePaths = verifyDirectoryManifestShape(sourceConfig, sourceConfigEntriesSha256);
+  const preparedPaths = verifyDirectoryManifestShape(preparedConfig, preparedConfigEntriesSha256);
+  assert.deepEqual(preparedPaths, sourcePaths);
+  assertConfigTransition(sourceConfig, preparedConfig, ['network.xml'],
+    'Preparing the clone must rewrite only network.xml.');
+  await verifyDirectoryManifest(sourceConfig, sourceRoot, sourceConfigEntriesSha256);
+
+  const finalConfig = finalConfigManifest(preparedConfig);
+  assert.equal(finalConfig.entriesSha256, finalConfigEntriesSha256);
+  assertConfigTransition(preparedConfig, finalConfig, ['encoding.xml'],
+    'Starting Jellyfin must rewrite only encoding.xml.');
+  await verifyDirectoryManifest(finalConfig, finalRoot, finalConfigEntriesSha256);
+
+  for (const preparedEntry of preparedConfig.entries) {
+    const preparedRoot = preparedEntry.path === 'network.xml' ? finalRoot : sourceRoot;
+    const { filename: preparedFilename, metadata } = await resolveContainedRegularFile(preparedRoot,
+      preparedEntry.path);
+    const preparedBytes = await readFile(preparedFilename);
+    assert.equal(metadata.size, preparedEntry.size, `${preparedEntry.path}: prepared size`);
+    assert.equal(preparedBytes.length, preparedEntry.size, `${preparedEntry.path}: prepared byte size`);
+    assert.equal(sha256(preparedBytes), preparedEntry.sha256, `${preparedEntry.path}: prepared sha256`);
+
+    const { filename: finalFilename } = await resolveContainedRegularFile(finalRoot, preparedEntry.path);
+    const finalBytes = await readFile(finalFilename);
+    if (preparedEntry.path === 'encoding.xml') {
+      assert.notDeepEqual(finalBytes, preparedBytes, 'encoding.xml must contain the recorded lifecycle rewrite.');
+    } else {
+      assert.deepEqual(finalBytes, preparedBytes,
+        `${preparedEntry.path} must remain byte-for-byte identical after startup.`);
+    }
+  }
+  return finalConfig;
+}
+
+async function verifyBoundInputs() {
+  assert.equal(provenance.nativeSources.length, 17);
+  assert.equal(provenance.preparedInputs.length, 34);
+  const sourceConfig = JSON.parse(await readFile(path.join(evidenceRoot, 'source-config-manifest.json')));
+  const preparedConfig = JSON.parse(await readFile(path.join(evidenceRoot, 'prepared-config-manifest.json')));
+  for (const entry of provenance.nativeSources) {
+    const mapped = resolveBoundInput(entry.path);
+    const { filename } = await resolveContainedRegularFile(mapped.root, mapped.relative);
+    assert.equal(sha256(await readFile(filename)), entry.sha256, entry.path);
+  }
+  for (const entry of provenance.preparedInputs) {
+    if (entry.kind === 'frozenReleaseRuntimeTree') {
+      const mapped = resolveBoundInput(entry.path);
+      assert.equal(await realpath(path.join(mapped.root, mapped.relative)), await realpath(currentRuntimeRoot));
+      assert.equal(entry.fileCount, runtimeManifest.fileCount);
+      assert.equal(entry.entriesSha256, runtimeManifest.entriesSha256);
+    } else if (entry.kind === 'sourceConfigTree') {
+      const mapped = resolveBoundInput(entry.path);
+      assert.equal(entry.entriesSha256, sourceConfigEntriesSha256);
+      await verifyDirectoryManifest(sourceConfig, path.join(mapped.root, mapped.relative), entry.entriesSha256);
+      assert.equal(entry.entryCount, sourceConfig.entries.length);
+    } else if (entry.kind === 'preparedCloneConfigTree') {
+      assert.equal(entry.path, recordingBinding.preparedInputs.find(entry => entry.kind === 'preparedCloneConfigTree').path);
+      assert.equal(entry.entriesSha256, preparedConfigEntriesSha256);
+      await verifyConfigLifecycle(sourceConfig, preparedConfig);
+      assert.equal(entry.entryCount, preparedConfig.entries.length);
+    } else {
+      assert.match(entry.sha256, /^[0-9a-f]{64}$/u, entry.path);
+      const mapped = resolveBoundInput(entry.path);
+      const { filename } = await resolveContainedRegularFile(mapped.root, mapped.relative);
+      assert.equal(sha256(await readFile(filename)), entry.sha256, entry.path);
+    }
+  }
+}
+
+test('tracked artist fixture is a mechanical projection of the authoritative main and four side contracts', () => {
+  assert.equal(sourceContract.schemaVersion, 2);
+  assert.equal(sourceContract.mode, 'main');
+  assert.ok(sourceContract.cases.every(entry => entry.discoveryOnly === false));
+  assert.deepEqual(native, projectNative());
+
+  assert.equal(projectionBinding.schemaVersion, 1);
+  assert.deepEqual(projectionBinding.projectionLogic.spec, projectionSpec);
+  assert.equal(projectionBinding.projectionLogic.sha256, sha256(JSON.stringify(projectionSpec)));
+  assert.deepEqual(projectionBinding.authoritativeContract, {
+    path: sourceEvidence,
+    sha256: sha256(sourceContractBytes)
+  });
+  assert.deepEqual(projectionBinding.sideContracts, sideSources.map(source => ({
+    key: source.key,
+    path: source.path,
+    sha256: sha256(source.bytes)
+  })));
+  assert.deepEqual(projectionBinding.fixtureInput, {
+    path: 'tests/library/fixtures/artist-filters/input.json',
+    sha256: sha256(inputBytes)
+  });
+  assert.deepEqual(projectionBinding.trackedFixture, {
+    path: 'tests/library/fixtures/artist-filters/native.json',
+    sha256: sha256(nativeBytes)
+  });
+  assert.deepEqual(projectionBinding.integrityTest, {
+    path: 'tests/library/artist-filter-native-fixture.test.js',
+    sha256: sha256(testBytes)
+  });
+  assert.deepEqual(projectionBinding.projector, {
+    path: 'tools/compat/project-artist-filter-fixture.js',
+    sha256: sha256(projectorBytes)
+  });
+});
+
+test('authoritative main evidence is read-only, complete, cleanly stopped, and tied to the full frozen runtime', async () => {
+  assert.equal(mainSummary.passed, true);
+  assert.equal(mainSummary.mode, 'main');
+  assert.equal(mainSummary.fixtureCases, 49);
+  assert.equal(mainSummary.endpointCases, 95);
+  assert.equal(mainSummary.httpRecords, 97);
+  assert.deepEqual(mainSummary.discoveryOnlyCases, []);
+  assert.equal(mainSummary.databaseUnchangedByReads, true);
+  assert.equal(mainSummary.filesystemUnchangedByReads, true);
+  assert.equal(mainSummary.foreignKeyCheckPassedAllStages, true);
+  assert.equal(mainSummary.process.code, 0);
+  assert.equal(mainSummary.process.cleanShutdown, true);
+  assert.equal(mainSummary.process.portInitiallyAvailable, true);
+  assert.equal(mainSummary.process.portFinallyAvailable, true);
+  assertRuntimeEvidence(mainSummary, nativeHttp, provenance);
+
+  assert.deepEqual(databaseStages.snapshotScope, {
+    rowSelection: 'all rows',
+    tables: ['BaseItems', 'ItemValues', 'ItemValuesMap', 'AncestorIds', 'LinkedChildren', 'ApiKeys'],
+    includesForeignKeyCheck: true
+  });
+  for (const name of ['beforeSeed', 'afterSeed', 'beforeReads', 'afterReads', 'finalAfterShutdown']) {
+    assert.deepEqual(databaseStages[name].foreignKeyCheck, [], name);
+  }
+  assert.deepEqual(databaseStages.beforeReads, databaseStages.afterSeed);
+  assert.deepEqual(databaseStages.afterReads, databaseStages.beforeReads);
+  assert.deepEqual(databaseStages.finalAfterShutdown, databaseStages.beforeReads);
+  assert.deepEqual(filesystemStages.afterReads, filesystemStages.beforeReads);
+  assert.deepEqual(filesystemStages.finalAfterShutdown, filesystemStages.beforeReads);
+
+  assert.equal(runtimeManifest.fileCount, runtimeManifest.entries.length);
+  assert.equal(runtimeManifest.fileCount, 230);
+  assert.equal(runtimeManifest.dllCount, 115);
+  assert.equal(runtimeManifest.depsJsonCount, 1);
+  assert.equal(runtimeManifest.runtimeConfigCount, 1);
+  assert.equal(runtimeManifest.entriesSha256, sha256(JSON.stringify(runtimeManifest.entries)));
+  assert.equal(provenance.referenceRuntime.entriesSha256, runtimeManifest.entriesSha256);
+  await verifyRuntimeManifest();
+  assert.equal(provenance.recorder.sha256, sha256(recorderBytes));
+  assert.equal(provenance.preparedInputs.find(entry => entry.kind === 'recorderSource').sha256, sha256(recorderBytes));
+  await verifyBoundInputs();
+  await verifyArtifactManifest();
+  const preparedNativeSources = provenance.preparedInputs.filter(entry => entry.kind === 'frozenNativeSource')
+    .map(({ path, sha256: hash }) => ({ path, sha256: hash }));
+  assert.deepEqual(preparedNativeSources, provenance.nativeSources);
+  assert.ok(provenance.preparedInputs.every(entry => !String(entry.path).endsWith('/native.json')
+    && !String(entry.path).endsWith('artist-filter-native-fixture.test.js')));
+
+  assert.equal(nativeHttp.records.length, 97);
+  assert.equal(nativeHttp.records[0].name, 'login-admin');
+  assert.doesNotMatch(nativeHttp.records[0].request.headers.Authorization, /Token=/u);
+  assert.equal(nativeHttp.records.at(-1).name, 'authenticated-shutdown');
+});
+
+test('artist runtime evidence rejects disconnected port, origin, result, and invocation facts', () => {
+  const fallback = structuredClone({ summary: mainSummary, nativeHttp, provenance });
+  const fallbackPort = fallback.summary.process.preferredPort + 1;
+  for (const process of [fallback.summary.process, fallback.provenance.result.process]) {
+    process.preferredPortInitiallyAvailable = false;
+    process.selectedPort = fallbackPort;
+  }
+  fallback.provenance.isolation.preferredPortInitiallyAvailable = false;
+  fallback.provenance.isolation.selectedPort = fallbackPort;
+  fallback.summary.origin = `http://127.0.0.1:${fallbackPort}`;
+  fallback.nativeHttp.origin = fallback.summary.origin;
+  assert.doesNotThrow(() => assertRuntimeEvidence(fallback.summary, fallback.nativeHttp, fallback.provenance));
+
+  const cases = [
+    ['summary selected port', value => { value.summary.process.selectedPort += 1; }],
+    ['native HTTP origin', value => { value.nativeHttp.origin = 'http://127.0.0.1:1'; }],
+    ['provenance isolation port', value => { value.provenance.isolation.selectedPort += 1; }],
+    ['provenance result process', value => { value.provenance.result.process.selectedPort += 1; }],
+    ['recorder invocation port', value => { value.provenance.recorderInvocation[3] = '65535'; }],
+  ];
+  for (const [name, tamper] of cases) {
+    const value = structuredClone({ summary: mainSummary, nativeHttp, provenance });
+    tamper(value);
+    assert.throws(() => assertRuntimeEvidence(value.summary, value.nativeHttp, value.provenance), {
+      code: 'ERR_ASSERTION',
+    }, name);
+  }
+
+  const invalidFallback = structuredClone(fallback);
+  invalidFallback.summary.process.selectedPort = invalidFallback.summary.process.preferredPort;
+  invalidFallback.provenance.result.process.selectedPort = invalidFallback.summary.process.selectedPort;
+  invalidFallback.provenance.isolation.selectedPort = invalidFallback.summary.process.selectedPort;
+  invalidFallback.summary.origin = `http://127.0.0.1:${invalidFallback.summary.process.selectedPort}`;
+  invalidFallback.nativeHttp.origin = invalidFallback.summary.origin;
+  assert.throws(() => assertRuntimeEvidence(invalidFallback.summary, invalidFallback.nativeHttp,
+    invalidFallback.provenance), { code: 'ERR_ASSERTION' });
+});
+
+test('artist evidence manifests reject omission, insertion, reorder, tampering, and linked-root escape', async () => {
+  const artifactCases = [
+    value => value.splice(0),
+    value => value.pop(),
+    value => value.push({ ...value[0], path: 'extra.json' }),
+    value => value.reverse(),
+    value => { value[0].sha256 = '0'.repeat(64); },
+    value => { value[0].size += 1; },
+  ];
+  for (const tamper of artifactCases) {
+    const candidate = structuredClone(bindArtifactSizes(provenance.artifacts));
+    tamper(candidate);
+    await assert.rejects(() => verifyArtifactManifest(candidate), assert.AssertionError);
+  }
+
+  const runtimeCases = [
+    value => value.entries.splice(0),
+    value => value.entries.pop(),
+    value => value.entries.push({ ...value.entries[0], path: 'unexpected-runtime-file' }),
+    value => value.entries.reverse(),
+    value => { value.entries[0].sha256 = '0'.repeat(64); },
+    value => { value.entries[0].size += 1; },
+  ];
+  for (const tamper of runtimeCases) {
+    const candidate = structuredClone(runtimeManifest);
+    tamper(candidate);
+    sealRuntimeManifest(candidate);
+    const binding = {
+      ...provenance.referenceRuntime,
+      fileCount: candidate.fileCount,
+      dllCount: candidate.dllCount,
+      depsJsonCount: candidate.depsJsonCount,
+      runtimeConfigCount: candidate.runtimeConfigCount,
+      entriesSha256: candidate.entriesSha256,
+    };
+    await assert.rejects(() => verifyRuntimeManifest(candidate, binding), assert.AssertionError);
+  }
+
+  const [sourceConfig, preparedConfig] = await Promise.all([
+    readFile(path.join(evidenceRoot, 'source-config-manifest.json'), 'utf8').then(JSON.parse),
+    readFile(path.join(evidenceRoot, 'prepared-config-manifest.json'), 'utf8').then(JSON.parse),
+  ]);
+  const configManifestCases = [
+    value => value.entries.splice(0),
+    value => value.entries.pop(),
+    value => value.entries.push({ ...value.entries[0], path: 'unexpected.xml' }),
+    value => value.entries.reverse(),
+    value => { value.entries[0].sha256 = '0'.repeat(64); },
+    value => { value.entries[0].size += 1; },
+  ];
+  for (const tamper of configManifestCases) {
+    const candidate = structuredClone(preparedConfig);
+    tamper(candidate);
+    candidate.entriesSha256 = sha256(JSON.stringify(candidate.entries));
+    await assert.rejects(() => verifyConfigLifecycle(sourceConfig, candidate), assert.AssertionError);
+  }
+
+  const unexpectedSecondRewrite = finalConfigManifest(preparedConfig);
+  unexpectedSecondRewrite.entries.find(entry => entry.path === 'database.xml').sha256 = '0'.repeat(64);
+  unexpectedSecondRewrite.entriesSha256 = sha256(JSON.stringify(unexpectedSecondRewrite.entries));
+  assert.throws(() => assertConfigTransition(preparedConfig, unexpectedSecondRewrite, ['encoding.xml']),
+    assert.AssertionError);
+  for (const tamper of [
+    entry => { entry.sha256 = '0'.repeat(64); },
+    entry => { entry.size += 1; },
+  ]) {
+    const candidate = finalConfigManifest(preparedConfig);
+    tamper(candidate.entries.find(entry => entry.path === 'encoding.xml'));
+    candidate.entriesSha256 = sha256(JSON.stringify(candidate.entries));
+    await assert.rejects(() => verifyDirectoryManifest(candidate, path.join(evidenceRoot, 'reference/config'),
+      candidate.entriesSha256), assert.AssertionError);
+  }
+
+  await assert.rejects(() => resolveContainedRegularFile(evidenceRoot, '../outside.json'), assert.AssertionError);
+  assert.throws(() => resolveBoundInput('../outside.json'), assert.AssertionError);
+  const containmentRoot = await mkdtemp(path.join(tmpdir(), 'mediamanager-artist-evidence-root-'));
+  const outsideRoot = await mkdtemp(path.join(tmpdir(), 'mediamanager-artist-evidence-outside-'));
+  try {
+    await writeFile(path.join(outsideRoot, 'outside.json'), '{}');
+    await symlink(outsideRoot, path.join(containmentRoot, 'escape'), process.platform === 'win32' ? 'junction' : 'dir');
+    await assert.rejects(() => resolveContainedRegularFile(containmentRoot, 'escape/outside.json'),
+      assert.AssertionError);
+  } finally {
+    await rm(containmentRoot, { recursive: true, force: true });
+    await rm(outsideRoot, { recursive: true, force: true });
+  }
+});
+
+test('main fixture freezes every endpoint response order and DTO projection', () => {
+  assert.equal(native.schemaVersion, 2);
+  assert.equal(native.frozenJellyfin, true);
+  assert.equal(native.sourceEvidence, sourceEvidence);
+  assert.match(native.sourceEvidenceSha256, /^[0-9a-f]{64}$/u);
+  assert.equal(native.fixtureInputSha256, sha256(inputBytes));
+  assert.deepEqual(native.endpoints, ['/Items', '/Users/{userId}/Items']);
+  assert.equal(input.items.length, 47);
+  assert.equal(input.itemValues.length, 15);
+  assert.equal(input.itemValueLinks.length, 30);
+  assert.equal(input.cases.length, 49);
+  assert.equal(native.cases.length, 49);
+  assert.equal(cases.size, 49);
+  assert.equal(native.cases.reduce((count, entry) => count + entry.endpoints.length, 0), 95);
+
+  for (const entry of native.cases) {
+    const source = input.cases.find(candidate => candidate.name === entry.name);
+    assert.ok(source, entry.name);
+    assert.equal(entry.query, source.query, entry.name);
+    assert.deepEqual(entry.scope, source.scope, entry.name);
+    assert.equal(entry.auth, source.auth ?? 'user', entry.name);
+    assert.deepEqual(entry.endpoints, source.endpoints ?? ['items', 'legacy'], entry.name);
+    assert.equal(entry.omitScope, source.omitScope ?? false, entry.name);
+    assert.equal(entry.omitSortBy, source.omitSortBy ?? false, entry.name);
+    assert.equal(entry.assertOrder, source.assertOrder ?? false, entry.name);
+    assert.equal(entry.status, 200, entry.name);
+    assert.equal(entry.contentType, 'application/json; charset=utf-8', entry.name);
+    assert.equal(entry.problem, null, entry.name);
+    assert.deepEqual(entry.keys, [...entry.orderedKeys].sort(), entry.name);
+    assert.deepEqual(entry.ids, [...entry.orderedIds].sort(), entry.name);
+    assert.deepEqual(entry.orderedIds, entry.items.map(item => idKey(item.id)), entry.name);
+    assert.deepEqual(entry.orderedKeys, entry.items.map(item => item.key), entry.name);
+    assert.ok(entry.keys.every(key => entry.scope.includes(key)), entry.name);
+    assert.deepEqual(entry.ids, entry.keys.map(key => idKey(itemByKey.get(key).id)).sort(), entry.name);
+    assert.equal(entry.totalRecordCount, entry.name === 'user-artist-group-count-before-page' ? 2 : entry.keys.length, entry.name);
+
+    for (const item of entry.items) {
+      assert.deepEqual(Object.keys(item).sort(), ['id', 'key', 'name', 'productionYear', 'type'], entry.name);
+      const seeded = itemByKey.get(item.key);
+      assert.ok(seeded, entry.name + ':' + item.key);
+      assert.equal(idKey(item.id), idKey(seeded.id), entry.name);
+      assert.equal(item.name, seeded.name, entry.name);
+      assert.equal(item.type, seeded.type, entry.name);
+      assert.equal(item.productionYear, seeded.productionYear ?? null, entry.name);
+    }
+  }
+});
+
+test('artist relation filters preserve role, conjunction, exclusion, and persisted CleanName semantics', () => {
+  assert.deepEqual(cases.get('artist-ids-match-artist-and-album-artist').keys, ['albumArtistAlice', 'artistAlice']);
+  assert.deepEqual(cases.get('album-artist-ids-match-only-album-role').keys, ['albumArtistAlice']);
+  assert.deepEqual(cases.get('contributing-artist-requires-direct-artist').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('contributing-allows-unselected-album-artist').keys, ['artistAliceAlbumBob']);
+  assert.deepEqual(cases.get('contributing-excludes-any-selected-album-artist').keys, []);
+  assert.deepEqual(cases.get('exclude-artist-ids-cover-both-roles').keys, ['artistBob', 'noCredit']);
+  assert.deepEqual(cases.get('artist-id-uses-persisted-clean-name').keys, ['oddCredit']);
+  assert.deepEqual(cases.get('artist-id-missing-selector-matches-nothing').keys, []);
+  assert.deepEqual(cases.get('exclude-missing-selector-is-no-op').keys, ['artistAlice', 'noCredit']);
+  assert.deepEqual(cases.get('artist-ids-single-comma-or').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artist-and-album-artist-filters-are-and').keys, ['artistAliceAlbumBob']);
+});
+
+test('Artists name bridging freezes occurrence, visibility, raw-name Unicode, and whitespace selection boundaries', () => {
+  assert.deepEqual(cases.get('artists-name-bridge').keys, ['albumArtistAlice', 'artistAlice']);
+  assert.equal(cases.get('artists-root-request-dispatches-filtered-repository-query').omitScope, true);
+  assert.deepEqual(cases.get('artists-root-request-dispatches-filtered-repository-query').keys, []);
+  assert.deepEqual(cases.get('artists-query-key-and-name-case-insensitive').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artists-single-pipe-occurrence-splits').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artists-repeated-occurrences-are-values').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artists-repeated-occurrence-keeps-literal-pipe').keys, ['artistBob', 'literalPipeCredit']);
+  assert.deepEqual(cases.get('artists-empty-preserves-direct-artist-ids').keys, ['artistBob']);
+  assert.deepEqual(cases.get('artists-overwrite-direct-artist-ids').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artists-whitespace-selects-first-library-artist').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artists-whitespace-overwrites-direct-artist-ids').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artists-repeated-whitespace-and-name-union').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artists-name-bridge-excludes-owned-selector').keys, ['ownerEligibleCredit']);
+  assert.deepEqual(cases.get('artists-name-bridge-excludes-hidden-alternate-selector').keys, ['alternatePrimaryCredit']);
+  assert.deepEqual(cases.get('artists-raw-name-keeps-sharp-s-distinct-from-ss').keys, ['unicodeSharpCredit']);
+  assert.deepEqual(cases.get('artists-raw-name-ascii-ss-does-not-fold-to-sharp-s').keys, ['unicodeSsCredit']);
+
+  const byNameSortFirst = itemByKey.get('byNameSortFirstSelector');
+  assert.equal(byNameSortFirst.parentId, null);
+  assert.equal(byNameSortFirst.topParentId, null);
+  assert.equal(byNameSortFirst.sortName, '0000-by-name');
+  assert.ok(itemByKey.get('ownerExcludedSelector').ownerId);
+  assert.equal(itemByKey.get('alternateExcludedSelector').primaryVersionId, itemByKey.get('alternatePrimarySelector').id);
+});
+
+test('artist Guid binding freezes standard formats, occurrence splitting, and CLR whitespace edges', () => {
+  assert.deepEqual(cases.get('artist-ids-invalid-only-drops-filter').keys, ['artistAlice', 'noCredit']);
+  assert.deepEqual(cases.get('artist-ids-valid-and-invalid-keeps-valid').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artist-ids-repeated-comma-occurrence-is-not-split').keys, ['artistBob']);
+  assert.deepEqual(cases.get('artist-ids-p-format').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artist-ids-n-format').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artist-ids-b-format').keys, ['artistAlice']);
+  assert.deepEqual(cases.get('artist-ids-bom-wrapped-guid-is-discarded').keys, ['artistAlice', 'noCredit']);
+  assert.deepEqual(cases.get('artist-ids-single-x-format-is-split-away').keys, ['artistAlice', 'noCredit']);
+  assert.deepEqual(cases.get('artist-ids-repeated-x-format-is-accepted').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artist-ids-repeated-x-format-nel-whitespace-is-accepted').keys, ['artistAlice', 'artistBob']);
+  assert.deepEqual(cases.get('artist-ids-repeated-x-format-bom-whitespace-is-rejected').keys, ['artistBob']);
+});
+
+test('artist filters are item-local and respect alternate and owner visibility', () => {
+  assert.deepEqual(cases.get('artist-filter-does-not-propagate-to-ancestors').keys, ['ancestorChild']);
+  assert.deepEqual(cases.get('artist-filter-does-not-propagate-to-linked-parent').keys, ['linkedChild']);
+  assert.deepEqual(cases.get('artist-filter-can-match-folder-own-value').keys, ['ownCreditFolder']);
+  assert.deepEqual(cases.get('artist-filter-does-not-expand-alternate-to-primary').keys, []);
+  assert.deepEqual(cases.get('artist-filter-excludes-owned-non-extra-but-keeps-extra').keys, ['ownedExtra']);
+  assert.deepEqual(cases.get('artist-selector-outside-result-scope-still-drives').keys, ['outsideCredit']);
+});
+
+test('user identity controls grouping and count-before-page behavior on both Items routes', () => {
+  assert.deepEqual(cases.get('user-artist-presentation-grouping').keys, ['groupFirst']);
+  assert.deepEqual(cases.get('api-key-artist-does-not-group-modern').keys, ['groupFirst', 'groupSecond']);
+  assert.deepEqual(cases.get('api-key-artist-modern-with-user-id').keys, ['groupFirst']);
+  assert.deepEqual(cases.get('api-key-artist-legacy-route').keys, ['groupFirst']);
+  assert.deepEqual(cases.get('user-artist-group-count-before-page').keys, ['artistAlice']);
+  assert.equal(cases.get('user-artist-group-count-before-page').totalRecordCount, 2);
+});
+
+test('MusicAlbum artist query defaults to production year descending then sort name ascending', () => {
+  const entry = cases.get('music-album-artist-default-order');
+  assert.equal(entry.omitSortBy, true);
+  assert.equal(entry.assertOrder, true);
+  assert.deepEqual(entry.keys, ['albumAlpha2025', 'albumBeta2024', 'albumZeta2025']);
+  assert.deepEqual(entry.orderedKeys, ['albumAlpha2025', 'albumZeta2025', 'albumBeta2024']);
+  assert.deepEqual(entry.items.map(item => item.productionYear), [2025, 2025, 2024]);
+  assert.equal(entry.totalRecordCount, 3);
+});
+
+test('four side-effect contracts freeze response membership and persisted request-local creation', async () => {
+  assert.equal(native.sideEffects.length, 4);
+  const expected = new Map([
+    ['unknown-credit', { mode: 'probe-unknown-credit', keys: ['unknownNameOrphanCredit'], cleanName: 'nativemissingartist', name: 'NativeMissingArtist' }],
+    ['bom-credit', { mode: 'probe-bom-credit', keys: ['bomEmptyCleanOrphanCredit'], cleanName: '', name: '\uFEFF' }],
+    ['request-order', { mode: 'probe-request-order', keys: ['artistAlice'], cleanName: 'alice', name: 'Alice', preBob: true }],
+    ['bom-order', { mode: 'probe-bom-order', keys: ['artistBob', 'bomEmptyCleanOrphanCredit'], cleanName: '', name: '\uFEFF', preBob: true }]
+  ]);
+
+  for (const source of sideSources) {
+    const projected = native.sideEffects.find(entry => entry.key === source.key);
+    const pinned = expected.get(source.key);
+    assert.ok(projected && pinned, source.key);
+    assert.equal(projected.mode, pinned.mode);
+    assert.equal(projected.cases.length, 1);
+    assert.deepEqual(projected.cases[0].keys, [...pinned.keys].sort());
+    assert.deepEqual([...projected.cases[0].orderedKeys].sort(), [...pinned.keys].sort());
+    assert.equal(projected.cases[0].totalRecordCount, pinned.keys.length);
+    assert.deepEqual(projected.cases[0].endpoints, ['items', 'legacy']);
+    assert.deepEqual(projected.cases[0].items.map(item => item.key), projected.cases[0].orderedKeys);
+
+    const directory = source.path.slice(0, source.path.lastIndexOf('/'));
+    const summary = JSON.parse(await readFile(validationFileUrl('../../' + directory + '/summary.json', import.meta.url)));
+    assert.equal(summary.passed, true, source.key);
+    assert.equal(summary.mode, pinned.mode, source.key);
+    assert.equal(summary.probeCases, 1, source.key);
+    assert.equal(summary.endpointCases, 2, source.key);
+    assert.equal(summary.httpRecords, 4, source.key);
+    assert.equal(summary.observedDatabaseMutation, true, source.key);
+    assert.equal(summary.observedFilesystemMutation, true, source.key);
+    assert.equal(summary.foreignKeyCheckPassedAllStages, true, source.key);
+    assert.equal(summary.process.code, 0, source.key);
+    assert.equal(summary.process.cleanShutdown, true, source.key);
+    assert.equal(summary.process.portFinallyAvailable, true, source.key);
+    assert.equal(summary.probeObservations.createdArtists.length, 1, source.key);
+    assert.equal(summary.probeObservations.createdArtists[0].Name, pinned.name, source.key);
+    assert.equal(summary.probeObservations.createdArtists[0].CleanName, pinned.cleanName, source.key);
+    assert.equal(summary.probeObservations.createdArtists[0].ParentId, null, source.key);
+    assert.equal(summary.probeObservations.createdArtists[0].TopParentId, null, source.key);
+    if (pinned.preBob) {
+      assert.equal(summary.probeObservations.preRequestMusicArtists.length, 1, source.key);
+      assert.equal(summary.probeObservations.preRequestMusicArtists[0].Name, 'Bob', source.key);
+      assert.equal(summary.probeObservations.preRequestMusicArtists[0].ParentId, null, source.key);
+    }
+  }
+});
+

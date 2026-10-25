@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "fixture": "global-scan-current",
+  "scope": "Original18 actual LibraryManager scans, full72-column SQLite/PG effects, failures/cancellation, current clocks and cold readers; isolated controlled component.",
+  "cases": 18,
+  "nativeRepetitions": 2,
+  "historicalRecordingReused": false,
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/AggregateFolder.cs",
+    "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/IO/FileData.cs",
+    "MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Jellyfin.Server/CoreAppHost.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+    "MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "Oracle.csproj",
+      "bytes": 1336,
+      "sha256": "8f11401c5f3cb717f82343d5cba4cdec86d1bfb989ea18562d62d13d07e98685",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "Program.cs",
+      "bytes": 3788,
+      "sha256": "9daba2c181916153ef21e1df2aab8ff06bcf2e2f435602948d3abe4e9178f257",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "NativeScanHost.cs",
+      "bytes": 32324,
+      "sha256": "cdd6eab6e5007a30c3a9e76f7d34f17f9ecaebf444484a0e196eb304ffc50349",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "Readback.cs",
+      "bytes": 1578,
+      "sha256": "32509bebebbdeedda1c6c1dbf1adc31ffa9fe50682ae092d247f354d4feeca12",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "input.json",
+      "bytes": 6841,
+      "sha256": "b824aa99e7e4979efac038ac8fbd48425f39c30521ac840b6fcde673f842bd05",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "capture.js",
+      "bytes": 9873,
+      "sha256": "205ccbe720c5c6a33f0aaf7d26250bb13f680aae026b8011e37634fb075dd4e3",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "README.md",
+      "bytes": 2558,
+      "sha256": "50a33b172c4b4093c5cb151306ee9c5acc792f5b2573af72453c1bb3c85fe708",
+      "role": "current-global-scan-input"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "role": "current-global-scan-input"
+    }
+  ]
+}

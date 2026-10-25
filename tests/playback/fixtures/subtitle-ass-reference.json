@@ -1,0 +1,274 @@
+{
+  "records": {
+    "ass-srt": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.srt",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "209",
+      "bytes": "MQ0KMDA6MDA6MDEsMTgwIC0tPiAwMDowMDowNiw4NTANCntccG9zKDQwMCw1NzApfUZpcnN0LCBjb21tYQ0KU2Vjb25kIGxpbmUNCg0KMg0KMDA6MDA6MDcsMDAwIC0tPiAwMDowMDowOSwyNTANCkJlZm9yZSB7XGkxfWl0YWxpY3tcaTB9IGFmdGVyDQoNCjMNCjAwOjAwOjEwLDAwMCAtLT4gMDA6MDA6MTIsMDAwDQpUaGlyZCB7XGIxfWJvbGR7XGIwfQ0KdGFpbA0KDQo=",
+      "text": "1\r\n00:00:01,180 --> 00:00:06,850\r\n{\\pos(400,570)}First, comma\r\nSecond line\r\n\r\n2\r\n00:00:07,000 --> 00:00:09,250\r\nBefore {\\i1}italic{\\i0} after\r\n\r\n3\r\n00:00:10,000 --> 00:00:12,000\r\nThird {\\b1}bold{\\b0}\r\ntail\r\n\r\n",
+      "sha256": "ff034a49cd89e45eff62036d976c0ae15a8aec81b1d6367adc508e9c6da40b85"
+    },
+    "ass-srt-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.srt?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "145",
+      "bytes": "MQ0KMDA6MDA6MDAsMDAwIC0tPiAwMDowMDowMSw4NTANCntccG9zKDQwMCw1NzApfUZpcnN0LCBjb21tYQ0KU2Vjb25kIGxpbmUNCg0KMg0KMDA6MDA6MDIsMDAwIC0tPiAwMDowMDowNCwyNTANCkJlZm9yZSB7XGkxfWl0YWxpY3tcaTB9IGFmdGVyDQoNCg==",
+      "text": "1\r\n00:00:00,000 --> 00:00:01,850\r\n{\\pos(400,570)}First, comma\r\nSecond line\r\n\r\n2\r\n00:00:02,000 --> 00:00:04,250\r\nBefore {\\i1}italic{\\i0} after\r\n\r\n",
+      "sha256": "df5ed8d49e8163c3dd235bf6c12c40eddd1516dba01941a70f584aa4fb5d54e8"
+    },
+    "ass-srt-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.srt?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "145",
+      "bytes": "MQ0KMDA6MDA6MDEsMTgwIC0tPiAwMDowMDowNiw4NTANCntccG9zKDQwMCw1NzApfUZpcnN0LCBjb21tYQ0KU2Vjb25kIGxpbmUNCg0KMg0KMDA6MDA6MDcsMDAwIC0tPiAwMDowMDowOSwyNTANCkJlZm9yZSB7XGkxfWl0YWxpY3tcaTB9IGFmdGVyDQoNCg==",
+      "text": "1\r\n00:00:01,180 --> 00:00:06,850\r\n{\\pos(400,570)}First, comma\r\nSecond line\r\n\r\n2\r\n00:00:07,000 --> 00:00:09,250\r\nBefore {\\i1}italic{\\i0} after\r\n\r\n",
+      "sha256": "70f7b6ccc1ef8c43cf88b6da92c626e96b9572621ab70df2306c6fcd7acc8090"
+    },
+    "ass-vtt": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.vtt",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "171",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAxLjE4MCAtLT4gMDA6MDA6MDYuODUwDQpGaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjAwOjAwOjA3LjAwMCAtLT4gMDA6MDA6MDkuMjUwDQpCZWZvcmUgaXRhbGljIGFmdGVyDQoNCjAwOjAwOjEwLjAwMCAtLT4gMDA6MDA6MTIuMDAwDQpUaGlyZCBib2xkDQp0YWls",
+      "text": "WEBVTT\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nFirst, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore italic after\r\n\r\n00:00:10.000 --> 00:00:12.000\r\nThird bold\r\ntail",
+      "sha256": "d09494542130c2daf487c684f247f307d750bcfa947ebc6134e323ef5e25f287"
+    },
+    "ass-vtt-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.vtt?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "120",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAwLjAwMCAtLT4gMDA6MDA6MDEuODUwDQpGaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjAwOjAwOjAyLjAwMCAtLT4gMDA6MDA6MDQuMjUwDQpCZWZvcmUgaXRhbGljIGFmdGVy",
+      "text": "WEBVTT\r\n\r\n00:00:00.000 --> 00:00:01.850\r\nFirst, comma\r\nSecond line\r\n\r\n00:00:02.000 --> 00:00:04.250\r\nBefore italic after",
+      "sha256": "302b8a62e852993998e57f3c6bdd51731832d108508af1f093392321488fefb9"
+    },
+    "ass-vtt-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.vtt?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "120",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAxLjE4MCAtLT4gMDA6MDA6MDYuODUwDQpGaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjAwOjAwOjA3LjAwMCAtLT4gMDA6MDA6MDkuMjUwDQpCZWZvcmUgaXRhbGljIGFmdGVy",
+      "text": "WEBVTT\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nFirst, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore italic after",
+      "sha256": "a9d0a5546ea6d312bdd6ee1651d26ee37cf33f012333aa5df47ec3ec1441d04b"
+    },
+    "ass-json": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.json",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1GaXJzdCwgY29tbWFcclxuU2Vjb25kIGxpbmUiLCJTdGFydFBvc2l0aW9uVGlja3MiOjExODAwMDAwLCJFbmRQb3NpdGlvblRpY2tzIjo2ODUwMDAwMH0seyJJZCI6IjIiLCJUZXh0IjoiQmVmb3JlIHtcXGkxfWl0YWxpY3tcXGkwfSBhZnRlciIsIlN0YXJ0UG9zaXRpb25UaWNrcyI6NzAwMDAwMDAsIkVuZFBvc2l0aW9uVGlja3MiOjkyNTAwMDAwfSx7IklkIjoiMyIsIlRleHQiOiJUaGlyZCB7XFxiMX1ib2xke1xcYjB9XHJcbnRhaWwiLCJTdGFydFBvc2l0aW9uVGlja3MiOjEwMDAwMDAwMCwiRW5kUG9zaXRpb25UaWNrcyI6MTIwMDAwMDAwfV19",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}First, comma\\r\\nSecond line\",\"StartPositionTicks\":11800000,\"EndPositionTicks\":68500000},{\"Id\":\"2\",\"Text\":\"Before {\\\\i1}italic{\\\\i0} after\",\"StartPositionTicks\":70000000,\"EndPositionTicks\":92500000},{\"Id\":\"3\",\"Text\":\"Third {\\\\b1}bold{\\\\b0}\\r\\ntail\",\"StartPositionTicks\":100000000,\"EndPositionTicks\":120000000}]}",
+      "sha256": "f40d0d046413f38aac2c00bb1d94ed8300b2c580a2c7bb52a4a8bf3406ee3a08"
+    },
+    "ass-json-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.json?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1GaXJzdCwgY29tbWFcclxuU2Vjb25kIGxpbmUiLCJTdGFydFBvc2l0aW9uVGlja3MiOjAsIkVuZFBvc2l0aW9uVGlja3MiOjE4NTAwMDAwfSx7IklkIjoiMiIsIlRleHQiOiJCZWZvcmUge1xcaTF9aXRhbGlje1xcaTB9IGFmdGVyIiwiU3RhcnRQb3NpdGlvblRpY2tzIjoyMDAwMDAwMCwiRW5kUG9zaXRpb25UaWNrcyI6NDI1MDAwMDB9XX0=",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}First, comma\\r\\nSecond line\",\"StartPositionTicks\":0,\"EndPositionTicks\":18500000},{\"Id\":\"2\",\"Text\":\"Before {\\\\i1}italic{\\\\i0} after\",\"StartPositionTicks\":20000000,\"EndPositionTicks\":42500000}]}",
+      "sha256": "354ce6a629a6e5cd9727bcdea36672396851b1bb59a2db06d4abd3151841819d"
+    },
+    "ass-json-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.json?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1GaXJzdCwgY29tbWFcclxuU2Vjb25kIGxpbmUiLCJTdGFydFBvc2l0aW9uVGlja3MiOjExODAwMDAwLCJFbmRQb3NpdGlvblRpY2tzIjo2ODUwMDAwMH0seyJJZCI6IjIiLCJUZXh0IjoiQmVmb3JlIHtcXGkxfWl0YWxpY3tcXGkwfSBhZnRlciIsIlN0YXJ0UG9zaXRpb25UaWNrcyI6NzAwMDAwMDAsIkVuZFBvc2l0aW9uVGlja3MiOjkyNTAwMDAwfV19",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}First, comma\\r\\nSecond line\",\"StartPositionTicks\":11800000,\"EndPositionTicks\":68500000},{\"Id\":\"2\",\"Text\":\"Before {\\\\i1}italic{\\\\i0} after\",\"StartPositionTicks\":70000000,\"EndPositionTicks\":92500000}]}",
+      "sha256": "1c57ceb36faee923e09099862007ec0e6235a96ec1d24ab102647bdf041853a3"
+    },
+    "ssa-srt": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.srt",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "207",
+      "bytes": "MQ0KMDA6MDA6MDEsMTgwIC0tPiAwMDowMDowNiw4NTANCntccG9zKDQwMCw1NzApfVNTQSBmaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjINCjAwOjAwOjA3LDAwMCAtLT4gMDA6MDA6MDksMjUwDQpCZWZvcmUgPGk+aXRhbGljPC9pPiBhZnRlcg0KDQozDQowMDowMDoxMCwwMDAgLS0+IDAwOjAwOjEyLDAwMA0KVGhpcmQgPGI+Ym9sZDwvYj4NCnRhaWwNCg0K",
+      "text": "1\r\n00:00:01,180 --> 00:00:06,850\r\n{\\pos(400,570)}SSA first, comma\r\nSecond line\r\n\r\n2\r\n00:00:07,000 --> 00:00:09,250\r\nBefore <i>italic</i> after\r\n\r\n3\r\n00:00:10,000 --> 00:00:12,000\r\nThird <b>bold</b>\r\ntail\r\n\r\n",
+      "sha256": "eed4a5bcd132ccd834e6e5b1bab378842ee4d4de9a0c24a1acbddb5e1a2d4a8e"
+    },
+    "ssa-srt-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.srt?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "146",
+      "bytes": "MQ0KMDA6MDA6MDAsMDAwIC0tPiAwMDowMDowMSw4NTANCntccG9zKDQwMCw1NzApfVNTQSBmaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjINCjAwOjAwOjAyLDAwMCAtLT4gMDA6MDA6MDQsMjUwDQpCZWZvcmUgPGk+aXRhbGljPC9pPiBhZnRlcg0KDQo=",
+      "text": "1\r\n00:00:00,000 --> 00:00:01,850\r\n{\\pos(400,570)}SSA first, comma\r\nSecond line\r\n\r\n2\r\n00:00:02,000 --> 00:00:04,250\r\nBefore <i>italic</i> after\r\n\r\n",
+      "sha256": "1bc8a10fa20c93ddad3d8b01f9fa2fc70670e2c8b59e2f04da391c61d2fcfa72"
+    },
+    "ssa-srt-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.srt?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "application/x-subrip",
+      "contentLength": "146",
+      "bytes": "MQ0KMDA6MDA6MDEsMTgwIC0tPiAwMDowMDowNiw4NTANCntccG9zKDQwMCw1NzApfVNTQSBmaXJzdCwgY29tbWENClNlY29uZCBsaW5lDQoNCjINCjAwOjAwOjA3LDAwMCAtLT4gMDA6MDA6MDksMjUwDQpCZWZvcmUgPGk+aXRhbGljPC9pPiBhZnRlcg0KDQo=",
+      "text": "1\r\n00:00:01,180 --> 00:00:06,850\r\n{\\pos(400,570)}SSA first, comma\r\nSecond line\r\n\r\n2\r\n00:00:07,000 --> 00:00:09,250\r\nBefore <i>italic</i> after\r\n\r\n",
+      "sha256": "8ddc6034f59dbfe2ad3490d76216b8229db73238741cbfb2e8923c48945a1e56"
+    },
+    "ssa-vtt": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.vtt",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "189",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAxLjE4MCAtLT4gMDA6MDA6MDYuODUwDQpTU0EgZmlyc3QsIGNvbW1hDQpTZWNvbmQgbGluZQ0KDQowMDowMDowNy4wMDAgLS0+IDAwOjAwOjA5LjI1MA0KQmVmb3JlIDxpPml0YWxpYzwvaT4gYWZ0ZXINCg0KMDA6MDA6MTAuMDAwIC0tPiAwMDowMDoxMi4wMDANClRoaXJkIDxiPmJvbGQ8L2I+DQp0YWls",
+      "text": "WEBVTT\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nSSA first, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore <i>italic</i> after\r\n\r\n00:00:10.000 --> 00:00:12.000\r\nThird <b>bold</b>\r\ntail",
+      "sha256": "3a8d575d7862f0e0432a0193fb941f4027b578c3d0cc6b2e00e08e291ff3497d"
+    },
+    "ssa-vtt-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.vtt?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "131",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAwLjAwMCAtLT4gMDA6MDA6MDEuODUwDQpTU0EgZmlyc3QsIGNvbW1hDQpTZWNvbmQgbGluZQ0KDQowMDowMDowMi4wMDAgLS0+IDAwOjAwOjA0LjI1MA0KQmVmb3JlIDxpPml0YWxpYzwvaT4gYWZ0ZXI=",
+      "text": "WEBVTT\r\n\r\n00:00:00.000 --> 00:00:01.850\r\nSSA first, comma\r\nSecond line\r\n\r\n00:00:02.000 --> 00:00:04.250\r\nBefore <i>italic</i> after",
+      "sha256": "41c31fff67cc316ce310c7549a4d5dd3e0965e2526120ff5d2a8d64ed77e2650"
+    },
+    "ssa-vtt-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.vtt?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "131",
+      "bytes": "V0VCVlRUDQoNCjAwOjAwOjAxLjE4MCAtLT4gMDA6MDA6MDYuODUwDQpTU0EgZmlyc3QsIGNvbW1hDQpTZWNvbmQgbGluZQ0KDQowMDowMDowNy4wMDAgLS0+IDAwOjAwOjA5LjI1MA0KQmVmb3JlIDxpPml0YWxpYzwvaT4gYWZ0ZXI=",
+      "text": "WEBVTT\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nSSA first, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore <i>italic</i> after",
+      "sha256": "c087b9dafcaf7b1b9ccc7f7f2b0eefffbc76005f8b862a1c39cd7b7ab5dbe8a5"
+    },
+    "ssa-json": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.json",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1TU0EgZmlyc3QsIGNvbW1hXHJcblNlY29uZCBsaW5lIiwiU3RhcnRQb3NpdGlvblRpY2tzIjoxMTgwMDAwMCwiRW5kUG9zaXRpb25UaWNrcyI6Njg1MDAwMDB9LHsiSWQiOiIyIiwiVGV4dCI6IkJlZm9yZSBcdTAwM0NpXHUwMDNFaXRhbGljXHUwMDNDL2lcdTAwM0UgYWZ0ZXIiLCJTdGFydFBvc2l0aW9uVGlja3MiOjcwMDAwMDAwLCJFbmRQb3NpdGlvblRpY2tzIjo5MjUwMDAwMH0seyJJZCI6IjMiLCJUZXh0IjoiVGhpcmQgXHUwMDNDYlx1MDAzRWJvbGRcdTAwM0MvYlx1MDAzRVxyXG50YWlsIiwiU3RhcnRQb3NpdGlvblRpY2tzIjoxMDAwMDAwMDAsIkVuZFBvc2l0aW9uVGlja3MiOjEyMDAwMDAwMH1dfQ==",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}SSA first, comma\\r\\nSecond line\",\"StartPositionTicks\":11800000,\"EndPositionTicks\":68500000},{\"Id\":\"2\",\"Text\":\"Before \\u003Ci\\u003Eitalic\\u003C/i\\u003E after\",\"StartPositionTicks\":70000000,\"EndPositionTicks\":92500000},{\"Id\":\"3\",\"Text\":\"Third \\u003Cb\\u003Ebold\\u003C/b\\u003E\\r\\ntail\",\"StartPositionTicks\":100000000,\"EndPositionTicks\":120000000}]}",
+      "sha256": "eac61dc3e45a7c83e1921199a31ecdf2eb4ac7d2bac45321ebade6ee38deb981"
+    },
+    "ssa-json-crop": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.json?startPositionTicks=50000000&endPositionTicks=80000000",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1TU0EgZmlyc3QsIGNvbW1hXHJcblNlY29uZCBsaW5lIiwiU3RhcnRQb3NpdGlvblRpY2tzIjowLCJFbmRQb3NpdGlvblRpY2tzIjoxODUwMDAwMH0seyJJZCI6IjIiLCJUZXh0IjoiQmVmb3JlIFx1MDAzQ2lcdTAwM0VpdGFsaWNcdTAwM0MvaVx1MDAzRSBhZnRlciIsIlN0YXJ0UG9zaXRpb25UaWNrcyI6MjAwMDAwMDAsIkVuZFBvc2l0aW9uVGlja3MiOjQyNTAwMDAwfV19",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}SSA first, comma\\r\\nSecond line\",\"StartPositionTicks\":0,\"EndPositionTicks\":18500000},{\"Id\":\"2\",\"Text\":\"Before \\u003Ci\\u003Eitalic\\u003C/i\\u003E after\",\"StartPositionTicks\":20000000,\"EndPositionTicks\":42500000}]}",
+      "sha256": "f86f292d0ef2bd787033ecdb0c66ad9795064272984ad7d42001894b38b53632"
+    },
+    "ssa-json-preserve": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/4/Stream.json?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true",
+      "status": 200,
+      "contentType": "application/json",
+      "contentLength": null,
+      "bytes": "eyJUcmFja0V2ZW50cyI6W3siSWQiOiIxIiwiVGV4dCI6IntcXHBvcyg0MDAsNTcwKX1TU0EgZmlyc3QsIGNvbW1hXHJcblNlY29uZCBsaW5lIiwiU3RhcnRQb3NpdGlvblRpY2tzIjoxMTgwMDAwMCwiRW5kUG9zaXRpb25UaWNrcyI6Njg1MDAwMDB9LHsiSWQiOiIyIiwiVGV4dCI6IkJlZm9yZSBcdTAwM0NpXHUwMDNFaXRhbGljXHUwMDNDL2lcdTAwM0UgYWZ0ZXIiLCJTdGFydFBvc2l0aW9uVGlja3MiOjcwMDAwMDAwLCJFbmRQb3NpdGlvblRpY2tzIjo5MjUwMDAwMH1dfQ==",
+      "text": "{\"TrackEvents\":[{\"Id\":\"1\",\"Text\":\"{\\\\pos(400,570)}SSA first, comma\\r\\nSecond line\",\"StartPositionTicks\":11800000,\"EndPositionTicks\":68500000},{\"Id\":\"2\",\"Text\":\"Before \\u003Ci\\u003Eitalic\\u003C/i\\u003E after\",\"StartPositionTicks\":70000000,\"EndPositionTicks\":92500000}]}",
+      "sha256": "15da95a33a3c0cab8ef41857fb948afef59258e72af5271eba1c792de53a1f71"
+    },
+    "ass-vtt-hls": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.vtt?startPositionTicks=50000000&endPositionTicks=80000000&copyTimestamps=true&addVttTimeMap=true",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "169",
+      "bytes": "V0VCVlRUClgtVElNRVNUQU1QLU1BUD1NUEVHVFM6OTAwMDAwLExPQ0FMOjAwOjAwOjAwLjAwMA0KDQowMDowMDowMS4xODAgLS0+IDAwOjAwOjA2Ljg1MA0KRmlyc3QsIGNvbW1hDQpTZWNvbmQgbGluZQ0KDQowMDowMDowNy4wMDAgLS0+IDAwOjAwOjA5LjI1MA0KQmVmb3JlIGl0YWxpYyBhZnRlcg==",
+      "text": "WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nFirst, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore italic after",
+      "sha256": "09546cdaa6b87f4ad6f2bc6ecc167283bf2ec410ebb3acde8e863ea4c5675d35"
+    },
+    "ass-vtt-hls-full": {
+      "route": "/Videos/22222222222222222222222222222222/22222222222222222222222222222222/Subtitles/3/Stream.vtt?startPositionTicks=0&endPositionTicks=300210000&copyTimestamps=true&addVttTimeMap=true",
+      "status": 200,
+      "contentType": "text/vtt",
+      "contentLength": "220",
+      "bytes": "V0VCVlRUClgtVElNRVNUQU1QLU1BUD1NUEVHVFM6OTAwMDAwLExPQ0FMOjAwOjAwOjAwLjAwMA0KDQowMDowMDowMS4xODAgLS0+IDAwOjAwOjA2Ljg1MA0KRmlyc3QsIGNvbW1hDQpTZWNvbmQgbGluZQ0KDQowMDowMDowNy4wMDAgLS0+IDAwOjAwOjA5LjI1MA0KQmVmb3JlIGl0YWxpYyBhZnRlcg0KDQowMDowMDoxMC4wMDAgLS0+IDAwOjAwOjEyLjAwMA0KVGhpcmQgYm9sZA0KdGFpbA==",
+      "text": "WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000\r\n\r\n00:00:01.180 --> 00:00:06.850\r\nFirst, comma\r\nSecond line\r\n\r\n00:00:07.000 --> 00:00:09.250\r\nBefore italic after\r\n\r\n00:00:10.000 --> 00:00:12.000\r\nThird bold\r\ntail",
+      "sha256": "6c221d03dc64289bac94b9890f500480918772e989bddb781a46e0cf7976c733"
+    }
+  },
+  "inputs": {
+    "ass": "W1NjcmlwdCBJbmZvXQ0KU2NyaXB0VHlwZTogdjQuMDArDQoNCltWNCsgU3R5bGVzXQ0KRm9ybWF0OiBOYW1lLCBGb250bmFtZSwgRm9udHNpemUsIFByaW1hcnlDb2xvdXIsIFNlY29uZGFyeUNvbG91ciwgT3V0bGluZUNvbG91ciwgQmFja0NvbG91ciwgQm9sZCwgSXRhbGljLCBVbmRlcmxpbmUsIFN0cmlrZU91dCwgU2NhbGVYLCBTY2FsZVksIFNwYWNpbmcsIEFuZ2xlLCBCb3JkZXJTdHlsZSwgT3V0bGluZSwgU2hhZG93LCBBbGlnbm1lbnQsIE1hcmdpbkwsIE1hcmdpblIsIE1hcmdpblYsIEVuY29kaW5nDQpTdHlsZTogRGVmYXVsdCxBcmlhbCwyNCwmSDAwRkZGRkZGLCZIMDAwMDAwRkYsJkgwMDAwMDAwMCwmSDY0MDAwMDAwLDAsMCwwLDAsMTAwLDEwMCwwLDAsMSwyLDAsMiwxMCwxMCwxMCwxDQoNCltFdmVudHNdDQpGb3JtYXQ6IExheWVyLCBTdGFydCwgRW5kLCBTdHlsZSwgTmFtZSwgTWFyZ2luTCwgTWFyZ2luUiwgTWFyZ2luViwgRWZmZWN0LCBUZXh0DQpEaWFsb2d1ZTogMCwwOjAwOjAxLjE4LDA6MDA6MDYuODUsRGVmYXVsdCwsMCwwLDAsLHtccG9zKDQwMCw1NzApfUZpcnN0LCBjb21tYVxOU2Vjb25kIGxpbmUNCkRpYWxvZ3VlOiAxLDA6MDA6MDcuMDAsMDowMDowOS4yNSxEZWZhdWx0LCwwLDAsMCwsQmVmb3JlIHtcaTF9aXRhbGlje1xpMH0gYWZ0ZXINCkRpYWxvZ3VlOiAwLDA6MDA6MTAuMDAsMDowMDoxMi4wMCxEZWZhdWx0LCwwLDAsMCwsVGhpcmQge1xiMX1ib2xke1xiMH1cTnRhaWwNCg==",
+    "ssa": "W1NjcmlwdCBJbmZvXQ0KU2NyaXB0VHlwZTogdjQuMDANCg0KW1Y0IFN0eWxlc10NCkZvcm1hdDogTmFtZSwgRm9udG5hbWUsIEZvbnRzaXplLCBQcmltYXJ5Q29sb3VyLCBTZWNvbmRhcnlDb2xvdXIsIFRlcnRpYXJ5Q29sb3VyLCBCYWNrQ29sb3VyLCBCb2xkLCBJdGFsaWMsIEJvcmRlclN0eWxlLCBPdXRsaW5lLCBTaGFkb3csIEFsaWdubWVudCwgTWFyZ2luTCwgTWFyZ2luUiwgTWFyZ2luViwgQWxwaGFMZXZlbCwgRW5jb2RpbmcNClN0eWxlOiBEZWZhdWx0LEFyaWFsLDI0LDE2Nzc3MjE1LDI1NSwwLDAsMCwwLDEsMiwwLDIsMTAsMTAsMTAsMCwxDQoNCltFdmVudHNdDQpGb3JtYXQ6IE1hcmtlZCwgU3RhcnQsIEVuZCwgU3R5bGUsIE5hbWUsIE1hcmdpbkwsIE1hcmdpblIsIE1hcmdpblYsIEVmZmVjdCwgVGV4dA0KRGlhbG9ndWU6IE1hcmtlZD0wLDA6MDA6MDEuMTgsMDowMDowNi44NSxEZWZhdWx0LCwwLDAsMCwse1xwb3MoNDAwLDU3MCl9U1NBIGZpcnN0LCBjb21tYVxOU2Vjb25kIGxpbmUNCkRpYWxvZ3VlOiBNYXJrZWQ9MCwwOjAwOjA3LjAwLDA6MDA6MDkuMjUsRGVmYXVsdCwsMCwwLDAsLEJlZm9yZSB7XGkxfWl0YWxpY3tcaTB9IGFmdGVyDQpEaWFsb2d1ZTogTWFya2VkPTAsMDowMDoxMC4wMCwwOjAwOjEyLjAwLERlZmF1bHQsLDAsMCwwLCxUaGlyZCB7XGIxfWJvbGR7XGIwfVxOdGFpbA0K"
+  },
+  "upstream": [
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ssa"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    },
+    {
+      "method": "GET",
+      "path": "/d/Z%3A/Hls/fixture.ass"
+    }
+  ],
+  "dll": {
+    "path": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+    "sha256": "31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c"
+  }
+}

@@ -1,0 +1,514 @@
+[
+  {
+    "name": "empty-post-scan"
+  },
+  {
+    "postTasks": [
+      {
+        "progress": [
+          0,
+          25,
+          100
+        ],
+        "name": "a"
+      },
+      {
+        "progress": [
+          0,
+          50,
+          100
+        ],
+        "name": "b"
+      }
+    ],
+    "name": "two-post-tasks"
+  },
+  {
+    "name": "post-error-continues",
+    "postTasks": [
+      {
+        "name": "a"
+      },
+      {
+        "progress": [
+          100
+        ],
+        "name": "b"
+      }
+    ],
+    "failure": "post-a"
+  },
+  {
+    "name": "post-cancel-stops",
+    "cancelAt": "post-a",
+    "postTasks": [
+      {
+        "name": "a"
+      },
+      {
+        "name": "b"
+      }
+    ]
+  },
+  {
+    "postTasks": [
+      {
+        "replaceTasks": true,
+        "name": "a"
+      },
+      {
+        "name": "b"
+      }
+    ],
+    "name": "post-list-snapshot"
+  },
+  {
+    "name": "missing-collections",
+    "ordinaryChild": true,
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing-a",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      },
+      {
+        "name": "missing-b",
+        "id": "97010000-0000-0000-0000-000000000003",
+        "exists": false
+      }
+    ]
+  },
+  {
+    "name": "top-only-remove",
+    "mode": "top",
+    "removeRoot": true
+  },
+  {
+    "cancelled": true,
+    "name": "cancelled-before"
+  },
+  {
+    "name": "failure-monitor-stop",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "monitor-stop"
+  },
+  {
+    "name": "failure-monitor-start",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "monitor-start"
+  },
+  {
+    "name": "failure-refresh-aggregate",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "refresh-aggregate"
+  },
+  {
+    "name": "failure-validate-aggregate",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "validate-aggregate"
+  },
+  {
+    "name": "failure-refresh-user-root",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "refresh-user-root"
+  },
+  {
+    "name": "failure-validate-user-root",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "validate-user-root"
+  },
+  {
+    "name": "failure-recursive-aggregate",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "recursive-aggregate"
+  },
+  {
+    "name": "failure-update-inherited",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "update-inherited"
+  },
+  {
+    "name": "failure-refresh-existing",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "refresh-existing"
+  },
+  {
+    "name": "failure-delete-collections",
+    "collections": [
+      {
+        "name": "existing",
+        "id": "97010000-0000-0000-0000-000000000001",
+        "exists": true
+      },
+      {
+        "name": "missing",
+        "id": "97010000-0000-0000-0000-000000000002",
+        "exists": false
+      }
+    ],
+    "failure": "delete-collections"
+  },
+  {
+    "mode": "inheritance",
+    "values": [
+      {
+        "value": "Value 0",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000001",
+        "type": 0
+      },
+      {
+        "value": "Value 1",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000002",
+        "type": 1
+      },
+      {
+        "value": "Value 2",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000003",
+        "type": 2
+      },
+      {
+        "value": "Value 3",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000004",
+        "type": 3
+      },
+      {
+        "value": "Value 4",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000005",
+        "type": 4
+      },
+      {
+        "value": "Value 5",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000006",
+        "type": 5
+      },
+      {
+        "value": "Value 6",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000007",
+        "type": 6
+      },
+      {
+        "value": "Value 7",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000008",
+        "type": 7
+      },
+      {
+        "value": "Orphan",
+        "items": [],
+        "id": "97030000-0000-0000-0000-000000000010",
+        "type": 6
+      }
+    ],
+    "name": "inherited-links-clear"
+  },
+  {
+    "mode": "inheritance",
+    "values": [
+      {
+        "value": "Value 0",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000001",
+        "type": 0
+      },
+      {
+        "value": "Value 1",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000002",
+        "type": 1
+      },
+      {
+        "value": "Value 2",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000003",
+        "type": 2
+      },
+      {
+        "value": "Value 3",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000004",
+        "type": 3
+      },
+      {
+        "value": "Value 4",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000005",
+        "type": 4
+      },
+      {
+        "value": "Value 5",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000006",
+        "type": 5
+      },
+      {
+        "value": "Value 6",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000007",
+        "type": 6
+      },
+      {
+        "value": "Value 7",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000008",
+        "type": 7
+      },
+      {
+        "value": "Orphan",
+        "items": [],
+        "id": "97030000-0000-0000-0000-000000000010",
+        "type": 6
+      }
+    ],
+    "repeat": 2,
+    "name": "inherited-links-repeat"
+  },
+  {
+    "mode": "inheritance",
+    "values": [
+      {
+        "value": "Value 0",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000001",
+        "type": 0
+      },
+      {
+        "value": "Value 1",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000002",
+        "type": 1
+      },
+      {
+        "value": "Value 2",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000003",
+        "type": 2
+      },
+      {
+        "value": "Value 3",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000004",
+        "type": 3
+      },
+      {
+        "value": "Value 4",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000005",
+        "type": 4
+      },
+      {
+        "value": "Value 5",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000006",
+        "type": 5
+      },
+      {
+        "value": "Value 6",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000007",
+        "type": 6
+      },
+      {
+        "value": "Value 7",
+        "items": [
+          0,
+          1
+        ],
+        "id": "97030000-0000-0000-0000-000000000008",
+        "type": 7
+      },
+      {
+        "value": "Orphan",
+        "items": [],
+        "id": "97030000-0000-0000-0000-000000000010",
+        "type": 6
+      }
+    ],
+    "sqlFailure": true,
+    "name": "inherited-links-failure-rolls-back"
+  },
+  {
+    "mode": "inheritance",
+    "values": [],
+    "name": "inherited-links-empty"
+  }
+]

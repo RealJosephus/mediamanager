@@ -1,0 +1,4075 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80100000-0000-0000-0000-000000000201",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80100000-0000-0000-0000-000000000100",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalA"
+    },
+    {
+      "key": "physicalB",
+      "id": "80100000-0000-0000-0000-000000000150",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000150",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "physicalB"
+    },
+    {
+      "key": "collections",
+      "id": "80100000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Collections Physical",
+      "sortName": "collections physical",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "80100000-0000-0000-0000-000000000200",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "collections"
+    },
+    {
+      "key": "libraryA",
+      "id": "80100000-0000-0000-0000-000000000101",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000101",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000100"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "libraryB",
+      "id": "80100000-0000-0000-0000-000000000151",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000151",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000150"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "collectionLibrary",
+      "id": "80100000-0000-0000-0000-000000000201",
+      "type": "CollectionFolder",
+      "name": "Collection Library",
+      "sortName": "collection library",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "topParentId": "80100000-0000-0000-0000-000000000201",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ],
+      "pathKind": "collectionLibrary",
+      "data": {
+        "CollectionType": "boxsets",
+        "PhysicalFolderIds": [
+          "80100000-0000-0000-0000-000000000200"
+        ],
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "displayAlbum",
+      "id": "80100000-0000-0000-0000-000000001000",
+      "type": "BoxSet",
+      "name": "Display Album",
+      "sortName": "display album",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "Album"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayAlbumZero",
+      "id": "80100000-0000-0000-0000-000000001001",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayAlbumNull",
+      "id": "80100000-0000-0000-0000-000000001002",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayAlbumLow",
+      "id": "80100000-0000-0000-0000-000000001003",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayAlbumHigh",
+      "id": "80100000-0000-0000-0000-000000001004",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayAlbumAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001005",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayAlbumAudioLower",
+      "id": "80100000-0000-0000-0000-000000001006",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayAlbumFolder",
+      "id": "80100000-0000-0000-0000-000000001007",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001000",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayAlbumFolderChild",
+      "id": "80100000-0000-0000-0000-000000001008",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001007",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001007",
+        "80100000-0000-0000-0000-000000001000",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayDateCreated",
+      "id": "80100000-0000-0000-0000-000000001009",
+      "type": "BoxSet",
+      "name": "Display DateCreated",
+      "sortName": "display datecreated",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "DateCreated"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayDateCreatedZero",
+      "id": "80100000-0000-0000-0000-000000001010",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayDateCreatedNull",
+      "id": "80100000-0000-0000-0000-000000001011",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayDateCreatedLow",
+      "id": "80100000-0000-0000-0000-000000001012",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayDateCreatedHigh",
+      "id": "80100000-0000-0000-0000-000000001013",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayDateCreatedAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001014",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayDateCreatedAudioLower",
+      "id": "80100000-0000-0000-0000-000000001015",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayDateCreatedFolder",
+      "id": "80100000-0000-0000-0000-000000001016",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001009",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayDateCreatedFolderChild",
+      "id": "80100000-0000-0000-0000-000000001017",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001016",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001016",
+        "80100000-0000-0000-0000-000000001009",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayRuntime",
+      "id": "80100000-0000-0000-0000-000000001018",
+      "type": "BoxSet",
+      "name": "Display Runtime",
+      "sortName": "display runtime",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "Runtime"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayRuntimeZero",
+      "id": "80100000-0000-0000-0000-000000001019",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayRuntimeNull",
+      "id": "80100000-0000-0000-0000-000000001020",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayRuntimeLow",
+      "id": "80100000-0000-0000-0000-000000001021",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayRuntimeHigh",
+      "id": "80100000-0000-0000-0000-000000001022",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayRuntimeAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001023",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayRuntimeAudioLower",
+      "id": "80100000-0000-0000-0000-000000001024",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayRuntimeFolder",
+      "id": "80100000-0000-0000-0000-000000001025",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001018",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayRuntimeFolderChild",
+      "id": "80100000-0000-0000-0000-000000001026",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001025",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001025",
+        "80100000-0000-0000-0000-000000001018",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayCommunityRating",
+      "id": "80100000-0000-0000-0000-000000001027",
+      "type": "BoxSet",
+      "name": "Display CommunityRating",
+      "sortName": "display communityrating",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "CommunityRating"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayCommunityRatingZero",
+      "id": "80100000-0000-0000-0000-000000001028",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayCommunityRatingNull",
+      "id": "80100000-0000-0000-0000-000000001029",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayCommunityRatingLow",
+      "id": "80100000-0000-0000-0000-000000001030",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayCommunityRatingHigh",
+      "id": "80100000-0000-0000-0000-000000001031",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayCommunityRatingAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001032",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayCommunityRatingAudioLower",
+      "id": "80100000-0000-0000-0000-000000001033",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayCommunityRatingFolder",
+      "id": "80100000-0000-0000-0000-000000001034",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001027",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayCommunityRatingFolderChild",
+      "id": "80100000-0000-0000-0000-000000001035",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001034",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001034",
+        "80100000-0000-0000-0000-000000001027",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayProductionYear",
+      "id": "80100000-0000-0000-0000-000000001036",
+      "type": "BoxSet",
+      "name": "Display ProductionYear",
+      "sortName": "display productionyear",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "ProductionYear"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayProductionYearZero",
+      "id": "80100000-0000-0000-0000-000000001037",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayProductionYearNull",
+      "id": "80100000-0000-0000-0000-000000001038",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayProductionYearLow",
+      "id": "80100000-0000-0000-0000-000000001039",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayProductionYearHigh",
+      "id": "80100000-0000-0000-0000-000000001040",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayProductionYearAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001041",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayProductionYearAudioLower",
+      "id": "80100000-0000-0000-0000-000000001042",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayProductionYearFolder",
+      "id": "80100000-0000-0000-0000-000000001043",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001036",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayProductionYearFolderChild",
+      "id": "80100000-0000-0000-0000-000000001044",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001043",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001043",
+        "80100000-0000-0000-0000-000000001036",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayCriticRating",
+      "id": "80100000-0000-0000-0000-000000001045",
+      "type": "BoxSet",
+      "name": "Display CriticRating",
+      "sortName": "display criticrating",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "CriticRating"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayCriticRatingZero",
+      "id": "80100000-0000-0000-0000-000000001046",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayCriticRatingNull",
+      "id": "80100000-0000-0000-0000-000000001047",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayCriticRatingLow",
+      "id": "80100000-0000-0000-0000-000000001048",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayCriticRatingHigh",
+      "id": "80100000-0000-0000-0000-000000001049",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayCriticRatingAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001050",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayCriticRatingAudioLower",
+      "id": "80100000-0000-0000-0000-000000001051",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayCriticRatingFolder",
+      "id": "80100000-0000-0000-0000-000000001052",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001045",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayCriticRatingFolderChild",
+      "id": "80100000-0000-0000-0000-000000001053",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001052",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001052",
+        "80100000-0000-0000-0000-000000001045",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsFolder",
+      "id": "80100000-0000-0000-0000-000000001054",
+      "type": "BoxSet",
+      "name": "Display IsFolder",
+      "sortName": "display isfolder",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "IsFolder"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayIsFolderZero",
+      "id": "80100000-0000-0000-0000-000000001055",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayIsFolderNull",
+      "id": "80100000-0000-0000-0000-000000001056",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayIsFolderLow",
+      "id": "80100000-0000-0000-0000-000000001057",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayIsFolderHigh",
+      "id": "80100000-0000-0000-0000-000000001058",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayIsFolderAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001059",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayIsFolderAudioLower",
+      "id": "80100000-0000-0000-0000-000000001060",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayIsFolderFolder",
+      "id": "80100000-0000-0000-0000-000000001061",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001054",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsFolderFolderChild",
+      "id": "80100000-0000-0000-0000-000000001062",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001061",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001061",
+        "80100000-0000-0000-0000-000000001054",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIndexNumber",
+      "id": "80100000-0000-0000-0000-000000001063",
+      "type": "BoxSet",
+      "name": "Display IndexNumber",
+      "sortName": "display indexnumber",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "IndexNumber"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayIndexNumberZero",
+      "id": "80100000-0000-0000-0000-000000001064",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayIndexNumberNull",
+      "id": "80100000-0000-0000-0000-000000001065",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayIndexNumberLow",
+      "id": "80100000-0000-0000-0000-000000001066",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayIndexNumberHigh",
+      "id": "80100000-0000-0000-0000-000000001067",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayIndexNumberAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001068",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayIndexNumberAudioLower",
+      "id": "80100000-0000-0000-0000-000000001069",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayIndexNumberFolder",
+      "id": "80100000-0000-0000-0000-000000001070",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001063",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIndexNumberFolderChild",
+      "id": "80100000-0000-0000-0000-000000001071",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001070",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001070",
+        "80100000-0000-0000-0000-000000001063",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayParentIndexNumber",
+      "id": "80100000-0000-0000-0000-000000001072",
+      "type": "BoxSet",
+      "name": "Display ParentIndexNumber",
+      "sortName": "display parentindexnumber",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "ParentIndexNumber"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayParentIndexNumberZero",
+      "id": "80100000-0000-0000-0000-000000001073",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayParentIndexNumberNull",
+      "id": "80100000-0000-0000-0000-000000001074",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayParentIndexNumberLow",
+      "id": "80100000-0000-0000-0000-000000001075",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayParentIndexNumberHigh",
+      "id": "80100000-0000-0000-0000-000000001076",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayParentIndexNumberAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001077",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayParentIndexNumberAudioLower",
+      "id": "80100000-0000-0000-0000-000000001078",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayParentIndexNumberFolder",
+      "id": "80100000-0000-0000-0000-000000001079",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001072",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayParentIndexNumberFolderChild",
+      "id": "80100000-0000-0000-0000-000000001080",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001079",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001079",
+        "80100000-0000-0000-0000-000000001072",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayDatePlayed",
+      "id": "80100000-0000-0000-0000-000000001081",
+      "type": "BoxSet",
+      "name": "Display DatePlayed",
+      "sortName": "display dateplayed",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "DatePlayed"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayDatePlayedZero",
+      "id": "80100000-0000-0000-0000-000000001082",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayDatePlayedNull",
+      "id": "80100000-0000-0000-0000-000000001083",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayDatePlayedLow",
+      "id": "80100000-0000-0000-0000-000000001084",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayDatePlayedHigh",
+      "id": "80100000-0000-0000-0000-000000001085",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayDatePlayedAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001086",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayDatePlayedAudioLower",
+      "id": "80100000-0000-0000-0000-000000001087",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayDatePlayedFolder",
+      "id": "80100000-0000-0000-0000-000000001088",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001081",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayDatePlayedFolderChild",
+      "id": "80100000-0000-0000-0000-000000001089",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001088",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001088",
+        "80100000-0000-0000-0000-000000001081",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayPlayCount",
+      "id": "80100000-0000-0000-0000-000000001090",
+      "type": "BoxSet",
+      "name": "Display PlayCount",
+      "sortName": "display playcount",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "PlayCount"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayPlayCountZero",
+      "id": "80100000-0000-0000-0000-000000001091",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayPlayCountNull",
+      "id": "80100000-0000-0000-0000-000000001092",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayPlayCountLow",
+      "id": "80100000-0000-0000-0000-000000001093",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayPlayCountHigh",
+      "id": "80100000-0000-0000-0000-000000001094",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayPlayCountAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001095",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayPlayCountAudioLower",
+      "id": "80100000-0000-0000-0000-000000001096",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayPlayCountFolder",
+      "id": "80100000-0000-0000-0000-000000001097",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001090",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayPlayCountFolderChild",
+      "id": "80100000-0000-0000-0000-000000001098",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001097",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001097",
+        "80100000-0000-0000-0000-000000001090",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsPlayed",
+      "id": "80100000-0000-0000-0000-000000001099",
+      "type": "BoxSet",
+      "name": "Display IsPlayed",
+      "sortName": "display isplayed",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "IsPlayed"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayIsPlayedZero",
+      "id": "80100000-0000-0000-0000-000000001100",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayIsPlayedNull",
+      "id": "80100000-0000-0000-0000-000000001101",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayIsPlayedLow",
+      "id": "80100000-0000-0000-0000-000000001102",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayIsPlayedHigh",
+      "id": "80100000-0000-0000-0000-000000001103",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayIsPlayedAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001104",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayIsPlayedAudioLower",
+      "id": "80100000-0000-0000-0000-000000001105",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayIsPlayedFolder",
+      "id": "80100000-0000-0000-0000-000000001106",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001099",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsPlayedFolderChild",
+      "id": "80100000-0000-0000-0000-000000001107",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001106",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001106",
+        "80100000-0000-0000-0000-000000001099",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsUnplayed",
+      "id": "80100000-0000-0000-0000-000000001108",
+      "type": "BoxSet",
+      "name": "Display IsUnplayed",
+      "sortName": "display isunplayed",
+      "parentId": "80100000-0000-0000-0000-000000000100",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "external",
+      "data": {
+        "DisplayOrder": "IsUnplayed"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "a zero",
+      "runTimeTicks": "0",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2005,
+      "premiereDate": "2005-02-01 00:00:00",
+      "dateCreated": "2026-01-02 00:00:00",
+      "indexNumber": 4,
+      "parentIndexNumber": 1,
+      "album": "z movie",
+      "key": "displayIsUnplayedZero",
+      "id": "80100000-0000-0000-0000-000000001109",
+      "name": "Zero",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "b null",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": "2021-02-01 00:00:00",
+      "dateCreated": "2026-01-04 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": null,
+      "album": "a movie",
+      "key": "displayIsUnplayedNull",
+      "id": "80100000-0000-0000-0000-000000001110",
+      "name": "Null",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "c low",
+      "runTimeTicks": "1000000000",
+      "communityRating": 3.5,
+      "criticRating": 30,
+      "productionYear": 2020,
+      "premiereDate": null,
+      "dateCreated": "2026-01-01 00:00:00",
+      "indexNumber": 1,
+      "parentIndexNumber": 3,
+      "album": "b movie",
+      "key": "displayIsUnplayedLow",
+      "id": "80100000-0000-0000-0000-000000001111",
+      "name": "Low",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Movie",
+      "sortName": "d high",
+      "runTimeTicks": "2000000000",
+      "communityRating": 8.5,
+      "criticRating": 90,
+      "productionYear": 2010,
+      "premiereDate": "2010-02-01 00:00:00",
+      "dateCreated": "2026-01-03 00:00:00",
+      "indexNumber": 2,
+      "parentIndexNumber": 2,
+      "album": null,
+      "key": "displayIsUnplayedHigh",
+      "id": "80100000-0000-0000-0000-000000001112",
+      "name": "High",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Video",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "e audio upper",
+      "runTimeTicks": "400000000",
+      "communityRating": 0,
+      "criticRating": 0,
+      "productionYear": 2000,
+      "premiereDate": null,
+      "dateCreated": "2026-01-06 00:00:00",
+      "indexNumber": 6,
+      "parentIndexNumber": 4,
+      "album": "Z",
+      "key": "displayIsUnplayedAudioUpper",
+      "id": "80100000-0000-0000-0000-000000001113",
+      "name": "AudioUpper",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "Z"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Audio",
+      "sortName": "f audio lower",
+      "runTimeTicks": "300000000",
+      "communityRating": 1,
+      "criticRating": 20,
+      "productionYear": 2001,
+      "premiereDate": null,
+      "dateCreated": "2026-01-05 00:00:00",
+      "indexNumber": 5,
+      "parentIndexNumber": 5,
+      "album": "a",
+      "key": "displayIsUnplayedAudioLower",
+      "id": "80100000-0000-0000-0000-000000001114",
+      "name": "AudioLower",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Audio",
+      "data": {
+        "Album": "a"
+      },
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "type": "Folder",
+      "sortName": "g folder",
+      "runTimeTicks": null,
+      "communityRating": null,
+      "criticRating": null,
+      "productionYear": null,
+      "premiereDate": null,
+      "dateCreated": "2026-01-07 00:00:00",
+      "indexNumber": null,
+      "parentIndexNumber": 6,
+      "album": null,
+      "key": "displayIsUnplayedFolder",
+      "id": "80100000-0000-0000-0000-000000001115",
+      "name": "Folder",
+      "parentId": "80100000-0000-0000-0000-000000001108",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "mediaType": "Unknown",
+      "data": {},
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "displayIsUnplayedFolderChild",
+      "id": "80100000-0000-0000-0000-000000001116",
+      "type": "Movie",
+      "name": "Nested played",
+      "sortName": "nested played",
+      "parentId": "80100000-0000-0000-0000-000000001115",
+      "topParentId": "80100000-0000-0000-0000-000000000100",
+      "pathKind": "child",
+      "data": {},
+      "mediaType": "Video",
+      "ancestorIds": [
+        "80100000-0000-0000-0000-000000001115",
+        "80100000-0000-0000-0000-000000001108",
+        "80100000-0000-0000-0000-000000000100",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    }
+  ],
+  "links": [],
+  "itemValues": [],
+  "itemValueLinks": [],
+  "cases": [
+    {
+      "name": "null-user-DateCreated-items",
+      "parentKey": "displayDateCreated",
+      "query": "SortBy=DateCreated&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-DateCreated-empty",
+      "parentKey": "displayDateCreated",
+      "query": "SortBy=DateCreated&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-PremiereDate-items",
+      "parentKey": "displayProductionYear",
+      "query": "SortBy=PremiereDate&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-PremiereDate-empty",
+      "parentKey": "displayProductionYear",
+      "query": "SortBy=PremiereDate&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-DatePlayed-items",
+      "parentKey": "displayDatePlayed",
+      "query": "SortBy=DatePlayed&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-DatePlayed-empty",
+      "parentKey": "displayDatePlayed",
+      "query": "SortBy=DatePlayed&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-PlayCount-items",
+      "parentKey": "displayPlayCount",
+      "query": "SortBy=PlayCount&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-PlayCount-empty",
+      "parentKey": "displayPlayCount",
+      "query": "SortBy=PlayCount&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsUnplayed-items",
+      "parentKey": "displayIsUnplayed",
+      "query": "SortBy=IsUnplayed&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsUnplayed-empty",
+      "parentKey": "displayIsUnplayed",
+      "query": "SortBy=IsUnplayed&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsPlayed-items",
+      "parentKey": "displayIsPlayed",
+      "query": "SortBy=IsPlayed&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsPlayed-empty",
+      "parentKey": "displayIsPlayed",
+      "query": "SortBy=IsPlayed&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsFavoriteOrLiked-items",
+      "parentKey": "displayIsPlayed",
+      "query": "SortBy=IsFavoriteOrLiked&SortOrder=Ascending",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "null-user-IsFavoriteOrLiked-empty",
+      "parentKey": "displayIsPlayed",
+      "query": "SortBy=IsFavoriteOrLiked&SortOrder=Ascending&NameStartsWith=__none__",
+      "scope": [],
+      "recursive": false,
+      "omitIds": true,
+      "omitSortBy": true,
+      "policy": {
+        "IsAdministrator": true,
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "BlockedTags": [],
+        "AllowedTags": []
+      },
+      "auth": "apiKey",
+      "endpoints": [
+        "items"
+      ]
+    }
+  ],
+  "userData": [
+    {
+      "itemKey": "displayAlbumZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayAlbumNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayAlbumLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayAlbumHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayAlbumAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayAlbumAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayAlbumFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayDateCreatedZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayDateCreatedNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayDateCreatedLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayDateCreatedHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayDateCreatedAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayDateCreatedAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayDateCreatedFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayRuntimeZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayRuntimeNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayRuntimeLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayRuntimeHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayRuntimeAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayRuntimeAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayRuntimeFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayCommunityRatingZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayCommunityRatingNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayCommunityRatingLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayCommunityRatingHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayCommunityRatingAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayCommunityRatingAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayCommunityRatingFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayProductionYearZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayProductionYearNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayProductionYearLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayProductionYearHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayProductionYearAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayProductionYearAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayProductionYearFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayCriticRatingZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayCriticRatingNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayCriticRatingLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayCriticRatingHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayCriticRatingAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayCriticRatingAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayCriticRatingFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsFolderZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayIsFolderNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsFolderLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayIsFolderHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayIsFolderAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayIsFolderAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayIsFolderFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIndexNumberZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayIndexNumberNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIndexNumberLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayIndexNumberHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayIndexNumberAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayIndexNumberAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayIndexNumberFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayParentIndexNumberZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayParentIndexNumberNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayParentIndexNumberLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayParentIndexNumberHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayParentIndexNumberAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayParentIndexNumberAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayParentIndexNumberFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayDatePlayedZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayDatePlayedNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayDatePlayedLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayDatePlayedHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayDatePlayedAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayDatePlayedAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayDatePlayedFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayPlayCountZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayPlayCountNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayPlayCountLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayPlayCountHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayPlayCountAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayPlayCountAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayPlayCountFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsPlayedZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayIsPlayedNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsPlayedLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayIsPlayedHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayIsPlayedAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayIsPlayedAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayIsPlayedFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsUnplayedZero",
+      "played": true,
+      "playCount": 2,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-20 12:00:00"
+    },
+    {
+      "itemKey": "displayIsUnplayedNull",
+      "played": false,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "displayIsUnplayedLow",
+      "played": true,
+      "playCount": 5,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-22 12:00:00"
+    },
+    {
+      "itemKey": "displayIsUnplayedHigh",
+      "played": false,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-23 12:00:00"
+    },
+    {
+      "itemKey": "displayIsUnplayedAudioUpper",
+      "played": true,
+      "playCount": 0,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-24 12:00:00"
+    },
+    {
+      "itemKey": "displayIsUnplayedAudioLower",
+      "played": false,
+      "playCount": 3,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-25 12:00:00"
+    },
+    {
+      "itemKey": "displayIsUnplayedFolderChild",
+      "played": true,
+      "playCount": 1,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "lastPlayedDate": null
+    }
+  ]
+}

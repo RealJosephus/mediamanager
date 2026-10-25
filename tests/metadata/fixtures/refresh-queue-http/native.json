@@ -1,0 +1,141 @@
+[
+  {
+    "name": "blocked-queue",
+    "statuses": [
+      204,
+      204,
+      204,
+      204
+    ],
+    "beforeRelease": [
+      "refresh-control-0"
+    ],
+    "order": [
+      "refresh-control-0",
+      "refresh-control-1",
+      "refresh-control-3",
+      "refresh-control-2"
+    ],
+    "cancelled": [],
+    "persisted": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "savedChanged": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "refreshedChanged": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "overviews": [
+      "Provider updated refresh-control-0",
+      "Provider updated refresh-control-1",
+      "Provider updated refresh-control-2",
+      "Provider updated refresh-control-3"
+    ],
+    "shutdownStatus": 204,
+    "exitCode": 0,
+    "signalCode": null
+  },
+  {
+    "name": "provider-cancellation",
+    "statuses": [
+      204,
+      204,
+      204,
+      204
+    ],
+    "beforeRelease": [
+      "refresh-control-0"
+    ],
+    "order": [
+      "refresh-control-0",
+      "refresh-control-1",
+      "refresh-control-3",
+      "refresh-control-2"
+    ],
+    "cancelled": [
+      "refresh-control-0"
+    ],
+    "persisted": [
+      false,
+      true,
+      true,
+      true
+    ],
+    "savedChanged": [
+      false,
+      true,
+      true,
+      true
+    ],
+    "refreshedChanged": [
+      false,
+      true,
+      true,
+      true
+    ],
+    "overviews": [
+      null,
+      "Provider updated refresh-control-1",
+      "Provider updated refresh-control-2",
+      "Provider updated refresh-control-3"
+    ],
+    "shutdownStatus": 204,
+    "exitCode": 0,
+    "signalCode": null
+  },
+  {
+    "name": "shutdown",
+    "statuses": [
+      204,
+      204,
+      204,
+      204
+    ],
+    "beforeRelease": [
+      "refresh-control-0"
+    ],
+    "order": [
+      "refresh-control-0"
+    ],
+    "cancelled": [
+      "refresh-control-0"
+    ],
+    "persisted": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "savedChanged": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "refreshedChanged": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "overviews": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "shutdownStatus": 204,
+    "exitCode": 0,
+    "signalCode": null
+  }
+]

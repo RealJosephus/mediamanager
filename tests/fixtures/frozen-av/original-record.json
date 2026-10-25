@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-25T04:52:28.876Z",
+  "project": "D:\\a\\mediamanager\\mediamanager\\tests\\storage\\fixtures\\bluray-disc-info\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\a\\_temp\\mediamanager-dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "abce6623a6729059cf39bb0f728c4a7804f625895099c88c17e6e704661e09eb"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:\\a\\_temp\\mediamanager-native-build\\runtime\\jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 505856,
+    "sha256": "508796254e8dd21576932124d00d1afcd21b604565f02adc6f67aa8eb4936f7d"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\a\\mediamanager\\mediamanager\\tests\\storage\\fixtures\\bluray-disc-info\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 728,
+      "sha256": "8938520028579c26dc4ea24942abbb7a87eca14058cf12bc94e2d868a3c051a1"
+    },
+    {
+      "filename": "D:\\a\\mediamanager\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\a\\mediamanager\\mediamanager\\tests\\storage\\fixtures\\bluray-disc-info\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 5023,
+      "sha256": "87efe7562fa792e8c85074dc05d017a5c85f23f196a02dbce1afbae1fd2c2fa0"
+    }
+  ],
+  "sourceFilesSha256": "ed05c9eb5cd367146dd36b36c90f2eaf4615bf19cd660a1a2524d0938d2bc392",
+  "build": {
+    "args": [
+      "build",
+      "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:UseSharedCompilation=false",
+      "-p:BaseOutputPath=D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\a\\mediamanager\\mediamanager\\tests\\storage\\fixtures\\bluray-disc-info\\input.json",
+      "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\disc",
+      "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 396,
+      "sha256": "d6d7527ecdf3327d1c9f02d996be3f84742b15da5b9bfe676a6b49b4a49f5122"
+    },
+    {
+      "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 15808,
+      "sha256": "6e5cbcbd3366120d771887ce196ce4de99ba1fb56291b36de1357f9b54bc65b8"
+    },
+    {
+      "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\a\\_temp\\mediamanager-results\\bluray-disc-info-63537ae1-e6f6-470c-a0a1-af30bc005954\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 23040,
+    "sha256": "de958c0972dc605ca89c089dcb5f9a2e5cedff97989336dd53c73b51f502b827"
+  },
+  "passed": true
+}

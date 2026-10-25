@@ -1,0 +1,1851 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": [],
+      "EnableContentDeletion": false,
+      "EnableContentDeletionFromFolders": []
+    }
+  },
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "existingNative": true,
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "liveTvRoot",
+      "id": "80200000-0000-0000-0000-000000001000",
+      "type": "UserView",
+      "name": "Live TV",
+      "sortName": "live tv",
+      "pathKind": "liveTvRoot",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "isFolder": true,
+      "dateLastRefreshed": "$seed-clock",
+      "data": {
+        "ViewType": "livetv",
+        "DisplayParentId": "00000000000000000000000000000000",
+        "IsRoot": false
+      }
+    },
+    {
+      "key": "channel-neutral",
+      "id": "80200000-0000-0000-0000-000000001100",
+      "type": "LiveTvChannel",
+      "name": "Neutral channel",
+      "sortName": "neutral channel",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "mediaType": "Unknown",
+      "data": {
+        "Number": "1",
+        "ChannelType": "TV"
+      }
+    },
+    {
+      "key": "channel-favorite",
+      "id": "80200000-0000-0000-0000-000000001101",
+      "type": "LiveTvChannel",
+      "name": "Favorite channel",
+      "sortName": "favorite channel",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "mediaType": "Unknown",
+      "data": {
+        "Number": "2.5",
+        "ChannelType": "TV"
+      }
+    },
+    {
+      "key": "channel-disliked",
+      "id": "80200000-0000-0000-0000-000000001102",
+      "type": "LiveTvChannel",
+      "name": "Disliked channel",
+      "sortName": "disliked channel",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "mediaType": "Unknown",
+      "data": {
+        "Number": "7",
+        "ChannelType": "Radio"
+      }
+    },
+    {
+      "key": "channel-late",
+      "id": "80200000-0000-0000-0000-000000001103",
+      "type": "LiveTvChannel",
+      "name": "Late channel",
+      "sortName": "late channel",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "mediaType": "Unknown",
+      "data": {
+        "Number": "9",
+        "ChannelType": "TV"
+      }
+    },
+    {
+      "key": "genre-adventure",
+      "id": "80200000-0000-0000-0000-000000001200",
+      "type": "Genre",
+      "name": "Adventure",
+      "sortName": "adventure",
+      "pathKind": "named",
+      "isFolder": false,
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "genre-drama",
+      "id": "80200000-0000-0000-0000-000000001201",
+      "type": "Genre",
+      "name": "Drama",
+      "sortName": "drama",
+      "pathKind": "named",
+      "isFolder": false,
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": []
+    },
+    {
+      "key": "neutral",
+      "id": "80200000-0000-0000-0000-000000002000",
+      "type": "LiveTvProgram",
+      "name": "Neutral opening",
+      "sortName": "neutral opening",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001100",
+      "startDate": "1900-01-01 01:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": "broadcast-neutral",
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "new-series",
+      "id": "80200000-0000-0000-0000-000000002001",
+      "type": "LiveTvProgram",
+      "name": "New series",
+      "sortName": "new series",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001101",
+      "startDate": "1900-01-01 03:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "Live",
+      "externalId": "broadcast-new-series",
+      "data": {},
+      "isSeries": true,
+      "isRepeat": false,
+      "episodeTitle": "Episode 1",
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "repeat",
+      "id": "80200000-0000-0000-0000-000000002002",
+      "type": "LiveTvProgram",
+      "name": "Repeat series",
+      "sortName": "repeat series",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001102",
+      "startDate": "1900-01-01 02:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": "broadcast-repeat",
+      "data": {},
+      "isSeries": true,
+      "isRepeat": true,
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "movie",
+      "id": "80200000-0000-0000-0000-000000002003",
+      "type": "LiveTvProgram",
+      "name": "Guide movie",
+      "sortName": "guide movie",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001101",
+      "startDate": "1900-01-01 05:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Drama",
+      "tagsText": "",
+      "externalId": "broadcast-movie",
+      "data": {},
+      "isMovie": true,
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "next-day",
+      "id": "80200000-0000-0000-0000-000000002004",
+      "type": "LiveTvProgram",
+      "name": "Next day favorite",
+      "sortName": "next day favorite",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001103",
+      "startDate": "1900-01-02 00:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "Live|Premiere",
+      "externalId": "broadcast-next-day",
+      "data": {},
+      "externalSeriesId": "SERIES-SHARED"
+    },
+    {
+      "key": "ended",
+      "id": "80200000-0000-0000-0000-000000002005",
+      "type": "LiveTvProgram",
+      "name": "Ended show",
+      "sortName": "ended show",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001100",
+      "startDate": "1899-12-31 23:00:00",
+      "endDate": "2000-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": "broadcast-ended",
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "future",
+      "id": "80200000-0000-0000-0000-000000002006",
+      "type": "LiveTvProgram",
+      "name": "Future show",
+      "sortName": "future show",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001100",
+      "startDate": "2100-01-01 00:00:00",
+      "endDate": "2200-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": "broadcast-future",
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "null-end",
+      "id": "80200000-0000-0000-0000-000000002007",
+      "type": "LiveTvProgram",
+      "name": "No end time",
+      "sortName": "no end time",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001100",
+      "startDate": "1899-12-31 22:00:00",
+      "endDate": null,
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": null,
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "orphan",
+      "id": "80200000-0000-0000-0000-000000002008",
+      "type": "LiveTvProgram",
+      "name": "Orphan channel",
+      "sortName": "orphan channel",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000999998",
+      "startDate": "1900-01-01 04:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "Live",
+      "externalId": "",
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "flags",
+      "id": "80200000-0000-0000-0000-000000002009",
+      "type": "LiveTvProgram",
+      "name": "Guide flags",
+      "sortName": "guide flags",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001101",
+      "startDate": "1900-01-01 04:30:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "live|News|Kids|Sports|Premiere",
+      "externalId": "broadcast-flags",
+      "data": {},
+      "externalSeriesId": " "
+    },
+    {
+      "key": "blocked",
+      "id": "80200000-0000-0000-0000-000000002010",
+      "type": "LiveTvProgram",
+      "name": "Blocked guide",
+      "sortName": "blocked guide",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000001000",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001101",
+      "startDate": "1900-01-01 04:45:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "blocked-guide",
+      "externalId": "broadcast-blocked",
+      "data": {},
+      "officialRating": "TV-MA",
+      "inheritedParentalRatingValue": 21,
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "wrong-root",
+      "id": "80200000-0000-0000-0000-000000002011",
+      "type": "LiveTvProgram",
+      "name": "Outside top parent",
+      "sortName": "outside top parent",
+      "pathKind": "noPath",
+      "isFolder": false,
+      "isVirtualItem": true,
+      "parentId": "80200000-0000-0000-0000-000000001000",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000001000"
+      ],
+      "channelId": "80200000-0000-0000-0000-000000001103",
+      "startDate": "1899-12-30 01:00:00",
+      "endDate": "2999-01-01 00:00:00",
+      "mediaType": "Unknown",
+      "genresText": "Adventure",
+      "tagsText": "",
+      "externalId": "broadcast-wrong-root",
+      "data": {},
+      "externalSeriesId": "series-shared"
+    },
+    {
+      "key": "library-series",
+      "id": "80500000-0000-0000-0000-000000000001",
+      "type": "Series",
+      "name": "New series",
+      "sortName": "new series",
+      "pathKind": "noPath",
+      "isFolder": true,
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007"
+      ],
+      "data": {}
+    }
+  ],
+  "itemValues": [
+    {
+      "key": "genre-Adventure",
+      "id": "80200000-0000-0000-0000-000000004000",
+      "type": 2,
+      "value": "Adventure",
+      "cleanValue": "adventure"
+    },
+    {
+      "key": "genre-Drama",
+      "id": "80200000-0000-0000-0000-000000004001",
+      "type": 2,
+      "value": "Drama",
+      "cleanValue": "drama"
+    },
+    {
+      "key": "tag-Kids",
+      "id": "80200000-0000-0000-0000-000000004002",
+      "type": 4,
+      "value": "Kids",
+      "cleanValue": "kids"
+    },
+    {
+      "key": "tag-Live",
+      "id": "80200000-0000-0000-0000-000000004003",
+      "type": 4,
+      "value": "Live",
+      "cleanValue": "live"
+    },
+    {
+      "key": "tag-News",
+      "id": "80200000-0000-0000-0000-000000004004",
+      "type": 4,
+      "value": "News",
+      "cleanValue": "news"
+    },
+    {
+      "key": "tag-Premiere",
+      "id": "80200000-0000-0000-0000-000000004005",
+      "type": 4,
+      "value": "Premiere",
+      "cleanValue": "premiere"
+    },
+    {
+      "key": "tag-Sports",
+      "id": "80200000-0000-0000-0000-000000004006",
+      "type": 4,
+      "value": "Sports",
+      "cleanValue": "sports"
+    },
+    {
+      "key": "tag-blocked-guide",
+      "id": "80200000-0000-0000-0000-000000004007",
+      "type": 4,
+      "value": "blocked-guide",
+      "cleanValue": "blocked guide"
+    },
+    {
+      "key": "tag-live",
+      "id": "80200000-0000-0000-0000-000000004008",
+      "type": 4,
+      "value": "live",
+      "cleanValue": "live"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "neutral",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "new-series",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "repeat",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "next-day",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "ended",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "future",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "null-end",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "orphan",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "blocked",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "wrong-root",
+      "valueKey": "genre-Adventure"
+    },
+    {
+      "itemKey": "movie",
+      "valueKey": "genre-Drama"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "tag-Kids"
+    },
+    {
+      "itemKey": "new-series",
+      "valueKey": "tag-Live"
+    },
+    {
+      "itemKey": "next-day",
+      "valueKey": "tag-Live"
+    },
+    {
+      "itemKey": "orphan",
+      "valueKey": "tag-Live"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "tag-News"
+    },
+    {
+      "itemKey": "next-day",
+      "valueKey": "tag-Premiere"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "tag-Premiere"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "tag-Sports"
+    },
+    {
+      "itemKey": "blocked",
+      "valueKey": "tag-blocked-guide"
+    },
+    {
+      "itemKey": "flags",
+      "valueKey": "tag-live"
+    }
+  ],
+  "links": [],
+  "userData": [
+    {
+      "itemKey": "channel-neutral",
+      "playCount": 0,
+      "played": false,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "channel-favorite",
+      "playCount": 3,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": true,
+      "likes": false,
+      "lastPlayedDate": null,
+      "rating": 8
+    },
+    {
+      "itemKey": "channel-disliked",
+      "playCount": 11,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": true,
+      "lastPlayedDate": null,
+      "rating": 2
+    },
+    {
+      "itemKey": "channel-late",
+      "playCount": 100,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": null,
+      "lastPlayedDate": null
+    },
+    {
+      "itemKey": "channel-neutral",
+      "customDataKey": "TvChannel-Neutral channel",
+      "playCount": 50,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": false,
+      "likes": false,
+      "lastPlayedDate": null,
+      "rating": 8
+    },
+    {
+      "itemKey": "new-series",
+      "customDataKey": "Program-New seriesEpisode 1",
+      "playCount": 4,
+      "played": true,
+      "positionTicks": "0",
+      "isFavorite": true,
+      "likes": null,
+      "lastPlayedDate": "2026-09-28 13:00:00"
+    }
+  ],
+  "cases": [
+    {
+      "name": "all programs",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "page",
+      "action": "live-tv-programs",
+      "query": "startIndex=2&limit=3",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "direction without key",
+      "query": "sortOrder=Descending",
+      "action": "live-tv-programs",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "post direction without key",
+      "query": "",
+      "method": "POST",
+      "body": {
+        "SortOrder": [
+          "Descending"
+        ]
+      },
+      "action": "live-tv-programs",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "local date parameter",
+      "query": "maxStartDate=1900-01-01T04:45:00",
+      "action": "live-tv-programs",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "negative start",
+      "action": "live-tv-programs",
+      "query": "startIndex=-2&limit=3",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "empty page",
+      "action": "live-tv-programs",
+      "query": "limit=0",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "without total",
+      "action": "live-tv-programs",
+      "query": "startIndex=2&limit=3&enableTotalRecordCount=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "name descending",
+      "action": "live-tv-programs",
+      "query": "sortBy=Name&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "compound sort",
+      "action": "live-tv-programs",
+      "query": "sortBy=Name,StartDate&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "one channel",
+      "action": "live-tv-programs",
+      "query": "channelIds=80200000-0000-0000-0000-000000001101",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "channels with malformed member",
+      "action": "live-tv-programs",
+      "query": "channelIds=80200000-0000-0000-0000-000000001100,broken,80200000-0000-0000-0000-000000001101",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "missing channel",
+      "action": "live-tv-programs",
+      "query": "channelIds=80500000-0000-0000-0000-000000009999",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "minimum start",
+      "action": "live-tv-programs",
+      "query": "minStartDate=2000-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "maximum start",
+      "action": "live-tv-programs",
+      "query": "maxStartDate=2000-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "minimum end",
+      "action": "live-tv-programs",
+      "query": "minEndDate=2000-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "maximum end",
+      "action": "live-tv-programs",
+      "query": "maxEndDate=2000-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "has aired overrides max",
+      "action": "live-tv-programs",
+      "query": "hasAired=true&maxEndDate=0001-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "not aired overrides min",
+      "action": "live-tv-programs",
+      "query": "hasAired=false&minEndDate=9999-01-01T00:00:00Z",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "currently airing",
+      "action": "live-tv-programs",
+      "query": "isAiring=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "not airing",
+      "action": "live-tv-programs",
+      "query": "isAiring=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "genre names",
+      "action": "live-tv-programs",
+      "query": "genres=Adventure",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "genre ids",
+      "action": "live-tv-programs",
+      "query": "genreIds=80200000-0000-0000-0000-000000001201",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "images and channel fields",
+      "action": "live-tv-programs",
+      "query": "fields=ChannelInfo,PrimaryImageAspectRatio,MediaSourceCount",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "removed fields",
+      "action": "live-tv-programs",
+      "query": "fields=CanDelete,CanDownload,DisplayPreferencesId,Etag,Tags",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "no user data",
+      "action": "live-tv-programs",
+      "query": "enableUserData=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "no images",
+      "action": "live-tv-programs",
+      "query": "enableImages=false",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "series filter",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=744bef78c70163ae7016968a48fb45ae",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "series case",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=744BEF78C70163AE7016968A48FB45AE",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "series lower exact",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=1d69aee596501b2ce03c16c1ea1ab171",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "duplicate timer identity winner",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=948ef4db469df10bb4e2a2533050ced2",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "empty series id",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=50fafaffbe7e99b20d85523fb671f052&startIndex=8",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "space series id",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=b01b4c6b6666c53ab99867540148a52d&startIndex=8",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "unknown timer",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=unknown&startIndex=8",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "whitespace timer",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=%20%09",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "BOM timer",
+      "action": "live-tv-programs",
+      "query": "seriesTimerId=%EF%BB%BF",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "library series",
+      "action": "live-tv-programs",
+      "query": "librarySeriesId=80500000-0000-0000-0000-000000000001",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "missing library series",
+      "action": "live-tv-programs",
+      "query": "librarySeriesId=80500000-0000-0000-0000-000000009999",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "wrong library series type",
+      "action": "live-tv-programs",
+      "query": "librarySeriesId=80200000-0000-0000-0000-000000002003",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "explicit user",
+      "action": "live-tv-programs",
+      "query": "userId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "unknown user",
+      "action": "live-tv-programs",
+      "query": "userId=80500000-0000-0000-0000-000000009999",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ]
+    },
+    {
+      "name": "bad date",
+      "action": "live-tv-programs",
+      "query": "minStartDate=not-a-date",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "bad boolean",
+      "action": "live-tv-programs",
+      "query": "isAiring=not-a-bool",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "api key no user",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "auth": "apiKey"
+    },
+    {
+      "name": "post default",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "name": "post explicit user",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7"
+      }
+    },
+    {
+      "name": "post channel string",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "ChannelIds": "80200000-0000-0000-0000-000000001100,invalid,80200000-0000-0000-0000-000000001101"
+      }
+    },
+    {
+      "name": "post channels array",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "ChannelIds": [
+          "80200000-0000-0000-0000-000000001101"
+        ]
+      }
+    },
+    {
+      "name": "post delimited fields",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "Fields": "ChannelInfo,Tags,CanDelete",
+        "SortBy": "Name",
+        "SortOrder": "Descending",
+        "Genres": " Adventure |Drama"
+      }
+    },
+    {
+      "name": "post null arrays",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "ChannelIds": null,
+        "Fields": null,
+        "SortBy": null,
+        "Genres": null
+      }
+    },
+    {
+      "name": "post page without count",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+        "StartIndex": "2",
+        "Limit": "3",
+        "EnableTotalRecordCount": false
+      }
+    },
+    {
+      "name": "post fractional date",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "MaxStartDate": "1900-01-01T04:45:00.0000001Z"
+      }
+    },
+    {
+      "name": "post offset date",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "MaxStartDate": "1900-01-01T12:45:00+08:00"
+      }
+    },
+    {
+      "name": "post series timer",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "SeriesTimerId": "744bef78c70163ae7016968a48fb45ae"
+      }
+    },
+    {
+      "name": "post library series",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "LibrarySeriesId": "80500000-0000-0000-0000-000000000001"
+      }
+    },
+    {
+      "name": "post unknown user",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "UserId": "80500000-0000-0000-0000-000000009999"
+      }
+    },
+    {
+      "name": "detail program",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002000",
+      "itemType": "Program"
+    },
+    {
+      "name": "detail series",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002001",
+      "itemType": "Program"
+    },
+    {
+      "name": "detail flags",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002009",
+      "itemType": "Program"
+    },
+    {
+      "name": "detail cancelled",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002002",
+      "itemType": "Program"
+    },
+    {
+      "name": "detail unknown enum",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002006",
+      "itemType": "Program"
+    },
+    {
+      "name": "detail nonprogram",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000001200",
+      "itemType": "Genre"
+    },
+    {
+      "name": "detail api key",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002000",
+      "itemType": "Program",
+      "auth": "apiKey"
+    },
+    {
+      "name": "detail missing",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80500000-0000-0000-0000-000000009999",
+      "itemType": "Program",
+      "expectedStatus": 404
+    },
+    {
+      "name": "detail invalid id",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "not-a-guid",
+      "itemType": "Program",
+      "expectedStatus": 500
+    },
+    {
+      "name": "restricted get",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "policy": {
+        "IsAdministrator": false,
+        "EnableLiveTvAccess": true,
+        "EnableAllFolders": true,
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked-guide"
+        ]
+      }
+    },
+    {
+      "name": "restricted post anonymous body",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "name": "restricted post explicit user",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "method": "POST",
+      "body": {
+        "UserId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7"
+      }
+    },
+    {
+      "name": "restricted detail",
+      "action": "live-tv-program",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "programId": "80200000-0000-0000-0000-000000002010",
+      "itemType": "Program"
+    },
+    {
+      "name": "live tv denied",
+      "action": "live-tv-programs",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 403,
+      "policy": {
+        "IsAdministrator": false,
+        "EnableLiveTvAccess": false,
+        "EnableAllFolders": true,
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked-guide"
+        ]
+      }
+    }
+  ],
+  "images": [
+    {
+      "id": "80200000-0000-0000-0000-000000009000",
+      "itemKey": "channel-favorite",
+      "imageType": 0,
+      "dateModified": "2026-09-27 12:00:00",
+      "width": 160,
+      "height": 90
+    }
+  ],
+  "timerDocuments": {
+    "timers": [
+      {
+        "Id": "later-neutral",
+        "ProgramId": "broadcast-neutral",
+        "Name": "later-neutral",
+        "StartDate": "$future-9",
+        "EndDate": "$future-10",
+        "Status": "InProgress"
+      },
+      {
+        "Id": "neutral-first",
+        "ProgramId": "broadcast-neutral",
+        "Name": "neutral-first",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "New"
+      },
+      {
+        "Id": "new-series",
+        "ProgramId": "broadcast-new-series",
+        "Name": "new-series",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "New",
+        "SeriesTimerId": "direct-series"
+      },
+      {
+        "Id": "cancelled-repeat",
+        "ProgramId": "broadcast-repeat",
+        "Name": "cancelled-repeat",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "Cancelled",
+        "SeriesTimerId": "cancelled-series"
+      },
+      {
+        "Id": "error-movie",
+        "ProgramId": "broadcast-movie",
+        "Name": "error-movie",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "Error"
+      },
+      {
+        "Id": "completed-ended",
+        "ProgramId": "broadcast-ended",
+        "Name": "completed-ended",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "Completed"
+      },
+      {
+        "Id": "unknown-future",
+        "ProgramId": "broadcast-future",
+        "Name": "unknown-future",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": 7
+      },
+      {
+        "Id": "null-program",
+        "ProgramId": null,
+        "Name": "null-program",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "New"
+      },
+      {
+        "Id": "empty-program",
+        "ProgramId": "",
+        "Name": "empty-program",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "New"
+      },
+      {
+        "Id": "flags-space",
+        "ProgramId": "broadcast-flags",
+        "Name": "flags-space",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8",
+        "Status": "New",
+        "SeriesTimerId": " "
+      }
+    ],
+    "seriesTimers": [
+      {
+        "Id": "show-10",
+        "SeriesId": "series-shared",
+        "Name": "Show 10",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "show-2",
+        "SeriesId": "SERIES-SHARED",
+        "Name": "Show 2",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "show-02",
+        "SeriesId": "series-shared",
+        "Name": "Show 02",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "duplicate-filter",
+        "Name": "Show 10",
+        "SeriesId": "series-shared",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "duplicate-filter",
+        "Name": "Show 2",
+        "SeriesId": "SERIES-SHARED",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "empty-series",
+        "Name": "Empty series",
+        "SeriesId": "",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      },
+      {
+        "Id": "space-series",
+        "Name": "Space series",
+        "SeriesId": " ",
+        "StartDate": "$future-7",
+        "EndDate": "$future-8"
+      }
+    ]
+  }
+}

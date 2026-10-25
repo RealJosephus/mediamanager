@@ -1,0 +1,5 @@
+# Extension-named Book directory
+
+These three raw results were genuinely executed against the distinct designated source-built native assemblies. BookResolver counts an immediate directory whose extension matches a Book extension. A single matching directory collapses to a non-folder Book at that directory path; adding another matching Book prevents collapse. The file control uses the same resolver. Manager identity and parent lookup are controlled seams; this component recording does not claim persistence or recursive traversal. The separate `book-photo-global` fixture records the actual full native traversal, metadata error, repository save, and repair sequence.
+
+The candidate pipeline tests additionally reject unobserved, foreign, weak, multipart, secondary ownership, and folder-shaped claims. These are pipeline safety controls, not fabricated native output rows. Raw records, helper inputs and source, actual assembly identities, and designated/built resolver source bytes are hash-bound in `provenance.json`.

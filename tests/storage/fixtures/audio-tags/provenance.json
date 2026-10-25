@@ -1,0 +1,81 @@
+{
+  "recordedAt": "2026-09-26T18:44:15.7500633Z",
+  "source": "D:/jellyfin at 208c278b75abd897aefa1e1175126eac5e4dbfaa including local modifications, read-only; executed the frozen ATL DLL",
+  "sources": [
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/AudioFileProber.cs",
+      "currentSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b",
+      "frozenSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/ATL.dll",
+      "sha256": "9ade8f1b5b6b2193447c2931890f21888c96b0bba69037ad610d5dc0d0a6c38e"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".gitignore",
+      "sha256": "bda118ba0613ef3641cd3cdbcc4c3231ae9505a91542d82cb5ef3f2f009a5912"
+    },
+    {
+      "path": "record.mjs",
+      "sha256": "3f0c75b3de651cbebecd278cc0aa70626ad06c9736232828aedaa19488c0abfb"
+    },
+    {
+      "path": "tagged-wave.mjs",
+      "sha256": "779563eed9db554f31739c9aa2af66e0064f44635c0585f12f3be2c3a0bb2c5a"
+    },
+    {
+      "path": "Oracle.cs",
+      "sha256": "58a808a26e9bbe63c6731efe11a24dc980d4e20d73894d436f259a1bc52a839c"
+    },
+    {
+      "path": "Oracle.csproj",
+      "sha256": "1919a48f2858c7eb273acaa94abc74b6ef8e540dd55bccf271a49323cb0aa386",
+      "priorSha256": "a4b6148e536105a0f653c705c2895c4861a91980f5902e3dc2e3613fe93e7c96",
+      "replayedProject": ".test-output/validation/oracle-rebind-20261003/audio-tags/project/Oracle.csproj"
+    },
+    {
+      "path": "atl.json",
+      "sha256": "9160fb2fdaf9d63087a14dc71f5b107f0fbdf05bc40fd300e73d97eda2623c87"
+    }
+  ],
+  "tools": {
+    "node": "v24.16.0",
+    "dotnet": "10.0.401",
+    "ffprobe": "8.1.1-essentials_build-www.gyan.dev"
+  },
+  "oracle": {
+    "projection": "ATL Track title, album, artist, album artist, composer, genre, year, date, track/disc numbers, description, comment, publisher and additional fields for a generated PCM WAV with an ID3v2.4 chunk.",
+    "commands": [
+      "node tests/storage/fixtures/audio-tags/record.mjs tests/storage/fixtures/audio-tags/fixture.wav",
+      ".tools/dotnet/dotnet.exe run --project tests/storage/fixtures/audio-tags/Oracle.csproj -- tests/storage/fixtures/audio-tags/fixture.wav tests/storage/fixtures/audio-tags/observed.json",
+      "node --test tests/storage/audio-tag-metadata.test.js tests/storage/probe-service.test.js"
+    ]
+  },
+  "boundary": "The pure Node runtime uses ffprobe's common tag subset. On this fixture ATL retains both null-separated ID3v2.4 artist and genre values, while ffprobe 8.1.1 exposes only the first value. The tests preserve that differential instead of claiming full ATL parsing.",
+  "replay": {
+    "recordedAt": "2026-10-03T13:48:25.688Z",
+    "scope": "Actual ATL Track parse of a fresh taggedWave-generated WAV only. No wider audio format matrix.",
+    "priorProvenanceSha256": "bb1ec48751d0dcfe8a75d3a43d74fc912c66d7b7579b35c8943a4091eb2b88f9",
+    "comparisons": [
+      {
+        "fixture": "atl.json",
+        "trackedSha256": "9160fb2fdaf9d63087a14dc71f5b107f0fbdf05bc40fd300e73d97eda2623c87",
+        "rawSha256": "5b742e8a91f99ee9dde796d59a5d8807ecd1e9b2d7c3b391b359332f44e5559b",
+        "jsonFieldsEqual": true,
+        "normalization": "Whitespace only; every JSON field value and array order compared.",
+        "rawPath": ".test-output/validation/oracle-rebind-20261003/audio-tags/atl.json",
+        "recordSha256": "9a82dfa90a914c933fe25c181cb46e0f2a2ab35d7392aef6b321b985bc43d45a"
+      }
+    ],
+    "commonBuildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "unchangedTrackedResults": true,
+    "projectReexecuted": true
+  }
+}

@@ -1,0 +1,9 @@
+The fixture executes the actual native BoxSetMetadataService SaveItemAsync, ProviderManager, XML saver, LibraryManager, EF SQLite persistence, and an independent cold DbContext. It records repository exceptions, XML lexical NUL/SOH errors, and the success control.
+
+People and linked lookup are controlled at the LibraryManager interface. They model the repository exception delivered to the real saver and preserve its actual file and continuation effects; this does not prove every malformed item hydration path or a full metadata refresh.
+
+Regenerate with tools/compat/record-local-xml-failure-pipeline.mjs and a new isolated output directory, the isolated source directory, and designated source directory. MEDIAMANAGER_JELLYFIN_DLL, MEDIAMANAGER_DOTNET, and MEDIAMANAGER_DOTNET_ROOT identify the fixed Windows native runtime.
+
+The candidate replay uses `tests/metadata/local-xml-pipeline-fixture.js`. `local-xml-failure-pipeline.test.js` executes all five faults for local storage and an actual WebDAV service; `local-xml-alist-pipeline.test.js` executes the same five faults for an actual AList service. Both retain the real scan-continuation scenario, PostgreSQL persistence, monitor beginning/completion checks, and byte-exact recorded XML outcomes. The AList entry additionally requires the AList executable; it is not claimed as passed by the local/WebDAV entry. No environment variable narrows the registered protocol cases.
+
+This replay reads only the repository's native JSON; historical provenance descriptors are not execution inputs and are not newly claimed as verified source/runtime identities. The temporary state directory uses the current host's path style. `MM_XML_PIPELINE_EVIDENCE`, when set, retains a fresh protocol-specific child directory with observations and service receipts.

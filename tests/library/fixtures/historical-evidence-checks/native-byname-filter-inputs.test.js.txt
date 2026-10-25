@@ -1,0 +1,69 @@
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import test from 'node:test';
+import { assertNativeByNameFilterOutput, nativeByNameFilterBinding, nativeByNameFilterRecording,
+  resolveNativeByNameFilterInput, verifyNativeByNameFilterRecording, verifyNativeByNameFilterSourceBindings } from './native-byname-filter-inputs.js';
+
+test('by-name filter input closure binds eight double recordings and all 351 native endpoints', async () => {
+  await verifyNativeByNameFilterSourceBindings();
+  assert.equal(nativeByNameFilterBinding.recordings.reduce((total, entry) => total + entry.cases, 0), 180);
+  assert.equal(nativeByNameFilterBinding.recordings.reduce((total, entry) => total + entry.endpoints, 0), 351);
+  for (const recording of nativeByNameFilterBinding.recordings) {
+    assert.equal(recording.repetitions.length, 2);
+    await verifyNativeByNameFilterRecording(recording.kind, recording.side);
+  }
+});
+
+test('by-name input gates reject changed audits, preparation, modes, configuration and executable roots', async () => {
+  const mutations = [
+    binding => { binding.reference.sourceDatabase.sha256 = '0'.repeat(64); },
+    binding => { binding.preparationInputFiles.pop(); },
+    binding => { binding.runtimeDirectory.entriesSha256 = '0'.repeat(64); },
+    binding => { binding.sdkDirectory.entriesSha256 = '0'.repeat(64); },
+    binding => { binding.independentNativeAudit.sha256 = '0'.repeat(64); },
+    binding => { binding.recordings.reverse(); },
+    binding => { binding.recordings[0].side = 'unknown-credit'; },
+    binding => { binding.recordings[0].logicalRoot = '.test-input/evidence/foreign'; },
+    binding => { binding.recordings[0].repetitions[1].filename = '.'; },
+    binding => { binding.recordings[0].artifacts[0].sha256 = '0'.repeat(64); },
+    binding => { binding.recordings[0].preparedInputs.pop(); },
+    binding => { binding.recordings[0].nativeSources.pop(); },
+    binding => { binding.recordings[0].inputAllowlist.push('../foreign.json'); },
+    binding => { binding.recordings[0].recorderInvocation[2] = '../foreign'; },
+    binding => { binding.recordings[0].runtimeManifestRoot = '..'; },
+    binding => { binding.recordings[0].configuration.finalEntries.pop(); },
+    binding => { binding.recordings[0].configuration.finalEncodingEntry.sha256 = '0'.repeat(64); },
+    binding => { binding.completeBuildInputClosure = true; },
+    binding => { binding.releaseAcceptance = true; },
+  ];
+  for (const mutate of mutations) {
+    const changed = structuredClone(nativeByNameFilterBinding);
+    mutate(changed);
+    await assert.rejects(verifyNativeByNameFilterSourceBindings(changed));
+  }
+});
+
+test('by-name inputs resolve only literal recorded paths and require the declared kind and mode', () => {
+  for (const recording of nativeByNameFilterBinding.recordings) {
+    for (const filename of recording.inputAllowlist) {
+      const resolved = resolveNativeByNameFilterInput(recording.kind, recording.side, filename);
+      assert.equal(path.resolve(resolved.root, resolved.relative), path.resolve(filename));
+    }
+    assert.throws(() => resolveNativeByNameFilterInput(recording.kind, recording.side, '../foreign.json'));
+  }
+  assert.throws(() => nativeByNameFilterRecording('foreign'));
+  assert.throws(() => nativeByNameFilterRecording('album', 'request-order'));
+});
+
+test('by-name output isolation covers both repetitions, audits, source and executable trees', () => {
+  const environment = { MEDIAMANAGER_VALIDATION_OUTPUT_ROOT: 'D:/mediamanager-validation/20261011/byname-stage-results' };
+  assert.doesNotThrow(() => assertNativeByNameFilterOutput(environment.MEDIAMANAGER_VALIDATION_OUTPUT_ROOT, environment));
+  const descriptors = [nativeByNameFilterBinding.runtimeDirectory, nativeByNameFilterBinding.sdkDirectory,
+    ...nativeByNameFilterBinding.recordings.flatMap(recording => recording.repetitions)];
+  for (const descriptor of descriptors) {
+    assert.throws(() => assertNativeByNameFilterOutput(descriptor.filename, environment), /outside reference/u);
+    assert.throws(() => assertNativeByNameFilterOutput(descriptor.filename + '/output', environment), /outside reference/u);
+  }
+  assert.throws(() => assertNativeByNameFilterOutput(nativeByNameFilterBinding.reference.sourceDatabase.filename, environment));
+  assert.throws(() => assertNativeByNameFilterOutput(nativeByNameFilterBinding.independentNativeAudit.filename, environment));
+});

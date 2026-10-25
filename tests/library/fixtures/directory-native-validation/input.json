@@ -1,0 +1,982 @@
+[
+  {
+    "name": "directory-single-file",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-numeric-stack",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd2.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-ordinal-stack-order",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd2.mkv",
+      "Film/Film cd10.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-alpha-stack",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film disc b.mkv",
+      "Film/Film disc a.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-stack-start-at-two",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film part3.mkv",
+      "Film/Film part2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-mixed-stack-tokens",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd1.mkv",
+      "Film/Film part2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-mixed-numeric-alpha",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film disk1.mkv",
+      "Film/Film diskb.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-case-distinct-stacks",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd1.mkv",
+      "Film/film cd2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-stack-trailer",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd2.mkv",
+      "Film/Film-trailer.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-stack-and-version",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film cd2.mkv",
+      "Film/Film cd1.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-two-stacked-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - Theatrical cd2.mkv",
+      "Film/Film - Director cd1.mkv",
+      "Film/Film - Theatrical cd1.mkv",
+      "Film/Film - Director cd2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-local-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-version-prefix-mismatch",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Other - 1080p.mkv",
+      "Film/Other - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-other-subfolder",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-extra-subfolders",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv",
+      "Film/trailers/Trailer.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/trailers",
+      "Film/extras"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-hidden-extra-theme",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv",
+      "Film/.hidden-trailer.mkv",
+      "Film/theme.mp3"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-ignore-stack-part",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film cd1.mkv",
+      "Film/Film cd2.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Film/.ignore",
+        "text": "*cd2*"
+      }
+    ]
+  },
+  {
+    "name": "directory-ignore-version",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Film/.ignore",
+        "text": "*2160p*"
+      }
+    ]
+  },
+  {
+    "name": "directory-ignore-other-subfolder",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Film/.ignore",
+        "text": "Unrelated/"
+      }
+    ]
+  },
+  {
+    "name": "directory-ignore-all",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/Film/.ignore",
+        "text": "*"
+      }
+    ]
+  },
+  {
+    "name": "directory-homevideo-single",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-homevideo-stack",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Holiday pt2.mp4",
+      "Film/Holiday pt1.mp4"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-folder-provider-id",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film [tmdbid=123] [dontfetchmeta]"
+    ],
+    "files": [
+      "Film [tmdbid=123] [dontfetchmeta]/Feature (2025).mkv"
+    ],
+    "directories": [
+      "Film [tmdbid=123] [dontfetchmeta]"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-file-provider-id",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature [tmdbid=456] (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-provider-short-aliases",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film [TMDB-123] (TVDB= 456 ) {imdbid=tt1234567}"
+    ],
+    "files": [
+      "Film [TMDB-123] (TVDB= 456 ) {imdbid=tt1234567}/Feature.mkv"
+    ],
+    "directories": [
+      "Film [TMDB-123] (TVDB= 456 ) {imdbid=tt1234567}"
+    ],
+    "ignoreFiles": [],
+    "directory": "Film [TMDB-123] (TVDB= 456 ) {imdbid=tt1234567}"
+  },
+  {
+    "name": "directory-provider-folder-precedence",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film [tmdbid=123] [tvdbid=456]"
+    ],
+    "files": [
+      "Film [tmdbid=123] [tvdbid=456]/Feature [tmdbid=999] [tvdb=888].mkv"
+    ],
+    "directories": [
+      "Film [tmdbid=123] [tvdbid=456]"
+    ],
+    "ignoreFiles": [],
+    "directory": "Film [tmdbid=123] [tvdbid=456]"
+  },
+  {
+    "name": "directory-provider-empty-folder-fallback",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film [tmdbid= ] [tvdbid=]"
+    ],
+    "files": [
+      "Film [tmdbid= ] [tvdbid=]/Feature [tmdb=777] [tvdbid=888].mkv"
+    ],
+    "directories": [
+      "Film [tmdbid= ] [tvdbid=]"
+    ],
+    "ignoreFiles": [],
+    "directory": "Film [tmdbid= ] [tvdbid=]"
+  },
+  {
+    "name": "directory-provider-invalid-then-valid",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film xtmdbid=111 [tmdbidon=222] [tmdb= ]"
+    ],
+    "files": [
+      "Film xtmdbid=111 [tmdbidon=222] [tmdb= ]/Feature {TmdbID-  123  } [tvdb=456].mkv"
+    ],
+    "directories": [
+      "Film xtmdbid=111 [tmdbidon=222] [tmdb= ]"
+    ],
+    "ignoreFiles": [],
+    "directory": "Film xtmdbid=111 [tmdbidon=222] [tmdb= ]"
+  },
+  {
+    "name": "directory-provider-imdb-parent",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film tt123456789"
+    ],
+    "files": [
+      "Film tt123456789/Feature.mkv"
+    ],
+    "directories": [
+      "Film tt123456789"
+    ],
+    "ignoreFiles": [],
+    "directory": "Film tt123456789"
+  },
+  {
+    "name": "directory-provider-imdb-uppercase",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature TT1234567.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-provider-imdb-overlap",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature ttt1234567.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-provider-imdb-explicit-precedence",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature tt1111111 [imdb=tt2222222].mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": []
+  },
+  {
+    "name": "directory-inherited-parent-lock",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "parentLocked": true
+  },
+  {
+    "name": "directory-file-resolve-clock",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Feature.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "useResolveTime": true
+  },
+  {
+    "name": "validate-cancel-before-enumeration",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "validate-cancel-before-insert-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "cancelled": true,
+    "failInsert": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "validate-first-insert-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "failInsert": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "validate-later-alternate-insert-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "failInsertAlternate": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "validate-link-insert-fault",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "failLinks": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "validate-repeat-single",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "repeatValidation": true
+  },
+  {
+    "name": "validate-repeat-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "repeatValidation": true
+  },
+  {
+    "name": "validate-repeat-folder",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film",
+      "Film/Unrelated"
+    ],
+    "ignoreFiles": [],
+    "repeatValidation": true
+  },
+  {
+    "name": "validate-physical-parent-single",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film (2025).mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "aggregateParent": true
+  },
+  {
+    "name": "validate-physical-parent-versions",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 2160p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "aggregateParent": true
+  },
+  {
+    "name": "validate-lazy-resolver-io-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "FilmA",
+      "FilmB"
+    ],
+    "files": [
+      "FilmA/Feature.mkv",
+      "FilmB/Feature.mkv"
+    ],
+    "directories": [
+      "FilmA",
+      "FilmB"
+    ],
+    "ignoreFiles": [],
+    "resolverFailure": "io"
+  },
+  {
+    "name": "validate-lazy-resolver-security-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "FilmA",
+      "FilmB"
+    ],
+    "files": [
+      "FilmA/Feature.mkv",
+      "FilmB/Feature.mkv"
+    ],
+    "directories": [
+      "FilmA",
+      "FilmB"
+    ],
+    "ignoreFiles": [],
+    "resolverFailure": "security"
+  },
+  {
+    "name": "validate-lazy-resolver-general-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "FilmA",
+      "FilmB"
+    ],
+    "files": [
+      "FilmA/Feature.mkv",
+      "FilmB/Feature.mkv"
+    ],
+    "directories": [
+      "FilmA",
+      "FilmB"
+    ],
+    "ignoreFiles": [],
+    "resolverFailure": "general"
+  }
+]

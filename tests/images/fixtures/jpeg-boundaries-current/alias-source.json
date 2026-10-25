@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "scope": "Same original bytes under independently named supported extensions. No codec or image encoder ran; original ten-image sources and the Actions generation receipt remain unchanged.",
+  "aliases": [
+    {
+      "name": "alias-jpeg-png",
+      "filename": "assets/alias-jpeg.png",
+      "source": "assets/generated-rgb.jpg",
+      "bytes": 78374,
+      "sha256": "3c1376985fc6085701395220e4062a74de2c402ff59337f17df0f58b16050591"
+    },
+    {
+      "name": "alias-jpeg-webp",
+      "filename": "assets/alias-jpeg.webp",
+      "source": "assets/generated-rgb.jpg",
+      "bytes": 78374,
+      "sha256": "3c1376985fc6085701395220e4062a74de2c402ff59337f17df0f58b16050591"
+    },
+    {
+      "name": "alias-png-jpg",
+      "filename": "assets/alias-png.jpg",
+      "source": "../blurhash-resampling/inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    },
+    {
+      "name": "alias-png-webp",
+      "filename": "assets/alias-png.webp",
+      "source": "../blurhash-resampling/inputs/coordinates-257x193.png",
+      "bytes": 158545,
+      "sha256": "bfacdfcf41d6189ac92976b03626d2dafbbec81e6aac3bee1b9fff5fc20501db"
+    }
+  ]
+}

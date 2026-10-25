@@ -1,0 +1,4742 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "groupMovies",
+      "id": "80200000-0000-0000-0000-000000000115",
+      "type": "UserView",
+      "name": "groupMovies",
+      "sortName": "groupmovies",
+      "parentId": null,
+      "topParentId": null,
+      "pathKind": "view",
+      "data": {
+        "ViewType": "movies",
+        "DisplayParentId": "00000000-0000-0000-0000-000000000000",
+        "IsRoot": false
+      },
+      "ancestorIds": []
+    },
+    {
+      "key": "groupTv",
+      "id": "80200000-0000-0000-0000-000000000116",
+      "type": "UserView",
+      "name": "groupTv",
+      "sortName": "grouptv",
+      "parentId": null,
+      "topParentId": null,
+      "pathKind": "view",
+      "data": {
+        "ViewType": "tvshows",
+        "DisplayParentId": "00000000-0000-0000-0000-000000000000",
+        "IsRoot": false
+      },
+      "ancestorIds": []
+    },
+    {
+      "key": "Movie oldest",
+      "id": "83000000-0000-0000-0000-000000000301",
+      "type": "Movie",
+      "name": "Movie oldest",
+      "sortName": "movie oldest",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-17 12:00:00",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "movie-one",
+      "productionYear": 2020,
+      "genresText": "Action|Unregistered|Hidden|Shared A|Shared B|Null A|Null B|Owned|",
+      "tagsText": "Sports|binary\u0000tag|",
+      "officialRating": "PG",
+      "startDate": "2000-01-01 00:00:00",
+      "endDate": "2099-01-01 00:00:00"
+    },
+    {
+      "key": "Movie newest copy",
+      "id": "83000000-0000-0000-0000-000000000302",
+      "type": "Movie",
+      "name": "Movie newest copy",
+      "sortName": "movie newest copy",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "movie-one",
+      "productionYear": 2024,
+      "genresText": "ÁCTION",
+      "tagsText": "sports",
+      "officialRating": "pg",
+      "startDate": "1999-01-01 00:00:00",
+      "endDate": "2000-01-01 00:00:00"
+    },
+    {
+      "key": "Movie same date A",
+      "id": "83000000-0000-0000-0000-000000000303",
+      "type": "Movie",
+      "name": "Movie same date A",
+      "sortName": "movie same date a",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "movie-tie-a",
+      "productionYear": -1,
+      "genresText": "Drama|  ",
+      "tagsText": "SPORTS|Kids|  ",
+      "officialRating": "",
+      "startDate": "2099-01-01 00:00:00",
+      "endDate": "2100-01-01 00:00:00"
+    },
+    {
+      "key": "Movie same date Z",
+      "id": "83000000-0000-0000-0000-000000000304",
+      "type": "Movie",
+      "name": "Movie same date Z",
+      "sortName": "movie same date z",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "movie-tie-z",
+      "productionYear": 0,
+      "genresText": "Drama|drama",
+      "tagsText": "News",
+      "officialRating": " ",
+      "startDate": null,
+      "endDate": null
+    },
+    {
+      "key": "Movie second library",
+      "id": "83000000-0000-0000-0000-000000000305",
+      "type": "Movie",
+      "name": "Movie second library",
+      "sortName": "movie second library",
+      "parentId": "80200000-0000-0000-0000-000000000005",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000005",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 01:00:00.0000001",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "movie-one",
+      "genresText": "Action",
+      "tagsText": "Neutral",
+      "productionYear": 1999,
+      "officialRating": "TV-MA"
+    },
+    {
+      "key": "Movie virtual",
+      "id": "83000000-0000-0000-0000-000000000306",
+      "type": "Movie",
+      "name": "Movie virtual",
+      "sortName": "movie virtual",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-22 01:00:00",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "isVirtualItem": true
+    },
+    {
+      "key": "Movie restricted",
+      "id": "83000000-0000-0000-0000-000000000307",
+      "type": "Movie",
+      "name": "Movie restricted",
+      "sortName": "movie restricted",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-22 02:00:00",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "inheritedParentalRatingValue": 90,
+      "genresText": "Restricted",
+      "tagsText": "Restricted tag",
+      "productionYear": 2099,
+      "officialRating": "R"
+    },
+    {
+      "key": "Album newest",
+      "id": "83000000-0000-0000-0000-000000000308",
+      "type": "MusicAlbum",
+      "name": "Album newest",
+      "sortName": "album newest",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 10:00:00",
+      "inheritedParentalRatingValue": 5,
+      "genresText": "Action",
+      "tagsText": "Kids"
+    },
+    {
+      "key": "Album older",
+      "id": "83000000-0000-0000-0000-000000000309",
+      "type": "MusicAlbum",
+      "name": "Album older",
+      "sortName": "album older",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-18 01:00:00",
+      "genresText": "Rock",
+      "tagsText": "Neutral"
+    },
+    {
+      "key": "Album restricted",
+      "id": "83000000-0000-0000-0000-000000000310",
+      "type": "MusicAlbum",
+      "name": "Album restricted",
+      "sortName": "album restricted",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-23 01:00:00",
+      "inheritedParentalRatingValue": 90
+    },
+    {
+      "key": "Album empty",
+      "id": "83000000-0000-0000-0000-000000000311",
+      "type": "MusicAlbum",
+      "name": "Album empty",
+      "sortName": "album empty",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-22 01:00:00"
+    },
+    {
+      "key": "Track new A",
+      "id": "83000000-0000-0000-0000-000000000312",
+      "type": "Audio",
+      "name": "Track new A",
+      "sortName": "track new a",
+      "parentId": "83000000-0000-0000-0000-000000000308",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000308",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 11:00:00",
+      "mediaType": "Audio",
+      "genresText": "Action|Rock",
+      "tagsText": "Neutral",
+      "productionYear": 1990,
+      "officialRating": "NR"
+    },
+    {
+      "key": "Track new B",
+      "id": "83000000-0000-0000-0000-000000000313",
+      "type": "Audio",
+      "name": "Track new B",
+      "sortName": "track new b",
+      "parentId": "83000000-0000-0000-0000-000000000308",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000308",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 10:00:00",
+      "mediaType": "Audio",
+      "genresText": "Rock"
+    },
+    {
+      "key": "Track old",
+      "id": "83000000-0000-0000-0000-000000000314",
+      "type": "Audio",
+      "name": "Track old",
+      "sortName": "track old",
+      "parentId": "83000000-0000-0000-0000-000000000309",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000309",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Track restricted album",
+      "id": "83000000-0000-0000-0000-000000000315",
+      "type": "Audio",
+      "name": "Track restricted album",
+      "sortName": "track restricted album",
+      "parentId": "83000000-0000-0000-0000-000000000310",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000310",
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-24 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Track outside album",
+      "id": "83000000-0000-0000-0000-000000000316",
+      "type": "Audio",
+      "name": "Track outside album",
+      "sortName": "track outside album",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-25 00:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Series Single",
+      "id": "83000000-0000-0000-0000-000000000317",
+      "type": "Series",
+      "name": "Series Single",
+      "sortName": "series single",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-10 01:00:00",
+      "presentationUniqueKey": "series-Single",
+      "inheritedParentalRatingValue": 5,
+      "genresText": "Action",
+      "tagsText": "Sports",
+      "productionYear": 2018,
+      "officialRating": "TV-PG"
+    },
+    {
+      "key": "Season Single 1",
+      "id": "83000000-0000-0000-0000-000000000318",
+      "type": "Season",
+      "name": "Season Single 1",
+      "sortName": "season single 1",
+      "parentId": "83000000-0000-0000-0000-000000000317",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000317",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000317",
+      "indexNumber": 1,
+      "seasonId": null
+    },
+    {
+      "key": "Episode Single 1",
+      "id": "83000000-0000-0000-0000-000000000319",
+      "type": "Episode",
+      "name": "Episode Single 1",
+      "sortName": "episode single 1",
+      "parentId": "83000000-0000-0000-0000-000000000318",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000318",
+        "83000000-0000-0000-0000-000000000317",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000317",
+      "seasonId": "83000000-0000-0000-0000-000000000318",
+      "seriesName": "Single",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "series-Single",
+      "presentationUniqueKey": "ep-Single-1",
+      "genresText": "Drama",
+      "tagsText": "Sports",
+      "productionYear": 2022,
+      "officialRating": "TV-14"
+    },
+    {
+      "key": "Episode Single 2",
+      "id": "83000000-0000-0000-0000-000000000320",
+      "type": "Episode",
+      "name": "Episode Single 2",
+      "sortName": "episode single 2",
+      "parentId": "83000000-0000-0000-0000-000000000318",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000318",
+        "83000000-0000-0000-0000-000000000317",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000317",
+      "seasonId": "83000000-0000-0000-0000-000000000318",
+      "seriesName": "Single",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "seriesPresentationUniqueKey": "series-Single",
+      "presentationUniqueKey": "ep-Single-2",
+      "tagsText": "Kids"
+    },
+    {
+      "key": "Episode Single 3",
+      "id": "83000000-0000-0000-0000-000000000321",
+      "type": "Episode",
+      "name": "Episode Single 3",
+      "sortName": "episode single 3",
+      "parentId": "83000000-0000-0000-0000-000000000318",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000318",
+        "83000000-0000-0000-0000-000000000317",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234566",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000317",
+      "seasonId": "83000000-0000-0000-0000-000000000318",
+      "seriesName": "Single",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "series-Single",
+      "presentationUniqueKey": "ep-Single-3"
+    },
+    {
+      "key": "Series Multiple",
+      "id": "83000000-0000-0000-0000-000000000322",
+      "type": "Series",
+      "name": "Series Multiple",
+      "sortName": "series multiple",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-10 01:00:00",
+      "presentationUniqueKey": "series-Multiple",
+      "inheritedParentalRatingValue": 5,
+      "tagsText": "News"
+    },
+    {
+      "key": "Season Multiple 1",
+      "id": "83000000-0000-0000-0000-000000000323",
+      "type": "Season",
+      "name": "Season Multiple 1",
+      "sortName": "season multiple 1",
+      "parentId": "83000000-0000-0000-0000-000000000322",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000322",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000322",
+      "indexNumber": 1,
+      "seasonId": null
+    },
+    {
+      "key": "Season Multiple 2",
+      "id": "83000000-0000-0000-0000-000000000324",
+      "type": "Season",
+      "name": "Season Multiple 2",
+      "sortName": "season multiple 2",
+      "parentId": "83000000-0000-0000-0000-000000000322",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000322",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000322",
+      "indexNumber": 2,
+      "seasonId": null
+    },
+    {
+      "key": "Episode Multiple 1",
+      "id": "83000000-0000-0000-0000-000000000325",
+      "type": "Episode",
+      "name": "Episode Multiple 1",
+      "sortName": "episode multiple 1",
+      "parentId": "83000000-0000-0000-0000-000000000323",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000323",
+        "83000000-0000-0000-0000-000000000322",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000322",
+      "seasonId": "83000000-0000-0000-0000-000000000323",
+      "seriesName": "Multiple",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "series-Multiple",
+      "presentationUniqueKey": "ep-Multiple-1",
+      "tagsText": "News"
+    },
+    {
+      "key": "Episode Multiple 2",
+      "id": "83000000-0000-0000-0000-000000000326",
+      "type": "Episode",
+      "name": "Episode Multiple 2",
+      "sortName": "episode multiple 2",
+      "parentId": "83000000-0000-0000-0000-000000000323",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000323",
+        "83000000-0000-0000-0000-000000000322",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000322",
+      "seasonId": "83000000-0000-0000-0000-000000000323",
+      "seriesName": "Multiple",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "seriesPresentationUniqueKey": "series-Multiple",
+      "presentationUniqueKey": "ep-Multiple-2"
+    },
+    {
+      "key": "Episode Multiple 3",
+      "id": "83000000-0000-0000-0000-000000000327",
+      "type": "Episode",
+      "name": "Episode Multiple 3",
+      "sortName": "episode multiple 3",
+      "parentId": "83000000-0000-0000-0000-000000000323",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000323",
+        "83000000-0000-0000-0000-000000000322",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234566",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000322",
+      "seasonId": "83000000-0000-0000-0000-000000000323",
+      "seriesName": "Multiple",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "series-Multiple",
+      "presentationUniqueKey": "ep-Multiple-3"
+    },
+    {
+      "key": "Series Cross",
+      "id": "83000000-0000-0000-0000-000000000328",
+      "type": "Series",
+      "name": "Series Cross",
+      "sortName": "series cross",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-10 01:00:00",
+      "presentationUniqueKey": "series-Cross",
+      "inheritedParentalRatingValue": 5
+    },
+    {
+      "key": "Season Cross 1",
+      "id": "83000000-0000-0000-0000-000000000329",
+      "type": "Season",
+      "name": "Season Cross 1",
+      "sortName": "season cross 1",
+      "parentId": "83000000-0000-0000-0000-000000000328",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000328",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000328",
+      "indexNumber": 1,
+      "seasonId": null
+    },
+    {
+      "key": "Season Cross 2",
+      "id": "83000000-0000-0000-0000-000000000330",
+      "type": "Season",
+      "name": "Season Cross 2",
+      "sortName": "season cross 2",
+      "parentId": "83000000-0000-0000-0000-000000000328",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000328",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000328",
+      "indexNumber": 2,
+      "seasonId": null
+    },
+    {
+      "key": "Episode Cross 1",
+      "id": "83000000-0000-0000-0000-000000000331",
+      "type": "Episode",
+      "name": "Episode Cross 1",
+      "sortName": "episode cross 1",
+      "parentId": "83000000-0000-0000-0000-000000000329",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000329",
+        "83000000-0000-0000-0000-000000000328",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000328",
+      "seasonId": "83000000-0000-0000-0000-000000000329",
+      "seriesName": "Cross",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "series-Cross",
+      "presentationUniqueKey": "ep-Cross-1"
+    },
+    {
+      "key": "Episode Cross 2",
+      "id": "83000000-0000-0000-0000-000000000332",
+      "type": "Episode",
+      "name": "Episode Cross 2",
+      "sortName": "episode cross 2",
+      "parentId": "83000000-0000-0000-0000-000000000330",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000330",
+        "83000000-0000-0000-0000-000000000328",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000328",
+      "seasonId": "83000000-0000-0000-0000-000000000330",
+      "seriesName": "Cross",
+      "parentIndexNumber": 2,
+      "indexNumber": 2,
+      "seriesPresentationUniqueKey": "series-Cross",
+      "presentationUniqueKey": "ep-Cross-2"
+    },
+    {
+      "key": "Episode Cross 3",
+      "id": "83000000-0000-0000-0000-000000000333",
+      "type": "Episode",
+      "name": "Episode Cross 3",
+      "sortName": "episode cross 3",
+      "parentId": "83000000-0000-0000-0000-000000000329",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000329",
+        "83000000-0000-0000-0000-000000000328",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234566",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000328",
+      "seasonId": "83000000-0000-0000-0000-000000000329",
+      "seriesName": "Cross",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "series-Cross",
+      "presentationUniqueKey": "ep-Cross-3"
+    },
+    {
+      "key": "Series Restricted",
+      "id": "83000000-0000-0000-0000-000000000334",
+      "type": "Series",
+      "name": "Series Restricted",
+      "sortName": "series restricted",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-10 01:00:00",
+      "presentationUniqueKey": "series-Restricted",
+      "inheritedParentalRatingValue": 90
+    },
+    {
+      "key": "Season Restricted 1",
+      "id": "83000000-0000-0000-0000-000000000335",
+      "type": "Season",
+      "name": "Season Restricted 1",
+      "sortName": "season restricted 1",
+      "parentId": "83000000-0000-0000-0000-000000000334",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000334",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000334",
+      "indexNumber": 1,
+      "seasonId": null,
+      "inheritedParentalRatingValue": 90
+    },
+    {
+      "key": "Season Restricted 2",
+      "id": "83000000-0000-0000-0000-000000000336",
+      "type": "Season",
+      "name": "Season Restricted 2",
+      "sortName": "season restricted 2",
+      "parentId": "83000000-0000-0000-0000-000000000334",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000334",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000334",
+      "indexNumber": 2,
+      "seasonId": null
+    },
+    {
+      "key": "Episode Restricted 1",
+      "id": "83000000-0000-0000-0000-000000000337",
+      "type": "Episode",
+      "name": "Episode Restricted 1",
+      "sortName": "episode restricted 1",
+      "parentId": "83000000-0000-0000-0000-000000000335",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000335",
+        "83000000-0000-0000-0000-000000000334",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000334",
+      "seasonId": "83000000-0000-0000-0000-000000000335",
+      "seriesName": "Restricted",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "series-Restricted",
+      "presentationUniqueKey": "ep-Restricted-1"
+    },
+    {
+      "key": "Episode Restricted 2",
+      "id": "83000000-0000-0000-0000-000000000338",
+      "type": "Episode",
+      "name": "Episode Restricted 2",
+      "sortName": "episode restricted 2",
+      "parentId": "83000000-0000-0000-0000-000000000335",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000335",
+        "83000000-0000-0000-0000-000000000334",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000334",
+      "seasonId": "83000000-0000-0000-0000-000000000335",
+      "seriesName": "Restricted",
+      "parentIndexNumber": 1,
+      "indexNumber": 2,
+      "seriesPresentationUniqueKey": "series-Restricted",
+      "presentationUniqueKey": "ep-Restricted-2"
+    },
+    {
+      "key": "Episode Restricted 3",
+      "id": "83000000-0000-0000-0000-000000000339",
+      "type": "Episode",
+      "name": "Episode Restricted 3",
+      "sortName": "episode restricted 3",
+      "parentId": "83000000-0000-0000-0000-000000000335",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000335",
+        "83000000-0000-0000-0000-000000000334",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234566",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000334",
+      "seasonId": "83000000-0000-0000-0000-000000000335",
+      "seriesName": "Restricted",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "series-Restricted",
+      "presentationUniqueKey": "ep-Restricted-3"
+    },
+    {
+      "key": "Series EpisodeOnly",
+      "id": "83000000-0000-0000-0000-000000000340",
+      "type": "Series",
+      "name": "Series EpisodeOnly",
+      "sortName": "series episodeonly",
+      "parentId": "80200000-0000-0000-0000-000000000007",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-10 01:00:00",
+      "presentationUniqueKey": "series-EpisodeOnly",
+      "inheritedParentalRatingValue": 5
+    },
+    {
+      "key": "Season EpisodeOnly 1",
+      "id": "83000000-0000-0000-0000-000000000341",
+      "type": "Season",
+      "name": "Season EpisodeOnly 1",
+      "sortName": "season episodeonly 1",
+      "parentId": "83000000-0000-0000-0000-000000000340",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000340",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000340",
+      "indexNumber": 1,
+      "seasonId": null
+    },
+    {
+      "key": "Season EpisodeOnly 2",
+      "id": "83000000-0000-0000-0000-000000000342",
+      "type": "Season",
+      "name": "Season EpisodeOnly 2",
+      "sortName": "season episodeonly 2",
+      "parentId": "83000000-0000-0000-0000-000000000340",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000340",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-11 01:00:00",
+      "seriesId": "83000000-0000-0000-0000-000000000340",
+      "indexNumber": 2,
+      "seasonId": null
+    },
+    {
+      "key": "Episode EpisodeOnly 1",
+      "id": "83000000-0000-0000-0000-000000000343",
+      "type": "Episode",
+      "name": "Episode EpisodeOnly 1",
+      "sortName": "episode episodeonly 1",
+      "parentId": "83000000-0000-0000-0000-000000000341",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000341",
+        "83000000-0000-0000-0000-000000000340",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000340",
+      "seasonId": "83000000-0000-0000-0000-000000000341",
+      "seriesName": "EpisodeOnly",
+      "parentIndexNumber": 1,
+      "indexNumber": 1,
+      "seriesPresentationUniqueKey": "series-EpisodeOnly",
+      "presentationUniqueKey": "ep-EpisodeOnly-1"
+    },
+    {
+      "key": "Episode EpisodeOnly 3",
+      "id": "83000000-0000-0000-0000-000000000344",
+      "type": "Episode",
+      "name": "Episode EpisodeOnly 3",
+      "sortName": "episode episodeonly 3",
+      "parentId": "83000000-0000-0000-0000-000000000341",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000341",
+        "83000000-0000-0000-0000-000000000340",
+        "80200000-0000-0000-0000-000000000007",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-19 12:00:00.1234566",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "seriesId": "83000000-0000-0000-0000-000000000340",
+      "seasonId": "83000000-0000-0000-0000-000000000341",
+      "seriesName": "EpisodeOnly",
+      "parentIndexNumber": 1,
+      "indexNumber": 3,
+      "seriesPresentationUniqueKey": "series-EpisodeOnly",
+      "presentationUniqueKey": "ep-EpisodeOnly-3"
+    },
+    {
+      "key": "Book newest",
+      "id": "83000000-0000-0000-0000-000000000345",
+      "type": "Book",
+      "name": "Book newest",
+      "sortName": "book newest",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 10:00:00",
+      "mediaType": "Book"
+    },
+    {
+      "key": "Book track A",
+      "id": "83000000-0000-0000-0000-000000000346",
+      "type": "Audio",
+      "name": "Book track A",
+      "sortName": "book track a",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 11:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Book track B",
+      "id": "83000000-0000-0000-0000-000000000347",
+      "type": "Audio",
+      "name": "Book track B",
+      "sortName": "book track b",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-20 11:00:00",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Movie owned excluded",
+      "id": "83000000-0000-0000-0000-000000000801",
+      "type": "Movie",
+      "name": "Movie owned excluded",
+      "sortName": "movie owned excluded",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-26 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "Movie owned excluded",
+      "productionYear": 2001,
+      "ownerId": "83000000-0000-0000-0000-000000000302",
+      "genresText": "Owned only",
+      "tagsText": "Owned tag"
+    },
+    {
+      "key": "Movie alternate excluded",
+      "id": "83000000-0000-0000-0000-000000000802",
+      "type": "Movie",
+      "name": "Movie alternate excluded",
+      "sortName": "movie alternate excluded",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000003",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-26 12:00:00.1234567",
+      "mediaType": "Video",
+      "data": {
+        "VideoType": "VideoFile",
+        "RemoteTrailers": []
+      },
+      "presentationUniqueKey": "Movie alternate excluded",
+      "productionYear": 2001,
+      "primaryVersionId": "83000000-0000-0000-0000-000000000302",
+      "genresText": "Alternate only",
+      "tagsText": "Alternate tag"
+    },
+    {
+      "key": "Book album",
+      "id": "83000000-0000-0000-0000-000000000901",
+      "type": "MusicAlbum",
+      "name": "Book album",
+      "sortName": "book album",
+      "parentId": "80200000-0000-0000-0000-000000000009",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-21 10:00:00",
+      "inheritedParentalRatingValue": 5
+    },
+    {
+      "key": "Book album track 1",
+      "id": "83000000-0000-0000-0000-000000000902",
+      "type": "Audio",
+      "name": "Book album track 1",
+      "sortName": "book album track 1",
+      "parentId": "83000000-0000-0000-0000-000000000901",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000901",
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-26 12:00:03.1234567",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Book album track 2",
+      "id": "83000000-0000-0000-0000-000000000903",
+      "type": "Audio",
+      "name": "Book album track 2",
+      "sortName": "book album track 2",
+      "parentId": "83000000-0000-0000-0000-000000000901",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000901",
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-26 12:00:02.1234567",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "Book album track 3",
+      "id": "83000000-0000-0000-0000-000000000904",
+      "type": "Audio",
+      "name": "Book album track 3",
+      "sortName": "book album track 3",
+      "parentId": "83000000-0000-0000-0000-000000000901",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "83000000-0000-0000-0000-000000000901",
+        "80200000-0000-0000-0000-000000000009",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "child",
+      "dateCreated": "2026-10-26 12:00:01.1234567",
+      "mediaType": "Audio"
+    },
+    {
+      "key": "genreAction",
+      "id": "85000000-0000-0000-0000-000000000001",
+      "type": "Genre",
+      "name": "Action",
+      "cleanName": "action",
+      "sortName": "action",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-action"
+    },
+    {
+      "key": "genreActionCopy",
+      "id": "85000000-0000-0000-0000-000000000002",
+      "type": "Genre",
+      "name": "Action duplicate",
+      "cleanName": "action",
+      "sortName": "action",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-action"
+    },
+    {
+      "key": "genreDrama",
+      "id": "85000000-0000-0000-0000-000000000003",
+      "type": "Genre",
+      "name": "Drama",
+      "cleanName": "drama",
+      "sortName": "drama",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-3"
+    },
+    {
+      "key": "genreUnused",
+      "id": "85000000-0000-0000-0000-000000000004",
+      "type": "Genre",
+      "name": "Unused",
+      "cleanName": "unused",
+      "sortName": "unused",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-4"
+    },
+    {
+      "key": "genreHidden",
+      "id": "85000000-0000-0000-0000-000000000005",
+      "type": "Genre",
+      "name": "Hidden",
+      "cleanName": "hidden",
+      "sortName": "hidden",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-5",
+      "inheritedParentalRatingValue": 4096
+    },
+    {
+      "key": "genreSharedA",
+      "id": "85000000-0000-0000-0000-000000000006",
+      "type": "Genre",
+      "name": "Shared A",
+      "cleanName": "shared a",
+      "sortName": "shared a",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-shared"
+    },
+    {
+      "key": "genreSharedB",
+      "id": "85000000-0000-0000-0000-000000000007",
+      "type": "Genre",
+      "name": "Shared B",
+      "cleanName": "shared b",
+      "sortName": "shared b",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-shared"
+    },
+    {
+      "key": "genreNullA",
+      "id": "85000000-0000-0000-0000-000000000008",
+      "type": "Genre",
+      "name": "Null A",
+      "cleanName": "null a",
+      "sortName": "null a",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": null
+    },
+    {
+      "key": "genreNullB",
+      "id": "85000000-0000-0000-0000-000000000009",
+      "type": "Genre",
+      "name": "Null B",
+      "cleanName": "null b",
+      "sortName": "null b",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": null
+    },
+    {
+      "key": "genreOwned",
+      "id": "85000000-0000-0000-0000-000000000010",
+      "type": "Genre",
+      "name": "Owned",
+      "cleanName": "owned",
+      "sortName": "owned",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-10",
+      "ownerId": "83000000-0000-0000-0000-000000000301"
+    },
+    {
+      "key": "musicGenreAction",
+      "id": "85000000-0000-0000-0000-000000000011",
+      "type": "MusicGenre",
+      "name": "Music Action",
+      "cleanName": "action",
+      "sortName": "action",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-11"
+    },
+    {
+      "key": "musicGenreRock",
+      "id": "85000000-0000-0000-0000-000000000012",
+      "type": "MusicGenre",
+      "name": "Rock",
+      "cleanName": "rock",
+      "sortName": "rock",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-12"
+    },
+    {
+      "key": "musicGenreUnused",
+      "id": "85000000-0000-0000-0000-000000000013",
+      "type": "MusicGenre",
+      "name": "Unused Music",
+      "cleanName": "unused music",
+      "sortName": "unused music",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-13"
+    },
+    {
+      "key": "musicArtist",
+      "id": "85000000-0000-0000-0000-000000000014",
+      "type": "MusicArtist",
+      "name": "Facet Artist",
+      "cleanName": "facet artist",
+      "sortName": "facet artist",
+      "parentId": "80200000-0000-0000-0000-000000000011",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "80200000-0000-0000-0000-000000000011",
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ],
+      "pathKind": "facet",
+      "presentationUniqueKey": "filter-name-14",
+      "genresText": "Rock",
+      "tagsText": "Neutral"
+    }
+  ],
+  "links": [],
+  "itemValues": [
+    {
+      "key": "facetValue1",
+      "id": "85000000-0000-0001-0000-000000000001",
+      "type": 2,
+      "value": "Action",
+      "cleanValue": "action"
+    },
+    {
+      "key": "facetValue2",
+      "id": "85000000-0000-0001-0000-000000000002",
+      "type": 2,
+      "value": "ÁCTION",
+      "cleanValue": "action"
+    },
+    {
+      "key": "facetValue3",
+      "id": "85000000-0000-0001-0000-000000000003",
+      "type": 2,
+      "value": "Drama",
+      "cleanValue": "drama"
+    },
+    {
+      "key": "facetValue4",
+      "id": "85000000-0000-0001-0000-000000000004",
+      "type": 2,
+      "value": "drama",
+      "cleanValue": "drama"
+    },
+    {
+      "key": "facetValue5",
+      "id": "85000000-0000-0001-0000-000000000005",
+      "type": 2,
+      "value": "Unregistered",
+      "cleanValue": "unregistered"
+    },
+    {
+      "key": "facetValue6",
+      "id": "85000000-0000-0001-0000-000000000006",
+      "type": 2,
+      "value": "Hidden",
+      "cleanValue": "hidden"
+    },
+    {
+      "key": "facetValue7",
+      "id": "85000000-0000-0001-0000-000000000007",
+      "type": 2,
+      "value": "Shared A",
+      "cleanValue": "shared a"
+    },
+    {
+      "key": "facetValue8",
+      "id": "85000000-0000-0001-0000-000000000008",
+      "type": 2,
+      "value": "Shared B",
+      "cleanValue": "shared b"
+    },
+    {
+      "key": "facetValue9",
+      "id": "85000000-0000-0001-0000-000000000009",
+      "type": 2,
+      "value": "Null A",
+      "cleanValue": "null a"
+    },
+    {
+      "key": "facetValue10",
+      "id": "85000000-0000-0001-0000-000000000010",
+      "type": 2,
+      "value": "Null B",
+      "cleanValue": "null b"
+    },
+    {
+      "key": "facetValue11",
+      "id": "85000000-0000-0001-0000-000000000011",
+      "type": 2,
+      "value": "Owned",
+      "cleanValue": "owned"
+    },
+    {
+      "key": "facetValue12",
+      "id": "85000000-0000-0001-0000-000000000012",
+      "type": 2,
+      "value": "Rock",
+      "cleanValue": "rock"
+    },
+    {
+      "key": "facetValue13",
+      "id": "85000000-0000-0001-0000-000000000013",
+      "type": 2,
+      "value": "Restricted",
+      "cleanValue": "restricted"
+    },
+    {
+      "key": "facetValue14",
+      "id": "85000000-0000-0001-0000-000000000014",
+      "type": 2,
+      "value": "Owned only",
+      "cleanValue": "owned only"
+    },
+    {
+      "key": "facetValue15",
+      "id": "85000000-0000-0001-0000-000000000015",
+      "type": 2,
+      "value": "Alternate only",
+      "cleanValue": "alternate only"
+    },
+    {
+      "key": "facetValue16",
+      "id": "85000000-0000-0001-0000-000000000016",
+      "type": 2,
+      "value": "",
+      "cleanValue": ""
+    },
+    {
+      "key": "facetValue17",
+      "id": "85000000-0000-0001-0000-000000000017",
+      "type": 2,
+      "value": "  ",
+      "cleanValue": "  "
+    },
+    {
+      "key": "facetValue18",
+      "id": "85000000-0000-0001-0000-000000000018",
+      "type": 4,
+      "value": "Sports",
+      "cleanValue": "sports"
+    },
+    {
+      "key": "facetValue19",
+      "id": "85000000-0000-0001-0000-000000000019",
+      "type": 4,
+      "value": "sports",
+      "cleanValue": "sports"
+    },
+    {
+      "key": "facetValue20",
+      "id": "85000000-0000-0001-0000-000000000020",
+      "type": 4,
+      "value": "SPORTS",
+      "cleanValue": "sports"
+    },
+    {
+      "key": "facetValue21",
+      "id": "85000000-0000-0001-0000-000000000021",
+      "type": 4,
+      "value": "Kids",
+      "cleanValue": "kids"
+    },
+    {
+      "key": "facetValue22",
+      "id": "85000000-0000-0001-0000-000000000022",
+      "type": 4,
+      "value": "News",
+      "cleanValue": "news"
+    },
+    {
+      "key": "facetValue23",
+      "id": "85000000-0000-0001-0000-000000000023",
+      "type": 4,
+      "value": "Neutral",
+      "cleanValue": "neutral"
+    },
+    {
+      "key": "facetValue24",
+      "id": "85000000-0000-0001-0000-000000000024",
+      "type": 4,
+      "value": "Restricted tag",
+      "cleanValue": "restricted tag"
+    },
+    {
+      "key": "facetValue25",
+      "id": "85000000-0000-0001-0000-000000000025",
+      "type": 4,
+      "value": "Owned tag",
+      "cleanValue": "owned tag"
+    },
+    {
+      "key": "facetValue26",
+      "id": "85000000-0000-0001-0000-000000000026",
+      "type": 4,
+      "value": "Alternate tag",
+      "cleanValue": "alternate tag"
+    },
+    {
+      "key": "facetValue27",
+      "id": "85000000-0000-0001-0000-000000000027",
+      "type": 4,
+      "value": "binary\u0000tag",
+      "cleanValue": "binary tag"
+    },
+    {
+      "key": "facetValue28",
+      "id": "85000000-0000-0001-0000-000000000028",
+      "type": 4,
+      "value": "",
+      "cleanValue": ""
+    },
+    {
+      "key": "facetValue29",
+      "id": "85000000-0000-0001-0000-000000000029",
+      "type": 4,
+      "value": "  ",
+      "cleanValue": "  "
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue1"
+    },
+    {
+      "itemKey": "Movie second library",
+      "valueKey": "facetValue1"
+    },
+    {
+      "itemKey": "Track new A",
+      "valueKey": "facetValue1"
+    },
+    {
+      "itemKey": "Album newest",
+      "valueKey": "facetValue1"
+    },
+    {
+      "itemKey": "Series Single",
+      "valueKey": "facetValue1"
+    },
+    {
+      "itemKey": "Movie newest copy",
+      "valueKey": "facetValue2"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "valueKey": "facetValue3"
+    },
+    {
+      "itemKey": "Movie same date Z",
+      "valueKey": "facetValue3"
+    },
+    {
+      "itemKey": "Episode Single 1",
+      "valueKey": "facetValue3"
+    },
+    {
+      "itemKey": "Movie same date Z",
+      "valueKey": "facetValue4"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue5"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue6"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue7"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue8"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue9"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue10"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue11"
+    },
+    {
+      "itemKey": "Track new A",
+      "valueKey": "facetValue12"
+    },
+    {
+      "itemKey": "Track new B",
+      "valueKey": "facetValue12"
+    },
+    {
+      "itemKey": "Album older",
+      "valueKey": "facetValue12"
+    },
+    {
+      "itemKey": "musicArtist",
+      "valueKey": "facetValue12"
+    },
+    {
+      "itemKey": "Movie restricted",
+      "valueKey": "facetValue13"
+    },
+    {
+      "itemKey": "Movie owned excluded",
+      "valueKey": "facetValue14"
+    },
+    {
+      "itemKey": "Movie alternate excluded",
+      "valueKey": "facetValue15"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue16"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "valueKey": "facetValue17"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue18"
+    },
+    {
+      "itemKey": "Series Single",
+      "valueKey": "facetValue18"
+    },
+    {
+      "itemKey": "Episode Single 1",
+      "valueKey": "facetValue18"
+    },
+    {
+      "itemKey": "Movie newest copy",
+      "valueKey": "facetValue19"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "valueKey": "facetValue20"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "valueKey": "facetValue21"
+    },
+    {
+      "itemKey": "Episode Single 2",
+      "valueKey": "facetValue21"
+    },
+    {
+      "itemKey": "Album newest",
+      "valueKey": "facetValue21"
+    },
+    {
+      "itemKey": "Movie same date Z",
+      "valueKey": "facetValue22"
+    },
+    {
+      "itemKey": "Series Multiple",
+      "valueKey": "facetValue22"
+    },
+    {
+      "itemKey": "Episode Multiple 1",
+      "valueKey": "facetValue22"
+    },
+    {
+      "itemKey": "Movie second library",
+      "valueKey": "facetValue23"
+    },
+    {
+      "itemKey": "Track new A",
+      "valueKey": "facetValue23"
+    },
+    {
+      "itemKey": "Album older",
+      "valueKey": "facetValue23"
+    },
+    {
+      "itemKey": "musicArtist",
+      "valueKey": "facetValue23"
+    },
+    {
+      "itemKey": "Movie restricted",
+      "valueKey": "facetValue24"
+    },
+    {
+      "itemKey": "Movie owned excluded",
+      "valueKey": "facetValue25"
+    },
+    {
+      "itemKey": "Movie alternate excluded",
+      "valueKey": "facetValue26"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue27"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "valueKey": "facetValue28"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "valueKey": "facetValue29"
+    }
+  ],
+  "userData": [],
+  "cases": [
+    {
+      "name": "filters library movies",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters library all",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters physical movies",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters media video",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&MediaTypes=Video",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters media audio empty",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&MediaTypes=Audio",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters default user",
+      "action": "filters",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters default api key",
+      "action": "filters",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "filters api key explicit user",
+      "action": "filters",
+      "query": "IncludeItemTypes=Movie&UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "filters aggregate",
+      "action": "filters",
+      "query": "ParentId=f27caa37-e514-2225-cced-ed48f6553502&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters user root",
+      "action": "filters",
+      "query": "ParentId=e9d5075a-555c-1cbc-394e-ec4cef295274&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters nonfolder",
+      "action": "filters",
+      "query": "ParentId=83000000-0000-0000-0000-000000000301&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters missing parent",
+      "action": "filters",
+      "query": "ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "filters empty parent",
+      "action": "filters",
+      "query": "ParentId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "filters invalid parent",
+      "action": "filters",
+      "query": "ParentId=bad",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "filters trailer bypass",
+      "action": "filters",
+      "query": "IncludeItemTypes=Trailer&ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters program bypass",
+      "action": "filters",
+      "query": "IncludeItemTypes=Program&ParentId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters mixed types validate parent",
+      "action": "filters",
+      "query": "IncludeItemTypes=Trailer,Program&ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "filters unknown type ignored",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=not-a-kind",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters repeated types",
+      "action": "filters",
+      "query": "ParentId=f27caa37-e514-2225-cced-ed48f6553502&IncludeItemTypes=Movie&IncludeItemTypes=Series",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters music",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=MusicAlbum,Audio",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters tv",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Series,Episode",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters unbound flags",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsAiring=bad&IsKids=bad",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters nonrecursive ignored",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters second library",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000006&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters parental rating",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters blocked tags",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "Kids"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters allowed tags",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [
+          "Sports"
+        ],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters explicit disabled library",
+      "action": "filters",
+      "query": "ParentId=80200000-0000-0000-0000-000000000006&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 default all",
+      "action": "filters2",
+      "query": "",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 default movies",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 physical movies",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 collection ignores nonrecursive",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 physical nonrecursive",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000003&IncludeItemTypes=Movie&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 library all",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 grouped view",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000115&IncludeItemTypes=Movie&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 tv series",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Series",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 tv seasons",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Season",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 tv episodes",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Episode",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 series all",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000317",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 series types under series",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000317&IncludeItemTypes=Series",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 season types under series",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000317&IncludeItemTypes=Season",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 season nonrecursive streams",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000318&IncludeItemTypes=Season&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 leaf nonrecursive",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000301&IncludeItemTypes=Movie&Recursive=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 leaf recursive",
+      "action": "filters2",
+      "query": "ParentId=83000000-0000-0000-0000-000000000301&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 missing parent fallback",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie&ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 empty parent",
+      "action": "filters2",
+      "query": "ParentId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "filters2 invalid parent",
+      "action": "filters2",
+      "query": "ParentId=bad",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "filters2 api key movies",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "filters2 api key explicit user",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie&UserId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "auth": "apiKey"
+    },
+    {
+      "name": "filters2 aggregate",
+      "action": "filters2",
+      "query": "ParentId=f27caa37-e514-2225-cced-ed48f6553502&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 user root",
+      "action": "filters2",
+      "query": "ParentId=e9d5075a-555c-1cbc-394e-ec4cef295274&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 music Audio",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=Audio",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 music MusicAlbum",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=MusicAlbum",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 music MusicArtist",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=MusicArtist",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 music MusicVideo",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=MusicVideo",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 mixed music namespace",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000012&IncludeItemTypes=Audio,MusicAlbum",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 mixed audio video",
+      "action": "filters2",
+      "query": "ParentId=f27caa37-e514-2225-cced-ed48f6553502&IncludeItemTypes=Movie,Audio",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 unbound media types",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&MediaTypes=not-a-type",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsMovie true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsMovie=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsMovie false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsMovie=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsSeries true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Series&IsSeries=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsSeries false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000008&IncludeItemTypes=Series&IsSeries=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsSports true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsSports=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsSports false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsSports=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsKids true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsKids=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsKids false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsKids=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsNews true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsNews=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsNews false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsNews=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsAiring true",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsAiring=true",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 IsAiring false",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie&IsAiring=false",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 invalid flag",
+      "action": "filters2",
+      "query": "IsAiring=bad",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      },
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "filters2 trailer bypass",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Trailer&ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 program bypass",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Program&ParentId=00000000-0000-0000-0000-000000000000",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 mixed types missing fallback",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Trailer,Program&ParentId=85000000-0000-9999-0000-999999999999",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 unknown type ignored",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=not-a-kind",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 parental rating",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 10,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 blocked tags",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "Kids"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 allowed tags",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [
+          "Sports"
+        ],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 enabled folders",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 no enabled folders",
+      "action": "filters2",
+      "query": "IncludeItemTypes=Movie",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    },
+    {
+      "name": "filters2 unbound unknown controls",
+      "action": "filters2",
+      "query": "ParentId=80200000-0000-0000-0000-000000000004&IsPlayed=bad&Limit=bad&SortBy=bad",
+      "scope": [],
+      "endpoints": [
+        "items"
+      ],
+      "omitScope": true,
+      "configuration": {
+        "GroupedFolders": [
+          "80200000-0000-0000-0000-000000000004",
+          "80200000-0000-0000-0000-000000000006",
+          "80200000-0000-0000-0000-000000000008",
+          "80200000-0000-0000-0000-000000000010",
+          "80200000-0000-0000-0000-000000000012"
+        ],
+        "LatestItemsExcludes": [],
+        "HidePlayedInLatest": false
+      },
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": []
+      }
+    }
+  ],
+  "mediaStreams": [
+    {
+      "itemKey": "Movie oldest",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "eng"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 1,
+      "streamType": "Audio",
+      "language": "en"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 2,
+      "streamType": "Audio",
+      "language": "EN"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 3,
+      "streamType": "Audio",
+      "language": "English"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 4,
+      "streamType": "Audio",
+      "language": "xx-custom"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 5,
+      "streamType": "Audio",
+      "language": null
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 6,
+      "streamType": "Audio",
+      "language": ""
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 7,
+      "streamType": "Subtitle",
+      "language": "zho"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 8,
+      "streamType": "Subtitle",
+      "language": "chi"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 9,
+      "streamType": "Subtitle",
+      "language": "zh"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 10,
+      "streamType": "Subtitle",
+      "language": "fre"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 11,
+      "streamType": "Subtitle",
+      "language": "fra"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 12,
+      "streamType": "Subtitle",
+      "language": "fr"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 13,
+      "streamType": "Subtitle",
+      "language": null
+    },
+    {
+      "itemKey": "Movie newest copy",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "deu"
+    },
+    {
+      "itemKey": "Movie same date A",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "ja"
+    },
+    {
+      "itemKey": "Movie second library",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "spa"
+    },
+    {
+      "itemKey": "Movie restricted",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "restricted-language"
+    },
+    {
+      "itemKey": "Movie owned excluded",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "owned-language"
+    },
+    {
+      "itemKey": "Movie alternate excluded",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "alternate-language"
+    },
+    {
+      "itemKey": "Movie owned excluded",
+      "index": 1,
+      "streamType": "Subtitle",
+      "language": "owned-subtitle"
+    },
+    {
+      "itemKey": "Movie alternate excluded",
+      "index": 1,
+      "streamType": "Subtitle",
+      "language": "alternate-subtitle"
+    },
+    {
+      "itemKey": "Episode Single 1",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "kor"
+    },
+    {
+      "itemKey": "Episode Single 1",
+      "index": 1,
+      "streamType": "Subtitle",
+      "language": "it"
+    },
+    {
+      "itemKey": "Episode Single 2",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "por"
+    },
+    {
+      "itemKey": "Episode Multiple 1",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "ru"
+    },
+    {
+      "itemKey": "Episode Multiple 1",
+      "index": 1,
+      "streamType": "Subtitle",
+      "language": "dut"
+    },
+    {
+      "itemKey": "Track new A",
+      "index": 0,
+      "streamType": "Audio",
+      "language": "music-language"
+    },
+    {
+      "itemKey": "Movie oldest",
+      "index": 14,
+      "streamType": "Video",
+      "language": "video-language"
+    }
+  ],
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": []
+    }
+  }
+}

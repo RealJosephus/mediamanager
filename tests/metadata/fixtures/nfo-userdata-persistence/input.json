@@ -1,0 +1,38 @@
+[
+  {
+    "name": "three nodes commit independently and publish cache before each event",
+    "providerId": "501",
+    "xml": "<movie><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></movie>"
+  },
+  {
+    "name": "cancellation raised by first event stops before the second node",
+    "cancelAfterEvent": 1,
+    "xml": "<movie><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></movie>"
+  },
+  {
+    "name": "second node SQL failure preserves the first commit and event",
+    "sqlFailure": "second-node",
+    "xml": "<movie><watched>true</watched><playcount>2</playcount><lastplayed>2025-01-02 03:04:05</lastplayed></movie>"
+  },
+  {
+    "name": "second key SQL failure rolls back the whole first node",
+    "providerId": "502",
+    "sqlFailure": "second-key",
+    "xml": "<movie><watched>true</watched><playcount>2</playcount></movie>"
+  },
+  {
+    "name": "event failure propagates after database cache and item publication",
+    "eventFailureAt": 1,
+    "xml": "<movie><watched>true</watched><playcount>2</playcount></movie>"
+  },
+  {
+    "name": "pre-cancelled parse performs no user data work",
+    "preCancelled": true,
+    "xml": "<movie><watched>true</watched><playcount>2</playcount></movie>"
+  },
+  {
+    "name": "rehydrate SELECT failure preserves the commit and private cache without item publication or event",
+    "rehydrateFailure": true,
+    "xml": "<movie><watched>true</watched><playcount>2</playcount></movie>"
+  }
+]

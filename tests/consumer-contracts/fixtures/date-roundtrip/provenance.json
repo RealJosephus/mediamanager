@@ -1,0 +1,45 @@
+{
+  "recordedAt": "2026-10-11T17:15:11.163Z",
+  "files": [
+    {
+      "filename": "taipei.json",
+      "source": "D:/mediamanager-validation/20261012-r23-date-roundtrip/report.json",
+      "sha256": "97a2b982cfc3bbd1bddcf1729f20ff9275dccad08cbf2c081920396a3bcc0803"
+    },
+    {
+      "filename": "shanghai-candidate.json",
+      "source": "D:/mediamanager-validation/20261012-r23-date-shanghai-candidate/report.json",
+      "sha256": "5e3037da9eaa61010387af15b83cba0a86de628812ab52285dab4b48acdec1f6"
+    },
+    {
+      "filename": "platform.json",
+      "source": "D:/mediamanager-validation/20261012-r23-date-roundtrip/platform.json",
+      "sha256": "fb394a418859ef5561aedfe9ff4287a436ee9358dd18ce5e054899a374b2e8c7"
+    }
+  ],
+  "references": [
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-native-initialized/initialization.json",
+      "sha256": "70b1c86f15d7000041c6af714575b6cfa1962f763cf9db14340097c4042635a6"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261011/results/jellyfin-designated-workspace-controlled-v2/manifest.json",
+      "sha256": "3299791acef852bd33b5c521a32dbc1d1fcd0741e38a80d6351b87bd4324ae6d"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-date-roundtrip/report.json",
+      "sha256": "97a2b982cfc3bbd1bddcf1729f20ff9275dccad08cbf2c081920396a3bcc0803"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-date-shanghai-candidate/report.json",
+      "sha256": "5e3037da9eaa61010387af15b83cba0a86de628812ab52285dab4b48acdec1f6"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261012-r23-date-roundtrip/platform.json",
+      "sha256": "fb394a418859ef5561aedfe9ff4287a436ee9358dd18ce5e054899a374b2e8c7"
+    }
+  ],
+  "candidateVerified": false,
+  "phaseAcceptance": false,
+  "originalFixturesUnchanged": true
+}

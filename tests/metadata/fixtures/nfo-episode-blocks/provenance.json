@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-08T02:21:01.755Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/nfo-episode-blocks/native.json",
+      "sha256": "114bf46367fb9678151749be4897e0640a8cbc7113415d0938328880df1212aa"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/nfo-episode-blocks/input.json",
+      "sha256": "a7a0b537cda84c819e5d869c39b57d0988ce6c7295bd0687d4d0949557fcb2cd"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/nfo-episode-blocks/Program.cs",
+      "sha256": "c3aaabf312a3523c462b9cbc098418b52d5ddb98f2c351598d3ee8e83b7448e7"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/nfo-episode-blocks/Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "jellyfin": {
+    "root": "D:/jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "relevantSourceWorktreeClean": true,
+    "sources": {
+      "MediaBrowser.XbmcMetadata/Parsers/EpisodeNfoParser.cs": "db512780a4880eba3d5a86de035164e8f7dc3bc63719d8eb5a50e906cb8c2105",
+      "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs": "f50fd3439d423330b0bc1c40ab5b413a2c2b3811a14a0955ecd9fbb63b32c152",
+      "MediaBrowser.XbmcMetadata/Providers/EpisodeNfoProvider.cs": "64a3c4cb68fb4141d282ee10948d95a09ef44859ddb6895023ad8264d333fe76",
+      "MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs": "3e9cb414ae0efe0752c4d935988f5fce61ec30a26cc31d27b2c436580c94d8bc",
+      "MediaBrowser.Controller/Providers/MetadataResult.cs": "71fb22c6a4da1e4ec2af9e872eede684af560c5f5dcf17b9dde83dd4f644d856",
+      "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs": "45e5ecd70806044d4d803f2d7b9a2b9c370d9ba21c232234f2d7de61f7ca446c",
+      "MediaBrowser.XbmcMetadata/Configuration/NfoConfigurationExtension.cs": "b31130b924c80f9c506edf4bf091604584beaa80c13666b4a6c8727270e61526"
+    }
+  },
+  "runtime": {
+    "platform": "win32",
+    "os": "Microsoft Windows NT 10.0.26300.0",
+    "culture": "zh-CN",
+    "uiCulture": "zh-CN",
+    "timezone": "Asia/Taipei",
+    "node": "v24.16.0",
+    "dotnet": {
+      "path": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "path": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+    },
+    "assemblies": {
+      "MediaBrowser.XbmcMetadata.dll": {
+        "bytes": 84992,
+        "sha256": "82ddd82082f44faf43284258609ba4efce9a94759d24e0f7161ebf5c7d18558e"
+      },
+      "MediaBrowser.Controller.dll": {
+        "bytes": 655872,
+        "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+      },
+      "MediaBrowser.Common.dll": {
+        "bytes": 48640,
+        "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+      },
+      "MediaBrowser.Model.dll": {
+        "bytes": 489472,
+        "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+      },
+      "Emby.Server.Implementations.dll": {
+        "bytes": 1673728,
+        "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+      },
+      "Jellyfin.Database.Implementations.dll": {
+        "bytes": 249344,
+        "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+      },
+      "Jellyfin.Extensions.dll": {
+        "bytes": 37888,
+        "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+      }
+    }
+  },
+  "record": {
+    "path": "D:/mediamanager-validation/20261005/results/nfo-episode-blocks-20261008-v5-final/record.json",
+    "sha256": "1beeabd9e5689a4c6a7d94cf0acaccdd403337145ccb02042c35dd3ecc125494",
+    "sourceFilesSha256": "7d12a7679ef5f1d81880d8990fdc63c7c8c13d92b8992378eaca67e902e6f75f",
+    "oracleAssemblySha256": "39844bcbe251d2653ccac394a03d8dad3f76ee67a66127d65b59a08a818c6de7",
+    "rawNativeSha256": "114bf46367fb9678151749be4897e0640a8cbc7113415d0938328880df1212aa",
+    "portableNativeSha256": "114bf46367fb9678151749be4897e0640a8cbc7113415d0938328880df1212aa",
+    "rawNativeBytes": 111306,
+    "portableNativeBytes": 111306,
+    "rawCarriageReturns": 0,
+    "portableCarriageReturns": 0,
+    "rawFinalByte": 10,
+    "portableFinalByte": 10,
+    "buildStatus": 0,
+    "processStatus": 0
+  },
+  "command": "node tools/validation/oracle.js tests/metadata/fixtures/nfo-episode-blocks/Oracle.csproj D:/mediamanager-validation/20261005/results/nfo-episode-blocks-20261008-v5-final tests/metadata/fixtures/nfo-episode-blocks/input.json {output}/native.json"
+}

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>TMDbLib</id>
+    <version>3.0.0</version>
+    <authors>LordMike,Naliath,Jellyfin Contributors</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <readme>Readme.md</readme>
+    <projectUrl>https://github.com/jellyfin/TMDbLib</projectUrl>
+    <description>Package Description</description>
+    <copyright>Michael Bisbjerg 2013-2023, Jellyfin Contributors 2023-2026</copyright>
+    <repository type="git" url="https://github.com/jellyfin/TMDbLib" commit="7abd4c8e02ae3bba09c9f7a329b99c0f22978cb6" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Newtonsoft.Json" version="13.0.4" include="Runtime,Build,Native,ContentFiles,Analyzers,BuildTransitive" />
+        <dependency id="SmartAnalyzers.MultithreadingAnalyzer" version="1.1.31" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net10.0">
+        <dependency id="Newtonsoft.Json" version="13.0.4" include="Runtime,Build,Native,ContentFiles,Analyzers,BuildTransitive" />
+        <dependency id="SmartAnalyzers.MultithreadingAnalyzer" version="1.1.31" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "projectionLogic": {
+    "spec": {
+      "id": "studio-filter-native-v1-contract-projection",
+      "version": 1,
+      "topLevel": "Drop only kind and mode; add frozenJellyfin, the exact source path, and its SHA-256; preserve schemaVersion, fixtureInputSha256, endpoints, setup, and cases.",
+      "cases": "Preserve every case, response item, JSON field, and array order verbatim. The authoritative contract excludes all runtime-native ids.",
+      "authority": "The v1 projection is created only from the pinned main native contract and has no predecessor fixture."
+    },
+    "sha256": "9d8f42ad9345bee38e629979b1569616224c72eb5d38d5b6caeed5acdc6af239"
+  },
+  "authoritativeContract": {
+    "path": ".test-input/evidence/byname-filter-inputs/studio-filter-restoration-v1/native-contract.json",
+    "sha256": "6178429e576c63ebfa4e78eee12ae2d7dc2001ef3672728178944e396afcb832"
+  },
+  "fixtureInput": {
+    "path": "tests/library/fixtures/studio-filters/input.json",
+    "sha256": "5707c13b653736bf3127087c293fb63cf053f31eb4f822e70f6c37ebc557693c"
+  },
+  "trackedFixture": {
+    "path": "tests/library/fixtures/studio-filters/native.json",
+    "sha256": "86950a31a3f9fc7a78aa579b3d79acf7bda6eab38b4a2ab93bafffe4daa34b2a"
+  },
+  "integrityTest": {
+    "path": "tests/library/studio-filter-native-fixture.test.js",
+    "sha256": "e8268a90ff421a836fc6d522ec2ea4a379249c5a6c0617942c8e8bded8aa18ed"
+  },
+  "projector": {
+    "path": "tools/compat/project-studio-filter-fixture.js",
+    "sha256": "ccf81ec877c53a5282430c7a410909b216b30b6819046beacccd7d98c1325330"
+  }
+}

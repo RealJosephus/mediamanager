@@ -1,0 +1,5404 @@
+{
+  "schemaVersion": 1,
+  "results": [
+    {
+      "name": "upcoming builds the native episode query and counts the paged list",
+      "status": 200,
+      "startIndex": 1,
+      "totalRecordCount": 3,
+      "items": [
+        "special",
+        "two",
+        "missing"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "PremiereDate",
+              "SortOrder": "Ascending"
+            },
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": "2026-10-14T00:00:00Z",
+          "StartIndex": 1,
+          "Limit": 2,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "91000000-0000-0000-0000-000000000099",
+          "Recursive": true,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "SortName",
+            "ParentId"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [
+            "SortName",
+            "ParentId"
+          ],
+          "EnableImages": false,
+          "EnableUserData": false,
+          "ImageTypeLimit": 1,
+          "imageTypes": [
+            "Primary",
+            "Backdrop"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "series episodes hide missing episodes for the default user",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 6,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "pathOnly",
+        "special",
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "series episodes include missing episodes from user preference",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 8,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "missing",
+        "flagOnly",
+        "pathOnly",
+        "special",
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "series episodes include missing episodes for an api key without a user",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 8,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "missing",
+        "flagOnly",
+        "pathOnly",
+        "special",
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": null,
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ]
+    },
+    {
+      "name": "season number chooses the matching native season",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 5,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "pathOnly",
+        "special"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        },
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "season id ignores the route series id",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "isMissing is a post-selection filter",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 2,
+      "items": [
+        "missing",
+        "pathOnly"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "isMissing false uses location rather than the repository virtual flag",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 6,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "flagOnly",
+        "special",
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "alternate start then adjacency then paging preserves native order",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 3,
+      "items": [
+        "pathOnly",
+        "special"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "non-random sortBy is ignored",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 6,
+      "items": [
+        "old",
+        "one",
+        "two",
+        "pathOnly",
+        "special",
+        "three"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode",
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "missing series returns the native message",
+      "status": 404,
+      "error": "Series not found",
+      "queries": [],
+      "dto": []
+    },
+    {
+      "name": "missing season returns the dashed native id message",
+      "status": 404,
+      "error": "No season exists with Id 91000000-0000-0000-0000-000000000098",
+      "queries": [],
+      "dto": []
+    },
+    {
+      "name": "upcoming Guid.Empty remains unscoped at the controller boundary",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "one"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "PremiereDate",
+              "SortOrder": "Ascending"
+            },
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": "2026-10-14T00:00:00Z",
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": true,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "upcoming preserves a persisted series parent for LibraryManager translation",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "one"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "PremiereDate",
+              "SortOrder": "Ascending"
+            },
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": "2026-10-14T00:00:00Z",
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "91000000-0000-0000-0000-000000000001",
+          "Recursive": true,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "upcoming preserves a persisted nonfolder parent for LibraryManager translation",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "two"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "PremiereDate",
+              "SortOrder": "Ascending"
+            },
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": "2026-10-14T00:00:00Z",
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "91000000-0000-0000-0000-000000000013",
+          "Recursive": true,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "upcoming preserves negative StartIndex and Limit on the repository query",
+      "status": 200,
+      "startIndex": -1,
+      "totalRecordCount": 2,
+      "items": [
+        "one",
+        "two"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Episode"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "PremiereDate",
+              "SortOrder": "Ascending"
+            },
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": "2026-10-14T00:00:00Z",
+          "StartIndex": -1,
+          "Limit": -1,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": true,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": true,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": null,
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": []
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "next up binds every controller option and preserves negative paging",
+      "status": 200,
+      "startIndex": -1,
+      "totalRecordCount": 7,
+      "items": [
+        "one",
+        "two"
+      ],
+      "queries": [
+        {
+          "operation": "GetNextUp",
+          "user": "shows-reader",
+          "StartIndex": -1,
+          "Limit": -1,
+          "SeriesId": "91000000-0000-0000-0000-000000000001",
+          "ParentId": "91000000-0000-0000-0000-000000000003",
+          "EnableTotalRecordCount": false,
+          "NextUpDateCutoff": "2026-10-06T00:00:00Z",
+          "EnableResumable": false,
+          "EnableRewatching": true,
+          "dtoFields": [
+            "SortName",
+            "ParentId"
+          ],
+          "EnableImages": false,
+          "EnableUserData": false,
+          "ImageTypeLimit": 1,
+          "imageTypes": [
+            "Primary",
+            "Backdrop"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [
+            "SortName",
+            "ParentId"
+          ],
+          "EnableImages": false,
+          "EnableUserData": false,
+          "ImageTypeLimit": 1,
+          "imageTypes": [
+            "Primary",
+            "Backdrop"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "next up applies controller defaults",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "two"
+      ],
+      "queries": [
+        {
+          "operation": "GetNextUp",
+          "user": "shows-reader",
+          "StartIndex": null,
+          "Limit": null,
+          "SeriesId": null,
+          "ParentId": null,
+          "EnableTotalRecordCount": true,
+          "NextUpDateCutoff": "0001-01-01T00:00:00",
+          "EnableResumable": true,
+          "EnableRewatching": false,
+          "dtoFields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "next up controller preserves requested start over an empty manager result",
+      "status": 200,
+      "startIndex": -2,
+      "totalRecordCount": 0,
+      "items": [],
+      "queries": [
+        {
+          "operation": "GetNextUp",
+          "user": "shows-reader",
+          "StartIndex": -2,
+          "Limit": null,
+          "SeriesId": null,
+          "ParentId": null,
+          "EnableTotalRecordCount": true,
+          "NextUpDateCutoff": "0001-01-01T00:00:00",
+          "EnableResumable": true,
+          "EnableRewatching": false,
+          "dtoFields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "next up returns not found for an unresolved user",
+      "status": 404,
+      "error": null,
+      "queries": [],
+      "dto": []
+    },
+    {
+      "name": "seasons hide missing rows for the default user",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 4,
+      "items": [
+        "Specials",
+        "Season 1",
+        "Season 2",
+        "Unnumbered Season"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [
+            "SortName",
+            "ParentId"
+          ],
+          "EnableImages": false,
+          "EnableUserData": false,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "seasons respect missing filter when the user displays missing episodes",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Missing Season"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": true,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "seasons are userless for an api key",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 5,
+      "items": [
+        "Specials",
+        "Season 1",
+        "Season 2",
+        "Missing Season",
+        "Unnumbered Season"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": null,
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ]
+    },
+    {
+      "name": "seasons select the special season",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Specials"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": true,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "season adjacency follows native filtered sort order",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 3,
+      "items": [
+        "Specials",
+        "Season 1",
+        "Season 2"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "shows-api-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": "91000000-0000-0000-0000-000000000003",
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "user seasons group duplicate presentation keys",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Season High"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": "shows-reader",
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "duplicate-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": false,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ]
+    },
+    {
+      "name": "userless seasons retain duplicate presentation keys",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 3,
+      "items": [
+        "Duplicate Season Alternate",
+        "Duplicate Season",
+        "Duplicate Season High"
+      ],
+      "queries": [
+        {
+          "includeItemTypes": [
+            "Season"
+          ],
+          "orderBy": [
+            {
+              "OrderBy": "SortName",
+              "SortOrder": "Ascending"
+            }
+          ],
+          "MinPremiereDate": null,
+          "StartIndex": null,
+          "Limit": null,
+          "user": null,
+          "GroupByPresentationUniqueKey": true,
+          "EnableGroupByMetadataKey": false,
+          "EnableTotalRecordCount": false,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "Recursive": false,
+          "SearchTerm": null,
+          "genres": [],
+          "Tags": [],
+          "ExcludeItemIds": [],
+          "ExcludeArtistIds": [],
+          "SeriesPresentationUniqueKey": "duplicate-series",
+          "AncestorWithPresentationUniqueKey": null,
+          "IsMissing": null,
+          "IsSpecialSeason": null,
+          "AdjacentTo": null,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ]
+        }
+      ],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ]
+    },
+    {
+      "name": "missing series seasons returns an empty not found",
+      "status": 404,
+      "error": null,
+      "queries": [],
+      "dto": []
+    },
+    {
+      "name": "missing series seasons precedes dto construction",
+      "status": 404,
+      "error": null,
+      "queries": [],
+      "dto": []
+    },
+    {
+      "name": "similar series applies action defaults before manager projection",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Show",
+          "itemType": "Series",
+          "excludeArtistIds": [],
+          "user": "shows-reader",
+          "fields": [],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar binds manager options including negative limit",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 2,
+      "items": [
+        "Duplicate Show",
+        "Empty Key Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [
+            "SortName",
+            "ParentId"
+          ],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Show",
+          "itemType": "Series",
+          "excludeArtistIds": [
+            "91000000-0000-0000-0000-000000000091",
+            "91000000-0000-0000-0000-000000000092"
+          ],
+          "user": "shows-reader",
+          "fields": [
+            "SortName",
+            "ParentId"
+          ],
+          "limit": -1,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar is userless for an api key",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Show",
+          "itemType": "Series",
+          "excludeArtistIds": [],
+          "user": null,
+          "fields": [],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar Guid.Empty chooses the user root",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "User Root",
+          "itemType": "UserRootFolder",
+          "excludeArtistIds": [],
+          "user": "shows-reader",
+          "fields": [],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar Guid.Empty chooses the aggregate root without a user",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Aggregate Root",
+          "itemType": "AggregateFolder",
+          "excludeArtistIds": [],
+          "user": null,
+          "fields": [],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar missing item returns not found before dto or manager",
+      "status": 404,
+      "error": null,
+      "queries": [],
+      "dto": [],
+      "managerCalls": []
+    },
+    {
+      "name": "similar Episode returns empty before dto or manager",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 0,
+      "items": [],
+      "queries": [],
+      "dto": [],
+      "managerCalls": []
+    },
+    {
+      "name": "similar IItemByName returns empty before dto or manager",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 0,
+      "items": [],
+      "queries": [],
+      "dto": [],
+      "managerCalls": []
+    },
+    {
+      "name": "similar MusicArtist is not an IItemByName early return",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [
+            "SortName"
+          ],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Artist",
+          "itemType": "MusicArtist",
+          "excludeArtistIds": [
+            "91000000-0000-0000-0000-000000000091",
+            "91000000-0000-0000-0000-000000000092"
+          ],
+          "user": "shows-reader",
+          "fields": [
+            "SortName"
+          ],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar MusicAlbum reaches the shared manager",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [
+            "SortName"
+          ],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Album",
+          "itemType": "MusicAlbum",
+          "excludeArtistIds": [
+            "91000000-0000-0000-0000-000000000091"
+          ],
+          "user": "shows-reader",
+          "fields": [
+            "SortName"
+          ],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar Audio reaches the shared manager",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": "shows-reader"
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Audio",
+          "itemType": "Audio",
+          "excludeArtistIds": [
+            "91000000-0000-0000-0000-000000000092"
+          ],
+          "user": "shows-reader",
+          "fields": [],
+          "limit": 7,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar administrator may request an unresolved user as userless",
+      "status": 200,
+      "startIndex": 0,
+      "totalRecordCount": 1,
+      "items": [
+        "Duplicate Show"
+      ],
+      "queries": [],
+      "dto": [
+        {
+          "fields": [],
+          "EnableImages": true,
+          "EnableUserData": true,
+          "ImageTypeLimit": 2147483647,
+          "imageTypes": [
+            "Primary",
+            "Art",
+            "Backdrop",
+            "Banner",
+            "Logo",
+            "Thumb",
+            "Disc",
+            "Box",
+            "Screenshot",
+            "Menu",
+            "Chapter",
+            "BoxRear",
+            "Profile"
+          ],
+          "user": null
+        }
+      ],
+      "managerCalls": [
+        {
+          "item": "Fixture Show",
+          "itemType": "Series",
+          "excludeArtistIds": [],
+          "user": null,
+          "fields": [],
+          "limit": null,
+          "libraryTypeOptions": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    {
+      "name": "similar cross-user rejection precedes user item dto and manager",
+      "exception": "MediaBrowser.Controller.Net.SecurityException",
+      "Message": "Forbidden",
+      "queries": [],
+      "dto": [],
+      "managerCalls": []
+    }
+  ],
+  "sqliteRepository": {
+    "actual": "pinned BaseItemRepository \u002B EF Core SQLite",
+    "userless": [
+      "dup-alternate-lower-id",
+      "dup-primary-low",
+      "dup-primary-high",
+      "unique"
+    ],
+    "grouped": [
+      "dup-primary-low",
+      "unique"
+    ],
+    "seasonsUserless": [
+      "season-alternate",
+      "season-primary-low",
+      "season-primary-high"
+    ],
+    "seasonsGrouped": [
+      "season-primary-low"
+    ],
+    "seasonsFilteredBeforeGrouping": [
+      "season-primary-high"
+    ],
+    "similar": {
+      "actual": "same concrete repository, deterministic SortName substituted for provider Random to isolate genre/tag, grouping, access, paging and total-count semantics",
+      "userless": [
+        "similar-both",
+        "similar-duplicate-low",
+        "similar-duplicate-high",
+        "similar-denied"
+      ],
+      "groupedAndAccessFiltered": [
+        "similar-both",
+        "similar-duplicate-low"
+      ],
+      "paged": [
+        "similar-both"
+      ],
+      "TotalRecordCount": 2,
+      "StartIndex": 0,
+      "defaults": {
+        "ParentId": "00000000-0000-0000-0000-000000000000",
+        "Recursive": false,
+        "SearchTerm": null,
+        "GroupByPresentationUniqueKey": true,
+        "EnableGroupByMetadataKey": false,
+        "EnableTotalRecordCount": true,
+        "Genres": [
+          "Drama",
+          "Mystery"
+        ],
+        "Tags": [
+          "Network",
+          "Epic"
+        ],
+        "ExcludeItemIds": [
+          "92000000-0000-0000-0000-000000000050"
+        ],
+        "IncludeItemTypes": [
+          "Series"
+        ]
+      }
+    },
+    "negativeLimit": [
+      "dup-alternate-lower-id",
+      "dup-primary-low",
+      "dup-primary-high",
+      "unique"
+    ],
+    "negativeStart": [
+      "dup-alternate-lower-id",
+      "dup-primary-low"
+    ],
+    "negativeStartIndex": -1,
+    "negativeLimitValue": -1,
+    "emptyParentScope": {
+      "topParentIds": 0,
+      "ancestorIds": 1,
+      "sentinelIsNonEmpty": true,
+      "keys": []
+    },
+    "userViewParentScopes": {
+      "liveTv": [
+        "92000000-0000-0000-0000-000000000081"
+      ],
+      "music": []
+    },
+    "nextUp": {
+      "keys": [
+        "repository-next-up"
+      ],
+      "cutoffKeys": [],
+      "lastWatched": "next-last",
+      "next": "next-candidate",
+      "specials": [
+        "next-special"
+      ],
+      "lastForRewatching": "next-old",
+      "nextForRewatching": "next-last"
+    }
+  },
+  "tvSeriesManager": {
+    "actual": "pinned TVSeriesManager with native comparers and controlled ILibraryManager/IUserDataManager seams",
+    "cases": [
+      {
+        "name": "default resumable next episode",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "resumable disabled rejects the next episode",
+        "items": [],
+        "TotalRecordCount": 0,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "rewatching adds the played successor",
+        "items": [
+          "one",
+          "two"
+        ],
+        "TotalRecordCount": 2,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": true
+          }
+        ]
+      },
+      {
+        "name": "negative paging is preserved and unbounded",
+        "items": [
+          "one",
+          "two"
+        ],
+        "TotalRecordCount": 2,
+        "StartIndex": -1,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": true
+          }
+        ]
+      },
+      {
+        "name": "total count can be disabled",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 0,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "series scope bypasses key discovery",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "missing series scope keeps unbounded key discovery",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "non-series scope keeps unbounded key discovery",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "empty series key caps discovery at eleven",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": 11,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "parent scope passes the resolved parent",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "missing parent passes an empty parent list",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [],
+            "cutoff": "0001-01-01T00:00:00"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "date cutoff reaches key discovery",
+        "items": [
+          "two"
+        ],
+        "TotalRecordCount": 1,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "2026-10-06T00:00:00Z"
+          },
+          {
+            "operation": "GetNextUpEpisodesBatch",
+            "keys": [
+              "shows-api-series"
+            ],
+            "includeSpecials": true,
+            "includeRewatching": false
+          }
+        ]
+      },
+      {
+        "name": "empty keys reset the requested start index",
+        "items": [],
+        "TotalRecordCount": 0,
+        "StartIndex": 0,
+        "calls": [
+          {
+            "operation": "GetNextUpSeriesKeys",
+            "limit": null,
+            "parents": [
+              "Season 1"
+            ],
+            "cutoff": "0001-01-01T00:00:00"
+          }
+        ]
+      }
+    ]
+  },
+  "localSimilarProviders": {
+    "actual": "pinned Series, MusicArtist, MusicAlbum and Audio local similar providers with controlled ILibraryManager seam",
+    "officialDefaults": {
+      "user": null,
+      "Limit": null,
+      "dtoOptions": null,
+      "ExcludeItemIds": [],
+      "ExcludeArtistIds": []
+    },
+    "providers": [
+      {
+        "itemType": "Series",
+        "name": "Local Genre/Tag",
+        "type": "LocalSimilarityProvider",
+        "defaultCalls": [
+          {
+            "includeItemTypes": [
+              "Series"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": null,
+            "user": null,
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [],
+            "ExcludeArtistIds": [],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "AirTime",
+              "CanDelete",
+              "CanDownload",
+              "ChannelInfo",
+              "Chapters",
+              "Trickplay",
+              "ChildCount",
+              "CumulativeRunTimeTicks",
+              "CustomRating",
+              "DateCreated",
+              "DateLastMediaAdded",
+              "DisplayPreferencesId",
+              "Etag",
+              "ExternalUrls",
+              "Genres",
+              "ItemCounts",
+              "MediaSourceCount",
+              "MediaSources",
+              "OriginalTitle",
+              "Overview",
+              "ParentId",
+              "Path",
+              "People",
+              "PlayAccess",
+              "ProductionLocations",
+              "ProviderIds",
+              "PrimaryImageAspectRatio",
+              "RecursiveItemCount",
+              "Settings",
+              "SeriesStudio",
+              "SortName",
+              "SpecialEpisodeNumbers",
+              "Studios",
+              "Taglines",
+              "Tags",
+              "RemoteTrailers",
+              "MediaStreams",
+              "DateLastRefreshed",
+              "DateLastSaved",
+              "ChannelImage",
+              "EnableMediaSourceDisplay",
+              "Width",
+              "Height",
+              "ExtraIds",
+              "LocalTrailerCount",
+              "IsHD",
+              "SpecialFeatureCount"
+            ]
+          }
+        ],
+        "configuredCalls": [
+          {
+            "includeItemTypes": [
+              "Series"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": 7,
+            "user": "similar-reader",
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [
+              "91000000-0000-0000-0000-000000000001",
+              "91000000-0000-0000-0000-000000000030"
+            ],
+            "ExcludeArtistIds": [],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "SortName"
+            ]
+          }
+        ]
+      },
+      {
+        "itemType": "MusicArtist",
+        "name": "Local Genre/Tag",
+        "type": "LocalSimilarityProvider",
+        "defaultCalls": [
+          {
+            "includeItemTypes": [
+              "MusicArtist"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": null,
+            "user": null,
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [],
+            "ExcludeArtistIds": [],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "AirTime",
+              "CanDelete",
+              "CanDownload",
+              "ChannelInfo",
+              "Chapters",
+              "Trickplay",
+              "ChildCount",
+              "CumulativeRunTimeTicks",
+              "CustomRating",
+              "DateCreated",
+              "DateLastMediaAdded",
+              "DisplayPreferencesId",
+              "Etag",
+              "ExternalUrls",
+              "Genres",
+              "ItemCounts",
+              "MediaSourceCount",
+              "MediaSources",
+              "OriginalTitle",
+              "Overview",
+              "ParentId",
+              "Path",
+              "People",
+              "PlayAccess",
+              "ProductionLocations",
+              "ProviderIds",
+              "PrimaryImageAspectRatio",
+              "RecursiveItemCount",
+              "Settings",
+              "SeriesStudio",
+              "SortName",
+              "SpecialEpisodeNumbers",
+              "Studios",
+              "Taglines",
+              "Tags",
+              "RemoteTrailers",
+              "MediaStreams",
+              "DateLastRefreshed",
+              "DateLastSaved",
+              "ChannelImage",
+              "EnableMediaSourceDisplay",
+              "Width",
+              "Height",
+              "ExtraIds",
+              "LocalTrailerCount",
+              "IsHD",
+              "SpecialFeatureCount"
+            ]
+          }
+        ],
+        "configuredCalls": [
+          {
+            "includeItemTypes": [
+              "MusicArtist"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": 7,
+            "user": "similar-reader",
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [
+              "91000000-0000-0000-0000-000000000036",
+              "91000000-0000-0000-0000-000000000030"
+            ],
+            "ExcludeArtistIds": [
+              "91000000-0000-0000-0000-000000000091"
+            ],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "SortName"
+            ]
+          }
+        ]
+      },
+      {
+        "itemType": "MusicAlbum",
+        "name": "Local Genre/Tag",
+        "type": "LocalSimilarityProvider",
+        "defaultCalls": [
+          {
+            "includeItemTypes": [
+              "MusicAlbum"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": null,
+            "user": null,
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [],
+            "ExcludeArtistIds": [],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "AirTime",
+              "CanDelete",
+              "CanDownload",
+              "ChannelInfo",
+              "Chapters",
+              "Trickplay",
+              "ChildCount",
+              "CumulativeRunTimeTicks",
+              "CustomRating",
+              "DateCreated",
+              "DateLastMediaAdded",
+              "DisplayPreferencesId",
+              "Etag",
+              "ExternalUrls",
+              "Genres",
+              "ItemCounts",
+              "MediaSourceCount",
+              "MediaSources",
+              "OriginalTitle",
+              "Overview",
+              "ParentId",
+              "Path",
+              "People",
+              "PlayAccess",
+              "ProductionLocations",
+              "ProviderIds",
+              "PrimaryImageAspectRatio",
+              "RecursiveItemCount",
+              "Settings",
+              "SeriesStudio",
+              "SortName",
+              "SpecialEpisodeNumbers",
+              "Studios",
+              "Taglines",
+              "Tags",
+              "RemoteTrailers",
+              "MediaStreams",
+              "DateLastRefreshed",
+              "DateLastSaved",
+              "ChannelImage",
+              "EnableMediaSourceDisplay",
+              "Width",
+              "Height",
+              "ExtraIds",
+              "LocalTrailerCount",
+              "IsHD",
+              "SpecialFeatureCount"
+            ]
+          }
+        ],
+        "configuredCalls": [
+          {
+            "includeItemTypes": [
+              "MusicAlbum"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": 7,
+            "user": "similar-reader",
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [
+              "91000000-0000-0000-0000-000000000037",
+              "91000000-0000-0000-0000-000000000030"
+            ],
+            "ExcludeArtistIds": [
+              "91000000-0000-0000-0000-000000000091"
+            ],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "SortName"
+            ]
+          }
+        ]
+      },
+      {
+        "itemType": "Audio",
+        "name": "Local Genre/Tag",
+        "type": "LocalSimilarityProvider",
+        "defaultCalls": [
+          {
+            "includeItemTypes": [
+              "Audio"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": null,
+            "user": null,
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [],
+            "ExcludeArtistIds": [],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "AirTime",
+              "CanDelete",
+              "CanDownload",
+              "ChannelInfo",
+              "Chapters",
+              "Trickplay",
+              "ChildCount",
+              "CumulativeRunTimeTicks",
+              "CustomRating",
+              "DateCreated",
+              "DateLastMediaAdded",
+              "DisplayPreferencesId",
+              "Etag",
+              "ExternalUrls",
+              "Genres",
+              "ItemCounts",
+              "MediaSourceCount",
+              "MediaSources",
+              "OriginalTitle",
+              "Overview",
+              "ParentId",
+              "Path",
+              "People",
+              "PlayAccess",
+              "ProductionLocations",
+              "ProviderIds",
+              "PrimaryImageAspectRatio",
+              "RecursiveItemCount",
+              "Settings",
+              "SeriesStudio",
+              "SortName",
+              "SpecialEpisodeNumbers",
+              "Studios",
+              "Taglines",
+              "Tags",
+              "RemoteTrailers",
+              "MediaStreams",
+              "DateLastRefreshed",
+              "DateLastSaved",
+              "ChannelImage",
+              "EnableMediaSourceDisplay",
+              "Width",
+              "Height",
+              "ExtraIds",
+              "LocalTrailerCount",
+              "IsHD",
+              "SpecialFeatureCount"
+            ]
+          }
+        ],
+        "configuredCalls": [
+          {
+            "includeItemTypes": [
+              "Audio"
+            ],
+            "orderBy": [
+              {
+                "OrderBy": "Random",
+                "SortOrder": "Ascending"
+              }
+            ],
+            "MinPremiereDate": null,
+            "StartIndex": null,
+            "Limit": 7,
+            "user": "similar-reader",
+            "GroupByPresentationUniqueKey": true,
+            "EnableGroupByMetadataKey": false,
+            "EnableTotalRecordCount": true,
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "Recursive": false,
+            "SearchTerm": null,
+            "genres": [
+              "Drama",
+              "Mystery"
+            ],
+            "Tags": [
+              "Network",
+              "Epic"
+            ],
+            "ExcludeItemIds": [
+              "91000000-0000-0000-0000-000000000038",
+              "91000000-0000-0000-0000-000000000030"
+            ],
+            "ExcludeArtistIds": [
+              "91000000-0000-0000-0000-000000000091"
+            ],
+            "SeriesPresentationUniqueKey": null,
+            "AncestorWithPresentationUniqueKey": null,
+            "IsMissing": null,
+            "IsSpecialSeason": null,
+            "AdjacentTo": null,
+            "dtoFields": [
+              "SortName"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "similarItemsManager": {
+    "actual": "pinned SimilarItemsManager \u002B controlled local provider \u002B concrete BaseItemRepository access filter over EF Core SQLite",
+    "defaultLimitAndAccess": {
+      "items": [
+        "manager-allowed"
+      ],
+      "dtoFieldsAfterManager": [
+        "SortName",
+        "ProviderIds"
+      ],
+      "providerQueries": [
+        {
+          "item": "manager-source",
+          "user": "similar-reader",
+          "Limit": 50,
+          "dtoFields": [
+            "SortName",
+            "ProviderIds"
+          ],
+          "ExcludeItemIds": [
+            "93000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [
+            "93000000-0000-0000-0000-000000000099"
+          ],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "limitedBeforeAccessFilter": {
+      "items": [],
+      "providerQueries": [
+        {
+          "item": "manager-source",
+          "user": "similar-reader",
+          "Limit": 1,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ],
+          "ExcludeItemIds": [
+            "93000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "idAndPresentationKeyDeduplication": {
+      "items": [
+        "manager-allowed"
+      ],
+      "providerQueries": [
+        {
+          "item": "manager-source",
+          "user": null,
+          "Limit": 50,
+          "dtoFields": [
+            "AirTime",
+            "CanDelete",
+            "CanDownload",
+            "ChannelInfo",
+            "Chapters",
+            "Trickplay",
+            "ChildCount",
+            "CumulativeRunTimeTicks",
+            "CustomRating",
+            "DateCreated",
+            "DateLastMediaAdded",
+            "DisplayPreferencesId",
+            "Etag",
+            "ExternalUrls",
+            "Genres",
+            "ItemCounts",
+            "MediaSourceCount",
+            "MediaSources",
+            "OriginalTitle",
+            "Overview",
+            "ParentId",
+            "Path",
+            "People",
+            "PlayAccess",
+            "ProductionLocations",
+            "ProviderIds",
+            "PrimaryImageAspectRatio",
+            "RecursiveItemCount",
+            "Settings",
+            "SeriesStudio",
+            "SortName",
+            "SpecialEpisodeNumbers",
+            "Studios",
+            "Taglines",
+            "Tags",
+            "RemoteTrailers",
+            "MediaStreams",
+            "DateLastRefreshed",
+            "DateLastSaved",
+            "ChannelImage",
+            "EnableMediaSourceDisplay",
+            "Width",
+            "Height",
+            "ExtraIds",
+            "LocalTrailerCount",
+            "IsHD",
+            "SpecialFeatureCount"
+          ],
+          "ExcludeItemIds": [
+            "93000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "negativeLimit": {
+      "items": [],
+      "providerQueries": []
+    },
+    "zeroLimit": {
+      "items": [],
+      "providerQueries": []
+    }
+  },
+  "similarProviderOrchestration": {
+    "actual": "pinned SimilarItemsManager \u002B TmdbSeriesSimilarProvider/TMDbLib controlled transport \u002B real file cache",
+    "provider": {
+      "Name": "TheMovieDb",
+      "Type": "SimilarityProvider",
+      "cacheDays": 14
+    },
+    "first": {
+      "items": [
+        "remote-one",
+        "remote-two",
+        "local-one"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/configuration?api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=2\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000002",
+            "95000000-0000-0000-0000-000000000003"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cache": {
+        "path": "themoviedb-similar-series/95000000000000000000000000000001.json",
+        "propertyNames": [
+          "References",
+          "ExpiresAt"
+        ],
+        "rawJsonTemplate": "{\u0022References\u0022:[{\u0022ProviderName\u0022:\u0022Tmdb\u0022,\u0022ProviderId\u0022:\u0022101\u0022},{\u0022ProviderName\u0022:\u0022Tmdb\u0022,\u0022ProviderId\u0022:\u0022999\u0022},{\u0022ProviderName\u0022:\u0022Tmdb\u0022,\u0022ProviderId\u0022:\u0022102\u0022}],\u0022ExpiresAt\u0022:\u0022$EXPIRES_AT\u0022}",
+        "byteLength": 188,
+        "utf8Bom": false,
+        "expiresAtKind": "Utc",
+        "expiresAtTicks": "639288346077978041",
+        "references": [
+          {
+            "providerName": "Tmdb",
+            "providerId": "101",
+            "score": null
+          },
+          {
+            "providerName": "Tmdb",
+            "providerId": "999",
+            "score": null
+          },
+          {
+            "providerName": "Tmdb",
+            "providerId": "102",
+            "score": null
+          }
+        ],
+        "expiresWithinConfiguredWindow": true
+      }
+    },
+    "cacheHit": {
+      "items": [
+        "remote-one",
+        "remote-two",
+        "local-one"
+      ],
+      "requests": [],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000002",
+            "95000000-0000-0000-0000-000000000003"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "numericStringScores": {
+      "items": [
+        "remote-two",
+        "remote-one"
+      ],
+      "requests": [],
+      "localCalls": [],
+      "originalCacheRetained": true,
+      "replacementHasScores": true,
+      "temporaryFiles": 0
+    },
+    "exactDecimalMidpointScores": {
+      "items": [
+        "remote-two",
+        "remote-one"
+      ],
+      "requests": [],
+      "localCalls": [],
+      "originalCacheRetained": true,
+      "replacementHasScores": true,
+      "temporaryFiles": 0
+    },
+    "invalidStringScore": {
+      "items": [
+        "remote-one",
+        "remote-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=2\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [],
+      "originalCacheRetained": false,
+      "replacementHasScores": false,
+      "temporaryFiles": 0
+    },
+    "singleOverflowScore": {
+      "items": [
+        "remote-one",
+        "remote-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=2\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [],
+      "originalCacheRetained": false,
+      "replacementHasScores": false,
+      "temporaryFiles": 0
+    },
+    "scoreMath": {
+      "cases": [
+        {
+          "name": "position multiply and subtract",
+          "matchScore": null,
+          "matchScoreBits": null,
+          "providerOrder": 10,
+          "position": 17,
+          "value": 0.65999997,
+          "bits": 1059648962
+        },
+        {
+          "name": "provider boost multiply and add",
+          "matchScore": null,
+          "matchScoreBits": null,
+          "providerOrder": 3,
+          "position": 17,
+          "value": 0.695,
+          "bits": 1060236165
+        },
+        {
+          "name": "provided score and boost",
+          "matchScore": 0.1,
+          "matchScoreBits": 1036831949,
+          "providerOrder": 9,
+          "position": 400,
+          "value": 0.105000004,
+          "bits": 1037503038
+        },
+        {
+          "name": "rounding tie first",
+          "matchScore": null,
+          "matchScoreBits": null,
+          "providerOrder": 0,
+          "position": 28,
+          "value": 0.49,
+          "bits": 1056629064
+        },
+        {
+          "name": "rounding tie second",
+          "matchScore": null,
+          "matchScoreBits": null,
+          "providerOrder": 8,
+          "position": 26,
+          "value": 0.49,
+          "bits": 1056629064
+        },
+        {
+          "name": "lower clamp",
+          "matchScore": -2,
+          "matchScoreBits": -1073741824,
+          "providerOrder": 10,
+          "position": 0,
+          "value": 0,
+          "bits": 0
+        },
+        {
+          "name": "upper clamp",
+          "matchScore": 2,
+          "matchScoreBits": 1073741824,
+          "providerOrder": 10,
+          "position": 0,
+          "value": 1,
+          "bits": 1065353216
+        }
+      ],
+      "equalInputs": {
+        "first": 0.1,
+        "second": 0.1,
+        "firstBits": 1036831949,
+        "secondBits": 1036831949
+      }
+    },
+    "stableFloatScoreOrder": {
+      "items": [
+        "remote-one",
+        "remote-two"
+      ],
+      "Yielded": 2
+    },
+    "corruptCacheFallback": {
+      "items": [
+        "remote-one",
+        "remote-two",
+        "local-one"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=2\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000002",
+            "95000000-0000-0000-0000-000000000003"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "replacementIsJson": true,
+      "temporaryFiles": 0
+    },
+    "expiredCacheFallback": {
+      "items": [
+        "remote-one",
+        "remote-two",
+        "local-one"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=2\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000002",
+            "95000000-0000-0000-0000-000000000003"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "replacementExpiresInFuture": true,
+      "temporaryFiles": 0
+    },
+    "unresolvedRemoteReferences": {
+      "sourceTmdbId": "42",
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cacheExists": true
+    },
+    "nullResponse": {
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cacheExists": false
+    },
+    "httpFailure": {
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cacheExists": false
+    },
+    "rateLimited": {
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key",
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cacheExists": false
+    },
+    "serverError": {
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "requests": [
+        "http://tmdb.invalid/3/tv/42/recommendations?page=1\u0026language=null%2Cen\u0026api_key=oracle-key"
+      ],
+      "localCalls": [
+        {
+          "provider": "Local Genre/Tag",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ],
+      "cacheExists": false
+    },
+    "configuredOrder": {
+      "items": [
+        "local-two",
+        "local-one",
+        "local-three"
+      ],
+      "calls": [
+        {
+          "provider": "Second",
+          "Limit": 3,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "First",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000005"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "Third",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000005",
+            "95000000-0000-0000-0000-000000000004"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "stableRegistrationOrder": {
+      "items": [
+        "local-one",
+        "local-two",
+        "local-three"
+      ],
+      "calls": [
+        {
+          "provider": "First",
+          "Limit": 3,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "Second",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000004"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "Third",
+          "Limit": 1,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000004",
+            "95000000-0000-0000-0000-000000000005"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "failureBoundary": {
+      "items": [
+        "local-one",
+        "local-two"
+      ],
+      "calls": [
+        {
+          "provider": "Failure",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "After failure",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "cancellationBoundary": {
+      "items": [
+        "local-one"
+      ],
+      "calls": [
+        {
+          "provider": "Before cancellation",
+          "Limit": 3,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        },
+        {
+          "provider": "Cancellation",
+          "Limit": 2,
+          "excludeItemIds": [
+            "95000000-0000-0000-0000-000000000001",
+            "95000000-0000-0000-0000-000000000004"
+          ],
+          "ExcludeArtistIds": [],
+          "cancellationRequested": false
+        }
+      ]
+    },
+    "preCancellationBoundary": {
+      "items": [],
+      "calls": []
+    },
+    "batches": [
+      {
+        "count": 21,
+        "limit": 2,
+        "resolve": false,
+        "Yielded": 21,
+        "Calls": [
+          {
+            "Limit": 2,
+            "excludeItemIds": [
+              "95000000-0000-0000-0000-000000000001"
+            ],
+            "ExcludeArtistIds": [],
+            "cancellationRequested": false
+          }
+        ],
+        "querySizes": [
+          20,
+          1
+        ],
+        "items": []
+      },
+      {
+        "count": 501,
+        "limit": 2,
+        "resolve": false,
+        "Yielded": 500,
+        "Calls": [
+          {
+            "Limit": 2,
+            "excludeItemIds": [
+              "95000000-0000-0000-0000-000000000001"
+            ],
+            "ExcludeArtistIds": [],
+            "cancellationRequested": false
+          }
+        ],
+        "querySizes": [
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20
+        ],
+        "items": []
+      },
+      {
+        "count": 501,
+        "limit": 2,
+        "resolve": true,
+        "Yielded": 20,
+        "Calls": [
+          {
+            "Limit": 2,
+            "excludeItemIds": [
+              "95000000-0000-0000-0000-000000000001"
+            ],
+            "ExcludeArtistIds": [],
+            "cancellationRequested": false
+          }
+        ],
+        "querySizes": [
+          20
+        ],
+        "items": [
+          "batch-zero",
+          "batch-one"
+        ]
+      }
+    ]
+  },
+  "dateTimeBinding": {
+    "actual": "Microsoft.AspNetCore.Mvc DateTimeModelBinder with its provider styles and invariant query culture",
+    "styles": "AllowWhiteSpaces, AdjustToUniversal",
+    "results": [
+      {
+        "input": "",
+        "IsModelSet": true,
+        "value": null,
+        "kind": null,
+        "errors": []
+      },
+      {
+        "input": " ",
+        "IsModelSet": true,
+        "value": null,
+        "kind": null,
+        "errors": []
+      },
+      {
+        "input": "2026-10-06",
+        "IsModelSet": true,
+        "value": "2026-10-06T00:00:00.0000000",
+        "kind": "Unspecified",
+        "errors": []
+      },
+      {
+        "input": "2026-10-06T00:00:00Z",
+        "IsModelSet": true,
+        "value": "2026-10-06T00:00:00.0000000Z",
+        "kind": "Utc",
+        "errors": []
+      },
+      {
+        "input": "2026-10-06T00:00:00\u002B08:00",
+        "IsModelSet": true,
+        "value": "2026-10-05T16:00:00.0000000Z",
+        "kind": "Utc",
+        "errors": []
+      },
+      {
+        "input": "bad",
+        "IsModelSet": false,
+        "value": null,
+        "kind": null,
+        "errors": [
+          "The value \u0027bad\u0027 is not valid."
+        ]
+      }
+    ]
+  },
+  "similarBinding": {
+    "actual": "pinned ASP.NET SimpleTypeModelBinder for route Guid plus CommaDelimitedCollectionModelBinder",
+    "itemId": [
+      {
+        "inputs": [],
+        "IsModelSet": false,
+        "value": null,
+        "errors": []
+      },
+      {
+        "inputs": [
+          ""
+        ],
+        "IsModelSet": false,
+        "value": null,
+        "errors": [
+          "The value \u0027\u0027 is invalid."
+        ]
+      },
+      {
+        "inputs": [
+          "00000000-0000-0000-0000-000000000000"
+        ],
+        "IsModelSet": true,
+        "value": "00000000-0000-0000-0000-000000000000",
+        "errors": []
+      },
+      {
+        "inputs": [
+          "bad"
+        ],
+        "IsModelSet": false,
+        "value": null,
+        "errors": [
+          "The value \u0027bad\u0027 is not valid."
+        ]
+      },
+      {
+        "inputs": [
+          "91000000-0000-0000-0000-000000000001"
+        ],
+        "IsModelSet": true,
+        "value": "91000000-0000-0000-0000-000000000001",
+        "errors": []
+      }
+    ],
+    "excludeArtistIds": [
+      {
+        "name": "ExcludeArtistIds",
+        "inputs": [],
+        "IsModelSet": true,
+        "values": []
+      },
+      {
+        "name": "ExcludeArtistIds",
+        "inputs": [
+          ""
+        ],
+        "IsModelSet": true,
+        "values": []
+      },
+      {
+        "name": "ExcludeArtistIds",
+        "inputs": [
+          "91000000-0000-0000-0000-000000000091,bad,91000000000000000000000000000092"
+        ],
+        "IsModelSet": true,
+        "values": [
+          "91000000-0000-0000-0000-000000000091",
+          "91000000-0000-0000-0000-000000000092"
+        ]
+      },
+      {
+        "name": "ExcludeArtistIds",
+        "inputs": [
+          "91000000-0000-0000-0000-000000000091",
+          "bad"
+        ],
+        "IsModelSet": true,
+        "values": [
+          "91000000-0000-0000-0000-000000000091"
+        ]
+      },
+      {
+        "name": "ExcludeArtistIds",
+        "inputs": [
+          "91000000-0000-0000-0000-000000000091,bad",
+          "91000000-0000-0000-0000-000000000092"
+        ],
+        "IsModelSet": true,
+        "values": [
+          "91000000-0000-0000-0000-000000000092"
+        ]
+      }
+    ],
+    "fields": [
+      {
+        "name": "Fields",
+        "inputs": [],
+        "IsModelSet": true,
+        "values": []
+      },
+      {
+        "name": "Fields",
+        "inputs": [
+          "SortName,bad,ParentId"
+        ],
+        "IsModelSet": true,
+        "values": [
+          "SortName",
+          "ParentId"
+        ]
+      },
+      {
+        "name": "Fields",
+        "inputs": [
+          "SortName",
+          "bad"
+        ],
+        "IsModelSet": true,
+        "values": [
+          "SortName"
+        ]
+      }
+    ]
+  },
+  "similarContract": {
+    "actual": "pinned LibraryController.GetSimilarItems reflection contract",
+    "declaringType": "Jellyfin.Api.Controllers.LibraryController",
+    "routes": [
+      {
+        "Template": "Artists/{itemId}/Similar",
+        "Name": "GetSimilarArtists"
+      },
+      {
+        "Template": "Items/{itemId}/Similar",
+        "Name": null
+      },
+      {
+        "Template": "Albums/{itemId}/Similar",
+        "Name": "GetSimilarAlbums"
+      },
+      {
+        "Template": "Shows/{itemId}/Similar",
+        "Name": "GetSimilarShows"
+      },
+      {
+        "Template": "Movies/{itemId}/Similar",
+        "Name": "GetSimilarMovies"
+      },
+      {
+        "Template": "Trailers/{itemId}/Similar",
+        "Name": "GetSimilarTrailers"
+      }
+    ],
+    "authorize": [
+      {
+        "Policy": null,
+        "Roles": null
+      }
+    ],
+    "parameters": [
+      {
+        "Name": "itemId",
+        "type": "System.Guid",
+        "required": true,
+        "binder": null,
+        "source": [
+          "FromRouteAttribute"
+        ],
+        "hasDefault": false,
+        "defaultValue": null
+      },
+      {
+        "Name": "excludeArtistIds",
+        "type": "System.Guid[]",
+        "required": false,
+        "binder": "Jellyfin.Api.ModelBinders.CommaDelimitedCollectionModelBinder",
+        "source": [
+          "FromQueryAttribute"
+        ],
+        "hasDefault": false,
+        "defaultValue": null
+      },
+      {
+        "Name": "userId",
+        "type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "required": false,
+        "binder": null,
+        "source": [
+          "FromQueryAttribute"
+        ],
+        "hasDefault": false,
+        "defaultValue": null
+      },
+      {
+        "Name": "limit",
+        "type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "required": false,
+        "binder": null,
+        "source": [
+          "FromQueryAttribute"
+        ],
+        "hasDefault": false,
+        "defaultValue": null
+      },
+      {
+        "Name": "fields",
+        "type": "MediaBrowser.Model.Querying.ItemFields[]",
+        "required": false,
+        "binder": "Jellyfin.Api.ModelBinders.CommaDelimitedCollectionModelBinder",
+        "source": [
+          "FromQueryAttribute"
+        ],
+        "hasDefault": false,
+        "defaultValue": null
+      },
+      {
+        "Name": "cancellationToken",
+        "type": "System.Threading.CancellationToken",
+        "required": false,
+        "binder": null,
+        "source": [],
+        "hasDefault": false,
+        "defaultValue": null
+      }
+    ]
+  },
+  "guidEmptyHttp": {
+    "actual": "pinned TvShowsController \u002B TVSeriesManager \u002B concrete LibraryManager \u002B ExceptionMiddleware",
+    "nextUpParent": {
+      "name": "next up Guid.Empty parent",
+      "status": 400,
+      "contentType": "text/plain",
+      "body": "Error processing request."
+    },
+    "seasonsSeries": {
+      "name": "seasons Guid.Empty series",
+      "status": 400,
+      "contentType": "text/plain",
+      "body": "Error processing request."
+    }
+  },
+  "similarHttp": {
+    "actual": "pinned LibraryController.GetSimilarItems \u002B RequestHelpers \u002B ExceptionMiddleware",
+    "crossUser": {
+      "name": "cross-user SecurityException",
+      "status": 403,
+      "contentType": "text/plain",
+      "body": "Error processing request."
+    },
+    "managerFailure": {
+      "name": "manager failure",
+      "status": 500,
+      "contentType": "text/plain",
+      "body": "Error processing request."
+    }
+  },
+  "runtimeAssemblyScope": "Managed assemblies loaded in the oracle AppDomain at capture time plus e_sqlite3 modules observed in Process.Modules; not a complete build-input dependency closure.",
+  "runtimeAssemblies": [
+    {
+      "managed": true,
+      "name": "BitFaster.Caching",
+      "version": "2.6.1.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/BitFaster.Caching.dll",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+    },
+    {
+      "managed": true,
+      "name": "Diacritics",
+      "version": "4.1.8.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Diacritics.dll",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+    },
+    {
+      "managed": true,
+      "name": "Emby.Server.Implementations",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "managed": false,
+      "name": "e_sqlite3",
+      "version": null,
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/e_sqlite3.DLL",
+      "bytes": 1978880,
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+    },
+    {
+      "managed": true,
+      "name": "J2N",
+      "version": "2.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/J2N.dll",
+      "bytes": 590848,
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Api",
+      "version": "1.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Api.dll",
+      "bytes": 683008,
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Data",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Database.Implementations",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Extensions",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "managed": true,
+      "name": "Jellyfin.Server.Implementations",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "managed": true,
+      "name": "MediaBrowser.Common",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "managed": true,
+      "name": "MediaBrowser.Controller",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "managed": true,
+      "name": "MediaBrowser.Model",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "managed": true,
+      "name": "MediaBrowser.Providers",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Data.Sqlite",
+      "version": "10.0.11.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "version": "10.0.11.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.EntityFrameworkCore",
+      "version": "10.0.11.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "version": "10.0.11.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "version": "10.0.11.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+    },
+    {
+      "managed": true,
+      "name": "Newtonsoft.Json",
+      "version": "13.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Newtonsoft.Json.dll",
+      "bytes": 723368,
+      "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b"
+    },
+    {
+      "managed": true,
+      "name": "Oracle",
+      "version": "1.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Oracle.dll",
+      "bytes": 243200,
+      "sha256": "aa9ad09a372b76e24a4c4e8407bb0f93254f265b9b0ab6751bd25d31e879f28b"
+    },
+    {
+      "managed": true,
+      "name": "Polly",
+      "version": "8.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+    },
+    {
+      "managed": true,
+      "name": "SQLitePCLRaw.batteries_v2",
+      "version": "2.1.12.3116",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+    },
+    {
+      "managed": true,
+      "name": "SQLitePCLRaw.core",
+      "version": "2.1.12.3116",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+    },
+    {
+      "managed": true,
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "version": "2.1.12.3116",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+    },
+    {
+      "managed": true,
+      "name": "TMDbLib",
+      "version": "3.0.0.0",
+      "path": "D:/mediamanager-validation/20261015-node-plugins-acceptance/shows-native-2/bin/Release/net10.0/TMDbLib.dll",
+      "bytes": 401920,
+      "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Authorization",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Authorization.dll",
+      "bytes": 116520,
+      "sha256": "b41d6f875d0b1a99179fa65a1c5f92b2d2066047e681706b65906c2dbc23f413"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Hosting.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Hosting.Abstractions.dll",
+      "bytes": 46928,
+      "sha256": "50eea9716964d7dfd8b30a286fe577da612cf567eceacf11e248f01d85a7333f"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "bytes": 325416,
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Http",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.dll",
+      "bytes": 300840,
+      "sha256": "32f6a181eb790eae12d0bbb0d31db74c4abe5841c16f7a1040e8f64ee96fd103"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Http.Features",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Features.dll",
+      "bytes": 71504,
+      "sha256": "d3714725c1f38d791d93c4ce23296747051e6dfdb3ceea453b32408116390d2f"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Metadata",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Metadata.dll",
+      "bytes": 16208,
+      "sha256": "99c572500931b719c44a38a8b9bdc7c67cc85d6d3426737f20d4b3b3496d82f3"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Mvc.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Mvc.Abstractions.dll",
+      "bytes": 268072,
+      "sha256": "f53787e278fdd13e7755214f3d24082f4b8a9313e72f4a0966ed9ea7a18b1457"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Mvc.Core",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Mvc.Core.dll",
+      "bytes": 1931088,
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.AspNetCore.Routing.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Routing.Abstractions.dll",
+      "bytes": 59176,
+      "sha256": "ea601c608e0e51ba51136f7755af4eb6b47099cd1c41710faae2f8b096b63194"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "bytes": 75560,
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "bytes": 100136,
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "bytes": 46888,
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "bytes": 141096,
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "bytes": 227152,
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Features",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Features.dll",
+      "bytes": 46928,
+      "sha256": "9a37af53f48d4cbcafd3de646c60cdc5d142a95b49de1f82aade1a919c4aecff"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.FileProviders.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "bytes": 38696,
+      "sha256": "f39acfb26fe3c3c977283e5efda4f0406418d58f446cfc0d4b1a843777a10651"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Hosting.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Hosting.Abstractions.dll",
+      "bytes": 79656,
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Http",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Http.dll",
+      "bytes": 198440,
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Logging",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "bytes": 100176,
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Options",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "bytes": 141096,
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Extensions.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "bytes": 83752,
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Net.Http.Headers",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Net.Http.Headers.dll",
+      "bytes": 218920,
+      "sha256": "7b836d9e11acc47222d28cd02a54101f43464b047d84978d157d2d932b97a8e9"
+    },
+    {
+      "managed": true,
+      "name": "Microsoft.Win32.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/Microsoft.Win32.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "6c21472b0ae2f9b484a97614fad5485a22f18f9f19ee1adb9ceb3ed8ddb072d7"
+    },
+    {
+      "managed": true,
+      "name": "netstandard",
+      "version": "2.1.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "bytes": 100648,
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+    },
+    {
+      "managed": true,
+      "name": "System.Collections.Concurrent",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "managed": true,
+      "name": "System.Collections",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "managed": true,
+      "name": "System.Collections.Immutable",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "bytes": 976680,
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+    },
+    {
+      "managed": true,
+      "name": "System.Collections.NonGeneric",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.NonGeneric.dll",
+      "bytes": 104232,
+      "sha256": "aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b"
+    },
+    {
+      "managed": true,
+      "name": "System.ComponentModel.Annotations",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "bytes": 198480,
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903"
+    },
+    {
+      "managed": true,
+      "name": "System.ComponentModel",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "bytes": 30544,
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+    },
+    {
+      "managed": true,
+      "name": "System.ComponentModel.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "bytes": 79656,
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+    },
+    {
+      "managed": true,
+      "name": "System.ComponentModel.TypeConverter",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "bytes": 767784,
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+    },
+    {
+      "managed": true,
+      "name": "System.Data.Common",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "bytes": 2770728,
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc"
+    },
+    {
+      "managed": true,
+      "name": "System.Diagnostics.DiagnosticSource",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "bytes": 501544,
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb"
+    },
+    {
+      "managed": true,
+      "name": "System.Diagnostics.Process",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "bytes": 329552,
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "managed": true,
+      "name": "System.Diagnostics.TraceSource",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.TraceSource.dll",
+      "bytes": 141096,
+      "sha256": "8445c7f1bbaae6cffde60e2c9a8753faaa5100255fbe31d0a1927d9d9bb7f194"
+    },
+    {
+      "managed": true,
+      "name": "System.Diagnostics.Tracing",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "bytes": 16208,
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263"
+    },
+    {
+      "managed": true,
+      "name": "System.IO.Pipelines",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Pipelines.dll",
+      "bytes": 190248,
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "managed": true,
+      "name": "System.Linq",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "managed": true,
+      "name": "System.Linq.Expressions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "bytes": 3639080,
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f"
+    },
+    {
+      "managed": true,
+      "name": "System.Linq.Queryable",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "bytes": 182056,
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa"
+    },
+    {
+      "managed": true,
+      "name": "System.Memory",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "managed": true,
+      "name": "System.Net.Http",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "bytes": 1746768,
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801"
+    },
+    {
+      "managed": true,
+      "name": "System.Net.NetworkInformation",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "bytes": 157520,
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b"
+    },
+    {
+      "managed": true,
+      "name": "System.Net.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "bytes": 210728,
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+    },
+    {
+      "managed": true,
+      "name": "System.Numerics.Vectors",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "managed": true,
+      "name": "System.ObjectModel",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "bytes": 79656,
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+    },
+    {
+      "managed": true,
+      "name": "System.Private.CoreLib",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "managed": true,
+      "name": "System.Private.Uri",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "managed": true,
+      "name": "System.Private.Xml",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "bytes": 7788328,
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "managed": true,
+      "name": "System.Reflection.DispatchProxy",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "managed": true,
+      "name": "System.Reflection.Emit",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "managed": true,
+      "name": "System.Reflection.Emit.ILGeneration",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "managed": true,
+      "name": "System.Reflection.Emit.Lightweight",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "managed": true,
+      "name": "System.Reflection.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.InteropServices",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.Intrinsics",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.Loader",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.Numerics",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Numerics.dll",
+      "bytes": 354128,
+      "sha256": "8ac94fb810c092a9297a903762e79a75ae07d7229d0721540c391f86d3d5d220"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.Serialization.Formatters",
+      "version": "8.1.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Serialization.Formatters.dll",
+      "bytes": 124712,
+      "sha256": "5e8e957c6b7a63132555ede5bcf5fe6a59934c83300e28074ec6e9845ecdd17f"
+    },
+    {
+      "managed": true,
+      "name": "System.Runtime.Serialization.Primitives",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Serialization.Primitives.dll",
+      "bytes": 38696,
+      "sha256": "f96093940e64d8eead98c86de9773d3c9d12c2b033bc6b1312ac88398303fdf3"
+    },
+    {
+      "managed": true,
+      "name": "System.Security.Claims",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Claims.dll",
+      "bytes": 100176,
+      "sha256": "c53c8a7e95d8296f951872fdd2e6334d11c20bffd4322f1a088773bf9dcaa3c2"
+    },
+    {
+      "managed": true,
+      "name": "System.Security.Cryptography",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "managed": true,
+      "name": "System.Text.Encoding.Extensions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "managed": true,
+      "name": "System.Text.Encodings.Web",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "managed": true,
+      "name": "System.Text.Json",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "managed": true,
+      "name": "System.Text.RegularExpressions",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "bytes": 1034064,
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "managed": true,
+      "name": "System.Threading.Channels",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "bytes": 157480,
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39"
+    },
+    {
+      "managed": true,
+      "name": "System.Threading",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "managed": true,
+      "name": "System.Threading.Thread",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "bytes": 15696,
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930"
+    },
+    {
+      "managed": true,
+      "name": "System.Threading.ThreadPool",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "bytes": 15656,
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936"
+    },
+    {
+      "managed": true,
+      "name": "System.Transactions.Local",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "bytes": 640808,
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4"
+    },
+    {
+      "managed": true,
+      "name": "System.Xml.ReaderWriter",
+      "version": "10.0.0.0",
+      "path": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "bytes": 21840,
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "8639828af0a1e33a33f51618764c4891653f1be477e492168d99954f16065f0b",
+  "boundary": "Actual pinned TvShowsController and shared LibraryController Similar route/action methods, RequestHelpers claim/user selection, native Series/Season selectors, Episode.IsMissingEpisode, UserViewBuilder adjacency, controller paging/error results, actual TVSeriesManager next-up selection, Series/MusicArtist/MusicAlbum/Audio local similar providers, TmdbSeriesSimilarProvider over controlled TMDbLib transport, and SimilarItemsManager provider configuration/order/scoring, remaining-limit queries, exception/cancellation boundaries, remote 20/500 batching, provider-ID resolution and real file cache behavior including exact numeric-string decimal-to-Single midpoint ordering, invalid-string and quoted Single-overflow fallback, and bit-exact Single scoring, with native comparers, actual ASP.NET comma collection and DateTime model binders, actual ExceptionMiddleware, and concrete LibraryManager empty-parent/UserView-parent/Guid.Empty, BaseItemRepository, SimilarItemsManager access filtering, and NextUpService probes over EF Core SQLite. Controlled controller-side repository/manager result arrays, user lookup, DTO projection, local provider results and remote local-library lookup entities are explicit seams. ASP.NET authorization filters, concrete DtoService internals, live external services and deterministic Random shuffle order remain outside this oracle; no public-network call is made. Named or non-finite cache-score rejection is a stricter candidate fail-closed policy and is not asserted as native parity."
+}

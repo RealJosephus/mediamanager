@@ -1,0 +1,10 @@
+[
+  {
+    "enabled": true,
+    "status": 200
+  },
+  {
+    "enabled": false,
+    "status": 404
+  }
+]

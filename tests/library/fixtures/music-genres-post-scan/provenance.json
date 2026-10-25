@@ -1,0 +1,128 @@
+{
+  "nativeSha256": "22003ebcc7ce823662bdae7b78c136ddd7ec2e4d64aeb8b3019d013ee16a917c",
+  "inputSha256": "44ce073866c724451f066339b3d5136f03a6b3c5c6a90f37a54561e37e2be72b",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/MusicGenresPostScanTask.cs",
+      "sha256": "1ecd19d7cf7eb0ddd7c204be785aa2cf63a08dc19f7d408cf8251e8a30f7defa",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/MusicGenresValidator.cs",
+      "sha256": "467b406362c971d09cda75ed3f2a554c0a266e12ec1854329586487518e97934",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Emby.Server.Implementations/Data/ItemTypeLookup.cs",
+      "sha256": "0e0d8322b53251df4556bd7c8b209505efcf5235ad7e767fa361f81704088aa4",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs",
+      "sha256": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Providers/MetadataRefreshOptions.cs",
+      "sha256": "a3c8c714480d398e284f730d88bbedccdc27f123f9bdf3a704d61ad98e5b7f10",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Providers/ImageRefreshOptions.cs",
+      "sha256": "291d2b4da3abecb0baab439ed869891dfaa7906a85666906d254637d21e2743d",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.ByName.cs",
+      "sha256": "7f6eee4731947677354fbbdd3cc3cad8a991fb8d7789a869dafd9f0309ad1c07",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "0847ac55ef33909591e1e392ca3e34eaae0f843066c366aea7d20d0c1c53b9a8"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 49152,
+    "sha256": "eed74d568fb40aa1b5e600785949d05c02ef95049323f1ab004c4b3089b8652b"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:\\mediamanager\\tests\\library\\fixtures\\music-genres-post-scan\\input.json",
+      "D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "cases": 17,
+  "sqliteRuntime": {
+    "name": "e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "evidence": "D:\\mediamanager-validation\\20261012-music-genres-post-scan-native-5",
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

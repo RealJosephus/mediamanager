@@ -1,0 +1,1929 @@
+[
+  {
+    "name": "movie-remove-file",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": []
+  },
+  {
+    "name": "movie-remove-before-new-sibling",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ]
+  },
+  {
+    "name": "movie-remove-image-files",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "imageCase": "current"
+  },
+  {
+    "name": "movie-delete-sql-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "movie-create-failure-after-delete",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-cancel-after-cleanup",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "cancellable": true,
+    "cancelFromCleanup": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "movie-empty-aggregate-root",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "aggregateParent": true
+  },
+  {
+    "name": "musicvideo-remove-file",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": []
+  },
+  {
+    "name": "musicvideo-remove-before-new-sibling",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ]
+  },
+  {
+    "name": "musicvideo-remove-image-files",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "imageCase": "current"
+  },
+  {
+    "name": "musicvideo-delete-sql-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "musicvideo-create-failure-after-delete",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-cancel-after-cleanup",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "cancellable": true,
+    "cancelFromCleanup": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "musicvideo-empty-aggregate-root",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "aggregateParent": true
+  },
+  {
+    "name": "video-remove-file",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": []
+  },
+  {
+    "name": "video-remove-before-new-sibling",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ]
+  },
+  {
+    "name": "video-remove-image-files",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "imageCase": "current"
+  },
+  {
+    "name": "video-delete-sql-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "video-create-failure-after-delete",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "video-cancel-after-cleanup",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "New Film.mkv"
+    ],
+    "cancellable": true,
+    "cancelFromCleanup": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "video-empty-aggregate-root",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [],
+    "aggregateParent": true
+  },
+  {
+    "name": "movie-to-homevideos",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "homevideos"
+  },
+  {
+    "name": "movie-to-homevideos-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "homevideos",
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "movie-to-homevideos-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "homevideos",
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "video-to-movies",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies"
+  },
+  {
+    "name": "video-to-movies-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies",
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "video-to-movies-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Video",
+    "resolverType": "Video",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "homevideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies",
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-to-musicvideos",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "musicvideos"
+  },
+  {
+    "name": "movie-to-musicvideos-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "musicvideos",
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "movie-to-musicvideos-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "musicvideos",
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-to-movies",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies"
+  },
+  {
+    "name": "musicvideo-to-movies-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies",
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "musicvideo-to-movies-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film (2020).mkv"
+    ],
+    "files": [
+      "Film (2020).mkv"
+    ],
+    "directories": [],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterCollectionType": "movies",
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "folder-remove-directory",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/readme.txt"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "mutationPath": "Film",
+    "mutationType": "Folder",
+    "afterFiles": [],
+    "afterDirectories": []
+  },
+  {
+    "name": "folder-remove-directory-with-images",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/readme.txt"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "mutationPath": "Film",
+    "mutationType": "Folder",
+    "afterFiles": [],
+    "afterDirectories": [],
+    "imageCase": "current"
+  },
+  {
+    "name": "folder-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/readme.txt"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "mutationPath": "Film",
+    "mutationType": "Folder",
+    "afterFiles": [],
+    "afterDirectories": [],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "folder-collapse-empty",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film A.mkv",
+      "Film/Film B.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "mutationPath": "Film",
+    "mutationType": "Folder",
+    "afterFiles": [
+      "Film/Film A.mkv"
+    ],
+    "warmNested": false
+  },
+  {
+    "name": "folder-collapse-nested",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film A.mkv",
+      "Film/Film B.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "mutationPath": "Film",
+    "mutationType": "Folder",
+    "afterFiles": [
+      "Film/Film A.mkv"
+    ],
+    "warmNested": true
+  },
+  {
+    "name": "movie-expand-to-folder",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film.mkv",
+      "Film/Other.mkv"
+    ]
+  },
+  {
+    "name": "movie-expand-to-folder-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film.mkv",
+      "Film/Other.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-replace-primary",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-replace-primary-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "failDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-replace-primary-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "failUpdate": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-demote-primary",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ]
+  },
+  {
+    "name": "movie-demote-primary-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-drop-alternate",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ]
+  },
+  {
+    "name": "musicvideo-replace-primary",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-replace-primary-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "failDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-replace-primary-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "failUpdate": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-demote-primary",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ]
+  },
+  {
+    "name": "musicvideo-demote-primary-create-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failCreateAfterDelete": true,
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-drop-alternate",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ]
+  },
+  {
+    "name": "movie-replace-two-version-primary",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ]
+  },
+  {
+    "name": "movie-replace-two-version-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "movie-replace-two-version-repository-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 1080p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-demote-alternate-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 1080p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-demote-old-primary-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 2160p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "movie-demote-saver-cancellation",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "cancellable": true,
+    "cancelFromSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "movie-demote-image-before-primary-failure",
+    "operation": "resolvepaths",
+    "expectedType": "Movie",
+    "resolverType": "Movie",
+    "parseName": true,
+    "mixed": false,
+    "collectionType": "movies",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "imageCase": "current",
+    "failSavedUpdatePath": "Film/Film - 2160p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-replace-two-version-primary",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ]
+  },
+  {
+    "name": "musicvideo-replace-two-version-delete-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ],
+    "failDelete": true,
+    "expectException": "SqliteException"
+  },
+  {
+    "name": "musicvideo-replace-two-version-repository-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 1080p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 1080p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-demote-alternate-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 1080p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-demote-old-primary-update-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "failSavedUpdatePath": "Film/Film - 2160p.mkv",
+    "expectException": "DbUpdateException"
+  },
+  {
+    "name": "musicvideo-demote-saver-cancellation",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "cancellable": true,
+    "cancelFromSaver": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "musicvideo-demote-image-before-primary-failure",
+    "operation": "resolvepaths",
+    "expectedType": "MusicVideo",
+    "resolverType": "MusicVideo",
+    "parseName": false,
+    "mixed": false,
+    "collectionType": "musicvideos",
+    "entries": [
+      "Film"
+    ],
+    "files": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv"
+    ],
+    "directories": [
+      "Film"
+    ],
+    "ignoreFiles": [],
+    "mutation": {
+      "Name": "Curated title",
+      "Overview": "Preserved overview",
+      "ProductionYear": 1999,
+      "RunTimeTicks": 9007199254740999
+    },
+    "afterFiles": [
+      "Film/Film - 2160p.mkv",
+      "Film/Film - 1080p.mkv",
+      "Film/Film - 720p.mkv",
+      "Film/Film - 4320p.mkv"
+    ],
+    "imageCase": "current",
+    "failSavedUpdatePath": "Film/Film - 2160p.mkv",
+    "expectException": "DbUpdateException"
+  }
+]

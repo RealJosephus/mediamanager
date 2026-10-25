@@ -1,0 +1,233 @@
+[
+  {
+    "name": "empty-root",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "comment-root",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled comment\n"
+      }
+    ]
+  },
+  {
+    "name": "number-after-filter",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mp4",
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mp4"
+      }
+    ]
+  },
+  {
+    "name": "ordered-negation",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv",
+      "primary-trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv\n!trailer.mkv"
+      }
+    ]
+  },
+  {
+    "name": "ancestor-filter",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": ".ignore",
+        "text": "trailer.mkv"
+      }
+    ]
+  },
+  {
+    "name": "ancestor-folder-filter",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "extras/some.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": ".ignore",
+        "text": "extras/"
+      }
+    ]
+  },
+  {
+    "name": "nested-nearest-comments",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "extras/.ignore",
+      "extras/some.mkv",
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      },
+      {
+        "path": "media/extras/.ignore",
+        "text": "# nearest\n"
+      }
+    ]
+  },
+  {
+    "name": "nested-file-filter-mixed",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "extras/.ignore",
+      "extras/some.mkv",
+      "extras/other.mp4"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/extras/.ignore",
+        "text": "*.mkv"
+      }
+    ]
+  },
+  {
+    "name": "nested-empty-folder",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "extras/.ignore",
+      "extras/some.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/extras/.ignore",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "ignored-cached-trailer",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "trailer.mkv"
+      }
+    ],
+    "existingType": true,
+    "attached": true
+  },
+  {
+    "name": "ignored-cached-cancelled",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "trailer.mkv"
+      }
+    ],
+    "existingType": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "all-invalid-root",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "\\q"
+      }
+    ]
+  },
+  {
+    "name": "unicode-filter",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "猫-trailer.mkv",
+      "trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "\\b猫\\b-trailer.mkv"
+      }
+    ]
+  },
+  {
+    "name": "utf16-series-nested",
+    "expectedType": "Series",
+    "resolverType": "Video",
+    "parseName": false,
+    "files": [
+      "primary/extras/.ignore",
+      "primary/extras/some.mkv",
+      "primary/extras/other.mp4"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/primary/extras/.ignore",
+        "text": "*.mkv\n",
+        "encoding": "utf16le"
+      }
+    ],
+    "ownerPath": "primary"
+  }
+]

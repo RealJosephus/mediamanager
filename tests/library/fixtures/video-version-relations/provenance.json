@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-06T19:45:59.742Z",
+  "frozenJellyfin": {
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "workspaceContentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/video-version-relations/input.json",
+      "sha256": "5c8c4bb94366ede755652f82fe520ae52ecc86db473cd6e952880ae634353142"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-relations/Program.cs",
+      "sha256": "ad2715d986c0511d6d09f401186bcdf24f05b061cd5470957775cd6a9a40a8b0"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-relations/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    {
+      "path": "tests/library/fixtures/video-version-relations/native.json",
+      "sha256": "736ac16cdd1bb2fd24285f1dad3798c56c8edd195c6edf97504a9b7c079c19de"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    }
+  ],
+  "recording": {
+    "passed": true,
+    "sourceFilesSha256": "074d4de43168512f16e1c74f3052750337213cd7ef31dba140538a1b2bcfe30a",
+    "originalNativeSha256": "cbf8b682d50af19775736ae9863aa3f24a8d8602d9044602b1ad7844bb6f12cf",
+    "portableNativeLineEndings": "LF"
+  },
+  "scope": "Actual frozen ItemPersistenceService.SaveItems and EF SQLite: ordered typed version links, literal path resolution, local priority/deduplication, child demotion, owned orphan direct removal, real FK cascades and transaction failures. Typed entities, seed rows, virtual paths, library getters, cancellation and SQL triggers are controls. Projects six BaseItems fields plus exact Int64, all LinkedChildren and selected FK/non-FK identifier projections. Excludes the retention placeholder, missing-file discovery/creation, LibraryManager events/cache, savers/images, full scalar mapping, generic DeleteItem and complete library acceptance."
+}

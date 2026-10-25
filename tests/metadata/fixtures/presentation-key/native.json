@@ -1,0 +1,4859 @@
+{
+  "phaseAcceptance": false,
+  "actualFrozenCreatePresentationUniqueKey": true,
+  "actualFrozenMetadataService": true,
+  "actualFrozenLibraryContextMethods": true,
+  "processId": 19488,
+  "runtime": ".NET 10.0.12",
+  "direct": [
+    {
+      "name": "default-Folder",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Folder",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Video",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Video",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Movie",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Movie",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-MusicVideo",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicVideo",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Trailer",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Trailer",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Episode",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Episode",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-UserView",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "UserView",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-MusicAlbum",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicAlbum",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Audio",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Audio",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-AudioBook",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "AudioBook",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Book",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Book",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "default-Year",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Year",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "Video-primary-00000000-0000-0000-0000-000000000000",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Video",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "00000000-0000-0000-0000-000000000000",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "00000000000000000000000000000000",
+      "error": null
+    },
+    {
+      "name": "Video-primary-abcdef01-1234-5678-9123-1234567890ab",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Video",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "abcdef01-1234-5678-9123-1234567890ab",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "abcdef011234567891231234567890ab",
+      "error": null
+    },
+    {
+      "name": "Movie-primary-00000000-0000-0000-0000-000000000000",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Movie",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "00000000-0000-0000-0000-000000000000",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "00000000000000000000000000000000",
+      "error": null
+    },
+    {
+      "name": "Movie-primary-abcdef01-1234-5678-9123-1234567890ab",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Movie",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "abcdef01-1234-5678-9123-1234567890ab",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "abcdef011234567891231234567890ab",
+      "error": null
+    },
+    {
+      "name": "MusicVideo-primary-00000000-0000-0000-0000-000000000000",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicVideo",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "00000000-0000-0000-0000-000000000000",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "00000000000000000000000000000000",
+      "error": null
+    },
+    {
+      "name": "MusicVideo-primary-abcdef01-1234-5678-9123-1234567890ab",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicVideo",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "abcdef01-1234-5678-9123-1234567890ab",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "abcdef011234567891231234567890ab",
+      "error": null
+    },
+    {
+      "name": "Trailer-primary-00000000-0000-0000-0000-000000000000",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Trailer",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "00000000-0000-0000-0000-000000000000",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "00000000000000000000000000000000",
+      "error": null
+    },
+    {
+      "name": "Trailer-primary-abcdef01-1234-5678-9123-1234567890ab",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Trailer",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "abcdef01-1234-5678-9123-1234567890ab",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "abcdef011234567891231234567890ab",
+      "error": null
+    },
+    {
+      "name": "Episode-primary-00000000-0000-0000-0000-000000000000",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Episode",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "00000000-0000-0000-0000-000000000000",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "00000000000000000000000000000000",
+      "error": null
+    },
+    {
+      "name": "Episode-primary-abcdef01-1234-5678-9123-1234567890ab",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Episode",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": "abcdef01-1234-5678-9123-1234567890ab",
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "abcdef011234567891231234567890ab",
+      "error": null
+    },
+    {
+      "name": "Person-name-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Person",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Person-",
+      "error": null
+    },
+    {
+      "name": "Person-name-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "Person",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Person-",
+      "error": null
+    },
+    {
+      "name": "Person-name-Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+        "Type": "Person",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Person-Jose A \u00DF I \u4E2D\u6587",
+      "error": null
+    },
+    {
+      "name": "Person-name-  \u00C9lodie  ",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "  \u00C9lodie  ",
+        "Type": "Person",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Person-  Elodie  ",
+      "error": null
+    },
+    {
+      "name": "Genre-name-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Genre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Genre-",
+      "error": null
+    },
+    {
+      "name": "Genre-name-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "Genre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Genre-",
+      "error": null
+    },
+    {
+      "name": "Genre-name-Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+        "Type": "Genre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Genre-Jose A \u00DF I \u4E2D\u6587",
+      "error": null
+    },
+    {
+      "name": "Genre-name-  \u00C9lodie  ",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "  \u00C9lodie  ",
+        "Type": "Genre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Genre-  Elodie  ",
+      "error": null
+    },
+    {
+      "name": "MusicGenre-name-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicGenre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "MusicGenre-",
+      "error": null
+    },
+    {
+      "name": "MusicGenre-name-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "MusicGenre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "MusicGenre-",
+      "error": null
+    },
+    {
+      "name": "MusicGenre-name-Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+        "Type": "MusicGenre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "MusicGenre-Jose A \u00DF I \u4E2D\u6587",
+      "error": null
+    },
+    {
+      "name": "MusicGenre-name-  \u00C9lodie  ",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "  \u00C9lodie  ",
+        "Type": "MusicGenre",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "MusicGenre-  Elodie  ",
+      "error": null
+    },
+    {
+      "name": "Studio-name-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Studio",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Studio-",
+      "error": null
+    },
+    {
+      "name": "Studio-name-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "Studio",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Studio-",
+      "error": null
+    },
+    {
+      "name": "Studio-name-Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+        "Type": "Studio",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Studio-Jose A \u00DF I \u4E2D\u6587",
+      "error": null
+    },
+    {
+      "name": "Studio-name-  \u00C9lodie  ",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "  \u00C9lodie  ",
+        "Type": "Studio",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Studio-  Elodie  ",
+      "error": null
+    },
+    {
+      "name": "MusicArtist-name-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "MusicArtist",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Artist-",
+      "error": null
+    },
+    {
+      "name": "MusicArtist-name-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "MusicArtist",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Artist-",
+      "error": null
+    },
+    {
+      "name": "MusicArtist-name-Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9 \u00C5 \u00DF \u0130 \u4E2D\u6587",
+        "Type": "MusicArtist",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Artist-Jose A \u00DF I \u4E2D\u6587",
+      "error": null
+    },
+    {
+      "name": "MusicArtist-name-  \u00C9lodie  ",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "  \u00C9lodie  ",
+        "Type": "MusicArtist",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "Artist-  Elodie  ",
+      "error": null
+    },
+    {
+      "name": "series-name-False-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "series-name-False-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "series-name-False-THE \u0130 SERIES",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "THE \u0130 SERIES",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": false,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "series-name-True-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "series-name-True-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "series-name-True-THE \u0130 SERIES",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "THE \u0130 SERIES",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "zh-CN",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-the \u0130 series-zh-CN-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-providers-Tmdb",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback name",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {
+        "Tmdb": "123"
+      },
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-fallback name-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-providers-Imdb",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback name",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {
+        "Imdb": "tt1"
+      },
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "tt1-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-providers-Tvdb-Imdb",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback name",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {
+        "Tvdb": "tv1",
+        "Imdb": "tt1"
+      },
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "tv1-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-providers-Custom-Tvdb-Imdb",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback name",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {
+        "Custom": "custom1",
+        "Tvdb": "tv1",
+        "Imdb": "tt1"
+      },
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "custom1-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-providers-Custom-Tvdb-Imdb",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback name",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {
+        "Custom": "",
+        "Tvdb": "",
+        "Imdb": ""
+      },
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-fallback name-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-channel-external",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 1,
+      "ExternalId": "external-control",
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "",
+      "collections": [],
+      "key": "external-control",
+      "error": null
+    },
+    {
+      "name": "series-own-language",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": "fr",
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-fallback-fr-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-collection-language",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "en",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": "ja"
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-fallback-ja-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "series-library-empty",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "",
+      "collections": [],
+      "key": "series-fallback",
+      "error": null
+    },
+    {
+      "name": "series-duplicate-collection",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Fallback",
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": null,
+      "series": null,
+      "grouping": true,
+      "language": "",
+      "collections": [
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "PreferredMetadataLanguage": null
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "PreferredMetadataLanguage": null
+        }
+      ],
+      "key": "series-fallback-abcdef01000000000000000000000001-abcdef01000000000000000000000002-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "season-null-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "season-null-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "season-null-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": null,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    },
+    {
+      "name": "season--2147483648-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -2147483648,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "--2147483648",
+      "error": null
+    },
+    {
+      "name": "season--2147483648-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -2147483648,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "--2147483648",
+      "error": null
+    },
+    {
+      "name": "season--2147483648-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -2147483648,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key--2147483648",
+      "error": null
+    },
+    {
+      "name": "season--1-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "--001",
+      "error": null
+    },
+    {
+      "name": "season--1-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "--001",
+      "error": null
+    },
+    {
+      "name": "season--1-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": -1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key--001",
+      "error": null
+    },
+    {
+      "name": "season-0-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 0,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-000",
+      "error": null
+    },
+    {
+      "name": "season-0-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 0,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-000",
+      "error": null
+    },
+    {
+      "name": "season-0-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 0,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key-000",
+      "error": null
+    },
+    {
+      "name": "season-1-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-001",
+      "error": null
+    },
+    {
+      "name": "season-1-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-001",
+      "error": null
+    },
+    {
+      "name": "season-1-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key-001",
+      "error": null
+    },
+    {
+      "name": "season-999-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 999,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-999",
+      "error": null
+    },
+    {
+      "name": "season-999-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 999,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-999",
+      "error": null
+    },
+    {
+      "name": "season-999-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 999,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key-999",
+      "error": null
+    },
+    {
+      "name": "season-1000-null",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1000,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-1000",
+      "error": null
+    },
+    {
+      "name": "season-1000-",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1000,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "-1000",
+      "error": null
+    },
+    {
+      "name": "season-1000-stored-series-key",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1000,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": {
+        "Id": "99700000-0000-0000-0000-000000000099",
+        "Name": null,
+        "Type": "Series",
+        "PresentationUniqueKey": "stored-series-key",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "stored-series-key-1000",
+      "error": null
+    },
+    {
+      "name": "season-missing-series",
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": null,
+        "Type": "Season",
+        "PresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "ProviderIds": {},
+      "SourceType": 0,
+      "ExternalId": null,
+      "PreferredMetadataLanguage": null,
+      "primaryVersionId": null,
+      "IndexNumber": 1,
+      "seriesId": "99700000-0000-0000-0000-000000000099",
+      "series": null,
+      "grouping": false,
+      "language": "",
+      "collections": [],
+      "key": "99700000000000000000000000000001",
+      "error": null
+    }
+  ],
+  "metadata": [
+    {
+      "name": "Movie-False-None-missing",
+      "kind": "Movie",
+      "first": false,
+      "mode": 0,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-False-None-stale",
+      "kind": "Movie",
+      "first": false,
+      "mode": 0,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-False-None-correct",
+      "kind": "Movie",
+      "first": false,
+      "mode": 0,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-False-Default-missing",
+      "kind": "Movie",
+      "first": false,
+      "mode": 2,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T10:20:43.2907572Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.2907572Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-False-Default-stale",
+      "kind": "Movie",
+      "first": false,
+      "mode": 2,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T10:20:43.2909212Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.2909212Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-False-Default-correct",
+      "kind": "Movie",
+      "first": false,
+      "mode": 2,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.2909745Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-None-missing",
+      "kind": "Movie",
+      "first": true,
+      "mode": 0,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-None-stale",
+      "kind": "Movie",
+      "first": true,
+      "mode": 0,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-None-correct",
+      "kind": "Movie",
+      "first": true,
+      "mode": 0,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 1,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-Default-missing",
+      "kind": "Movie",
+      "first": true,
+      "mode": 2,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3049723Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3049723Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-Default-stale",
+      "kind": "Movie",
+      "first": true,
+      "mode": 2,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3051883Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3051883Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Movie-True-Default-correct",
+      "kind": "Movie",
+      "first": true,
+      "mode": 2,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 1,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Movie",
+            "PresentationUniqueKey": "99700000000000000000000000000001",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3052617Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Movie",
+        "PresentationUniqueKey": "99700000000000000000000000000001",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3052617Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-None-missing",
+      "kind": "Person",
+      "first": false,
+      "mode": 0,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-None-stale",
+      "kind": "Person",
+      "first": false,
+      "mode": 0,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-None-correct",
+      "kind": "Person",
+      "first": false,
+      "mode": 0,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-Default-missing",
+      "kind": "Person",
+      "first": false,
+      "mode": 2,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3113777Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3113777Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-Default-stale",
+      "kind": "Person",
+      "first": false,
+      "mode": 2,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3115291Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3115291Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-False-Default-correct",
+      "kind": "Person",
+      "first": false,
+      "mode": 2,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3116088Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-None-missing",
+      "kind": "Person",
+      "first": true,
+      "mode": 0,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-None-stale",
+      "kind": "Person",
+      "first": true,
+      "mode": 0,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-None-correct",
+      "kind": "Person",
+      "first": true,
+      "mode": 0,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 1,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-Default-missing",
+      "kind": "Person",
+      "first": true,
+      "mode": 2,
+      "initial": "missing",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3125143Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3125143Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-Default-stale",
+      "kind": "Person",
+      "first": true,
+      "mode": 2,
+      "initial": "stale",
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T10:20:43.3126516Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.3126516Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    },
+    {
+      "name": "Person-True-Default-correct",
+      "kind": "Person",
+      "first": true,
+      "mode": 2,
+      "initial": "correct",
+      "result": 1,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider",
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 1,
+          "item": {
+            "Id": "99700000-0000-0000-0000-000000000001",
+            "Name": "Jos\u00E9",
+            "Type": "Person",
+            "PresentationUniqueKey": "Person-Jose",
+            "DateLastRefreshed": "2026-10-03T10:20:43.312761Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach"
+        }
+      ],
+      "item": {
+        "Id": "99700000-0000-0000-0000-000000000001",
+        "Name": "Jos\u00E9",
+        "Type": "Person",
+        "PresentationUniqueKey": "Person-Jose",
+        "DateLastRefreshed": "2026-10-03T10:20:43.312761Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      }
+    }
+  ],
+  "contexts": [
+    {
+      "name": "unrelated-query-ancestors",
+      "itemId": "99700000-0000-0000-0000-000000000001",
+      "rows": [
+        {
+          "Id": "99700000-0000-0000-0000-000000000002",
+          "Type": "AggregateFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "0",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000003",
+          "Type": "UserRootFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "1",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": null,
+          "Path": "Z:\\Fixture",
+          "ParentId": "99700000-0000-0000-0000-000000000002",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "2",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000009",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\bad",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ru",
+          "PreferredMetadataCountryCode": "RU",
+          "SortName": "3",
+          "PhysicalFolderIds": [
+            "99700000-0000-0000-0000-000000000004"
+          ],
+          "PhysicalLocationsList": [
+            "Z:\\Unrelated"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\first",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ja",
+          "PreferredMetadataCountryCode": "JP",
+          "SortName": "4",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\second",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "5",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000001",
+          "Type": "Series",
+          "Name": "Fallback",
+          "Path": "Z:\\Fixture\\Show",
+          "ParentId": "99700000-0000-0000-0000-000000000004",
+          "TopParentId": "99700000-0000-0000-0000-000000000009",
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "6",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        }
+      ],
+      "staleQueryAncestorIds": [
+        "99700000-0000-0000-0000-000000000009"
+      ],
+      "configuredOptions": [
+        {
+          "id": "abcdef01-0000-0000-0000-000000000002",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": true,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "zh-CN",
+            "MetadataCountryCode": "CN",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "abcdef01-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "es",
+            "MetadataCountryCode": "ES",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000009",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "ru",
+            "MetadataCountryCode": "RU",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000001",
+          "missing": true,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "it",
+            "MetadataCountryCode": "IT",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        }
+      ],
+      "options": {
+        "EnableAutomaticSeriesGrouping": true,
+        "PreferredMetadataLanguage": "zh-CN",
+        "MetadataCountryCode": "CN"
+      },
+      "actualFolders": [
+        "abcdef01-0000-0000-0000-000000000002",
+        "abcdef01-0000-0000-0000-000000000001"
+      ],
+      "language": "ja",
+      "country": "JP",
+      "key": "series-fallback-ja-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "real-parent-language",
+      "itemId": "99700000-0000-0000-0000-000000000001",
+      "rows": [
+        {
+          "Id": "99700000-0000-0000-0000-000000000002",
+          "Type": "AggregateFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "0",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000003",
+          "Type": "UserRootFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "1",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": null,
+          "Path": "Z:\\Fixture",
+          "ParentId": "99700000-0000-0000-0000-000000000002",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "fr",
+          "PreferredMetadataCountryCode": "FR",
+          "SortName": "2",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000009",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\bad",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ru",
+          "PreferredMetadataCountryCode": "RU",
+          "SortName": "3",
+          "PhysicalFolderIds": [
+            "99700000-0000-0000-0000-000000000004"
+          ],
+          "PhysicalLocationsList": [
+            "Z:\\Unrelated"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\first",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ja",
+          "PreferredMetadataCountryCode": "JP",
+          "SortName": "4",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\second",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "5",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000001",
+          "Type": "Series",
+          "Name": "Fallback",
+          "Path": "Z:\\Fixture\\Show",
+          "ParentId": "99700000-0000-0000-0000-000000000004",
+          "TopParentId": "99700000-0000-0000-0000-000000000009",
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "6",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        }
+      ],
+      "staleQueryAncestorIds": [
+        "99700000-0000-0000-0000-000000000009"
+      ],
+      "configuredOptions": [
+        {
+          "id": "abcdef01-0000-0000-0000-000000000002",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": true,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "zh-CN",
+            "MetadataCountryCode": "CN",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "abcdef01-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "es",
+            "MetadataCountryCode": "ES",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000009",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "ru",
+            "MetadataCountryCode": "RU",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000001",
+          "missing": true,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "it",
+            "MetadataCountryCode": "IT",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        }
+      ],
+      "options": {
+        "EnableAutomaticSeriesGrouping": true,
+        "PreferredMetadataLanguage": "zh-CN",
+        "MetadataCountryCode": "CN"
+      },
+      "actualFolders": [
+        "abcdef01-0000-0000-0000-000000000002",
+        "abcdef01-0000-0000-0000-000000000001"
+      ],
+      "language": "fr",
+      "country": "FR",
+      "key": "series-fallback-fr-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "first-library-default-options",
+      "itemId": "99700000-0000-0000-0000-000000000001",
+      "rows": [
+        {
+          "Id": "99700000-0000-0000-0000-000000000002",
+          "Type": "AggregateFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "0",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000003",
+          "Type": "UserRootFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "1",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": null,
+          "Path": "Z:\\Fixture",
+          "ParentId": "99700000-0000-0000-0000-000000000002",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "2",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000009",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\bad",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ru",
+          "PreferredMetadataCountryCode": "RU",
+          "SortName": "3",
+          "PhysicalFolderIds": [
+            "99700000-0000-0000-0000-000000000004"
+          ],
+          "PhysicalLocationsList": [
+            "Z:\\Unrelated"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\first",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "4",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\second",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "5",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000001",
+          "Type": "Series",
+          "Name": "Fallback",
+          "Path": "Z:\\Fixture\\Show",
+          "ParentId": "99700000-0000-0000-0000-000000000004",
+          "TopParentId": "99700000-0000-0000-0000-000000000009",
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "6",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        }
+      ],
+      "staleQueryAncestorIds": [
+        "99700000-0000-0000-0000-000000000009"
+      ],
+      "configuredOptions": [
+        {
+          "id": "abcdef01-0000-0000-0000-000000000002",
+          "missing": true,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": true,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": null,
+            "MetadataCountryCode": null,
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "abcdef01-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "es",
+            "MetadataCountryCode": "ES",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000009",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "ru",
+            "MetadataCountryCode": "RU",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000001",
+          "missing": true,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "it",
+            "MetadataCountryCode": "IT",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        }
+      ],
+      "options": {
+        "EnableAutomaticSeriesGrouping": true,
+        "PreferredMetadataLanguage": null,
+        "MetadataCountryCode": null
+      },
+      "actualFolders": [
+        "abcdef01-0000-0000-0000-000000000002",
+        "abcdef01-0000-0000-0000-000000000001"
+      ],
+      "language": "en",
+      "country": "US",
+      "key": "series-fallback-en-abcdef01000000000000000000000001-abcdef01000000000000000000000002",
+      "error": null
+    },
+    {
+      "name": "no-actual-library",
+      "itemId": "99700000-0000-0000-0000-000000000001",
+      "rows": [
+        {
+          "Id": "99700000-0000-0000-0000-000000000002",
+          "Type": "AggregateFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "0",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000003",
+          "Type": "UserRootFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "1",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": null,
+          "Path": "Z:\\Other",
+          "ParentId": "99700000-0000-0000-0000-000000000002",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "2",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000009",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\bad",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ru",
+          "PreferredMetadataCountryCode": "RU",
+          "SortName": "3",
+          "PhysicalFolderIds": [
+            "99700000-0000-0000-0000-000000000004"
+          ],
+          "PhysicalLocationsList": [
+            "Z:\\Unrelated"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\first",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "4",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\second",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "5",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000001",
+          "Type": "Series",
+          "Name": "Fallback",
+          "Path": "Z:\\Other\\Show",
+          "ParentId": "99700000-0000-0000-0000-000000000004",
+          "TopParentId": "99700000-0000-0000-0000-000000000009",
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "6",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        }
+      ],
+      "staleQueryAncestorIds": [
+        "99700000-0000-0000-0000-000000000009"
+      ],
+      "configuredOptions": [
+        {
+          "id": "abcdef01-0000-0000-0000-000000000002",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": true,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "zh-CN",
+            "MetadataCountryCode": "CN",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "abcdef01-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "es",
+            "MetadataCountryCode": "ES",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000009",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "ru",
+            "MetadataCountryCode": "RU",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000001",
+          "missing": true,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "it",
+            "MetadataCountryCode": "IT",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        }
+      ],
+      "options": {
+        "EnableAutomaticSeriesGrouping": true,
+        "PreferredMetadataLanguage": null,
+        "MetadataCountryCode": null
+      },
+      "actualFolders": [],
+      "language": "en",
+      "country": "US",
+      "key": "series-fallback-en",
+      "error": null
+    },
+    {
+      "name": "collection-self",
+      "itemId": "99700000-0000-0000-0000-000000000001",
+      "rows": [
+        {
+          "Id": "99700000-0000-0000-0000-000000000002",
+          "Type": "AggregateFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "0",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000003",
+          "Type": "UserRootFolder",
+          "Name": null,
+          "Path": null,
+          "ParentId": "00000000-0000-0000-0000-000000000000",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "1",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000004",
+          "Type": "Folder",
+          "Name": null,
+          "Path": "Z:\\Fixture",
+          "ParentId": "99700000-0000-0000-0000-000000000002",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "2",
+          "PhysicalFolderIds": null,
+          "PhysicalLocationsList": null
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000009",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\bad",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": "ru",
+          "PreferredMetadataCountryCode": "RU",
+          "SortName": "3",
+          "PhysicalFolderIds": [
+            "99700000-0000-0000-0000-000000000004"
+          ],
+          "PhysicalLocationsList": [
+            "Z:\\Unrelated"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000002",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\first",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "4",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "abcdef01-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": null,
+          "Path": "Z:\\Libraries\\second",
+          "ParentId": "99700000-0000-0000-0000-000000000003",
+          "TopParentId": null,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "5",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": [
+            "Z:\\Fixture"
+          ]
+        },
+        {
+          "Id": "99700000-0000-0000-0000-000000000001",
+          "Type": "CollectionFolder",
+          "Name": "Self",
+          "Path": "Z:\\Libraries\\self",
+          "ParentId": "99700000-0000-0000-0000-000000000004",
+          "TopParentId": "99700000-0000-0000-0000-000000000009",
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "SortName": "6",
+          "PhysicalFolderIds": [],
+          "PhysicalLocationsList": []
+        }
+      ],
+      "staleQueryAncestorIds": [
+        "99700000-0000-0000-0000-000000000009"
+      ],
+      "configuredOptions": [
+        {
+          "id": "abcdef01-0000-0000-0000-000000000002",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": true,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "zh-CN",
+            "MetadataCountryCode": "CN",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "abcdef01-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "es",
+            "MetadataCountryCode": "ES",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000009",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "ru",
+            "MetadataCountryCode": "RU",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        },
+        {
+          "id": "99700000-0000-0000-0000-000000000001",
+          "missing": false,
+          "value": {
+            "Enabled": true,
+            "EnablePhotos": true,
+            "EnableRealtimeMonitor": false,
+            "EnableLUFSScan": false,
+            "EnableChapterImageExtraction": false,
+            "ExtractChapterImagesDuringLibraryScan": false,
+            "EnableTrickplayImageExtraction": false,
+            "ExtractTrickplayImagesDuringLibraryScan": false,
+            "PathInfos": [],
+            "SaveLocalMetadata": false,
+            "EnableInternetProviders": false,
+            "EnableAutomaticSeriesGrouping": false,
+            "EnableEmbeddedTitles": false,
+            "EnableEmbeddedExtrasTitles": false,
+            "EnableEmbeddedEpisodeInfos": false,
+            "AutomaticRefreshIntervalDays": 0,
+            "PreferredMetadataLanguage": "it",
+            "MetadataCountryCode": "IT",
+            "SeasonZeroDisplayName": "Specials",
+            "MetadataSavers": null,
+            "DisabledLocalMetadataReaders": [],
+            "LocalMetadataReaderOrder": null,
+            "DisabledSubtitleFetchers": [],
+            "SubtitleFetcherOrder": [],
+            "DisabledMediaSegmentProviders": [],
+            "MediaSegmentProviderOrder": [],
+            "SkipSubtitlesIfEmbeddedSubtitlesPresent": false,
+            "SkipSubtitlesIfAudioTrackMatches": true,
+            "SubtitleDownloadLanguages": null,
+            "RequirePerfectSubtitleMatch": true,
+            "SaveSubtitlesWithMedia": true,
+            "SaveLyricsWithMedia": false,
+            "SaveTrickplayWithMedia": false,
+            "DisabledLyricFetchers": [],
+            "LyricFetcherOrder": [],
+            "PreferNonstandardArtistsTag": false,
+            "UseCustomTagDelimiters": false,
+            "CustomTagDelimiters": [
+              "/",
+              "|",
+              ";",
+              "\\"
+            ],
+            "DelimiterWhitelist": [],
+            "AutomaticallyAddToCollection": false,
+            "AllowEmbeddedSubtitles": 0,
+            "TypeOptions": []
+          }
+        }
+      ],
+      "options": {
+        "EnableAutomaticSeriesGrouping": false,
+        "PreferredMetadataLanguage": "it",
+        "MetadataCountryCode": "IT"
+      },
+      "actualFolders": [
+        "abcdef01-0000-0000-0000-000000000002",
+        "abcdef01-0000-0000-0000-000000000001"
+      ],
+      "language": "it",
+      "country": "IT",
+      "key": "99700000000000000000000000000001",
+      "error": null
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\presentation-key-native-v5\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\presentation-key-native-v5\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\presentation-key-native-v5\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "limitations": "Direct actual entity virtual-method controls plus actual Movie/Person metadata services. Library options, collection lookup, parent series, custom providers and repository saves are controlled dependencies. No native SQL, HTTP, filesystem or PostgreSQL. Metadata timestamps from controlled repository saves remain MinValue; no complete refresh or migration acceptance."
+}

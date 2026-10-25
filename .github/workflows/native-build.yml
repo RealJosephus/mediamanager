@@ -1,0 +1,72 @@
+name: Build native reference runtime
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Native reference / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+      MEDIAMANAGER_CI_MATRIX_OS: ${{ matrix.os }}
+      MEDIAMANAGER_CI_SHARD: '1'
+      MEDIAMANAGER_CI_SHARDS: '1'
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Bind exact checkout HEAD and tree
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $head = (git rev-parse --verify HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $head -cne $env:GITHUB_SHA) { throw 'Checked-out HEAD differs from GITHUB_SHA.' }
+          $tree = (git rev-parse --verify 'HEAD^{tree}').Trim()
+          if ($LASTEXITCODE -ne 0 -or $tree -notmatch '^[a-f0-9]{40}$') { throw 'Cannot identify the checked-out tree.' }
+          "MEDIAMANAGER_CHECKOUT_HEAD=$head" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "MEDIAMANAGER_CHECKOUT_TREE=$tree" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Configure isolated .NET installation
+        shell: pwsh
+        run: |
+          "DOTNET_INSTALL_DIR=$(Join-Path $env:RUNNER_TEMP 'mediamanager-dotnet')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Set up pinned .NET SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.401
+      - name: Verify isolated .NET installation
+        shell: pwsh
+        run: ./tools/ci/verify-dotnet.ps1
+      - name: Set up pinned Node.js for receipt verification
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+      - name: Verify source, build runtime and immediately close same-run receipts
+        shell: pwsh
+        run: |
+          ./tools/ci/build-native.ps1
+          $env:MEDIAMANAGER_NATIVE_BUILD_ROOT = Join-Path $env:RUNNER_TEMP 'mediamanager-native-build'
+          $env:MEDIAMANAGER_JELLYFIN_DLL = Join-Path $env:MEDIAMANAGER_NATIVE_BUILD_ROOT 'runtime/jellyfin.dll'
+          node --input-type=module --eval "const { verifyNativeBuild } = await import('./tools/validation/native-build-inputs.js'); await verifyNativeBuild();"
+      - name: Preserve runtime, source offer and build evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-reference-${{ matrix.os }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mediamanager-native-build/runtime
+            ${{ runner.temp }}/mediamanager-native-build/source-offer
+            ${{ runner.temp }}/mediamanager-native-build/receipts
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "ordinary-movie-stack-replacement",
+    "Libraries": [{ "Name": "Movies", "Locations": ["Film"], "CollectionType": "movies" }],
+    "Directories": ["Film"],
+    "StackReplacement": {
+      "Directory": "Film",
+      "Steps": [
+        { "Name": "created", "Write": ["Film cd2.mkv", "Film cd1.mkv"] },
+        { "Name": "repeated" },
+        { "Name": "earlier-primary", "Write": ["Film cd0.mkv"] },
+        { "Name": "removed-earlier-primary", "Delete": ["Film cd0.mkv"] },
+        { "Name": "later-part", "Write": ["Film cd10.mkv"] },
+        { "Name": "removed-first-primary", "Delete": ["Film cd1.mkv"] },
+        { "Name": "removed-last-part", "Delete": ["Film cd2.mkv"], "RefreshBeforeScan": true }
+      ]
+    }
+  }
+]

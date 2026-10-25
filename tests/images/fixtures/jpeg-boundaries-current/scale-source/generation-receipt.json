@@ -1,0 +1,1930 @@
+{
+  "schemaVersion": 1,
+  "identity": "independent-jpeg-scale-boundary-inputs",
+  "scope": "Fourteen neutral JPEG inputs straddling source-dimension scale boundaries; no expected decoder pixels, BlurHash values or Native observations.",
+  "repository": "RealJosephus/mediamanager",
+  "commit": "49dc33a8d28d71d4e7a243836113bc7fff67870b",
+  "runId": "40101904994",
+  "runAttempt": "1",
+  "ref": "refs/heads/main",
+  "runner": {
+    "RUNNER_OS": "Linux",
+    "RUNNER_ARCH": "X64",
+    "ImageOS": "ubuntu24",
+    "ImageVersion": "20261023.334.3"
+  },
+  "status": "generated",
+  "commands": [
+    {
+      "name": "checkout-head",
+      "arguments": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/runner/work/mediamanager/mediamanager",
+      "timeoutSeconds": 240,
+      "started": 1792851548.8566284,
+      "exitCode": 0,
+      "finished": 1792851548.860303,
+      "stdout": {
+        "filename": "receipts/checkout-head.stdout.txt",
+        "bytes": 41,
+        "sha256": "f91f8222b94d78689b20b261027fc274bec7aaf594174a65ecf556d4aaa349e4"
+      },
+      "stderr": {
+        "filename": "receipts/checkout-head.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "checkout-status-before",
+      "arguments": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/home/runner/work/mediamanager/mediamanager",
+      "timeoutSeconds": 240,
+      "started": 1792851548.8608975,
+      "exitCode": 0,
+      "finished": 1792851549.6767862,
+      "stdout": {
+        "filename": "receipts/checkout-status-before.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/checkout-status-before.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compiler-version",
+      "arguments": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "--version"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851549.8371313,
+      "exitCode": 0,
+      "finished": 1792851549.840765,
+      "stdout": {
+        "filename": "receipts/compiler-version.stdout.txt",
+        "bytes": 266,
+        "sha256": "ae487f55927d605284a32711e4ecf6bc3be2bcd5a9de414ace0936264b741f85"
+      },
+      "stderr": {
+        "filename": "receipts/compiler-version.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-neutral-producer",
+      "arguments": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "-O2",
+        "-std=c11",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcapimin.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcapistd.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jccoefct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jccolor.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcdctmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jchuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcicc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcinit.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcmainct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcmarker.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcmaster.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcomapi.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcparam.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcphuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcprepct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jcsample.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jctrans.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdapimin.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdapistd.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdatadst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdatasrc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdcoefct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdcolor.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jddctmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdhuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdicc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdinput.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdmainct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdmarker.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdmaster.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdmerge.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdphuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdpostct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdsample.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jdtrans.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jerror.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jfdctflt.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jfdctfst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jfdctint.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jidctflt.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jidctfst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jidctint.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jidctred.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jmemmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jmemnobs.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jpeg_nbits_table.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jquant1.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jquant2.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jutils.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/jsimd_none.c",
+        "/home/runner/work/mediamanager/mediamanager/tools/images/generate-jpeg-scale-boundaries.c",
+        "-lm",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851549.8466923,
+      "exitCode": 0,
+      "finished": 1792851558.6825614,
+      "stdout": {
+        "filename": "receipts/compile-neutral-producer.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/compile-neutral-producer.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n2-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n2-width-floor.jpg",
+        "682",
+        "512"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.6833746,
+      "exitCode": 0,
+      "finished": 1792851558.699102,
+      "stdout": {
+        "filename": "receipts/generate-scale-n2-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n2-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n2-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n2-width-ceil.jpg",
+        "683",
+        "512"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.700323,
+      "exitCode": 0,
+      "finished": 1792851558.7160192,
+      "stdout": {
+        "filename": "receipts/generate-scale-n2-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n2-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n3-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n3-width-floor.jpg",
+        "409",
+        "307"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7172718,
+      "exitCode": 0,
+      "finished": 1792851558.7249148,
+      "stdout": {
+        "filename": "receipts/generate-scale-n3-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n3-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n3-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n3-width-ceil.jpg",
+        "410",
+        "307"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7254906,
+      "exitCode": 0,
+      "finished": 1792851558.7330942,
+      "stdout": {
+        "filename": "receipts/generate-scale-n3-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n3-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n4-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n4-width-floor.jpg",
+        "292",
+        "219"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7336512,
+      "exitCode": 0,
+      "finished": 1792851558.7411904,
+      "stdout": {
+        "filename": "receipts/generate-scale-n4-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n4-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n4-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n4-width-ceil.jpg",
+        "293",
+        "220"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.741625,
+      "exitCode": 0,
+      "finished": 1792851558.7491813,
+      "stdout": {
+        "filename": "receipts/generate-scale-n4-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n4-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n5-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n5-width-floor.jpg",
+        "227",
+        "170"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7497363,
+      "exitCode": 0,
+      "finished": 1792851558.7532976,
+      "stdout": {
+        "filename": "receipts/generate-scale-n5-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n5-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n5-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n5-width-ceil.jpg",
+        "228",
+        "171"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.753707,
+      "exitCode": 0,
+      "finished": 1792851558.7571929,
+      "stdout": {
+        "filename": "receipts/generate-scale-n5-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n5-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n6-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n6-width-floor.jpg",
+        "186",
+        "139"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7575874,
+      "exitCode": 0,
+      "finished": 1792851558.7610497,
+      "stdout": {
+        "filename": "receipts/generate-scale-n6-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n6-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n6-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n6-width-ceil.jpg",
+        "187",
+        "140"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.761449,
+      "exitCode": 0,
+      "finished": 1792851558.7649057,
+      "stdout": {
+        "filename": "receipts/generate-scale-n6-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n6-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n7-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n7-width-floor.jpg",
+        "157",
+        "117"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.76531,
+      "exitCode": 0,
+      "finished": 1792851558.7687485,
+      "stdout": {
+        "filename": "receipts/generate-scale-n7-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n7-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n7-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n7-width-ceil.jpg",
+        "158",
+        "118"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7691114,
+      "exitCode": 0,
+      "finished": 1792851558.772571,
+      "stdout": {
+        "filename": "receipts/generate-scale-n7-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n7-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n8-width-floor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n8-width-floor.jpg",
+        "136",
+        "102"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.7729595,
+      "exitCode": 0,
+      "finished": 1792851558.7764158,
+      "stdout": {
+        "filename": "receipts/generate-scale-n8-width-floor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n8-width-floor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "generate-scale-n8-width-ceil",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/producer/generate-jpeg-scale-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/artifact/assets/scale-n8-width-ceil.jpg",
+        "137",
+        "102"
+      ],
+      "cwd": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs",
+      "timeoutSeconds": 240,
+      "started": 1792851558.776778,
+      "exitCode": 0,
+      "finished": 1792851558.7801874,
+      "stdout": {
+        "filename": "receipts/generate-scale-n8-width-ceil.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/generate-scale-n8-width-ceil.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "checkout-status-after",
+      "arguments": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/home/runner/work/mediamanager/mediamanager",
+      "timeoutSeconds": 240,
+      "started": 1792851558.8207953,
+      "exitCode": 0,
+      "finished": 1792851558.8528411,
+      "stdout": {
+        "filename": "receipts/checkout-status-after.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "filename": "receipts/checkout-status-after.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "sourceInputs": [
+    {
+      "filename": "sources/libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/src/images/jpeg-codec/source-archives/libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "role": "complete-original-libjpeg-turbo-archive",
+      "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+archive/927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "commit": "927aabfcd26897abb9776ecf2a6c38ea5bb52ab6"
+    },
+    {
+      "filename": "recipe/source-offer.json",
+      "bytes": 6935,
+      "sha256": "448b258af2fe2252745c3e6ad5794a0d161d8bbec1a1eab5f53f74252c19f5b3",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/src/images/jpeg-codec/source-offer.json",
+      "role": "original-codec-source-offer"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.c",
+      "bytes": 2158,
+      "sha256": "81240ceeabb19420d9d71e8c88e1973da040acfb9ac56bcf1d952284eb071bf2",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/tools/images/generate-jpeg-scale-boundaries.c",
+      "role": "neutral-rgb-pattern-producer"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.py",
+      "bytes": 11840,
+      "sha256": "ca6513d1d8c6acb240d6348e7b1235ca50a6550b2938a7fd5f37d8f0d0d6d91b",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/tools/images/generate-jpeg-scale-boundaries.py",
+      "role": "generation-recipe"
+    },
+    {
+      "filename": "recipe/generate-jpeg-boundaries.c",
+      "bytes": 2863,
+      "sha256": "ee41f7c6072b916234a62d36dd1b3600d0dde970b58bfbf4b381b5ea01d8d8f8",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/tools/images/generate-jpeg-boundaries.c",
+      "role": "original-rgb-pattern-producer"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.yml",
+      "bytes": 976,
+      "sha256": "c0b4839007f11b4c2dbb908a193366a31aa197f2ece17c24034f43480ce1087f",
+      "originalFilename": "/home/runner/work/mediamanager/mediamanager/.github/workflows/generate-jpeg-scale-boundaries.yml",
+      "role": "generation-workflow"
+    },
+    {
+      "filename": "licenses/LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1",
+      "originalFilename": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/LICENSE.md",
+      "role": "original-libjpeg-turbo-license",
+      "archiveMember": "LICENSE.md"
+    },
+    {
+      "filename": "licenses/README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb",
+      "originalFilename": "/home/runner/work/_temp/mediamanager-jpeg-scale-inputs/libjpeg-turbo/README.ijg",
+      "role": "original-libjpeg-turbo-license",
+      "archiveMember": "README.ijg"
+    },
+    {
+      "filename": "compiler/driver",
+      "bytes": 1023032,
+      "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26",
+      "originalFilename": "/usr/bin/x86_64-linux-gnu-gcc-13",
+      "role": "actual-runner-c-compiler-driver"
+    }
+  ],
+  "licenses": [
+    {
+      "filename": "licenses/LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1",
+      "archiveMember": "LICENSE.md"
+    },
+    {
+      "filename": "licenses/README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb",
+      "archiveMember": "README.ijg"
+    }
+  ],
+  "assets": [
+    {
+      "name": "scale-n2-width-floor",
+      "filename": "assets/scale-n2-width-floor.jpg",
+      "n": 2,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 3
+      },
+      "scaleBoundary": {
+        "numerator": 3,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 682
+      },
+      "width": 682,
+      "height": 512,
+      "bytes": 539840,
+      "sha256": "76adbc3c71e7d19c478051907b67c03e044f2e3120504862a4ff93190785ee8d",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 512,
+        "width": 682,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n2-width-ceil",
+      "filename": "assets/scale-n2-width-ceil.jpg",
+      "n": 2,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 3
+      },
+      "scaleBoundary": {
+        "numerator": 3,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 683
+      },
+      "width": 683,
+      "height": 512,
+      "bytes": 540837,
+      "sha256": "359f5c2a555db5cd277d4bc16184e36fecdecd39c425131cbc6c2d9e0a2b8e4d",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 512,
+        "width": 683,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n3-width-floor",
+      "filename": "assets/scale-n3-width-floor.jpg",
+      "n": 3,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 5
+      },
+      "scaleBoundary": {
+        "numerator": 5,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 409
+      },
+      "width": 409,
+      "height": 307,
+      "bytes": 197187,
+      "sha256": "7da7b776b649897ac8512c287ef4bd9da7c86c3c30a4a89697efe0d1aaf1c8c4",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 307,
+        "width": 409,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n3-width-ceil",
+      "filename": "assets/scale-n3-width-ceil.jpg",
+      "n": 3,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 5
+      },
+      "scaleBoundary": {
+        "numerator": 5,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 410
+      },
+      "width": 410,
+      "height": 307,
+      "bytes": 198486,
+      "sha256": "d113be1e9a7e5d9a6a37ca8c3e0a08db4bffed25cbbdb3dd0dfab2d04ba1aea1",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 307,
+        "width": 410,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n4-width-floor",
+      "filename": "assets/scale-n4-width-floor.jpg",
+      "n": 4,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 7
+      },
+      "scaleBoundary": {
+        "numerator": 7,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 292
+      },
+      "width": 292,
+      "height": 219,
+      "bytes": 102027,
+      "sha256": "e9a17091c8a4586e42ae80ed604881afa99ecc17d0a9b92eb2caa1dacc7ad399",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 219,
+        "width": 292,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n4-width-ceil",
+      "filename": "assets/scale-n4-width-ceil.jpg",
+      "n": 4,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 7
+      },
+      "scaleBoundary": {
+        "numerator": 7,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 293
+      },
+      "width": 293,
+      "height": 220,
+      "bytes": 102288,
+      "sha256": "7388e59b6e7ebf54ad9d17372512af94a497cc16a753b5f1ec137498d1c18e8d",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 220,
+        "width": 293,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n5-width-floor",
+      "filename": "assets/scale-n5-width-floor.jpg",
+      "n": 5,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 9
+      },
+      "scaleBoundary": {
+        "numerator": 9,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 227
+      },
+      "width": 227,
+      "height": 170,
+      "bytes": 62451,
+      "sha256": "35ba6fb9ecd777e6317ab5758ca9a03997769886d90c5369692bcd7209b17e8b",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 170,
+        "width": 227,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n5-width-ceil",
+      "filename": "assets/scale-n5-width-ceil.jpg",
+      "n": 5,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 9
+      },
+      "scaleBoundary": {
+        "numerator": 9,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 228
+      },
+      "width": 228,
+      "height": 171,
+      "bytes": 62979,
+      "sha256": "486b042eea4d433d436f1207e5760005b7f87544f086b60f002b080963497392",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 171,
+        "width": 228,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n6-width-floor",
+      "filename": "assets/scale-n6-width-floor.jpg",
+      "n": 6,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 11
+      },
+      "scaleBoundary": {
+        "numerator": 11,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 186
+      },
+      "width": 186,
+      "height": 139,
+      "bytes": 42409,
+      "sha256": "6a04da5ccb2060c2966e12bd871370d7f41dab63b756f57394bc615a09dc786c",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 139,
+        "width": 186,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n6-width-ceil",
+      "filename": "assets/scale-n6-width-ceil.jpg",
+      "n": 6,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 11
+      },
+      "scaleBoundary": {
+        "numerator": 11,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 187
+      },
+      "width": 187,
+      "height": 140,
+      "bytes": 42806,
+      "sha256": "cfafb38e0ced87da9278d1d107d9d0938e957a23ecc4001afa8589c0ca093cb4",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 140,
+        "width": 187,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n7-width-floor",
+      "filename": "assets/scale-n7-width-floor.jpg",
+      "n": 7,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 13
+      },
+      "scaleBoundary": {
+        "numerator": 13,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 157
+      },
+      "width": 157,
+      "height": 117,
+      "bytes": 30035,
+      "sha256": "9184fed563eac03734e2c07910716dbba77e13db78e1ed08331a0f62bd6e2cea",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 117,
+        "width": 157,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n7-width-ceil",
+      "filename": "assets/scale-n7-width-ceil.jpg",
+      "n": 7,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 13
+      },
+      "scaleBoundary": {
+        "numerator": 13,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 158
+      },
+      "width": 158,
+      "height": 118,
+      "bytes": 30089,
+      "sha256": "9938209e14500960f9b46752e2d4dd9719c8d741fa04da74431fc60daa0f6a29",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 118,
+        "width": 158,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n8-width-floor",
+      "filename": "assets/scale-n8-width-floor.jpg",
+      "n": 8,
+      "widthRounding": "floor",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 15
+      },
+      "scaleBoundary": {
+        "numerator": 15,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 136
+      },
+      "width": 136,
+      "height": 102,
+      "bytes": 22344,
+      "sha256": "432d5e577879e41073d88cd9717057d3bde155d9379bab3191a09e2118c2442f",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 102,
+        "width": 136,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    },
+    {
+      "name": "scale-n8-width-ceil",
+      "filename": "assets/scale-n8-width-ceil.jpg",
+      "n": 8,
+      "widthRounding": "ceil",
+      "widthBoundary": {
+        "numerator": 2048,
+        "denominator": 15
+      },
+      "scaleBoundary": {
+        "numerator": 15,
+        "denominator": 16
+      },
+      "sourceScaleRatio": {
+        "numerator": 128,
+        "denominator": 137
+      },
+      "width": 137,
+      "height": 102,
+      "bytes": 22922,
+      "sha256": "36307716cc34b0a59142ee66786aac2ddb60edc92a419ce13ec13dd40df8b1da",
+      "origin": "declared-neutral-rgb-pattern",
+      "header": {
+        "frameMarker": 192,
+        "precision": 8,
+        "height": 102,
+        "width": 137,
+        "components": 3,
+        "componentInfo": [
+          {
+            "id": 1,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 0
+          },
+          {
+            "id": 2,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          },
+          {
+            "id": 3,
+            "horizontalSampling": 1,
+            "verticalSampling": 1,
+            "quantizationTable": 1
+          }
+        ],
+        "jfif": true
+      }
+    }
+  ],
+  "nativeResultsRecorded": false,
+  "expectedPixelsRecorded": false,
+  "decoderResultsRecorded": false,
+  "compilerClosureArchived": false,
+  "phaseAcceptance": false,
+  "releaseAcceptance": false,
+  "checkoutHead": "49dc33a8d28d71d4e7a243836113bc7fff67870b",
+  "interpreter": {
+    "filename": "python3.12",
+    "bytes": 8020928,
+    "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+    "version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "compiler": {
+    "filename": "compiler/driver",
+    "bytes": 1023032,
+    "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26",
+    "originalFilename": "/usr/bin/x86_64-linux-gnu-gcc-13"
+  },
+  "compiledSources": [
+    {
+      "filename": "jcapimin.c",
+      "bytes": 9659,
+      "sha256": "25ddd9ea33d41cf3b45c2da3a89d2a7ffc2e3128fbe716b83895bb070369cf89"
+    },
+    {
+      "filename": "jcapistd.c",
+      "bytes": 5903,
+      "sha256": "2cbab73bf063d57f0b2236054e35470093df3d0ec2277e7cd4deabe49142aa9a"
+    },
+    {
+      "filename": "jccoefct.c",
+      "bytes": 17271,
+      "sha256": "3348d978c4f05982c9443a60872e4719ecff8367680144335ee3386f11aaf370"
+    },
+    {
+      "filename": "jccolor.c",
+      "bytes": 23998,
+      "sha256": "261c5caeb6ea6728d5621d0ca30821fe92f72176a668104de384bc7f9da9356b"
+    },
+    {
+      "filename": "jcdctmgr.c",
+      "bytes": 22364,
+      "sha256": "35f1577f07817e1dc5aceb231c02fedfd375e287e9aaee651525230b6bdab093"
+    },
+    {
+      "filename": "jchuff.c",
+      "bytes": 36659,
+      "sha256": "00d84b8960385e36596f9656fdead9e4b7632b928fae1b417d257019b37c27a8"
+    },
+    {
+      "filename": "jcicc.c",
+      "bytes": 4072,
+      "sha256": "021f073e040e474ea73e3b6785c0373cf289fd2faa87895832ae623d9c0e0b39"
+    },
+    {
+      "filename": "jcinit.c",
+      "bytes": 2565,
+      "sha256": "22b509c783edcf807a073a686487f9656264c35be52effe62563599d2514345b"
+    },
+    {
+      "filename": "jcmainct.c",
+      "bytes": 5221,
+      "sha256": "b130dce1040b1da38dabfd2c0d159080940f049999c2c25dc5a8cbeb28c6454b"
+    },
+    {
+      "filename": "jcmarker.c",
+      "bytes": 17532,
+      "sha256": "a4ad3c9b400fdd938268cc856bd6b2b53e90ce9ce041a3935f65f702a6a2e402"
+    },
+    {
+      "filename": "jcmaster.c",
+      "bytes": 21959,
+      "sha256": "4ae656d8e1a590a4dc3814fa354eec978cf880ec8e5837d9be7db505fb2ff482"
+    },
+    {
+      "filename": "jcomapi.c",
+      "bytes": 3275,
+      "sha256": "b70d463fb2a29b01995e6fa307baee756dd97f83f9ffe0a4dcb2e9220e9c51af"
+    },
+    {
+      "filename": "jcparam.c",
+      "bytes": 18203,
+      "sha256": "3de66d0a0a71c49a4c9eefc4c5818b3867f6e7762859744b25eeb3998c2d6715"
+    },
+    {
+      "filename": "jcphuff.c",
+      "bytes": 33656,
+      "sha256": "8b9555ed1add89eee3be3bbcf04494b42ab6de49b6ce6d3344ba9dd585ca1774"
+    },
+    {
+      "filename": "jcprepct.c",
+      "bytes": 12965,
+      "sha256": "e3cf9999c43f9f45faa472287278948713cc4b6ba101c3fe30c4c6a8a063983d"
+    },
+    {
+      "filename": "jcsample.c",
+      "bytes": 19156,
+      "sha256": "a7b5a6ea0543257d6f9cfee8133d917b267784aa926e17dfeb99e50539718817"
+    },
+    {
+      "filename": "jctrans.c",
+      "bytes": 14940,
+      "sha256": "5957a34aba2d424b1c5d880bf32e5d359eb8e9b7518c5bb608fdfeb427dc4b3f"
+    },
+    {
+      "filename": "jdapimin.c",
+      "bytes": 13240,
+      "sha256": "cced9cd5ba984ae7be81876c27116d981db714b73fcbb98080c6e787ddeddcdc"
+    },
+    {
+      "filename": "jdapistd.c",
+      "bytes": 25518,
+      "sha256": "c2ba7030eab69145f91bf1460d6979b415c450c41a59de38f23c26d73bec9a8d"
+    },
+    {
+      "filename": "jdatadst.c",
+      "bytes": 9557,
+      "sha256": "ec025843dd75200b49102bf7b98b55cb672f093e2dd97a2d7c592c3e9757871f"
+    },
+    {
+      "filename": "jdatasrc.c",
+      "bytes": 10288,
+      "sha256": "589b76c8166b80b01c7de9f8d5c28037c3e8c253b23faba62981c4fad5bd4ea1"
+    },
+    {
+      "filename": "jdcoefct.c",
+      "bytes": 34033,
+      "sha256": "4504c9816d94533a1fa7bac04690b301d7993e4a4058fc53a80da7f805bdfcf0"
+    },
+    {
+      "filename": "jdcolor.c",
+      "bytes": 28525,
+      "sha256": "ed93d5f8c7f33720b495744208715def6f4e99dcc95859fa1317011e0de8d7f1"
+    },
+    {
+      "filename": "jddctmgr.c",
+      "bytes": 11423,
+      "sha256": "a984a15a7431bfaac9a5413fe6792dc6d98e669b8d1fafabb579e771f2bff763"
+    },
+    {
+      "filename": "jdhuff.c",
+      "bytes": 26644,
+      "sha256": "1a22497bb18235ed467cd82ca5e25e8d1ef2aeb01f90860ac1a9f19505c50bcc"
+    },
+    {
+      "filename": "jdicc.c",
+      "bytes": 5409,
+      "sha256": "f605e2337afa011e020eb84f9c2f5a211f30d380621e97206d07216e4f78f661"
+    },
+    {
+      "filename": "jdinput.c",
+      "bytes": 14585,
+      "sha256": "020a7652d7cfaded9c394adb82b3e0eefce5037dc174c23d03ba682aa74ae8e4"
+    },
+    {
+      "filename": "jdmainct.c",
+      "bytes": 19797,
+      "sha256": "fbad0a16a715c5908451a2471d952b5d0ee2434508acd915911118d4c75b3c2b"
+    },
+    {
+      "filename": "jdmarker.c",
+      "bytes": 42329,
+      "sha256": "7f117f6f2494983d4ab0b4cda36cbf3a25cbdaa1ba28db4c7a3be324d6250a2c"
+    },
+    {
+      "filename": "jdmaster.c",
+      "bytes": 27460,
+      "sha256": "b1257e5932dde9835e6b8f391ca083e28cc8752fc0f196c8a7d033169b975c91"
+    },
+    {
+      "filename": "jdmerge.c",
+      "bytes": 19780,
+      "sha256": "5388ac21e9168a2accde7529000c0ea9d77b0f09690962debae1ab0a68d55e8a"
+    },
+    {
+      "filename": "jdphuff.c",
+      "bytes": 22173,
+      "sha256": "19c68891914ed39835f7a53e6aead3438e59d23c889bbf88c9df298c4318d71a"
+    },
+    {
+      "filename": "jdpostct.c",
+      "bytes": 10948,
+      "sha256": "6c5436027009d6454c75db6927f479ac49ca498bd1dacfc968d06ccce219fad4"
+    },
+    {
+      "filename": "jdsample.c",
+      "bytes": 18058,
+      "sha256": "58f0cbc962224a4585aa0247bbe768be641828ac569852c3a8e61b093b428f8a"
+    },
+    {
+      "filename": "jdtrans.c",
+      "bytes": 5461,
+      "sha256": "634249c6970650bd82523450c7c344159ce5e0801408c559d27446f5a6334ee6"
+    },
+    {
+      "filename": "jerror.c",
+      "bytes": 7929,
+      "sha256": "3133629433ebe7907e4b11c4a3207f0787648d70195c46e7c14841fb076705a4"
+    },
+    {
+      "filename": "jfdctflt.c",
+      "bytes": 5588,
+      "sha256": "30098eb7e20b4ae42bc7ddc16552c6de59cb5cb045059d5a138c4b1b2b8f4739"
+    },
+    {
+      "filename": "jfdctfst.c",
+      "bytes": 7792,
+      "sha256": "fa54b1dcadd48d22ed332d93af006e5e27fb5b052e8e891f8261e8e87e54544d"
+    },
+    {
+      "filename": "jfdctint.c",
+      "bytes": 11508,
+      "sha256": "93860efc42a1879c800c3af5d9ebf932cef6a76f45c31639b78980cccaba8cdd"
+    },
+    {
+      "filename": "jidctflt.c",
+      "bytes": 8729,
+      "sha256": "81d31db3e3cf411f3d13e1092182186da67fbd52a6db9e53e94121e7387cd48b"
+    },
+    {
+      "filename": "jidctfst.c",
+      "bytes": 13554,
+      "sha256": "8ba9c5f936420048e7e37682c719703f47b446a5f06b6d56bda87b814d7065af"
+    },
+    {
+      "filename": "jidctint.c",
+      "bytes": 106254,
+      "sha256": "849b998c58c503cd21be23609ed7c931f73c1b74235f83f3b417a1b23d50cd71"
+    },
+    {
+      "filename": "jidctred.c",
+      "bytes": 14528,
+      "sha256": "403cdaff1ba82d6b15729c543227082b1ec2d9da7654880cb60df4c3c9e0467c"
+    },
+    {
+      "filename": "jmemmgr.c",
+      "bytes": 45062,
+      "sha256": "5383b40a69ea040fec05f9f1c30039105014b9983b96fe254806ca58b69f1540"
+    },
+    {
+      "filename": "jmemnobs.c",
+      "bytes": 2674,
+      "sha256": "6f249f71119598bad7dbe6e810331a35c84c4e2d0803b4556b5e32fa3ed58593"
+    },
+    {
+      "filename": "jpeg_nbits_table.c",
+      "bytes": 270530,
+      "sha256": "abe4b533b3aa28f1a5727d701dc098ed0653c103062e7a80840278c986c3e387"
+    },
+    {
+      "filename": "jquant1.c",
+      "bytes": 32176,
+      "sha256": "982635ab3dbb412c960e2852b19e151870b733ac39dbbbe6e8192159e6f2de3d"
+    },
+    {
+      "filename": "jquant2.c",
+      "bytes": 48710,
+      "sha256": "67f2107e5a113810e2f36ca2872e72b486b981229d61844caa32f3db76c4304a"
+    },
+    {
+      "filename": "jutils.c",
+      "bytes": 3764,
+      "sha256": "c35e5753f0c9eb42797ac3b1b5ebb563615dc3edbba0a8acb7eefaa5c81c73ee"
+    },
+    {
+      "filename": "jsimd_none.c",
+      "bytes": 8050,
+      "sha256": "1f8b6e88c945038a2ae8f5616fdb0286b5ae462ebf77a1850f71d381dc80abfb"
+    }
+  ],
+  "producerBinary": {
+    "filename": "producer/generate-jpeg-scale-boundaries",
+    "bytes": 351808,
+    "sha256": "a056d07e38ff01771df1424bf9cdee5363c6ef37ca49ee309999721cc9b5a204"
+  },
+  "sourceUnchangedDuringGeneration": true,
+  "generationInputsUnchanged": true,
+  "artifactFiles": [
+    {
+      "filename": "assets/scale-n2-width-ceil.jpg",
+      "bytes": 540837,
+      "sha256": "359f5c2a555db5cd277d4bc16184e36fecdecd39c425131cbc6c2d9e0a2b8e4d"
+    },
+    {
+      "filename": "assets/scale-n2-width-floor.jpg",
+      "bytes": 539840,
+      "sha256": "76adbc3c71e7d19c478051907b67c03e044f2e3120504862a4ff93190785ee8d"
+    },
+    {
+      "filename": "assets/scale-n3-width-ceil.jpg",
+      "bytes": 198486,
+      "sha256": "d113be1e9a7e5d9a6a37ca8c3e0a08db4bffed25cbbdb3dd0dfab2d04ba1aea1"
+    },
+    {
+      "filename": "assets/scale-n3-width-floor.jpg",
+      "bytes": 197187,
+      "sha256": "7da7b776b649897ac8512c287ef4bd9da7c86c3c30a4a89697efe0d1aaf1c8c4"
+    },
+    {
+      "filename": "assets/scale-n4-width-ceil.jpg",
+      "bytes": 102288,
+      "sha256": "7388e59b6e7ebf54ad9d17372512af94a497cc16a753b5f1ec137498d1c18e8d"
+    },
+    {
+      "filename": "assets/scale-n4-width-floor.jpg",
+      "bytes": 102027,
+      "sha256": "e9a17091c8a4586e42ae80ed604881afa99ecc17d0a9b92eb2caa1dacc7ad399"
+    },
+    {
+      "filename": "assets/scale-n5-width-ceil.jpg",
+      "bytes": 62979,
+      "sha256": "486b042eea4d433d436f1207e5760005b7f87544f086b60f002b080963497392"
+    },
+    {
+      "filename": "assets/scale-n5-width-floor.jpg",
+      "bytes": 62451,
+      "sha256": "35ba6fb9ecd777e6317ab5758ca9a03997769886d90c5369692bcd7209b17e8b"
+    },
+    {
+      "filename": "assets/scale-n6-width-ceil.jpg",
+      "bytes": 42806,
+      "sha256": "cfafb38e0ced87da9278d1d107d9d0938e957a23ecc4001afa8589c0ca093cb4"
+    },
+    {
+      "filename": "assets/scale-n6-width-floor.jpg",
+      "bytes": 42409,
+      "sha256": "6a04da5ccb2060c2966e12bd871370d7f41dab63b756f57394bc615a09dc786c"
+    },
+    {
+      "filename": "assets/scale-n7-width-ceil.jpg",
+      "bytes": 30089,
+      "sha256": "9938209e14500960f9b46752e2d4dd9719c8d741fa04da74431fc60daa0f6a29"
+    },
+    {
+      "filename": "assets/scale-n7-width-floor.jpg",
+      "bytes": 30035,
+      "sha256": "9184fed563eac03734e2c07910716dbba77e13db78e1ed08331a0f62bd6e2cea"
+    },
+    {
+      "filename": "assets/scale-n8-width-ceil.jpg",
+      "bytes": 22922,
+      "sha256": "36307716cc34b0a59142ee66786aac2ddb60edc92a419ce13ec13dd40df8b1da"
+    },
+    {
+      "filename": "assets/scale-n8-width-floor.jpg",
+      "bytes": 22344,
+      "sha256": "432d5e577879e41073d88cd9717057d3bde155d9379bab3191a09e2118c2442f"
+    },
+    {
+      "filename": "compiler/driver",
+      "bytes": 1023032,
+      "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+    },
+    {
+      "filename": "input-declaration.json",
+      "bytes": 6524,
+      "sha256": "a259bf7c66a6390e563f4ceebaff2877e046d50d2f20ea8eed9daebd8ddcb70f"
+    },
+    {
+      "filename": "licenses/LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1"
+    },
+    {
+      "filename": "licenses/README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+    },
+    {
+      "filename": "producer/generate-jpeg-scale-boundaries",
+      "bytes": 351808,
+      "sha256": "a056d07e38ff01771df1424bf9cdee5363c6ef37ca49ee309999721cc9b5a204"
+    },
+    {
+      "filename": "receipts/checkout-head.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/checkout-head.stdout.txt",
+      "bytes": 41,
+      "sha256": "f91f8222b94d78689b20b261027fc274bec7aaf594174a65ecf556d4aaa349e4"
+    },
+    {
+      "filename": "receipts/checkout-status-after.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/checkout-status-after.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/checkout-status-before.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/checkout-status-before.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/compile-neutral-producer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/compile-neutral-producer.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/compiler-version.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/compiler-version.stdout.txt",
+      "bytes": 266,
+      "sha256": "ae487f55927d605284a32711e4ecf6bc3be2bcd5a9de414ace0936264b741f85"
+    },
+    {
+      "filename": "receipts/generate-scale-n2-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n2-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n2-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n2-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n3-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n3-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n3-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n3-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n4-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n4-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n4-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n4-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n5-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n5-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n5-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n5-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n6-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n6-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n6-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n6-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n7-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n7-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n7-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n7-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n8-width-ceil.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n8-width-ceil.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n8-width-floor.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/generate-scale-n8-width-floor.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "receipts/libjpeg-source-after.json",
+      "bytes": 43789,
+      "sha256": "0855c0a1e5592f2c5758ecc27ac101ff61ae5f10573b42c46e7d9dfbb816c87d"
+    },
+    {
+      "filename": "receipts/libjpeg-source-before.json",
+      "bytes": 43789,
+      "sha256": "0855c0a1e5592f2c5758ecc27ac101ff61ae5f10573b42c46e7d9dfbb816c87d"
+    },
+    {
+      "filename": "recipe/generate-jpeg-boundaries.c",
+      "bytes": 2863,
+      "sha256": "ee41f7c6072b916234a62d36dd1b3600d0dde970b58bfbf4b381b5ea01d8d8f8"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.c",
+      "bytes": 2158,
+      "sha256": "81240ceeabb19420d9d71e8c88e1973da040acfb9ac56bcf1d952284eb071bf2"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.py",
+      "bytes": 11840,
+      "sha256": "ca6513d1d8c6acb240d6348e7b1235ca50a6550b2938a7fd5f37d8f0d0d6d91b"
+    },
+    {
+      "filename": "recipe/generate-jpeg-scale-boundaries.yml",
+      "bytes": 976,
+      "sha256": "c0b4839007f11b4c2dbb908a193366a31aa197f2ece17c24034f43480ce1087f"
+    },
+    {
+      "filename": "recipe/source-offer.json",
+      "bytes": 6935,
+      "sha256": "448b258af2fe2252745c3e6ad5794a0d161d8bbec1a1eab5f53f74252c19f5b3"
+    },
+    {
+      "filename": "sources/libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1"
+    }
+  ]
+}

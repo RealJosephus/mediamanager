@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-08T16:42:38.424Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/native-resolver-entity-types/input.json",
+      "sha256": "0cd37fbcb72481d6c8beb51c7ccd5c832a20e7d87fcbd100ec43a1b008e58c28"
+    },
+    {
+      "path": "tests/library/fixtures/native-resolver-entity-types/Program.cs",
+      "sha256": "042b2daef8787afd7038300c4116ffaf1972bf981ae1d5ea771ac8786062c539"
+    },
+    {
+      "path": "tests/library/fixtures/native-resolver-entity-types/Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "path": "tests/library/fixtures/native-resolver-entity-types/native.json",
+      "sha256": "890f45cc17faef4c8b479a8ae56363bd1c3c041b2b29d513a4c883c90645a15b"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen CLR constructors, BaseItemMapper.Map, ItemPersistenceService.SaveItems, EF SQLite and BaseItemMapper.DeserializeBaseItem for the exact fifteen entity types in the candidate's production directory resolvers. Sixteen independent cases include physical and by-name MusicArtist plus AudioBook, Book, Photo and PhotoAlbum. Controlled resolved values mirror the narrow candidate drafts; Season and Episode parent relationship fields are assigned exactly as frozen SeasonResolver/EpisodeResolver do, but no filesystem resolver is executed. Each case records constructor/live/hydrated typed defaults, including normalized nullable Folder.DateLastMediaAdded and Folder.LinkedChildrenLoaded across constructor, resolved live state and hydrated lookup; all 72 mapped BaseItems scalar columns; exact normalized Data text plus parsed Data/null policy; and complete subject ancestor/provider/value/locked/trailer/link relations. Parent lookup, empty collection folders, library options, path reversal and fixed timestamps are controls. No LibraryManager.CreateItems cache/events, Folder.ValidateChildren, metadata providers, recursive scan, PostgreSQL candidate, faults/cancellation, HTTP, migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "sha256": "5f4cf0ff15958cea5887fdec9183be392f29332a8776c29594dd75e0c5f1a252"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "sha256": "5fdd279de253d939ea5e872b24469d8a5cb9182bb34bb68c70588aa3bf388398"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261009/results/native-resolver-entity-types-15-v1/record.json",
+    "recordSha256": "6175e2ae8ac1e077826e8cc47facd18bb1d7b6d1391533f7269d55ad6bb432ad",
+    "sourceFilesSha256": "1a07ed681f1e15be81aa2c209ef666eccfd10eded63588a11e1066620ed77ea9",
+    "oracleAssemblySha256": "ae361b24fffbada318d260f49b70cacf094aeb33f08865432f39266b64637556"
+  },
+  "sources": {
+    "MediaBrowser.Controller/Entities/BaseItem.cs": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+    "MediaBrowser.Controller/Entities/Folder.cs": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+    "MediaBrowser.Controller/Entities/Video.cs": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+    "MediaBrowser.Controller/Entities/Movies/Movie.cs": "2208ffddb928e6407c4a3b6c71d5e9c0851882d62ad2fd1e10b4f814c391ac43",
+    "MediaBrowser.Controller/Entities/Trailer.cs": "9135c6caaa9b42030f35c4eab8bb7f7592dd3a125827f6b72d7ae32ec78ec18e",
+    "MediaBrowser.Controller/Entities/MusicVideo.cs": "fa9a519208acd409ddf3e84b08d6e322ad594097710cce7c77465019e85943cd",
+    "MediaBrowser.Controller/Entities/TV/Series.cs": "46d1748fd41a051fbcd4be50ef24b1814b7402265bdb37a735ced8c0235e460f",
+    "MediaBrowser.Controller/Entities/TV/Season.cs": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+    "MediaBrowser.Controller/Entities/TV/Episode.cs": "9944d6d777c8309ceedc66b2ded3d1de29cbd8a514b1bfa7d9698e04bda33a96",
+    "MediaBrowser.Controller/Entities/Audio/Audio.cs": "fe19004e9d6d59d59fc1750952db7b95a29fd6d9de1398680deacae8dbd383ea",
+    "MediaBrowser.Controller/Entities/AudioBook.cs": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+    "MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+    "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+    "MediaBrowser.Controller/Entities/Book.cs": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+    "MediaBrowser.Controller/Entities/Photo.cs": "6d2581b1e8db05771e22b804b58c119fc5972287878dac459ca66260c74e7654",
+    "MediaBrowser.Controller/Entities/PhotoAlbum.cs": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+    "Emby.Server.Implementations/Library/Resolvers/TV/SeasonResolver.cs": "e40882f66042aae6b30a2472bfb933cc1e6c1213c67ed4a378d97fbd5060c9dd",
+    "Emby.Server.Implementations/Library/Resolvers/TV/EpisodeResolver.cs": "c7b25ed9d8962c729f7ba73024c325fd5c6bd80b1f34f4c615fbc2e9cde9c9a2"
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnetSha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+    "jellyfinDllSha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "Focused native resolver entity comparison passed 52/52 with 0 failures, 0 skips and 0 cancellations on 2026-10-09 against real SQLite and isolated PostgreSQL 17.11 at 127.0.0.1:15439. It covers all sixteen frozen result objects, the exact fifteen-type production registry, Folder state controls, sixteen constructors, sixteen SQLite round trips and sixteen PostgreSQL round trips, all 72 BaseItems columns, exact raw and complete parsed Data, all eight relation projections, controlled parent rows, and cold getItemById hydration. This remains a constructor/persistence boundary, not filesystem resolution, ValidateChildren, phase or final release acceptance."
+}

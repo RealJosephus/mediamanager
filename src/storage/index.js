@@ -1,0 +1,9 @@
+export { StorageError, StorageErrorCode } from './errors.js';
+export { StorageRegistry } from './registry.js';
+export { VirtualFileSystem } from './vfs.js';
+export { IdentityAccessMap } from './identity-mapping.js';
+export { normalizePath, validateName } from './paths.js';
+export { normalizeRange, resolveRange, rangeHeader, parseContentRange } from './range.js';
+export { ProbeReadBridge } from './probe-bridge.js';
+export { probeRaw, buildHttpProbeArguments } from './ffprobe.js';
+export { normalizeProbe, estimatedAudioBitrate, probeFrameRate } from './probe-normalizer.js';

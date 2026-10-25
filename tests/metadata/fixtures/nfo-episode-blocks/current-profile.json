@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "fixture": "nfo-episode-blocks",
+  "scope": "Same-run designated Native XML/NFO readers over physical input files and current Node consumers; public values, failure prefixes and callback outcomes only.",
+  "baseCases": 56,
+  "layoutCases": 168,
+  "sourcePaths": [
+    "MediaBrowser.XbmcMetadata/Parsers/EpisodeNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs",
+    "MediaBrowser.XbmcMetadata/Providers/EpisodeNfoProvider.cs",
+    "MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs",
+    "MediaBrowser.Controller/Providers/MetadataResult.cs",
+    "MediaBrowser.Controller/Extensions/XmlReaderExtensions.cs",
+    "MediaBrowser.XbmcMetadata/Configuration/NfoConfigurationExtension.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/TV/Episode.cs",
+    "MediaBrowser.Controller/Entities/UserItemData.cs",
+    "MediaBrowser.Controller/Library/TVUtils.cs",
+    "MediaBrowser.Model/Configuration/XbmcMetadataOptions.cs",
+    "MediaBrowser.Model/Entities/ProviderIdsExtensions.cs",
+    "MediaBrowser.Common/Providers/ProviderIdParsers.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 14607,
+      "sha256": "a7a0b537cda84c819e5d869c39b57d0988ce6c7295bd0687d4d0949557fcb2cd"
+    },
+    {
+      "role": "layouts",
+      "filename": "current/layout-input.json",
+      "bytes": 47638,
+      "sha256": "0c9c903f83a151d1c2c24f5f971e89f43c12333a7e440a9c9fda5749eed53668"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 13523,
+      "sha256": "30f0d21103f23358a7c231d956f47f9fe120eea7fc96e96315955b470b8c7d82"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 536,
+      "sha256": "cf91a4447964aebc0ac09142f2b048bd3e1352e1d2303588a2de897d1c96417f"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "layoutRelations",
+      "filename": "current/layout-comparison.json",
+      "bytes": 35520,
+      "sha256": "76ae6e540f2832643d8eb462b8f4aa6748266600f4a61b77771e066a9357ddad"
+    }
+  ]
+}

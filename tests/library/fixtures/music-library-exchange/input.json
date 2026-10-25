@@ -1,0 +1,21 @@
+{
+  "libraryName": "Music Exchange Library",
+  "artist": "Exchange Artist",
+  "album": "Exchange Album",
+  "genre": "Exchange Genre",
+  "year": 2024,
+  "sampleRate": 8000,
+  "tracks": [
+    { "filename": "01 - Native Opening.wav", "title": "Native Opening", "number": 1, "seconds": 2 },
+    { "filename": "02 - Native Removable.wav", "title": "Native Removable", "number": 2, "seconds": 3 },
+    { "filename": "03 - Node Addition.wav", "title": "Node Addition", "number": 3, "seconds": 4 },
+    { "filename": "04 - Native Continuation.wav", "title": "Native Continuation", "number": 4, "seconds": 5 }
+  ],
+  "nodeAlbumOverview": "Album saved by the PostgreSQL runtime.",
+  "nodeTrackOverview": "Track saved by the PostgreSQL runtime.",
+  "nativeAlbumOverview": "Album continued by the original Native runtime.",
+  "nativeTrackOverview": "Track continued by the original Native runtime.",
+  "providerIds": { "MusicExchangeArchive": "preserve-external-provider-2048" },
+  "tags": ["Music exchange", "Saved through HTTP"],
+  "siblingText": "This unrelated album asset must survive track deletion.\n"
+}

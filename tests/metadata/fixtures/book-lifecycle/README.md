@@ -1,0 +1,11 @@
+# Book metadata lifecycle
+
+The main oracle runs actual Book.GetLookupInfo, BookMetadataService.MergeData and BookMetadataService.RefreshMetadata with ProviderManager. Its 17 lookup cases distinguish the first real Parent name from an Owner or later ancestor, including null, empty and whitespace. Its 64 merge cases cover source/target empty values, replacement and Name locks. Eleven refresh cases cover remote/local provider consumption, first and final saves, full/default/validation/None modes, locking, replacement, provider failure, provider cancellation and final repository failure.
+
+The native refresh oracle controls configuration, library/repository callbacks, filesystem and provider results. Candidate PostgreSQL tests execute the real context loader, refresh host and persistence; they compare provider inputs, successful save prefixes, update reasons, persisted values, source-only Book Data and refresh stamps. Native repository callbacks do not execute SQL. Candidate final-save failure uses a real PostgreSQL trigger.
+
+The owned oracle runs actual BaseItem.RefreshMetadata, LibraryManager.FindExtras, naming/resolver classes, real files and EF SQLite. Its sixteen owner shapes cover Book/Photo non-video files, deliberately video-shaped paths, .disc/.dvd.disc/.iso/.strm/.img, a dotfile, PhotoAlbum directories and ordinary Folder search gates. Single-item refresh callbacks perform no save, so new extras remain live and produce no inserted row or Added event. Candidate helper tests cover all sixteen shapes; real PostgreSQL Book discovery additionally checks typed extras, corrected names and the absence of inserted extras.
+
+This enables the generic Book metadata lifecycle. Production OPF, EPUB, ComicInfo, archive-cover providers and complete Book scanning remain outside this fixture. Photo and PhotoAlbum metadata refresh stay unsupported. Photo/album appearances here only protect the shared owner-path gate; photo tags, static-image generation and dynamic-image provider saves are not exercised.
+
+Provenance binds raw inputs, original oracle outputs, harness/project bytes, successful execution records, the pinned DLL and the reviewed reference sources. Original recordings are preserved in the independent evidence directory.

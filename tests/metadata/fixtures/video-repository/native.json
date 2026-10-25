@@ -1,0 +1,5920 @@
+{
+  "actualFrozenVideoRepository": true,
+  "inputSha256": "02d78ced734a702c5604dd6672a3bca8d03ad30b0d01bd82816aa8cab4812812",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423"
+    }
+  ],
+  "results": [
+    {
+      "name": "locked-alternate-edit",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-reason-1-child-download",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 1,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 1,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-reason-2-child-download",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 2,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 2,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-reason-4-child-download",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 4,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 4,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-reason-8-child-download",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 8,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 8,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "nullable-fields-clear-child",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "CommunityRating": null,
+            "OfficialRating": null,
+            "ProviderIds": {},
+            "ImageInfos": [],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "null-genres-retained-as-native-null",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": null,
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "duplicate-links-save-child-twice",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "missing-linked-entity-is-skipped",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "no-links-no-alternate-save",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Comedy"
+            ],
+            "Overview": "Old version",
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "CommunityRating": 4,
+            "OfficialRating": "R",
+            "ProviderIds": {
+              "Imdb": "tt202"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Thumb",
+                "Path": "Z:\\ChildrenMetadata\\old.png",
+                "Width": 0,
+                "Height": 0,
+                "DateModified": "0001-01-01T00:00:00"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "nonvideo-owner-does-not-propagate",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Comedy"
+            ],
+            "Overview": "Old version",
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "CommunityRating": 4,
+            "OfficialRating": "R",
+            "ProviderIds": {
+              "Imdb": "tt202"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Thumb",
+                "Path": "Z:\\ChildrenMetadata\\old.png",
+                "Width": 0,
+                "Height": 0,
+                "DateModified": "0001-01-01T00:00:00"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "nonvideo-linked-child-is-not-filtered",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "nested-local-versions-propagate-depth-first",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "nested",
+          "reason": 8,
+          "item": {
+            "Name": "Nested",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        },
+        {
+          "key": "nested",
+          "reason": 8,
+          "item": {
+            "Name": "Nested",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        },
+        {
+          "key": "nested",
+          "item": {
+            "Name": "Nested",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "failed-parent-stops-before-copy",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Comedy"
+            ],
+            "Overview": "Old version",
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "CommunityRating": 4,
+            "OfficialRating": "R",
+            "ProviderIds": {
+              "Imdb": "tt202"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Thumb",
+                "Path": "Z:\\ChildrenMetadata\\old.png",
+                "Width": 0,
+                "Height": 0,
+                "DateModified": "0001-01-01T00:00:00"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "failed-child-retains-parent",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "failed-second-child-retains-first",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "second",
+          "reason": 8,
+          "item": {
+            "Name": "Second",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        },
+        {
+          "key": "second",
+          "item": {
+            "Name": "Second",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel-after-parent-stops-child-commit",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "already-cancelled-parent-has-no-commit",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Comedy"
+            ],
+            "Overview": "Old version",
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "CommunityRating": 4,
+            "OfficialRating": "R",
+            "ProviderIds": {
+              "Imdb": "tt202"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Thumb",
+                "Path": "Z:\\ChildrenMetadata\\old.png",
+                "Width": 0,
+                "Height": 0,
+                "DateModified": "0001-01-01T00:00:00"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "metadata-save-item-reattaches-after-family",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "reattach",
+          "key": "owner"
+        },
+        {
+          "action": "people",
+          "key": "owner"
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "metadata-save-item-child-failure-skips-reattach-people",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-save-removes-link-before-selection",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Comedy"
+            ],
+            "Overview": "Old version",
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "CommunityRating": 4,
+            "OfficialRating": "R",
+            "ProviderIds": {
+              "Imdb": "tt202"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Thumb",
+                "Path": "Z:\\ChildrenMetadata\\old.png",
+                "Width": 0,
+                "Height": 0,
+                "DateModified": "0001-01-01T00:00:00"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "parent-save-adds-link-before-selection",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "inherited-arrays-dictionaries-share-live-reference",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          },
+          "sameImages": true,
+          "sameGenres": true,
+          "sameProviders": true
+        }
+      ],
+      "commits": [
+        {
+          "key": "owner",
+          "reason": 16,
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "reason": 8,
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Drama",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 80,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ],
+      "items": [
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Owner",
+            "Path": "Z:\\ChildrenMetadata\\Film.mkv",
+            "Genres": [
+              "Mutated genre",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102",
+              "Injected": "303"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 99,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Tags": [
+              "Owner tag"
+            ],
+            "CriticRating": 81,
+            "CustomRating": "TV-14",
+            "OriginalTitle": null,
+            "RunTimeTicks": null,
+            "IsLocked": false,
+            "LockedFields": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Locked version",
+            "Path": "Z:\\ChildrenMetadata\\Film 1080p.mkv",
+            "Genres": [
+              "Mutated genre",
+              "drama"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "CommunityRating": 7.5,
+            "OfficialRating": "PG",
+            "ProviderIds": {
+              "Tmdb": "101",
+              "tmdb": "102",
+              "Injected": "303"
+            },
+            "ImageInfos": [
+              {
+                "Type": "Primary",
+                "Path": "Z:\\ChildrenMetadata\\poster.png",
+                "Width": 99,
+                "Height": 60,
+                "DateModified": "2026-10-01T00:00:00Z"
+              }
+            ],
+            "Studios": [
+              "Keep studio"
+            ],
+            "Tags": [
+              "Keep tag"
+            ],
+            "CriticRating": 22,
+            "CustomRating": "Keep custom",
+            "OriginalTitle": "Keep original",
+            "RunTimeTicks": 9007199254740995,
+            "IsLocked": true,
+            "LockedFields": [
+              "Overview",
+              "Genres"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Actual frozen Video.UpdateToRepositoryAsync and MetadataService.SaveItemAsync over Movie/Video/Audio entities. Native copy fields, null clearing, shared references, recursive/repeated/missing-linked dispatch and SaveItem reattachment/people order execute. Linked ID lookup and repository commits/failures/cancellation/mutations are controls. No native SQL, saver/image processing, file discovery, providers or complete library acceptance."
+}

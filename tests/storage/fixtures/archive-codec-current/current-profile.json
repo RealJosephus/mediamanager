@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "fixture": "archive-codec-current",
+  "scope": "Current published codec byte/source/license integrity and actual selected-image readers with exact recovered sources; historical builds remain separate and no rebuild or release acceptance is claimed.",
+  "inputs": [
+    {
+      "filename": "functional-cases.json",
+      "sha256": "78eb7990314a5b4f4f17a3fedd84bebed06e2e212b550a505bca1d5e7aaf6185",
+      "bytes": 2337,
+      "role": "consumer-input"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileNameDecoder.cs",
+      "sha256": "d829c008374b7be8021bafbf1a54590ccc9a50b278a452554ffd5e5e1bdf40b1",
+      "bytes": 2475,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Compressors/Rar/UnpackV1/Unpack.Async.cs",
+      "sha256": "ece4fa256ebde26d5e0ef4ea0c93f4c66e5d3353edd683f678a87904180fb90a",
+      "bytes": 30230,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Compressors/Rar/UnpackV1/Unpack.cs",
+      "sha256": "96ed1141638a74028daea1b560ebcdf59035200e2bec895006ccb435210a324b",
+      "bytes": 42594,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Compressors/Rar/UnpackV1/UnpackUtility.cs",
+      "sha256": "62d3da6aff85e3f82fc6ad234da0de52e961070a70a2dbcbda7cda79c92febb0",
+      "bytes": 3476,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Compressors/Rar/UnpackV1/Decode/PackDef.cs",
+      "sha256": "08a32313a6e2b5c27a7f6c75bfa9ee0b16cdb3a10bb5a6817e25b057a1679a50",
+      "bytes": 1844,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-licenses-provenance.json",
+      "sha256": "c06810ce54cccc5e46609f722144d3fa309020782446d0fcb7798209f9bcd0fc",
+      "bytes": 415920,
+      "role": "unchanged-historical-record"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-rar4.provenance.json",
+      "sha256": "037ab3dfbf73e4eabafa05cc7ef4901e995a86a05cfd505cc9a9fd930c7f2be8",
+      "bytes": 17163,
+      "role": "unchanged-historical-record"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-rar5-provenance.json",
+      "sha256": "12d0a6211f3847ae149f03002ed0ca6cd1cbe5f44ff2360118796d583f160cb9",
+      "bytes": 15968,
+      "role": "unchanged-historical-record"
+    },
+    {
+      "filename": "../../../../tools/archive-codec-sources.json",
+      "sha256": "78abdfea8965364d868476852a8f21accdd75b7f72461c7ff1ba2418df8513d2",
+      "bytes": 4195,
+      "role": "unchanged-historical-record"
+    },
+    {
+      "filename": "../archive-codec/provenance.json",
+      "sha256": "0e09f4f16c815fa37bd4697e260782466b0d8f41846c9532892947927f016a9e",
+      "bytes": 2876,
+      "role": "unchanged-historical-record"
+    },
+    {
+      "filename": "../../../metadata/fixtures/book-comic/native.json",
+      "sha256": "ffa89ef25b8f3db8823f0bbd07c654497fb05a9e4c90e3e1a5b1d16b5b49c7a4",
+      "bytes": 656401,
+      "role": "retained-recording-byte-vectors"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec.mjs",
+      "sha256": "ed4e0fd0d4e40c46c0fc2581b41cce7f169a21eff4312e68daf10840f8d600c8",
+      "bytes": 14654,
+      "role": "published-payload"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec.wasm",
+      "sha256": "29500511ab901881802d1819f3f334cfe8f9881db495c83237e12ab2012c2d86",
+      "bytes": 363215,
+      "role": "published-payload"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec.c",
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e",
+      "bytes": 4913,
+      "role": "bridge-source"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-rar4.patch",
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0",
+      "bytes": 5083,
+      "role": "source-patch"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.patch",
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca",
+      "bytes": 3881,
+      "role": "source-patch"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.c",
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d",
+      "bytes": 130247,
+      "role": "modified-source"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-licenses.txt",
+      "sha256": "413f1dfd71e5ef0b96c1bdf94098a96407faa1cd5acad83a227021bbb39717c4",
+      "bytes": 351036,
+      "role": "original-licenses"
+    },
+    {
+      "filename": "../../../../src/storage/resources/archive-codec-notice.txt",
+      "sha256": "036ba25888546e5efc1c4af69218c10d9336d9f7e62d6eb411babbab00f249cc",
+      "bytes": 3368,
+      "role": "original-notice"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileHeader.cs",
+      "sha256": "d8dc692ae2cef812e05b6c3fb45e90765633ce5b84736fbe31166998864cca00",
+      "bytes": 15321,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileHeader.Async.cs",
+      "sha256": "a485b2a7630c24718671b52532e1231c525f0b8783f7b497cdcd79a851e49636",
+      "bytes": 16190,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/RarEntry.cs",
+      "sha256": "2b8fbe19c8b40a7ced5132c1e2954daf6d7d3163df3ddadf7198b1269009e376",
+      "bytes": 2775,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/RarCryptoWrapper.cs",
+      "sha256": "52f4449f92443552e81eb3b6450fcd9850e254d6d1a571158dc82b3cb95c2bdc",
+      "bytes": 4697,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "prepare_source_offer.py",
+      "sha256": "9e45eae3abf5ed43d53da749b1bf2455e49aeb9751c2db9e688e92a28e739511",
+      "bytes": 11932,
+      "role": "consumer-input"
+    },
+    {
+      "filename": "README.md",
+      "sha256": "673ad8068108aee402d7ef5caf15d9aba124d984e4b5baab0aa31431561eb96a",
+      "bytes": 2897,
+      "role": "consumer-input"
+    },
+    {
+      "filename": "source-offer.json",
+      "sha256": "e37462117dfb57f2b7d4dcdc93a31560ed132b17004cc719180bd2973225eb6f",
+      "bytes": 197103,
+      "role": "consumer-input"
+    },
+    {
+      "filename": "source-reader.js",
+      "sha256": "4c284a1666a67712cd1c5335160f69b97d02f6baf8d8ecaf85c54d9b58ab4c80",
+      "bytes": 4744,
+      "role": "consumer-input"
+    },
+    {
+      "filename": "assets/7Zip.LZMA2.7z",
+      "sha256": "9dc21162eaa4cc0aad74a847cdbe5b8d2cf75a86e84e4db8928e150f44b28bf1",
+      "bytes": 58970,
+      "role": "functional-input"
+    },
+    {
+      "filename": "assets/Rar.rar",
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802",
+      "bytes": 60029,
+      "role": "functional-input"
+    },
+    {
+      "filename": "assets/Rar5.rar",
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9",
+      "bytes": 60066,
+      "role": "functional-input"
+    },
+    {
+      "filename": "source-archives/bzip2-1.0.8.tar.gz",
+      "sha256": "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269",
+      "bytes": 810029,
+      "role": "complete-source-archive"
+    },
+    {
+      "filename": "source-archives/emscripten-ce6d2aad8bbf1e508e5a6d112f986617198bdc0d.tar.gz",
+      "sha256": "060fd90a2fab88a6859e21f4ad5b32081fe88eca2893ddcd92ffc1396b756412",
+      "bytes": 32940545,
+      "role": "complete-source-archive"
+    },
+    {
+      "filename": "../../../../src/storage/resources/SharpCompress.LICENSE.txt",
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed",
+      "bytes": 1081,
+      "role": "original-license"
+    },
+    {
+      "filename": "source-archives/libarchive-3.8.10.tar.gz",
+      "sha256": "a1bffbe5152cfe869751179e7b16648c87c461cb8c46eee75062efbe164cc57c",
+      "bytes": 9301407,
+      "role": "complete-source-archive"
+    },
+    {
+      "filename": "source-archives/zlib-1.3.1.tar.gz",
+      "sha256": "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23",
+      "bytes": 1512791,
+      "role": "complete-source-archive"
+    },
+    {
+      "filename": "sources/CC0-1.0.txt",
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "bytes": 7048,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/patched-libarchive/archive_read_support_format_rar.c",
+      "sha256": "d35aa635e300f947d89ab94edf0fcf55e04ef310b2414bbf62d966a74ceaefe8",
+      "bytes": 113607,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/patched-libarchive/archive_read_support_format_rar5.c",
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d",
+      "bytes": 130247,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/LICENSE.txt",
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed",
+      "bytes": 1081,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Archives/Rar/SeekableFilePart.cs",
+      "sha256": "5b66a0c64a073844b4bec41921adfc0dd27bbb4bb0f28f70082735c68119e77f",
+      "bytes": 1186,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/ArchiveEncoding.cs",
+      "sha256": "e369efd6d9f0620aafb573fc584409bf1b4fad5680c3614aa401a95aae1656f4",
+      "bytes": 427,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/ArchiveEncodingExtensions.cs",
+      "sha256": "8da09c0f6176399f8391dfd642fde863df677db5c7eb4c94084a3575f8ec1259",
+      "bytes": 2891,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "sources/sharpcompress/src/SharpCompress/Common/Rar/CryptKey3.cs",
+      "sha256": "fa13e11014bcd3241c92e39945844781d1c4c7e54b87ab717db2f8e35f3018f9",
+      "bytes": 3218,
+      "role": "complete-source-or-license"
+    },
+    {
+      "filename": "source-archives/xz-5.8.2.tar.gz",
+      "sha256": "ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1",
+      "bytes": 2693526,
+      "role": "complete-source-archive"
+    },
+    {
+      "filename": "../../../../tools/archive-codec-zlib.patch",
+      "sha256": "3d61fa2660e029a46f86ccd9170c98bee9e21e93b149752f4f1f6972a99b1d65",
+      "bytes": 415,
+      "role": "source-patch"
+    }
+  ]
+}

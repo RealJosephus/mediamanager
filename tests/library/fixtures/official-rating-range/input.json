@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "11111111-1111-1111-1111-111111111111",
+  "items": [
+    {
+      "key": "aggregateRoot",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "name": "root",
+      "type": "AggregateFolder",
+      "parentId": null,
+      "topParentId": null
+    },
+    {
+      "key": "physicalRoot",
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Core Flow Movies",
+      "type": "Folder",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "topParentId": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "key": "pg13",
+      "id": "22222222-2222-2222-2222-222222222222",
+      "name": "Alpha 中文",
+      "sortName": "alpha 中文",
+      "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111",
+      "topParentId": "11111111-1111-1111-1111-111111111111",
+      "ancestorIds": ["11111111-1111-1111-1111-111111111111", "f27caa37-e514-2225-cced-ed48f6553502"],
+      "presentationUniqueKey": "rating-range-pg13",
+      "officialRating": "PG-13",
+      "inheritedParentalRatingValue": 13,
+      "inheritedParentalRatingSubValue": 0
+    },
+    {
+      "key": "tv14",
+      "id": "33333333-3333-3333-3333-333333333333",
+      "name": "Beta Film",
+      "sortName": "beta film",
+      "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111",
+      "topParentId": "11111111-1111-1111-1111-111111111111",
+      "ancestorIds": ["11111111-1111-1111-1111-111111111111", "f27caa37-e514-2225-cced-ed48f6553502"],
+      "presentationUniqueKey": "rating-range-tv14",
+      "officialRating": "TV-14",
+      "inheritedParentalRatingValue": 14,
+      "inheritedParentalRatingSubValue": 0
+    },
+    {
+      "key": "tv14d",
+      "id": "44444444-4444-4444-4444-444444444444",
+      "name": "Gamma TV-14-D",
+      "sortName": "gamma tv-14-d",
+      "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111",
+      "topParentId": "11111111-1111-1111-1111-111111111111",
+      "ancestorIds": ["11111111-1111-1111-1111-111111111111", "f27caa37-e514-2225-cced-ed48f6553502"],
+      "presentationUniqueKey": "rating-range-tv14d",
+      "officialRating": "TV-14-D",
+      "inheritedParentalRatingValue": 14,
+      "inheritedParentalRatingSubValue": 1
+    },
+    {
+      "key": "r",
+      "id": "55555555-5555-5555-5555-555555555555",
+      "name": "Delta R",
+      "sortName": "delta r",
+      "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111",
+      "topParentId": "11111111-1111-1111-1111-111111111111",
+      "ancestorIds": ["11111111-1111-1111-1111-111111111111", "f27caa37-e514-2225-cced-ed48f6553502"],
+      "presentationUniqueKey": "rating-range-r",
+      "officialRating": "R",
+      "inheritedParentalRatingValue": 17,
+      "inheritedParentalRatingSubValue": 0
+    },
+    {
+      "key": "unrated",
+      "id": "66666666-6666-6666-6666-666666666666",
+      "name": "Epsilon Unrated",
+      "sortName": "epsilon unrated",
+      "type": "Movie",
+      "parentId": "11111111-1111-1111-1111-111111111111",
+      "topParentId": "11111111-1111-1111-1111-111111111111",
+      "ancestorIds": ["11111111-1111-1111-1111-111111111111", "f27caa37-e514-2225-cced-ed48f6553502"],
+      "presentationUniqueKey": "rating-range-unrated",
+      "officialRating": null,
+      "inheritedParentalRatingValue": null,
+      "inheritedParentalRatingSubValue": null
+    }
+  ],
+  "cases": []
+}

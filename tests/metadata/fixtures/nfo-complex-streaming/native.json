@@ -1,0 +1,1074 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "frozenJellyfinHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "inputSha256": "3dd938b40f081fb5216eef7ee6bf45f7c414b849fe5b0ba81dffd181872346c9",
+  "boundary": "Actual MovieNfoParser, SeasonNfoParser and SeriesNfoSeasonParser over exact UTF-8 temporary file bytes. This isolates XmlReader look-ahead, parser-specific subtree handling, complex subtree partial commits, namespace/name/attribute validation and malformed XML behavior.",
+  "uncovered": [
+    "every XML 1.0 grammar production and encoding combination",
+    "local image filesystem behavior",
+    "user-data persistence and cancellation",
+    "episode multi-block merge behavior",
+    "all NFO scalar fields and external-id providers"
+  ],
+  "results": [
+    {
+      "name": "complete actor commits before immediate truncated token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 90,
+        "sha256": "4100478ab9f820ca58910c12961e1dcb349001e3677ad5a5e0da67704a1cb2e7",
+        "base64": "PG1vdmllPjxhY3Rvcj48bmFtZT5Db21taXR0ZWQgQWN0b3I8L25hbWU\u002BPHJvbGU\u002BTGVhZDwvcm9sZT48b3JkZXI\u002BNzwvb3JkZXI\u002BPC9hY3Rvcj48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": [
+        {
+          "Name": "Committed Actor",
+          "Type": "Actor",
+          "Role": "Lead",
+          "SortOrder": 7,
+          "ImageUrl": null
+        }
+      ]
+    },
+    {
+      "name": "complete actor commits before unclosed root eof",
+      "type": "Movie",
+      "raw": {
+        "bytes": 71,
+        "sha256": "c38078f4ea87fbf4895e48305f541f5319d926602940ccabab2c08a2c7e0ac0b",
+        "base64": "PG1vdmllPjxhY3Rvcj48bmFtZT5Db21taXR0ZWQgQXQgRU9GPC9uYW1lPjxyb2xlPlN1cHBvcnQ8L3JvbGU\u002BPC9hY3Rvcj4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": [
+        {
+          "Name": "Committed At EOF",
+          "Type": "Actor",
+          "Role": "Support",
+          "SortOrder": null,
+          "ImageUrl": null
+        }
+      ]
+    },
+    {
+      "name": "partial actor retains no person",
+      "type": "Movie",
+      "raw": {
+        "bytes": 60,
+        "sha256": "52abae4d30d773a3b13e1973615e0fb4c2a90bf75698f12cb0131fe1e17cc13f",
+        "base64": "PG1vdmllPjxhY3Rvcj48bmFtZT5JbmNvbXBsZXRlIEFjdG9yPC9uYW1lPjxyb2xlPkxlYWQ8L3JvbGU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "season scalar nested element propagates and does not commit",
+      "type": "Season",
+      "raw": {
+        "bytes": 62,
+        "sha256": "270935f3f1ed2848a256375998841ba60f9573a60b32bc893faafbe91905c562",
+        "base64": "PHNlYXNvbj48dGl0bGU\u002BT3V0ZXI8aW5uZXI\u002BTmVzdGVkPC9pbm5lcj5UYWlsPC90aXRsZT48L3NlYXNvbj4="
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Season",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    },
+    {
+      "name": "movie scalar nested element is swallowed and does not commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 60,
+        "sha256": "deb46bd07ac1abbc282b53f69ecb6bba18d3c1cdfdcbc70e129e5cdc38d86f65",
+        "base64": "PG1vdmllPjx0aXRsZT5PdXRlcjxpbm5lcj5OZXN0ZWQ8L2lubmVyPlRhaWw8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "critic rating nested element is swallowed and does not commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 54,
+        "sha256": "f0ae446fa66aeed835258f82f245d50595850516ef39ee802c2193657b2c37c0",
+        "base64": "PG1vdmllPjxjcml0aWNyYXRpbmc\u002BODxpbm5lci8\u002BMjwvY3JpdGljcmF0aW5nPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "series-season skips ratings subtree",
+      "type": "Season",
+      "raw": {
+        "bytes": 83,
+        "sha256": "25aee965953c86f8e5e1a28d54d5622597b5db310af36a6369e56963e9abd96e",
+        "base64": "PHR2c2hvdz48cmF0aW5ncz48cmF0aW5nIG5hbWU9InRtZGIiPjx2YWx1ZT43LjU8L3ZhbHVlPjwvcmF0aW5nPjwvcmF0aW5ncz48L3R2c2hvdz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Season",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    },
+    {
+      "name": "series-season skips actor scalar rules before named season",
+      "type": "Season",
+      "raw": {
+        "bytes": 104,
+        "sha256": "151992a9b44c737912b9df22befb4a8d8131917147a92db2cf3a93637a3c651a",
+        "base64": "PHR2c2hvdz48YWN0b3I\u002BPG5hbWU\u002BSWdub3JlZDxpbm5lci8\u002BPC9uYW1lPjwvYWN0b3I\u002BPG5hbWVkc2Vhc29uIG51bWJlcj0iMiI\u002BV2ludGVyPC9uYW1lZHNlYXNvbj48L3R2c2hvdz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Season",
+        "Name": "Winter",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    },
+    {
+      "name": "non-video fileinfo ignores nested video fields",
+      "type": "Season",
+      "raw": {
+        "bytes": 111,
+        "sha256": "2d346374dc3d6d94c1ab030816a76c53627ab22d74f1d90f3e7c24c70a06ea43",
+        "base64": "PHNlYXNvbj48ZmlsZWluZm8\u002BPHN0cmVhbWRldGFpbHM\u002BPHZpZGVvPjx3aWR0aD4xOTxpbm5lci8\u002BMjA8L3dpZHRoPjwvdmlkZW8\u002BPC9zdHJlYW1kZXRhaWxzPjwvZmlsZWluZm8\u002BPC9zZWFzb24\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Season",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    },
+    {
+      "name": "scalar commits when root end is valid lookahead",
+      "type": "Movie",
+      "raw": {
+        "bytes": 39,
+        "sha256": "f3a7abcc010a057ef56ac280c87e9eb86332c0be757c04ace120667a63dc0594",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Committed",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "scalar does not commit before immediate truncated token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 42,
+        "sha256": "1c5390c938c16b9a36e741af1ac1e3337d57d24bc2ae8d2bbb9b115209be30d8",
+        "base64": "PG1vdmllPjx0aXRsZT5Ob3QgQ29tbWl0dGVkPC90aXRsZT48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "scalar commits after lexing valid next sibling start",
+      "type": "Movie",
+      "raw": {
+        "bytes": 64,
+        "sha256": "4be5c7de3bf221b47ff3eadf06d06647920a110d09729c78fe876cfe808fba64",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjxwbG90Pk5vdCBDb21taXR0ZWQ8L3Bsb3Q\u002BPGJyb2tlbg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Committed",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "complete ratings commits before immediate truncated token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 81,
+        "sha256": "4fbddc52048e204eb33179fac2f165ed85b66e286991069907afa296417c891f",
+        "base64": "PG1vdmllPjxyYXRpbmdzPjxyYXRpbmcgbmFtZT0idG1kYiI\u002BPHZhbHVlPjcuMjU8L3ZhbHVlPjwvcmF0aW5nPjwvcmF0aW5ncz48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": 7.25,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "rating value commits before ratings subtree truncation",
+      "type": "Movie",
+      "raw": {
+        "bytes": 63,
+        "sha256": "0c341b4e2545577f7ebbe626f3d242781cd14d28f4aeb3f3e44d1ae35f38b200",
+        "base64": "PG1vdmllPjxyYXRpbmdzPjxyYXRpbmcgbmFtZT0idG1kYiI\u002BPHZhbHVlPjcuNTwvdmFsdWU\u002BPC9yYXRpbmc\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": 7.5,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "rating value does not commit before malformed child token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 62,
+        "sha256": "e3a150acb50915a768cd28c06823b943d9b08f646fb0f45d491ab7e6f02194cd",
+        "base64": "PG1vdmllPjxyYXRpbmdzPjxyYXRpbmcgbmFtZT0idG1kYiI\u002BPHZhbHVlPjcuNzU8L3ZhbHVlPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "first rating commits before second rating truncates",
+      "type": "Movie",
+      "raw": {
+        "bytes": 114,
+        "sha256": "46ca44f867653b61cb31a25f148d2c2a7537516e8dec5eddf74b042b6dde557d",
+        "base64": "PG1vdmllPjxyYXRpbmdzPjxyYXRpbmcgbmFtZT0idG1kYiI\u002BPHZhbHVlPjYuNTwvdmFsdWU\u002BPC9yYXRpbmc\u002BPHJhdGluZyBuYW1lPSJ0b21hdG9tZXRlciI\u002BPHZhbHVlPjgxPC92YWx1ZT48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": 6.5,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "critic rating commits independently before later community truncates",
+      "type": "Movie",
+      "raw": {
+        "bytes": 114,
+        "sha256": "04c9f46abedaeed540fada0dec1aefbc5a6d0106f22cd722abcedf6557ca3ec6",
+        "base64": "PG1vdmllPjxyYXRpbmdzPjxyYXRpbmcgbmFtZT0idG9tYXRvbWV0ZXIiPjx2YWx1ZT44MjwvdmFsdWU\u002BPC9yYXRpbmc\u002BPHJhdGluZyBuYW1lPSJ0bWRiIj48dmFsdWU\u002BOC4yPC92YWx1ZT48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": 82,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "complete fileinfo commits before immediate truncated token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 255,
+        "sha256": "10e8eb340e81099962ec2e9c5b158abb91618ee472780332598277ad1f3e4af8",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48dmlkZW8\u002BPGFzcGVjdD4xLjg1OjE8L2FzcGVjdD48d2lkdGg\u002BMTkyMDwvd2lkdGg\u002BPGhlaWdodD4xMDgwPC9oZWlnaHQ\u002BPGR1cmF0aW9uaW5zZWNvbmRzPjYxPC9kdXJhdGlvbmluc2Vjb25kcz48Zm9ybWF0M2Q\u002BSFNCUzwvZm9ybWF0M2Q\u002BPC92aWRlbz48c3VidGl0bGU\u002BPGxhbmd1YWdlPmVuZzwvbGFuZ3VhZ2U\u002BPC9zdWJ0aXRsZT48L3N0cmVhbWRldGFpbHM\u002BPC9maWxlaW5mbz48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": "610000000",
+        "providers": {},
+        "aspectRatio": "1.85:1",
+        "width": 1920,
+        "height": 1080,
+        "video3DFormat": "HalfSideBySide",
+        "hasSubtitles": true
+      },
+      "people": []
+    },
+    {
+      "name": "video width waits for valid following token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 65,
+        "sha256": "e77eb50e6aaf9b26fb8ec7252a63160c55b62cc432fe8aa91389f8cf161963b7",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48dmlkZW8\u002BPHdpZHRoPjE5MjA8L3dpZHRoPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "video width commits before height lookahead fails",
+      "type": "Movie",
+      "raw": {
+        "bytes": 86,
+        "sha256": "14a39e5824e1358883b271013e18ee4ae069e5204830111c0f387f5a11bd0d6b",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48dmlkZW8\u002BPHdpZHRoPjE5MjA8L3dpZHRoPjxoZWlnaHQ\u002BMTA4MDwvaGVpZ2h0Pjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 1920,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "complete video fields survive streamdetails truncation",
+      "type": "Movie",
+      "raw": {
+        "bytes": 116,
+        "sha256": "ea6f2027c41e593ea30d3e915a3ce618474bac98177589826940d2901012b42f",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48dmlkZW8\u002BPGFzcGVjdD4yLjQwOjE8L2FzcGVjdD48d2lkdGg\u002BMTI4MDwvd2lkdGg\u002BPGhlaWdodD43MjA8L2hlaWdodD48L3ZpZGVvPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": "2.40:1",
+        "width": 1280,
+        "height": 720,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "subtitle flag waits for language lookahead",
+      "type": "Movie",
+      "raw": {
+        "bytes": 73,
+        "sha256": "5e9ecf75adf68202cba122d36ff3986f944964e96edc754c7186a6dab5e119ce",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48c3VidGl0bGU\u002BPGxhbmd1YWdlPmVuZzwvbGFuZ3VhZ2U\u002BPGJyb2tlbg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "subtitle flag commits after complete subtitle before truncation",
+      "type": "Movie",
+      "raw": {
+        "bytes": 84,
+        "sha256": "a37295dadd7a24969b78ac685341c7c77512be7159d6b66f9812282f76eda9a7",
+        "base64": "PG1vdmllPjxmaWxlaW5mbz48c3RyZWFtZGV0YWlscz48c3VidGl0bGU\u002BPGxhbmd1YWdlPmVuZzwvbGFuZ3VhZ2U\u002BPC9zdWJ0aXRsZT48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": true
+      },
+      "people": []
+    },
+    {
+      "name": "default namespace keeps unprefixed parser names",
+      "type": "Movie",
+      "raw": {
+        "bytes": 57,
+        "sha256": "9b4573e3006a4d303d9949ef4368f1432453dadecd749c3cd373fe6191d4a3fc",
+        "base64": "PG1vdmllIHhtbG5zPSJ1cm46dGVzdCI\u002BPHRpdGxlPk5hbWVzcGFjZWQ8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Namespaced",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "declared prefixed scalar name is ignored case exactly",
+      "type": "Movie",
+      "raw": {
+        "bytes": 60,
+        "sha256": "a80dd258ab8e3b647dea86657a5e985e0773f0484522d039ccc6bb9b54466b68",
+        "base64": "PG1vdmllIHhtbG5zOm49InVybjp0ZXN0Ij48bjp0aXRsZT5JZ25vcmVkPC9uOnRpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "element names are case sensitive",
+      "type": "Movie",
+      "raw": {
+        "bytes": 37,
+        "sha256": "33cf2a0a62558b1d727c4f3900812e76d9a32bebe086c66674721007ec66d5ce",
+        "base64": "PG1vdmllPjxUaXRsZT5JZ25vcmVkPC9UaXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "attributes are case sensitive",
+      "type": "Movie",
+      "raw": {
+        "bytes": 55,
+        "sha256": "5037fb707a20430dd72a55c181a60727a52386ebc14991dcfa511d7748bea288",
+        "base64": "PG1vdmllPjxpZCB0bWRiPSIxMDEiIHR2ZGI9IjIwMiI\u002BdHQwMDAwMzAzPC9pZD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {
+          "Imdb": "tt0000303"
+        },
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "undeclared namespace prefix is rejected after prefix commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 64,
+        "sha256": "2237fbf0f5533eba39d05eedc808e21216349e3f7b2f69e5522620cb8cda7798",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjxuOnBsb3Q\u002BUmVqZWN0ZWQ8L246cGxvdD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "invalid element name start is rejected after prefix commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 60,
+        "sha256": "e9303118f628d4667f432f853939f5dcec38238f58cf398ef8dae4b060d95d1e",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjwxYmFkPlJlamVjdGVkPC8xYmFkPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Initial",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "multiple colons in element name are rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 67,
+        "sha256": "520ed20fa5420bb7264ac93741d31733f8cd915dd2e3bd5476fecdbf7db3eb1c",
+        "base64": "PG1vdmllIHhtbG5zOm49InVybjp0ZXN0Ij48bjpiYWQ6bmFtZT5SZWplY3RlZDwvbjpiYWQ6bmFtZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "duplicate lexical attribute is rejected before id attributes commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 55,
+        "sha256": "f1f069561cee6333c80fecdc633d5d60366fecc9b5f639990bfb84a797925c1f",
+        "base64": "PG1vdmllPjxpZCBUTURCPSIxMDEiIFRNREI9IjIwMiI\u002BdHQwMDAwMzAzPC9pZD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "duplicate expanded namespace attribute is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 91,
+        "sha256": "62f326b5705a9d2ce5605ab8d5b8a4e685e6530016e3c8e3986d267945f08a59",
+        "base64": "PG1vdmllIHhtbG5zOmE9InVybjp0ZXN0IiB4bWxuczpiPSJ1cm46dGVzdCIgYTppZD0iMSIgYjppZD0iMiI\u002BPHRpdGxlPk5ldmVyPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "unquoted attribute is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 42,
+        "sha256": "657ac7ea1532b7d5e59b1d0f5e32677c4b9e7908a3d458d26572d3f457e9e782",
+        "base64": "PG1vdmllPjxpZCBUTURCPTEwMT50dDAwMDAzMDM8L2lkPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "literal less than in attribute is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 45,
+        "sha256": "cc40f9f2fb71577306a5c58ba6b4a7958f021ec3d1fa402e259044b9b1c1bbe0",
+        "base64": "PG1vdmllPjxpZCBUTURCPSIxMDwxIj50dDAwMDAzMDM8L2lkPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "illegal xml namespace binding is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 59,
+        "sha256": "43f3241e67a0e34a94451521cc5d1e02e3916adb8f44447ad22b3df3169d81a7",
+        "base64": "PG1vdmllIHhtbG5zOnhtbD0idXJuOm5vdC14bWwiPjx0aXRsZT5OZXZlcjwvdGl0bGU\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "double hyphen in comment is rejected after prefix commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 60,
+        "sha256": "4e2c28c30302b9a47cc0b50db60cf7a6026ccc07e341565123b4f747cc37502c",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjwhLS0gYmFkLS1jb21tZW50IC0tPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "cdata terminator in text is rejected after prefix commit",
+      "type": "Movie",
+      "raw": {
+        "bytes": 62,
+        "sha256": "89ed95a2ff3102688eb7e3a247d29daeb9d9e5272fa0d180fe3dd5a742b252eb",
+        "base64": "PG1vdmllPjx0aXRsZT5Db21taXR0ZWQ8L3RpdGxlPjxwbG90PmJhZF1dPnRleHQ8L3Bsb3Q\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": "Committed",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "mismatched namespace-qualified end tag is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 70,
+        "sha256": "10f9edfd37eacb6f13ad87272c89ce6e04f6d85070423ec842d1ba87dc45162a",
+        "base64": "PG1vdmllIHhtbG5zOmE9InVybjphIiB4bWxuczpiPSJ1cm46YiI\u002BPGE6dW5rbm93bj48L2I6dW5rbm93bj48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "Name": null,
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": 0,
+        "height": 0,
+        "video3DFormat": null,
+        "hasSubtitles": false
+      },
+      "people": []
+    },
+    {
+      "name": "nonwhitespace text after root is rejected after final scalar commit",
+      "type": "Season",
+      "raw": {
+        "bytes": 45,
+        "sha256": "a0f9a2f4995f5c660b810738f8d51df03239492e73b294f1bf7a7d16948137f9",
+        "base64": "PHNlYXNvbj48dGl0bGU\u002BQ29tbWl0dGVkPC90aXRsZT48L3NlYXNvbj50YWls"
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Season",
+        "Name": "Committed",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    },
+    {
+      "name": "second root is rejected after first scalar commit",
+      "type": "Season",
+      "raw": {
+        "bytes": 49,
+        "sha256": "cc71f6879ee542d6fc83497c809ad413102e3c2bf5710eba6aced9f5ad9f97e9",
+        "base64": "PHNlYXNvbj48dGl0bGU\u002BQ29tbWl0dGVkPC90aXRsZT48L3NlYXNvbj48b3RoZXIvPg=="
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Season",
+        "Name": "Committed",
+        "Overview": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "providers": {},
+        "aspectRatio": null,
+        "width": null,
+        "height": null,
+        "video3DFormat": null,
+        "hasSubtitles": null
+      },
+      "people": []
+    }
+  ]
+}

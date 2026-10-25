@@ -1,0 +1,109 @@
+import { validationFileUrl } from '../../tools/validation/paths.js';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import test from 'node:test';
+import { nativeArtistIdentity } from '../../src/library/identity.js';
+import { idKey } from '../../src/library/records.js';
+import { recordItemFilterCandidate } from './item-filter-http-scenario.js';
+import { writeCompleteIdentityHttpEvidence } from './full-identity-wire.js';
+import { assertCandidateIdentityMatchesNative,
+  verifyNativeIdentityEvidence,
+  verifyIdentityMismatchNegativeControl } from './native-identity-evidence.js';
+
+assert.equal(verifyIdentityMismatchNegativeControl(), true);
+
+const evidenceRoot = validationFileUrl('../../.test-input/evidence/identity-inputs/artist-concurrency-native-v1/', import.meta.url);
+await verifyNativeIdentityEvidence({ evidenceRoot, kind: 'artist', evidenceName: 'artist-concurrency-native-v1',
+  expectedRunModes: { 'native-run': 'concurrency', 'native-run-b': 'race', 'native-run-c': 'race',
+    'native-run-d': 'race-reverse', 'native-run-f': 'race-eight', 'native-run-g': 'race-eight-reverse' } });
+const evidence = new URL('native-run/', evidenceRoot);
+const fixture = JSON.parse(await readFile(validationFileUrl('./fixtures/artist-filters/input.json', import.meta.url), 'utf8'));
+const nativeHttp = JSON.parse(await readFile(validationFileUrl('native-http.json', evidence), 'utf8'));
+const nativeStages = JSON.parse(await readFile(validationFileUrl('stages.json', evidence), 'utf8'));
+const nativeSummary = JSON.parse(await readFile(validationFileUrl('summary.json', evidence), 'utf8'));
+assert.equal(nativeSummary.passed, true, 'The frozen concurrency recorder must have completed and released its port.');
+assert.equal(createHash('sha256').update(await readFile(validationFileUrl('../record-native.mjs', evidence))).digest('hex'),
+  nativeSummary.recorderSha256, 'The recorder must match the frozen run input.');
+assert.equal(nativeHttp.records.length, 9);
+assert.equal(nativeStages.afterBatch.database.baseItemsCount - nativeStages.before.database.baseItemsCount, 1);
+assert.equal(nativeStages.afterFollowup.database.baseItemsCount - nativeStages.before.database.baseItemsCount, 1);
+assert.deepEqual(nativeStages.afterBatch.artistTree.map(entry => [entry.name, entry.type]),
+  [['Concurrent Alpha', 'directory']]);
+
+const artist = 'Concurrent Alpha';
+const caseFor = (name, parallelRequests) => ({
+  name, query: `Artists=${encodeURIComponent(artist)}`, scope: ['noCredit'],
+  omitParentId: true, recursive: null, omitSortBy: true, endpoints: ['items'],
+  ...(parallelRequests ? { parallelRequests } : {}),
+});
+const scenario = { ...fixture, cases: [caseFor('parallel', 8), caseFor('followup')] };
+const nativeTree = stage => [{ path: 'artists', type: 'directory' },
+  ...nativeStages[stage].artistTree.map(entry => ({ path: `artists/${entry.name}`, type: entry.type }))]
+  .filter(entry => stage !== 'before' || entry.path !== 'artists')
+  .sort((left, right) => left.path.localeCompare(right.path, 'en'));
+const comparableRow = row => Object.fromEntries(Object.entries(row)
+  .filter(([key]) => !['Id', 'DateCreated', 'DateModified'].includes(key))
+  .map(([key, value]) => [key, typeof value === 'bigint' ? Number(value) : typeof value === 'boolean' ? Number(value) : value]));
+const dialects = process.env.MEDIAMANAGER_ARTIST_CONCURRENCY_DIALECT
+  ? [process.env.MEDIAMANAGER_ARTIST_CONCURRENCY_DIALECT] : ['postgres'];
+if (dialects.some(dialect => !['postgres'].includes(dialect))) throw new Error('Invalid Artist concurrency dialect.');
+
+for (const dialect of dialects) {
+  test(`${dialect}: simultaneous Artist GETs match frozen response and one-row side effect`, {
+    skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES,
+  }, async () => {
+    let identity;
+    const actual = await recordItemFilterCandidate({
+      dialect, fixture: scenario, connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES,
+      scenarioName: 'artist-concurrency', fields: 'SortName', captureStartIndex: true,
+      trackFilesystem: true, captureCaseStages: true, captureResponseBodies: true,
+      prepareScenario({ programDataPath }) {
+        identity = nativeArtistIdentity(artist, { programDataPath,
+          metadataPath: path.join(programDataPath, 'metadata') });
+      },
+    });
+
+    assertCandidateIdentityMatchesNative(identity.Id, nativeStages.watched[0].id,
+      `${dialect}:Concurrent Alpha`);
+    assert.equal(actual.httpCases, nativeHttp.records.length);
+    await writeCompleteIdentityHttpEvidence(actual, nativeHttp, { scenarioName: 'artist-concurrency' });
+    const endpoints = actual.cases.flatMap(item => item.endpoints);
+    for (const [index, record] of nativeHttp.records.entries()) {
+      const observed = endpoints[index].contract;
+      const expected = record.response.bodyJson;
+      assert.equal(observed.status, record.response.status, record.name);
+      assert.equal(observed.contentType, record.response.contentType, record.name);
+      assert.equal(observed.totalRecordCount, expected.TotalRecordCount, record.name);
+      assert.equal(observed.startIndex, expected.StartIndex, record.name);
+      assert.equal(observed.keys.length, expected.Items.length, record.name);
+    }
+    assert.deepEqual(actual.filesystemBeforeReads, nativeTree('before'));
+    for (const [index, stageName] of ['afterBatch', 'afterFollowup'].entries()) {
+      const stage = actual.caseStages[index];
+      const expected = nativeStages[stageName];
+      assert.equal(stage.database.BaseItems.length - actual.beforeReads.BaseItems.length,
+        expected.database.baseItemsCount - nativeStages.before.database.baseItemsCount, stageName);
+      assert.deepEqual(stage.filesystem, nativeTree(stageName), `${dialect}:${stageName}:tree`);
+      const observed = stage.database.BaseItems.find(row => idKey(row.Id) === idKey(identity.Id));
+      const nativeRow = expected.database.watchedRows[0].row;
+      assert.ok(observed, `${dialect}:${stageName}:row`);
+      assert.deepEqual(comparableRow(observed), comparableRow(nativeRow), `${dialect}:${stageName}:row`);
+      assert.match(observed.DateCreated, /^\d{4}-\d\d-\d\d /u);
+      assert.match(observed.DateModified, /^\d{4}-\d\d-\d\d /u);
+    }
+    assert.deepEqual(actual.filesystemAfterReads, nativeTree('afterFollowup'));
+    assert.deepEqual(actual.filesystemAfterShutdown, actual.filesystemAfterReads);
+    for (const table of Object.keys(actual.beforeReads).filter(name => name !== 'BaseItems')) {
+      assert.deepEqual(actual.afterReads[table], actual.beforeReads[table], `${dialect}:${table}`);
+    }
+    assert.deepEqual(actual.runtimeErrors, []);
+    assert.deepEqual(actual.handledExpectedRuntimeErrors, []);
+    assert.deepEqual(actual.cleanup, {
+      runtimeClosed: true, databaseClosed: true, portReleased: true,
+      postgresSchemasRemoved: dialect === 'postgres' ? true : null,
+      programDataDirectoryRemoved: true,
+    });
+  });
+}

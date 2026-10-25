@@ -1,0 +1,9 @@
+{
+  "modified": "2024-04-03T04:13:14Z",
+  "cases": [
+    { "name": "cold-original", "method": "GET", "query": "?format=Png", "headers": {} },
+    { "name": "cold-tagged", "method": "GET", "query": "?format=Png&tag=cold-metadata-a", "headers": {} },
+    { "name": "cold-head", "method": "HEAD", "query": "?format=Png&tag=cold-metadata-a", "headers": {} },
+    { "name": "cold-tag-not-modified", "method": "GET", "query": "?format=Png&tag=cold-metadata-a", "headers": { "If-None-Match": "\"cold-metadata-a\"" } }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "inputSha256": "ada44f1159805184cb0632861dc47be2dde209b790092995c76a4efa4eb6dc8e",
+  "case": "update-nested-nearest",
+  "scope": "Actual native mixed-separator persistence on POSIX filesystems; original Windows recordings remain byte-sealed.",
+  "recordings": [
+    {
+      "platform": "linux",
+      "native": {
+        "sha256": "e756466ca619e8597ba815884ac77df697433882347940221988e1b41128b9dc",
+        "filename": "linux-native.json"
+      },
+      "record": {
+        "sha256": "dc06db9328fd13aa8b112baeaf4fb53b9941427f8d7ac65366a9812540b51313",
+        "filename": "linux-record.json"
+      },
+      "selectedInputSha256": "85aea7177fd342d42b0d88ad4d006bafd49041deeba29f17674370f606bbb98c",
+      "sourceFilesSha256": "6cd0d4553c5fc2759d421f9a50ca75a957a320ace445f62bc79f4cabdea0587d",
+      "run": "https://github.com/RealJosephus/mediamanager/actions/runs/39237838913",
+      "candidate": "833e731eca37e7d5b2b52f8f2a66945d42a5f3b3"
+    },
+    {
+      "platform": "darwin",
+      "native": {
+        "sha256": "0154e9f210bfbece5560241e9901ad2a35f85aebb78064441444b8934e0a4a8f",
+        "filename": "macos-native.json"
+      },
+      "record": {
+        "sha256": "5ace94fa1227dd19809b7e381affe973bd64125e4ea698e39d2865b3e384d3f6",
+        "filename": "macos-record.json"
+      },
+      "selectedInputSha256": "85aea7177fd342d42b0d88ad4d006bafd49041deeba29f17674370f606bbb98c",
+      "sourceFilesSha256": "03adacc2b89c819454ab8c7a54d98a2d6b368cf7390b854a244b8deeea09563b",
+      "run": "https://github.com/RealJosephus/mediamanager/actions/runs/39237838913",
+      "candidate": "833e731eca37e7d5b2b52f8f2a66945d42a5f3b3"
+    }
+  ],
+  "phaseAcceptance": false
+}

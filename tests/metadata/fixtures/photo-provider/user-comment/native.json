@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "name": "corrupt-unicode-user-comment",
+      "sourceSha256": "29b9b26f0c7c937b3b672b6b40a9b54a2c97ef9cf588022ba647386b615a669a",
+      "update": 6,
+      "exception": null,
+      "fallbackCalls": 0,
+      "errors": [],
+      "item": {
+        "Name": "Stored title",
+        "Overview": "User comment",
+        "CameraMake": "EXIF maker",
+        "CameraModel": "EXIF camera",
+        "Software": "EXIF software",
+        "Width": 8,
+        "Height": 6,
+        "CommunityRating": null,
+        "communityRatingBits": null,
+        "communityRatingDouble": null,
+        "dateCreated": "2024-03-02T15:04:05.0000000Z",
+        "premiereDate": "2024-03-02T23:04:05.0000000",
+        "dateCreatedTicks": "638449886450000000",
+        "premiereDateTicks": "638450174450000000",
+        "dateCreatedKind": "Utc",
+        "premiereDateKind": "Unspecified",
+        "ProductionYear": 2024,
+        "Genres": [],
+        "Tags": [],
+        "orientation": "RightTop",
+        "ExposureTime": 0.008,
+        "FocalLength": 50.1,
+        "Aperture": 2.8,
+        "ShutterSpeed": 77,
+        "Latitude": -25.035,
+        "Longitude": -121.5654,
+        "Altitude": -12.5,
+        "IsoSpeedRating": 400,
+        "images": [
+          {
+            "path": "unicode-comment.jpg",
+            "type": "Primary",
+            "dateModified": "2026-10-01T01:02:03.0000000Z",
+            "Width": 0,
+            "Height": 0,
+            "BlurHash": null
+          }
+        ]
+      }
+    }
+  ],
+  "inputSha256": "4cf0f1a8dce920dbe2fb694fa6a6136748b45edab5bde2659dc57c79a07df3d7",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "Emby.Photos",
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e"
+    },
+    {
+      "name": "TagLibSharp",
+      "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3"
+    }
+  ],
+  "localTimeZone": "Taipei Standard Time",
+  "localUtcOffset": "08:00:00",
+  "scope": "Actual PhotoProvider.FetchAsync and TagLib2.3 file reads over bound synthetic static bytes; controlled ImageProcessor dimension fallback and filesystem timestamp only. No SQL, complete metadata host, or HTTP consumer in this oracle."
+}

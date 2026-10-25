@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "fixture": "rar-entry-current",
+  "scope": "Two independent same-run designated ComicImageProvider and SharpCompress captures exercise all 30 complete RAR directories and 13 selected CRC/solid/password/cancellation/compressed-stream scenarios. Current assets bind to original upstream SHA-256 values; unavailable historical synthetic/helper inputs retain their old records and have independently declared new identities. Compare full keys/ordinals/selected bytes/failure outcomes and actual source/stream/spool close. CLR class names, exception descriptions and private wrappers remain raw diagnostics. No full-instance or release acceptance claim.",
+  "sourcePaths": [
+    "MediaBrowser.Providers/Books/ComicImageProvider.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Providers/DynamicImageResponse.cs",
+    "Directory.Packages.props"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "input.json",
+      "bytes": 10458,
+      "sha256": "5c997aedc8fb13daa247f31bcc137f56f94af3918d19c8e91498397d6756788c"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "Program.cs",
+      "bytes": 18922,
+      "sha256": "713e42ce95915902dc1bc267246affbf02d2a008044b42e70b04bd0301ca90f3"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "Oracle.csproj",
+      "bytes": 410,
+      "sha256": "8b40b0302a14f2ed73eabfb41e34acaa83807ab772da63ff8d0645880b688cca"
+    },
+    {
+      "role": "capture",
+      "filename": "capture.js",
+      "bytes": 8459,
+      "sha256": "0b7b34b303f2cbd1067d5d56db9261f1e157e61e4784669b9157d7963cfdb3f1"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "assetSource",
+      "filename": "asset-source.json",
+      "bytes": 595,
+      "sha256": "90f67e42ef8c91d693f148ec7c8f8fe51a8ee007663096b5b4c1ae98810455dd"
+    },
+    {
+      "role": "archive",
+      "filename": "assets/Rar.solid.rar",
+      "bytes": 60001,
+      "sha256": "e7e62f24f22f195d21437be09667c8956837d99ba48d7270090251a8e32babc5"
+    },
+    {
+      "role": "archive",
+      "filename": "../../../metadata/fixtures/book-comic-current/assets/Rar.rar",
+      "bytes": 60029,
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802"
+    },
+    {
+      "role": "archive",
+      "filename": "../../../metadata/fixtures/book-comic-current/assets/Rar5.rar",
+      "bytes": 60066,
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9"
+    },
+    {
+      "role": "archive",
+      "filename": "../../../metadata/fixtures/book-comic-current/assets/Rar.encrypted_filesOnly.rar",
+      "bytes": 60069,
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2"
+    },
+    {
+      "role": "assetLicense",
+      "filename": "../../../metadata/fixtures/book-comic-current/assets/LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Archives/Rar/SeekableFilePart.cs",
+      "bytes": 1186,
+      "sha256": "5b66a0c64a073844b4bec41921adfc0dd27bbb4bb0f28f70082735c68119e77f"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileHeader.cs",
+      "bytes": 15321,
+      "sha256": "d8dc692ae2cef812e05b6c3fb45e90765633ce5b84736fbe31166998864cca00"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileHeader.Async.cs",
+      "bytes": 16190,
+      "sha256": "a485b2a7630c24718671b52532e1231c525f0b8783f7b497cdcd79a851e49636"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Common/Rar/Headers/FileNameDecoder.cs",
+      "bytes": 2475,
+      "sha256": "d829c008374b7be8021bafbf1a54590ccc9a50b278a452554ffd5e5e1bdf40b1"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Common/Rar/CryptKey3.cs",
+      "bytes": 3218,
+      "sha256": "fa13e11014bcd3241c92e39945844781d1c4c7e54b87ab717db2f8e35f3018f9"
+    },
+    {
+      "role": "nativeArchiveSource",
+      "filename": "../archive-codec-current/sources/sharpcompress/src/SharpCompress/Common/Rar/RarCryptoWrapper.cs",
+      "bytes": 4697,
+      "sha256": "52f4449f92443552e81eb3b6450fcd9850e254d6d1a571158dc82b3cb95c2bdc"
+    },
+    {
+      "role": "codecSourceOffer",
+      "filename": "../archive-codec-current/source-offer.json",
+      "bytes": 197103,
+      "sha256": "e37462117dfb57f2b7d4dcdc93a31560ed132b17004cc719180bd2973225eb6f"
+    },
+    {
+      "role": "codecModule",
+      "filename": "../../../../src/storage/resources/archive-codec.mjs",
+      "bytes": 14654,
+      "sha256": "ed4e0fd0d4e40c46c0fc2581b41cce7f169a21eff4312e68daf10840f8d600c8"
+    },
+    {
+      "role": "codecWasm",
+      "filename": "../../../../src/storage/resources/archive-codec.wasm",
+      "bytes": 363215,
+      "sha256": "29500511ab901881802d1819f3f334cfe8f9881db495c83237e12ab2012c2d86"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec.c",
+      "bytes": 4913,
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar4.patch",
+      "bytes": 5083,
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0"
+    },
+    {
+      "role": "codecSource",
+      "filename": "../../../../src/storage/resources/archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-notice.txt",
+      "bytes": 3368,
+      "sha256": "036ba25888546e5efc1c4af69218c10d9336d9f7e62d6eb411babbab00f249cc"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/archive-codec-licenses.txt",
+      "bytes": 351036,
+      "sha256": "413f1dfd71e5ef0b96c1bdf94098a96407faa1cd5acad83a227021bbb39717c4"
+    },
+    {
+      "role": "codecLicense",
+      "filename": "../../../../src/storage/resources/SharpCompress.LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    }
+  ]
+}

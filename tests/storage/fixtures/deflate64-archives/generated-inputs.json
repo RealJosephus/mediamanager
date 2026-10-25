@@ -1,0 +1,107 @@
+{
+  "scope": "Independent bit-encoder inputs and intended plaintext; native execution must confirm every value before these can be expected results.",
+  "entries": [
+    {
+      "name": "stored-65535-then-stored",
+      "description": "Stored LEN/NLEN at maximum and a second stored block crossing the 64 KiB input buffer.",
+      "generatedLength": 65539,
+      "generatedSha256": "e53b418265b33d66ab208014305a6d2c2da5c7d61ad0cea839947a4c44309d78"
+    },
+    {
+      "name": "fixed-all-literals",
+      "description": "All 256 fixed alphabet literals, including nine-bit codes.",
+      "generatedLength": 1024,
+      "generatedSha256": "bf8874384b7682dae34818d307eafea415bb6e9ca0d01ab1b9a640dff3511414"
+    },
+    {
+      "name": "fixed-code285-length-3",
+      "description": "Deflate64 code 285 with sixteen length bits: 3.",
+      "generatedLength": 4,
+      "generatedSha256": "63c1dd951ffedf6f7fd968ad4efa39b8ed584f162f46e715114ee184f8de9201"
+    },
+    {
+      "name": "fixed-code285-length-258",
+      "description": "Deflate64 code 285 with sixteen length bits: 258.",
+      "generatedLength": 259,
+      "generatedSha256": "bd29f5b5043ba9d48f0cd6fda241bb24d8c274987ed0c1697008dc73c0f37dc2"
+    },
+    {
+      "name": "fixed-code285-length-259",
+      "description": "Deflate64 code 285 with sixteen length bits: 259.",
+      "generatedLength": 260,
+      "generatedSha256": "7fe02b05f3fc8c847b1286ce954e320e9c21f7493988c96f6751814528a17b8f"
+    },
+    {
+      "name": "fixed-code285-length-65538",
+      "description": "Deflate64 code 285 with sixteen length bits: 65538.",
+      "generatedLength": 65539,
+      "generatedSha256": "2548571936ec94827963864d3199caad85c8cf935d00eb5ce46d1e99585b3803"
+    },
+    {
+      "name": "fixed-distance-32768",
+      "description": "Stored history followed by fixed code 285 and distance 32768.",
+      "generatedLength": 32787,
+      "generatedSha256": "8733bbc5a4435571400a910afcb89e85d2ca92baeb12eea976c45bc70eedbdfc"
+    },
+    {
+      "name": "fixed-distance-32769",
+      "description": "Stored history followed by fixed code 285 and distance 32769.",
+      "generatedLength": 32788,
+      "generatedSha256": "5f186e922d10c3953be28d58d7dc09578dd2960088f5b269f96a3c5c923d0961"
+    },
+    {
+      "name": "fixed-distance-49152",
+      "description": "Stored history followed by fixed code 285 and distance 49152.",
+      "generatedLength": 49171,
+      "generatedSha256": "ce70f78b689391c84b0fcd040d50e75b0ca950a0199a40ece3024d5825d139d0"
+    },
+    {
+      "name": "fixed-distance-49153",
+      "description": "Stored history followed by fixed code 285 and distance 49153.",
+      "generatedLength": 49172,
+      "generatedSha256": "4566d6d2a31220bed562eb0d55fb8a1124207cb4c25c91191a4463329f8ac666"
+    },
+    {
+      "name": "fixed-distance-65535",
+      "description": "Stored history followed by fixed code 285 and distance 65535.",
+      "generatedLength": 65554,
+      "generatedSha256": "2e87a1a91f31cd3e839753e90ccc641eb5fd4892f50a73dee1ad7a32f06fed5b"
+    },
+    {
+      "name": "fixed-distance-65536",
+      "description": "Stored history followed by fixed code 285 and distance 65536.",
+      "generatedLength": 65555,
+      "generatedSha256": "4f5a4379380977ece424756292b4f281d5b09033da1fdb2dcb9dd45888e79771"
+    },
+    {
+      "name": "window-wrap-distance65536-longmatch",
+      "description": "History wraps twice; a maximum code285 match overlaps at distance65536.",
+      "generatedLength": 196610,
+      "generatedSha256": "98bfa55ed28a9e9282a615743fd8b9cda7183f42613720a96c0536064fed7fea"
+    },
+    {
+      "name": "dynamic-complete-length-repeat16",
+      "description": "Complete dynamic literal/distance trees with code-length repeat16 and a maximum code285 overlap.",
+      "generatedLength": 65539,
+      "generatedSha256": "2548571936ec94827963864d3199caad85c8cf935d00eb5ce46d1e99585b3803"
+    },
+    {
+      "name": "dynamic-sparse-repeat17-18",
+      "description": "Sparse complete literal tree and two-code distance tree; zero repeats17/18.",
+      "generatedLength": 263,
+      "generatedSha256": "2ae5e0970a7720c3c0294d8b1bee1b6bc1bb1e1ca1a9ebaad1946110aeea87d1"
+    },
+    {
+      "name": "dynamic-distance65536",
+      "description": "Maximum Deflate64 distance31 through the dynamic Huffman alphabet.",
+      "generatedLength": 131074,
+      "generatedSha256": "97965540523189e7bacc39cb611a4103317fa90b372e0c81f68b6b1c54fd1303"
+    },
+    {
+      "name": "stored-fixed-dynamic-stored-fixed",
+      "description": "Five block transitions preserve bit alignment and history across all block modes.",
+      "generatedLength": 50,
+      "generatedSha256": "d3a2cbdd96b0bb97da04c0cf94205cff1c01e4e56f12e35afeb04480dd493cbb"
+    }
+  ]
+}

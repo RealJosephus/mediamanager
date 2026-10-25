@@ -1,0 +1,196 @@
+{
+  "candidateVerified": false,
+  "recordedAt": "2026-10-09T19:57:09.826Z",
+  "jellyfin": {
+    "source": "D:/mediamanager-validation/20261008/jellyfin-pinned-208c278/source",
+    "commit": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "sources": [
+      {
+        "name": "Emby.Server.Implementations/Library/Resolvers/Movies/BoxSetResolver.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\Resolvers\\Movies\\BoxSetResolver.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 2419,
+        "sha256": "3fdaeadac3d8605c20a3f8fba7336fe3e30a1344efeec15f9a2275398edf47f2"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/Resolvers/PlaylistResolver.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\Resolvers\\PlaylistResolver.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 3910,
+        "sha256": "74b72d0f084dd3f1c12fa230d5f80841b2d06d0a5cf60d44a8b4c48d45d63e76"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/Resolvers/GenericFolderResolver.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\Resolvers\\GenericFolderResolver.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 876,
+        "sha256": "6df07117dfa1ca88f77a0a5cade96a1ebe92e5a4a462d4989112c0613ab2cf54"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/ResolverHelper.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\ResolverHelper.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 5960,
+        "sha256": "3c00ed6c92cb6b3671b716a9cfbc001f7f0775848da2602a2c82a62357ca6e4b"
+      },
+      {
+        "name": "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 156996,
+        "sha256": "ba2d43d6a9061b999d2595015c46a329c86cbf5bdeaa632eef04c433c1bc1d5d"
+      },
+      {
+        "name": "Emby.Server.Implementations/ApplicationHost.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Emby.Server.Implementations\\ApplicationHost.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 42960,
+        "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef"
+      },
+      {
+        "name": "MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Library\\ItemResolveArgs.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 10009,
+        "sha256": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25"
+      },
+      {
+        "name": "MediaBrowser.Controller/Resolvers/ItemResolver.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Resolvers\\ItemResolver.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 1565,
+        "sha256": "53bc078bab8300153282f89981b259ae2bf83ac1bda53ab84ac86fb8e8531ec5"
+      },
+      {
+        "name": "MediaBrowser.Controller/Entities/Folder.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Entities\\Folder.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 79497,
+        "sha256": "7f3caa6b32b267736ac5a62eb2d147baa76a14870619f172668513657b575920"
+      },
+      {
+        "name": "MediaBrowser.Controller/Playlists/Playlist.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Playlists\\Playlist.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 8672,
+        "sha256": "3d7488cbfa751ccba0e2debc7d9a34e4dc390a9f4ed7b8031c60750a76774d97"
+      },
+      {
+        "name": "MediaBrowser.Controller/Entities/Movies/BoxSet.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\MediaBrowser.Controller\\Entities\\Movies\\BoxSet.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 9007,
+        "sha256": "c7777732f29cf43b7470ece2b17eda5d67f6e43f4bbd9f4192bafd5891738df6"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\BaseItemMapper.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 21359,
+        "sha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92"
+      },
+      {
+        "name": "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server.Implementations\\Item\\ItemPersistenceService.cs",
+        "available": true,
+        "kind": "file",
+        "bytes": 33110,
+        "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+      }
+    ]
+  },
+  "record": {
+    "filename": "D:\\mediamanager-validation\\20261010\\results\\collection-playlist-resolution-v4\\record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4411,
+    "sha256": "2d3812e8a48d6d3d2b89a074aa881719d6e456b954e53d8cb71fcaabf7bb4b68"
+  },
+  "raw": {
+    "filename": "D:\\mediamanager-validation\\20261010\\results\\collection-playlist-resolution-v4\\native.raw.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 129268,
+    "sha256": "3e25b956780fa4b87c157273a701d0d0d113c54c5ac0f0a1a7e2b4e240b6234a"
+  },
+  "native": {
+    "filename": "tests/library/fixtures/collection-playlist-resolution/native.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 125811,
+    "sha256": "79f198cb53da8c29030b152c6299a68a1e51eaad4659e8a6814e7f3b70402368"
+  },
+  "files": [
+    {
+      "filename": "tests\\library\\fixtures\\collection-playlist-resolution\\input.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 4187,
+      "sha256": "9b3cba926c5a538b9f30fe4dd292222c8502aa75a0bcdd90c792f4527727785f"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\collection-playlist-resolution\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 12936,
+      "sha256": "4f56ec177dff43cff647781db487537b6efef1ba9fba821947142d47d6dbd4b3"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\collection-playlist-resolution\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 601,
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "filename": "tests\\library\\fixtures\\collection-playlist-resolution\\README.md",
+      "available": true,
+      "kind": "file",
+      "bytes": 2206,
+      "sha256": "2fca300148b7d4ad2a2d039dfd82a48c1b7d3da3148652fe1205a305c490df6f"
+    }
+  ],
+  "resolution": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\collection-playlist-resolution-v4\\bin\\Release\\net10.0\\Oracle.deps.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 40164,
+      "sha256": "20e9e98589666d91627d4334e59310535a3caa4a8fb89e30196561465a01802f"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261010\\results\\collection-playlist-resolution-v4\\bin\\Release\\net10.0\\Oracle.runtimeconfig.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 458,
+      "sha256": "b4aad84277c120c025a443649c4e09ca20b08725acc12ef60940786bfb8c024f"
+    }
+  ],
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "jellyfinDll": {
+    "filename": "D:\\mediamanager-validation\\20261008\\jellyfin-pinned-208c278\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 514560,
+    "sha256": "14a821378e554f3a1476610b02ef7ad3795fbb4050872413180ee423bd612d01"
+  },
+  "runtimeScope": "Runtime-loaded managed assemblies and native SQLite; not the complete native build-input closure."
+}

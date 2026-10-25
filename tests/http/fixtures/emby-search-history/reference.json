@@ -1,0 +1,3897 @@
+{
+  "sources": [
+    {
+      "kind": "history",
+      "run": "https://github.com/RealJosephus/mediamanager/actions/runs/39468619234",
+      "candidate": "976dae728f863c4c7b75771ad911d30cca918d30",
+      "packageUrl": "https://github.com/MediaBrowser/Emby.Releases/releases/download/4.10.1.0/embyserver-netcore_4.10.1.0.zip",
+      "packageSha256": "cada885b561eb4dd06fb410d09127b6948c2110662c3bdcd1e653a6cf04b9dce",
+      "producerSha256": "c5cabf12f74cb2ac07bb225635f1fccddd1e02862bc18f1515c9c054d1d732ab",
+      "scenarioProducerSha256": "9dee262086bd79294524aee5188a501872d5c5e398fd8552a584d61e5ab0b9a8",
+      "observationsSha256": "c6df27f4197652d5e4e27e94887ffc1eac48f8dd96da728150c810eabce539f8",
+      "referenceEntriesSha256": "6618275ea7f6de2b337b85fbfd096e77fa3b9426daea89c8f7d3195d7ffc5b2f",
+      "referenceUnchanged": true,
+      "runtimeUnchanged": true,
+      "processesStopped": true,
+      "instanceRemoved": true
+    },
+    {
+      "kind": "order",
+      "run": "https://github.com/RealJosephus/mediamanager/actions/runs/39469698007",
+      "candidate": "f6796ef27accd43c7d3c3e62f720eeddd6a5dd7b",
+      "packageUrl": "https://github.com/MediaBrowser/Emby.Releases/releases/download/4.10.1.0/embyserver-netcore_4.10.1.0.zip",
+      "packageSha256": "cada885b561eb4dd06fb410d09127b6948c2110662c3bdcd1e653a6cf04b9dce",
+      "producerSha256": "00abe497795b92473f69dc7e3eead6784e4e2d7b4f7b182f8452fadda9ecd28f",
+      "scenarioProducerSha256": "f1dcfbb7f55764fe0dcbc47af5810decfa60bdb703f6a575c46f6265d2df6405",
+      "observationsSha256": "a3b4d82211fd9bc8a911d275c38b3f62abf8659293946649f21d40191ca68f83",
+      "referenceEntriesSha256": "6618275ea7f6de2b337b85fbfd096e77fa3b9426daea89c8f7d3195d7ffc5b2f",
+      "referenceUnchanged": true,
+      "runtimeUnchanged": true,
+      "processesStopped": true,
+      "instanceRemoved": true
+    }
+  ],
+  "records": [
+    {
+      "scenario": "history",
+      "label": "clear-source-initial",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/RecentlySearched/Delete",
+      "authenticated": true,
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "clear-target-initial",
+      "method": "POST",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/RecentlySearched/Delete",
+      "authenticated": true,
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "initial-history",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "source-item-before-mark",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items/5",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"Etag\":\"af9355520c2220e26b5ce4c382792d20\",\"DateCreated\":\"2026-10-20T17:44:36.0000000Z\",\"DateModified\":\"2026-10-20T17:44:36.0000000Z\",\"CanDelete\":false,\"CanDownload\":true,\"PresentationUniqueKey\":\"9a00f621a80a38250ec77242de612665\",\"SupportsSync\":true,\"Container\":\"wav\",\"SortName\":\"Controlled audio A\",\"ForcedSortName\":\"Controlled audio A\",\"ExternalUrls\":[],\"MediaSources\":[{\"Chapters\":[],\"Protocol\":\"File\",\"Id\":\"mediasource_5\",\"Path\":\"/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav\",\"Type\":\"Default\",\"Container\":\"wav\",\"Size\":16044,\"Name\":\"Controlled audio A\",\"IsRemote\":false,\"HasMixedProtocols\":false,\"RunTimeTicks\":10000000,\"SupportsTranscoding\":true,\"SupportsDirectStream\":true,\"SupportsDirectPlay\":true,\"IsInfiniteStream\":false,\"RequiresOpening\":false,\"RequiresClosing\":false,\"RequiresLooping\":false,\"SupportsProbing\":true,\"MediaStreams\":[{\"Codec\":\"pcm_s16le\",\"TimeBase\":\"1/8000\",\"DisplayTitle\":\"PCM_S16LE 1 ch\",\"IsInterlaced\":false,\"BitRate\":128000,\"BitDepth\":16,\"Channels\":1,\"SampleRate\":8000,\"IsDefault\":false,\"IsForced\":false,\"IsHearingImpaired\":false,\"Type\":\"Audio\",\"Index\":0,\"IsExternal\":false,\"IsTextSubtitleStream\":false,\"SupportsExternalStream\":false,\"Protocol\":\"File\",\"ExtendedVideoType\":\"None\",\"ExtendedVideoSubType\":\"None\",\"ExtendedVideoSubTypeDescription\":\"None\",\"AttachmentSize\":0}],\"Formats\":[],\"Bitrate\":128352,\"RequiredHttpHeaders\":{},\"AddApiKeyToDirectStreamUrl\":false,\"ReadAtNativeFramerate\":false,\"DefaultAudioStreamIndex\":0,\"ItemId\":\"5\",\"MimeType\":\"audio/wav\"}],\"Path\":\"/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav\",\"Taglines\":[],\"Genres\":[],\"RunTimeTicks\":10000000,\"Size\":16044,\"FileName\":\"Controlled audio A.wav\",\"Bitrate\":128352,\"RemoteTrailers\":[],\"ProviderIds\":{},\"IsFolder\":false,\"ParentId\":\"4\",\"Type\":\"Audio\",\"GenreItems\":[],\"TagItems\":[],\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":1,\"IsFavorite\":true,\"LastPlayedDate\":\"2026-10-20T17:44:37.0000000Z\",\"Played\":true},\"DisplayPreferencesId\":\"61bba315f137702baa296a1c417faada\",\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"MediaStreams\":[{\"Codec\":\"pcm_s16le\",\"TimeBase\":\"1/8000\",\"DisplayTitle\":\"PCM_S16LE 1 ch\",\"IsInterlaced\":false,\"BitRate\":128000,\"BitDepth\":16,\"Channels\":1,\"SampleRate\":8000,\"IsDefault\":false,\"IsForced\":false,\"IsHearingImpaired\":false,\"Type\":\"Audio\",\"Index\":0,\"IsExternal\":false,\"IsTextSubtitleStream\":false,\"SupportsExternalStream\":false,\"Protocol\":\"File\",\"ExtendedVideoType\":\"None\",\"ExtendedVideoSubType\":\"None\",\"ExtendedVideoSubTypeDescription\":\"None\",\"AttachmentSize\":0}],\"ImageTags\":{},\"BackdropImageTags\":[],\"Chapters\":[],\"MediaType\":\"Audio\",\"MimeType\":\"audio/wav\",\"LockedFields\":[],\"LockData\":false}",
+      "bodyJson": {
+        "Name": "Controlled audio A",
+        "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+        "Id": "5",
+        "Etag": "af9355520c2220e26b5ce4c382792d20",
+        "DateCreated": "2026-10-20T17:44:36.0000000Z",
+        "DateModified": "2026-10-20T17:44:36.0000000Z",
+        "CanDelete": false,
+        "CanDownload": true,
+        "PresentationUniqueKey": "9a00f621a80a38250ec77242de612665",
+        "SupportsSync": true,
+        "Container": "wav",
+        "SortName": "Controlled audio A",
+        "ForcedSortName": "Controlled audio A",
+        "ExternalUrls": [],
+        "MediaSources": [
+          {
+            "Chapters": [],
+            "Protocol": "File",
+            "Id": "mediasource_5",
+            "Path": "/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav",
+            "Type": "Default",
+            "Container": "wav",
+            "Size": 16044,
+            "Name": "Controlled audio A",
+            "IsRemote": false,
+            "HasMixedProtocols": false,
+            "RunTimeTicks": 10000000,
+            "SupportsTranscoding": true,
+            "SupportsDirectStream": true,
+            "SupportsDirectPlay": true,
+            "IsInfiniteStream": false,
+            "RequiresOpening": false,
+            "RequiresClosing": false,
+            "RequiresLooping": false,
+            "SupportsProbing": true,
+            "MediaStreams": [
+              {
+                "Codec": "pcm_s16le",
+                "TimeBase": "1/8000",
+                "DisplayTitle": "PCM_S16LE 1 ch",
+                "IsInterlaced": false,
+                "BitRate": 128000,
+                "BitDepth": 16,
+                "Channels": 1,
+                "SampleRate": 8000,
+                "IsDefault": false,
+                "IsForced": false,
+                "IsHearingImpaired": false,
+                "Type": "Audio",
+                "Index": 0,
+                "IsExternal": false,
+                "IsTextSubtitleStream": false,
+                "SupportsExternalStream": false,
+                "Protocol": "File",
+                "ExtendedVideoType": "None",
+                "ExtendedVideoSubType": "None",
+                "ExtendedVideoSubTypeDescription": "None",
+                "AttachmentSize": 0
+              }
+            ],
+            "Formats": [],
+            "Bitrate": 128352,
+            "RequiredHttpHeaders": {},
+            "AddApiKeyToDirectStreamUrl": false,
+            "ReadAtNativeFramerate": false,
+            "DefaultAudioStreamIndex": 0,
+            "ItemId": "5",
+            "MimeType": "audio/wav"
+          }
+        ],
+        "Path": "/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav",
+        "Taglines": [],
+        "Genres": [],
+        "RunTimeTicks": 10000000,
+        "Size": 16044,
+        "FileName": "Controlled audio A.wav",
+        "Bitrate": 128352,
+        "RemoteTrailers": [],
+        "ProviderIds": {},
+        "IsFolder": false,
+        "ParentId": "4",
+        "Type": "Audio",
+        "GenreItems": [],
+        "TagItems": [],
+        "UserData": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 1,
+          "IsFavorite": true,
+          "LastPlayedDate": "2026-10-20T17:44:37.0000000Z",
+          "Played": true
+        },
+        "DisplayPreferencesId": "61bba315f137702baa296a1c417faada",
+        "Artists": [],
+        "ArtistItems": [],
+        "Composers": [],
+        "AlbumArtists": [],
+        "MediaStreams": [
+          {
+            "Codec": "pcm_s16le",
+            "TimeBase": "1/8000",
+            "DisplayTitle": "PCM_S16LE 1 ch",
+            "IsInterlaced": false,
+            "BitRate": 128000,
+            "BitDepth": 16,
+            "Channels": 1,
+            "SampleRate": 8000,
+            "IsDefault": false,
+            "IsForced": false,
+            "IsHearingImpaired": false,
+            "Type": "Audio",
+            "Index": 0,
+            "IsExternal": false,
+            "IsTextSubtitleStream": false,
+            "SupportsExternalStream": false,
+            "Protocol": "File",
+            "ExtendedVideoType": "None",
+            "ExtendedVideoSubType": "None",
+            "ExtendedVideoSubTypeDescription": "None",
+            "AttachmentSize": 0
+          }
+        ],
+        "ImageTags": {},
+        "BackdropImageTags": [],
+        "Chapters": [],
+        "MediaType": "Audio",
+        "MimeType": "audio/wav",
+        "LockedFields": [],
+        "LockData": false
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-first",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "5"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "after-first",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":1}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 1
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-second",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "7"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "after-second",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-ascending",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-page",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=1&StartIndex=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-page-without-count",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=1&StartIndex=1&EnableTotalRecordCount=false",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-negative-filter",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=false&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":1}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 1
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-default-order",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-field",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10&Fields=DateLastSearched",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-unknown-bool",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=invalid&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 500,
+      "contentType": "text/plain",
+      "bodyText": "String 'invalid' was not recognized as a valid Boolean."
+    },
+    {
+      "scenario": "history",
+      "label": "mark-false",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "5"
+        ],
+        "WasSearched": false
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "after-false",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-invalid-flag",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "7"
+        ],
+        "WasSearched": "invalid"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "after-invalid-flag",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":2}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 2
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-empty-list",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "mark-null-list",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": null
+      },
+      "status": 500,
+      "contentType": "text/plain",
+      "bodyText": "Object reference not set to an instance of an object."
+    },
+    {
+      "scenario": "history",
+      "label": "mark-missing-id",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "999999999999"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "mark-invalid-id",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "invalid"
+        ],
+        "WasSearched": true
+      },
+      "status": 500,
+      "contentType": "text/plain",
+      "bodyText": "Unrecognized Guid format."
+    },
+    {
+      "scenario": "history",
+      "label": "mark-mixed-ids",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "6",
+          "999999999999",
+          "5"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "after-mixed-ids",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-other-user",
+      "method": "POST",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "6"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "other-history-after-cross-write",
+      "method": "GET",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "other-history-as-reader",
+      "method": "GET",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "anonymous-mark",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": false,
+      "requestBody": {
+        "Ids": [
+          "5"
+        ]
+      },
+      "status": 401,
+      "contentType": "text/plain",
+      "bodyText": "Access token is invalid or expired."
+    },
+    {
+      "scenario": "history",
+      "label": "anonymous-clear",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/RecentlySearched/Delete",
+      "authenticated": false,
+      "status": 401,
+      "contentType": "text/plain",
+      "bodyText": "Access token is invalid or expired."
+    },
+    {
+      "scenario": "history",
+      "label": "mark-other-as-owner",
+      "method": "POST",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "6"
+        ]
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "copy-search-history",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/CopyData",
+      "authenticated": true,
+      "requestBody": {
+        "ToUserIds": [
+          "a7f19601e18448f2b89dd06c3067e100"
+        ],
+        "CopyOptions": [
+          "userdata"
+        ]
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "other-history-after-copy",
+      "method": "GET",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-without-library-access",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "mark-without-library-access",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/SearchedItems",
+      "authenticated": true,
+      "requestBody": {
+        "Ids": [
+          "7"
+        ],
+        "WasSearched": true
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "history-after-access-restored",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-before-restart",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "history-after-restart",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "clear-source",
+      "method": "POST",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/RecentlySearched/Delete",
+      "authenticated": true,
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "scenario": "history",
+      "label": "history-after-clear",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "source-item-after-clear",
+      "method": "GET",
+      "route": "/Users/f8c10c7cd14b4f30a7f57ead1d6fc3f7/Items/5",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"Etag\":\"af9355520c2220e26b5ce4c382792d20\",\"DateCreated\":\"2026-10-20T17:44:36.0000000Z\",\"DateModified\":\"2026-10-20T17:44:36.0000000Z\",\"CanDelete\":false,\"CanDownload\":true,\"PresentationUniqueKey\":\"9a00f621a80a38250ec77242de612665\",\"SupportsSync\":true,\"Container\":\"wav\",\"SortName\":\"Controlled audio A\",\"ForcedSortName\":\"Controlled audio A\",\"ExternalUrls\":[],\"MediaSources\":[{\"Chapters\":[],\"Protocol\":\"File\",\"Id\":\"mediasource_5\",\"Path\":\"/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav\",\"Type\":\"Default\",\"Container\":\"wav\",\"Size\":16044,\"Name\":\"Controlled audio A\",\"IsRemote\":false,\"HasMixedProtocols\":false,\"RunTimeTicks\":10000000,\"SupportsTranscoding\":true,\"SupportsDirectStream\":true,\"SupportsDirectPlay\":true,\"IsInfiniteStream\":false,\"RequiresOpening\":false,\"RequiresClosing\":false,\"RequiresLooping\":false,\"SupportsProbing\":true,\"MediaStreams\":[{\"Codec\":\"pcm_s16le\",\"TimeBase\":\"1/8000\",\"DisplayTitle\":\"PCM_S16LE 1 ch\",\"IsInterlaced\":false,\"BitRate\":128000,\"BitDepth\":16,\"Channels\":1,\"SampleRate\":8000,\"IsDefault\":false,\"IsForced\":false,\"IsHearingImpaired\":false,\"Type\":\"Audio\",\"Index\":0,\"IsExternal\":false,\"IsTextSubtitleStream\":false,\"SupportsExternalStream\":false,\"Protocol\":\"File\",\"ExtendedVideoType\":\"None\",\"ExtendedVideoSubType\":\"None\",\"ExtendedVideoSubTypeDescription\":\"None\",\"AttachmentSize\":0}],\"Formats\":[],\"Bitrate\":128352,\"RequiredHttpHeaders\":{},\"AddApiKeyToDirectStreamUrl\":false,\"ReadAtNativeFramerate\":false,\"DefaultAudioStreamIndex\":0,\"ItemId\":\"5\",\"MimeType\":\"audio/wav\"}],\"Path\":\"/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav\",\"Taglines\":[],\"Genres\":[],\"RunTimeTicks\":10000000,\"Size\":16044,\"FileName\":\"Controlled audio A.wav\",\"Bitrate\":128352,\"RemoteTrailers\":[],\"ProviderIds\":{},\"IsFolder\":false,\"ParentId\":\"4\",\"Type\":\"Audio\",\"GenreItems\":[],\"TagItems\":[],\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":1,\"IsFavorite\":true,\"LastPlayedDate\":\"2026-10-20T17:44:37.0000000Z\",\"Played\":true},\"DisplayPreferencesId\":\"61bba315f137702baa296a1c417faada\",\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"MediaStreams\":[{\"Codec\":\"pcm_s16le\",\"TimeBase\":\"1/8000\",\"DisplayTitle\":\"PCM_S16LE 1 ch\",\"IsInterlaced\":false,\"BitRate\":128000,\"BitDepth\":16,\"Channels\":1,\"SampleRate\":8000,\"IsDefault\":false,\"IsForced\":false,\"IsHearingImpaired\":false,\"Type\":\"Audio\",\"Index\":0,\"IsExternal\":false,\"IsTextSubtitleStream\":false,\"SupportsExternalStream\":false,\"Protocol\":\"File\",\"ExtendedVideoType\":\"None\",\"ExtendedVideoSubType\":\"None\",\"ExtendedVideoSubTypeDescription\":\"None\",\"AttachmentSize\":0}],\"ImageTags\":{},\"BackdropImageTags\":[],\"Chapters\":[],\"MediaType\":\"Audio\",\"MimeType\":\"audio/wav\",\"LockedFields\":[],\"LockData\":false}",
+      "bodyJson": {
+        "Name": "Controlled audio A",
+        "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+        "Id": "5",
+        "Etag": "af9355520c2220e26b5ce4c382792d20",
+        "DateCreated": "2026-10-20T17:44:36.0000000Z",
+        "DateModified": "2026-10-20T17:44:36.0000000Z",
+        "CanDelete": false,
+        "CanDownload": true,
+        "PresentationUniqueKey": "9a00f621a80a38250ec77242de612665",
+        "SupportsSync": true,
+        "Container": "wav",
+        "SortName": "Controlled audio A",
+        "ForcedSortName": "Controlled audio A",
+        "ExternalUrls": [],
+        "MediaSources": [
+          {
+            "Chapters": [],
+            "Protocol": "File",
+            "Id": "mediasource_5",
+            "Path": "/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav",
+            "Type": "Default",
+            "Container": "wav",
+            "Size": 16044,
+            "Name": "Controlled audio A",
+            "IsRemote": false,
+            "HasMixedProtocols": false,
+            "RunTimeTicks": 10000000,
+            "SupportsTranscoding": true,
+            "SupportsDirectStream": true,
+            "SupportsDirectPlay": true,
+            "IsInfiniteStream": false,
+            "RequiresOpening": false,
+            "RequiresClosing": false,
+            "RequiresLooping": false,
+            "SupportsProbing": true,
+            "MediaStreams": [
+              {
+                "Codec": "pcm_s16le",
+                "TimeBase": "1/8000",
+                "DisplayTitle": "PCM_S16LE 1 ch",
+                "IsInterlaced": false,
+                "BitRate": 128000,
+                "BitDepth": 16,
+                "Channels": 1,
+                "SampleRate": 8000,
+                "IsDefault": false,
+                "IsForced": false,
+                "IsHearingImpaired": false,
+                "Type": "Audio",
+                "Index": 0,
+                "IsExternal": false,
+                "IsTextSubtitleStream": false,
+                "SupportsExternalStream": false,
+                "Protocol": "File",
+                "ExtendedVideoType": "None",
+                "ExtendedVideoSubType": "None",
+                "ExtendedVideoSubTypeDescription": "None",
+                "AttachmentSize": 0
+              }
+            ],
+            "Formats": [],
+            "Bitrate": 128352,
+            "RequiredHttpHeaders": {},
+            "AddApiKeyToDirectStreamUrl": false,
+            "ReadAtNativeFramerate": false,
+            "DefaultAudioStreamIndex": 0,
+            "ItemId": "5",
+            "MimeType": "audio/wav"
+          }
+        ],
+        "Path": "/home/runner/work/_temp/mediamanager-emby-reference/instance/controlled-music/Controlled audio A.wav",
+        "Taglines": [],
+        "Genres": [],
+        "RunTimeTicks": 10000000,
+        "Size": 16044,
+        "FileName": "Controlled audio A.wav",
+        "Bitrate": 128352,
+        "RemoteTrailers": [],
+        "ProviderIds": {},
+        "IsFolder": false,
+        "ParentId": "4",
+        "Type": "Audio",
+        "GenreItems": [],
+        "TagItems": [],
+        "UserData": {
+          "PlaybackPositionTicks": 0,
+          "PlayCount": 1,
+          "IsFavorite": true,
+          "LastPlayedDate": "2026-10-20T17:44:37.0000000Z",
+          "Played": true
+        },
+        "DisplayPreferencesId": "61bba315f137702baa296a1c417faada",
+        "Artists": [],
+        "ArtistItems": [],
+        "Composers": [],
+        "AlbumArtists": [],
+        "MediaStreams": [
+          {
+            "Codec": "pcm_s16le",
+            "TimeBase": "1/8000",
+            "DisplayTitle": "PCM_S16LE 1 ch",
+            "IsInterlaced": false,
+            "BitRate": 128000,
+            "BitDepth": 16,
+            "Channels": 1,
+            "SampleRate": 8000,
+            "IsDefault": false,
+            "IsForced": false,
+            "IsHearingImpaired": false,
+            "Type": "Audio",
+            "Index": 0,
+            "IsExternal": false,
+            "IsTextSubtitleStream": false,
+            "SupportsExternalStream": false,
+            "Protocol": "File",
+            "ExtendedVideoType": "None",
+            "ExtendedVideoSubType": "None",
+            "ExtendedVideoSubTypeDescription": "None",
+            "AttachmentSize": 0
+          }
+        ],
+        "ImageTags": {},
+        "BackdropImageTags": [],
+        "Chapters": [],
+        "MediaType": "Audio",
+        "MimeType": "audio/wav",
+        "LockedFields": [],
+        "LockData": false
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "other-history-after-source-clear",
+      "method": "GET",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "history",
+      "label": "clear-other-as-reader",
+      "method": "POST",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/RecentlySearched/Delete",
+      "authenticated": true,
+      "status": 403,
+      "contentType": "text/plain",
+      "bodyText": "User Controlled reader does not have access to ManageServer feature."
+    },
+    {
+      "scenario": "history",
+      "label": "other-history-after-cross-clear",
+      "method": "GET",
+      "route": "/Users/a7f19601e18448f2b89dd06c3067e100/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&Limit=10",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":false,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"d2ae8ab2f54b45d6beb92cb65ad887cb\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":true},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": false,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "d2ae8ab2f54b45d6beb92cb65ad887cb",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": true
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "tie-descending",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "tie-ascending",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "tie-count-off",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&EnableTotalRecordCount=false&StartIndex=1&Limit=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "ordinary-count-off",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&IncludeItemTypes=Audio&SortBy=SortName&StartIndex=1&Limit=1&EnableTotalRecordCount=false",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "tie-after-repeat",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Ascending-count-true-limited-true",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending&EnableTotalRecordCount=true&Limit=2&StartIndex=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Ascending-count-true-limited-false",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending&EnableTotalRecordCount=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Ascending-count-false-limited-true",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending&EnableTotalRecordCount=false&Limit=2&StartIndex=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Ascending-count-false-limited-false",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Ascending&EnableTotalRecordCount=false",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Descending-count-true-limited-true",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&EnableTotalRecordCount=true&Limit=2&StartIndex=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Descending-count-true-limited-false",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&EnableTotalRecordCount=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 3
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Descending-count-false-limited-true",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&EnableTotalRecordCount=false&Limit=2&StartIndex=1",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    },
+    {
+      "scenario": "order",
+      "label": "spaced-Descending-count-false-limited-false",
+      "method": "GET",
+      "route": "/Users/15492df582384a32a5ede785a88f4383/Items?Recursive=true&WasSearched=true&SortBy=DateLastSearched&SortOrder=Descending&EnableTotalRecordCount=false",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "{\"Items\":[{\"Name\":\"Controlled audio C\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"6\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio B\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"7\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"},{\"Name\":\"Controlled audio A\",\"ServerId\":\"9b9cb6a1d390433aa81a9c9774034a98\",\"Id\":\"5\",\"RunTimeTicks\":10000000,\"IsFolder\":false,\"Type\":\"Audio\",\"UserData\":{\"PlaybackPositionTicks\":0,\"PlayCount\":0,\"IsFavorite\":true,\"Played\":false},\"Artists\":[],\"ArtistItems\":[],\"Composers\":[],\"AlbumArtists\":[],\"ImageTags\":{},\"BackdropImageTags\":[],\"MediaType\":\"Audio\"}],\"TotalRecordCount\":0}",
+      "bodyJson": {
+        "Items": [
+          {
+            "Name": "Controlled audio C",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "6",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio B",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "7",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          },
+          {
+            "Name": "Controlled audio A",
+            "ServerId": "9b9cb6a1d390433aa81a9c9774034a98",
+            "Id": "5",
+            "RunTimeTicks": 10000000,
+            "IsFolder": false,
+            "Type": "Audio",
+            "UserData": {
+              "PlaybackPositionTicks": 0,
+              "PlayCount": 0,
+              "IsFavorite": true,
+              "Played": false
+            },
+            "Artists": [],
+            "ArtistItems": [],
+            "Composers": [],
+            "AlbumArtists": [],
+            "ImageTags": {},
+            "BackdropImageTags": [],
+            "MediaType": "Audio"
+          }
+        ],
+        "TotalRecordCount": 0
+      }
+    }
+  ],
+  "searchStorage": [
+    {
+      "label": "after-second",
+      "tables": [
+        {
+          "database": "library.db",
+          "table": "UserDatas",
+          "columns": [
+            {
+              "cid": 0,
+              "name": "UserDataKeyId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 1
+            },
+            {
+              "cid": 1,
+              "name": "userId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 2
+            },
+            {
+              "cid": 2,
+              "name": "rating",
+              "type": "REAL",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 3,
+              "name": "played",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 4,
+              "name": "playCount",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 5,
+              "name": "isFavorite",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 6,
+              "name": "HideFromResume",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 7,
+              "name": "playbackPositionTicks",
+              "type": "INTEGER",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 8,
+              "name": "LastPlayedDateInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 9,
+              "name": "AudioStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 10,
+              "name": "SubtitleStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 11,
+              "name": "RatingLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 12,
+              "name": "PlaystateLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 13,
+              "name": "DateLastSearchedInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            }
+          ],
+          "rows": [
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518277"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518277"
+              }
+            }
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "after-false",
+      "tables": [
+        {
+          "database": "library.db",
+          "table": "UserDatas",
+          "columns": [
+            {
+              "cid": 0,
+              "name": "UserDataKeyId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 1
+            },
+            {
+              "cid": 1,
+              "name": "userId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 2
+            },
+            {
+              "cid": 2,
+              "name": "rating",
+              "type": "REAL",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 3,
+              "name": "played",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 4,
+              "name": "playCount",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 5,
+              "name": "isFavorite",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 6,
+              "name": "HideFromResume",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 7,
+              "name": "playbackPositionTicks",
+              "type": "INTEGER",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 8,
+              "name": "LastPlayedDateInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 9,
+              "name": "AudioStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 10,
+              "name": "SubtitleStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 11,
+              "name": "RatingLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 12,
+              "name": "PlaystateLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 13,
+              "name": "DateLastSearchedInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            }
+          ],
+          "rows": [
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518278"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518277"
+              }
+            }
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "after-invalid-flag",
+      "tables": [
+        {
+          "database": "library.db",
+          "table": "UserDatas",
+          "columns": [
+            {
+              "cid": 0,
+              "name": "UserDataKeyId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 1
+            },
+            {
+              "cid": 1,
+              "name": "userId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 2
+            },
+            {
+              "cid": 2,
+              "name": "rating",
+              "type": "REAL",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 3,
+              "name": "played",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 4,
+              "name": "playCount",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 5,
+              "name": "isFavorite",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 6,
+              "name": "HideFromResume",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 7,
+              "name": "playbackPositionTicks",
+              "type": "INTEGER",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 8,
+              "name": "LastPlayedDateInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 9,
+              "name": "AudioStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 10,
+              "name": "SubtitleStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 11,
+              "name": "RatingLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 12,
+              "name": "PlaystateLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 13,
+              "name": "DateLastSearchedInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            }
+          ],
+          "rows": [
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518278"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            }
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "after-copy",
+      "tables": [
+        {
+          "database": "library.db",
+          "table": "UserDatas",
+          "columns": [
+            {
+              "cid": 0,
+              "name": "UserDataKeyId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 1
+            },
+            {
+              "cid": 1,
+              "name": "userId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 2
+            },
+            {
+              "cid": 2,
+              "name": "rating",
+              "type": "REAL",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 3,
+              "name": "played",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 4,
+              "name": "playCount",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 5,
+              "name": "isFavorite",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 6,
+              "name": "HideFromResume",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 7,
+              "name": "playbackPositionTicks",
+              "type": "INTEGER",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 8,
+              "name": "LastPlayedDateInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 9,
+              "name": "AudioStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 10,
+              "name": "SubtitleStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 11,
+              "name": "RatingLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 12,
+              "name": "PlaystateLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 13,
+              "name": "DateLastSearchedInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            }
+          ],
+          "rows": [
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "3"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518279"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518279"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "3"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518279"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518279"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            }
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "after-clear",
+      "tables": [
+        {
+          "database": "library.db",
+          "table": "UserDatas",
+          "columns": [
+            {
+              "cid": 0,
+              "name": "UserDataKeyId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 1
+            },
+            {
+              "cid": 1,
+              "name": "userId",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 2
+            },
+            {
+              "cid": 2,
+              "name": "rating",
+              "type": "REAL",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 3,
+              "name": "played",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 4,
+              "name": "playCount",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 5,
+              "name": "isFavorite",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 6,
+              "name": "HideFromResume",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 7,
+              "name": "playbackPositionTicks",
+              "type": "INTEGER",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 8,
+              "name": "LastPlayedDateInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 9,
+              "name": "AudioStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 10,
+              "name": "SubtitleStreamIndex",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 11,
+              "name": "RatingLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 12,
+              "name": "PlaystateLastModified",
+              "type": "INT",
+              "notnull": 1,
+              "dflt_value": null,
+              "pk": 0
+            },
+            {
+              "cid": 13,
+              "name": "DateLastSearchedInt",
+              "type": "INT",
+              "notnull": 0,
+              "dflt_value": null,
+              "pk": 0
+            }
+          ],
+          "rows": [
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": null
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "2"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "1"
+              },
+              "playCount": {
+                "integer": "1"
+              },
+              "isFavorite": {
+                "integer": "1"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": {
+                "integer": "1792518277"
+              },
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "3"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518279"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518279"
+              },
+              "DateLastSearchedInt": null
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "3"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518279"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518279"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "2"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": null
+            },
+            {
+              "UserDataKeyId": {
+                "integer": "4"
+              },
+              "userId": {
+                "integer": "3"
+              },
+              "rating": null,
+              "played": {
+                "integer": "0"
+              },
+              "playCount": {
+                "integer": "0"
+              },
+              "isFavorite": {
+                "integer": "0"
+              },
+              "HideFromResume": {
+                "integer": "0"
+              },
+              "playbackPositionTicks": {
+                "integer": "0"
+              },
+              "LastPlayedDateInt": null,
+              "AudioStreamIndex": null,
+              "SubtitleStreamIndex": null,
+              "RatingLastModified": {
+                "integer": "1792518277"
+              },
+              "PlaystateLastModified": {
+                "integer": "1792518277"
+              },
+              "DateLastSearchedInt": {
+                "integer": "1792518279"
+              }
+            }
+          ]
+        }
+      ],
+      "failures": []
+    }
+  ]
+}

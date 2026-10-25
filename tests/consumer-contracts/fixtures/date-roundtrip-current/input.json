@@ -1,0 +1,18 @@
+{
+  "libraryName": "Current date exchange photos",
+  "zones": [
+    { "name": "utc", "tz": "UTC" },
+    { "name": "taipei", "tz": "Asia/Taipei" },
+    { "name": "shanghai", "tz": "Asia/Shanghai" }
+  ],
+  "cases": [
+    { "name": "date-295", "input": "1990-07-01T20:00:00+08:00", "continued": "1990-07-01T12:00:01.0000001Z" },
+    { "name": "date-296", "input": "1900-01-01T12:00:00", "continued": "1900-01-01T04:00:00.7654321Z" },
+    { "name": "utc-100ns", "input": "2026-10-23T01:02:03.1234567Z", "continued": "2026-10-24T01:02:03.1234568Z" },
+    { "name": "offset-100ns", "input": "2026-10-23T09:02:03.7654321+08:00", "continued": "2026-10-24T01:02:03.7654322Z" },
+    { "name": "unspecified-100ns", "input": "2026-10-23T09:02:03.9999999", "continued": "2026-10-24T01:02:03.9999999Z" },
+    { "name": "minimum-utc", "input": "0001-01-01T00:00:00.0000001Z", "continued": "0001-01-01T00:00:00.0000002Z" },
+    { "name": "maximum-utc", "input": "9999-12-31T23:59:59.9999999Z", "continued": "9999-12-31T23:59:59.9999998Z" },
+    { "name": "negative-offset-100ns", "input": "2026-10-22T18:02:03.1230001-07:00", "continued": "2026-10-24T01:02:03.1230002Z" }
+  ]
+}

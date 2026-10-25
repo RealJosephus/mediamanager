@@ -1,0 +1,1131 @@
+{
+  "schemaVersion": 1,
+  "scope": "Exact historical bytes read and hash-checked by the adjacent replay consumer. These inputs do not execute native services or establish a complete build-input closure.",
+  "inputs": [
+    {
+      "filename": "D:/jellyfin/Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+      "sha256": "f2cf45b2e511042a1bc358fd7924cdf4e6cb92c782129e5d13623ec73e546806",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Api/Controllers/DisplayPreferencesController.cs",
+      "sha256": "02e900299719e961253d9b20146c0b36fdbc4244cb9e7c2975a6de94ef8a2e23",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Api/Helpers/RequestHelpers.cs",
+      "sha256": "213a922281289ea49aacd9b45a9302beeb4995160f66a8d575e7432b58d6e5e6",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+      "sha256": "1c48cc816bf2899acbfeff9f30e9ce687c8ba689bff78e5cf1d8925d011a78b4",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server.Implementations/Users/DisplayPreferencesManager.cs",
+      "sha256": "0b7f1939060424e2cb3ba29e4d3f81c6579b5b0004c39ce96380efbd2cd2653a",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+      "sha256": "1935e128e152be8aa8baf236a3c5d84e0095f301878b8831b21b2849087a0e52",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/IDisplayPreferencesManager.cs",
+      "sha256": "4f52660804fe9f3854096bb774ce9c4c10dc53c39d5f96fc209f26d146179e46",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Model/Dto/DisplayPreferencesDto.cs",
+      "sha256": "7e9a10886c9c1ad5c22539ff6cf4b8f165a0ab90e64562bca95f481804ded1e2",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/CustomItemDisplayPreferences.cs",
+      "sha256": "d012435283da1f9117a98237f3f5444ba07501830896bd2c43e8acc0f9796e49",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/DisplayPreferences.cs",
+      "sha256": "68dd7e2130e5cd0f30f578299df9f0acf5fa09bf9c685b4326a3e1c9cf673109",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/HomeSection.cs",
+      "sha256": "966f92d8ee4e482f65691433894eed058af38e4a658256a0456c975ea0bf3ea6",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/ItemDisplayPreferences.cs",
+      "sha256": "a89100bb5a989b8dfb203b3ae16b972b172f1883b81074fa7c0ea3f71457d668",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ChromecastVersion.cs",
+      "sha256": "7e59a34750df12a06f527512848a71cd8085c17e2a776b1a232c43e059e37e87",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/HomeSectionType.cs",
+      "sha256": "4250dbe63bfbe024acf80f73429f37875e21ef31267bdafd8797a4b28721d236",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/IndexingKind.cs",
+      "sha256": "c9be6142819fdfdb534f0bf90a7dae9ae2c49961989315d621979fd076032829",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ScrollDirection.cs",
+      "sha256": "866e4bf0939ad80fc0389a5d6a1d803d1dbefe2820bd597e07444efcc7a8d3d3",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/SortOrder.cs",
+      "sha256": "846e00b93184357e56c7241ffe77ee9bcca9fd7a1a5cfeaaa756d48487e3ad03",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ViewType.cs",
+      "sha256": "7f32111af60d885245475e206673191ec228029cb0df5294628bd9269544d7f4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+      "sha256": "f2cf45b2e511042a1bc358fd7924cdf4e6cb92c782129e5d13623ec73e546806",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Api/Controllers/DisplayPreferencesController.cs",
+      "sha256": "02e900299719e961253d9b20146c0b36fdbc4244cb9e7c2975a6de94ef8a2e23",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Api/Helpers/RequestHelpers.cs",
+      "sha256": "213a922281289ea49aacd9b45a9302beeb4995160f66a8d575e7432b58d6e5e6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+      "sha256": "1c48cc816bf2899acbfeff9f30e9ce687c8ba689bff78e5cf1d8925d011a78b4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server.Implementations/Users/DisplayPreferencesManager.cs",
+      "sha256": "0b7f1939060424e2cb3ba29e4d3f81c6579b5b0004c39ce96380efbd2cd2653a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+      "sha256": "1935e128e152be8aa8baf236a3c5d84e0095f301878b8831b21b2849087a0e52",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.Controller/IDisplayPreferencesManager.cs",
+      "sha256": "4f52660804fe9f3854096bb774ce9c4c10dc53c39d5f96fc209f26d146179e46",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/MediaBrowser.Model/Dto/DisplayPreferencesDto.cs",
+      "sha256": "7e9a10886c9c1ad5c22539ff6cf4b8f165a0ab90e64562bca95f481804ded1e2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/CustomItemDisplayPreferences.cs",
+      "sha256": "d012435283da1f9117a98237f3f5444ba07501830896bd2c43e8acc0f9796e49",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/DisplayPreferences.cs",
+      "sha256": "68dd7e2130e5cd0f30f578299df9f0acf5fa09bf9c685b4326a3e1c9cf673109",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/HomeSection.cs",
+      "sha256": "966f92d8ee4e482f65691433894eed058af38e4a658256a0456c975ea0bf3ea6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/ItemDisplayPreferences.cs",
+      "sha256": "a89100bb5a989b8dfb203b3ae16b972b172f1883b81074fa7c0ea3f71457d668",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ChromecastVersion.cs",
+      "sha256": "7e59a34750df12a06f527512848a71cd8085c17e2a776b1a232c43e059e37e87",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/HomeSectionType.cs",
+      "sha256": "4250dbe63bfbe024acf80f73429f37875e21ef31267bdafd8797a4b28721d236",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/IndexingKind.cs",
+      "sha256": "c9be6142819fdfdb534f0bf90a7dae9ae2c49961989315d621979fd076032829",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ScrollDirection.cs",
+      "sha256": "866e4bf0939ad80fc0389a5d6a1d803d1dbefe2820bd597e07444efcc7a8d3d3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/SortOrder.cs",
+      "sha256": "846e00b93184357e56c7241ffe77ee9bcca9fd7a1a5cfeaaa756d48487e3ad03",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/ViewType.cs",
+      "sha256": "7f32111af60d885245475e206673191ec228029cb0df5294628bd9269544d7f4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261015-release-display-preferences-native-12/native.json",
+      "sha256": "97e88d65d0ad6808dc37d5bdf6608298f60a71358239c000b7daee01379f5481",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261015-release-display-preferences-native-13/native.json",
+      "sha256": "2c2c20709ebf9031f537bdc4b8cea95fb459f48a5284d10c4296f04533a2469b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261015-release-display-preferences-snapshot-native-3/recording.json",
+      "sha256": "5faf969d8f4ed8ce85d51d9f116047a74d5bbebfb77e6087dafacc58d33c1c25",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261015-release-display-preferences-snapshot-native-4/recording.json",
+      "sha256": "ea3101b41c82b52f4e8c91671c7dc0e04998cf8c3c6dd237b5e56ba334599af3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\e_sqlite3.DLL",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\jellyfin.dll",
+      "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "12ae8c6069c1883ba591b85689281d73aa28ae87c698f13da51e2fdd562bd441",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\Polly.dll",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-native-12\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\e_sqlite3.DLL",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+      "sha256": "d5952a67decf6279096c3ad02df59f63e8f486373b0b63a785b47ac3f9060777",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "3c2fa5059fb413fd7a026cf2ad2dfebc27b800c15eada8328d4c4fcccaa852a4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\Polly.dll",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-display-preferences-snapshot-native-3\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\display-preferences-snapshot-native\\Oracle.csproj",
+      "sha256": "14422677277a946140c72c564ff4a03570628a785dc16cc40a7b7b5041f0f55a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\display-preferences-snapshot-native\\Program.cs",
+      "sha256": "135f145f0cdefcd35a179d4ef64b5acd0758114f35ca99c8fc66ebc59cf47cad",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Antiforgery.dll",
+      "sha256": "f417fe903c5fef3ad36cc6e9d73e5e4b9fbcb1bb855c7490aed7de60316419f0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.Abstractions.dll",
+      "sha256": "62bfde62231404dc637ce47d5cec6deee338824efffa03a8dde907d8d049ad60",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.Core.dll",
+      "sha256": "874392660a182a29ad1b5a22e9639293ac327ee9f5e989b8f5d9c87b7cd845f5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authentication.dll",
+      "sha256": "73104deede0ab682e457e393832a9ed0fe25153349c974961f5a370f2ae2ad14",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authorization.dll",
+      "sha256": "b41d6f875d0b1a99179fa65a1c5f92b2d2066047e681706b65906c2dbc23f413",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Authorization.Policy.dll",
+      "sha256": "4a32fa113253f5d6e999ee96a59e2d147cf712c6a3cab29622f7adcb3da64f40",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Authorization.dll",
+      "sha256": "650717382403fe55378ee0062f40b5d9b093daaea4c398cdfac92b3ef2bc669d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.dll",
+      "sha256": "2030bb3a0d8d8fb76084ad4dbc3e31f372078d8111dd1fec6ae9c0ce23c583d7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Endpoints.dll",
+      "sha256": "6484fdff68008ed2841a6b9f769c6fdb31aee77734131907007e6d601e3795bc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Components.Web.dll",
+      "sha256": "c7bfc2c74881b23586c743b7c9963a7bd69906b6d79d52525f2b3ac2fed382db",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Connections.Abstractions.dll",
+      "sha256": "50e62c202b6eef678f763d0a96588a1ae4f8040594c06e9934992518bea63eb1",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Cors.dll",
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Cryptography.Internal.dll",
+      "sha256": "c9502c62d7f045da855d64acecabd0dd079869ec6323384468b831e33b13df82",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.DataProtection.Abstractions.dll",
+      "sha256": "3ee8801c29a292734945b38dcdb8a2e4483a5bbe4f74545093830ab55c843c0e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.DataProtection.dll",
+      "sha256": "913e251bcea27044f76c39be087f03721346a13d44dcf4a1dc34a19c22ae28fe",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.dll",
+      "sha256": "3bfd8a9ad4aa79e4cf809fab1cf133e0ceb43c89e80dc6eff47405f27cbf779f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.HostFiltering.dll",
+      "sha256": "f611ece92c3026f3a4c1d18024c0fa704db9718946c441003535bcd5e3dc1b74",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.Abstractions.dll",
+      "sha256": "50eea9716964d7dfd8b30a286fe577da612cf567eceacf11e248f01d85a7333f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.dll",
+      "sha256": "917814acfe6637034ad97a7ec6e5716385f9a662b82d7561017dcc410ba31630",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll",
+      "sha256": "9778d4dfe9956524d4bbc229d52e1de81cdca5f1dfed8a666ff8edbf9941f20f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Abstractions.dll",
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.dll",
+      "sha256": "32f6a181eb790eae12d0bbb0d31db74c4abe5841c16f7a1040e8f64ee96fd103",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Extensions.dll",
+      "sha256": "76a2df901a0031491e8c1e663729117081f165578e7b4617f2a20eaf092d6808",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Features.dll",
+      "sha256": "d3714725c1f38d791d93c4ce23296747051e6dfdb3ceea453b32408116390d2f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.HttpOverrides.dll",
+      "sha256": "52312857bc3ff2dbb4df1a006dcfa0c3c2a4302887a24e6f889d5ffe24a5a3a0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Metadata.dll",
+      "sha256": "99c572500931b719c44a38a8b9bdc7c67cc85d6d3426737f20d4b3b3496d82f3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Abstractions.dll",
+      "sha256": "f53787e278fdd13e7755214f3d24082f4b8a9313e72f4a0966ed9ea7a18b1457",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.ApiExplorer.dll",
+      "sha256": "4807ac9cf2783691dc0d0773a8ee8c3e677af291927f6127ab3995fe73c1741e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Core.dll",
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Cors.dll",
+      "sha256": "88d6633b8bc7bffa3d0bacceb608d10fe972a52d0c494a4ef7d9fadeaf97eafd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.DataAnnotations.dll",
+      "sha256": "bb03c333a404d742626ba11cb32039857c694139ba638a9e9ea713b6559eee9a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.dll",
+      "sha256": "a6c2e38221b2ee6f09adfc561613ef4370fdb46502720c695660c42a5671de9c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.Razor.dll",
+      "sha256": "f34e1ebb50fd360586d0ef28af06429df4eea42f8ab7ca1a04ba3a082cbd5478",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.RazorPages.dll",
+      "sha256": "521e78b18bb474a3b6cb6ccabd6b48fdfc94048bf87c1555f427571dc9b0d353",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.TagHelpers.dll",
+      "sha256": "dc3f1bb01059cc9096259943a1c7ccd72b9298fadb3a81390dd76830f173b737",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Mvc.ViewFeatures.dll",
+      "sha256": "4da923fa312615a49de69d655dff3b8227ed76116c42d02d33b28dca8b84cc03",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Razor.dll",
+      "sha256": "1c7d05cf15cdd03879131a5769861c2632faef8b47861e78ccdeebcd9060afdd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Razor.Runtime.dll",
+      "sha256": "4f0eb5dfcc89ab1169a87a86f6379f0370907e6ebdea0de3e700aa68b9a0eec2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Routing.Abstractions.dll",
+      "sha256": "ea601c608e0e51ba51136f7755af4eb6b47099cd1c41710faae2f8b096b63194",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Routing.dll",
+      "sha256": "69c76fd9e5cac492d689bc0aad3ae3de047ee4f0c4261f43446d53e8e14fcb16",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.IIS.dll",
+      "sha256": "00299f6b4354341aa069aa993993be017296c4196d7b2211b822b73558f6e5f1",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.IISIntegration.dll",
+      "sha256": "e0d3536a9033a48b7d0c4c8695e838c4e7c618eac6436ff454070f5a74296c40",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Core.dll",
+      "sha256": "62b5ab79f5f896235e4068039450a15a7bcdb5bb4eb73f2f6bdf5a787d4cc239",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.dll",
+      "sha256": "f0de796d9d6b05c0f3ce877c2288f836a3f1dd5b5a374babc2af3deda73e94b7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll",
+      "sha256": "7ad9ac5286296e71f63d139dc2c4cffd66577874f21aaf0cadf0320ae7a03771",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll",
+      "sha256": "6a6919a866b014e392b18bb0f1bf26ae9ed51a063c77ed584a06cf4a2ab591de",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll",
+      "sha256": "14bb84ef188ffa3d9a40799b04eda941184ab89bc001ef59c03debd8922ed139",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.WebUtilities.dll",
+      "sha256": "ee33396c44e552d8623c15e79bb033fdb63281597222575624256fd90213c7cd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Abstractions.dll",
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Binder.dll",
+      "sha256": "26064491ae0cfb2dad631e672f6307a1a6659faeab3275b16b3f2b029841389e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.dll",
+      "sha256": "b8fb3cee77f703ab623826f5585a9acecfbbd186b98e1912353784b0aa994fb6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
+      "sha256": "f44e7a938bb4417e29925aa15dc121ac714157384819bc22e75f7af2e2779230",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.FileExtensions.dll",
+      "sha256": "07b4726e83356d65ddc922ea4cf10da10b90dc8c074b845483786e840b47c17d",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Json.dll",
+      "sha256": "49b6f5405bd45624edd3dd1286e82ccf7265eb5ed3befaa38902194395eff743",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.dll",
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Diagnostics.Abstractions.dll",
+      "sha256": "d99f6143691e8a409b4857bd65829189465c71ad7ef5dff0e63a36c9f8fae002",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Diagnostics.dll",
+      "sha256": "f2da53517fbd33cf08738dc8a439a3ba662b394fd8328d73107da635bc446f30",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Features.dll",
+      "sha256": "9a37af53f48d4cbcafd3de646c60cdc5d142a95b49de1f82aade1a919c4aecff",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "sha256": "f39acfb26fe3c3c977283e5efda4f0406418d58f446cfc0d4b1a843777a10651",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.FileProviders.Physical.dll",
+      "sha256": "79d43cd4ac4df4c45bb6d3af3cfa5d4c9218008430122af685cb3877e8737208",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Hosting.Abstractions.dll",
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Hosting.dll",
+      "sha256": "22eb6edfc401db5d4ec30783474a913b7c39de13a76a6607128980c50b6cd521",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Localization.Abstractions.dll",
+      "sha256": "5d5e96ef35d1fa9da098ce574eb6af3b1ea7e83dddee0a729322746be1e2b90b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Configuration.dll",
+      "sha256": "c4df0fd6bce42c6293a8fc59c16d21a98e64f90a2f13523cc3b82cfd42ef968c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Console.dll",
+      "sha256": "f2a8843474f346cd3d076d352345a6372f199ca11fdb863bdbb246c87bcc9068",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Debug.dll",
+      "sha256": "4a261451703385f107746d051041270f46b2fd4272b5b1bc3e98b01677660658",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.dll",
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.EventLog.dll",
+      "sha256": "21fa039f689683993894c73c35a1611ed64d46bdcaffae86d8273e0c7a30a0a8",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.EventSource.dll",
+      "sha256": "5372914940d40ebb0e05dffc31011901be5a961fddf7e3d6bee4a3a7f6bd285f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.ObjectPool.dll",
+      "sha256": "e02787c8fb6a7d9dd4e302c4d7f25f5a5c887c3b65f2d356098d473547c5df82",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.ConfigurationExtensions.dll",
+      "sha256": "1bcd901dbe6c5a148f42f6e1865a8bce598d24e87bd38f62e5a6108454d9a541",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.WebEncoders.dll",
+      "sha256": "461ba0dde4de891204588ba5e4ed9174a499366dc93e8a78a04f74d45290b4c2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.JSInterop.dll",
+      "sha256": "6a283855c4e5e60c7ec9c81e3cad6201178fc232cc0d8dc022ca643d7a9c4138",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Net.Http.Headers.dll",
+      "sha256": "7b836d9e11acc47222d28cd02a54101f43464b047d84978d157d2d932b97a8e9",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\Microsoft.Win32.Primitives.dll",
+      "sha256": "6c21472b0ae2f9b484a97614fad5485a22f18f9f19ee1adb9ceb3ed8ddb072d7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\Microsoft.Win32.Registry.dll",
+      "sha256": "76849cfde4369f3ae93e28261fe5e1010dbf1332f7da95c98543cba9b03961c0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.NonGeneric.dll",
+      "sha256": "aa4d5216d066c91cb489f63c6cbfcaf1f47b6e74e070db45639d3460454fc60b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Annotations.dll",
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.dll",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Primitives.dll",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.TypeConverter.dll",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Data.Common.dll",
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Tracing.dll",
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.FileSystem.Watcher.dll",
+      "sha256": "8ab1704e4bd171056ec5a11e886d5199d05a641c6d0233c53d4766bf30328dd3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipelines.dll",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipes.dll",
+      "sha256": "3804f9992861122e60990b0765d0b50b33cdc2e4d89d26d9dbf8641d1d0134a2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Expressions.dll",
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Queryable.dll",
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Http.dll",
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NameResolution.dll",
+      "sha256": "e786c0940f5322f0ad6e8e34e7b582e5b050df0fb2230329325307e61bfd994c",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NetworkInformation.dll",
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Quic.dll",
+      "sha256": "af5b52cdee62d014af677c411530a3fde5c1c368adecb8f83dcfe9246e8bbe73",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Security.dll",
+      "sha256": "a78bd713e807729f15b0e085c67fd6cbfefa85736a2618512d4ff1212759eba5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Sockets.dll",
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.WebSockets.dll",
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.Linq.dll",
+      "sha256": "c832b73de9783e6929ca5ff4863fc313e13ef7cfb5965c52587c4f77f6e037a7",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Numerics.dll",
+      "sha256": "8ac94fb810c092a9297a903762e79a75ae07d7229d0721540c391f86d3d5d220",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Claims.dll",
+      "sha256": "c53c8a7e95d8296f951872fdd2e6334d11c20bffd4322f1a088773bf9dcaa3c2",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Principal.Windows.dll",
+      "sha256": "2311a3f92971de918943573dfb66e04e25c1d543663951eb24e8eb1a0dcd4251",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Overlapped.dll",
+      "sha256": "89fde15f8e520c4bcbc6cbfdceba2baed8670cdf52399a4cd7a21c6efb276c1a",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.ThreadPool.dll",
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Transactions.Local.dll",
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.XDocument.dll",
+      "sha256": "3ff858607de5146051498a7124ef983bea280d86e165f993516c6c26af81cfb5",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\http\\fixtures\\display-preferences\\Oracle.csproj",
+      "sha256": "59f75232990bda35c1de7deef2bcefb75a611a8d1f3d73065c61457828bcb380",
+      "required": true
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\http\\fixtures\\display-preferences\\Program.cs",
+      "sha256": "ab763c32035b877af6b9430b8959c4146194f36d10e451f2a4c260f9c1b07eff",
+      "required": true
+    }
+  ]
+}

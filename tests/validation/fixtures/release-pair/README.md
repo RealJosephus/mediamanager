@@ -1,0 +1,9 @@
+# CI strict-pair receipt shapes
+
+`runner-shape.json` binds the actual `validation-macos-15-shard-1-1` artifact from [Actions run 39604577581](https://github.com/RealJosephus/mediamanager/actions/runs/39604577581), candidate `e71bfa066e032802bec5e71a97d0ea616e086ad4`.
+
+Its compressed payload preserves the complete original UTF-8 bytes of `strict/result.json`, `environment.json`, and `postgres-audit.json`. The file records their original byte counts and SHA-256 hashes. The test verifies those hashes after decompression. Input identity data is a separately identified structural projection of `strict/inputs-before.json`: schema version, the first actual entry, and the ordered identity keys. This projection is not an input digest or a substitute for the original input snapshot.
+
+The observed run was an available subset: 118 files and 2,234 passing tests in this shard. It remains a `base` strict result and must be rejected as a full pair. Synthetic orchestration cases derive receipt structure from these observations, then explicitly replace identities, selections, counts and controlled failure fields. They test scheduling, frozen-input comparison, original-evidence verification and three-platform aggregation; they do not provide native, full-suite, production-scale or release acceptance evidence.
+
+The preserved projection above remains historical schema-2 evidence and a rejection sample; it is not rewritten to resemble the current protocol. Actual execution uses schema-3 input receipts through `tools/validation/run.js`. The CI pair supplies one preflight-only output and two distinct strict full outputs, retains each original receipt/TAP/registration/candidate/input file, and compares only the canonical current-release input digest. Historical archive diagnostics are deliberately outside that digest.

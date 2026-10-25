@@ -1,0 +1,3513 @@
+{
+  "actualFrozenOwnedItemLifecycle": true,
+  "inputSha256": "d81aff862e3902583f7a4b3e5417f094aea25041de38f2673f82396735d66ad5",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "results": [
+    {
+      "name": "no-parent-skips-owned",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "mixed-skips-extras",
+      "exception": null,
+      "calls": [
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "stable-extra-dates-only",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "reason": 16
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "stable-extra-null-owner-dates",
+      "exception": null,
+      "calls": [
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "full-extra-copies-title",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "replace-extra-copies-title",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": true,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": true,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "extra-rename-forces-child-and-owner",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "extra",
+          "item": {
+            "Name": "Corrected trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Corrected trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "primary-maintains-alternate-extra",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "link",
+          "parent": "owner",
+          "child": "alternate",
+          "childType": 2
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "FullRefresh",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "part-copies-title-every-refresh",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "alternate-no-title-copy",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "link",
+          "parent": "owner",
+          "child": "alternate",
+          "childType": 2
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "alternate-mixed-import-before-child",
+      "exception": null,
+      "calls": [
+        {
+          "action": "update",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "reason": 2
+        },
+        {
+          "action": "refresh",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "link",
+          "parent": "owner",
+          "child": "alternate",
+          "childType": 2
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "alternate-missing-link-forces-owner",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "link",
+          "parent": "owner",
+          "child": "alternate",
+          "childType": 2
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "alternate-primary-repair-after-child",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "link",
+          "parent": "owner",
+          "child": "alternate",
+          "childType": 2
+        },
+        {
+          "action": "update",
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "reason": 16
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": [
+              "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv"
+            ]
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "missing-part-deletes-row-not-path-array",
+      "exception": null,
+      "calls": [
+        {
+          "action": "delete",
+          "key": "part",
+          "deleteFileLocation": false
+        },
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "missing-alternate-removes-path-not-row",
+      "exception": null,
+      "calls": [
+        {
+          "action": "images",
+          "key": "owner"
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Child"
+            ],
+            "Studios": [],
+            "Overview": "Child overview",
+            "ProductionYear": 1990,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": [
+        "alternate"
+      ]
+    },
+    {
+      "name": "owned-failure-continues-owner",
+      "exception": null,
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": false
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": false
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    },
+    {
+      "name": "owned-cancellation-continues-to-owner",
+      "exception": "OperationCanceledException",
+      "calls": [
+        {
+          "action": "refresh",
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": false
+          },
+          "cancellationRequested": true
+        },
+        {
+          "action": "refresh",
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "None",
+            "ReplaceAllMetadata": false,
+            "hasSearchResult": true
+          },
+          "cancellationRequested": true
+        }
+      ],
+      "items": [
+        {
+          "key": "folder",
+          "item": {
+            "Name": "Folder",
+            "Path": "Z:\\ChildrenMetadata",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [],
+            "Studios": [],
+            "Overview": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": null,
+            "LocalAlternateVersions": null
+          }
+        },
+        {
+          "key": "owner",
+          "item": {
+            "Name": "Film",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film.mkv",
+            "OwnerId": "00000000-0000-0000-0000-000000000000",
+            "ParentId": "97b70000-0000-0000-0000-000000000001",
+            "IsInMixedFolder": true,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [
+              "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv"
+            ],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "part",
+          "item": {
+            "Name": "Part",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film cd2.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Owner studio"
+            ],
+            "Overview": "Owner overview",
+            "ProductionYear": 2025,
+            "PremiereDate": "2025-01-01T00:00:00.0000001Z",
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternate",
+          "item": {
+            "Name": "Alternate",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": null,
+            "Genres": [
+              "Alternate"
+            ],
+            "Studios": [
+              "Alternate studio"
+            ],
+            "Overview": "Alternate overview",
+            "ProductionYear": 1991,
+            "PremiereDate": null,
+            "PrimaryVersionId": "97b70000-0000-0000-0000-000000000002",
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "extra",
+          "item": {
+            "Name": "Trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000002",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Extra"
+            ],
+            "Studios": [],
+            "Overview": "Extra overview",
+            "ProductionYear": 1992,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        },
+        {
+          "key": "alternateExtra",
+          "item": {
+            "Name": "Alternate trailer",
+            "Path": "Z:\\ChildrenMetadata\\Film\\Film - 4K-trailer.mkv",
+            "OwnerId": "97b70000-0000-0000-0000-000000000004",
+            "ParentId": "00000000-0000-0000-0000-000000000000",
+            "IsInMixedFolder": false,
+            "ExtraType": "Trailer",
+            "Genres": [
+              "Alt extra"
+            ],
+            "Studios": [],
+            "Overview": "Alt extra overview",
+            "ProductionYear": 1993,
+            "PremiereDate": null,
+            "PrimaryVersionId": null,
+            "AdditionalParts": [],
+            "LocalAlternateVersions": []
+          }
+        }
+      ],
+      "links": []
+    }
+  ],
+  "scope": "Actual frozen BaseItem.RefreshMetadata and Video.RefreshedOwnedItems dispatch, native date/title inheritance, mixed-version imports, PrimaryVersionId repair, link/count rules, missing path cleanup and owned-error boundary. Existing typed cached entities, FindExtras results/rename, path identity/existence, provider refresh, repository/image/link/delete effects are controls. No native resolution, SQL, external provider/probe/image execution or full library acceptance."
+}

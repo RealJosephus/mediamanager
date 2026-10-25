@@ -1,0 +1,2455 @@
+{
+  "inputSha256": "5635a61251089df397fddaf02f1fd77e9bbff306661cd02750b29f6dd4dd0a83",
+  "actualPostScanTask": true,
+  "actualBaseItemRefresh": true,
+  "rootChildrenControlled": true,
+  "metadataProviderControlled": true,
+  "mediaOpened": false,
+  "portOpened": false,
+  "results": [
+    {
+      "sample": {
+        "Name": "empty",
+        "Items": [],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\0",
+      "before": [],
+      "after": [],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "empty cancelled",
+        "Items": [],
+        "CancelInitial": true,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\1",
+      "before": [],
+      "after": [],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "non collections cancelled",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "Folder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "UserView",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "Movie",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": true,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "Folder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "UserView",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "Movie",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "Folder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "UserView",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "Movie",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\2\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "one missing",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\3",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\3\\library-0",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\3\\library-0",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\3\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "one primary",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\4",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\4\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\4\\library-0\\Primary.jpg"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\4\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\4\\library-0\\Primary.jpg"
+            }
+          ]
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "primary empty path",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": true,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\5",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\5\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": ""
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\5\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": ""
+            }
+          ]
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "primary null path",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": true,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\6",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\6\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": null
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\6\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": null
+            }
+          ]
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "primary outside scope",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": true,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\7",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\7\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "Z:\\outside\\poster.jpg"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\7\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "Z:\\outside\\poster.jpg"
+            }
+          ]
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "only backdrop",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Backdrop"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0",
+          "images": [
+            {
+              "type": "Backdrop",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0\\Backdrop.jpg"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0",
+          "images": [
+            {
+              "type": "Backdrop",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0\\Backdrop.jpg"
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": [
+            {
+              "type": "Backdrop",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\8\\library-0\\Backdrop.jpg"
+            }
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "only thumb",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Thumb"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0",
+          "images": [
+            {
+              "type": "Thumb",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0\\Thumb.jpg"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0",
+          "images": [
+            {
+              "type": "Thumb",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0\\Thumb.jpg"
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": [
+            {
+              "type": "Thumb",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\9\\library-0\\Thumb.jpg"
+            }
+          ]
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "mixed types",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "Folder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "UserView",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 3",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 4",
+            "Kind": "Movie",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 5",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "Folder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "UserView",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-2",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000003",
+          "Name": "Library 3",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-3",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-3\\Primary.jpg"
+            }
+          ]
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000004",
+          "Name": "Library 4",
+          "type": "Movie",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-4",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000005",
+          "Name": "Library 5",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-5",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "Folder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "UserView",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-2",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000003",
+          "Name": "Library 3",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-3",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-3\\Primary.jpg"
+            }
+          ]
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000004",
+          "Name": "Library 4",
+          "type": "Movie",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-4",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000005",
+          "Name": "Library 5",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-5",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000005",
+          "Name": "Library 5",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\10\\library-5",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 5 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        33.33333333333333,
+        66.66666666666666,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "missing nullable names",
+        "Items": [
+          {
+            "Name": null,
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "\u6771\u4EAC",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": null,
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "\u6771\u4EAC",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": null,
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "\u6771\u4EAC",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": null,
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "\u6771\u4EAC",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\11\\library-2",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library (null) is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library  is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library \u6771\u4EAC is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        33.33333333333333,
+        66.66666666666666,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "duplicate identities",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": true
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-1",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-1",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\12\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "three missing",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\13\\library-2",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 2 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        33.33333333333333,
+        66.66666666666666,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "already cancelled missing",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": true,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\14",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\14\\library-0",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\14\\library-0",
+          "images": []
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "OperationCanceledException",
+        "Message": "The operation was canceled."
+      }
+    },
+    {
+      "sample": {
+        "Name": "already cancelled primary",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": true,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\15",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\15\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\15\\library-0\\Primary.jpg"
+            }
+          ]
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\15\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\15\\library-0\\Primary.jpg"
+            }
+          ]
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "OperationCanceledException",
+        "Message": "The operation was canceled."
+      }
+    },
+    {
+      "sample": {
+        "Name": "refresh cancellation first",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": "Library 0",
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\16\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [],
+      "failure": {
+        "type": "OperationCanceledException",
+        "Message": "The operation was canceled."
+      }
+    },
+    {
+      "sample": {
+        "Name": "refresh cancellation second",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [
+              "Primary"
+            ],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": "Library 1",
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-0\\Primary.jpg"
+            }
+          ]
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-0",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-0\\Primary.jpg"
+            }
+          ]
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\17\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        33.33333333333333
+      ],
+      "failure": {
+        "type": "OperationCanceledException",
+        "Message": "The operation was canceled."
+      }
+    },
+    {
+      "sample": {
+        "Name": "ordinary refresh first",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": "Library 0",
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\18\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled refresh failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "ordinary refresh second",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 2",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": "Library 1",
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-2",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-1",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000002",
+          "Name": "Library 2",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-2",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\19\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        33.33333333333333
+      ],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled refresh failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "root read failure",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": true,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\20",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\20\\library-0",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\20\\library-0",
+          "images": []
+        }
+      ],
+      "calls": [],
+      "logs": [],
+      "progress": [],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled root failure"
+      }
+    },
+    {
+      "sample": {
+        "Name": "add library after snapshot",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": true,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\21",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\21\\library-0",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\21\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000888",
+          "Name": "New after snapshot",
+          "type": "CollectionFolder",
+          "path": null,
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\21\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "remove later library after snapshot",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": true,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22\\library-1",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22\\library-0",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\22\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Library 1 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "change later library image",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": true,
+        "RenameSibling": false,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23\\library-1",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23\\library-1",
+          "images": [
+            {
+              "type": "Primary",
+              "Path": "created after snapshot"
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\23\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "change later library name",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": true,
+        "FailProgress": false
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-1",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Renamed after snapshot",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-1",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        },
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Renamed after snapshot",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\24\\library-1",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        },
+        {
+          "level": "Debug",
+          "message": "Library Renamed after snapshot is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        50,
+        100,
+        100
+      ],
+      "failure": null
+    },
+    {
+      "sample": {
+        "Name": "progress failure",
+        "Items": [
+          {
+            "Name": "Library 0",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          },
+          {
+            "Name": "Library 1",
+            "Kind": "CollectionFolder",
+            "Images": [],
+            "EmptyImagePath": false,
+            "NullImagePath": false,
+            "OutsideImagePath": false,
+            "SameIdentity": false
+          }
+        ],
+        "CancelInitial": false,
+        "CancelRefresh": null,
+        "FailRefresh": null,
+        "FailRoot": false,
+        "AddChild": false,
+        "RemoveSibling": false,
+        "AddSiblingImage": false,
+        "RenameSibling": false,
+        "FailProgress": true
+      },
+      "root": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25",
+      "before": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25\\library-1",
+          "images": []
+        }
+      ],
+      "after": [
+        {
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25\\library-0",
+          "images": []
+        },
+        {
+          "Id": "ba400000-0000-0000-0000-000000000001",
+          "Name": "Library 1",
+          "type": "CollectionFolder",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25\\library-1",
+          "images": []
+        }
+      ],
+      "calls": [
+        {
+          "action": "refresh",
+          "Id": "ba400000-0000-0000-0000-000000000000",
+          "Name": "Library 0",
+          "path": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\instances\\25\\library-0",
+          "metadataMode": 2,
+          "imageMode": 2,
+          "IsAutomated": true,
+          "ForceSave": false,
+          "ReplaceAllMetadata": false,
+          "ReplaceAllImages": false,
+          "RemoveOldMetadata": false,
+          "images": []
+        }
+      ],
+      "logs": [
+        {
+          "level": "Debug",
+          "message": "Library Library 0 is missing a primary image. Refreshing metadata."
+        }
+      ],
+      "progress": [
+        50
+      ],
+      "failure": {
+        "type": "IOException",
+        "Message": "Controlled progress failure"
+      }
+    }
+  ]
+}

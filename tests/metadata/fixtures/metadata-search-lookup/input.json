@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Movie: no search automated false",
+    "type": "Movie",
+    "automated": false
+  },
+  {
+    "name": "Movie: no search automated true",
+    "type": "Movie",
+    "automated": true
+  },
+  {
+    "name": "Movie: identified name year and replacement IDs",
+    "type": "Movie",
+    "automated": true,
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2024,
+      "ProviderIds": {
+        "tmdb": "22",
+        "Custom": "selected"
+      },
+      "SearchProviderName": "Controlled lookup"
+    }
+  },
+  {
+    "name": "Movie: null search values clear previous lookup",
+    "type": "Movie",
+    "search": {
+      "Name": null,
+      "ProductionYear": null,
+      "ProviderIds": null
+    }
+  },
+  {
+    "name": "Movie: provider ID validation and normalization",
+    "type": "Movie",
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2025,
+      "ProviderIds": {
+        "tmdb": " 23 ",
+        "imdb": "tt42",
+        "Tvdb": "3",
+        "Custom": " padded ",
+        "Invalid": " ",
+        "bad=name": "accepted only as series ID",
+        "MusicBrainzArtist": "invalid"
+      }
+    }
+  },
+  {
+    "name": "Season: no search automated false",
+    "type": "Season",
+    "automated": false
+  },
+  {
+    "name": "Season: no search automated true",
+    "type": "Season",
+    "automated": true
+  },
+  {
+    "name": "Season: identified name year and replacement IDs",
+    "type": "Season",
+    "automated": true,
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2024,
+      "ProviderIds": {
+        "tmdb": "22",
+        "Custom": "selected"
+      },
+      "SearchProviderName": "Controlled lookup"
+    }
+  },
+  {
+    "name": "Season: null search values clear previous lookup",
+    "type": "Season",
+    "search": {
+      "Name": null,
+      "ProductionYear": null,
+      "ProviderIds": null
+    }
+  },
+  {
+    "name": "Season: provider ID validation and normalization",
+    "type": "Season",
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2025,
+      "ProviderIds": {
+        "tmdb": " 23 ",
+        "imdb": "tt42",
+        "Tvdb": "3",
+        "Custom": " padded ",
+        "Invalid": " ",
+        "bad=name": "accepted only as series ID",
+        "MusicBrainzArtist": "invalid"
+      }
+    }
+  },
+  {
+    "name": "Episode: no search automated false",
+    "type": "Episode",
+    "automated": false
+  },
+  {
+    "name": "Episode: no search automated true",
+    "type": "Episode",
+    "automated": true
+  },
+  {
+    "name": "Episode: identified name year and replacement IDs",
+    "type": "Episode",
+    "automated": true,
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2024,
+      "ProviderIds": {
+        "tmdb": "22",
+        "Custom": "selected"
+      },
+      "SearchProviderName": "Controlled lookup"
+    }
+  },
+  {
+    "name": "Episode: null search values clear previous lookup",
+    "type": "Episode",
+    "search": {
+      "Name": null,
+      "ProductionYear": null,
+      "ProviderIds": null
+    }
+  },
+  {
+    "name": "Episode: provider ID validation and normalization",
+    "type": "Episode",
+    "search": {
+      "Name": "Identified title",
+      "ProductionYear": 2025,
+      "ProviderIds": {
+        "tmdb": " 23 ",
+        "imdb": "tt42",
+        "Tvdb": "3",
+        "Custom": " padded ",
+        "Invalid": " ",
+        "bad=name": "accepted only as series ID",
+        "MusicBrainzArtist": "invalid"
+      }
+    }
+  }
+]

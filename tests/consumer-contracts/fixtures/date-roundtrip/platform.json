@@ -1,0 +1,16 @@
+{
+  "platform": "win32",
+  "node": "v24.16.0",
+  "timezone": {
+    "status": 0,
+    "stdout": "Taipei Standard Time",
+    "stderr": ""
+  },
+  "linux": {
+    "status": 1,
+    "stdoutBase64": "",
+    "stderrBase64": "KmeJW8WIApAodY5OIABMAGkAbgB1AHgAIACEdiAAVwBpAG4AZABvAHcAcwAgAFBb+3zffgIw71MakMeP0I9MiCAAHCB3AHMAbAAuAGUAeABlACAALQAtAGkAbgBzAHQAYQBsAGwAHSAgANuPTIiJW8WIAjANAA0ACgAJZ3NR5ovGfuFPb2AM//eLv4vulSAAaAB0AHQAcABzADoALwAvAGEAawBhAC4AbQBzAC8AdwBzAGwAaQBuAHMAdABhAGwAbAANAA0ACgA="
+  },
+  "linuxVerified": false,
+  "timezoneChanged": false
+}

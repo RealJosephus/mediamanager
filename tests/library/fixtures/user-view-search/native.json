@@ -1,0 +1,4402 @@
+{
+  "format": 1,
+  "frozenJellyfin": true,
+  "inputSha256": "2ad911ca07feaa382188196a58b144ddada15d6d50bf10e71b846f316d363da4",
+  "recorderSha256": "1f46c1b27dee6b56dff5b219dfb9c597a2d143b5465aa2dcef3fc247fda92f6f",
+  "sourceBindings": [
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/input.json",
+      "bytes": 27407,
+      "sha256": "2ad911ca07feaa382188196a58b144ddada15d6d50bf10e71b846f316d363da4"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/native-run/native-http.json",
+      "bytes": 33911,
+      "sha256": "7963620626a4d7b71892429071b95186070a4bcc2e720a7e0e5f6c0f6e47e4e0"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/native-run/stages.json",
+      "bytes": 268911,
+      "sha256": "91a2f95c64fe0c71486ea19bbbf94b2c69e13b0596dddf4a8bdf0703b8a570ac"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/native-run/endpoint-stages.json",
+      "bytes": 1695731,
+      "sha256": "c0bd868a9769ffc58e44e5a958a66e0f69e1e5975aa9c173f10d49de11e7bf86"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/native-run/summary.json",
+      "bytes": 539,
+      "sha256": "7585ee28534fde38ff74a1749478443cd1005a0981335f80e255139e596516dd"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/runtime-source-bindings.json",
+      "bytes": 41521,
+      "sha256": "3b94ce7c51ad76ed785ad67478d4bd1313eff3c4447b6d50fdb9cb47333f1596"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/process-reclamation.json",
+      "bytes": 293,
+      "sha256": "d9d7c3e000c49e9e28d1c2766bad62ddc3baa8f8c4754ccd889df8253eba55cf"
+    },
+    {
+      "path": ".test-input/evidence/user-view-search-http-native-v1/record-native.mjs",
+      "bytes": 23448,
+      "sha256": "1f46c1b27dee6b56dff5b219dfb9c597a2d143b5465aa2dcef3fc247fda92f6f"
+    }
+  ],
+  "nativeSourceBindings": [
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Api/Controllers/ItemsController.cs",
+      "bytes": 65470,
+      "sha256": "ea5c492f96dd9ca90e8b0723f76d188a90a26b6c645266eed284db18f8c68419"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserView.cs",
+      "bytes": 5990,
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+      "bytes": 32703,
+      "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SearchManager.cs",
+      "bytes": 17459,
+      "sha256": "c4b3fffb6ba7f34f6958f17fca6577c0041a17cce4ecd51772dc2b27820ae16c"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SqlSearchProvider.cs",
+      "bytes": 8867,
+      "sha256": "724010047d464a5a4d45808a268b435d744fa3e6151f19580830be6c97e2d2e2"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SearchQueryAccessFilter.cs",
+      "bytes": 1697,
+      "sha256": "464be558fcea981218b3adf24dcdedd9c2e3be1bf40acaa31a340c6245dae315"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+      "bytes": 31527,
+      "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2"
+    },
+    {
+      "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+      "bytes": 58978,
+      "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+    }
+  ],
+  "runtimeBindings": {
+    "timing": "post-execution full frozen runtime copy; main executable also agrees with recorder pre-run hash",
+    "files": [
+      {
+        "path": "ATL.dll",
+        "bytes": 686080,
+        "sha256": "9ade8f1b5b6b2193447c2931890f21888c96b0bba69037ad610d5dc0d0a6c38e"
+      },
+      {
+        "path": "AsyncKeyedLock.dll",
+        "bytes": 147968,
+        "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36"
+      },
+      {
+        "path": "BDInfo.dll",
+        "bytes": 120832,
+        "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f"
+      },
+      {
+        "path": "BitFaster.Caching.dll",
+        "bytes": 195584,
+        "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+      },
+      {
+        "path": "BlurHashSharp.SkiaSharp.dll",
+        "bytes": 7168,
+        "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f"
+      },
+      {
+        "path": "BlurHashSharp.dll",
+        "bytes": 11776,
+        "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292"
+      },
+      {
+        "path": "CommandLine.dll",
+        "bytes": 225280,
+        "sha256": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad"
+      },
+      {
+        "path": "Diacritics.dll",
+        "bytes": 30720,
+        "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+      },
+      {
+        "path": "DiscUtils.Core.dll",
+        "bytes": 176128,
+        "sha256": "f69c5091f7b43b00e8affca8fba08684507164050e0dfe6a854b400274ee8afe"
+      },
+      {
+        "path": "DiscUtils.Iso9660.dll",
+        "bytes": 51200,
+        "sha256": "6664411665a23ff62339c865ab36a55a539c4c5585f5dad3fb42bf29b0497af6"
+      },
+      {
+        "path": "DiscUtils.Streams.dll",
+        "bytes": 79360,
+        "sha256": "9de71c017c45c4dba0bc3806d56e26f9eea99391beff0f084de61686f9d917c7"
+      },
+      {
+        "path": "DiscUtils.Udf.dll",
+        "bytes": 36352,
+        "sha256": "24a6b7135c505b2d87157185b239c6e6c951277b7a5adf46a3b7f22781d142bd"
+      },
+      {
+        "path": "DotNet.Glob.dll",
+        "bytes": 35328,
+        "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80"
+      },
+      {
+        "path": "Emby.Naming.dll",
+        "bytes": 105984,
+        "sha256": "aec58918ad6f313836b867cab8b71eecaae6bdbf7a5e2b9e73ada2a54f2ee4f7"
+      },
+      {
+        "path": "Emby.Naming.pdb",
+        "bytes": 74876,
+        "sha256": "78fc2abd6e2f82604370b80c38ad0f4ec1141f4d5c6e8066f1ec72e1eb86b0bd"
+      },
+      {
+        "path": "Emby.Naming.xml",
+        "bytes": 141323,
+        "sha256": "ab7ca405b26548f19278d5288fda7253aabc7355865177bfa679f4cf7723189c"
+      },
+      {
+        "path": "Emby.Photos.dll",
+        "bytes": 10240,
+        "sha256": "c538e0511b0ab38888abbedc694d8514629c59f701ba9a4191cbd7b5059e3017"
+      },
+      {
+        "path": "Emby.Photos.pdb",
+        "bytes": 22456,
+        "sha256": "9f91b9cd23c21dbd1083ca6601e91ddcec71bf23b70bbc41a12b052e3355973b"
+      },
+      {
+        "path": "Emby.Photos.xml",
+        "bytes": 1312,
+        "sha256": "6dde709cb6f8f005bb061e0710653cabb250d6a3343b9c080466c4ef118ee645"
+      },
+      {
+        "path": "Emby.Server.Implementations.dll",
+        "bytes": 1673728,
+        "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+      },
+      {
+        "path": "Emby.Server.Implementations.pdb",
+        "bytes": 239332,
+        "sha256": "d3287ada562431d755c1558f63f4bcc4b0ea4a7dff9c907841864fa1ca1c4a13"
+      },
+      {
+        "path": "Emby.Server.Implementations.xml",
+        "bytes": 364700,
+        "sha256": "4a8d8bbe222491cf6213ff5127ea1318bbd6780a5ab7005843dfc28daf6127a8"
+      },
+      {
+        "path": "ExCSS.dll",
+        "bytes": 347136,
+        "sha256": "6b166e638181eba3150f0d10379d1cc8362af6dfd518e9e9e194aa9a746293c2"
+      },
+      {
+        "path": "HarfBuzzSharp.dll",
+        "bytes": 122720,
+        "sha256": "072715d79f7f4a9160fc14f1085eb24a0beccfe02871f04184eaf7c94e9a1061"
+      },
+      {
+        "path": "ICU4N.Transliterator.dll",
+        "bytes": 687616,
+        "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793"
+      },
+      {
+        "path": "ICU4N.dll",
+        "bytes": 13657600,
+        "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af"
+      },
+      {
+        "path": "Ignore.dll",
+        "bytes": 27136,
+        "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+      },
+      {
+        "path": "J2N.dll",
+        "bytes": 590848,
+        "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+      },
+      {
+        "path": "Jellyfin.Api.dll",
+        "bytes": 683008,
+        "sha256": "8e1f9aeef644d8924be306d804880cf52804a947b52a5991406d8928fe4999d2"
+      },
+      {
+        "path": "Jellyfin.Api.pdb",
+        "bytes": 154796,
+        "sha256": "4695dde27efe40acffa44ecaf63e7e5a48820d0483d3439266bfe5e46c743d52"
+      },
+      {
+        "path": "Jellyfin.Api.xml",
+        "bytes": 664268,
+        "sha256": "9450315d4024a1e7c2ea55c0135678320f51d47a8c27377576a6ad7e114f30f2"
+      },
+      {
+        "path": "Jellyfin.Data.dll",
+        "bytes": 18432,
+        "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751"
+      },
+      {
+        "path": "Jellyfin.Data.pdb",
+        "bytes": 16556,
+        "sha256": "0c1f3e81c3366ff969ae38b80b57df8c8c8955b9d281de2adbd2798d96ff090b"
+      },
+      {
+        "path": "Jellyfin.Data.xml",
+        "bytes": 47244,
+        "sha256": "0c05c4e9e596578771d6e2e577b990c61c73d877db532f4e1876550688284067"
+      },
+      {
+        "path": "Jellyfin.Database.Implementations.dll",
+        "bytes": 249344,
+        "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+      },
+      {
+        "path": "Jellyfin.Database.Implementations.pdb",
+        "bytes": 68852,
+        "sha256": "c168bc5938ced2ac5f73c3ad129aa75175f164050260447c1cc3e1b5ef09e96b"
+      },
+      {
+        "path": "Jellyfin.Database.Implementations.xml",
+        "bytes": 241701,
+        "sha256": "80f9b714c930d8e8a7fc9bb12fed92a5d3bcfe26c26849a7f4f9e41efb8a2592"
+      },
+      {
+        "path": "Jellyfin.Database.Providers.Sqlite.dll",
+        "bytes": 1109504,
+        "sha256": "a5c69219419c67798a51e7b40a5bbd8031dbf88cf2f0fee1312f333bde7108fc"
+      },
+      {
+        "path": "Jellyfin.Database.Providers.Sqlite.pdb",
+        "bytes": 185888,
+        "sha256": "9d7d90b5f0a7e365d00bb3b77cba5dccc639c1572d94a49f5e8a94fdcbab27d7"
+      },
+      {
+        "path": "Jellyfin.Database.Providers.Sqlite.xml",
+        "bytes": 41670,
+        "sha256": "c46a0407396712179259e19a4352fd3bce10af8219a9dc61ed8f39d75b57f346"
+      },
+      {
+        "path": "Jellyfin.Drawing.Skia.dll",
+        "bytes": 37376,
+        "sha256": "e29fabfb76106beb78f30d05eae08f35c33a4c02e0a919a5890fd8a921349097"
+      },
+      {
+        "path": "Jellyfin.Drawing.Skia.pdb",
+        "bytes": 35140,
+        "sha256": "c71c817c99d9142576b24ec334cfc76e41907b5c3cfd05067dcfb2c4aff1cd25"
+      },
+      {
+        "path": "Jellyfin.Drawing.Skia.xml",
+        "bytes": 25274,
+        "sha256": "a89ca6a6560c2941b20f9052b42402c2cb4a3c7fc1bce7b94fbbf8d0c3b2d244"
+      },
+      {
+        "path": "Jellyfin.Drawing.dll",
+        "bytes": 18944,
+        "sha256": "cd4201fae065a9396c1cf757af479f2f68020dbdb05bc5e1a89db733039b5fbb"
+      },
+      {
+        "path": "Jellyfin.Drawing.pdb",
+        "bytes": 24416,
+        "sha256": "76cda5f5e28429d51cd9ab1ea6acd115907871bdc05f7a21e37d08e5bbd9867f"
+      },
+      {
+        "path": "Jellyfin.Drawing.xml",
+        "bytes": 7887,
+        "sha256": "10f3a89ecce416ea38a03af22102246675a3e27a6ebcb55090cf6e6d4c346ab2"
+      },
+      {
+        "path": "Jellyfin.Extensions.dll",
+        "bytes": 37888,
+        "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+      },
+      {
+        "path": "Jellyfin.Extensions.pdb",
+        "bytes": 24912,
+        "sha256": "c4d740e573dc7b096276d87a69a3f18a38f36cbb8cc2218d3537a3a77888e6bf"
+      },
+      {
+        "path": "Jellyfin.Extensions.xml",
+        "bytes": 46193,
+        "sha256": "ebbd1b9ee6bd04f257208442ed84bf613132e81f5b756f4d9ac9e1fc4df8fa55"
+      },
+      {
+        "path": "Jellyfin.LiveTv.dll",
+        "bytes": 428544,
+        "sha256": "c8742af463e0d3cd5018541ed607cba3ca6ad42bc594084109f8175dac4ca238"
+      },
+      {
+        "path": "Jellyfin.LiveTv.pdb",
+        "bytes": 128992,
+        "sha256": "f8090d924e9cb8f3dcf50748f195520501c9b44908374c3e5e4472bf1ed109cf"
+      },
+      {
+        "path": "Jellyfin.LiveTv.xml",
+        "bytes": 89809,
+        "sha256": "e49807f71bc7068dd312b832fb72ab733b358deed943be0806749b46a210c0ae"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Hls.dll",
+        "bytes": 17408,
+        "sha256": "8b56142c5c54cbe69b5d47698bbfd99a1bcaab8416262e11b4cbe7381bc04fc4"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Hls.pdb",
+        "bytes": 25880,
+        "sha256": "9fcc0dc94a67c3a130e620d7c388e4408cd4b191a8990382c31234969dc69c72"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Hls.xml",
+        "bytes": 13118,
+        "sha256": "b46b837651fe466c950b58ca677f9de443d18ffd31bc627d2cbcde06a2a00828"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Keyframes.dll",
+        "bytes": 11776,
+        "sha256": "faf3d3291dc66c3a4edf92ad547008dbb758762eb09d7fbb514ede7002921ed7"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Keyframes.pdb",
+        "bytes": 13664,
+        "sha256": "fadb75102a7b0f3d3f690cfcdaf4840e97f60cd628eaa2215f441927786ee0e6"
+      },
+      {
+        "path": "Jellyfin.MediaEncoding.Keyframes.xml",
+        "bytes": 9478,
+        "sha256": "2bf659d7ef96701cc60021a025be83ca6a395faed4f0069220490aab685f0e7c"
+      },
+      {
+        "path": "Jellyfin.Networking.dll",
+        "bytes": 46592,
+        "sha256": "06dac24f1ec9a988f8542f76549542085ce8dbd0bcdadf8d46c5b4e753f6ef3f"
+      },
+      {
+        "path": "Jellyfin.Networking.pdb",
+        "bytes": 30484,
+        "sha256": "d2ee4478363eb9a6dd8580b2e598b7aa91a7794a960abac0b375b7660d29b8aa"
+      },
+      {
+        "path": "Jellyfin.Networking.xml",
+        "bytes": 19484,
+        "sha256": "0c4ec2ec2b56871f1bc2e4988299ae77c3b0f7aafb3a83cdf01c17a0882a3107"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations.dll",
+        "bytes": 664064,
+        "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations.pdb",
+        "bytes": 123656,
+        "sha256": "40141a6b92fae749f396731d3f469c687ff5eabbc40bfde65e8ccc6125304cdb"
+      },
+      {
+        "path": "Jellyfin.Server.Implementations.xml",
+        "bytes": 122645,
+        "sha256": "c9c334ec5e7e93ea500201412f46488e3eb9ddabf4694c1705d22701928ab0ad"
+      },
+      {
+        "path": "Jellyfin.XmlTv.dll",
+        "bytes": 38912,
+        "sha256": "fe5a138772607a01397642745a5c4e686953cd24122ee2fdbba3ae3809f9ea62"
+      },
+      {
+        "path": "LrcParser.dll",
+        "bytes": 40960,
+        "sha256": "2595f3b12c97bafc4917bfde3552a58e5d0c14ee43b46cdd65fc070aa4baab3d"
+      },
+      {
+        "path": "MediaBrowser.Common.dll",
+        "bytes": 48640,
+        "sha256": "c26f4b04b829d85aa2d97401235d245923e5702ffa6021a90a1e27c49399ae87"
+      },
+      {
+        "path": "MediaBrowser.Common.pdb",
+        "bytes": 43168,
+        "sha256": "5ae01bf989232e603c4b62abeadd3943296dca5eb0b1b5ac9d5ab8e201b5e0a4"
+      },
+      {
+        "path": "MediaBrowser.Common.xml",
+        "bytes": 100825,
+        "sha256": "0cecc56f97e8d3e465fc8b47193c0837ff1b862d777443e81422c56186d258b6"
+      },
+      {
+        "path": "MediaBrowser.Controller.dll",
+        "bytes": 655872,
+        "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+      },
+      {
+        "path": "MediaBrowser.Controller.pdb",
+        "bytes": 260804,
+        "sha256": "8f59c453b29e6513d50924ff8c9405e1d2c380d4e428f0d836acc277a480357c"
+      },
+      {
+        "path": "MediaBrowser.Controller.xml",
+        "bytes": 792974,
+        "sha256": "f0a32f2837fb083a4c5db03c92c7012e3ddedbba789a98e854dfad219cd5f85a"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata.dll",
+        "bytes": 57344,
+        "sha256": "a6aa6e950950b305850e32b2f3f1d4b188b194808df6ea4995af0ba3f5fe77df"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata.pdb",
+        "bytes": 35964,
+        "sha256": "659b6f8efdb3ca3069f9c8fb87d10a977bebef459aaa65c40444aa5748501cf4"
+      },
+      {
+        "path": "MediaBrowser.LocalMetadata.xml",
+        "bytes": 31180,
+        "sha256": "9bf8744fb862c3372e041aead3aee5a77b53bde7e199130b585211dcac424fdc"
+      },
+      {
+        "path": "MediaBrowser.MediaEncoding.dll",
+        "bytes": 215552,
+        "sha256": "0f8d22de3a3aa21aa0c1d2dac0897a37ca83e552b869551238fa1a7f8e2499d1"
+      },
+      {
+        "path": "MediaBrowser.MediaEncoding.pdb",
+        "bytes": 84180,
+        "sha256": "2da0caa86d35a2f0f0bfafb6ac4f6171a6199867939f330db818f3907f36c9f5"
+      },
+      {
+        "path": "MediaBrowser.MediaEncoding.xml",
+        "bytes": 96795,
+        "sha256": "28e5fcfe09c4e0cc2901d9a8d6b19cc781f4fdf6203f7fb747575fb7b95cc06e"
+      },
+      {
+        "path": "MediaBrowser.Model.dll",
+        "bytes": 489472,
+        "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+      },
+      {
+        "path": "MediaBrowser.Model.pdb",
+        "bytes": 173608,
+        "sha256": "bf675ae1b35ce6c6f15e319e2f32e453b2daf71f3ba9ef71b63c1a3006df0037"
+      },
+      {
+        "path": "MediaBrowser.Model.xml",
+        "bytes": 510737,
+        "sha256": "e1c48bfd306acb4727121248a137787eefa39bca1f7b923f21c14109d42155aa"
+      },
+      {
+        "path": "MediaBrowser.Providers.dll",
+        "bytes": 1030656,
+        "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+      },
+      {
+        "path": "MediaBrowser.Providers.pdb",
+        "bytes": 184260,
+        "sha256": "0d61defea2b2871543044b07abe984c944fd613f26d9ec18fd9f07b212cd3ef7"
+      },
+      {
+        "path": "MediaBrowser.Providers.xml",
+        "bytes": 324178,
+        "sha256": "8322f43b515296baf13a82102ea21a314c92a5d007362ec7a9147ab65156f357"
+      },
+      {
+        "path": "MediaBrowser.XbmcMetadata.dll",
+        "bytes": 84992,
+        "sha256": "125b8d97635ef501d187b1785ead28e81f703960ef4ed10ea06869c42fad629a"
+      },
+      {
+        "path": "MediaBrowser.XbmcMetadata.pdb",
+        "bytes": 46712,
+        "sha256": "5cd28d18f336ae9e8d27fb83f90b2c204c42c213280fbca6145650f20c0b59c5"
+      },
+      {
+        "path": "MediaBrowser.XbmcMetadata.xml",
+        "bytes": 58935,
+        "sha256": "0ab2061c3a75b3603ef46b3e55b494f1ed22088c8ec7a52004fe05c4b3656360"
+      },
+      {
+        "path": "MetaBrainz.Common.Json.dll",
+        "bytes": 31232,
+        "sha256": "0abef4d3cd0a8f3b312d2661cc6c9e851d7ea9de9fa28516e4a9a3a7b98470d4"
+      },
+      {
+        "path": "MetaBrainz.Common.dll",
+        "bytes": 18432,
+        "sha256": "dd0b78005cce58be00d2934e1148251b958ea72de3d6d2bed3e417f2d0e7e7b3"
+      },
+      {
+        "path": "MetaBrainz.MusicBrainz.dll",
+        "bytes": 285184,
+        "sha256": "06decf86fd4d12209d0b6c20bbfa66eec8e7280bf5b32f09162baf3e92f62a6b"
+      },
+      {
+        "path": "Microsoft.Data.Sqlite.dll",
+        "bytes": 177504,
+        "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+      },
+      {
+        "path": "Microsoft.EntityFrameworkCore.Abstractions.dll",
+        "bytes": 34616,
+        "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+      },
+      {
+        "path": "Microsoft.EntityFrameworkCore.Relational.dll",
+        "bytes": 2194784,
+        "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+      },
+      {
+        "path": "Microsoft.EntityFrameworkCore.Sqlite.dll",
+        "bytes": 311648,
+        "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+      },
+      {
+        "path": "Microsoft.EntityFrameworkCore.dll",
+        "bytes": 2829112,
+        "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+      },
+      {
+        "path": "Microsoft.Extensions.DependencyModel.dll",
+        "bytes": 84816,
+        "sha256": "9237596e7cf66d2d93163fae81dc29ed5942d6376e9bcfde85bbf6f0c8186766"
+      },
+      {
+        "path": "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll",
+        "bytes": 21800,
+        "sha256": "9791edf3b328bb50dce4570290e3602f65e2fe4be0061b4398d08c9ebcff2022"
+      },
+      {
+        "path": "Microsoft.OpenApi.dll",
+        "bytes": 486752,
+        "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5"
+      },
+      {
+        "path": "Microsoft.Win32.SystemEvents.dll",
+        "bytes": 27416,
+        "sha256": "a606ed156f527d4cadadcff1f23987b87daec6f41738d5b0c4b10a722116a1db"
+      },
+      {
+        "path": "Morestachio.dll",
+        "bytes": 609792,
+        "sha256": "008dc0205293bb5ef51f157de0102cbacdc107cf2d99ca6813097da5b604d0bb"
+      },
+      {
+        "path": "NEbml.Core.dll",
+        "bytes": 24576,
+        "sha256": "9352adc0f9fe1efeda6b7715a37fc8ea7d28b76aa016698955e5dc5867ed8468"
+      },
+      {
+        "path": "Newtonsoft.Json.dll",
+        "bytes": 723368,
+        "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b"
+      },
+      {
+        "path": "PDFtoImage.dll",
+        "bytes": 96096,
+        "sha256": "bebf1ed3ef86674d2eec07b74de88e7bff679f3d4fb00a896b69cd70aa0cb4a3"
+      },
+      {
+        "path": "PlaylistsNET.dll",
+        "bytes": 47104,
+        "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea"
+      },
+      {
+        "path": "Polly.Core.dll",
+        "bytes": 223136,
+        "sha256": "f7f50017ca9f457b854498358ae595c2a8ab69c1fd8b915139d22bed8f7e4f2a"
+      },
+      {
+        "path": "Polly.dll",
+        "bytes": 288160,
+        "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+      },
+      {
+        "path": "Prometheus.AspNetCore.dll",
+        "bytes": 47104,
+        "sha256": "04fad5a2ff2c62da5bf31fe1e17978056162e57e8cdf266d89d28c4a36f61dbd"
+      },
+      {
+        "path": "Prometheus.NetStandard.dll",
+        "bytes": 197632,
+        "sha256": "87f007a4e95ded1e9a8b0b0cd0dca43e89822c926b8d93c15ec69a3e520f3620"
+      },
+      {
+        "path": "Resources/Configuration/logging.json",
+        "bytes": 1366,
+        "sha256": "ed6c9137a777896fa7ce8365d7f71ce37e424eef6c7fe2e67645b7c56b9465ca"
+      },
+      {
+        "path": "SQLitePCLRaw.batteries_v2.dll",
+        "bytes": 5120,
+        "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+      },
+      {
+        "path": "SQLitePCLRaw.core.dll",
+        "bytes": 51200,
+        "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+      },
+      {
+        "path": "SQLitePCLRaw.provider.e_sqlite3.dll",
+        "bytes": 36864,
+        "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+      },
+      {
+        "path": "Serilog.AspNetCore.dll",
+        "bytes": 17920,
+        "sha256": "a550c57df7a04edbed00da036fc14be12acd0d425b7401855975fb628e3dbada"
+      },
+      {
+        "path": "Serilog.Enrichers.Thread.dll",
+        "bytes": 6656,
+        "sha256": "74b88ad495b8699fb214d83f7ea371f3470ece05948111c99e72ddd5f3f1d852"
+      },
+      {
+        "path": "Serilog.Expressions.dll",
+        "bytes": 200704,
+        "sha256": "e3fc0c1c14ab4221ce55f6b926f1a6bb33654009242d3527526064995f70b9e8"
+      },
+      {
+        "path": "Serilog.Extensions.Hosting.dll",
+        "bytes": 35840,
+        "sha256": "3e6d0284179ee0e1c197568fd79b58f869d15298fff8ecb8447322fe87d44f47"
+      },
+      {
+        "path": "Serilog.Extensions.Logging.dll",
+        "bytes": 28672,
+        "sha256": "80d3edbe3e3ac0b4c5bc764474220e7da11df8d285e0098f3dc1b65a734c8507"
+      },
+      {
+        "path": "Serilog.Formatting.Compact.dll",
+        "bytes": 9728,
+        "sha256": "319fbcefc2161dd50ccdd8d60b30edee48a09f794aedb28421a23f35ddd670d9"
+      },
+      {
+        "path": "Serilog.Settings.Configuration.dll",
+        "bytes": 71680,
+        "sha256": "de6fb7b6ee3229e0b0b9356ecdbbd05767d6490aaf0c34e9e49dbd7fe1e974a0"
+      },
+      {
+        "path": "Serilog.Sinks.Async.dll",
+        "bytes": 14848,
+        "sha256": "1031cd50ee3f0d62bbfdad3e07de0e953f26b90edac475e1b06fc65d2b42619c"
+      },
+      {
+        "path": "Serilog.Sinks.Console.dll",
+        "bytes": 38400,
+        "sha256": "dc88002ddd9f5fd0ffec9a6568ef89954671f60f2c9161593ee78932538c1e3e"
+      },
+      {
+        "path": "Serilog.Sinks.Debug.dll",
+        "bytes": 7168,
+        "sha256": "df543d3df8bd00d72e5eb2b9b2a15e67a6e4d10c13834de4cedbf500b8793e01"
+      },
+      {
+        "path": "Serilog.Sinks.File.dll",
+        "bytes": 36864,
+        "sha256": "4f4282671c2ac68284b4dc99f7a76eac9cbd4e659978cef642cff9e6c01b676d"
+      },
+      {
+        "path": "Serilog.Sinks.Graylog.Core.dll",
+        "bytes": 33792,
+        "sha256": "1aa458c5ec4d0bee8be25900d0103e345b28ac1da2c356a81641954bd5d67e19"
+      },
+      {
+        "path": "Serilog.Sinks.Graylog.dll",
+        "bytes": 10240,
+        "sha256": "1acb2f796c01331bc185cdf3ffd81fbaa3dd131335eda6a8341f1cbeb325e514"
+      },
+      {
+        "path": "Serilog.dll",
+        "bytes": 161792,
+        "sha256": "9fbf7441a9bdc9459652dc66e18f008040651f14cb8d7a7bb806ac4a8b722d10"
+      },
+      {
+        "path": "ServerSetupApp/index.mstemplate.html",
+        "bytes": 63827,
+        "sha256": "01eea6962e222549baa1f63b817f269836e00fb597e4d1d1235f03b060b0b388"
+      },
+      {
+        "path": "SharpCompress.dll",
+        "bytes": 2461696,
+        "sha256": "f59f7159bc053f656f59ee15144f123de5d4b798c337083f3bfc6b0d30e846fd"
+      },
+      {
+        "path": "ShimSkiaSharp.dll",
+        "bytes": 189952,
+        "sha256": "81605037e7c1b6515c40ac2a20cee7dcc2ec6fab2de448661ab19dcda421feb9"
+      },
+      {
+        "path": "SkiaSharp.HarfBuzz.dll",
+        "bytes": 23904,
+        "sha256": "a3395e68c225d9fbe950312117e50ba475240a4b6b1deb8feb3c27dfcf6a767a"
+      },
+      {
+        "path": "SkiaSharp.dll",
+        "bytes": 489824,
+        "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+      },
+      {
+        "path": "Svg.Custom.dll",
+        "bytes": 737792,
+        "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d"
+      },
+      {
+        "path": "Svg.Model.dll",
+        "bytes": 187392,
+        "sha256": "11d47f250c0afcd4d6d8a72bb7173a1c9d9e0fcfda764156f74dcbcfb02dbd82"
+      },
+      {
+        "path": "Svg.Skia.dll",
+        "bytes": 94208,
+        "sha256": "1879c178d0adc1438638421407f1241175905da2a0854d30198b45bc11ed56b1"
+      },
+      {
+        "path": "Swashbuckle.AspNetCore.ReDoc.dll",
+        "bytes": 386560,
+        "sha256": "b9eeab4c8d2f697cbf0a71da1a25fff537dc95040436b198aaa3961001abd728"
+      },
+      {
+        "path": "Swashbuckle.AspNetCore.Swagger.dll",
+        "bytes": 23040,
+        "sha256": "846276be474e07728eee6c60f586959c4d13f40df730c3645107d3ff115c622b"
+      },
+      {
+        "path": "Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "bytes": 157696,
+        "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9"
+      },
+      {
+        "path": "Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "bytes": 727552,
+        "sha256": "2b986a27c1ce3bf2508eb100e4971380833bd52319f6b7b769016efe8e138e73"
+      },
+      {
+        "path": "System.Drawing.Common.dll",
+        "bytes": 485664,
+        "sha256": "a998ea518f11dc6bc85d76abab2b99a79de3f06580fc409af8c3b344c9d8b30a"
+      },
+      {
+        "path": "System.Private.Windows.Core.dll",
+        "bytes": 854808,
+        "sha256": "2cae44600028d3181b068421317c35faaee4f2e6eb990cb06a3ab60d587d5f50"
+      },
+      {
+        "path": "TMDbLib.dll",
+        "bytes": 401920,
+        "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794"
+      },
+      {
+        "path": "TagLibSharp.dll",
+        "bytes": 500224,
+        "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3"
+      },
+      {
+        "path": "Ude.NetStandard.dll",
+        "bytes": 164864,
+        "sha256": "98d4b00f323dcff984c2eff193df5947f69653be13c6de98bc232a1f701c3963"
+      },
+      {
+        "path": "UtfUnknown.dll",
+        "bytes": 256512,
+        "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+      },
+      {
+        "path": "jellyfin.deps.json",
+        "bytes": 82867,
+        "sha256": "3cbb9d8f4818e24ae3774a20615ece9f20868700c5feda3aa3dbd856397bc91b"
+      },
+      {
+        "path": "jellyfin.dll",
+        "bytes": 506368,
+        "sha256": "31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c"
+      },
+      {
+        "path": "jellyfin.exe",
+        "bytes": 203776,
+        "sha256": "2cb9d0b099decd5eeaab7fdee6270942ebf9915f2fd0e76bff4efefade5faef9"
+      },
+      {
+        "path": "jellyfin.pdb",
+        "bytes": 124908,
+        "sha256": "637d686fd4735ae85299ebc84f2469a700819fc4f2487f90b1456ab6d119d992"
+      },
+      {
+        "path": "jellyfin.runtimeconfig.json",
+        "bytes": 561,
+        "sha256": "0156465df0494a56e95076f537786ee0190a878149d4716821c4c37861cfae1f"
+      },
+      {
+        "path": "jellyfin.staticwebassets.endpoints.json",
+        "bytes": 12275,
+        "sha256": "57bbca7f7cc2f409236837ff81d76f5d8117f11bf90bfb5551da4385710a9f2e"
+      },
+      {
+        "path": "jellyfin.staticwebassets.runtime.json",
+        "bytes": 1244,
+        "sha256": "45ef3c58ca1c03caa8f22b872b1221f21045e77052cfafc1ee5cbce28885ce01"
+      },
+      {
+        "path": "jellyfin.xml",
+        "bytes": 106382,
+        "sha256": "bc03135941cada35a5dd98116d753561d4ed24a336db9f496297353615386688"
+      },
+      {
+        "path": "libse.dll",
+        "bytes": 2984448,
+        "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903"
+      },
+      {
+        "path": "prometheus-net.DotNetRuntime.dll",
+        "bytes": 94720,
+        "sha256": "5c9ba723966ff7f28305ebd9f8e4a2176c748dec03a1253b9894c942cd4e991d"
+      },
+      {
+        "path": "runtimes/browser-wasm/nativeassets/net9.0/e_sqlite3.a",
+        "bytes": 1308854,
+        "sha256": "c64ae8d44dc3e1aa03aca4e79ccc501cbc3a3c490e8e2ea9e369367f68cf0f21"
+      },
+      {
+        "path": "runtimes/linux-arm64/native/libHarfBuzzSharp.so",
+        "bytes": 2657280,
+        "sha256": "68fc5ef842ac0dbd57e8063a11de5bb2f3c2b5af530a2d4fa07a7cf5d6ea4259"
+      },
+      {
+        "path": "runtimes/linux-arm64/native/libSkiaSharp.so",
+        "bytes": 10848184,
+        "sha256": "87d2d56c49a9b1d1da618dfa20994ee213f752f9ada04e085703115162997aef"
+      },
+      {
+        "path": "runtimes/linux-arm64/native/libe_sqlite3.so",
+        "bytes": 1534296,
+        "sha256": "707fff6b18c1f083158e7a543c8d2545d5485f547ffd96db29679a95f52878d5"
+      },
+      {
+        "path": "runtimes/linux-arm64/native/libpdfium.so",
+        "bytes": 6182920,
+        "sha256": "2f3c16505b23e43c74adf632c3ea7ca0ccd105ebcf1bea8a77321b29b3144319"
+      },
+      {
+        "path": "runtimes/linux-arm/native/libHarfBuzzSharp.so",
+        "bytes": 1988676,
+        "sha256": "7a7bafe7d89c5d361a3890e044bdc5993b234831e5c8c1f768260828969ec007"
+      },
+      {
+        "path": "runtimes/linux-arm/native/libSkiaSharp.so",
+        "bytes": 8008960,
+        "sha256": "7896ca61cbb9fe9f4f9f7669595329d8a688f9ea60ef8d103701b7b9441b7699"
+      },
+      {
+        "path": "runtimes/linux-arm/native/libe_sqlite3.so",
+        "bytes": 982224,
+        "sha256": "43556c2f5075857bf57be1136d556733bdc27195884fbdde127cd976d1c25ad5"
+      },
+      {
+        "path": "runtimes/linux-arm/native/libpdfium.so",
+        "bytes": 4737780,
+        "sha256": "ef0edb8c12db5b8a9b4ce13e57721b8e43f038beb69e654c28af78abc223b625"
+      },
+      {
+        "path": "runtimes/linux-armel/native/libe_sqlite3.so",
+        "bytes": 1375344,
+        "sha256": "3f4d9b9ca49bb3f100882e78ba85807398cee19b481bfd4c301a8f5f58d48540"
+      },
+      {
+        "path": "runtimes/linux-bionic-arm64/native/libHarfBuzzSharp.so",
+        "bytes": 2936568,
+        "sha256": "0636b48058f3481faa75ab4ec7e7b914440aafbc01ad8e893f63b3e6cbce9cf1"
+      },
+      {
+        "path": "runtimes/linux-bionic-arm64/native/libSkiaSharp.so",
+        "bytes": 11319400,
+        "sha256": "03ff0a09dc95d92b85c91cfbd87567793fe095f2fb1566f6b21bf6ae048c7ea4"
+      },
+      {
+        "path": "runtimes/linux-bionic-x64/native/libHarfBuzzSharp.so",
+        "bytes": 2865736,
+        "sha256": "d2057e63b0fac388a29d0b298ae51a561198fa4b2a9bd6a619960a2bb5ac7e60"
+      },
+      {
+        "path": "runtimes/linux-bionic-x64/native/libSkiaSharp.so",
+        "bytes": 11068032,
+        "sha256": "db79508d5c6c6234b127f4948b64b96e7ddcb08e6495fe4dfda70ea187137af6"
+      },
+      {
+        "path": "runtimes/linux-loongarch64/native/libHarfBuzzSharp.so",
+        "bytes": 2721088,
+        "sha256": "e3f25c2a81f919fd0297023504bf0655b626d5d47e569724827cca7d06f9c3d7"
+      },
+      {
+        "path": "runtimes/linux-loongarch64/native/libSkiaSharp.so",
+        "bytes": 10483856,
+        "sha256": "94f65c8536514d4fd2f78568b634bf73acfde22e4dd427615584f58d8e05ca30"
+      },
+      {
+        "path": "runtimes/linux-mips64/native/libe_sqlite3.so",
+        "bytes": 1756544,
+        "sha256": "985884523e512414f3e50aa359f08dad3ce635e99405e7823de9b26a7db38d09"
+      },
+      {
+        "path": "runtimes/linux-musl-arm64/native/libHarfBuzzSharp.so",
+        "bytes": 3880784,
+        "sha256": "aa71a80195e31d55b7045bafdc6ec5895b69785cd4b39a249309d3c9fde3e280"
+      },
+      {
+        "path": "runtimes/linux-musl-arm64/native/libSkiaSharp.so",
+        "bytes": 18546520,
+        "sha256": "6b5b1a4f4ee4def48fc4a50f9c5a686c47661b5acaf0150dc0b462b30070b925"
+      },
+      {
+        "path": "runtimes/linux-musl-arm64/native/libe_sqlite3.so",
+        "bytes": 1450704,
+        "sha256": "530e2f74f259fe04faa4b595336e671fab5eedbb6f4e94dad59494efb7b00c2a"
+      },
+      {
+        "path": "runtimes/linux-musl-arm64/native/libpdfium.so",
+        "bytes": 15715904,
+        "sha256": "85ba19cb686668d3933441bd0f57fa8e6b0e2841d5fcc9b80af17a28e0fdf55a"
+      },
+      {
+        "path": "runtimes/linux-musl-arm/native/libHarfBuzzSharp.so",
+        "bytes": 3017916,
+        "sha256": "fa511560f4420e0b420eb73fa8339af5c6683d71403c611af8ca6ce366f01494"
+      },
+      {
+        "path": "runtimes/linux-musl-arm/native/libSkiaSharp.so",
+        "bytes": 14668520,
+        "sha256": "ebc2baff6958516a8d16818af690c61678d7cfe4af8322a35b33d9f8d08f2b0f"
+      },
+      {
+        "path": "runtimes/linux-musl-arm/native/libe_sqlite3.so",
+        "bytes": 1322584,
+        "sha256": "7fec7057d16e8b5ae54fed0c42a0e6b85e40df0d57092ef20cd647a4e1c1e0ed"
+      },
+      {
+        "path": "runtimes/linux-musl-loongarch64/native/libHarfBuzzSharp.so",
+        "bytes": 3577960,
+        "sha256": "82befae55055053a65fc66366b2c75081c28463058c79295d0ef38c6ec2df97d"
+      },
+      {
+        "path": "runtimes/linux-musl-loongarch64/native/libSkiaSharp.so",
+        "bytes": 11909704,
+        "sha256": "9ac3dd56dfd62b2f767767f28ace0b8125680dfab0838193de2864e094299ed9"
+      },
+      {
+        "path": "runtimes/linux-musl-riscv64/native/libHarfBuzzSharp.so",
+        "bytes": 2586112,
+        "sha256": "1d0c376dae6362986a294737cb7b2580e6416c007d4cc25aba8c9eac916ffc10"
+      },
+      {
+        "path": "runtimes/linux-musl-riscv64/native/libSkiaSharp.so",
+        "bytes": 9977720,
+        "sha256": "a8eb81e33709fc19003e16d65129f3dec54b6bd46304115b695fb9cac1887342"
+      },
+      {
+        "path": "runtimes/linux-musl-riscv64/native/libe_sqlite3.so",
+        "bytes": 1015888,
+        "sha256": "d8e54eb7dc52ea0a7df9b78ac6feb85af429e7264613099df478825dea5805d4"
+      },
+      {
+        "path": "runtimes/linux-musl-s390x/native/libe_sqlite3.so",
+        "bytes": 1685752,
+        "sha256": "64260c0460ad6efa7dce9263bff7a4b64ad66172ccc580cb09181c845e1a3407"
+      },
+      {
+        "path": "runtimes/linux-musl-x64/native/libHarfBuzzSharp.so",
+        "bytes": 3908472,
+        "sha256": "f4b0c632dd41e8000b647dbc463e77602d915ab99914239c8c25a1858430c83f"
+      },
+      {
+        "path": "runtimes/linux-musl-x64/native/libSkiaSharp.so",
+        "bytes": 18453464,
+        "sha256": "59039b2548e3a3f563fa247f582c62d280c2015df78316fcab62e383d7ae9d4f"
+      },
+      {
+        "path": "runtimes/linux-musl-x64/native/libe_sqlite3.so",
+        "bytes": 1445336,
+        "sha256": "647b7b5886526691aed58e0fcbb56dc1e6dea8b1f9f5390782f0c95269250db1"
+      },
+      {
+        "path": "runtimes/linux-musl-x64/native/libpdfium.so",
+        "bytes": 15471776,
+        "sha256": "54ff5a7eeecd1b8f93b42598fea9d7b492060919b243bd3d0f358cc9cffed013"
+      },
+      {
+        "path": "runtimes/linux-musl-x86/native/libpdfium.so",
+        "bytes": 14377616,
+        "sha256": "3143f3315200ee80171e80aab7ff6293abe82602ac32486c1272b2b67658638f"
+      },
+      {
+        "path": "runtimes/linux-ppc64le/native/libe_sqlite3.so",
+        "bytes": 1937408,
+        "sha256": "1ef00b5e3ac63e491f59ecf587680fc52ad844cea62e0a879a1315ef6bd10fc6"
+      },
+      {
+        "path": "runtimes/linux-riscv64/native/libHarfBuzzSharp.so",
+        "bytes": 2318920,
+        "sha256": "b0a7dfafd7edfecce56819026741e56c8e46b7e8a422a1a1935d392bb8fc3c39"
+      },
+      {
+        "path": "runtimes/linux-riscv64/native/libSkiaSharp.so",
+        "bytes": 8627760,
+        "sha256": "e6dc641e3b049261c9d3d402660ff31e3a23160b1498081a4cec63feb9249c21"
+      },
+      {
+        "path": "runtimes/linux-riscv64/native/libe_sqlite3.so",
+        "bytes": 1291896,
+        "sha256": "6b390eecbc6f55c44d9ab8a774f1fe4283dfb33a72e6f29f4e0b173065e7e105"
+      },
+      {
+        "path": "runtimes/linux-s390x/native/libe_sqlite3.so",
+        "bytes": 1655776,
+        "sha256": "dfd5ab35f6d61155a3c629d0bceff4d6e0f0f190983f3fb8f681fb34ec08c67e"
+      },
+      {
+        "path": "runtimes/linux-x64/native/libHarfBuzzSharp.so",
+        "bytes": 2808040,
+        "sha256": "1d5c3afef13545bf34bf8f068b14e25ee619c3b6dee235c44e260fe61cb24018"
+      },
+      {
+        "path": "runtimes/linux-x64/native/libSkiaSharp.so",
+        "bytes": 11170296,
+        "sha256": "66c856eaf1a47a00b23204c30c6ee407987bf5086ecc0a1a6b4fd67526b0cd02"
+      },
+      {
+        "path": "runtimes/linux-x64/native/libe_sqlite3.so",
+        "bytes": 1470784,
+        "sha256": "b0f5c48026fedcf9f05cf31c6fadf9e1e001ca59cd85aa68b8b6814e52c18a07"
+      },
+      {
+        "path": "runtimes/linux-x64/native/libpdfium.so",
+        "bytes": 6008736,
+        "sha256": "8100bc0812e7064d00e26e1d41fbbb618d52240ed730dc3bd0e8ca5ce5c54078"
+      },
+      {
+        "path": "runtimes/linux-x86/native/libHarfBuzzSharp.so",
+        "bytes": 2735488,
+        "sha256": "9171121cc7c5f76d13e3458ea17e9eb6afc74f38ad0e6e2290f050e3557afb42"
+      },
+      {
+        "path": "runtimes/linux-x86/native/libSkiaSharp.so",
+        "bytes": 10358832,
+        "sha256": "5984f467bc1a867543ea3bbb1d0913053b88ae52c4afca21a6412816be30d045"
+      },
+      {
+        "path": "runtimes/linux-x86/native/libe_sqlite3.so",
+        "bytes": 1547984,
+        "sha256": "fe8229e5baeaf21e721cf65626a6b07ec22d9b17d07bd624e7a77927174277f1"
+      },
+      {
+        "path": "runtimes/linux-x86/native/libpdfium.so",
+        "bytes": 5983000,
+        "sha256": "693d499c43b658a35b695c5be3fb09ecc134153686cc40671cb3bbc951d3e710"
+      },
+      {
+        "path": "runtimes/maccatalyst-arm64/native/libe_sqlite3.dylib",
+        "bytes": 1695264,
+        "sha256": "8d63d80bc6caa754679d6fc89fd741a32c156f136c34759cc8fff8cd51468a93"
+      },
+      {
+        "path": "runtimes/maccatalyst-x64/native/libe_sqlite3.dylib",
+        "bytes": 1724352,
+        "sha256": "43d27adbc5ba40850bac42a12aea08314a22a43d3ce77cdc7a6cc47ecffb5746"
+      },
+      {
+        "path": "runtimes/osx-arm64/native/libe_sqlite3.dylib",
+        "bytes": 1696624,
+        "sha256": "09fe20a6c050912a7944b2f2f2981debe31679f7919f523c87251ae8cf0f2daa"
+      },
+      {
+        "path": "runtimes/osx-arm64/native/libpdfium.dylib",
+        "bytes": 5526320,
+        "sha256": "40720223c09c96b894faa4d6b22fb78a1675b160f10402a25b79d3e31763eba1"
+      },
+      {
+        "path": "runtimes/osx-x64/native/libe_sqlite3.dylib",
+        "bytes": 1724472,
+        "sha256": "02344e1d0bcb5ed447ad9b79ed19e37a590fb1ece3eba1e63efbc35e36e47bdf"
+      },
+      {
+        "path": "runtimes/osx-x64/native/libpdfium.dylib",
+        "bytes": 5811760,
+        "sha256": "faa494a4bf57c1a5c47e7e50e9aefb62644e9291653759f7c8d7bfd6b2b6581d"
+      },
+      {
+        "path": "runtimes/osx/native/libHarfBuzzSharp.dylib",
+        "bytes": 2641664,
+        "sha256": "f8e9ab02b74e68d151abc3781098c9201e57c392b827b40451515d42386d6b0d"
+      },
+      {
+        "path": "runtimes/osx/native/libSkiaSharp.dylib",
+        "bytes": 15201456,
+        "sha256": "e09f07ae1df62ded475351f56d8dc8366cd679043f28b65d9dee597a5fd0da6c"
+      },
+      {
+        "path": "runtimes/win-arm64/native/e_sqlite3.dll",
+        "bytes": 1814528,
+        "sha256": "4177542756bd94f75b55fb74367e0cf34e66a88ffaf95755489af14c6ca2f792"
+      },
+      {
+        "path": "runtimes/win-arm64/native/libHarfBuzzSharp.dll",
+        "bytes": 1924448,
+        "sha256": "e8c9923c68c08e83f632e18fec2c9dd812f64e1e553e4b6702b5396b3834f821"
+      },
+      {
+        "path": "runtimes/win-arm64/native/libHarfBuzzSharp.pdb",
+        "bytes": 20967424,
+        "sha256": "59c29b0f650572c127f39f2f37569e995d9a1692706e6b0be1af3730cb7246c2"
+      },
+      {
+        "path": "runtimes/win-arm64/native/libSkiaSharp.dll",
+        "bytes": 10411360,
+        "sha256": "f7409fcfc3557e272d3e8df2dcd6f737ee5a68b09fdbc6d6ff8c9a3c24b2e36a"
+      },
+      {
+        "path": "runtimes/win-arm64/native/libSkiaSharp.pdb",
+        "bytes": 84938752,
+        "sha256": "068c4b775d2bfce0d377762fa4d283f4111769fa3cef1c089ea18e12249f03ca"
+      },
+      {
+        "path": "runtimes/win-arm64/native/pdfium.dll",
+        "bytes": 5366272,
+        "sha256": "e13c75645d70b40a1857b90106a16c036ad951f17b389ec3d4671f235238bb89"
+      },
+      {
+        "path": "runtimes/win-x64/native/e_sqlite3.dll",
+        "bytes": 1978880,
+        "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+      },
+      {
+        "path": "runtimes/win-x64/native/libHarfBuzzSharp.dll",
+        "bytes": 1815904,
+        "sha256": "cf97ae00945e6f5290967ba4ff3051f1cd47a0758b7d9a7159fb352b33655d43"
+      },
+      {
+        "path": "runtimes/win-x64/native/libHarfBuzzSharp.pdb",
+        "bytes": 20918272,
+        "sha256": "b7fd174d69cec7384459f6e0ec0d7892463908dcace32e50eae90d9dc793282a"
+      },
+      {
+        "path": "runtimes/win-x64/native/libSkiaSharp.dll",
+        "bytes": 11628896,
+        "sha256": "7dec3ba900ab353491e6446f0083739924c6f8dd668832e2f09d38ebffdbbe1c"
+      },
+      {
+        "path": "runtimes/win-x64/native/libSkiaSharp.pdb",
+        "bytes": 84033536,
+        "sha256": "9fa70aeff3122bcceae15cd89d9d2f3c88c8d382122ef70ad694a76d119dcc6e"
+      },
+      {
+        "path": "runtimes/win-x64/native/pdfium.dll",
+        "bytes": 5802496,
+        "sha256": "15df9dddd81eddc5a177946aa5e34cda821ebc46a51440ecb607f91e99644895"
+      },
+      {
+        "path": "runtimes/win-x86/native/e_sqlite3.dll",
+        "bytes": 1533952,
+        "sha256": "d13eb819d1353d98c684c88672868bbfcc6a52eb5987bdf2557ec02fabce4ea7"
+      },
+      {
+        "path": "runtimes/win-x86/native/libHarfBuzzSharp.dll",
+        "bytes": 1518432,
+        "sha256": "18fcfa3677b92e3a4ffce48119e98100625faf84db550f770e1883447f0bde8d"
+      },
+      {
+        "path": "runtimes/win-x86/native/libHarfBuzzSharp.pdb",
+        "bytes": 20705280,
+        "sha256": "22a92d9443e1661d209dbd42015085628a48782f7cde5c6fe7af9afd29725478"
+      },
+      {
+        "path": "runtimes/win-x86/native/libSkiaSharp.dll",
+        "bytes": 10124128,
+        "sha256": "2e49b47ff56a0f6ccf61932d33e01e9046c319da35bbb16f9ec9572a9dcf675f"
+      },
+      {
+        "path": "runtimes/win-x86/native/libSkiaSharp.pdb",
+        "bytes": 86761472,
+        "sha256": "0636110c85e35a4acabd8df236e4a9410c2ab65258a929b92864817ee790f2a8"
+      },
+      {
+        "path": "runtimes/win-x86/native/pdfium.dll",
+        "bytes": 5376512,
+        "sha256": "83bd789c4924deb42db18ab42f7479be8d0d13e8cf5363c914e53404382baa6d"
+      },
+      {
+        "path": "runtimes/win/lib/net9.0/Microsoft.Win32.SystemEvents.dll",
+        "bytes": 60712,
+        "sha256": "e7053cac432c626f1a89d109e596872e0e31742b545b82034f517a94b613ef86"
+      },
+      {
+        "path": "zlib.net.dll",
+        "bytes": 56320,
+        "sha256": "1645161b61e85fd7b76f6b6d53f88c3006b718f25cbd2ade3dcd11a2a73f0dd4"
+      }
+    ],
+    "contentDigest": "afbea74841616d148c032ccb368ed663f67f3d18b8521517307b6f8c55f5ff93",
+    "sourceBindings": [
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Api/Controllers/ItemsController.cs",
+        "bytes": 65470,
+        "sha256": "ea5c492f96dd9ca90e8b0723f76d188a90a26b6c645266eed284db18f8c68419"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/Folder.cs",
+        "bytes": 83390,
+        "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserView.cs",
+        "bytes": 5990,
+        "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+        "bytes": 32703,
+        "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+        "bytes": 105800,
+        "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SearchManager.cs",
+        "bytes": 17459,
+        "sha256": "c4b3fffb6ba7f34f6958f17fca6577c0041a17cce4ecd51772dc2b27820ae16c"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SqlSearchProvider.cs",
+        "bytes": 8867,
+        "sha256": "724010047d464a5a4d45808a268b435d744fa3e6151f19580830be6c97e2d2e2"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/Search/SearchQueryAccessFilter.cs",
+        "bytes": 1697,
+        "sha256": "464be558fcea981218b3adf24dcdedd9c2e3be1bf40acaa31a340c6245dae315"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+        "bytes": 157087,
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+        "bytes": 31527,
+        "sha256": "b4c3ddd5a657ac4d9308131bfb5bf490df11d5f56c3df50d0a1b6645d282bdb2"
+      },
+      {
+        "path": ".test-input/baselines/jellyfin-current/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+        "bytes": 58978,
+        "sha256": "0b2d4aba6f4d73c224315c1a0abd82b3c65ba2a42683381e1e73c00b01019c06"
+      }
+    ],
+    "copiedEveryFile": true,
+    "everySourceAndCopyShaEqual": true,
+    "phaseAcceptance": false
+  },
+  "summary": {
+    "passed": true,
+    "cases": 18,
+    "processResult": {
+      "code": 0,
+      "signal": null
+    },
+    "referencePid": 10104,
+    "recorderPid": 18312,
+    "portAvailable": true,
+    "recorderSha256": "1f46c1b27dee6b56dff5b219dfb9c597a2d143b5465aa2dcef3fc247fda92f6f",
+    "fixtureSha256": "2ad911ca07feaa382188196a58b144ddada15d6d50bf10e71b846f316d363da4",
+    "sourceDatabaseSha256": "49086bcdb1669bf23f4bba70e2caff285d54eeb069b826faea32044da454a9c3",
+    "dllSha256": "31236d2a520e52ab2130742515a552980b0edbde4cfe8da124c0a0cd87c9046c",
+    "error": null
+  },
+  "http": {
+    "origin": "http://127.0.0.1:18243",
+    "records": [
+      {
+        "name": "movielatest-user-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008801\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008803\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008801",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008803",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "movielatest-user-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "movielatest-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Ids=80100000-0000-0000-0000-000000008804&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008801\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008803\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008801",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008803",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "movielatest-apiKey-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008801\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008803\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008801",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008803",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "movielatest-apiKey-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "movielatest-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Ids=80100000-0000-0000-0000-000000008804&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008801\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008803\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008801",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008803",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "movielatest-user-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[],\"TotalRecordCount\":0,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [],
+            "TotalRecordCount": 0,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "movielatest-apiKey-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008800&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 500,
+          "contentType": "text/plain",
+          "bodyText": "Error processing request."
+        }
+      },
+      {
+        "name": "moviemovies-user-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008811\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008813\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008811",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008813",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviemovies-user-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "moviemovies-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Ids=80100000-0000-0000-0000-000000008814&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008811\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008813\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008811",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008813",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviemovies-apiKey-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008811\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008813\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008811",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008813",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviemovies-apiKey-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "moviemovies-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Ids=80100000-0000-0000-0000-000000008814&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008811\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008813\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008811",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008813",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviemovies-user-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[],\"TotalRecordCount\":0,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [],
+            "TotalRecordCount": 0,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviemovies-apiKey-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008810&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 500,
+          "contentType": "text/plain",
+          "bodyText": "Error processing request."
+        }
+      },
+      {
+        "name": "moviecollection-user-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008821\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008823\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008821",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008823",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviecollection-user-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "moviecollection-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Ids=80100000-0000-0000-0000-000000008824&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008821\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008823\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008821",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008823",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviecollection-apiKey-provider-hit",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008821\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008823\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":3,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008821",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008823",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 3,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviecollection-apiKey-explicit-union",
+        "query": "SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [
+          "moviecollection-explicit"
+        ],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Ids=80100000-0000-0000-0000-000000008824&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=searchprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[{\"Name\":\"searchprobe alpha\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008821\",\"SortName\":\"searchprobe alpha\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Movie\",\"VideoType\":\"VideoFile\",\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Video\"},{\"Name\":\"searchprobe audio\",\"ServerId\":\"416cfae20a6b4e638e02a01114c7c4b5\",\"Id\":\"80100000000000000000000000008823\",\"HasLyrics\":false,\"SortName\":\"searchprobe audio\",\"ChannelId\":null,\"IsFolder\":false,\"Type\":\"Audio\",\"Artists\":[],\"ArtistItems\":[],\"AlbumArtists\":[],\"ImageBlurHashes\":{},\"LocationType\":\"FileSystem\",\"MediaType\":\"Audio\"}],\"TotalRecordCount\":4,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [
+              {
+                "Name": "searchprobe alpha",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008821",
+                "SortName": "searchprobe alpha",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Movie",
+                "VideoType": "VideoFile",
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Video"
+              },
+              {
+                "Name": "searchprobe audio",
+                "ServerId": "416cfae20a6b4e638e02a01114c7c4b5",
+                "Id": "80100000000000000000000000008823",
+                "HasLyrics": false,
+                "SortName": "searchprobe audio",
+                "ChannelId": null,
+                "IsFolder": false,
+                "Type": "Audio",
+                "Artists": [],
+                "ArtistItems": [],
+                "AlbumArtists": [],
+                "ImageBlurHashes": {},
+                "LocationType": "FileSystem",
+                "MediaType": "Audio"
+              }
+            ],
+            "TotalRecordCount": 4,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviecollection-user-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 200,
+          "contentType": "application/json; charset=utf-8",
+          "bodyText": "{\"Items\":[],\"TotalRecordCount\":0,\"StartIndex\":0}",
+          "bodyJson": {
+            "Items": [],
+            "TotalRecordCount": 0,
+            "StartIndex": 0
+          }
+        }
+      },
+      {
+        "name": "moviecollection-apiKey-nohit",
+        "query": "SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "scope": [],
+        "endpoint": "items",
+        "route": "/Items?ParentId=80100000-0000-0000-0000-000000008820&Recursive=false&Fields=SortName&EnableImages=false&EnableUserData=false&SearchTerm=absentprobe&Limit=2&SortBy=Name&SortOrder=Descending",
+        "response": {
+          "status": 500,
+          "contentType": "text/plain",
+          "bodyText": "Error processing request."
+        }
+      }
+    ]
+  },
+  "nativeState": {
+    "database": {
+      "tables": {
+        "BaseItems": [
+          {
+            "Id": "00000000-0000-0000-0000-000000000001",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": null,
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": null,
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": null,
+            "Height": null,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": null,
+            "Name": "This is a placeholder item for UserData that has been detached from its original item",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": null,
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": null,
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "PLACEHOLDER",
+            "UnratedType": null,
+            "Width": null
+          },
+          {
+            "Id": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "root",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"VirtualChildren\":[],\"PhysicalLocationsList\":[],\"IsRoot\":true,\"IsHD\":false,\"IsShortcut\":false,\"Width\":0,\"Height\":0,\"DateLastSaved\":\"2026-09-26T11:31:11.2395601Z\",\"RemoteTrailers\":[]}",
+            "DateCreated": "2026-09-26 11:31:11.2238682",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-26 11:31:11.2395601",
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "root",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\core-flow-20260926\\reference\\data\\root",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "root",
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.AggregateFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "1071671E-7BFF-A053-2E93-0DEBEE501D2E",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "playlists",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": null,
+            "DateCreated": "2026-09-26 11:31:11.2274492",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-26 11:31:11.7945523",
+            "DateModified": "2026-09-26 11:31:11.2274492",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Playlists",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "ParentIndexNumber": null,
+            "Path": "%AppDataPath%\\playlists",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "playlists",
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": "1071671E-7BFF-A053-2E93-0DEBEE501D2E",
+            "TotalBitrate": null,
+            "Type": "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "11111111-1111-1111-1111-111111111111",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "core flow movies",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-20 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-20 12:00:00",
+            "DateModified": "2026-09-20 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Core Flow Movies",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "ParentIndexNumber": null,
+            "Path": "Z:\\CoreFlow\\Movies",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "core flow movies",
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": "11111111-1111-1111-1111-111111111111",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Folder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "22222222-2222-2222-2222-222222222222",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "alpha 中文",
+            "CommunityRating": 7.5,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"VideoType\":\"VideoFile\",\"IsHD\":false,\"IsShortcut\":false,\"RemoteTrailers\":[]}",
+            "DateCreated": "2026-09-20 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-20 12:00:00",
+            "DateModified": "2026-09-20 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "Alpha 中文",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": "Alpha 中文 overview",
+            "OwnerId": null,
+            "ParentId": "11111111-1111-1111-1111-111111111111",
+            "ParentIndexNumber": null,
+            "Path": "Z:\\CoreFlow\\Movies\\Alpha 中文.mkv",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": 2020,
+            "RunTimeTicks": 72000000000,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "alpha 中文",
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": "11111111-1111-1111-1111-111111111111",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "33333333-3333-3333-3333-333333333333",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "beta film",
+            "CommunityRating": 8.1,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"VideoType\":\"VideoFile\",\"IsHD\":false,\"IsShortcut\":false,\"RemoteTrailers\":[]}",
+            "DateCreated": "2026-09-20 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-20 12:00:00",
+            "DateModified": "2026-09-20 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "Beta Film",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": "Beta Film overview",
+            "OwnerId": null,
+            "ParentId": "11111111-1111-1111-1111-111111111111",
+            "ParentIndexNumber": null,
+            "Path": "Z:\\CoreFlow\\Movies\\Beta Film.mkv",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": 2024,
+            "RunTimeTicks": 72000000000,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "beta film",
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": "11111111-1111-1111-1111-111111111111",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "E9D5075A-555C-1CBC-394E-EC4CEF295274",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "media folders",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"IsRoot\":true,\"PhysicalLocationsList\":[]}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Media Folders",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\data\\root\\default",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "e9d5075a555c1cbc394eec4cef295274",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "media folders",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.UserRootFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000100",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "physical a",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Physical A",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000100",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "physical a",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Folder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000150",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "physical b",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Physical B",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\B",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000150",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "physical b",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000150",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Folder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000200",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "collections physical",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Collections Physical",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "F27CAA37-E514-2225-CCED-ED48F6553502",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\data\\data\\collections",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000200",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "collections physical",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000200",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Folder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000101",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "library a",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"CollectionType\":\"movies\",\"PhysicalFolderIds\":[\"80100000-0000-0000-0000-000000000100\"],\"PhysicalLocationsList\":[\"D:\\\\mediamanager\\\\.test-input\\\\evidence\\\\user-view-search-http-native-v1\\\\native-run\\\\reference\\\\library-content\\\\A\"]}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Library A",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "E9D5075A-555C-1CBC-394E-EC4CEF295274",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\data\\root\\default\\Library A",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000101",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "library a",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000101",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.CollectionFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000151",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "library b",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"CollectionType\":\"movies\",\"PhysicalFolderIds\":[\"80100000-0000-0000-0000-000000000150\"],\"PhysicalLocationsList\":[\"D:\\\\mediamanager\\\\.test-input\\\\evidence\\\\user-view-search-http-native-v1\\\\native-run\\\\reference\\\\library-content\\\\B\"]}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Library B",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "E9D5075A-555C-1CBC-394E-EC4CEF295274",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\data\\root\\default\\Library B",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000151",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "library b",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000151",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.CollectionFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000000201",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "collection library",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"CollectionType\":\"boxsets\",\"PhysicalFolderIds\":[\"80100000-0000-0000-0000-000000000200\"],\"PhysicalLocationsList\":[\"D:\\\\mediamanager\\\\.test-input\\\\evidence\\\\user-view-search-http-native-v1\\\\native-run\\\\reference\\\\data\\\\data\\\\collections\"]}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "Collection Library",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "E9D5075A-555C-1CBC-394E-EC4CEF295274",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\data\\root\\default\\Collection Library",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000000201",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "collection library",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000201",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.CollectionFolder",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008800",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "view movielatest",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"ViewType\":109,\"DisplayParentId\":\"80100000-0000-0000-0000-000000000100\"}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "View movielatest",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000000100",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-movielatest",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008800",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "view movielatest",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.UserView",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008801",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe alpha",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-01-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe alpha",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008800",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-movielatest\\movielatest-alpha.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008801",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe alpha",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008802",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe beta",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe beta",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008800",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-movielatest\\movielatest-beta.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008802",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe beta",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008803",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe audio",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-05-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "searchprobe audio",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008800",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-movielatest\\movielatest-audio",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008803",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe audio",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008804",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "plain explicit",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-07-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "plain explicit",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008800",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-movielatest\\movielatest-explicit",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008804",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "plain explicit",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008810",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "view moviemovies",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"ViewType\":111,\"DisplayParentId\":\"80100000-0000-0000-0000-000000000100\"}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "View moviemovies",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000000100",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviemovies",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008810",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "view moviemovies",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.UserView",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008811",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe alpha",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-01-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe alpha",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008810",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviemovies\\moviemovies-alpha.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008811",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe alpha",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008812",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe beta",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe beta",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008810",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviemovies\\moviemovies-beta.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008812",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe beta",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008813",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe audio",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-05-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "searchprobe audio",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008810",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviemovies\\moviemovies-audio",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008813",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe audio",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008814",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "plain explicit",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-07-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "plain explicit",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008810",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviemovies\\moviemovies-explicit",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008814",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "plain explicit",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008820",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "view moviecollection",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{\"ViewType\":112,\"DisplayParentId\":\"80100000-0000-0000-0000-000000000100\"}",
+            "DateCreated": "2026-09-29 12:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 1,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": "View moviecollection",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000000100",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviecollection",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008820",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "view moviecollection",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.UserView",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008821",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe alpha",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-01-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe alpha",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008820",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviecollection\\moviecollection-alpha.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008821",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe alpha",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008822",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe beta",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-09-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 1,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Video",
+            "Name": "searchprobe beta",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008820",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviecollection\\moviecollection-beta.mkv",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008822",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe beta",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+            "UnratedType": "Movie",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008823",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "searchprobe audio",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-05-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "searchprobe audio",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008820",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviecollection\\moviecollection-audio",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008823",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "searchprobe audio",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          {
+            "Id": "80100000-0000-0000-0000-000000008824",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": "plain explicit",
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": "{}",
+            "DateCreated": "2026-07-01 00:00:00",
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": "2026-09-29 12:00:00",
+            "DateModified": "2026-09-29 12:00:00",
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "Drama",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": 0,
+            "IsInMixedFolder": 0,
+            "IsLocked": 0,
+            "IsMovie": 0,
+            "IsRepeat": 0,
+            "IsSeries": 0,
+            "IsVirtualItem": 0,
+            "LUFS": null,
+            "MediaType": "Audio",
+            "Name": "plain explicit",
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": "80100000-0000-0000-0000-000000008820",
+            "ParentIndexNumber": null,
+            "Path": "D:\\mediamanager\\.test-input\\evidence\\user-view-search-http-native-v1\\native-run\\reference\\library-content\\A\\view-moviecollection\\moviecollection-explicit",
+            "PreferredMetadataCountryCode": "US",
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": "80100000000000000000000000008824",
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": "plain explicit",
+            "StartDate": null,
+            "Studios": null,
+            "Tagline": null,
+            "Tags": null,
+            "TopParentId": "80100000-0000-0000-0000-000000000100",
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+            "UnratedType": "Other",
+            "Width": 0
+          }
+        ],
+        "AncestorIds": [
+          {
+            "ItemId": "1071671E-7BFF-A053-2E93-0DEBEE501D2E",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "22222222-2222-2222-2222-222222222222",
+            "ParentItemId": "11111111-1111-1111-1111-111111111111"
+          },
+          {
+            "ItemId": "22222222-2222-2222-2222-222222222222",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "33333333-3333-3333-3333-333333333333",
+            "ParentItemId": "11111111-1111-1111-1111-111111111111"
+          },
+          {
+            "ItemId": "33333333-3333-3333-3333-333333333333",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "11111111-1111-1111-1111-111111111111",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000100",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000150",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000200",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000101",
+            "ParentItemId": "E9D5075A-555C-1CBC-394E-EC4CEF295274"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000151",
+            "ParentItemId": "E9D5075A-555C-1CBC-394E-EC4CEF295274"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000000201",
+            "ParentItemId": "E9D5075A-555C-1CBC-394E-EC4CEF295274"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008800",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008800",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008801",
+            "ParentItemId": "80100000-0000-0000-0000-000000008800"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008801",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008801",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008802",
+            "ParentItemId": "80100000-0000-0000-0000-000000008800"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008802",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008802",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008803",
+            "ParentItemId": "80100000-0000-0000-0000-000000008800"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008803",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008803",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008804",
+            "ParentItemId": "80100000-0000-0000-0000-000000008800"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008804",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008804",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008810",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008810",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008811",
+            "ParentItemId": "80100000-0000-0000-0000-000000008810"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008811",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008811",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008812",
+            "ParentItemId": "80100000-0000-0000-0000-000000008810"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008812",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008812",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008813",
+            "ParentItemId": "80100000-0000-0000-0000-000000008810"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008813",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008813",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008814",
+            "ParentItemId": "80100000-0000-0000-0000-000000008810"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008814",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008814",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008820",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008820",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008821",
+            "ParentItemId": "80100000-0000-0000-0000-000000008820"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008821",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008821",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008822",
+            "ParentItemId": "80100000-0000-0000-0000-000000008820"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008822",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008822",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008823",
+            "ParentItemId": "80100000-0000-0000-0000-000000008820"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008823",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008823",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008824",
+            "ParentItemId": "80100000-0000-0000-0000-000000008820"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008824",
+            "ParentItemId": "80100000-0000-0000-0000-000000000100"
+          },
+          {
+            "ItemId": "80100000-0000-0000-0000-000000008824",
+            "ParentItemId": "F27CAA37-E514-2225-CCED-ED48F6553502"
+          }
+        ],
+        "LinkedChildren": [],
+        "ItemValues": [],
+        "ItemValuesMap": [],
+        "Peoples": [],
+        "PeopleBaseItemMap": [],
+        "BaseItemImageInfos": [],
+        "BaseItemProviders": [],
+        "BaseItemMetadataFields": [],
+        "MediaStreamInfos": [],
+        "UserData": []
+      },
+      "foreignKeyCheck": []
+    },
+    "filesystem": {
+      "userViews": {
+        "exists": true,
+        "entries": [
+          {
+            "path": "Collection Library",
+            "type": "directory"
+          },
+          {
+            "path": "Library A",
+            "type": "directory"
+          },
+          {
+            "path": "Library B",
+            "type": "directory"
+          }
+        ]
+      },
+      "metadata": {
+        "exists": true,
+        "entries": []
+      },
+      "libraries": {
+        "exists": true,
+        "entries": [
+          {
+            "path": "A",
+            "type": "directory"
+          },
+          {
+            "path": "B",
+            "type": "directory"
+          }
+        ]
+      },
+      "collections": {
+        "exists": true,
+        "entries": []
+      }
+    }
+  },
+  "audit": {
+    "passed": true,
+    "phaseAcceptance": false,
+    "responses": 18,
+    "endpointSnapshots": 18,
+    "completeStageWindows": 3,
+    "allRecordedStateEqual": true,
+    "tables": [
+      "BaseItems",
+      "AncestorIds",
+      "LinkedChildren",
+      "ItemValues",
+      "ItemValuesMap",
+      "Peoples",
+      "PeopleBaseItemMap",
+      "BaseItemImageInfos",
+      "BaseItemProviders",
+      "BaseItemMetadataFields",
+      "MediaStreamInfos",
+      "UserData"
+    ],
+    "tableCounts": {
+      "BaseItems": 28,
+      "AncestorIds": 54,
+      "LinkedChildren": 0,
+      "ItemValues": 0,
+      "ItemValuesMap": 0,
+      "Peoples": 0,
+      "PeopleBaseItemMap": 0,
+      "BaseItemImageInfos": 0,
+      "BaseItemProviders": 0,
+      "BaseItemMetadataFields": 0,
+      "MediaStreamInfos": 0,
+      "UserData": 0
+    },
+    "filesystemDomains": [
+      "userViews",
+      "metadata",
+      "libraries",
+      "collections"
+    ],
+    "statusCounts": {
+      "200": 15,
+      "500": 3
+    },
+    "processReclaimed": true
+  },
+  "projection": "All eighteen raw HTTP records are retained without field removal. All twelve recorded media/UserData tables, four filesystem domains and foreign-key checks at eighteen endpoints and three windows are verified exactly equal before retaining one full native state. Authentication setup, Users, policies and token/password tables are outside these recorded state snapshots and are not projected. Runtime copies are post-execution; the executable also matches the recorder pre-run hash. No stage acceptance."
+}

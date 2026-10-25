@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "scope": "New portable scaled-JPEG decoder candidate using the designated Skia dependency revisions. Complete original library archives and licenses are retained; generated runtime and actual compiler/source identities are supplied by a new Actions build receipt. No historical binary replacement, Native parity or release acceptance is claimed.",
+  "nativeReference": {
+    "SkiaSharp": "3.119.4",
+    "skiaRepository": "https://github.com/mono/skia",
+    "skiaCommit": "7dbfc07dd33181f84e0958afb7ee805c6c769f0b",
+    "skiaSource": "src/codec/SkJpegCodec.cpp",
+    "jpegDependency": "DEPS: third_party/externals/libjpeg-turbo",
+    "skcmsVersionSource": "modules/skcms/version.sha1"
+  },
+  "toolchainVersion": "4.0.22",
+  "archives": [
+    {
+      "id": "libjpeg-turbo",
+      "filename": "source-archives/libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+archive/927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "commit": "927aabfcd26897abb9776ecf2a6c38ea5bb52ab6",
+      "root": "",
+      "members": 305,
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1"
+    },
+    {
+      "id": "skcms",
+      "filename": "source-archives/skcms-1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "url": "https://skia.googlesource.com/skcms/+archive/1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "commit": "1323db7bd0b43b2b4d90aebc0cd4ba6409f689de",
+      "root": "",
+      "members": 343,
+      "bytes": 10038666,
+      "sha256": "3e4f1f48034717cce3cc2ef3cd58e878a22cc52a4db5de7a1a11f0234a7a5807"
+    },
+    {
+      "id": "emsdk",
+      "filename": "source-archives/emsdk-15915cad554b707837024dc2758b6a1c5b94b036.tar.gz",
+      "url": "https://codeload.github.com/emscripten-core/emsdk/tar.gz/15915cad554b707837024dc2758b6a1c5b94b036",
+      "commit": "15915cad554b707837024dc2758b6a1c5b94b036",
+      "root": "emsdk-15915cad554b707837024dc2758b6a1c5b94b036",
+      "members": 149,
+      "bytes": 208128,
+      "sha256": "b61f041e9cb38a0d439d8ad62c6c4459028348ed2c1d25d090e6fa65b629d358"
+    }
+  ],
+  "jpegCompiledSources": [
+    "jcapimin.c",
+    "jcapistd.c",
+    "jccoefct.c",
+    "jccolor.c",
+    "jcdctmgr.c",
+    "jchuff.c",
+    "jcicc.c",
+    "jcinit.c",
+    "jcmainct.c",
+    "jcmarker.c",
+    "jcmaster.c",
+    "jcomapi.c",
+    "jcparam.c",
+    "jcphuff.c",
+    "jcprepct.c",
+    "jcsample.c",
+    "jctrans.c",
+    "jdapimin.c",
+    "jdapistd.c",
+    "jdatadst.c",
+    "jdatasrc.c",
+    "jdcoefct.c",
+    "jdcolor.c",
+    "jddctmgr.c",
+    "jdhuff.c",
+    "jdicc.c",
+    "jdinput.c",
+    "jdmainct.c",
+    "jdmarker.c",
+    "jdmaster.c",
+    "jdmerge.c",
+    "jdphuff.c",
+    "jdpostct.c",
+    "jdsample.c",
+    "jdtrans.c",
+    "jerror.c",
+    "jfdctflt.c",
+    "jfdctfst.c",
+    "jfdctint.c",
+    "jidctflt.c",
+    "jidctfst.c",
+    "jidctint.c",
+    "jidctred.c",
+    "jmemmgr.c",
+    "jmemnobs.c",
+    "jpeg_nbits_table.c",
+    "jquant1.c",
+    "jquant2.c",
+    "jutils.c",
+    "jsimd_none.c"
+  ],
+  "skcmsCompiledSources": [
+    {
+      "filename": "skcms.cc",
+      "bytes": 112867,
+      "sha256": "9221f673b7caa8fbc1152fd914aa548d15294095f4930c924b244df4273a7d44"
+    },
+    {
+      "filename": "skcms.h",
+      "bytes": 18203,
+      "sha256": "baf66afedc26f54deb967c8ac70387c26d81e62be4f48ccb0c51a68f7ffa172e"
+    },
+    {
+      "filename": "skcms_internal.h",
+      "bytes": 1719,
+      "sha256": "b93465eb74f92cdd0280b09ecd512946255aa2b0c8134b3e2da01499fc7e2d14"
+    },
+    {
+      "filename": "src/Transform_inl.h",
+      "bytes": 55386,
+      "sha256": "160f90f2a2d86f418b1bda0aa9a924bfebb783010bbf362b611a533a2e303870"
+    }
+  ],
+  "recipeInputs": [
+    {
+      "role": "bridge",
+      "filename": "src/images/jpeg-codec/bridge.c",
+      "bytes": 6766,
+      "sha256": "aad456c175f8f50a8ef60111899b86e682b7b70db0606f3879b09a20149b60e8"
+    },
+    {
+      "role": "decoderReference",
+      "filename": "src/images/jpeg-codec/SkJpegCodec.reference.cpp",
+      "bytes": 55191,
+      "sha256": "beaa7ac3b5eec527d83944b750313b0896a6bf6402629f844a60cb1d38469e92"
+    },
+    {
+      "role": "sourceDependencyReference",
+      "filename": "src/images/jpeg-codec/Skia.DEPS",
+      "bytes": 9049,
+      "sha256": "a0e1e0cc4e1a9a06ab68eaf649741114dd2bc7404d290564a40bcd395740898a"
+    },
+    {
+      "role": "sourceLicense",
+      "filename": "src/images/jpeg-codec/LICENSE.Skia",
+      "bytes": 1507,
+      "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd"
+    },
+    {
+      "role": "sourceLicense",
+      "filename": "src/images/jpeg-codec/LICENSE.skcms",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "role": "sourceLicense",
+      "filename": "src/images/jpeg-codec/LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1"
+    },
+    {
+      "role": "sourceLicense",
+      "filename": "src/images/jpeg-codec/README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+    },
+    {
+      "role": "notice",
+      "filename": "src/images/jpeg-codec/NOTICE.txt",
+      "bytes": 816,
+      "sha256": "657d27677b327c75297aaa8d004101871c570ec4190544fb786a6863b138c834"
+    },
+    {
+      "role": "moduleCheck",
+      "filename": "tools/images/smoke-jpeg-codec.mjs",
+      "bytes": 2292,
+      "sha256": "29349f799134daf0338df2a7c9b9eeb3c97072cd4b26ff41272edabb2058b391"
+    },
+    {
+      "role": "buildWorkflow",
+      "filename": ".github/workflows/build-jpeg-codec.yml",
+      "bytes": 1072,
+      "sha256": "fd1825e092415d44e776f69e23182f261dfb1e15f3d95527c325ec80a010b78e"
+    },
+    {
+      "role": "incompleteDecodeReference",
+      "filename": "src/images/jpeg-codec/SkJpegDecoderMgr.reference.cpp",
+      "bytes": 5153,
+      "sha256": "0b8cade96f3b0eb5dfe36b7a56d98a67669c51156a50011ad8bf70702bcaec3d"
+    },
+    {
+      "role": "incompleteDecodeReference",
+      "filename": "src/images/jpeg-codec/SkJpegSourceMgr.reference.cpp",
+      "bytes": 17501,
+      "sha256": "806d75a1ed5c8bc53f2741411fc31b6c270ceb8ea1985219a7432f9bb5317e1f"
+    },
+    {
+      "role": "incompleteDecodeReference",
+      "filename": "src/images/jpeg-codec/SkCodec.reference.cpp",
+      "bytes": 36498,
+      "sha256": "17ca5074174fd199b7e1a6573191d638b1dfcb212186a0bb925ce09d0413dc44"
+    },
+    {
+      "role": "incompleteDecodeReference",
+      "filename": "src/images/jpeg-codec/SkSampler.reference.cpp",
+      "bytes": 2251,
+      "sha256": "5eb4a481401fd6fd7e903c98a861bd91d6f3f7e938ce0a41b78f6d53d5754d24"
+    }
+  ]
+}

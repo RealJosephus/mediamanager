@@ -1,0 +1,2830 @@
+{
+  "roots": {
+    "server": {
+      "type": {
+        "kind": "object",
+        "reference": "ServerConfiguration"
+      },
+      "element": "ServerConfiguration",
+      "defaults": {
+        "EnableMetrics": false,
+        "EnableNormalizedItemByNameIds": true,
+        "IsPortAuthorized": false,
+        "QuickConnectAvailable": true,
+        "EnableCaseSensitiveItemIds": true,
+        "DisableLiveTvChannelUserDataName": true,
+        "MetadataPath": "",
+        "PreferredMetadataLanguage": "en",
+        "MetadataCountryCode": "US",
+        "SortReplaceCharacters": [
+          ".",
+          "+",
+          "%"
+        ],
+        "SortRemoveCharacters": [
+          ",",
+          "&",
+          "-",
+          "{",
+          "}",
+          "'"
+        ],
+        "SortRemoveWords": [
+          "the",
+          "a",
+          "an"
+        ],
+        "MinResumePct": 5,
+        "MaxResumePct": 90,
+        "MinResumeDurationSeconds": 300,
+        "MinAudiobookResume": 5,
+        "MaxAudiobookResume": 5,
+        "InactiveSessionThreshold": 0,
+        "LibraryMonitorDelay": 60,
+        "LibraryUpdateDuration": 30,
+        "CacheSize": null,
+        "ImageSavingConvention": "Legacy",
+        "MetadataOptions": [
+          {
+            "ItemType": "Book",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Movie",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicVideo",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "The Open Movie Database"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [
+              "The Open Movie Database"
+            ],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Series",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicAlbum",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "TheAudioDB"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicArtist",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "TheAudioDB"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "BoxSet",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Season",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Episode",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          }
+        ],
+        "SkipDeserializationForBasicTypes": true,
+        "ServerName": "",
+        "UICulture": "en-US",
+        "SaveMetadataHidden": false,
+        "ContentTypes": [],
+        "RemoteClientBitrateLimit": 0,
+        "EnableFolderView": false,
+        "EnableGroupingMoviesIntoCollections": false,
+        "EnableGroupingShowsIntoCollections": false,
+        "DisplaySpecialsWithinSeasons": true,
+        "CodecsUsed": [],
+        "PluginRepositories": [],
+        "EnableExternalContentInSuggestions": true,
+        "ImageExtractionTimeoutMs": 0,
+        "PathSubstitutions": [],
+        "EnableSlowResponseWarning": true,
+        "SlowResponseThresholdMs": 500,
+        "CorsHosts": [
+          "*"
+        ],
+        "ActivityLogRetentionDays": 30,
+        "LibraryScanFanoutConcurrency": 0,
+        "LibraryMetadataRefreshConcurrency": 0,
+        "AllowClientLogUpload": true,
+        "DummyChapterDuration": 0,
+        "ChapterImageResolution": "MatchSource",
+        "ParallelImageEncodingLimit": 0,
+        "CastReceiverApplications": [],
+        "TrickplayOptions": {
+          "EnableHwAcceleration": false,
+          "EnableHwEncoding": false,
+          "EnableKeyFrameOnlyExtraction": false,
+          "ScanBehavior": "NonBlocking",
+          "ProcessPriority": "BelowNormal",
+          "Interval": 10000,
+          "WidthResolutions": [
+            320
+          ],
+          "TileWidth": 10,
+          "TileHeight": 10,
+          "Qscale": 4,
+          "JpegQuality": 90,
+          "ProcessThreads": 1
+        },
+        "EnableLegacyAuthorization": false,
+        "LogFileRetentionDays": 3,
+        "IsStartupWizardCompleted": false,
+        "CachePath": null,
+        "PreviousVersion": null,
+        "PreviousVersionStr": null
+      }
+    },
+    "network": {
+      "type": {
+        "kind": "object",
+        "reference": "NetworkConfiguration"
+      },
+      "element": "NetworkConfiguration",
+      "defaults": {
+        "BaseUrl": "",
+        "EnableHttps": false,
+        "RequireHttps": false,
+        "CertificatePath": "",
+        "CertificatePassword": "",
+        "InternalHttpPort": 8096,
+        "InternalHttpsPort": 8920,
+        "PublicHttpPort": 8096,
+        "PublicHttpsPort": 8920,
+        "AutoDiscovery": true,
+        "EnableUPnP": false,
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "EnableRemoteAccess": true,
+        "LocalNetworkSubnets": [],
+        "LocalNetworkAddresses": [],
+        "KnownProxies": [],
+        "IgnoreVirtualInterfaces": true,
+        "VirtualInterfaceNames": [
+          "veth"
+        ],
+        "EnablePublishedServerUriByRequest": false,
+        "PublishedServerUriBySubnet": [],
+        "RemoteIPFilter": [],
+        "IsRemoteIPFilterBlacklist": false
+      }
+    },
+    "encoding": {
+      "type": {
+        "kind": "object",
+        "reference": "EncodingOptions"
+      },
+      "element": "EncodingOptions",
+      "defaults": {
+        "EncodingThreadCount": -1,
+        "TranscodingTempPath": null,
+        "FallbackFontPath": null,
+        "EnableFallbackFont": false,
+        "EnableAudioVbr": false,
+        "DownMixAudioBoost": 2,
+        "DownMixStereoAlgorithm": "None",
+        "MaxMuxingQueueSize": 2048,
+        "EnableThrottling": false,
+        "ThrottleDelaySeconds": 180,
+        "EnableSegmentDeletion": false,
+        "SegmentKeepSeconds": 720,
+        "HardwareAccelerationType": "none",
+        "EncoderAppPath": null,
+        "EncoderAppPathDisplay": null,
+        "VaapiDevice": "/dev/dri/renderD128",
+        "QsvDevice": "",
+        "EnableTonemapping": false,
+        "EnableVppTonemapping": false,
+        "EnableVideoToolboxTonemapping": false,
+        "TonemappingAlgorithm": "bt2390",
+        "TonemappingMode": "auto",
+        "TonemappingRange": "auto",
+        "TonemappingDesat": 0,
+        "TonemappingPeak": 100,
+        "TonemappingParam": 0,
+        "VppTonemappingBrightness": 16,
+        "VppTonemappingContrast": 1,
+        "H264Crf": 23,
+        "H265Crf": 28,
+        "EncoderPreset": "auto",
+        "DeinterlaceDoubleRate": false,
+        "DeinterlaceMethod": "yadif",
+        "EnableDecodingColorDepth10Hevc": true,
+        "EnableDecodingColorDepth10Vp9": true,
+        "EnableDecodingColorDepth10HevcRext": false,
+        "EnableDecodingColorDepth12HevcRext": false,
+        "EnableEnhancedNvdecDecoder": true,
+        "PreferSystemNativeHwDecoder": true,
+        "EnableIntelLowPowerH264HwEncoder": false,
+        "EnableIntelLowPowerHevcHwEncoder": false,
+        "EnableHardwareEncoding": true,
+        "AllowHevcEncoding": false,
+        "AllowAv1Encoding": false,
+        "EnableSubtitleExtraction": true,
+        "SubtitleExtractionTimeoutMinutes": 30,
+        "HardwareDecodingCodecs": [
+          "h264",
+          "vc1"
+        ],
+        "AllowOnDemandMetadataBasedKeyframeExtractionForExtensions": [
+          "mkv"
+        ],
+        "HlsAudioSeekStrategy": "TrimCopiedAudio"
+      }
+    },
+    "metadata": {
+      "type": {
+        "kind": "object",
+        "reference": "MetadataConfiguration"
+      },
+      "element": "MetadataConfiguration",
+      "defaults": {
+        "UseFileCreationTimeForDateAdded": true
+      }
+    },
+    "branding": {
+      "type": {
+        "kind": "object",
+        "reference": "BrandingOptions"
+      },
+      "element": "BrandingOptions",
+      "defaults": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      }
+    },
+    "xbmcmetadata": {
+      "type": {
+        "kind": "object",
+        "reference": "XbmcMetadataOptions"
+      },
+      "element": "XbmcMetadataOptions",
+      "defaults": {
+        "UserId": null,
+        "ReleaseDateFormat": "yyyy-MM-dd",
+        "SaveImagePathsInNfo": true,
+        "EnablePathSubstitution": true,
+        "EnableExtraThumbsDuplication": false
+      }
+    }
+  },
+  "definitions": {
+    "ServerConfiguration": {
+      "xmlType": "ServerConfiguration",
+      "fields": {
+        "EnableMetrics": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableMetrics",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableNormalizedItemByNameIds": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableNormalizedItemByNameIds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IsPortAuthorized": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IsPortAuthorized",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "QuickConnectAvailable": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "QuickConnectAvailable",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableCaseSensitiveItemIds": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableCaseSensitiveItemIds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DisableLiveTvChannelUserDataName": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "DisableLiveTvChannelUserDataName",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MetadataPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "MetadataPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PreferredMetadataLanguage": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "PreferredMetadataLanguage",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MetadataCountryCode": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "MetadataCountryCode",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SortReplaceCharacters": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "SortReplaceCharacters",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SortRemoveCharacters": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "SortRemoveCharacters",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SortRemoveWords": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "SortRemoveWords",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MinResumePct": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MinResumePct",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MaxResumePct": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MaxResumePct",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MinResumeDurationSeconds": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MinResumeDurationSeconds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MinAudiobookResume": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MinAudiobookResume",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MaxAudiobookResume": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MaxAudiobookResume",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "InactiveSessionThreshold": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "InactiveSessionThreshold",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LibraryMonitorDelay": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "LibraryMonitorDelay",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LibraryUpdateDuration": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "LibraryUpdateDuration",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CacheSize": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "CacheSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImageSavingConvention": {
+          "type": {
+            "kind": "enum",
+            "name": "ImageSavingConvention",
+            "flags": false,
+            "members": [
+              {
+                "name": "Legacy",
+                "xml": "Legacy",
+                "value": 0
+              },
+              {
+                "name": "Compatible",
+                "xml": "Compatible",
+                "value": 1
+              }
+            ]
+          },
+          "element": "ImageSavingConvention",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MetadataOptions": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "MetadataOptions"
+            },
+            "element": "MetadataOptions",
+            "nullableItem": true
+          },
+          "element": "MetadataOptions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SkipDeserializationForBasicTypes": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SkipDeserializationForBasicTypes",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ServerName": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ServerName",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "UICulture": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "UICulture",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SaveMetadataHidden": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SaveMetadataHidden",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ContentTypes": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "NameValuePair"
+            },
+            "element": "NameValuePair",
+            "nullableItem": true
+          },
+          "element": "ContentTypes",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "RemoteClientBitrateLimit": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "RemoteClientBitrateLimit",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableFolderView": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableFolderView",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableGroupingMoviesIntoCollections": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableGroupingMoviesIntoCollections",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableGroupingShowsIntoCollections": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableGroupingShowsIntoCollections",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DisplaySpecialsWithinSeasons": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "DisplaySpecialsWithinSeasons",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CodecsUsed": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "CodecsUsed",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PluginRepositories": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "RepositoryInfo"
+            },
+            "element": "RepositoryInfo",
+            "nullableItem": true
+          },
+          "element": "PluginRepositories",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableExternalContentInSuggestions": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableExternalContentInSuggestions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImageExtractionTimeoutMs": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "ImageExtractionTimeoutMs",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PathSubstitutions": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "PathSubstitution"
+            },
+            "element": "PathSubstitution",
+            "nullableItem": true
+          },
+          "element": "PathSubstitutions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableSlowResponseWarning": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableSlowResponseWarning",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SlowResponseThresholdMs": {
+          "type": {
+            "kind": "integer",
+            "bits": 64,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "SlowResponseThresholdMs",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CorsHosts": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "CorsHosts",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ActivityLogRetentionDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": true
+          },
+          "element": "ActivityLogRetentionDays",
+          "nullable": true,
+          "defaultValue": null
+        },
+        "LibraryScanFanoutConcurrency": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "LibraryScanFanoutConcurrency",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LibraryMetadataRefreshConcurrency": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "LibraryMetadataRefreshConcurrency",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowClientLogUpload": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowClientLogUpload",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DummyChapterDuration": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "DummyChapterDuration",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ChapterImageResolution": {
+          "type": {
+            "kind": "enum",
+            "name": "ImageResolution",
+            "flags": false,
+            "members": [
+              {
+                "name": "MatchSource",
+                "xml": "MatchSource",
+                "value": 0
+              },
+              {
+                "name": "P144",
+                "xml": "P144",
+                "value": 1
+              },
+              {
+                "name": "P240",
+                "xml": "P240",
+                "value": 2
+              },
+              {
+                "name": "P360",
+                "xml": "P360",
+                "value": 3
+              },
+              {
+                "name": "P480",
+                "xml": "P480",
+                "value": 4
+              },
+              {
+                "name": "P720",
+                "xml": "P720",
+                "value": 5
+              },
+              {
+                "name": "P1080",
+                "xml": "P1080",
+                "value": 6
+              },
+              {
+                "name": "P1440",
+                "xml": "P1440",
+                "value": 7
+              },
+              {
+                "name": "P2160",
+                "xml": "P2160",
+                "value": 8
+              }
+            ]
+          },
+          "element": "ChapterImageResolution",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ParallelImageEncodingLimit": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "ParallelImageEncodingLimit",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CastReceiverApplications": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "object",
+              "reference": "CastReceiverApplication"
+            },
+            "element": "CastReceiverApplication",
+            "nullableItem": true
+          },
+          "element": "CastReceiverApplications",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TrickplayOptions": {
+          "type": {
+            "kind": "object",
+            "reference": "TrickplayOptions"
+          },
+          "element": "TrickplayOptions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableLegacyAuthorization": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableLegacyAuthorization",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LogFileRetentionDays": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "LogFileRetentionDays",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IsStartupWizardCompleted": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IsStartupWizardCompleted",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CachePath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "CachePath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PreviousVersionStr": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "PreviousVersionStr",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "LogFileRetentionDays",
+        "IsStartupWizardCompleted",
+        "CachePath",
+        "PreviousVersionStr",
+        "EnableMetrics",
+        "EnableNormalizedItemByNameIds",
+        "IsPortAuthorized",
+        "QuickConnectAvailable",
+        "EnableCaseSensitiveItemIds",
+        "DisableLiveTvChannelUserDataName",
+        "MetadataPath",
+        "PreferredMetadataLanguage",
+        "MetadataCountryCode",
+        "SortReplaceCharacters",
+        "SortRemoveCharacters",
+        "SortRemoveWords",
+        "MinResumePct",
+        "MaxResumePct",
+        "MinResumeDurationSeconds",
+        "MinAudiobookResume",
+        "MaxAudiobookResume",
+        "InactiveSessionThreshold",
+        "LibraryMonitorDelay",
+        "LibraryUpdateDuration",
+        "CacheSize",
+        "ImageSavingConvention",
+        "MetadataOptions",
+        "SkipDeserializationForBasicTypes",
+        "ServerName",
+        "UICulture",
+        "SaveMetadataHidden",
+        "ContentTypes",
+        "RemoteClientBitrateLimit",
+        "EnableFolderView",
+        "EnableGroupingMoviesIntoCollections",
+        "EnableGroupingShowsIntoCollections",
+        "DisplaySpecialsWithinSeasons",
+        "CodecsUsed",
+        "PluginRepositories",
+        "EnableExternalContentInSuggestions",
+        "ImageExtractionTimeoutMs",
+        "PathSubstitutions",
+        "EnableSlowResponseWarning",
+        "SlowResponseThresholdMs",
+        "CorsHosts",
+        "ActivityLogRetentionDays",
+        "LibraryScanFanoutConcurrency",
+        "LibraryMetadataRefreshConcurrency",
+        "AllowClientLogUpload",
+        "DummyChapterDuration",
+        "ChapterImageResolution",
+        "ParallelImageEncodingLimit",
+        "CastReceiverApplications",
+        "TrickplayOptions",
+        "EnableLegacyAuthorization"
+      ],
+      "defaults": {
+        "EnableMetrics": false,
+        "EnableNormalizedItemByNameIds": true,
+        "IsPortAuthorized": false,
+        "QuickConnectAvailable": true,
+        "EnableCaseSensitiveItemIds": true,
+        "DisableLiveTvChannelUserDataName": true,
+        "MetadataPath": "",
+        "PreferredMetadataLanguage": "en",
+        "MetadataCountryCode": "US",
+        "SortReplaceCharacters": [
+          ".",
+          "+",
+          "%"
+        ],
+        "SortRemoveCharacters": [
+          ",",
+          "&",
+          "-",
+          "{",
+          "}",
+          "'"
+        ],
+        "SortRemoveWords": [
+          "the",
+          "a",
+          "an"
+        ],
+        "MinResumePct": 5,
+        "MaxResumePct": 90,
+        "MinResumeDurationSeconds": 300,
+        "MinAudiobookResume": 5,
+        "MaxAudiobookResume": 5,
+        "InactiveSessionThreshold": 0,
+        "LibraryMonitorDelay": 60,
+        "LibraryUpdateDuration": 30,
+        "CacheSize": null,
+        "ImageSavingConvention": "Legacy",
+        "MetadataOptions": [
+          {
+            "ItemType": "Book",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Movie",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicVideo",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "The Open Movie Database"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [
+              "The Open Movie Database"
+            ],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Series",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicAlbum",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "TheAudioDB"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "MusicArtist",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [
+              "TheAudioDB"
+            ],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "BoxSet",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Season",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          },
+          {
+            "ItemType": "Episode",
+            "DisabledMetadataSavers": [],
+            "LocalMetadataReaderOrder": [],
+            "DisabledMetadataFetchers": [],
+            "MetadataFetcherOrder": [],
+            "DisabledImageFetchers": [],
+            "ImageFetcherOrder": []
+          }
+        ],
+        "SkipDeserializationForBasicTypes": true,
+        "ServerName": "",
+        "UICulture": "en-US",
+        "SaveMetadataHidden": false,
+        "ContentTypes": [],
+        "RemoteClientBitrateLimit": 0,
+        "EnableFolderView": false,
+        "EnableGroupingMoviesIntoCollections": false,
+        "EnableGroupingShowsIntoCollections": false,
+        "DisplaySpecialsWithinSeasons": true,
+        "CodecsUsed": [],
+        "PluginRepositories": [],
+        "EnableExternalContentInSuggestions": true,
+        "ImageExtractionTimeoutMs": 0,
+        "PathSubstitutions": [],
+        "EnableSlowResponseWarning": true,
+        "SlowResponseThresholdMs": 500,
+        "CorsHosts": [
+          "*"
+        ],
+        "ActivityLogRetentionDays": 30,
+        "LibraryScanFanoutConcurrency": 0,
+        "LibraryMetadataRefreshConcurrency": 0,
+        "AllowClientLogUpload": true,
+        "DummyChapterDuration": 0,
+        "ChapterImageResolution": "MatchSource",
+        "ParallelImageEncodingLimit": 0,
+        "CastReceiverApplications": [],
+        "TrickplayOptions": {
+          "EnableHwAcceleration": false,
+          "EnableHwEncoding": false,
+          "EnableKeyFrameOnlyExtraction": false,
+          "ScanBehavior": "NonBlocking",
+          "ProcessPriority": "BelowNormal",
+          "Interval": 10000,
+          "WidthResolutions": [
+            320
+          ],
+          "TileWidth": 10,
+          "TileHeight": 10,
+          "Qscale": 4,
+          "JpegQuality": 90,
+          "ProcessThreads": 1
+        },
+        "EnableLegacyAuthorization": false,
+        "LogFileRetentionDays": 3,
+        "IsStartupWizardCompleted": false,
+        "CachePath": null,
+        "PreviousVersion": null,
+        "PreviousVersionStr": null
+      }
+    },
+    "MetadataOptions": {
+      "xmlType": "MetadataOptions",
+      "fields": {
+        "ItemType": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ItemType",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DisabledMetadataSavers": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "DisabledMetadataSavers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LocalMetadataReaderOrder": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "LocalMetadataReaderOrder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DisabledMetadataFetchers": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "DisabledMetadataFetchers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MetadataFetcherOrder": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "MetadataFetcherOrder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DisabledImageFetchers": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "DisabledImageFetchers",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ImageFetcherOrder": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "ImageFetcherOrder",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "ItemType",
+        "DisabledMetadataSavers",
+        "LocalMetadataReaderOrder",
+        "DisabledMetadataFetchers",
+        "MetadataFetcherOrder",
+        "DisabledImageFetchers",
+        "ImageFetcherOrder"
+      ],
+      "defaults": {
+        "ItemType": null,
+        "DisabledMetadataSavers": [],
+        "LocalMetadataReaderOrder": [],
+        "DisabledMetadataFetchers": [],
+        "MetadataFetcherOrder": [],
+        "DisabledImageFetchers": [],
+        "ImageFetcherOrder": []
+      }
+    },
+    "NameValuePair": {
+      "xmlType": "NameValuePair",
+      "fields": {
+        "Name": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Name",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Value": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Value",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Name",
+        "Value"
+      ],
+      "defaults": {
+        "Name": null,
+        "Value": null
+      }
+    },
+    "RepositoryInfo": {
+      "xmlType": "RepositoryInfo",
+      "fields": {
+        "Name": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Name",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Url": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Url",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Enabled": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "Enabled",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Name",
+        "Url",
+        "Enabled"
+      ],
+      "defaults": {
+        "Name": null,
+        "Url": null,
+        "Enabled": true
+      }
+    },
+    "PathSubstitution": {
+      "xmlType": "PathSubstitution",
+      "fields": {
+        "From": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "From",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "To": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "To",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "From",
+        "To"
+      ],
+      "defaults": {
+        "From": "",
+        "To": ""
+      }
+    },
+    "CastReceiverApplication": {
+      "xmlType": "CastReceiverApplication",
+      "fields": {
+        "Id": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Id",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Name": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "Name",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "Id",
+        "Name"
+      ],
+      "defaults": {
+        "Id": null,
+        "Name": null
+      }
+    },
+    "TrickplayOptions": {
+      "xmlType": "TrickplayOptions",
+      "fields": {
+        "EnableHwAcceleration": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableHwAcceleration",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableHwEncoding": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableHwEncoding",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableKeyFrameOnlyExtraction": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableKeyFrameOnlyExtraction",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ScanBehavior": {
+          "type": {
+            "kind": "enum",
+            "name": "TrickplayScanBehavior",
+            "flags": false,
+            "members": [
+              {
+                "name": "Blocking",
+                "xml": "Blocking",
+                "value": 0
+              },
+              {
+                "name": "NonBlocking",
+                "xml": "NonBlocking",
+                "value": 1
+              }
+            ]
+          },
+          "element": "ScanBehavior",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ProcessPriority": {
+          "type": {
+            "kind": "enum",
+            "name": "ProcessPriorityClass",
+            "flags": false,
+            "members": [
+              {
+                "name": "Normal",
+                "xml": "Normal",
+                "value": 32
+              },
+              {
+                "name": "Idle",
+                "xml": "Idle",
+                "value": 64
+              },
+              {
+                "name": "High",
+                "xml": "High",
+                "value": 128
+              },
+              {
+                "name": "RealTime",
+                "xml": "RealTime",
+                "value": 256
+              },
+              {
+                "name": "BelowNormal",
+                "xml": "BelowNormal",
+                "value": 16384
+              },
+              {
+                "name": "AboveNormal",
+                "xml": "AboveNormal",
+                "value": 32768
+              }
+            ]
+          },
+          "element": "ProcessPriority",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Interval": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "Interval",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "WidthResolutions": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "integer",
+              "bits": 32,
+              "signed": true,
+              "nullable": false
+            },
+            "element": "int",
+            "nullableItem": false
+          },
+          "element": "WidthResolutions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TileWidth": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "TileWidth",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TileHeight": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "TileHeight",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "Qscale": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "Qscale",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "JpegQuality": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "JpegQuality",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ProcessThreads": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "ProcessThreads",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "EnableHwAcceleration",
+        "EnableHwEncoding",
+        "EnableKeyFrameOnlyExtraction",
+        "ScanBehavior",
+        "ProcessPriority",
+        "Interval",
+        "WidthResolutions",
+        "TileWidth",
+        "TileHeight",
+        "Qscale",
+        "JpegQuality",
+        "ProcessThreads"
+      ],
+      "defaults": {
+        "EnableHwAcceleration": false,
+        "EnableHwEncoding": false,
+        "EnableKeyFrameOnlyExtraction": false,
+        "ScanBehavior": "NonBlocking",
+        "ProcessPriority": "BelowNormal",
+        "Interval": 10000,
+        "WidthResolutions": [
+          320
+        ],
+        "TileWidth": 10,
+        "TileHeight": 10,
+        "Qscale": 4,
+        "JpegQuality": 90,
+        "ProcessThreads": 1
+      }
+    },
+    "NetworkConfiguration": {
+      "xmlType": "NetworkConfiguration",
+      "fields": {
+        "BaseUrl": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "BaseUrl",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableHttps": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableHttps",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "RequireHttps": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "RequireHttps",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CertificatePath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "CertificatePath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CertificatePassword": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "CertificatePassword",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "InternalHttpPort": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "InternalHttpPort",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "InternalHttpsPort": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "InternalHttpsPort",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PublicHttpPort": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "PublicHttpPort",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PublicHttpsPort": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "PublicHttpsPort",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AutoDiscovery": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AutoDiscovery",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableUPnP": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableUPnP",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableIPv4": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableIPv4",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableIPv6": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableIPv6",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableRemoteAccess": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableRemoteAccess",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LocalNetworkSubnets": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "LocalNetworkSubnets",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "LocalNetworkAddresses": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "LocalNetworkAddresses",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "KnownProxies": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "KnownProxies",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IgnoreVirtualInterfaces": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IgnoreVirtualInterfaces",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "VirtualInterfaceNames": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "VirtualInterfaceNames",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnablePublishedServerUriByRequest": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnablePublishedServerUriByRequest",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PublishedServerUriBySubnet": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "PublishedServerUriBySubnet",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "RemoteIPFilter": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "RemoteIPFilter",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "IsRemoteIPFilterBlacklist": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "IsRemoteIPFilterBlacklist",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "BaseUrl",
+        "EnableHttps",
+        "RequireHttps",
+        "CertificatePath",
+        "CertificatePassword",
+        "InternalHttpPort",
+        "InternalHttpsPort",
+        "PublicHttpPort",
+        "PublicHttpsPort",
+        "AutoDiscovery",
+        "EnableUPnP",
+        "EnableIPv4",
+        "EnableIPv6",
+        "EnableRemoteAccess",
+        "LocalNetworkSubnets",
+        "LocalNetworkAddresses",
+        "KnownProxies",
+        "IgnoreVirtualInterfaces",
+        "VirtualInterfaceNames",
+        "EnablePublishedServerUriByRequest",
+        "PublishedServerUriBySubnet",
+        "RemoteIPFilter",
+        "IsRemoteIPFilterBlacklist"
+      ],
+      "defaults": {
+        "BaseUrl": "",
+        "EnableHttps": false,
+        "RequireHttps": false,
+        "CertificatePath": "",
+        "CertificatePassword": "",
+        "InternalHttpPort": 8096,
+        "InternalHttpsPort": 8920,
+        "PublicHttpPort": 8096,
+        "PublicHttpsPort": 8920,
+        "AutoDiscovery": true,
+        "EnableUPnP": false,
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "EnableRemoteAccess": true,
+        "LocalNetworkSubnets": [],
+        "LocalNetworkAddresses": [],
+        "KnownProxies": [],
+        "IgnoreVirtualInterfaces": true,
+        "VirtualInterfaceNames": [
+          "veth"
+        ],
+        "EnablePublishedServerUriByRequest": false,
+        "PublishedServerUriBySubnet": [],
+        "RemoteIPFilter": [],
+        "IsRemoteIPFilterBlacklist": false
+      }
+    },
+    "EncodingOptions": {
+      "xmlType": "EncodingOptions",
+      "fields": {
+        "EncodingThreadCount": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "EncodingThreadCount",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TranscodingTempPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "TranscodingTempPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "FallbackFontPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "FallbackFontPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableFallbackFont": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableFallbackFont",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableAudioVbr": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableAudioVbr",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DownMixAudioBoost": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "DownMixAudioBoost",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DownMixStereoAlgorithm": {
+          "type": {
+            "kind": "enum",
+            "name": "DownMixStereoAlgorithms",
+            "flags": false,
+            "members": [
+              {
+                "name": "None",
+                "xml": "None",
+                "value": 0
+              },
+              {
+                "name": "Dave750",
+                "xml": "Dave750",
+                "value": 1
+              },
+              {
+                "name": "NightmodeDialogue",
+                "xml": "NightmodeDialogue",
+                "value": 2
+              },
+              {
+                "name": "Rfc7845",
+                "xml": "Rfc7845",
+                "value": 3
+              },
+              {
+                "name": "Ac4",
+                "xml": "Ac4",
+                "value": 4
+              }
+            ]
+          },
+          "element": "DownMixStereoAlgorithm",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "MaxMuxingQueueSize": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "MaxMuxingQueueSize",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableThrottling": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableThrottling",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ThrottleDelaySeconds": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "ThrottleDelaySeconds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableSegmentDeletion": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableSegmentDeletion",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SegmentKeepSeconds": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "SegmentKeepSeconds",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "HardwareAccelerationType": {
+          "type": {
+            "kind": "enum",
+            "name": "HardwareAccelerationType",
+            "flags": false,
+            "members": [
+              {
+                "name": "none",
+                "xml": "none",
+                "value": 0
+              },
+              {
+                "name": "amf",
+                "xml": "amf",
+                "value": 1
+              },
+              {
+                "name": "qsv",
+                "xml": "qsv",
+                "value": 2
+              },
+              {
+                "name": "nvenc",
+                "xml": "nvenc",
+                "value": 3
+              },
+              {
+                "name": "v4l2m2m",
+                "xml": "v4l2m2m",
+                "value": 4
+              },
+              {
+                "name": "vaapi",
+                "xml": "vaapi",
+                "value": 5
+              },
+              {
+                "name": "videotoolbox",
+                "xml": "videotoolbox",
+                "value": 6
+              },
+              {
+                "name": "rkmpp",
+                "xml": "rkmpp",
+                "value": 7
+              }
+            ]
+          },
+          "element": "HardwareAccelerationType",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EncoderAppPath": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "EncoderAppPath",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EncoderAppPathDisplay": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "EncoderAppPathDisplay",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "VaapiDevice": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "VaapiDevice",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "QsvDevice": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "QsvDevice",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableTonemapping": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableTonemapping",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableVppTonemapping": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableVppTonemapping",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableVideoToolboxTonemapping": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableVideoToolboxTonemapping",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingAlgorithm": {
+          "type": {
+            "kind": "enum",
+            "name": "TonemappingAlgorithm",
+            "flags": false,
+            "members": [
+              {
+                "name": "none",
+                "xml": "none",
+                "value": 0
+              },
+              {
+                "name": "clip",
+                "xml": "clip",
+                "value": 1
+              },
+              {
+                "name": "linear",
+                "xml": "linear",
+                "value": 2
+              },
+              {
+                "name": "gamma",
+                "xml": "gamma",
+                "value": 3
+              },
+              {
+                "name": "reinhard",
+                "xml": "reinhard",
+                "value": 4
+              },
+              {
+                "name": "hable",
+                "xml": "hable",
+                "value": 5
+              },
+              {
+                "name": "mobius",
+                "xml": "mobius",
+                "value": 6
+              },
+              {
+                "name": "bt2390",
+                "xml": "bt2390",
+                "value": 7
+              }
+            ]
+          },
+          "element": "TonemappingAlgorithm",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingMode": {
+          "type": {
+            "kind": "enum",
+            "name": "TonemappingMode",
+            "flags": false,
+            "members": [
+              {
+                "name": "auto",
+                "xml": "auto",
+                "value": 0
+              },
+              {
+                "name": "max",
+                "xml": "max",
+                "value": 1
+              },
+              {
+                "name": "rgb",
+                "xml": "rgb",
+                "value": 2
+              },
+              {
+                "name": "lum",
+                "xml": "lum",
+                "value": 3
+              },
+              {
+                "name": "itp",
+                "xml": "itp",
+                "value": 4
+              }
+            ]
+          },
+          "element": "TonemappingMode",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingRange": {
+          "type": {
+            "kind": "enum",
+            "name": "TonemappingRange",
+            "flags": false,
+            "members": [
+              {
+                "name": "auto",
+                "xml": "auto",
+                "value": 0
+              },
+              {
+                "name": "tv",
+                "xml": "tv",
+                "value": 1
+              },
+              {
+                "name": "pc",
+                "xml": "pc",
+                "value": 2
+              }
+            ]
+          },
+          "element": "TonemappingRange",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingDesat": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "TonemappingDesat",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingPeak": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "TonemappingPeak",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "TonemappingParam": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "TonemappingParam",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "VppTonemappingBrightness": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "VppTonemappingBrightness",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "VppTonemappingContrast": {
+          "type": {
+            "kind": "number",
+            "single": false
+          },
+          "element": "VppTonemappingContrast",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "H264Crf": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "H264Crf",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "H265Crf": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "H265Crf",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EncoderPreset": {
+          "type": {
+            "kind": "enum",
+            "name": "EncoderPreset",
+            "flags": false,
+            "members": [
+              {
+                "name": "auto",
+                "xml": "auto",
+                "value": 0
+              },
+              {
+                "name": "placebo",
+                "xml": "placebo",
+                "value": 1
+              },
+              {
+                "name": "veryslow",
+                "xml": "veryslow",
+                "value": 2
+              },
+              {
+                "name": "slower",
+                "xml": "slower",
+                "value": 3
+              },
+              {
+                "name": "slow",
+                "xml": "slow",
+                "value": 4
+              },
+              {
+                "name": "medium",
+                "xml": "medium",
+                "value": 5
+              },
+              {
+                "name": "fast",
+                "xml": "fast",
+                "value": 6
+              },
+              {
+                "name": "faster",
+                "xml": "faster",
+                "value": 7
+              },
+              {
+                "name": "veryfast",
+                "xml": "veryfast",
+                "value": 8
+              },
+              {
+                "name": "superfast",
+                "xml": "superfast",
+                "value": 9
+              },
+              {
+                "name": "ultrafast",
+                "xml": "ultrafast",
+                "value": 10
+              }
+            ]
+          },
+          "element": "EncoderPreset",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DeinterlaceDoubleRate": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "DeinterlaceDoubleRate",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "DeinterlaceMethod": {
+          "type": {
+            "kind": "enum",
+            "name": "DeinterlaceMethod",
+            "flags": false,
+            "members": [
+              {
+                "name": "yadif",
+                "xml": "yadif",
+                "value": 0
+              },
+              {
+                "name": "bwdif",
+                "xml": "bwdif",
+                "value": 1
+              }
+            ]
+          },
+          "element": "DeinterlaceMethod",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableDecodingColorDepth10Hevc": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableDecodingColorDepth10Hevc",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableDecodingColorDepth10Vp9": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableDecodingColorDepth10Vp9",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableDecodingColorDepth10HevcRext": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableDecodingColorDepth10HevcRext",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableDecodingColorDepth12HevcRext": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableDecodingColorDepth12HevcRext",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableEnhancedNvdecDecoder": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableEnhancedNvdecDecoder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "PreferSystemNativeHwDecoder": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "PreferSystemNativeHwDecoder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableIntelLowPowerH264HwEncoder": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableIntelLowPowerH264HwEncoder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableIntelLowPowerHevcHwEncoder": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableIntelLowPowerHevcHwEncoder",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableHardwareEncoding": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableHardwareEncoding",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowHevcEncoding": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowHevcEncoding",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowAv1Encoding": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "AllowAv1Encoding",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableSubtitleExtraction": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableSubtitleExtraction",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SubtitleExtractionTimeoutMinutes": {
+          "type": {
+            "kind": "integer",
+            "bits": 32,
+            "signed": true,
+            "nullable": false
+          },
+          "element": "SubtitleExtractionTimeoutMinutes",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "HardwareDecodingCodecs": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "HardwareDecodingCodecs",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "AllowOnDemandMetadataBasedKeyframeExtractionForExtensions": {
+          "type": {
+            "kind": "array",
+            "item": {
+              "kind": "string"
+            },
+            "element": "string",
+            "nullableItem": true
+          },
+          "element": "AllowOnDemandMetadataBasedKeyframeExtractionForExtensions",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "HlsAudioSeekStrategy": {
+          "type": {
+            "kind": "enum",
+            "name": "HlsAudioSeekStrategy",
+            "flags": false,
+            "members": [
+              {
+                "name": "TrimCopiedAudio",
+                "xml": "TrimCopiedAudio",
+                "value": 0
+              },
+              {
+                "name": "TranscodeAudio",
+                "xml": "TranscodeAudio",
+                "value": 1
+              }
+            ]
+          },
+          "element": "HlsAudioSeekStrategy",
+          "nullable": false,
+          "defaultValue": "TrimCopiedAudio"
+        }
+      },
+      "order": [
+        "EncodingThreadCount",
+        "TranscodingTempPath",
+        "FallbackFontPath",
+        "EnableFallbackFont",
+        "EnableAudioVbr",
+        "DownMixAudioBoost",
+        "DownMixStereoAlgorithm",
+        "MaxMuxingQueueSize",
+        "EnableThrottling",
+        "ThrottleDelaySeconds",
+        "EnableSegmentDeletion",
+        "SegmentKeepSeconds",
+        "HardwareAccelerationType",
+        "EncoderAppPath",
+        "EncoderAppPathDisplay",
+        "VaapiDevice",
+        "QsvDevice",
+        "EnableTonemapping",
+        "EnableVppTonemapping",
+        "EnableVideoToolboxTonemapping",
+        "TonemappingAlgorithm",
+        "TonemappingMode",
+        "TonemappingRange",
+        "TonemappingDesat",
+        "TonemappingPeak",
+        "TonemappingParam",
+        "VppTonemappingBrightness",
+        "VppTonemappingContrast",
+        "H264Crf",
+        "H265Crf",
+        "EncoderPreset",
+        "DeinterlaceDoubleRate",
+        "DeinterlaceMethod",
+        "EnableDecodingColorDepth10Hevc",
+        "EnableDecodingColorDepth10Vp9",
+        "EnableDecodingColorDepth10HevcRext",
+        "EnableDecodingColorDepth12HevcRext",
+        "EnableEnhancedNvdecDecoder",
+        "PreferSystemNativeHwDecoder",
+        "EnableIntelLowPowerH264HwEncoder",
+        "EnableIntelLowPowerHevcHwEncoder",
+        "EnableHardwareEncoding",
+        "AllowHevcEncoding",
+        "AllowAv1Encoding",
+        "EnableSubtitleExtraction",
+        "SubtitleExtractionTimeoutMinutes",
+        "HardwareDecodingCodecs",
+        "AllowOnDemandMetadataBasedKeyframeExtractionForExtensions",
+        "HlsAudioSeekStrategy"
+      ],
+      "defaults": {
+        "EncodingThreadCount": -1,
+        "TranscodingTempPath": null,
+        "FallbackFontPath": null,
+        "EnableFallbackFont": false,
+        "EnableAudioVbr": false,
+        "DownMixAudioBoost": 2,
+        "DownMixStereoAlgorithm": "None",
+        "MaxMuxingQueueSize": 2048,
+        "EnableThrottling": false,
+        "ThrottleDelaySeconds": 180,
+        "EnableSegmentDeletion": false,
+        "SegmentKeepSeconds": 720,
+        "HardwareAccelerationType": "none",
+        "EncoderAppPath": null,
+        "EncoderAppPathDisplay": null,
+        "VaapiDevice": "/dev/dri/renderD128",
+        "QsvDevice": "",
+        "EnableTonemapping": false,
+        "EnableVppTonemapping": false,
+        "EnableVideoToolboxTonemapping": false,
+        "TonemappingAlgorithm": "bt2390",
+        "TonemappingMode": "auto",
+        "TonemappingRange": "auto",
+        "TonemappingDesat": 0,
+        "TonemappingPeak": 100,
+        "TonemappingParam": 0,
+        "VppTonemappingBrightness": 16,
+        "VppTonemappingContrast": 1,
+        "H264Crf": 23,
+        "H265Crf": 28,
+        "EncoderPreset": "auto",
+        "DeinterlaceDoubleRate": false,
+        "DeinterlaceMethod": "yadif",
+        "EnableDecodingColorDepth10Hevc": true,
+        "EnableDecodingColorDepth10Vp9": true,
+        "EnableDecodingColorDepth10HevcRext": false,
+        "EnableDecodingColorDepth12HevcRext": false,
+        "EnableEnhancedNvdecDecoder": true,
+        "PreferSystemNativeHwDecoder": true,
+        "EnableIntelLowPowerH264HwEncoder": false,
+        "EnableIntelLowPowerHevcHwEncoder": false,
+        "EnableHardwareEncoding": true,
+        "AllowHevcEncoding": false,
+        "AllowAv1Encoding": false,
+        "EnableSubtitleExtraction": true,
+        "SubtitleExtractionTimeoutMinutes": 30,
+        "HardwareDecodingCodecs": [
+          "h264",
+          "vc1"
+        ],
+        "AllowOnDemandMetadataBasedKeyframeExtractionForExtensions": [
+          "mkv"
+        ],
+        "HlsAudioSeekStrategy": "TrimCopiedAudio"
+      }
+    },
+    "MetadataConfiguration": {
+      "xmlType": "MetadataConfiguration",
+      "fields": {
+        "UseFileCreationTimeForDateAdded": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "UseFileCreationTimeForDateAdded",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "UseFileCreationTimeForDateAdded"
+      ],
+      "defaults": {
+        "UseFileCreationTimeForDateAdded": true
+      }
+    },
+    "BrandingOptions": {
+      "xmlType": "BrandingOptions",
+      "fields": {
+        "LoginDisclaimer": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "LoginDisclaimer",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "CustomCss": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "CustomCss",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SplashscreenEnabled": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SplashscreenEnabled",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SplashscreenLocation": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "SplashscreenLocation",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "LoginDisclaimer",
+        "CustomCss",
+        "SplashscreenEnabled",
+        "SplashscreenLocation"
+      ],
+      "defaults": {
+        "LoginDisclaimer": null,
+        "CustomCss": null,
+        "SplashscreenEnabled": false,
+        "SplashscreenLocation": null
+      }
+    },
+    "XbmcMetadataOptions": {
+      "xmlType": "XbmcMetadataOptions",
+      "fields": {
+        "UserId": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "UserId",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "ReleaseDateFormat": {
+          "type": {
+            "kind": "string"
+          },
+          "element": "ReleaseDateFormat",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "SaveImagePathsInNfo": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "SaveImagePathsInNfo",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnablePathSubstitution": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnablePathSubstitution",
+          "nullable": false,
+          "defaultValue": null
+        },
+        "EnableExtraThumbsDuplication": {
+          "type": {
+            "kind": "boolean"
+          },
+          "element": "EnableExtraThumbsDuplication",
+          "nullable": false,
+          "defaultValue": null
+        }
+      },
+      "order": [
+        "UserId",
+        "ReleaseDateFormat",
+        "SaveImagePathsInNfo",
+        "EnablePathSubstitution",
+        "EnableExtraThumbsDuplication"
+      ],
+      "defaults": {
+        "UserId": null,
+        "ReleaseDateFormat": "yyyy-MM-dd",
+        "SaveImagePathsInNfo": true,
+        "EnablePathSubstitution": true,
+        "EnableExtraThumbsDuplication": false
+      }
+    }
+  },
+  "hostDefaults": {
+    "ServerConfiguration": {
+      "CacheSize": "processors-times-100"
+    }
+  }
+}

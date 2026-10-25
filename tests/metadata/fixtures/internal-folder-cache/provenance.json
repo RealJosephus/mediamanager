@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "recordedAt": "2026-10-05T04:28:14.824Z",
+  "sourceFilesSha256": "0302adbd1ef66f3d2c30518fe0605c5c8098d59784e03fdac722c355070c9ad7",
+  "nativeRecordSha256": "75b1dc9bd90c01702490d03385832d684ea03ec3c150275211058dec16572973",
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/internal-folder-cache/native.json",
+      "sha256": "401e3eabce46e3de0c53932ac17b28be49b61221f95c81a2789ffd23fbfab945"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/internal-folder-cache/input.json",
+      "sha256": "e17b62fd383ee42685662c70a2095f47b67786288e69aa10e5d460b47b6667db"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/internal-folder-cache/Program.cs",
+      "sha256": "403df221cf81861102de6f0f07e31e228ab8385fe76260dae7ed01e330766aaa"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/internal-folder-cache/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sources": {
+    "MediaBrowser.Controller/Entities/AggregateFolder.cs": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+    "MediaBrowser.Controller/Entities/UserRootFolder.cs": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+    "Emby.Server.Implementations/Playlists/PlaylistsFolder.cs": "c621e1afdc79c1b641642cac5777964b0aa9e7464989055f5d3344e1ca87ce56",
+    "MediaBrowser.Controller/Entities/BaseItem.cs": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+    "MediaBrowser.Controller/Entities/Folder.cs": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+    "MediaBrowser.Controller/IO/FileData.cs": "0df3e4678a1ef3ed21e7e74b1f3f7d828fc62104d6d394d2c3ca555fcdb41184",
+    "MediaBrowser.Controller/Library/ItemResolveArgs.cs": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+    "Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+    "Emby.Server.Implementations/Library/LibraryManager.cs": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+    "MediaBrowser.Providers/Manager/MetadataService.cs": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+    "MediaBrowser.Providers/Folders/FolderMetadataService.cs": "a3bf9c0c0e652dc00244b56f1a2ef7d02ac5b5746ae0b45652e05322fc452640",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs": "c34fe8a47769180d7e0792d16fc535c83f76d66189a56af13c5071b4bfa2c013",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+  },
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

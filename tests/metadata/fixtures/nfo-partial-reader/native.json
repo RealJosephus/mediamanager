@@ -1,0 +1,2522 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "frozenJellyfinHead": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+  "inputSha256": "7eb3f76ee22b6c2ac4c97855f12807a5984e8cea270338dc9cc175b9519e8db9",
+  "boundary": "Actual BaseNfoParser, MovieNfoParser, EpisodeNfoParser, SeriesNfoParser, SeasonNfoParser and SeriesNfoSeasonParser over exact temporary file bytes. Dependencies are controlled DispatchProxy instances. HasMetadata models BaseNfoProvider by becoming true only after Fetch returns. Partial item/people/image state and IUserManager/IUserDataManager call order remain observable after exceptions. UserData persistence itself is not a real database transaction.",
+  "uncovered": [
+    "local image filesystem acceptance and logging",
+    "all scalar, ratings and fileinfo child permutations",
+    "real user-data database transactions and emitted events",
+    "provider path discovery and file disappearance/IO catch behavior",
+    "all release-date formats and every external-id provider"
+  ],
+  "results": [
+    {
+      "name": "movie malformed xml is swallowed",
+      "type": "Movie",
+      "raw": {
+        "bytes": 44,
+        "sha256": "ac171db82736cb7915244cf6616cd69b6a6a941c0f693eda792cbf0cae4642fa",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxicm9rZW4\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "video malformed xml is swallowed",
+      "type": "Video",
+      "raw": {
+        "bytes": 44,
+        "sha256": "ac171db82736cb7915244cf6616cd69b6a6a941c0f693eda792cbf0cae4642fa",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxicm9rZW4\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Video",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "music video malformed xml is swallowed",
+      "type": "MusicVideo",
+      "raw": {
+        "bytes": 54,
+        "sha256": "8ef798c64f0029bb8c508e08e26121ff72388cf9bea608fbd0ef2fca5dfbacb8",
+        "base64": "PG11c2ljdmlkZW8\u002BPHRpdGxlPkJlZm9yZTwvdGl0bGU\u002BPGJyb2tlbj48L211c2ljdmlkZW8\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "MusicVideo",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": [],
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "series malformed xml is swallowed",
+      "type": "Series",
+      "raw": {
+        "bytes": 46,
+        "sha256": "f184893e3ec7150f0a9ef1dc26af2519a74bff00971558048079f0c923b1ba24",
+        "base64": "PHR2c2hvdz48dGl0bGU\u002BQmVmb3JlPC90aXRsZT48YnJva2VuPjwvdHZzaG93Pg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Series",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "series season malformed xml is swallowed",
+      "type": "SeriesSeason",
+      "raw": {
+        "bytes": 69,
+        "sha256": "aa690dde8dcef72d1fba9cbde5ae9c17b2ec4a4267a2180fd139e0eabfc259dd",
+        "base64": "PHR2c2hvdz48bmFtZWRzZWFzb24gbnVtYmVyPSIyIj5CZWZvcmU8L25hbWVkc2Vhc29uPjxicm9rZW4\u002BPC90dnNob3c\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Season",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": 2,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode malformed xml is swallowed",
+      "type": "Episode",
+      "raw": {
+        "bytes": 62,
+        "sha256": "b4ede812ee89c53ca8a6d59705e9a9e8035766a7002262152a07112a3601d4ce",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxicm9rZW4\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Episode",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "season malformed xml propagates",
+      "type": "Season",
+      "raw": {
+        "bytes": 46,
+        "sha256": "f9d094cea3fefffbcb7d2f465d6882050c42568ac7f0049309bb4b525a62537e",
+        "base64": "PHNlYXNvbj48dGl0bGU\u002BQmVmb3JlPC90aXRsZT48YnJva2VuPjwvc2Vhc29uPg=="
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Season",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "album malformed xml propagates",
+      "type": "MusicAlbum",
+      "raw": {
+        "bytes": 44,
+        "sha256": "a3513672ab49987e1bb40f2ee8edd93d511fbeb404c329d76b96bb2aea75e997",
+        "base64": "PGFsYnVtPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxicm9rZW4\u002BPC9hbGJ1bT4="
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "MusicAlbum",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "artist malformed xml propagates",
+      "type": "MusicArtist",
+      "raw": {
+        "bytes": 46,
+        "sha256": "3ab0024739b462de7749d9c897b901c0a5670820071904ea0136cef5e1b62bed",
+        "base64": "PGFydGlzdD48dGl0bGU\u002BQmVmb3JlPC90aXRsZT48YnJva2VuPjwvYXJ0aXN0Pg=="
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "MusicArtist",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "scalar commits prior title but not final plot",
+      "type": "Movie",
+      "raw": {
+        "bytes": 53,
+        "sha256": "eaecbab8d95739e7701e40fd8a008f5964cb98eb97d33a8610c06768bbbb4eee",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxwbG90PkFmdGVyPC9wbG90Pjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "final scalar title is not committed",
+      "type": "Movie",
+      "raw": {
+        "bytes": 35,
+        "sha256": "6a0d385f4e97e354443484cf4065033daba6aef8f1886825e3f426cd6e7385a4",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "nameUtf16": [
+          73,
+          110,
+          105,
+          116,
+          105,
+          97,
+          108
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "complete actor and remote image commit before truncation",
+      "type": "Movie",
+      "raw": {
+        "bytes": 168,
+        "sha256": "90b767a61a2cf2dc8b85c425f8bb490acf960dbb80b00b433ccbca3229fad01f",
+        "base64": "PG1vdmllPjxhY3Rvcj48bmFtZT5Db21wbGV0ZSBBY3RvcjwvbmFtZT48cm9sZT5MZWFkPC9yb2xlPjxvcmRlcj43PC9vcmRlcj48L2FjdG9yPjx0aHVtYiBhc3BlY3Q9InBvc3RlciI\u002BaHR0cHM6Ly9leGFtcGxlLnRlc3QvcG9zdGVyLmpwZzwvdGh1bWI\u002BPHBsb3Q\u002BVGFpbDwvcGxvdD48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [
+        {
+          "Name": "Complete Actor",
+          "Type": "Actor",
+          "Role": "Lead",
+          "SortOrder": 7,
+          "ImageUrl": null
+        }
+      ],
+      "remoteImages": [
+        {
+          "Url": "https://example.test/poster.jpg",
+          "Type": "Primary"
+        }
+      ],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "partial actor is not committed",
+      "type": "Movie",
+      "raw": {
+        "bytes": 48,
+        "sha256": "bce7c4bf1355601a12ea16c0261fc95217457c993d8266c82792e61d0942a020",
+        "base64": "PG1vdmllPjxhY3Rvcj48bmFtZT5QYXJ0aWFsIEFjdG9yPC9uYW1lPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "id attributes commit before content and imdb",
+      "type": "Movie",
+      "raw": {
+        "bytes": 62,
+        "sha256": "f5ee0be2b285193e94213c7d38e693020ec91718447b24b5209df07f951daa43",
+        "base64": "PG1vdmllPjxpZCBUTURCPSIxMDEiIFRWREI9IjIwMiIgSU1EQj0idHQwMDAwMzAzIj48L2lkPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {
+          "Tmdb": "101",
+          "Tvdb": "202"
+        },
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "set attribute commits before inner content",
+      "type": "Movie",
+      "raw": {
+        "bytes": 65,
+        "sha256": "b386df8c6e662d76f0d756cda6105e1ce97d4109263f6f5520262dca15f7ae15",
+        "base64": "PG1vdmllPjxzZXQgdG1kYmNvbGlkPSI0MDQiPjxuYW1lPlBhcnRpYWwgU2V0PC9uYW1lPjwvc2V0Pjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {
+          "TmdbCollection": "404"
+        },
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "unique id waits for scalar completion",
+      "type": "Movie",
+      "raw": {
+        "bytes": 50,
+        "sha256": "cc276eecddb8d90083399ac02c1469c0437e85def4d23bdda42da6350335b704",
+        "base64": "PG1vdmllPjx1bmlxdWVpZCB0eXBlPSJ0bWRiIj41MDU8L3VuaXF1ZWlkPjxicm9rZW4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode no closing block retains parsed prefix",
+      "type": "Episode",
+      "raw": {
+        "bytes": 81,
+        "sha256": "ad03a472b4bc922aa3f5f4cb4c58d0db9749f87fc01071a5c4389769bb104f48",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjM8L2VwaXNvZGU\u002BPHRpdGxlPkJlZm9yZTwvdGl0bGU\u002BPHBsb3Q\u002BVGFpbDwvcGxvdD48YnJva2Vu"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Episode",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": 3,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode one complete block ignores trailing partial block",
+      "type": "Episode",
+      "raw": {
+        "bytes": 126,
+        "sha256": "f0802a38f3e5ec202784af34401f8c952e41e543a3747d2ac55c50ab351c03b0",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjQ8L2VwaXNvZGU\u002BPHRpdGxlPkNvbXBsZXRlPC90aXRsZT48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT41PC9lcGlzb2RlPjx0aXRsZT5JZ25vcmVk"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Episode",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Complete",
+        "nameUtf16": [
+          67,
+          111,
+          109,
+          112,
+          108,
+          101,
+          116,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": 4,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode bad later complete block aborts all merge",
+      "type": "Episode",
+      "raw": {
+        "bytes": 146,
+        "sha256": "dec8ffe9ef3737ba2cc71bb0fc781b7723ee63e0f0f83e2bff6069e24b9941a5",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlNlY29uZDwvdGl0bGU\u002BPC9lcGlzb2RlZGV0YWlscz48ZXBpc29kZWRldGFpbHM\u002BPGVwaXNvZGU\u002BMTwvZXBpc29kZT48dGl0bGU\u002BQnJva2VuPC9iYWQ\u002BPC9lcGlzb2RlZGV0YWlscz4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Episode",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Initial",
+        "nameUtf16": [
+          73,
+          110,
+          105,
+          116,
+          105,
+          97,
+          108
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "episode complete blocks sort then merge",
+      "type": "Episode",
+      "raw": {
+        "bytes": 193,
+        "sha256": "dcde4c2e0eb797b5f120e37659fa796fe80d86cd86c2a38c2ef0cf1d9510a1bb",
+        "base64": "PGVwaXNvZGVkZXRhaWxzPjxlcGlzb2RlPjI8L2VwaXNvZGU\u002BPHRpdGxlPlNlY29uZDwvdGl0bGU\u002BPHBsb3Q\u002BT3ZlcnZpZXcgMjwvcGxvdD48L2VwaXNvZGVkZXRhaWxzPjxlcGlzb2RlZGV0YWlscz48ZXBpc29kZT4xPC9lcGlzb2RlPjx0aXRsZT5GaXJzdDwvdGl0bGU\u002BPHBsb3Q\u002BT3ZlcnZpZXcgMTwvcGxvdD48L2VwaXNvZGVkZXRhaWxzPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Episode",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "First / Second",
+        "nameUtf16": [
+          70,
+          105,
+          114,
+          115,
+          116,
+          32,
+          47,
+          32,
+          83,
+          101,
+          99,
+          111,
+          110,
+          100
+        ],
+        "OriginalTitle": "",
+        "Overview": "Overview 1 / Overview 2",
+        "overviewUtf16": [
+          79,
+          118,
+          101,
+          114,
+          118,
+          105,
+          101,
+          119,
+          32,
+          49,
+          32,
+          47,
+          32,
+          79,
+          118,
+          101,
+          114,
+          118,
+          105,
+          101,
+          119,
+          32,
+          50
+        ],
+        "IndexNumber": 1,
+        "indexNumberEnd": 2,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "movie undeclared entity is swallowed after prefix",
+      "type": "Movie",
+      "raw": {
+        "bytes": 58,
+        "sha256": "1eb871bf378888df2191832a8c188bd13fd204eba7e3d37adf0a610d85c4998d",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmU8L3RpdGxlPjxwbG90PiZtaXNzaW5nOzwvcGxvdD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "season undeclared entity propagates",
+      "type": "Season",
+      "raw": {
+        "bytes": 60,
+        "sha256": "a331788c3426089f8297235e1aa86c015b7ab0c3381c5b9abfe8ffe511aecc56",
+        "base64": "PHNlYXNvbj48dGl0bGU\u002BQmVmb3JlPC90aXRsZT48cGxvdD4mbWlzc2luZzs8L3Bsb3Q\u002BPC9zZWFzb24\u002B"
+      },
+      "exception": "XmlException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Season",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": null,
+        "height": null,
+        "hasSubtitles": null,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "literal nul is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 42,
+        "sha256": "b063736b3e8fe670752cffa3be2040aec8c4274a38c1f3f037e412cc353a00d6",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmUAQWZ0ZXI8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "numeric soh reference reaches title",
+      "type": "Movie",
+      "raw": {
+        "bytes": 46,
+        "sha256": "749d0a62ddf64d4d84d1e41cb9b34fa590c9953268830642e93b8a8833f5b8fd",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmUmI3gxO0FmdGVyPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before\u0001After",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101,
+          1,
+          65,
+          102,
+          116,
+          101,
+          114
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "numeric nul reference reaches title",
+      "type": "Movie",
+      "raw": {
+        "bytes": 45,
+        "sha256": "67e54c8813f1dd307253307b88ab027db44ea27168ba46d2d3e28ba040a208d6",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmUmIzA7QWZ0ZXI8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before\u0000After",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101,
+          0,
+          65,
+          102,
+          116,
+          101,
+          114
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "numeric surrogate reference reaches title",
+      "type": "Movie",
+      "raw": {
+        "bytes": 49,
+        "sha256": "79d3f682e3de6d03fe316b9904118ee7140114c71bc1bed54dbb07f5dd8265b6",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmUmI3hEODAwO0FmdGVyPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before\uFFFDAfter",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101,
+          55296,
+          65,
+          102,
+          116,
+          101,
+          114
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "numeric value above unicode range is rejected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 51,
+        "sha256": "4efd3ed2af5d7e4721df9454ae665d5704552344ff2d338b02ac3914fc2e28d6",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmUmI3gxMTAwMDA7QWZ0ZXI8L3RpdGxlPjwvbW92aWU\u002B"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "malformed utf8 uses replacement fallback",
+      "type": "Movie",
+      "raw": {
+        "bytes": 43,
+        "sha256": "e0b406ca7bed074e6f23a291211e4db754a19279399c9b575838cf2c2bb59260",
+        "base64": "PG1vdmllPjx0aXRsZT5CZWZvcmXDKEFmdGVyPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Before\uFFFD(After",
+        "nameUtf16": [
+          66,
+          101,
+          102,
+          111,
+          114,
+          101,
+          65533,
+          40,
+          65,
+          102,
+          116,
+          101,
+          114
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf8 bom is detected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 44,
+        "sha256": "f81d9d6850903b5fc3da9b0deef0cb0fc0db258849a2a83c1f2719394bc2ccbc",
+        "base64": "77u/PG1vdmllPjx0aXRsZT5VVEY4IOS4reaWhzwvdGl0bGU\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "UTF8 \u4E2D\u6587",
+        "nameUtf16": [
+          85,
+          84,
+          70,
+          56,
+          32,
+          20013,
+          25991
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf16 little endian bom is detected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 82,
+        "sha256": "658bfdabbec97c4377a769585c90aed3aa6f6e3ac9bac937d431e3ee75f81b59",
+        "base64": "//48AG0AbwB2AGkAZQA\u002BADwAdABpAHQAbABlAD4AVQBUAEYAMQA2AEwARQAgAC1Oh2U8AC8AdABpAHQAbABlAD4APAAvAG0AbwB2AGkAZQA\u002BAA=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "UTF16LE \u4E2D\u6587",
+        "nameUtf16": [
+          85,
+          84,
+          70,
+          49,
+          54,
+          76,
+          69,
+          32,
+          20013,
+          25991
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf16 big endian bom is detected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 82,
+        "sha256": "1ac48d0ffe6e66821262666711bfa155c14bf58e313329f802c86ad70fb7497d",
+        "base64": "/v8APABtAG8AdgBpAGUAPgA8AHQAaQB0AGwAZQA\u002BAFUAVABGADEANgBCAEUAIE4tZYcAPAAvAHQAaQB0AGwAZQA\u002BADwALwBtAG8AdgBpAGUAPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "UTF16BE \u4E2D\u6587",
+        "nameUtf16": [
+          85,
+          84,
+          70,
+          49,
+          54,
+          66,
+          69,
+          32,
+          20013,
+          25991
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf32 little endian bom is detected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 164,
+        "sha256": "fdbb6d4134fb03aff658f70dea2cb45eafb110c1913b32acf871ff09e788ea98",
+        "base64": "//4AADwAAABtAAAAbwAAAHYAAABpAAAAZQAAAD4AAAA8AAAAdAAAAGkAAAB0AAAAbAAAAGUAAAA\u002BAAAAVQAAAFQAAABGAAAAMwAAADIAAABMAAAARQAAACAAAAAtTgAAh2UAADwAAAAvAAAAdAAAAGkAAAB0AAAAbAAAAGUAAAA\u002BAAAAPAAAAC8AAABtAAAAbwAAAHYAAABpAAAAZQAAAD4AAAA="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "UTF32LE \u4E2D\u6587",
+        "nameUtf16": [
+          85,
+          84,
+          70,
+          51,
+          50,
+          76,
+          69,
+          32,
+          20013,
+          25991
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf32 big endian bom is detected",
+      "type": "Movie",
+      "raw": {
+        "bytes": 164,
+        "sha256": "42b93341369ce169b6f9cd0ba39f979a9ee6e4475a1d226804602a4b1af29151",
+        "base64": "AAD\u002B/wAAADwAAABtAAAAbwAAAHYAAABpAAAAZQAAAD4AAAA8AAAAdAAAAGkAAAB0AAAAbAAAAGUAAAA\u002BAAAAVQAAAFQAAABGAAAAMwAAADIAAABCAAAARQAAACAAAE4tAABlhwAAADwAAAAvAAAAdAAAAGkAAAB0AAAAbAAAAGUAAAA\u002BAAAAPAAAAC8AAABtAAAAbwAAAHYAAABpAAAAZQAAAD4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "UTF32BE \u4E2D\u6587",
+        "nameUtf16": [
+          85,
+          84,
+          70,
+          51,
+          50,
+          66,
+          69,
+          32,
+          20013,
+          25991
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "utf16 without bom is treated as utf8",
+      "type": "Movie",
+      "raw": {
+        "bytes": 72,
+        "sha256": "42a6a57b4c869ccff1e89d484ebbfee85c8dbbab3bd0d80290af25e87a27f3e9",
+        "base64": "PABtAG8AdgBpAGUAPgA8AHQAaQB0AGwAZQA\u002BAE4AbwAgAEIATwBNADwALwB0AGkAdABsAGUAPgA8AC8AbQBvAHYAaQBlAD4A"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "xml declaration does not reinterpret decoded text",
+      "type": "Movie",
+      "raw": {
+        "bytes": 80,
+        "sha256": "c0564c8f6f3404c5d422c143ca63fe6df94d9d66afaa0729fb40aa9a33268c36",
+        "base64": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTE2Ij8\u002BPG1vdmllPjx0aXRsZT5EZWNsYXJhdGlvbjwvdGl0bGU\u002BPC9tb3ZpZT4="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Declaration",
+        "nameUtf16": [
+          68,
+          101,
+          99,
+          108,
+          97,
+          114,
+          97,
+          116,
+          105,
+          111,
+          110
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "movie trailing provider urls are parsed before body",
+      "type": "Movie",
+      "raw": {
+        "bytes": 84,
+        "sha256": "58a769103384f70514fb2220054f9192ba6b7867cbee0f92fbcff49ae9310598",
+        "base64": "PG1vdmllPjx0aXRsZT5Cb2R5PC90aXRsZT48L21vdmllPiBodHRwczovL3d3dy50aGVtb3ZpZWRiLm9yZy9tb3ZpZS8zMDI4NyB0dDEyMzQ1Njc4"
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": "Body",
+        "nameUtf16": [
+          66,
+          111,
+          100,
+          121
+        ],
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {
+          "Imdb": "tt12345678",
+          "Tmdb": "30287"
+        },
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "movie provider urls without closing xml skip body",
+      "type": "Movie",
+      "raw": {
+        "bytes": 49,
+        "sha256": "7da509c9f2d31d09be14c42edc99b90d595112a90f47ed36c9948d0e2af66f3f",
+        "base64": "aHR0cHM6Ly93d3cudGhlbW92aWVkYi5vcmcvbW92aWUvMzAyODggdHQ4NzY1NDMyMQ=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {
+          "Imdb": "tt87654321",
+          "Tmdb": "30288"
+        },
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [],
+      "userData": {
+        "current": {
+          "Played": false,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "empty item id mutates cached userdata but does not save",
+      "type": "Movie",
+      "raw": {
+        "bytes": 106,
+        "sha256": "24957dddb2103f9d18be0cc7a9c2fccfc9ed2f59f62ef2615a3d834e1346a35b",
+        "base64": "PG1vdmllPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPGxhc3RwbGF5ZWQ\u002BMjAyNS0wMS0wMiAwMzowNDowNTwvbGFzdHBsYXllZD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        "persisted": null
+      }
+    },
+    {
+      "name": "existing item id saves userdata sequentially with none token",
+      "type": "Movie",
+      "raw": {
+        "bytes": 106,
+        "sha256": "24957dddb2103f9d18be0cc7a9c2fccfc9ed2f59f62ef2615a3d834e1346a35b",
+        "base64": "PG1vdmllPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPGxhc3RwbGF5ZWQ\u002BMjAyNS0wMS0wMiAwMzowNDowNTwvbGFzdHBsYXllZD48L21vdmllPg=="
+      },
+      "exception": null,
+      "hasMetadata": true,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 2,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 3,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": "2025-01-02T03:04:05.0000000Z"
+        }
+      }
+    },
+    {
+      "name": "cancellation after first userdata save stops before second node",
+      "type": "Movie",
+      "raw": {
+        "bytes": 88,
+        "sha256": "2d7d93f23b3e512833537accd22a2b18a762317884579240a2e48fbd84e803ca",
+        "base64": "PG1vdmllPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPHRpdGxlPk5vdCByZWFjaGVkPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": "OperationCanceledException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      }
+    },
+    {
+      "name": "second userdata save failure preserves first successful call",
+      "type": "Movie",
+      "raw": {
+        "bytes": 88,
+        "sha256": "2d7d93f23b3e512833537accd22a2b18a762317884579240a2e48fbd84e803ca",
+        "base64": "PG1vdmllPjx3YXRjaGVkPnRydWU8L3dhdGNoZWQ\u002BPHBsYXljb3VudD4yPC9wbGF5Y291bnQ\u002BPHRpdGxlPk5vdCByZWFjaGVkPC90aXRsZT48L21vdmllPg=="
+      },
+      "exception": "IOException",
+      "hasMetadata": false,
+      "item": {
+        "runtimeType": "Movie",
+        "id": "20000000-0000-0000-0000-000000000001",
+        "Name": null,
+        "nameUtf16": null,
+        "OriginalTitle": null,
+        "Overview": null,
+        "overviewUtf16": null,
+        "IndexNumber": null,
+        "indexNumberEnd": null,
+        "ParentIndexNumber": null,
+        "ProductionYear": null,
+        "CommunityRating": null,
+        "CriticRating": null,
+        "runTimeTicks": null,
+        "PreferredMetadataLanguage": null,
+        "PreferredMetadataCountryCode": null,
+        "providers": {},
+        "collectionName": null,
+        "seriesName": null,
+        "width": 0,
+        "height": 0,
+        "hasSubtitles": false,
+        "artists": null,
+        "album": null
+      },
+      "people": [],
+      "remoteImages": [],
+      "localImages": [],
+      "calls": [
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": false,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 1,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "user",
+          "id": "10000000-0000-0000-0000-000000000001"
+        },
+        {
+          "action": "data",
+          "value": {
+            "Played": true,
+            "PlayCount": 0,
+            "lastPlayedDate": null
+          }
+        },
+        {
+          "action": "save",
+          "attempt": 2,
+          "reason": "Import",
+          "tokenCanBeCanceled": false,
+          "tokenIsCancellationRequested": false,
+          "value": {
+            "Played": true,
+            "PlayCount": 2,
+            "lastPlayedDate": null
+          }
+        }
+      ],
+      "userData": {
+        "current": {
+          "Played": true,
+          "PlayCount": 2,
+          "lastPlayedDate": null
+        },
+        "persisted": {
+          "Played": true,
+          "PlayCount": 0,
+          "lastPlayedDate": null
+        }
+      }
+    }
+  ]
+}

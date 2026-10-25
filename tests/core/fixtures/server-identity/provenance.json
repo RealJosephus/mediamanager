@@ -1,0 +1,151 @@
+{
+  "inputSha256": "89319125677621ddd9672b194abf2b7282aa7fd5f2e2cec57050398a65304cfe",
+  "nativeSha256": "439834543b8076d07b16f0aa82c1d51eccf9bfde46e21e09eb5b6c1fa1aabbf9",
+  "rawRecording": "D:/mediamanager-validation/20261015-release-server-identity-native-1/native.json",
+  "sources": [
+    {
+      "filename": "Emby.Server.Implementations/Devices/DeviceId.cs",
+      "sha256": "dacd88ddccf0885ca7885fd0db823083158952a8e666bb9bcce3fe23b3899f26",
+      "designatedSourceMatchesBuildCopy": true
+    },
+    {
+      "filename": "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
+      "sha256": "0ff750057a65384694dfb7de4c3539a0b4b859b53c80b3df6c371cb93a05f7e4",
+      "designatedSourceMatchesBuildCopy": true
+    },
+    {
+      "filename": "Emby.Server.Implementations/ServerApplicationPaths.cs",
+      "sha256": "7d01aafc1a2bc8f1d87d51b1feefa9280fc072e64a64311c0e603852a8f5852d",
+      "designatedSourceMatchesBuildCopy": true
+    }
+  ],
+  "sourcesStable": true,
+  "buildSource": "D:/mediamanager-validation/20261005/jellyfin-baseline/source",
+  "oracleSources": [
+    {
+      "filename": "D:\\mediamanager\\tests\\core\\fixtures\\server-identity\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 495,
+      "sha256": "5ed92a85e7848b44ffe00822e8ca6fd3246e71ababbc9474ab2228381c82fa8b"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\core\\fixtures\\server-identity\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2892,
+      "sha256": "5bca78781c55f3722cbc94e02efee900d9eccb9998c11e00d19bff61018da413"
+    }
+  ],
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager/tests/core/fixtures/server-identity/input.json",
+      "D:\\mediamanager-validation\\20261015-release-server-identity-native-1/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "assemblies": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "37e69176ea615e90e2b240a2d70beb7e463cc2e87326d7eec06d1c2df88bc383"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    }
+  ],
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false,
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261015-release-server-identity-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 14336,
+    "sha256": "37e69176ea615e90e2b240a2d70beb7e463cc2e87326d7eec06d1c2df88bc383"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "repeat": {
+    "filename": "D:/mediamanager-validation/20261015-release-server-identity-native-2/native.json",
+    "sha256": "599a44a76916497e5ecb8a53b6d23eacf043e0dd2d7f52c4badafbe3b3f0b816",
+    "comparison": "tests/core/fixtures/server-identity/observations.js",
+    "comparisonSha256": "8366e710b95e8d6e314403eb37c9b537357fea1ef9f49d7a6df2a9dba351e64d"
+  }
+}

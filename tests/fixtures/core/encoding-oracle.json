@@ -1,0 +1,42 @@
+[
+  {
+    "xml": "",
+    "accepted": true,
+    "EnableSegmentDeletion": false,
+    "SegmentKeepSeconds": 720
+  },
+  {
+    "xml": "\u003CEnableSegmentDeletion\u003Etrue\u003C/EnableSegmentDeletion\u003E\u003CSegmentKeepSeconds\u003E\u002B042\u003C/SegmentKeepSeconds\u003E",
+    "accepted": true,
+    "EnableSegmentDeletion": true,
+    "SegmentKeepSeconds": 42
+  },
+  {
+    "xml": "\u003CEnableSegmentDeletion\u003E0\u003C/EnableSegmentDeletion\u003E\u003CSegmentKeepSeconds\u003E-1\u003C/SegmentKeepSeconds\u003E",
+    "accepted": true,
+    "EnableSegmentDeletion": false,
+    "SegmentKeepSeconds": -1
+  },
+  {
+    "xml": "\u003CEnableSegmentDeletion\u003E1\u003C/EnableSegmentDeletion\u003E\u003CSegmentKeepSeconds\u003E2147483647\u003C/SegmentKeepSeconds\u003E",
+    "accepted": true,
+    "EnableSegmentDeletion": true,
+    "SegmentKeepSeconds": 2147483647
+  },
+  {
+    "xml": "\u003CEnableSegmentDeletion\u003ETrue\u003C/EnableSegmentDeletion\u003E",
+    "accepted": false
+  },
+  {
+    "xml": "\u003CSegmentKeepSeconds\u003E2147483648\u003C/SegmentKeepSeconds\u003E",
+    "accepted": false
+  },
+  {
+    "xml": "\u003CSegmentKeepSeconds\u003E5.0\u003C/SegmentKeepSeconds\u003E",
+    "accepted": false
+  },
+  {
+    "xml": "\u003CSegmentKeepSeconds/\u003E",
+    "accepted": false
+  }
+]

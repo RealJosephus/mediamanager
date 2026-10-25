@@ -1,0 +1,29 @@
+{
+  "referencePackage": { "id": "BDInfo", "version": "0.8.0", "commit": "40d2c5be76f68096f7277b706ccaf23395ee6e6e" },
+  "clips": [
+    { "id": "00001", "streams": [
+      { "pid": 4113, "type": 2, "format": 3, "rate": 4 }
+    ] },
+    { "id": "00002", "streams": [
+      { "pid": 4352, "type": 129, "layout": 3, "rate": 1, "language": "eng" },
+      { "pid": 4113, "type": 2, "format": 3, "rate": 4 },
+      { "pid": 4608, "type": 144, "language": "fra" },
+      { "pid": 4864, "type": 146, "language": "jpn" }
+    ] },
+    { "id": "00003", "streams": [
+      { "pid": 4113, "type": 2, "format": 3, "rate": 4 }
+    ] }
+  ],
+  "playlists": [
+    { "id": "00000", "items": [{ "clip": "00001", "in": 0, "out": 90000 }], "marks": [{ "item": 0, "time": 0 }] },
+    { "id": "00001", "items": [
+      { "clip": "00001", "in": 22500, "out": 90000, "angles": ["00003"] },
+      { "clip": "00002", "in": 0, "out": 90000 }
+    ], "marks": [{ "item": 0, "time": 22500 }, { "item": 1, "time": 0 }, { "item": 1, "time": 67500 }] },
+    { "id": "00002", "items": [
+      { "clip": "00002", "in": 0, "out": 90000 },
+      { "clip": "00002", "in": 0, "out": 90000 },
+      { "clip": "00002", "in": 0, "out": 90000 }
+    ], "marks": [] }
+  ]
+}

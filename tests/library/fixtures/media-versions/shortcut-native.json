@@ -1,0 +1,170 @@
+{
+  "source": "D:/jellyfin current workspace via tests/library/fixtures/media-versions/Oracle.csproj",
+  "results": [
+    {
+      "name": "shortcut-https",
+      "urls": [],
+      "sources": [
+        {
+          "Protocol": "Http",
+          "Id": "c0000000000000000000000000000001",
+          "Path": "https://example.invalid/video.mkv",
+          "Type": "Default",
+          "Container": "strm",
+          "Name": "Remote Shortcut",
+          "IsRemote": true,
+          "ETag": "543b6ca4c9f21c87d81daf7a932499c0",
+          "ReadAtNativeFramerate": false,
+          "IgnoreDts": false,
+          "IgnoreIndex": false,
+          "GenPtsInput": false,
+          "SupportsTranscoding": true,
+          "SupportsDirectStream": true,
+          "SupportsDirectPlay": true,
+          "IsInfiniteStream": false,
+          "UseMostCompatibleTranscodingProfile": false,
+          "RequiresOpening": false,
+          "RequiresClosing": false,
+          "RequiresLooping": false,
+          "SupportsProbing": true,
+          "VideoType": "VideoFile",
+          "MediaStreams": [
+            {
+              "VideoRange": "SDR",
+              "VideoRangeType": "SDR",
+              "AudioSpatialFormat": "None",
+              "DisplayTitle": "SDR",
+              "IsInterlaced": false,
+              "IsDefault": false,
+              "IsForced": false,
+              "IsHearingImpaired": false,
+              "IsOriginal": false,
+              "Width": 1920,
+              "Type": "Video",
+              "Index": 0,
+              "IsExternal": false,
+              "IsTextSubtitleStream": false,
+              "SupportsExternalStream": false
+            }
+          ],
+          "MediaAttachments": [],
+          "Formats": [],
+          "RequiredHttpHeaders": {},
+          "TranscodingSubProtocol": "http",
+          "HasSegments": false
+        }
+      ],
+      "count": 1
+    },
+    {
+      "name": "shortcut-local-target",
+      "urls": [],
+      "sources": [
+        {
+          "Protocol": "File",
+          "Id": "c0000000000000000000000000000002",
+          "Path": "Z:\\Library\\Shortcuts\\Local Shortcut.strm",
+          "Type": "Default",
+          "Container": "strm",
+          "Name": "Local Shortcut",
+          "IsRemote": false,
+          "ETag": "543b6ca4c9f21c87d81daf7a932499c0",
+          "ReadAtNativeFramerate": false,
+          "IgnoreDts": false,
+          "IgnoreIndex": false,
+          "GenPtsInput": false,
+          "SupportsTranscoding": true,
+          "SupportsDirectStream": true,
+          "SupportsDirectPlay": true,
+          "IsInfiniteStream": false,
+          "UseMostCompatibleTranscodingProfile": false,
+          "RequiresOpening": false,
+          "RequiresClosing": false,
+          "RequiresLooping": false,
+          "SupportsProbing": true,
+          "VideoType": "VideoFile",
+          "MediaStreams": [
+            {
+              "VideoRange": "SDR",
+              "VideoRangeType": "SDR",
+              "AudioSpatialFormat": "None",
+              "DisplayTitle": "SDR",
+              "IsInterlaced": false,
+              "IsDefault": false,
+              "IsForced": false,
+              "IsHearingImpaired": false,
+              "IsOriginal": false,
+              "Width": 1280,
+              "Type": "Video",
+              "Index": 0,
+              "IsExternal": false,
+              "IsTextSubtitleStream": false,
+              "SupportsExternalStream": false
+            }
+          ],
+          "MediaAttachments": [],
+          "Formats": [],
+          "RequiredHttpHeaders": {},
+          "TranscodingSubProtocol": "http",
+          "HasSegments": false
+        }
+      ],
+      "count": 1
+    },
+    {
+      "name": "shortcut-http-m3u8",
+      "urls": [],
+      "sources": [
+        {
+          "Protocol": "Http",
+          "Id": "c0000000000000000000000000000003",
+          "Path": "http://example.invalid/live.m3u8",
+          "Type": "Default",
+          "Container": "strm",
+          "Name": "Playlist Shortcut",
+          "IsRemote": true,
+          "ETag": "543b6ca4c9f21c87d81daf7a932499c0",
+          "ReadAtNativeFramerate": false,
+          "IgnoreDts": false,
+          "IgnoreIndex": false,
+          "GenPtsInput": false,
+          "SupportsTranscoding": true,
+          "SupportsDirectStream": false,
+          "SupportsDirectPlay": true,
+          "IsInfiniteStream": false,
+          "UseMostCompatibleTranscodingProfile": false,
+          "RequiresOpening": false,
+          "RequiresClosing": false,
+          "RequiresLooping": false,
+          "SupportsProbing": true,
+          "VideoType": "VideoFile",
+          "MediaStreams": [
+            {
+              "VideoRange": "SDR",
+              "VideoRangeType": "SDR",
+              "AudioSpatialFormat": "None",
+              "DisplayTitle": "SDR",
+              "IsInterlaced": false,
+              "IsDefault": false,
+              "IsForced": false,
+              "IsHearingImpaired": false,
+              "IsOriginal": false,
+              "Width": 640,
+              "Type": "Video",
+              "Index": 0,
+              "IsExternal": false,
+              "IsTextSubtitleStream": false,
+              "SupportsExternalStream": false
+            }
+          ],
+          "MediaAttachments": [],
+          "Formats": [],
+          "RequiredHttpHeaders": {},
+          "TranscodingSubProtocol": "http",
+          "HasSegments": false
+        }
+      ],
+      "count": 1
+    }
+  ]
+}

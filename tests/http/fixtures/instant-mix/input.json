@@ -1,0 +1,581 @@
+{
+  "items": [
+    {
+      "id": 10,
+      "type": "Folder",
+      "name": "Folder source",
+      "genres": [
+        "Ambient"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "Audio",
+      "name": "Rock track",
+      "genres": [
+        "Rock"
+      ],
+      "parent": 10
+    },
+    {
+      "id": 12,
+      "type": "Audio",
+      "name": "Jazz track",
+      "genres": [
+        "Jazz"
+      ],
+      "parent": 10
+    },
+    {
+      "id": 13,
+      "type": "Book",
+      "name": "Ignored book",
+      "genres": [
+        "Drama"
+      ],
+      "parent": 10
+    },
+    {
+      "id": 14,
+      "type": "AudioBook",
+      "name": "Ignored folder audiobook",
+      "genres": [
+        "Novel"
+      ],
+      "parent": 10
+    },
+    {
+      "id": 15,
+      "type": "Folder",
+      "name": "Nested folder",
+      "genres": [],
+      "parent": 10,
+      "links": [
+        18
+      ]
+    },
+    {
+      "id": 16,
+      "type": "Audio",
+      "name": "Pop track",
+      "genres": [
+        "Pop"
+      ],
+      "parent": 15
+    },
+    {
+      "id": 17,
+      "type": "Folder",
+      "name": "Shared folder",
+      "genres": [],
+      "parent": 15
+    },
+    {
+      "id": 18,
+      "type": "Audio",
+      "name": "Cafe track",
+      "genres": [
+        "Café"
+      ],
+      "parent": 17
+    },
+    {
+      "id": 19,
+      "type": "Movie",
+      "name": "Ignored movie",
+      "genres": [
+        "Blocked"
+      ],
+      "parent": 10
+    },
+    {
+      "id": 20,
+      "type": "Playlist",
+      "name": "Playlist source",
+      "genres": [
+        "Rock",
+        "Blocked",
+        "ROCK",
+        "Café",
+        "Cafe"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "MusicAlbum",
+      "name": "Album source",
+      "genres": [
+        "Café",
+        "CAFE",
+        " cafe ",
+        "Classical"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "MusicArtist",
+      "name": "Artist source",
+      "genres": [
+        "Rock"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "MusicGenre",
+      "name": "Jazz",
+      "genres": [
+        "Rock"
+      ]
+    },
+    {
+      "id": 24,
+      "type": "Movie",
+      "name": "Movie source",
+      "genres": [
+        "Rock"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "AudioBook",
+      "name": "Audiobook source",
+      "genres": [
+        "Novel"
+      ]
+    },
+    {
+      "id": 26,
+      "type": "Audio",
+      "name": "No genre source",
+      "genres": []
+    },
+    {
+      "id": 27,
+      "type": "Audio",
+      "name": "Failed genre source",
+      "genres": [
+        "Blocked"
+      ]
+    },
+    {
+      "id": 28,
+      "type": "MusicGenre",
+      "name": "Ghost",
+      "genres": []
+    },
+    {
+      "id": 30,
+      "type": "Folder",
+      "name": "Cycle source",
+      "genres": [],
+      "links": [
+        31
+      ]
+    },
+    {
+      "id": 31,
+      "type": "Folder",
+      "name": "Cycle child",
+      "genres": [],
+      "parent": 30,
+      "links": [
+        30,
+        18
+      ]
+    },
+    {
+      "id": 32,
+      "type": "Audio",
+      "name": "Cycle track",
+      "genres": [
+        "Cycle"
+      ],
+      "parent": 31
+    },
+    {
+      "id": 33,
+      "type": "Folder",
+      "name": "Books physical folder",
+      "genres": []
+    },
+    {
+      "id": 34,
+      "type": "Audio",
+      "name": "Book view audio",
+      "genres": [
+        "Novel"
+      ],
+      "parent": 33
+    },
+    {
+      "id": 35,
+      "type": "AudioBook",
+      "name": "Book view audiobook",
+      "genres": [
+        "Novel"
+      ],
+      "parent": 33
+    },
+    {
+      "id": 36,
+      "type": "Book",
+      "name": "Book view incompatible book",
+      "genres": [
+        "Drama"
+      ],
+      "parent": 33
+    },
+    {
+      "id": 37,
+      "type": "UserView",
+      "name": "Books view",
+      "genres": [
+        "Ambient"
+      ],
+      "displayParent": 33
+    },
+    {
+      "id": 38,
+      "type": "Audio",
+      "name": "Ambient track",
+      "genres": [
+        "Ambient"
+      ]
+    },
+    {
+      "id": 39,
+      "type": "Audio",
+      "name": "Classical track",
+      "genres": [
+        "Classical"
+      ]
+    },
+    {
+      "id": 40,
+      "type": "MusicAlbum",
+      "name": "No genre album",
+      "genres": []
+    },
+    {
+      "id": 41,
+      "type": "MusicAlbum",
+      "name": "Nonmatching album",
+      "genres": [
+        "Ghost"
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "name": "Songs source",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000011/InstantMix"
+    },
+    {
+      "name": "Albums source",
+      "path": "/Albums/ac310000-0000-0000-0000-000000000021/InstantMix"
+    },
+    {
+      "name": "Artists source",
+      "path": "/Artists/ac310000-0000-0000-0000-000000000022/InstantMix"
+    },
+    {
+      "name": "Items source",
+      "path": "/Items/ac310000-0000-0000-0000-000000000025/InstantMix"
+    },
+    {
+      "name": "Playlists source",
+      "path": "/Playlists/ac310000-0000-0000-0000-000000000020/InstantMix"
+    },
+    {
+      "name": "generic item 10",
+      "path": "/Items/ac310000-0000-0000-0000-000000000010/InstantMix"
+    },
+    {
+      "name": "generic item 23",
+      "path": "/Items/ac310000-0000-0000-0000-000000000023/InstantMix"
+    },
+    {
+      "name": "generic item 24",
+      "path": "/Items/ac310000-0000-0000-0000-000000000024/InstantMix"
+    },
+    {
+      "name": "generic item 26",
+      "path": "/Items/ac310000-0000-0000-0000-000000000026/InstantMix"
+    },
+    {
+      "name": "generic item 27",
+      "path": "/Items/ac310000-0000-0000-0000-000000000027/InstantMix"
+    },
+    {
+      "name": "generic item 28",
+      "path": "/Items/ac310000-0000-0000-0000-000000000028/InstantMix"
+    },
+    {
+      "name": "generic item 30",
+      "path": "/Items/ac310000-0000-0000-0000-000000000030/InstantMix"
+    },
+    {
+      "name": "generic item 37",
+      "path": "/Items/ac310000-0000-0000-0000-000000000037/InstantMix"
+    },
+    {
+      "name": "generic item 40",
+      "path": "/Items/ac310000-0000-0000-0000-000000000040/InstantMix"
+    },
+    {
+      "name": "generic item 41",
+      "path": "/Items/ac310000-0000-0000-0000-000000000041/InstantMix"
+    },
+    {
+      "name": "song alias accepts album",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000021/InstantMix"
+    },
+    {
+      "name": "album alias accepts song",
+      "path": "/Albums/ac310000-0000-0000-0000-000000000011/InstantMix"
+    },
+    {
+      "name": "playlist wrong type",
+      "path": "/Playlists/ac310000-0000-0000-0000-000000000011/InstantMix"
+    },
+    {
+      "name": "missing source",
+      "path": "/Items/ac310000-0000-0000-0000-000000000999/InstantMix"
+    },
+    {
+      "name": "empty source id",
+      "path": "/Items/00000000-0000-0000-0000-000000000000/InstantMix"
+    },
+    {
+      "name": "invalid source id",
+      "path": "/Items/invalid/InstantMix"
+    },
+    {
+      "name": "genre name",
+      "path": "/MusicGenres/Rock/InstantMix"
+    },
+    {
+      "name": "genre name preserves surrounding whitespace",
+      "path": "/MusicGenres/%20Rock%20/InstantMix"
+    },
+    {
+      "name": "genre lookup failure uses empty selector",
+      "path": "/MusicGenres/Blocked/InstantMix"
+    },
+    {
+      "name": "genre name nonmatching selector",
+      "path": "/MusicGenres/Ghost/InstantMix"
+    },
+    {
+      "name": "genre lookup reuses curated name",
+      "path": "/MusicGenres/Rock/InstantMix",
+      "curated": true
+    },
+    {
+      "name": "artist id alias",
+      "path": "/Artists/InstantMix?Id=ac310000-0000-0000-0000-000000000022"
+    },
+    {
+      "name": "genre id alias",
+      "path": "/MusicGenres/InstantMix?Id=ac310000-0000-0000-0000-000000000023"
+    },
+    {
+      "name": "artist alias generic type",
+      "path": "/Artists/InstantMix?Id=ac310000-0000-0000-0000-000000000025"
+    },
+    {
+      "name": "genre alias generic type",
+      "path": "/MusicGenres/InstantMix?Id=ac310000-0000-0000-0000-000000000021"
+    },
+    {
+      "name": "missing query id",
+      "path": "/Artists/InstantMix"
+    },
+    {
+      "name": "empty query id",
+      "path": "/MusicGenres/InstantMix?Id="
+    },
+    {
+      "name": "empty guid query id",
+      "path": "/Artists/InstantMix?Id=00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "name": "invalid query id",
+      "path": "/MusicGenres/InstantMix?Id=bad"
+    },
+    {
+      "name": "limit 0",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=0"
+    },
+    {
+      "name": "limit -1",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=-1"
+    },
+    {
+      "name": "limit 1",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=1"
+    },
+    {
+      "name": "limit 200",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=200"
+    },
+    {
+      "name": "limit 201",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=201"
+    },
+    {
+      "name": "limit 2147483647",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=2147483647"
+    },
+    {
+      "name": "invalid limit",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=bad"
+    },
+    {
+      "name": "limit overflow",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=2147483648"
+    },
+    {
+      "name": "empty limit",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit="
+    },
+    {
+      "name": "empty flags",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImages=&EnableUserData=&ImageTypeLimit="
+    },
+    {
+      "name": "invalid image flag",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImages=bad"
+    },
+    {
+      "name": "invalid user data flag",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableUserData=2"
+    },
+    {
+      "name": "invalid image limit",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?ImageTypeLimit=bad"
+    },
+    {
+      "name": "negative image limit",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?ImageTypeLimit=-1"
+    },
+    {
+      "name": "empty user id",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId="
+    },
+    {
+      "name": "empty guid user id",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId=00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "name": "invalid user id",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId=bad"
+    },
+    {
+      "name": "missing selected user",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId=ac310000-0000-0000-0000-000000000999"
+    },
+    {
+      "name": "dto options",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Fields=Overview,Genres,SortName&EnableImages=false&EnableUserData=false&ImageTypeLimit=1&EnableImageTypes=Primary,Backdrop"
+    },
+    {
+      "name": "invalid comma enums",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Fields=garbage,Overview&EnableImageTypes=garbage,Primary"
+    },
+    {
+      "name": "repeated fields",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Fields=Overview,Genres&Fields=SortName"
+    },
+    {
+      "name": "numeric fields",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Fields=19,123"
+    },
+    {
+      "name": "unknown parameters",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?StartIndex=2&EnableTotalRecordCount=false&Unexpected=yes"
+    },
+    {
+      "name": "repeated limit first value",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?Limit=1&Limit=0"
+    },
+    {
+      "name": "whitespace booleans",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImages=%20true%20"
+    },
+    {
+      "name": "undefined numeric image type",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImageTypes=123"
+    },
+    {
+      "name": "negative numeric image type",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImageTypes=-1"
+    },
+    {
+      "name": "mixed known and numeric image types",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?EnableImageTypes=0,123"
+    },
+    {
+      "name": "administrator selects reader",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId=ac310000-0000-0000-0000-000000000002"
+    },
+    {
+      "name": "reader own request",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix",
+      "reader": true
+    },
+    {
+      "name": "reader selects administrator forbidden",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix?UserId=ac310000-0000-0000-0000-000000000001",
+      "reader": true
+    },
+    {
+      "name": "api key no selected user song",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix",
+      "apiKey": true
+    },
+    {
+      "name": "api key no selected user folder",
+      "path": "/Items/ac310000-0000-0000-0000-000000000010/InstantMix",
+      "apiKey": true
+    },
+    {
+      "name": "api key no selected user view",
+      "path": "/Items/ac310000-0000-0000-0000-000000000037/InstantMix",
+      "apiKey": true
+    },
+    {
+      "name": "api key explicit reader folder",
+      "path": "/Items/ac310000-0000-0000-0000-000000000010/InstantMix?UserId=ac310000-0000-0000-0000-000000000002",
+      "apiKey": true
+    },
+    {
+      "name": "anonymous",
+      "path": "/Songs/ac310000-0000-0000-0000-000000000025/InstantMix",
+      "anonymous": true
+    },
+    {
+      "name": "warm album retains lookup genres after repository replacement",
+      "path": "/Albums/ac310000-0000-0000-0000-000000000021/InstantMix",
+      "warmSource": 21
+    },
+    {
+      "name": "warm album remains a source after persistence-only deletion",
+      "path": "/Albums/ac310000-0000-0000-0000-000000000021/InstantMix",
+      "warmSource": 21,
+      "removeWarmSource": true
+    },
+    {
+      "name": "warm artist retains type after repository replacement",
+      "path": "/Artists/ac310000-0000-0000-0000-000000000022/InstantMix",
+      "warmSource": 22,
+      "replaceWarmType": true
+    },
+    {
+      "name": "warm playlist retains typed route after repository replacement",
+      "path": "/Playlists/ac310000-0000-0000-0000-000000000020/InstantMix",
+      "warmSource": 20,
+      "replaceWarmType": true
+    }
+  ]
+}

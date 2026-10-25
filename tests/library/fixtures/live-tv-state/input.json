@@ -1,0 +1,264 @@
+{
+  "documents": [
+    {
+      "name": "empty timers",
+      "kind": "timers",
+      "text": "[]"
+    },
+    {
+      "name": "timer defaults",
+      "kind": "timers",
+      "text": "[{}]"
+    },
+    {
+      "name": "timer values",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\"}]"
+    },
+    {
+      "name": "root null",
+      "kind": "timers",
+      "text": "null"
+    },
+    {
+      "name": "null member",
+      "kind": "timers",
+      "text": "[null]"
+    },
+    {
+      "name": "wrong root",
+      "kind": "timers",
+      "text": "{}"
+    },
+    {
+      "name": "syntax",
+      "kind": "timers",
+      "text": "[{"
+    },
+    {
+      "name": "lowercase ignored",
+      "kind": "timers",
+      "text": "[{\"id\":\"ignored\",\"status\":\"Completed\",\"startDate\":\"invalid\"}]"
+    },
+    {
+      "name": "quoted numeric",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"Priority\":\"+12\",\"RetryCount\":\"0\",\"CommunityRating\":\"NaN\",\"OriginalAirDate\":\"\"}]"
+    },
+    {
+      "name": "quoted zero integer",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"Priority\":\"001\"}]"
+    },
+    {
+      "name": "wrong boolean",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"IsManual\":\"true\"}]"
+    },
+    {
+      "name": "wrong ignored getter",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"IsKids\":{},\"IsLive\":[],\"IsSports\":\"bad\",\"IsNews\":44}]"
+    },
+    {
+      "name": "duplicate valid",
+      "kind": "timers",
+      "text": "[{\"Id\":\"first\",\"Id\":123,\"ProgramId\":true,\"StartDate\":\"2500-01-01T00:00:00Z\",\"Status\":\"7\"}]"
+    },
+    {
+      "name": "duplicate invalid before valid",
+      "kind": "timers",
+      "text": "[{\"Priority\":{},\"Priority\":1}]"
+    },
+    {
+      "name": "enum unknown numeric",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":99,\"KeepUntil\":\"99\"}]"
+    },
+    {
+      "name": "enum flags",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New, Error\"}]"
+    },
+    {
+      "name": "enum unknown name",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"future\"}]"
+    },
+    {
+      "name": "nullable empty",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"CommunityRating\":\"\",\"OriginalAirDate\":\"\",\"SeasonNumber\":\"\"}]"
+    },
+    {
+      "name": "known unused invalid",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"ProviderIds\":{\"Id\":[]}}]"
+    },
+    {
+      "name": "dictionary primitive strings",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"ProviderIds\":{\"A\":12,\"a\":true,\"nil\":null}}]"
+    },
+    {
+      "name": "dictionary null",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"ProviderIds\":null,\"Tags\":null}]"
+    },
+    {
+      "name": "single overflow",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"CommunityRating\":1e+40}]"
+    },
+    {
+      "name": "date offset",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.123456789+03:30\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\"}]"
+    },
+    {
+      "name": "date invalid day",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-02-30T00:00:00Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\"}]"
+    },
+    {
+      "name": "unknown subtree",
+      "kind": "timers",
+      "text": "[{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"Future\":{\"Priority\":false,\"Tags\":42}}]"
+    },
+    {
+      "name": "series defaults",
+      "kind": "seriesTimers",
+      "text": "[{}]"
+    },
+    {
+      "name": "series values",
+      "kind": "seriesTimers",
+      "text": "[{\"Id\":\"series-a\",\"Name\":\"Show 2\",\"SeriesId\":\"series-a\",\"StartDate\":\"2500-01-01T00:00:00Z\",\"Days\":[\"Monday\",3],\"KeepUpTo\":\"12\",\"SkipEpisodesInLibrary\":false}]"
+    },
+    {
+      "name": "series bad days",
+      "kind": "seriesTimers",
+      "text": "[{\"Days\":[\"NoDay\"]}]"
+    },
+    {
+      "name": "series bad unrelated boolean",
+      "kind": "seriesTimers",
+      "text": "[{\"RecordAnyTime\":\"true\"}]"
+    },
+    {
+      "name": "series unknown members",
+      "kind": "seriesTimers",
+      "text": "[{\"Status\":{},\"SeriesTimerId\":{\"bad\":true},\"Future\":null}]"
+    },
+    {
+      "name": "dictionary empty string invalid",
+      "kind": "timers",
+      "text": "[{\"Id\":\"value\",\"ProviderIds\":\"\"}]"
+    },
+    {
+      "name": "BOM enum",
+      "kind": "timers",
+      "text": "[{\"Status\": \"﻿New\"}]"
+    },
+    {
+      "name": "enum unicode case",
+      "kind": "timers",
+      "text": "[{\"Status\": \"ConflictedOK\"}]"
+    }
+  ],
+  "lookups": [
+    {
+      "name": "native recording links",
+      "timers": "[{\"Id\":\"completed\",\"ProgramId\":\"program-a\",\"StartDate\":\"2400-01-01T00:00:00Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"Completed\"},{\"Id\":\"later\",\"ProgramId\":\"program-a\",\"StartDate\":\"2600-01-01T00:00:00Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"InProgress\"},{\"Id\":\"timer-A\",\"ProgramId\":\"program-a\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"SeriesTimerId\":\"series-direct\"},{\"Id\":\"program-b\",\"ProgramId\":\"program-b\",\"StartDate\":\"2501-01-01T00:00:00Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\",\"SeriesTimerId\":\" \"},{\"Id\":\"null-program\",\"ProgramId\":null,\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\"},{\"Id\":\"empty-program\",\"ProgramId\":\"\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"New\"},{\"Id\":\"error\",\"ProgramId\":\"program-error\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"Error\",\"SeriesTimerId\":\"from-error\"},{\"Id\":\"cancelled\",\"ProgramId\":\"program-cancelled\",\"StartDate\":\"2500-01-01T00:00:00.1234567Z\",\"EndDate\":\"2500-01-01T01:00:00Z\",\"Status\":\"Cancelled\"}]",
+      "seriesTimers": "[{\"Id\":\"numeric-later\",\"SeriesId\":\"series-shared\",\"Name\":\"Show 10\"},{\"Id\":\"numeric-first\",\"SeriesId\":\"SERIES-SHARED\",\"Name\":\"Show 2\"},{\"Id\":\"stable-later\",\"SeriesId\":\"series-shared\",\"Name\":\"Show 02\"},{\"Id\":\"series-null-name\",\"SeriesId\":\"series-b\",\"Name\":null},{\"Id\":null,\"SeriesId\":\"series-null-id\",\"Name\":\"A\"},{\"Id\":\"bom-id\",\"SeriesId\":\"\\ufeff\",\"Name\":\"B\"}]",
+      "programs": [
+        {
+          "id": "80300000-0000-0000-0000-000000000001",
+          "externalId": "program-a",
+          "externalSeriesId": "series-a"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000002",
+          "externalId": "PROGRAM-B",
+          "externalSeriesId": "series-b"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000003",
+          "externalId": null,
+          "externalSeriesId": null
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000004",
+          "externalId": "",
+          "externalSeriesId": ""
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000005",
+          "externalId": "no-timer",
+          "externalSeriesId": "series-shared"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000006",
+          "externalId": "program-error",
+          "externalSeriesId": "series-shared"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000007",
+          "externalId": "program-cancelled",
+          "externalSeriesId": "series-shared"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000008",
+          "externalId": "no-timer",
+          "externalSeriesId": "﻿"
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000009",
+          "externalId": "no-timer",
+          "externalSeriesId": " "
+        },
+        {
+          "id": "80300000-0000-0000-0000-000000000010",
+          "externalId": "no-timer",
+          "externalSeriesId": "series-null-id"
+        }
+      ]
+    },
+    {
+      "name": "null timer member faults",
+      "timers": "[null]",
+      "seriesTimers": "[]",
+      "programs": [
+        {
+          "id": "80300000-0000-0000-0000-000000000001",
+          "externalId": "program-a",
+          "externalSeriesId": "series-a"
+        }
+      ]
+    },
+    {
+      "name": "series fault is lazy",
+      "timers": "[{\"Id\": \"timer-A\", \"ProgramId\": \"program-a\", \"StartDate\": \"2500-01-01T00:00:00.1234567Z\", \"EndDate\": \"2500-01-01T01:00:00Z\", \"Status\": \"New\", \"SeriesTimerId\": \"series-direct\"}]",
+      "seriesTimers": "[null]",
+      "programs": [
+        {
+          "id": "80300000-0000-0000-0000-000000000001",
+          "externalId": "program-a",
+          "externalSeriesId": "series-a"
+        }
+      ]
+    },
+    {
+      "name": "series fault when needed",
+      "timers": "[]",
+      "seriesTimers": "[null]",
+      "programs": [
+        {
+          "id": "80300000-0000-0000-0000-000000000005",
+          "externalId": "no-timer",
+          "externalSeriesId": "series-shared"
+        }
+      ]
+    }
+  ]
+}

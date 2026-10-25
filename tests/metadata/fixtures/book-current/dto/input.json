@@ -1,0 +1,7 @@
+{
+  "cases": [
+    { "name": "BookDto:null", "seriesName": null },
+    { "name": "BookDto:", "seriesName": "" },
+    { "name": "BookDto:Book series", "seriesName": "Book series" }
+  ]
+}

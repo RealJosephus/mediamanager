@@ -1,0 +1,146 @@
+[
+  {
+    "name": "album native sort/name tie and inherited audiobook",
+    "target": "album",
+    "items": [
+      {
+        "key": "root",
+        "Id": "cf350000-0000-0000-0000-000000000001",
+        "type": "Folder",
+        "Name": "root",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "album",
+        "Id": "cf350000-0000-0000-0000-000000000002",
+        "type": "MusicAlbum",
+        "parent": "root",
+        "Name": "Album",
+        "Path": "Z:\\ChildrenMetadata\\Album"
+      },
+      {
+        "key": "beta",
+        "Id": "cf350000-0000-0000-0000-000000000003",
+        "type": "Audio",
+        "parent": "album",
+        "Name": " beta ",
+        "ForcedSortName": " same ",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "RunTimeTicks": "650000000"
+      },
+      {
+        "key": "alpha",
+        "Id": "cf350000-0000-0000-0000-000000000004",
+        "type": "Audio",
+        "parent": "album",
+        "Name": " Alpha ",
+        "ForcedSortName": " same ",
+        "ParentIndexNumber": 1,
+        "IndexNumber": 1,
+        "RunTimeTicks": "610000000"
+      },
+      {
+        "key": "blank",
+        "Id": "cf350000-0000-0000-0000-000000000005",
+        "type": "AudioBook",
+        "parent": "album",
+        "Name": " ",
+        "ParentIndexNumber": 0,
+        "IndexNumber": 1,
+        "RunTimeTicks": "1250000000"
+      }
+    ]
+  },
+  {
+    "name": "physical artist albums use native recursive scope",
+    "target": "artist",
+    "items": [
+      {
+        "key": "root",
+        "Id": "cf350000-0000-0000-0000-000000000001",
+        "type": "Folder",
+        "Name": "root",
+        "Path": "Z:\\ChildrenMetadata"
+      },
+      {
+        "key": "artist",
+        "Id": "cf350000-0000-0000-0000-000000000006",
+        "type": "MusicArtist",
+        "parent": "root",
+        "Name": "Artist",
+        "Path": "Z:\\ChildrenMetadata\\Artist"
+      },
+      {
+        "key": "nested",
+        "Id": "cf350000-0000-0000-0000-000000000007",
+        "type": "Folder",
+        "parent": "artist",
+        "Name": "Nested"
+      },
+      {
+        "key": "zeta",
+        "Id": "cf350000-0000-0000-0000-000000000008",
+        "type": "MusicAlbum",
+        "parent": "nested",
+        "Name": " zeta ",
+        "ForcedSortName": " same ",
+        "ProductionYear": 2000
+      },
+      {
+        "key": "alpha",
+        "Id": "cf350000-0000-0000-0000-000000000009",
+        "type": "MusicAlbum",
+        "parent": "artist",
+        "Name": " Alpha ",
+        "ForcedSortName": " same ",
+        "ProductionYear": 2000
+      },
+      {
+        "key": "emptyyear",
+        "Id": "cf350000-0000-0000-0000-000000000010",
+        "type": "MusicAlbum",
+        "parent": "artist",
+        "Name": "No year"
+      },
+      {
+        "key": "taggedOutside",
+        "Id": "cf350000-0000-0000-0000-000000000011",
+        "type": "MusicAlbum",
+        "Name": "Unrelated tagged",
+        "AlbumArtists": [
+          "Artist"
+        ],
+        "Artists": [
+          "Artist"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "by-name artist physical children remain empty",
+    "target": "artist",
+    "items": [
+      {
+        "key": "artist",
+        "Id": "cf350000-0000-0000-0000-000000000012",
+        "type": "MusicArtist",
+        "Name": "Artist",
+        "Path": "Z:\\ChildrenMetadata\\ByNameArtist"
+      },
+      {
+        "key": "tagged",
+        "Id": "cf350000-0000-0000-0000-000000000013",
+        "type": "MusicAlbum",
+        "parent": "artist",
+        "Name": "Tagged",
+        "AlbumArtists": [
+          "Artist"
+        ],
+        "Artists": [
+          "Artist"
+        ]
+      }
+    ]
+  }
+]

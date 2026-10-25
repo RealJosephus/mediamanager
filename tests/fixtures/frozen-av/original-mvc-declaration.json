@@ -1,0 +1,255 @@
+{
+  "purpose": "Exercise the pinned examiner PMT classification and SSIF membership; no stereoscopic decoding is claimed.",
+  "original": {
+    "size": 92160,
+    "sha256": "39c02b66aa2fe6d4f6fd7b4e13a8bda304774919db06c60b9001d096198c99d1"
+  },
+  "declared": {
+    "size": 92160,
+    "sha256": "4655d9f224d4953cd9f59b523ac0ad5799358716d2452944c44d31186190480a"
+  },
+  "changes": [
+    {
+      "packet": 384,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 422,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 438,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 2688,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 2726,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 2742,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 8256,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 8294,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 8310,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 12288,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 12326,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 12342,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 16320,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 16358,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 16374,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 20352,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 20390,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 20406,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 24576,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 24614,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 24630,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 28608,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 28646,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 28662,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 32640,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 32678,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 32694,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 36672,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 36710,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 36726,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 40704,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 40742,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 40758,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 44928,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 44966,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 44982,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 46464,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 46502,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 46518,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 51264,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 51302,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 51318,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 55296,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 55334,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 55350,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 59328,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 59366,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 59382,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 63360,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 63398,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 63414,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 67584,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 67622,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 67638,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 71616,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 71654,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 71670,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 75648,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 75686,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 75702,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 79680,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 79718,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 79734,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    },
+    {
+      "packet": 83712,
+      "pmtPid": 256,
+      "pid": 4114,
+      "typeOffset": 83750,
+      "beforeType": 27,
+      "afterType": 32,
+      "crcOffset": 83766,
+      "beforeCrc": 3656308327,
+      "afterCrc": 3280058283
+    }
+  ]
+}

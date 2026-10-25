@@ -1,0 +1,28 @@
+{
+  "nativeSha256": "5839671b37451f87330070d3250360721d8472cc4bcdeca210aefd1bf33858f6",
+  "nativeBytes": 517658,
+  "recorder": {
+    "sha256": "deb932225878e99f0f984ed93378e468216dbfe8bcbd81fdc6d2ce5bd53ce262"
+  },
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "bytes": 157087
+    },
+    {
+      "path": "Emby.Server.Implementations/Playlists/PlaylistsFolder.cs",
+      "sha256": "c621e1afdc79c1b641642cac5777964b0aa9e7464989055f5d3344e1ca87ce56",
+      "bytes": 1613
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/AggregateFolder.cs",
+      "sha256": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+      "bytes": 7278
+    }
+  ],
+  "phaseAcceptance": false,
+  "missingAggregateRecorder": {
+    "sha256": "56e493eff36a232f6e0370d4bc92b3af930e221b311fbd0d8edbbd6bc6fdc1a4"
+  }
+}

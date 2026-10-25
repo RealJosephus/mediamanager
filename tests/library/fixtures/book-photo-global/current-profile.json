@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "fixture": "book-photo-global",
+  "scope": "Two independent same-run designated Native complete Book/Photo scan captures preserve the original fourteen cases, sixty-one steps, exact eight assets and actual write-time inputs. Formal Node runtime with PostgreSQL retains default plugins, Windows logical identity and independent media/sidecars. Original functional subjects, metadata, parents/ancestors, image placement/dimensions/BlurHash and bytes compare exactly; complete SQL/file/prefix receipts are retained without claiming all-column equality, Native HTTP takeover or final release acceptance.",
+  "sourcePaths": [
+    "Emby.Photos/PhotoProvider.cs",
+    "Emby.Photos/Properties/AssemblyInfo.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+    "Emby.Server.Implementations/Images/BaseDynamicImageProvider.cs",
+    "Emby.Server.Implementations/Images/BaseFolderImageProvider.cs",
+    "Emby.Server.Implementations/Images/PhotoAlbumImageProvider.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/PhotoAlbumResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "Jellyfin.Server/CoreAppHost.cs",
+    "MediaBrowser.Controller/Entities/AggregateFolder.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs",
+    "MediaBrowser.Controller/Entities/Folder.cs",
+    "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+    "MediaBrowser.Controller/IO/FileData.cs",
+    "MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+    "MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "MediaBrowser.Providers/Books/AudioBookMetadataService.cs",
+    "MediaBrowser.Providers/Books/BookMetadataService.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/ComicBookInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoCredit.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoFormat.cs",
+    "MediaBrowser.Providers/Books/ComicBookInfo/Models/ComicBookInfoMetadata.cs",
+    "MediaBrowser.Providers/Books/ComicImageProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ComicInfoReader.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/ExternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicInfo/InternalComicInfoProvider.cs",
+    "MediaBrowser.Providers/Books/ComicProvider.cs",
+    "MediaBrowser.Providers/Books/ComicVine/ComicVineExternalId.cs",
+    "MediaBrowser.Providers/Books/ComicVine/ComicVineExternalUrlProvider.cs",
+    "MediaBrowser.Providers/Books/ComicVine/ComicVinePersonExternalId.cs",
+    "MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalId.cs",
+    "MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalUrlProvider.cs",
+    "MediaBrowser.Providers/Books/IComicProvider.cs",
+    "MediaBrowser.Providers/Books/Isbn/ISBNExternalId.cs",
+    "MediaBrowser.Providers/Books/Isbn/ISBNExternalUrlProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubImageProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubUtils.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfReader.cs",
+    "MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs",
+    "MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "MediaBrowser.Providers/Photos/PhotoAlbumMetadataService.cs",
+    "MediaBrowser.Providers/Photos/PhotoMetadataService.cs",
+    "src/Jellyfin.Drawing.Skia/PercentPlayedDrawer.cs",
+    "src/Jellyfin.Drawing.Skia/Properties/AssemblyInfo.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaExtensions.cs",
+    "src/Jellyfin.Drawing.Skia/SkiaHelper.cs",
+    "src/Jellyfin.Drawing.Skia/SplashscreenBuilder.cs",
+    "src/Jellyfin.Drawing.Skia/StripCollageBuilder.cs",
+    "src/Jellyfin.Drawing.Skia/SvgSecurityValidator.cs",
+    "src/Jellyfin.Drawing.Skia/UnplayedCountIndicator.cs",
+    "src/Jellyfin.Drawing/ImageProcessor.cs",
+    "src/Jellyfin.Drawing/NullImageEncoder.cs",
+    "src/Jellyfin.Drawing/Properties/AssemblyInfo.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 19361,
+      "sha256": "737b6af781128153b75229c41e83eb4fec76d6e98ac25a06c50ff8f11b807be0"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 15747,
+      "sha256": "874a69fdfc70d01dc82214b337876cf58dffb3fc5ad0c0dc1f2413824730bc42"
+    },
+    {
+      "role": "nativeScanHost",
+      "filename": "current/NativeScanHost.cs",
+      "bytes": 32299,
+      "sha256": "d9a8972ebf16c386e7546ef0c19d7c2a35e0f29efd1df711659f51610789c63b"
+    },
+    {
+      "role": "nativeBookPhotoProviders",
+      "filename": "current/BookPhotoProviders.cs",
+      "bytes": 4835,
+      "sha256": "c53cf65458fe26693372fdacdc706f1bd0cf4ad598b5b1ff55b88d07337e7971"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 2250,
+      "sha256": "b21b0bd297d30306a38716f3f23a239110c3a3bc21eb6f2b865222b4df91cd26"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/cover.png",
+      "bytes": 8787,
+      "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/epub-malformed.epub",
+      "bytes": 17,
+      "sha256": "4405d141e06d03ca972fc90ad9d61db24399ef5e48269da27b1852124d0029be"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/epub-positive.epub",
+      "bytes": 1119,
+      "sha256": "de9955fc668dbda33334d579d3560c24940c3aa384ec5b63606d6f6fd93d1228"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/epub-standard-slashes.epub",
+      "bytes": 735,
+      "sha256": "8f00f74fcdc3f47bd23ff590b8f206f2375120be8233a4f259f2412cbc5d4311"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/invalid-photo.jpg",
+      "bytes": 13,
+      "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/oriented-photo.jpg",
+      "bytes": 316,
+      "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/plain-photo.jpg",
+      "bytes": 268,
+      "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+    },
+    {
+      "role": "asset",
+      "filename": "current/assets/rich-photo.jpg",
+      "bytes": 1840,
+      "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+    }
+  ],
+  "photoReplacementTiming": {
+    "condition": "Before overwriting an existing photo, wait for the real clock to pass its previous filesystem mtime plus 1100 milliseconds, then perform the actual write. Preserve previous/new actual mtimes and the waiting interval.",
+    "changeWindowMilliseconds": 1000,
+    "clockPrecisionMarginMilliseconds": 100,
+    "mtimeAssignment": "No past or future timestamp is injected."
+  }
+}

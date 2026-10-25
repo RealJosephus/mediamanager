@@ -1,0 +1,447 @@
+{
+  "source": "D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source",
+  "license": "GPL-2.0-only",
+  "extraction": "tests/library/extract-user-view-resources.js",
+  "sourceFiles": [
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ab.json",
+      "sha256": "e4763e5ee5533850f7446ea4f9484c6b7914843c3c0c883a8aa5b15dbaf5da06"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/af.json",
+      "sha256": "8f4c6fbf3323f22c5a9d9bac35c8b7a36ad075008229d626bafb20108a43f952"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ar.json",
+      "sha256": "a25ae35833629279e1dda1f470fee11e1f76466da0a8e40c9aa83e72ea39598f"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ar_SA.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/as.json",
+      "sha256": "de55fca7d00d51002d94f502fe0dabb5d75e7291ce06186386dce8bb8b02ad6d"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/az.json",
+      "sha256": "6e20de363530f957dcc5518cfe5861d5819795b6855e0b36467a67675224f669"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/be.json",
+      "sha256": "b58a326e42b7f349af3426b2deed5ff552b9241a68aa8b7171f357d6a77ee8f2"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/bg-BG.json",
+      "sha256": "d403d88bf5b8ec7b8a016eb69a7e6088257fc82499d9a7f6774950e18063720e"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/bn.json",
+      "sha256": "f91aaac007d5e38f220788e2393269596adbe691d540b806b81f266bd558fb72"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/br.json",
+      "sha256": "71bac2c50de0d65ecc308573d79d9c7f198c1bdb6abe5e0cca4d169873c0fd93"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/bs.json",
+      "sha256": "05950e8ecfe63a4183f2f6152ca74294146c3cdd74242f116daa8d5d08afb060"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ca.json",
+      "sha256": "5e71fce8f3b8e12c342ddc4e1f3345d2620b09ce6417b59ada478c9ca5e84762"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/chr.json",
+      "sha256": "5805920bfa34dee9ec3cb2ffe1429b7d8055ce0bf8c06faafea78d201cbc6d7f"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/cs.json",
+      "sha256": "cbe9f217f8519f85600fc9aa519d03a24bfc5140fbb8e0dada254b109670b604"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/cy.json",
+      "sha256": "5bc07a062723d7653e53336e6cf1b5cf4b6ec42855deac346c004c89bb8bd283"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/da.json",
+      "sha256": "d2dbea3bcaf14cfed13d5ccfa20c2d7b7c7405c103ca5bf078f1d2fe4b156b55"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/de.json",
+      "sha256": "65286a6794573fa12da696b805572f5bbe409fd228f616528afd0db55bcb3886"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/el.json",
+      "sha256": "c621e5c80bdf2d9d940b35e6df267d215d631d9695e4aed00b4f6804c260f59c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/en-GB.json",
+      "sha256": "b30148ea678439a431aedd63000cdf03b04ed694778eb2543400f1e7330a2c13"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/en-US.json",
+      "sha256": "a18528c69b57601d9aac0c97d8bdab83952381067a10fccd09a6bcf1a5996c3c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/eo.json",
+      "sha256": "2fa0b186132b8d1da6552caf02cce04e90f91d6b94bbfadb5005fa9b62820f14"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/es-AR.json",
+      "sha256": "dc577b76655ce2a1fed875302e39303d671b2d477509684699cf31543f1db2e6"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/es-MX.json",
+      "sha256": "8cc8e0ad93feae9958835b68e70d5b24c118ce35dfc3ce88fd2058a7b71c8d5e"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/es.json",
+      "sha256": "c923bd3134a20c1dbab0587aaa3963c7e77ec5566eab98523dab8f1836073585"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/es_419.json",
+      "sha256": "958f552038819b4a04d8491c018b69e2800ec5ce72da22ab5532422978bfc6db"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/es_DO.json",
+      "sha256": "a4875f5a88edf03a6afa756cd8f1873f71efc5b7e4d877f1a79f0c6aaec6705d"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/et.json",
+      "sha256": "500117e5650ba8e11ffcbe54c97722a2dd6f0f69ca138dae5ff940cb7f897ea9"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/eu.json",
+      "sha256": "43bb49bf0e134fcf3d3a37cd26efb227e20871352b43d58c994e08a4b8811c68"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fa.json",
+      "sha256": "ed8ed6f4a7a8573f70796f91453b7dc7e9ea16d2b9a71fdabbf5c3bcbe0a6add"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fi.json",
+      "sha256": "6dc70db44d11021b8c77c17ca0182e17cd56afb92a56924f422ee840b053d0cf"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fil.json",
+      "sha256": "7b442a77dbf5c59e97048dd3de16d1b0081e2e26a09e06755ce63ff85169cc78"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fo.json",
+      "sha256": "f78aa522ee51b48da10938012ea39dc0a2c60bde63d487f9dbb1e0c9a67e57fe"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fr-CA.json",
+      "sha256": "89d301f9d1f1ba5b570a4e05b16842363d79fe1fb30cbae24a3eb8c745f00a62"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/fr.json",
+      "sha256": "77a1f7c06cc23c127d8a2d6a859c17bdb8f61617b64525f48321a44d46f5ac7b"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ga.json",
+      "sha256": "2ca0164b6fae10c41036cb14faf5a92f263386c9ae1defc2c252ecf205d6f900"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/gl.json",
+      "sha256": "c101dfe14a6a17f2c744ba7f490939ec0e953a982668d93ee89133505cb68cad"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/gsw.json",
+      "sha256": "f6324a1a917dffbe717f613bdb32cdf1132674b3e520092749cbf4de4639386c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/he.json",
+      "sha256": "91003e8e90528bb56475d1c37bd4964327afa1c63ca2f4a125dea3a43c47d12f"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/he_IL.json",
+      "sha256": "2c0e78cc50e16d843fe345b706452195e57f41c089ba9939668a58a933d55538"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/hi.json",
+      "sha256": "eec9bc0a4f1d9b7c01cf4d6f7a59bfd47a572257147d3bc9b2ca494509f7cb79"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/hr.json",
+      "sha256": "69d82bd8272dd4612ab5ce674d6b1ce89a6e405c228178a70d0554590561a124"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ht.json",
+      "sha256": "91c043d44c30d5783b6655e73fb21ad78adaf5e0d2d65153334699622d6fc45a"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/hu.json",
+      "sha256": "0b2dc38dfab6b1a7006c1993650045efad12b1ec0a3ea312e340cb181e2351fd"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/hy.json",
+      "sha256": "e4634b0fc5add7dbf9530b44a638bf9504622c814f0c7ae4da51665444683663"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/id.json",
+      "sha256": "2d49eeafc25f20202f9f2d71ba4cc9c8327e0023eb221b8c79b4c4376c929bc9"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/is.json",
+      "sha256": "ab69be5bec8a7c991d854faac790703584a19bb9321d2e4cfcad93eab94ccb48"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/it.json",
+      "sha256": "ec06bfd4e9ed863bd8824a1c6345719b5a9ff13c289b2797f00753c24752d233"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ja.json",
+      "sha256": "ebf815b1518d41736b5431d9468fa1884f1679e023972027e0b0bc8afe724019"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/jbo.json",
+      "sha256": "d366b874cf5365a1fe65cecedd244aedde49d4156ebc2d1560984e6c9e1c8b0d"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ka.json",
+      "sha256": "80630a8797cf83fa4771ef8cbdd2a293738322d51548103d82255ae6bb1d09ba"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/kab.json",
+      "sha256": "b6e8acc01c24208344ba41caf752bd171fcf6d367613b6b35ca97c0ef784254f"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/kk.json",
+      "sha256": "2847e18ebd9ddeb9405683c2e55f5d9cdcf7091bde36dc3f99ca7a646b2fea01"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/km.json",
+      "sha256": "9ae0479e784d106776043ad30f3a112ad8c13ac5742f5707865ab1cc45cfcee4"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/kn.json",
+      "sha256": "7611d69bcc6479e27017237913e29fb4c399cf1badc9f42dfebee75015286090"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ko.json",
+      "sha256": "f9fe520dce6ef66684413a19514038ec213b2021537397898b3398df66f74ca2"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/kw.json",
+      "sha256": "588715a543320a81e90132f84ef59389a68cc22aacaaae497f06318edef04543"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ky.json",
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/lb.json",
+      "sha256": "3e3fb5f1c8b86a0b6a7722208a95b5ed62f50ff8c006fea5da9acf5ebe431c74"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/lt-LT.json",
+      "sha256": "25ca0c67b5b5c7205973aff2607f9ae87441b2960c75caae482ea8240ec11724"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/lv.json",
+      "sha256": "25d4bbcdc207ac95dc30c2196b689a77d056957737574a683f9d451d56e375e9"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/lzh.json",
+      "sha256": "69d474b20ef6aa0d80c61881bef6cbd93cb088104f44780f88b103617516536c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/mi.json",
+      "sha256": "24eeb4c61b77cdbd475d9535a6d059dc905ce0257dd45bfc4973ff207c427f68"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/mk.json",
+      "sha256": "892346881d2e184e3eb12a8b0198baf4f6a2646d8e874d61b2bca6d34f8177f7"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ml.json",
+      "sha256": "b9730b62b0cef37aa7ec3b85823b54a87452b76985b5b9e0e5524908ccc29e8d"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/mn.json",
+      "sha256": "ac78160c2b9212c0f354cdb98dcbd09b854cd5a278e52e902f3f5c764f1daa39"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/mr.json",
+      "sha256": "20b7f516c4ede4f4b32a6280cadce2940dd30532f0156eb114b8ddaa40f207c4"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ms.json",
+      "sha256": "86f41f543cf8d1a5d651f47da61fe40836fc19e5f0872f6b8b351bc0f604ad8c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/mt.json",
+      "sha256": "eb339145749d71e89cc872eb90bdd198cb19767ad086c7d5da02091446264ee5"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/my.json",
+      "sha256": "25afd5be96484840a9ae5334991217ad48385296f59894225ba6477abbc6f0b4"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/nb.json",
+      "sha256": "ec1c747f3aa62158373af0a9daf0f687e4bc48a47774be3e35c8f451ed62a1d0"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ne.json",
+      "sha256": "d1cd61009980529c15fe4d4a2d8a0d4783ef963081de53bff3f4f51da591be10"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/nl.json",
+      "sha256": "419b16b8eacab0e67d4fe74ec117f4529ad4d537607dcfec31bc7e4354e16621"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/nn.json",
+      "sha256": "5864e82f957cd00f7886ac0ab0cfca77aef33c0d3ca18990675ba053267b901c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/oc.json",
+      "sha256": "22c39ff98d8592e3dad8d733632ca7149dc7291a7fefa70bfd9dbf4ece5db408"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/or.json",
+      "sha256": "84daf18a58b0a58032eafb3db5553c3b965fbf4e42d509c4863992f4100b1065"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pa.json",
+      "sha256": "3a13695345eb98fe7a7618eb544fa9b6051d9e54f1102d82e8504354327645c1"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pl.json",
+      "sha256": "aa22f4ec5e35118b0934acb7d9a6d1fdf55bc19e53004e5eddc3b89fcca3a0cf"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pr.json",
+      "sha256": "e44fe7bb2c54b96a3616eea81fe843c66f6e44a443d558f70c0fe14549146c08"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pt-BR.json",
+      "sha256": "1658927af2991ba1d5bcf0de71a6bee822b7af3c1d5f5c18ab3acbe600b9a19f"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pt-PT.json",
+      "sha256": "3417563bd3ed785d04f91c1499955e8bd6ffae0a0d2770f43481c4cc4c06c071"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/pt.json",
+      "sha256": "93ceff2403d421bd62e5e9666462217605a13307fcf929e15c1c5beb9ba7b1c8"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ro.json",
+      "sha256": "a0c5352c67a3004ee3c93ea84552c5beebec59d0a7c6801cdac4f9f8f7e65ada"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ru.json",
+      "sha256": "931b1d11adcd5d972524b7088fb37c39019e602bf9fba43b5401536a5b146467"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/si.json",
+      "sha256": "6420989389d2018d56e9fc66ac460c9c97742e3a486d8d1d61b2d107ad445027"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sk.json",
+      "sha256": "37d8d096338661bea53354d09e127e99027770125a38d4a24337bcd77bf60d3a"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sl-SI.json",
+      "sha256": "80d931fe854ef292983d1ecd42886922f64dfceeecef2419c5575bb63b21fb76"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sn.json",
+      "sha256": "1810612b9bce334c2351bd8c47903e94c81b40ea9562602079a282adda4b9748"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sq.json",
+      "sha256": "80a2e1f968cdaa34ad0ca96c84039155477b98312241d51a2495c617fcb893d9"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sr.json",
+      "sha256": "43a324a8ea4f3798e80fa5e6b0697f81b389411ab434592d5b2a55a2dbf33a97"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sv.json",
+      "sha256": "84a276bc2309a8ef63afbc9d3e7670aab59d4b3b739d994492111c2fd8b87f8a"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/sw.json",
+      "sha256": "6186dc524d7d3e6c7a9657c1fd43e6c28c4fc291cfee21091d448ae903e23e98"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ta.json",
+      "sha256": "816e294ca3f26b095b7ef846380e6c19e0e882092116532b88b6cad75b150073"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/te.json",
+      "sha256": "9688d8df31fb892c81cabae43f15ba771e7d461ea06a2187ad4a00131e949624"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/th.json",
+      "sha256": "7ea5b10aff93124661149bb8f1159fee7f6baf9829818b1020d9dc32005af7ef"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/tr.json",
+      "sha256": "7a76432888270a57d857fee2156f23ef5d07eb93d2ac5dfbf85a4079e0a3d5df"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ug.json",
+      "sha256": "6ab54d59683a80a306da9c1cbc87b14b298d97e6d2f24a91b429c0f51d1c8c64"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/uk.json",
+      "sha256": "a1978bbd6a0ee9994666cc5945e6e96bdb10906a7965f7a61ad13b3a31a3d1f4"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ur.json",
+      "sha256": "e2b78522b2caf90b1db173b19244e74e04031379a92729de5c96947dc0724110"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/ur_PK.json",
+      "sha256": "eb8e65f70e3766eee89c093a4a6c8da70136e0e3f9501249a096aabac3e546eb"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/uz.json",
+      "sha256": "3880751eaca59bb22c47b2f4c483ac65b0e44ffb35184fcdd52677735dd173cf"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/vi.json",
+      "sha256": "19769ddf1309bf265e782fe3c31c6247b695eb96337efc2c1dc7b87c03f021e8"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/zh-CN.json",
+      "sha256": "a18528c69b57601d9aac0c97d8bdab83952381067a10fccd09a6bcf1a5996c3c"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/zh-HK.json",
+      "sha256": "2843ec044bdd815b7d4a418b572bff03ccca1b6a61fa1a6c786379497cfbe147"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/zh-TW.json",
+      "sha256": "fbbe7586c8a93a4ea5f234a87bfdd80811cabaec9d062aec5aaf36ed16cf99ef"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/Core/zu.json",
+      "sha256": "c8fc7e3315459945dfc7c0e1f439d5ba37c6260f2278d57ff69ef35a0675a3b7"
+    },
+    {
+      "path": "Emby.Server.Implementations/Localization/LocalizationManager.cs",
+      "sha256": "1a8e48946bac6d1bade0598ceeaee330856b3204b8ac112ecae9a1a8f0e0abcc"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserViewBuilder.cs",
+      "sha256": "006c551a073cff64101f181a1d34c2c2840ac8e8bc412ce126f6a3c36f069794"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserView.cs",
+      "sha256": "45b09db8b50fd347d57ad30a52c761c65d4e64cae961941f31484dee86db858b"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/UserViewManager.cs",
+      "sha256": "3098650710fb5f3da8a3044c109364f0d5efde8e39f15714773e70e662018ead"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    }
+  ]
+}

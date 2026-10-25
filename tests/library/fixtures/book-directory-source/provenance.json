@@ -1,0 +1,137 @@
+{
+  "scope": "Actual native BookResolver over a real extension-named directory, directory plus file, and file control. Controlled manager identity/parent/image seams; no native compound assertion here. Full actual global Book/Photo counterpart is separately retained in book-photo-global.",
+  "requiredInputs": [
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/native.json",
+      "bytes": 2646,
+      "sha256": "b1d4353aa7f578e008ac160609b6e98379ae793928c7a941dae0d2d934a12530",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-directory-source/native.json",
+      "bytes": 2646,
+      "sha256": "b1d4353aa7f578e008ac160609b6e98379ae793928c7a941dae0d2d934a12530",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/record.json",
+      "bytes": 4718,
+      "sha256": "90d2d20ce7e30197b8eedbc0fbfe1c3da1567b813d0c6aedd85ed70c85178df9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-directory-source/record.json",
+      "bytes": 4718,
+      "sha256": "90d2d20ce7e30197b8eedbc0fbfe1c3da1567b813d0c6aedd85ed70c85178df9",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-extension-source-edge-1/input.json",
+      "bytes": 802,
+      "sha256": "5e3475f47cba45bad926d7688f5601ad550df51ae9baa0f6150f31a43c4f4705",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-directory-source/input.json",
+      "bytes": 802,
+      "sha256": "5e3475f47cba45bad926d7688f5601ad550df51ae9baa0f6150f31a43c4f4705",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-extension-source-edge-1/Program.cs",
+      "bytes": 8840,
+      "sha256": "efbf5da58d869b70934832c5adbd0536993dd3a9ed08450ae4563493d8ae7559",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-directory-source/Program.cs",
+      "bytes": 8840,
+      "sha256": "efbf5da58d869b70934832c5adbd0536993dd3a9ed08450ae4563493d8ae7559",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/book-extension-source-edge-1/Oracle.csproj",
+      "bytes": 453,
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager/tests/library/fixtures/book-directory-source/Oracle.csproj",
+      "bytes": 453,
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/build.stdout.txt",
+      "bytes": 414,
+      "sha256": "92fb0a01c598d1ac2617b08baa77506d05b9448d8f144521d9cea0e5a583a322",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/build.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-full-scan-stage/results/book-extension-source-edge-native-1/bin/Release/net10.0/Oracle.dll",
+      "bytes": 26624,
+      "sha256": "95ed7b22690047f186b514127b376a7255f643cfa8e18e79815ff8a7b2e7d782",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Naming.dll",
+      "bytes": 105984,
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+      "bytes": 2875,
+      "sha256": "3d4eb7f09a9f208ad53ea9d182f8c15ce7dfda435c07cc7219829745a6015453",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+      "bytes": 2875,
+      "sha256": "3d4eb7f09a9f208ad53ea9d182f8c15ce7dfda435c07cc7219829745a6015453",
+      "required": true
+    },
+    {
+      "path": "D:/jellyfin/Emby.Server.Implementations/Library/ResolverHelper.cs",
+      "bytes": 5960,
+      "sha256": "3c00ed6c92cb6b3671b716a9cfbc001f7f0775848da2602a2c82a62357ca6e4b",
+      "required": true
+    },
+    {
+      "path": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/ResolverHelper.cs",
+      "bytes": 5960,
+      "sha256": "3c00ed6c92cb6b3671b716a9cfbc001f7f0775848da2602a2c82a62357ca6e4b",
+      "required": true
+    }
+  ]
+}

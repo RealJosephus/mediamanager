@@ -1,0 +1,85 @@
+{
+  "assets": [
+    {
+      "bytes": 60029,
+      "filename": "assets/Rar.rar",
+      "gitBlob": "050509c347d6911db98f13db8aa33c8f914ba9de",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar.rar",
+      "sha256": "60db161de57dc59aa12e0c45b1b70d78904da3d104e74748972ac38643f12802"
+    },
+    {
+      "bytes": 60066,
+      "filename": "assets/Rar5.rar",
+      "gitBlob": "0a05d520923cc46f1daebdddcf6faa89fbafee12",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar5.rar",
+      "sha256": "3319de3e8a91a58d08d8a83f48ebae7e6b022c542b4a58775bab64f4063988a9"
+    },
+    {
+      "bytes": 60046,
+      "filename": "assets/Rar5.solid.rar",
+      "gitBlob": "e16a01da81526b480f9d006d73497e1a9656d010",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar5.solid.rar",
+      "sha256": "3043d68c5a81f46adcbb5393632d243944ead44eb383a677ac82e68afdde27cf"
+    },
+    {
+      "bytes": 60686,
+      "filename": "assets/Rar5.encrypted_filesAndHeader.rar",
+      "gitBlob": "d0bad6d438e329028acc65b2f16ae8aba513da0f",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar5.encrypted_filesAndHeader.rar",
+      "sha256": "63fc4b5576f7482311e950155607e171696588881bdd277c8c099efd2f98b6e2"
+    },
+    {
+      "bytes": 60069,
+      "filename": "assets/Rar.encrypted_filesOnly.rar",
+      "gitBlob": "d4ff767b6e463943374f66b659546639ea780eff",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar.encrypted_filesOnly.rar",
+      "sha256": "52c0d575e01750ae643c65866b5e06e67773a0aed5edea6b2b04e7de14a784a2"
+    },
+    {
+      "bytes": 58970,
+      "filename": "assets/7Zip.LZMA2.7z",
+      "gitBlob": "328eeb36b323947f6de341cfc727b3e806b3d44d",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/7Zip.LZMA2.7z",
+      "sha256": "9dc21162eaa4cc0aad74a847cdbe5b8d2cf75a86e84e4db8928e150f44b28bf1"
+    },
+    {
+      "bytes": 58959,
+      "filename": "assets/7Zip.solid.7z",
+      "gitBlob": "5ac695e59aeff2385e9065cb8841118f1bde06e1",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/7Zip.solid.7z",
+      "sha256": "3c336bf14bef2dc998b548a304c0c07c9c9da899f90e426a965a5f322e232b53"
+    },
+    {
+      "bytes": 61273,
+      "filename": "assets/Tar.tar.gz",
+      "gitBlob": "acb723b293dd1cddf10739007b4de7462c7dea53",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Tar.tar.gz",
+      "sha256": "ce260029fc3b57e86d9d1f45f1349124f313ba55ced6da101bcac2b9abd76df5"
+    },
+    {
+      "bytes": 90939,
+      "filename": "assets/Tar.tar.Z",
+      "gitBlob": "0eb90fb16643b08402e4a17e408aa2fe4e916a15",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Tar.tar.Z",
+      "sha256": "3cd8143b4f9b0897c7fd58f65d2c39714a88af1fff9edbd5aa73d146c21a989c"
+    },
+    {
+      "bytes": 5348,
+      "filename": "assets/large_test.txt.Z",
+      "gitBlob": "64ae2af12404f804db4d2da8bbaf7be327311dd5",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/large_test.txt.Z",
+      "sha256": "aeff63b3be32bd898d84dfa8564053ab4fbc86baf4ea865546789293f71437bb"
+    },
+    {
+      "bytes": 1081,
+      "filename": "assets/LICENSE.txt",
+      "gitBlob": "94e2f5bc83ac404584fd92c25cfcc305ea2f8942",
+      "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/LICENSE.txt",
+      "sha256": "b7ca2b6174cee11afe41d78b48527e3d7659a4435c25019a4a5e072299a2f8ed"
+    }
+  ],
+  "commit": "c083c6efd843a844b0c8f7878787360e815be781",
+  "schemaVersion": 1,
+  "repository": "https://github.com/adamhathcock/sharpcompress",
+  "license": "MIT"
+}

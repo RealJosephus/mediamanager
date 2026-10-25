@@ -1,0 +1,69 @@
+[
+  {
+    "name": "movie-success"
+  },
+  {
+    "name": "dotfile-success",
+    "filename": ".hidden"
+  },
+  {
+    "name": "dvd-success",
+    "filename": "DVD",
+    "videoType": "Dvd"
+  },
+  {
+    "name": "bluray-success",
+    "filename": "BluRay",
+    "videoType": "BluRay"
+  },
+  {
+    "name": "stacked-dvd-success",
+    "filename": "DVD",
+    "videoType": "Dvd",
+    "additionalParts": true
+  },
+  {
+    "name": "channel-success",
+    "channel": true
+  },
+  {
+    "name": "audio-success",
+    "type": "Audio"
+  },
+  {
+    "name": "pathless-success",
+    "path": null
+  },
+  {
+    "name": "read-only-asset",
+    "readOnly": true
+  },
+  {
+    "name": "file-at-cache-path",
+    "assetFile": true
+  },
+  {
+    "name": "files-only",
+    "filesOnly": true
+  },
+  {
+    "name": "segment-plugin-error",
+    "pluginError": true
+  },
+  {
+    "name": "failure-KeyframeData",
+    "failTable": "KeyframeData"
+  },
+  {
+    "name": "failure-MediaSegments",
+    "failTable": "MediaSegments"
+  },
+  {
+    "name": "failure-TrickplayInfos",
+    "failTable": "TrickplayInfos"
+  },
+  {
+    "name": "failure-Chapters",
+    "failTable": "Chapters"
+  }
+]

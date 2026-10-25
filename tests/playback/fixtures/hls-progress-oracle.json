@@ -1,0 +1,174 @@
+[
+  {
+    "Name": "compact",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 20000000,
+    "Line": "frame=30 fps=12.34 q=-1.0 size=123kB time=00:00:01.500000 bitrate=671.7kbits/s speed=1x",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 35000000,
+        "Framerate": 12.34,
+        "CompletionPercentage": 35,
+        "BytesTranscoded": 125952,
+        "Bitrate": 687821
+      }
+    ]
+  },
+  {
+    "Name": "native-spacing",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 20000000,
+    "Line": "frame=   30 fps= 12.34 q=-1.0 size=     123kB time=00:00:01.500000 bitrate= 671.7kbits/s speed=1x",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 35000000,
+        "Framerate": 12.34,
+        "CompletionPercentage": 35,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "no-runtime",
+    "RuntimeTicks": null,
+    "StartTimeTicks": 20000000,
+    "Line": "frame=30 fps=12.34 q=-1.0 size=123kB time=00:00:01.500000 bitrate=671.7kbits/s speed=1x",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": null,
+        "Framerate": 12.34,
+        "CompletionPercentage": null,
+        "BytesTranscoded": 125952,
+        "Bitrate": 687821
+      }
+    ]
+  },
+  {
+    "Name": "size-only",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 0,
+    "Line": "size=123kB bitrate=671.7kbits/s",
+    "Reports": []
+  },
+  {
+    "Name": "zero",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 20000000,
+    "Line": "fps=0.00 size=N/A time=00:00:00.000000 bitrate=N/A",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 20000000,
+        "Framerate": 0,
+        "CompletionPercentage": 20,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "last-native-hour",
+    "RuntimeTicks": 900000000000,
+    "StartTimeTicks": 0,
+    "Line": "fps=1 size=N/A time=23:59:59.990000 bitrate=N/A",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 863999900000,
+        "Framerate": 1,
+        "CompletionPercentage": 95.9999888888889,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "first-unsupported-native-hour",
+    "RuntimeTicks": 900000000000,
+    "StartTimeTicks": 0,
+    "Line": "fps=1 size=N/A time=24:00:00.000000 bitrate=N/A",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": null,
+        "Framerate": 1,
+        "CompletionPercentage": null,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "hours",
+    "RuntimeTicks": 3600000000000,
+    "StartTimeTicks": 0,
+    "Line": "fps=29.97 size=1kB time=25:01:02.123456 bitrate=1.1kbits/s",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": null,
+        "Framerate": 29.97,
+        "CompletionPercentage": null,
+        "BytesTranscoded": 1024,
+        "Bitrate": 1127
+      }
+    ]
+  },
+  {
+    "Name": "day-prefix",
+    "RuntimeTicks": 3600000000000,
+    "StartTimeTicks": 0,
+    "Line": "fps=1 size=N/A time=1.01:02:03.400000 bitrate=N/A",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 901234000000,
+        "Framerate": 1,
+        "CompletionPercentage": 25.034277777777778,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "overflow-time",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 0,
+    "Line": "fps=1 size=N/A time=2562047788:00:54.079808 bitrate=N/A",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": null,
+        "Framerate": 1,
+        "CompletionPercentage": null,
+        "BytesTranscoded": null,
+        "Bitrate": null
+      }
+    ]
+  },
+  {
+    "Name": "negative-time",
+    "RuntimeTicks": 100000000,
+    "StartTimeTicks": 20000000,
+    "Line": "fps=1 size=1kB time=-00:00:00.500000 bitrate=1kbits/s",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 15000000,
+        "Framerate": 1,
+        "CompletionPercentage": 15,
+        "BytesTranscoded": 1024,
+        "Bitrate": 1024
+      }
+    ]
+  },
+  {
+    "Name": "fraction-rounding",
+    "RuntimeTicks": 9007199254740000,
+    "StartTimeTicks": 9007199254000001,
+    "Line": "fps=1 size=1kB time=00:00:00.1234567 bitrate=1kbits/s",
+    "Reports": [
+      {
+        "TranscodingPositionTicks": 9007199255234568,
+        "Framerate": 1,
+        "CompletionPercentage": 100.0000000054908,
+        "BytesTranscoded": 1024,
+        "Bitrate": 1024
+      }
+    ]
+  }
+]

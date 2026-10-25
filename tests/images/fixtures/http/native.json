@@ -1,0 +1,2631 @@
+[
+  {
+    "name": "original",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438668967,
+    "after": 1790438669093,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "116.6373"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "head",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "HEAD",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669093,
+    "after": 1790438669130,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "22.3745"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "range-ignored",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "Range": "bytes=1-5"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "range": "bytes=1-5",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669130,
+    "after": 1790438669134,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.2843"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "tag",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669134,
+    "after": 1790438669144,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "7.702"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "etag-quoted",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-None-Match": "\"provided\""
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-none-match": "\"provided\"",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669144,
+    "after": 1790438669147,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8823"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "etag-bare",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-None-Match": "provided"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-none-match": "provided",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669147,
+    "after": 1790438669150,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.5269"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "etag-weak",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-None-Match": "W/\"provided\""
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-none-match": "W/\"provided\"",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669150,
+    "after": 1790438669154,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.0001"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "etag-list",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-None-Match": "\"provided\", \"other\""
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-none-match": "\"provided\", \"other\"",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669154,
+    "after": 1790438669156,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.4488"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "etag-star",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-None-Match": "*"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-none-match": "*",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669156,
+    "after": 1790438669159,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.0667"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "cache-disabled",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "If-None-Match": "provided"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "cache-control": "no-cache",
+      "if-none-match": "provided",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669159,
+    "after": 1790438669163,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "no-cache, no-store, must-revalidate",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "pragma": "no-cache, no-store, must-revalidate",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.4235"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "cache-combined",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "Cache-Control": "no-cache, no-store",
+        "If-None-Match": "provided"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "cache-control": "no-cache, no-store",
+      "if-none-match": "provided",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669163,
+    "after": 1790438669166,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.14"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "modified-same",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "Wed, 03 Apr 2024 04:13:14 GMT"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669166,
+    "after": 1790438669169,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.2664"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "modified-minute-before",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "Wed, 03 Apr 2024 04:12:14 GMT"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "Wed, 03 Apr 2024 04:12:14 GMT",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669169,
+    "after": 1790438669171,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.0674"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "modified-day-before",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "Tue, 02 Apr 2024 04:13:14 GMT"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "Tue, 02 Apr 2024 04:13:14 GMT",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669172,
+    "after": 1790438669176,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "3.3128"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "unmodified-before",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Unmodified-Since": "Tue, 02 Apr 2024 04:13:14 GMT"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-unmodified-since": "Tue, 02 Apr 2024 04:13:14 GMT",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669176,
+    "after": 1790438669179,
+    "status": 412,
+    "headers": {
+      "content-length": "0",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.6309"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "match-wrong",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "If-Match": "\"wrong\""
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-match": "\"wrong\"",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669179,
+    "after": 1790438669183,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.2703"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "index-query",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop?imageIndex=1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669183,
+    "after": 1790438669186,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.1064"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "index-route",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669186,
+    "after": 1790438669199,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "11.8969"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "index-precedence",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/0?imageIndex=1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669199,
+    "after": 1790438669202,
+    "status": 200,
+    "headers": {
+      "content-length": "334",
+      "content-type": "image/jpeg",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8037"
+    },
+    "length": 334,
+    "sha256": "0ae30be0bed4084a9251f37447a42ad4195654fc799f78c47be51eb77195c730"
+  },
+  {
+    "name": "index-negative",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary/-1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669202,
+    "after": 1790438669205,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "1.6728"
+    },
+    "length": 54,
+    "sha256": "428a10015c39ef22c812bbc4e46c1535e26f93f89bd5a7363a2ee833224967d8",
+    "body": "Image fixture does not have an image of type Primary"
+  },
+  {
+    "name": "index-missing",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary/1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669205,
+    "after": 1790438669206,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.6796"
+    },
+    "length": 54,
+    "sha256": "428a10015c39ef22c812bbc4e46c1535e26f93f89bd5a7363a2ee833224967d8",
+    "body": "Image fixture does not have an image of type Primary"
+  },
+  {
+    "name": "image-missing",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Banner",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669206,
+    "after": 1790438669207,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.4007"
+    },
+    "length": 53,
+    "sha256": "dca97a4233361f8f6508f0e48d24919af828f7d373e6e83ca91a30efc892e0c1",
+    "body": "Image fixture does not have an image of type Banner"
+  },
+  {
+    "name": "file-missing",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Logo",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669207,
+    "after": 1790438669211,
+    "status": 404,
+    "headers": {
+      "content-type": "text/plain",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "transfer-encoding": "chunked",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.4151"
+    },
+    "length": 25,
+    "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+    "body": "Error processing request."
+  },
+  {
+    "name": "type-numeric",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/0",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669211,
+    "after": 1790438669214,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.6419"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "type-case",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/primary",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669214,
+    "after": 1790438669216,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.7021"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "type-unknown",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/13",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669217,
+    "after": 1790438669235,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "17.6572"
+    },
+    "length": 256,
+    "sha256": "45ef4af72c90533f35d214f0124c53b4d69af5b7822ba1ad520c4d189fca11ae",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "imageType": [
+          "The value '13' is invalid."
+        ]
+      },
+      "traceId": "00-991bef023eada26946d0b30b714466c9-a41a7cb70161d704-00"
+    }
+  },
+  {
+    "name": "type-invalid",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Other",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669235,
+    "after": 1790438669237,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "1.3216"
+    },
+    "length": 261,
+    "sha256": "7b2979e6f903ea1e7fe36dde46f65f216ad488db78779c4c12c361248d3ffd8b",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "imageType": [
+          "The value 'Other' is not valid."
+        ]
+      },
+      "traceId": "00-a175c5525627224871afaba747493680-5a03305d88e07b5e-00"
+    }
+  },
+  {
+    "name": "type-composite",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary,Art",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669237,
+    "after": 1790438669245,
+    "status": 200,
+    "headers": {
+      "content-length": "95",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "698",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Sat, 26 Sep 2026 15:52:51 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "6.245"
+    },
+    "length": 95,
+    "sha256": "b30edff983b07605b1cbbc4ef70f882cc8ba3e3c33c6fb40ec0bfb3423f695c6"
+  },
+  {
+    "name": "format-invalid",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?format=original",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669245,
+    "after": 1790438669248,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.7537"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "format-unknown",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?format=6",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669248,
+    "after": 1790438669266,
+    "status": 400,
+    "headers": {
+      "content-type": "text/plain",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "17.3572"
+    },
+    "length": 25,
+    "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+    "body": "Error processing request."
+  },
+  {
+    "name": "format-empty",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?format=",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669266,
+    "after": 1790438669270,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.1391"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "width-invalid",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?width=bad",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669270,
+    "after": 1790438669272,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "1.0326"
+    },
+    "length": 255,
+    "sha256": "e69c5d87929a61c1369e128312e248431a76e8c7adbe231d827543ae725a7f64",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "width": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-1a9e7742c5f0dae5e162c25a5178744f-f75296414ee5a205-00"
+    }
+  },
+  {
+    "name": "width-empty",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?width=",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669272,
+    "after": 1790438669275,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.7403"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "width-nul",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?width=8%00",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669275,
+    "after": 1790438669281,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "4.4998"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "width-duplicate",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?width=8&width=9",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669281,
+    "after": 1790438669284,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.3854"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "width-overflow",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?width=2147483648",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669284,
+    "after": 1790438669286,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.9951"
+    },
+    "length": 262,
+    "sha256": "f7d249a497536f4d212328cd10c18a995bb5cc036be0cb50f15216e3ef4e35da",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "width": [
+          "The value '2147483648' is not valid."
+        ]
+      },
+      "traceId": "00-8a77a4206a36e6146002bdf17e7aa7c3-7220980b75472f29-00"
+    }
+  },
+  {
+    "name": "quality-pass",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?quality=90",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669286,
+    "after": 1790438669289,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8145"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "no-upsize",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?maxWidth=100&maxHeight=100",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669289,
+    "after": 1790438669292,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.2759"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "gif-transform",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?width=1&format=jpg&quality=1&blur=5",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669292,
+    "after": 1790438669296,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.1327"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "gif-nan",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?percentPlayed=NaN",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669296,
+    "after": 1790438669299,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8923"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "gif-infinite",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?percentPlayed=Infinity",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669299,
+    "after": 1790438669302,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.0919"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "gif-comma-double",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?percentPlayed=1,000",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669302,
+    "after": 1790438669305,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8088"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "gif-double-invalid",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?percentPlayed=bad",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669305,
+    "after": 1790438669306,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.7752"
+    },
+    "length": 263,
+    "sha256": "4ac0e180d8bcce53f05f6a8e904fbcde620c3daa6ee52c73169c95bcc2066f31",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "percentPlayed": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-13b15c8657daaef73a3c08225be388d0-4d377cfbac8620ad-00"
+    }
+  },
+  {
+    "name": "gif-double-overflow",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?percentPlayed=1e400",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669306,
+    "after": 1790438669309,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.631"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "chapter",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Chapter/0",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669309,
+    "after": 1790438669329,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "18.3714"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "public-hidden",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444442/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669329,
+    "after": 1790438669333,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "3.6213"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "missing-item",
+    "request": {
+      "pathname": "/Items/00000000000000000000000000000001/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669333,
+    "after": 1790438669339,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "4.7219"
+    },
+    "length": 162,
+    "sha256": "f0809b6b2f665248abc6be9610e9fc4bee2ef70d947661419814fad36ac3bce5",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Not Found",
+      "status": 404,
+      "traceId": "00-c101c06d87f477a1303632d0b627ebde-cc164a10d8f2068d-00"
+    }
+  },
+  {
+    "name": "invalid-id",
+    "request": {
+      "pathname": "/Items/invalid/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669339,
+    "after": 1790438669341,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.6476"
+    },
+    "length": 260,
+    "sha256": "3e2a0f3c1d86ef7ac34f83694a2c20b2e691fceba705151e804ca981f9c058d0",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "itemId": [
+          "The value 'invalid' is not valid."
+        ]
+      },
+      "traceId": "00-31bb6a0419503f67c09ef865a1daec6c-c4614242d27477f2-00"
+    }
+  },
+  {
+    "name": "long-route",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary/0/explicit/Png/100/100/0/0",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669341,
+    "after": 1790438669353,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321075",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"explicit\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "11.6139"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "long-route-bad",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary/0/explicit/original/100/100/0/0",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669353,
+    "after": 1790438669355,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.9599"
+    },
+    "length": 261,
+    "sha256": "1e215bd50aeba26e94fb4a2f2830d3bd9bd5bcaa70094867af4a4a951614cd94",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "format": [
+          "The value 'original' is not valid."
+        ]
+      },
+      "traceId": "00-73cadd8b39339d90363e9972d9eedd26-f33ba04b0d01395e-00"
+    }
+  },
+  {
+    "name": "user-required",
+    "request": {
+      "pathname": "/UserImage",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669355,
+    "after": 1790438669366,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "9.2595"
+    },
+    "length": 39,
+    "sha256": "26b5fbfd852ae968eafc2a276450b05934bb3d283293f2a8073876561097e986",
+    "body": "UserId is required if unauthenticated"
+  },
+  {
+    "name": "missing-user",
+    "request": {
+      "pathname": "/UserImage?userId=00000000000000000000000000000001",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669366,
+    "after": 1790438669416,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "48.3579"
+    },
+    "length": 162,
+    "sha256": "3735da8d45f673e63fc6850bb2fd2beb38865cf081b3422f79212b3f84ad2372",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Not Found",
+      "status": 404,
+      "traceId": "00-7851330d62c40cf5c985e246dcc05aea-45016c88d330040f-00"
+    }
+  },
+  {
+    "name": "user-current",
+    "request": {
+      "pathname": "/UserImage",
+      "method": "GET",
+      "headers": {},
+      "authenticated": true
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669416,
+    "after": 1790438669520,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "103.3614"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "user-public",
+    "request": {
+      "pathname": "/UserImage?userId=5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669520,
+    "after": 1790438669529,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "8.0474"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "user-legacy-ignored-options",
+    "request": {
+      "pathname": "/Users/5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7/Images/Backdrop/99?width=1&quality=1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669529,
+    "after": 1790438669551,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "20.5998"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "enum-invalid-null",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?format=bad",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669551,
+    "after": 1790438669579,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "25.9052"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "gif-enum-undefined",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Backdrop/1?format=6",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669579,
+    "after": 1790438669582,
+    "status": 200,
+    "headers": {
+      "content-length": "271",
+      "content-type": "image/gif",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.7434"
+    },
+    "length": 271,
+    "sha256": "84c256f2c2e64f95a4bec7022b062efc4bad43efe735341548596a1835453c55"
+  },
+  {
+    "name": "nullable-index-invalid",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?imageIndex=bad",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669582,
+    "after": 1790438669584,
+    "status": 400,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.7758"
+    },
+    "length": 260,
+    "sha256": "454b23384d04a7c8b04705f6d534513cb5273fe7177de191148d0ea51b8c3e59",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+      "title": "One or more validation errors occurred.",
+      "status": 400,
+      "errors": {
+        "imageIndex": [
+          "The value 'bad' is not valid."
+        ]
+      },
+      "traceId": "00-78ab537cbd569105a384cb9fd3e95b2f-76469f2b5a62c239-00"
+    }
+  },
+  {
+    "name": "percent-negative",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?percentPlayed=-1",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669584,
+    "after": 1790438669588,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.5093"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "percent-complete",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?percentPlayed=100",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669588,
+    "after": 1790438669591,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.8992"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "count-zero",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?unplayedCount=0",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669591,
+    "after": 1790438669595,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.801"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "cache-case",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "Cache-Control": "No-Cache",
+        "If-None-Match": "provided"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "cache-control": "No-Cache",
+      "if-none-match": "provided",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669595,
+    "after": 1790438669597,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public, max-age=31536000, immutable",
+      "content-language": "en-US",
+      "etag": "\"provided\"",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.0282"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "cache-multiple",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?tag=provided",
+      "method": "GET",
+      "headers": {
+        "Cache-Control": [
+          "no-store",
+          "no-cache"
+        ],
+        "If-None-Match": "provided"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "cache-control": [
+        "no-store",
+        "no-cache"
+      ],
+      "if-none-match": "provided",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669597,
+    "after": 1790438669602,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "no-cache, no-store, must-revalidate",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "pragma": "no-cache, no-store, must-revalidate",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.6934"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "modified-future",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "Thu, 03 Apr 2031 04:13:14 GMT"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "Thu, 03 Apr 2031 04:13:14 GMT",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669602,
+    "after": 1790438669604,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.1665"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "modified-no-cache",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "Wed, 03 Apr 2024 04:13:14 GMT",
+        "Cache-Control": "no-cache"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "cache-control": "no-cache",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669604,
+    "after": 1790438669607,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "no-cache, no-store, must-revalidate",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "pragma": "no-cache, no-store, must-revalidate",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "1.336"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "modified-iso",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "If-Modified-Since": "2024-04-03T04:12:14Z"
+      },
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "if-modified-since": "2024-04-03T04:12:14Z",
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669607,
+    "after": 1790438669609,
+    "status": 304,
+    "headers": {
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "age": "78321076",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "0.9267"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "infos-anonymous",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images",
+      "method": "GET",
+      "headers": {},
+      "authenticated": false
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669609,
+    "after": 1790438669619,
+    "status": 401,
+    "headers": {
+      "content-length": "0",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "x-response-time-ms": "9.6099"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "body": ""
+  },
+  {
+    "name": "infos-authenticated",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images",
+      "method": "GET",
+      "headers": {},
+      "authenticated": true
+    },
+    "sentHeaders": {
+      "host": "127.0.0.1:18359"
+    },
+    "before": 1790438669619,
+    "after": 1790438669766,
+    "status": 200,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:04:28 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "145.3493"
+    },
+    "length": 1327,
+    "sha256": "6dae176ce77ea0cce1e22c175b19bb832e9d6314ef4b750c86a9d76307279b5d",
+    "body": [
+      {
+        "ImageType": "Primary",
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\poster.png",
+        "BlurHash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+        "Height": 6,
+        "Width": 8,
+        "Size": 287
+      },
+      {
+        "ImageType": "Art",
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\vector.svg",
+        "BlurHash": "",
+        "Height": 6,
+        "Width": 8,
+        "Size": 106
+      },
+      {
+        "ImageType": "Logo",
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\missing.png",
+        "Size": 0
+      },
+      {
+        "ImageType": "Backdrop",
+        "ImageIndex": 0,
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\backdrop.jpg",
+        "BlurHash": "VOGlkq^kxl~Wv#-?t2Ri%3RPa$RQR%RltR%gs;W-ofRk",
+        "Height": 6,
+        "Width": 8,
+        "Size": 334
+      },
+      {
+        "ImageType": "Backdrop",
+        "ImageIndex": 1,
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\animation.gif",
+        "BlurHash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+        "Height": 6,
+        "Width": 8,
+        "Size": 271
+      }
+    ]
+  },
+  {
+    "name": "ignored-user-query",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary?userId=bad",
+      "method": "GET",
+      "headers": {}
+    },
+    "before": 1790439023379,
+    "after": 1790439023393,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "age": "78321429",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "2.0502"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "ignored-user-image-index",
+    "request": {
+      "pathname": "/UserImage?userId=5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7&imageIndex=bad&width=bad",
+      "method": "GET",
+      "headers": {}
+    },
+    "before": 1790439023394,
+    "after": 1790439023402,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "age": "78321429",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "7.3728"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "empty-item-id",
+    "request": {
+      "pathname": "/Items/00000000000000000000000000000000/Images/Primary",
+      "method": "GET",
+      "headers": {}
+    },
+    "before": 1790439023402,
+    "after": 1790439023408,
+    "status": 400,
+    "headers": {
+      "content-type": "text/plain",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "4.8208"
+    },
+    "length": 25,
+    "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+    "body": "Error processing request."
+  },
+  {
+    "name": "head-missing",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Banner",
+      "method": "HEAD",
+      "headers": {}
+    },
+    "before": 1790439023408,
+    "after": 1790439023409,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "x-response-time-ms": "0.5395"
+    },
+    "length": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "body": ""
+  },
+  {
+    "name": "missing-accept-any",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Banner",
+      "method": "GET",
+      "headers": {
+        "Accept": "*/*"
+      }
+    },
+    "before": 1790439023409,
+    "after": 1790439023411,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.4576"
+    },
+    "length": 53,
+    "sha256": "dca97a4233361f8f6508f0e48d24919af828f7d373e6e83ca91a30efc892e0c1",
+    "body": "Image fixture does not have an image of type Banner"
+  },
+  {
+    "name": "missing-accept-text",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Banner",
+      "method": "GET",
+      "headers": {
+        "Accept": "text/plain"
+      }
+    },
+    "before": 1790439023411,
+    "after": 1790439023412,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.3515"
+    },
+    "length": 53,
+    "sha256": "dca97a4233361f8f6508f0e48d24919af828f7d373e6e83ca91a30efc892e0c1",
+    "body": "Image fixture does not have an image of type Banner"
+  },
+  {
+    "name": "public-invalid-token",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {
+        "Authorization": "MediaBrowser Client=\"ImageExtra\", Device=\"Isolated\", DeviceId=\"image-extra\", Version=\"1\", Token=\"invalid-image-token\""
+      }
+    },
+    "before": 1790439023412,
+    "after": 1790439023425,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "age": "78321429",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "11.6364"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "authenticated-blocked-image",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444442/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authRole": "blocked"
+    },
+    "before": 1790439023425,
+    "after": 1790439023441,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "14.7798"
+    },
+    "length": 162,
+    "sha256": "222101862f151eaba344835d08ba871b093526ae83fba32ae4564dee453763c3",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Not Found",
+      "status": 404,
+      "traceId": "00-407aea8fc4ac8b92640bade83260f2f9-62d1bd98276a6906-00"
+    }
+  },
+  {
+    "name": "authenticated-allowed-image",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Primary",
+      "method": "GET",
+      "headers": {},
+      "authRole": "blocked"
+    },
+    "before": 1790439023441,
+    "after": 1790439023459,
+    "status": 200,
+    "headers": {
+      "content-length": "287",
+      "content-type": "image/png",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "age": "78321429",
+      "cache-control": "public",
+      "content-language": "en-US",
+      "last-modified": "Wed, 03 Apr 2024 04:13:14 GMT",
+      "vary": "Accept",
+      "transfermode.dlna.org": "Interactive",
+      "realtimeinfo.dlna.org": "DLNA.ORG_TLAG=*",
+      "content-disposition": "attachment",
+      "x-response-time-ms": "16.7429"
+    },
+    "length": 287,
+    "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3"
+  },
+  {
+    "name": "authenticated-blocked-infos",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444442/Images",
+      "method": "GET",
+      "headers": {},
+      "authRole": "blocked"
+    },
+    "before": 1790439023459,
+    "after": 1790439023479,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "19.4359"
+    },
+    "length": 162,
+    "sha256": "0a35f14f882b77a442979437efb12328d34a809fa42c19c94170e53ba69b178e",
+    "body": {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Not Found",
+      "status": 404,
+      "traceId": "00-a7b9b2c3684b327f7cc7b015b2fcfc3a-b746c499e9d06dc0-00"
+    }
+  },
+  {
+    "name": "authenticated-allowed-infos",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images",
+      "method": "GET",
+      "headers": {},
+      "authRole": "blocked"
+    },
+    "before": 1790439023479,
+    "after": 1790439023505,
+    "status": 200,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "24.1991"
+    },
+    "length": 1128,
+    "sha256": "b6b13f5d9db023e411c72ab76ec465203dbdcdb47c203c632ae176a156e82522",
+    "body": [
+      {
+        "ImageType": "Primary",
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\poster.png",
+        "BlurHash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+        "Height": 6,
+        "Width": 8,
+        "Size": 287
+      },
+      {
+        "ImageType": "Art",
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\vector.svg",
+        "BlurHash": "",
+        "Height": 6,
+        "Width": 8,
+        "Size": 106
+      },
+      {
+        "ImageType": "Backdrop",
+        "ImageIndex": 0,
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\backdrop.jpg",
+        "BlurHash": "VOGlkq^kxl~Wv#-?t2Ri%3RPa$RQR%RltR%gs;W-ofRk",
+        "Height": 6,
+        "Width": 8,
+        "Size": 334
+      },
+      {
+        "ImageType": "Backdrop",
+        "ImageIndex": 1,
+        "ImageTag": "b22f2ecfd13fb52f6456afa196c0b746",
+        "Path": "D:\\mediamanager\\.test-input\\evidence\\image-hls-lifecycle-20260926\\images-http\\reference\\media\\animation.gif",
+        "BlurHash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+        "Height": 6,
+        "Width": 8,
+        "Size": 271
+      }
+    ]
+  },
+  {
+    "name": "missing-after-infos",
+    "request": {
+      "pathname": "/Items/44444444-4444-4444-4444-444444444441/Images/Logo",
+      "method": "GET",
+      "headers": {}
+    },
+    "before": 1790439023505,
+    "after": 1790439023506,
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "date": "Sat, 26 Sep 2026 16:10:23 GMT",
+      "server": "Kestrel",
+      "content-language": "en-US",
+      "transfer-encoding": "chunked",
+      "x-response-time-ms": "0.4134"
+    },
+    "length": 51,
+    "sha256": "d7abadb205cbd4089b2948d27f33a61b0f26104405bc791c7130fa3f0f69c2da",
+    "body": "Image fixture does not have an image of type Logo"
+  }
+]

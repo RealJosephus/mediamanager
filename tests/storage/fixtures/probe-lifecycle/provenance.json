@@ -1,0 +1,215 @@
+{
+  "recordedAt": "2026-09-26T16:12:32.033Z",
+  "reference": "D:/jellyfin including local modifications, read-only; frozen DLLs executed in an isolated harness",
+  "sourceHashes": [
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/ProbeProvider.cs",
+      "currentSha256": "118b077b0963ee1741911c0e27002654c854ba7d4dad114cfb5f5498154e0994",
+      "frozenSha256": "118b077b0963ee1741911c0e27002654c854ba7d4dad114cfb5f5498154e0994"
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/MetadataService.cs",
+      "currentSha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "frozenSha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "currentSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "frozenSha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "currentSha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11",
+      "frozenSha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItemExtensions.cs",
+      "currentSha256": "9773741141f7d38e7cde16eb2bf2a5f7b9e271a679df9b00782b57d087275b22",
+      "frozenSha256": "9773741141f7d38e7cde16eb2bf2a5f7b9e271a679df9b00782b57d087275b22"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/AudioFileProber.cs",
+      "currentSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b",
+      "frozenSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs",
+      "currentSha256": "4fb2aae81a27f8e4799948c11512b3f4668feabd4d482b3a101e85d491178ba9",
+      "frozenSha256": "4fb2aae81a27f8e4799948c11512b3f4668feabd4d482b3a101e85d491178ba9"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/LyricResolver.cs",
+      "currentSha256": "8a76f211a28f9fd9b70f71db2af4eade7b9697fc4a643af7fcd4df190408b24b",
+      "frozenSha256": "8a76f211a28f9fd9b70f71db2af4eade7b9697fc4a643af7fcd4df190408b24b"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "currentSha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "frozenSha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/MediaStreamRepository.cs",
+      "currentSha256": "9e44c7a62b23f82631d5708c860f4a0439e6a46f091654fc380f9dade03f93d5",
+      "frozenSha256": "9e44c7a62b23f82631d5708c860f4a0439e6a46f091654fc380f9dade03f93d5"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "Oracle.cs",
+      "sha256": "d99600674d7c1f1626c620b53e556899096ac0466a45e871d4ceff70194653e9"
+    },
+    {
+      "path": "Oracle.csproj",
+      "sha256": "03711399c6664ee4862cd8316059c71ac5f9eb79756a52dffe383a01641ec8cf",
+      "priorSha256": "fa605ac9b2fe2ee27c80c4d7a66613983b4ca12548acecf2b55e77b718d84e30",
+      "replayedProject": ".test-output/validation/oracle-rebind-20261003/probe-lifecycle-v2/project/Oracle.csproj"
+    },
+    {
+      "path": "SelectionOracle.cs",
+      "sha256": "4eb75bc113bfa6ba26ee8cd9174bc8918c71c2d8f8d0d81c41a63a781b3add8e"
+    },
+    {
+      "path": "NativeReader.cs",
+      "sha256": "bdf25dacc3a6938682186e0e5ac6ef3d412a13d62451b13079d205d56157abe5"
+    },
+    {
+      "path": "create-input.mjs",
+      "sha256": "53767c1e8b2e19aa6c758268f82351b28cc40077975da9ae3b3ad162be9e0bfc"
+    },
+    {
+      "path": "input.json",
+      "sha256": "062645759d80e4f63827c0c6b67645c6a78d162c9019cf314e3ec4a3ce647a61"
+    },
+    {
+      "path": "native.json",
+      "sha256": "5211433db72d1e8ca1d464e37559b48fa962bb6b5f13db1b9bf5639b2ffb4ce0"
+    },
+    {
+      "path": "selection.json",
+      "sha256": "543af6b70b8a9be7e10a42f54bcf7f5dc02fd538668d8919aaec2409e9859c65"
+    },
+    {
+      "path": "verify-native.mjs",
+      "sha256": "5df8eff4b7edc504e05bbf2ec7e492a7a5c99ad66890ac3a431f7a065242be23"
+    },
+    {
+      "path": "record-provenance.mjs",
+      "sha256": "4bb33b88b1e8049865bcdf7c269df9ca0ace5052509565501f8e9dde817db6ba"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "MediaBrowser.Providers.dll",
+      "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+    },
+    {
+      "path": "MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "path": "MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+    },
+    {
+      "path": "Emby.Naming.dll",
+      "sha256": "aec58918ad6f313836b867cab8b71eecaae6bdbf7a5e2b9e73ada2a54f2ee4f7"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e"
+    },
+    {
+      "path": "Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+    },
+    {
+      "path": "runtimes/win-x64/native/e_sqlite3.dll",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+    }
+  ],
+  "tools": [
+    {
+      "path": "C:\\Program Files\\nodejs\\node.exe",
+      "sha256": "b3094d0b49f9ad602262a9921551737bb97637c05dd357a06ae98188d7290aa3"
+    },
+    {
+      "path": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    {
+      "path": "C:\\ProgramData\\chocolatey\\bin\\ffprobe.exe",
+      "sha256": "9b629964fd0eeb0b2a2a0168fe8e7dd7c9b347b9f872ad6190ad27cb02fbfe7c"
+    },
+    {
+      "path": "D:\\mediamanager\\.test-input\\evidence\\runtime-integration-20260926\\alist\\alist.exe",
+      "sha256": "d7de7958e174633a0e80966170c03db2c371f483ff64f8cb5faf78fd4f8a959f"
+    }
+  ],
+  "oracle": {
+    "changeCases": 37,
+    "selectionCases": 90,
+    "methods": [
+      "ProbeProvider.HasChanged",
+      "ProbeProvider.IsMissingMediaInfo",
+      "ProbeProvider.FetchVideoInfo/FetchAudioInfo early returns",
+      "LyricResolver.GetExternalStreams",
+      "MetadataService<Movie,MovieInfo>.GetProviders"
+    ],
+    "boundaries": "Native objects are assigned through actual CLR properties because native persistence columns are JsonIgnore. Directory/filesystem/protocol/language dependencies are isolated stubs. Active recording is false. Fetch gates stop at an explicitly null prober dependency; ProberBoundary means allowed past native early returns, not a successful native media probe. Selection uses actual native GetProviders with constrained generic provider-manager dependency stub and actual native exception handling.",
+    "normalization": "No native output changed. The host execution test additionally applies native RefreshWithProviders suppression of remote providers during ValidationOnly without replacement; raw selected/checks remain recorded."
+  },
+  "integration": {
+    "test": "tests/storage/probe-lifecycle.test.js",
+    "media": "Synthetic PCM WAV of 0.1 then 0.2 seconds and synthetic external LRC/TXT only. Actual ffprobe reads private VFS HTTP leases.",
+    "storage": "New in-memory SQLite; private independent PostgreSQL schema; actual AList current-source binary with isolated PostgreSQL database and synthetic Local driver. No original AList data.db or media opened.",
+    "return": "Exported native-schema SQLite with lyrics and after removal. Actual Microsoft.Data.Sqlite Mode=ReadOnly + BaseItemMapper.DeserializeBaseItem and MediaStreamRepository.Map read exported fields; all three storage modes exactly equal recorded expected fields.",
+    "http": "Two database queued POST Items/{Id}/Refresh integration with actual library/host/probe/VFS; authentication dependency is a stub. Existing metadata refresh HTTP native binding fixture covers the endpoint query/status contract.",
+    "timestamp": "Actual AList exposed RFC3339 nanosecond/offset date persistence failure. Host and probe now normalize UTC preserving 100 ns; precision-boundary regression covers offsets and 9-digit fractions."
+  },
+  "commands": [
+    "node tests/storage/fixtures/probe-lifecycle/create-input.mjs",
+    ".tools/dotnet/dotnet.exe run --project tests/storage/fixtures/probe-lifecycle/Oracle.csproj -- tests/storage/fixtures/probe-lifecycle/input.json tests/storage/fixtures/probe-lifecycle/native.json",
+    ".tools/dotnet/dotnet.exe run --project tests/storage/fixtures/probe-lifecycle/Oracle.csproj -- select tests/storage/fixtures/probe-lifecycle/selection.json",
+    "Set MEDIAMANAGER_TEST_POSTGRES, MEDIAMANAGER_ALIST_EXECUTABLE and a new MEDIAMANAGER_PROBE_LIFECYCLE_EVIDENCE directory; node --test tests/storage/probe-lifecycle.test.js",
+    "node tests/storage/fixtures/probe-lifecycle/verify-native.mjs .test-input/evidence/image-hls-lifecycle-20260926/probe/verified"
+  ],
+  "limits": [
+    "ATL-exclusive tags, embedded lyrics extraction and complete audio parsing remain unsupported.",
+    "DVD/BluRay/ISO/shortcut probing and Book archive/PDF/EPUB remain unsupported.",
+    "No filesystem watcher/full scan scheduler or all Before/After refresh events are implemented.",
+    "Native mapper return is not a full native server media-access migration proof.",
+    "Internal metadata sidecars need explicit VFS mapping. Native .strm and subtitle download providers remain unsupported.",
+    "AList has no reliable object version; same-path sidecar byte changes alone do not trigger native change monitoring. Explicit full refresh bypasses cache. AList actual runtime uses PostgreSQL; CGO/SQLite backend remains unverified."
+  ],
+  "replay": {
+    "recordedAt": "2026-10-03T13:48:25.695Z",
+    "scope": "37 actual ProbeProvider lifecycle rows and 90 MetadataService selection rows only. Native database reader, HTTP and actual AList integration were not rerun by this replay.",
+    "priorProvenanceSha256": "4ce00e76bcdef528cbe9e4d1bd178d537984ac8e37c32d172cbf17dc1be0ab39",
+    "comparisons": [
+      {
+        "fixture": "native.json",
+        "trackedSha256": "5211433db72d1e8ca1d464e37559b48fa962bb6b5f13db1b9bf5639b2ffb4ce0",
+        "rawSha256": "5211433db72d1e8ca1d464e37559b48fa962bb6b5f13db1b9bf5639b2ffb4ce0",
+        "jsonFieldsEqual": true,
+        "normalization": "Whitespace only; every JSON field value and array order compared.",
+        "rawPath": ".test-output/validation/oracle-rebind-20261003/probe-lifecycle-v2/native.json",
+        "recordSha256": "04b74fccf645935e4778482f0dce73be3340d36fa1c6749b35a257258a90a7fe"
+      },
+      {
+        "fixture": "selection.json",
+        "trackedSha256": "543af6b70b8a9be7e10a42f54bcf7f5dc02fd538668d8919aaec2409e9859c65",
+        "rawSha256": "543af6b70b8a9be7e10a42f54bcf7f5dc02fd538668d8919aaec2409e9859c65",
+        "jsonFieldsEqual": true,
+        "normalization": "Whitespace only; every JSON field value and array order compared.",
+        "rawPath": ".test-output/validation/oracle-rebind-20261003/probe-selection/selection.json",
+        "recordSha256": "b6d9bd66e52133772ea5eb6b3a8929bd8ca065c481a7ea5df9e95f7ee77fdc07"
+      }
+    ],
+    "commonBuildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "unchangedTrackedResults": true,
+    "projectReexecuted": true
+  }
+}

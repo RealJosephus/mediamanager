@@ -1,0 +1,250 @@
+{
+  "scope": "Two independent real native oracle builds and processes; input and output bytes are compared to the retained differential fixture. Source, selected native assemblies and oracle assemblies are bound. This is not a complete native build dependency closure.",
+  "recordings": [
+    {
+      "schemaVersion": 1,
+      "recordedAt": "2026-10-15T01:41:56.513Z",
+      "project": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Oracle.csproj",
+      "dotnet": {
+        "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+        "available": true,
+        "kind": "file",
+        "bytes": 167208,
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "node": "v24.16.0",
+      "timezone": "Asia/Taipei",
+      "jellyfinDll": {
+        "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 506368,
+        "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+      },
+      "sourceFiles": [
+        {
+          "filename": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Oracle.csproj",
+          "available": true,
+          "kind": "file",
+          "bytes": 453,
+          "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+          "available": true,
+          "kind": "file",
+          "bytes": 780,
+          "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Program.cs",
+          "available": true,
+          "kind": "file",
+          "bytes": 13419,
+          "sha256": "97d29f0f3864cb5439a5d84f585b3ae6a02e0a6a82882ecc420e627e75fa7bb5"
+        }
+      ],
+      "sourceFilesSha256": "c69072458797c8d55c8a551efbf0abd0cb589617bcfc4ac3933aaac7c8011dc6",
+      "build": {
+        "args": [
+          "build",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\project\\Oracle.csproj",
+          "-c",
+          "Release",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\bin\\",
+          "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\obj\\"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "process": {
+        "args": [
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+          "tests/metadata/fixtures/nfo-scalar-provider/input.json",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1/native.json"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "outputs": [
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\build.stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\build.stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 386,
+          "sha256": "dd62e0ce67e585dc78367710e51ebe8dbde51929e376548275a138de83114472"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\native.json",
+          "available": true,
+          "kind": "file",
+          "bytes": 132178,
+          "sha256": "aeac70d1e851f0bc5093b47cbaa078705174823325869bdd3a2ee0c195925d26"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "oracleAssembly": {
+        "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\bin\\Release\\net10.0\\Oracle.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 44032,
+        "sha256": "1aaafe16333d7e3ab27cc16bdbb60e22f3f0b5641f23eda5c62e1cf11977a7de"
+      },
+      "passed": true
+    },
+    {
+      "schemaVersion": 1,
+      "recordedAt": "2026-10-15T01:41:58.871Z",
+      "project": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Oracle.csproj",
+      "dotnet": {
+        "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+        "available": true,
+        "kind": "file",
+        "bytes": 167208,
+        "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+      },
+      "node": "v24.16.0",
+      "timezone": "Asia/Taipei",
+      "jellyfinDll": {
+        "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 506368,
+        "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+      },
+      "sourceFiles": [
+        {
+          "filename": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Oracle.csproj",
+          "available": true,
+          "kind": "file",
+          "bytes": 453,
+          "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+          "available": true,
+          "kind": "file",
+          "bytes": 780,
+          "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+        },
+        {
+          "filename": "D:\\mediamanager\\tests\\metadata\\fixtures\\nfo-scalar-provider\\Program.cs",
+          "available": true,
+          "kind": "file",
+          "bytes": 13419,
+          "sha256": "97d29f0f3864cb5439a5d84f585b3ae6a02e0a6a82882ecc420e627e75fa7bb5"
+        }
+      ],
+      "sourceFilesSha256": "c69072458797c8d55c8a551efbf0abd0cb589617bcfc4ac3933aaac7c8011dc6",
+      "build": {
+        "args": [
+          "build",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\project\\Oracle.csproj",
+          "-c",
+          "Release",
+          "--nologo",
+          "-v",
+          "minimal",
+          "-p:BaseOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\bin\\",
+          "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\obj\\"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "process": {
+        "args": [
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+          "tests/metadata/fixtures/nfo-scalar-provider/input.json",
+          "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2/native.json"
+        ],
+        "status": 0,
+        "signal": null
+      },
+      "outputs": [
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\build.stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\build.stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 386,
+          "sha256": "99a382501950108357526aae83519aaea9b6ad1e053e758354e2a76d3321213a"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\native.json",
+          "available": true,
+          "kind": "file",
+          "bytes": 132178,
+          "sha256": "aeac70d1e851f0bc5093b47cbaa078705174823325869bdd3a2ee0c195925d26"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\stderr.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\stdout.txt",
+          "available": true,
+          "kind": "file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "oracleAssembly": {
+        "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\bin\\Release\\net10.0\\Oracle.dll",
+        "available": true,
+        "kind": "file",
+        "bytes": 44032,
+        "sha256": "be3b994a25b32dfba14b59df6907d9fadf71f10f6f2b1ddd173c734d49252062"
+      },
+      "passed": true
+    }
+  ],
+  "input": {
+    "filename": "tests/metadata/fixtures/nfo-scalar-provider/input.json",
+    "bytes": 18677,
+    "sha256": "bdf318fe942f07f980e3b176166ce39f4ddef523fa648aa0bb55951013eaaa85"
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-1\\native.json",
+      "bytes": 132178,
+      "sha256": "aeac70d1e851f0bc5093b47cbaa078705174823325869bdd3a2ee0c195925d26"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261015-node-plugins-acceptance\\nfo-provider-native-2\\native.json",
+      "bytes": 132178,
+      "sha256": "aeac70d1e851f0bc5093b47cbaa078705174823325869bdd3a2ee0c195925d26"
+    }
+  ]
+}

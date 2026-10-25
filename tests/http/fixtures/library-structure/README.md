@@ -1,0 +1,13 @@
+# Native library structure HTTP boundary
+
+The neutral request matrix runs the designated `LibraryStructureController`, native Jellyfin MVC formatters and binding, nullable enum and comma collection binders, `FirstTimeSetupHandler`, `DefaultAuthorizationHandler` and `ExceptionMiddleware` on an isolated loopback listener. Principals follow the role assignment in `CustomAuthenticationHandler`; authentication, user lookup and network access remain controlled.
+
+The 102 HTTP cases cover all eight actions, first-time setup and elevated access, required and duplicate JSON members, typed options, scalar conversion failures, query validation, manager failures and rename outcomes. Rename executes real isolated directory moves, including the two-step case change and a failed second move. A physical-folder branch executes the actual `CollectionFolder.GetPhysicalFolders`, `BaseItem.RefreshMetadata` and `Folder.ValidateChildren` wrappers with controlled provider and child validation seams. Fifteen actual `CollectionTypeOptions` observations distinguish public marker types from the internal query enum.
+
+Create/delete/path manager operations, root navigation and repository lookup remain controls. Library options use the actual `CollectionFolder` JSON clone, XML writer and update event; shortcut creation is controlled. The HTTP differential projects those declared seams. The candidate runtime suite separately verifies PostgreSQL rows, actual state files, VFS media preservation, API-key and user authentication, restart, failure prefixes and service shutdown.
+
+Public JSON is compared by parsed values with only trace IDs removed. Runtime state roots and temporary GUID names are bound to their actual producers before consistent projection. File inventories are sets sorted after identity projection; move order and the temporary source/target identity remain exact. `Allow` is compared by its method set. Original recordings remain byte-bound independently of these projections.
+
+The current recording was independently executed twice with the unchanged oracle and input. The retained native DLL and dependencies match the previous input digests; all 23 selected designated sources and their recovered evidence copies were checked before and after capture. The recovered source copy did not produce the retained server DLL. `provenance.json` binds both fresh raw recordings, the loaded assemblies and the source recovery evidence; complete native build closure remains unproven.
+
+This does not establish full library scanning, real watcher, platform or browser acceptance. Re-record with `tools/compat/record-library-structure-http.js` into a new absolute evidence directory when the original isolated build source tree is available.

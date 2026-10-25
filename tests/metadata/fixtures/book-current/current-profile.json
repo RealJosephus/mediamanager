@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "fixture": "book-current",
+  "scope": "Independent repeated current native DTO, lifecycle, owned-extra, provider-order and Book directory-source observations. Original input matrices and historical recordings remain intact. Each component binds its own executed inputs, designated sources and actual runtime; component evidence grants no full-instance or release acceptance.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Dto/DtoService.cs",
+    "MediaBrowser.Controller/Entities/Book.cs",
+    "MediaBrowser.Model/Dto/BaseItemDto.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Providers/Books/BookMetadataService.cs",
+    "MediaBrowser.Providers/Manager/MetadataService.cs",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "Emby.Server.Implementations/Library/Resolvers/ExtraResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/GenericVideoResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/Audio/AudioResolver.cs",
+    "Emby.Naming/Video/VideoResolver.cs",
+    "Emby.Naming/Video/StubResolver.cs",
+    "Emby.Naming/Common/NamingOptions.cs",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Jellyfin.Server/CoreAppHost.cs",
+    "Emby.Server.Implementations/Plugins/PluginManager.cs",
+    "MediaBrowser.Providers/Books/ComicProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+    "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs",
+    "Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+    "Emby.Server.Implementations/Library/ResolverHelper.cs",
+    "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+    "MediaBrowser.Controller/Providers/DirectoryService.cs",
+    "Emby.Naming/Book/BookFileNameParser.cs"
+  ],
+  "components": {
+    "dto": {
+      "input": "dto/input.json",
+      "scope": "Actual Book DTO property mapping and supplied JSON serializer for the original null, empty and curated SeriesName wire values; Node item service/PostgreSQL/HTTP consumers remain separate.",
+      "sourcePaths": [
+        "Emby.Server.Implementations/Dto/DtoService.cs",
+        "MediaBrowser.Controller/Entities/Book.cs",
+        "MediaBrowser.Model/Dto/BaseItemDto.cs",
+        "src/Jellyfin.Extensions/Json/JsonDefaults.cs"
+      ]
+    },
+    "lifecycle": {
+      "input": "../book-lifecycle/input.json",
+      "scope": "All original seventeen lookups, sixty-four merges and eleven actual Book metadata refresh/save-prefix scenarios with controlled providers, repository callbacks and cancellation. Native SQL and production parsers are outside this component.",
+      "sourcePaths": [
+        "MediaBrowser.Controller/Entities/Book.cs",
+        "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "MediaBrowser.Providers/Books/BookMetadataService.cs",
+        "MediaBrowser.Providers/Manager/MetadataService.cs",
+        "MediaBrowser.Providers/Manager/ProviderManager.cs"
+      ]
+    },
+    "owned": {
+      "input": "../book-lifecycle/owned/input.json",
+      "scope": "All sixteen original non-video/video-shaped Book and other owner path boundaries through actual extra discovery, real files and SQLite persistence with controlled provider callbacks; no Photo/JPEG tag decoding or complete scanner claim.",
+      "sourcePaths": [
+        "MediaBrowser.Controller/Entities/BaseItem.cs",
+        "Emby.Server.Implementations/Library/LibraryManager.cs",
+        "Emby.Server.Implementations/Library/Resolvers/ExtraResolver.cs",
+        "Emby.Server.Implementations/Library/Resolvers/GenericVideoResolver.cs",
+        "Emby.Server.Implementations/Library/Resolvers/Audio/AudioResolver.cs",
+        "Emby.Naming/Video/VideoResolver.cs",
+        "Emby.Naming/Video/StubResolver.cs",
+        "Emby.Naming/Common/NamingOptions.cs",
+        "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+        "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs"
+      ]
+    },
+    "order": {
+      "input": "order/input.json",
+      "scope": "Actual CoreAppHost built-in export discovery and ProviderManager default/global/library local-reader ordering with no installed plugins or reader execution; Node consumes its actual runtime registry.",
+      "sourcePaths": [
+        "Emby.Server.Implementations/ApplicationHost.cs",
+        "Jellyfin.Server/CoreAppHost.cs",
+        "Emby.Server.Implementations/Plugins/PluginManager.cs",
+        "MediaBrowser.Providers/Manager/ProviderManager.cs",
+        "MediaBrowser.Providers/Books/ComicProvider.cs",
+        "MediaBrowser.Providers/Books/OpenPackagingFormat/EpubProvider.cs",
+        "MediaBrowser.Providers/Books/OpenPackagingFormat/OpfProvider.cs"
+      ]
+    },
+    "directory": {
+      "input": "../../../library/fixtures/book-directory-source/input.json",
+      "scope": "All three original extension-named Book directory and ordinary-file controls through actual BookResolver/ResolverHelper over real files; Node retains all six invalid-source/admission boundaries.",
+      "sourcePaths": [
+        "Emby.Server.Implementations/Library/Resolvers/Books/BookResolver.cs",
+        "Emby.Server.Implementations/Library/ResolverHelper.cs",
+        "Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+        "MediaBrowser.Controller/Providers/DirectoryService.cs",
+        "Emby.Naming/Book/BookFileNameParser.cs",
+        "MediaBrowser.Controller/Entities/Book.cs",
+        "MediaBrowser.Controller/Entities/BaseItem.cs"
+      ]
+    }
+  },
+  "inputs": [
+    {
+      "role": "capture",
+      "filename": "capture.js",
+      "bytes": 6597,
+      "sha256": "0d35b22de5aed7312239675184df0710dbeb06f9809a0d340e2eb62a3998b17d"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "role": "scenarios",
+      "filename": "dto/input.json",
+      "bytes": 186,
+      "sha256": "ceca7006d4d49cf6f42d09a1a19c27432ade6fb68f237ca5a4364c816d100fda"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "dto/Program.cs",
+      "bytes": 2068,
+      "sha256": "f34baff22836ca40b222561babed99b62731b82e340d2f2de783910eb602dfd5"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "dto/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "scenarios",
+      "filename": "../book-lifecycle/input.json",
+      "bytes": 15330,
+      "sha256": "aca7944e49d3272d6be802022e7f2ce69416db92f7a0652fdc7e77af75f11f69"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "lifecycle/Program.cs",
+      "bytes": 11376,
+      "sha256": "6b8c3987e7feb21c7059c23bd799691b92f0e49a8ee9ac9cfef4ac339c2f7dac"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "lifecycle/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "scenarios",
+      "filename": "../book-lifecycle/owned/input.json",
+      "bytes": 3583,
+      "sha256": "02cfca449ebe78ec77cfad81d9bb163d6384e83562fbcda2b25e8f323e629a59"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "owned/Program.cs",
+      "bytes": 21349,
+      "sha256": "1697ff250dddf94a6c3769d6a8c99cb11f79c44b3daf7360dec56cd8e5be1b5d"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "owned/Oracle.csproj",
+      "bytes": 1374,
+      "sha256": "6e7f6df47483274f6339ece9bf8f44d6e18cd526407311aa3d5918cb0e67fcdd"
+    },
+    {
+      "role": "scenarios",
+      "filename": "order/input.json",
+      "bytes": 274,
+      "sha256": "96b0040bed29cecd61b2c349c5351892655b873e0b0a7c022492e3cea5b0134c"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "order/Program.cs",
+      "bytes": 6294,
+      "sha256": "d27e06d0ad73091e11a7b26594564d8957927c2259e9ffc4c628b552e7bd74fe"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "order/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "scenarios",
+      "filename": "../../../library/fixtures/book-directory-source/input.json",
+      "bytes": 802,
+      "sha256": "5e3475f47cba45bad926d7688f5601ad550df51ae9baa0f6150f31a43c4f4705"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "directory/Program.cs",
+      "bytes": 7687,
+      "sha256": "c06181e2d44a578be366b7e016742b0fa30301af849114d81cb7c4ef877304b1"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "directory/Oracle.csproj",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "role": "scope",
+      "filename": "README.md",
+      "bytes": 2934,
+      "sha256": "2bcb22ed77e5f0ba6cac447ffcf9fa2f4d63bc81f2dcadf79c5e844ff19eb972"
+    }
+  ]
+}

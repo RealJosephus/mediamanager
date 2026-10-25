@@ -1,0 +1,146 @@
+{
+  "recordedAt": "2026-09-26T15:19:22.078Z",
+  "source": "D:/jellyfin including local modifications, read-only; executed frozen DLLs",
+  "sources": [
+    {
+      "path": "MediaBrowser.MediaEncoding/Probing/ProbeResultNormalizer.cs",
+      "currentSha256": "ec9ee2b0b3377dae825207071428683469a2652c053d64b7c16c08b04ca2b685",
+      "frozenSha256": "ec9ee2b0b3377dae825207071428683469a2652c053d64b7c16c08b04ca2b685"
+    },
+    {
+      "path": "MediaBrowser.MediaEncoding/Probing/FFProbeHelpers.cs",
+      "currentSha256": "74fe879ac8931364392980df1448a5592ec769dd74f758abf9ec18d6e86541ea",
+      "frozenSha256": "74fe879ac8931364392980df1448a5592ec769dd74f758abf9ec18d6e86541ea"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/FFProbeVideoInfo.cs",
+      "currentSha256": "cd808ee66d87e286f91d56075a27e1713783c7c14058af2a8b3b56032b49d870",
+      "frozenSha256": "cd808ee66d87e286f91d56075a27e1713783c7c14058af2a8b3b56032b49d870"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/AudioFileProber.cs",
+      "currentSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b",
+      "frozenSha256": "c0ef33b6e5ac0f122d987c9a7f919ea555d1c99014f03816fbdb5fb958181f6b"
+    },
+    {
+      "path": "MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs",
+      "currentSha256": "4fb2aae81a27f8e4799948c11512b3f4668feabd4d482b3a101e85d491178ba9",
+      "frozenSha256": "4fb2aae81a27f8e4799948c11512b3f4668feabd4d482b3a101e85d491178ba9"
+    },
+    {
+      "path": "Emby.Naming/ExternalFiles/ExternalPathParser.cs",
+      "currentSha256": "a460024f21663c10e7af3f8f2a13d669a5bd1418d75b4df205cc4cd7f8307eaa",
+      "frozenSha256": "a460024f21663c10e7af3f8f2a13d669a5bd1418d75b4df205cc4cd7f8307eaa"
+    },
+    {
+      "path": "Emby.Naming/Common/NamingOptions.cs",
+      "currentSha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02",
+      "frozenSha256": "4fc386ee2a335da97314845fcac71d2ffa534fbc37d772d44ae30e2dd4b07c02"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+      "currentSha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+      "frozenSha256": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/MediaStreamRepository.cs",
+      "currentSha256": "9e44c7a62b23f82631d5708c860f4a0439e6a46f091654fc380f9dade03f93d5",
+      "frozenSha256": "9e44c7a62b23f82631d5708c860f4a0439e6a46f091654fc380f9dade03f93d5"
+    },
+    {
+      "path": "Jellyfin.Server.Implementations/Item/ChapterRepository.cs",
+      "currentSha256": "edb26fd2f8bcfa3b138bd12f26751c778f98ac6200622a518493329a20a377c8",
+      "frozenSha256": "edb26fd2f8bcfa3b138bd12f26751c778f98ac6200622a518493329a20a377c8"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "oracle/Program.cs",
+      "sha256": "22782ed41ec5b93f2c1ad0e8156a1b33293d6634144d355deb6d3a5c68861a3a"
+    },
+    {
+      "path": "oracle/NativeReader.cs",
+      "sha256": "ce134c0307fc658440ced94446220404fd6b7cc0d1ceae046b4c2e093b4032d3"
+    },
+    {
+      "path": "oracle/ProbeOracle.csproj",
+      "sha256": "ad48d9f4fc6666aa90eeceecbf8d18a44861fec4a2a15da91dee82c32998d6f3"
+    },
+    {
+      "path": "create-input.mjs",
+      "sha256": "effe6e9f07088588b007c72bbb1cbe943a9badf989dccf6cad759b128bba4302"
+    },
+    {
+      "path": "input.json",
+      "sha256": "a544e2dcc369c4993317d47ea1c286d271662094a44a3906efd542b408925df4"
+    },
+    {
+      "path": "output.json",
+      "sha256": "ed237c78c4faba86b0f23e07b8e068fa31ce6132d0b87c30e63eb433a3b685f7"
+    },
+    {
+      "path": "verify-native.mjs",
+      "sha256": "f8683b2ca26e1eaac9354df07affd21dd58c5801094188dc912510e2022481d4"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+      "sha256": "0f8d22de3a3aa21aa0c1d2dac0897a37ca83e552b869551238fa1a7f8e2499d1"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/Emby.Naming.dll",
+      "sha256": "aec58918ad6f313836b867cab8b71eecaae6bdbf7a5e2b9e73ada2a54f2ee4f7"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "sha256": "eb3e6e24a44d691a70122a68feb8452420df94e93f85f2ca3b8a860bf1a42a2e"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+    },
+    {
+      "path": "Jellyfin.Server/bin/Release/net10.0/runtimes/win-x64/native/e_sqlite3.dll",
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+    }
+  ],
+  "tools": {
+    "node": "v24.16.0",
+    "ffmpeg": "ffmpeg version 8.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+    "ffprobe": "ffprobe version 8.1.1-essentials_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg developers"
+  },
+  "oracle": {
+    "cases": 36,
+    "projection": "MediaInfo descriptive fields; BaseItemPerson Name/Type/Role. ExternalPathParser all public fields. FFProbeVideoInfo chapter names. The language dependency uses the pinned ISO resource and native matching algorithm.",
+    "normalizations": "Only People DTO-only identity/image defaults are excluded from comparison.",
+    "commands": [
+      "node .test-input/evidence/capability-completion-20260926/probe/create-input.mjs",
+      ".tools/dotnet/dotnet.exe run --project .test-input/evidence/capability-completion-20260926/probe/oracle/ProbeOracle.csproj -- .test-input/evidence/capability-completion-20260926/probe/input.json .test-input/evidence/capability-completion-20260926/probe/output.json src/core/resources/iso6392.txt",
+      "node --test tests/storage/probe-descriptive.test.js",
+      "node .test-input/evidence/capability-completion-20260926/probe/verify-native.mjs .test-input/evidence/capability-completion-20260926/probe/verified"
+    ]
+  },
+  "runtimeValidation": {
+    "test": "tests/storage/probe-refresh.test.js",
+    "media": "ffmpeg-generated 0.2-second FFV1 MKV with descriptive tags and two chapters; 0.2-second PCM WAV and synthetic SRT; no real media",
+    "databases": "new in-memory SQLite, independent PostgreSQL schema; export SQLite read through actual native BaseItemMapper/MediaStreamRepository/ChapterRepository",
+    "alist": "Actual current-source AList executable from runtime-integration-20260926/alist, isolated PostgreSQL database and synthetic Local driver accessed through HTTP only",
+    "vobsub": "Synthetic idx metadata with two languages and an empty synthetic binary payload; actual ffprobe must open the explicitly leased .sub sibling. This verifies metadata discovery, not rendered bitmap content."
+  },
+  "limits": [
+    "ATL parsing and its exclusive audio tag/lyrics behavior are not implemented. Audio persistence covers explicit ffprobe title/album/year/track/disc fallbacks only.",
+    "Native DB reading is through DLL mappers and Microsoft.Data.Sqlite, not a full Jellyfin server startup.",
+    "No subtitle download providers, DVD/BluRay or shortcut probe lifecycle is implemented.",
+    "Internal sidecars require an explicit VFS mapping; local instance-state sidecars are not yet served by the probe bridge.",
+    "Date parsing beyond recorded ISO/year/date forms and native Unicode title-case performer behavior needs broader differential coverage."
+  ]
+}

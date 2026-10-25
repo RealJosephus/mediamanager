@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current Channel parent Latest provider inputs and actual UserLibraryController, UserViewManager and ChannelManager oracle. No historical recording is an execution dependency.",
+  "inputs": [
+    {
+      "role": "scenarioProducer",
+      "filename": "input.js",
+      "bytes": 8078,
+      "sha256": "2a4ea484b419fc91c25398f714789a08779f941cca9b35e9b6522b27b04915c2"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 26125,
+      "sha256": "6766c6c57a870bd31348526fc4cc9bcd5eec05187ddcd110b60571dac24ea940"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1345,
+      "sha256": "85517f503080a223ad02b544898de3832560c3e57bd871a120cb9117687bc3f6"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

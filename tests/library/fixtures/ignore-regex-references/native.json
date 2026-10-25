@@ -1,0 +1,1523 @@
+{
+  "actualFrozenIgnoreEscapes": true,
+  "inputSha256": "d70bbe2ae6b91efbc89dc8012244a2ac0926c8d36897b883d0b9c33d4f4c9172",
+  "scope": "Actual frozen DotIgnoreIgnoreRule.CheckIgnoreRules/Ignore 0.2.1 with its bound CLR Regex runtime. ASCII and non-ASCII control escape validation, numeric named references, initial bracket and subtracted classes, capture participation, forward references, optional/repeated captures, alternatives, boundaries and case equivalences. No file/cache operations, FindExtras, providers, scanning/network or release acceptance.",
+  "culture": "zh-CN",
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Ignore",
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    }
+  ],
+  "rules": [
+    {
+      "id": "control-at",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo@",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-open",
+      "checks": [
+        {
+          "path": "F:/foo\u001B",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo[",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-backslash",
+      "checks": [
+        {
+          "path": "F:/foo\u001C",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\\",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-close",
+      "checks": [
+        {
+          "path": "F:/foo\u001D",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo]",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-caret",
+      "checks": [
+        {
+          "path": "F:/foo\u001E",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo^",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-underscore",
+      "checks": [
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo_",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "named-number-angle",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": true
+        },
+        {
+          "path": "F:/xx",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "named-number-quote",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": true
+        },
+        {
+          "path": "F:/xx",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "named-zero",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": false
+        },
+        {
+          "path": "F:/xx",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "named-undefined",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": true
+        },
+        {
+          "path": "F:/xx",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "initial-rightbracket-capture",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": true
+        },
+        {
+          "path": "F:/xx",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "nested-subtraction-capture",
+      "checks": [
+        {
+          "path": "F:/fooaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooab",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooAA",
+          "ignored": false
+        },
+        {
+          "path": "F:/xx",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "optional-capture",
+      "checks": [
+        {
+          "path": "F:/",
+          "ignored": false
+        },
+        {
+          "path": "F:/a",
+          "ignored": false
+        },
+        {
+          "path": "F:/aa",
+          "ignored": true
+        },
+        {
+          "path": "F:/aaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/b",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "empty-participating-capture",
+      "checks": [
+        {
+          "path": "F:/",
+          "ignored": true
+        },
+        {
+          "path": "F:/a",
+          "ignored": false
+        },
+        {
+          "path": "F:/aa",
+          "ignored": false
+        },
+        {
+          "path": "F:/b",
+          "ignored": false
+        },
+        {
+          "path": "F:/\u732B",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "forward-number",
+      "checks": [
+        {
+          "path": "F:/a",
+          "ignored": false
+        },
+        {
+          "path": "F:/aa",
+          "ignored": false
+        },
+        {
+          "path": "F:/aaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/b",
+          "ignored": false
+        },
+        {
+          "path": "F:/",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "forward-named-number",
+      "checks": [
+        {
+          "path": "F:/a",
+          "ignored": false
+        },
+        {
+          "path": "F:/aa",
+          "ignored": false
+        },
+        {
+          "path": "F:/aaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/b",
+          "ignored": false
+        },
+        {
+          "path": "F:/",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "retained-repeated-capture",
+      "checks": [
+        {
+          "path": "F:/aa",
+          "ignored": false
+        },
+        {
+          "path": "F:/aba",
+          "ignored": false
+        },
+        {
+          "path": "F:/abab",
+          "ignored": true
+        },
+        {
+          "path": "F:/ababb",
+          "ignored": true
+        },
+        {
+          "path": "F:/aab",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "alternative-unmatched-reference",
+      "checks": [
+        {
+          "path": "F:/a",
+          "ignored": true
+        },
+        {
+          "path": "F:/b",
+          "ignored": false
+        },
+        {
+          "path": "F:/bb",
+          "ignored": false
+        },
+        {
+          "path": "F:/ab",
+          "ignored": true
+        },
+        {
+          "path": "F:/bbb",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "reference-branch",
+      "checks": [
+        {
+          "path": "F:/aa",
+          "ignored": true
+        },
+        {
+          "path": "F:/bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/ab",
+          "ignored": false
+        },
+        {
+          "path": "F:/ba",
+          "ignored": false
+        },
+        {
+          "path": "F:/",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "reference-repeat",
+      "checks": [
+        {
+          "path": "F:/aa",
+          "ignored": true
+        },
+        {
+          "path": "F:/bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/abb",
+          "ignored": true
+        },
+        {
+          "path": "F:/aba",
+          "ignored": false
+        },
+        {
+          "path": "F:/aaa",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "reference-bracket-class",
+      "checks": [
+        {
+          "path": "F:/abb",
+          "ignored": true
+        },
+        {
+          "path": "F:/]bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/(bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/)bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/aba",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "reference-boundary",
+      "checks": [
+        {
+          "path": "F:/aa",
+          "ignored": true
+        },
+        {
+          "path": "F:/aaa",
+          "ignored": false
+        },
+        {
+          "path": "F:/\u732Baa\u732B",
+          "ignored": false
+        },
+        {
+          "path": "F:/ aa ",
+          "ignored": false
+        },
+        {
+          "path": "F:/AA",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "reference-case",
+      "checks": [
+        {
+          "path": "F:/II",
+          "ignored": true
+        },
+        {
+          "path": "F:/Ii",
+          "ignored": true
+        },
+        {
+          "path": "F:/ii",
+          "ignored": true
+        },
+        {
+          "path": "F:/\u0130\u0130",
+          "ignored": true
+        },
+        {
+          "path": "F:/\u0131\u0131",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "reference-leading-zero",
+      "checks": [
+        {
+          "path": "F:/aa",
+          "ignored": true
+        },
+        {
+          "path": "F:/AA",
+          "ignored": true
+        },
+        {
+          "path": "F:/ab",
+          "ignored": false
+        },
+        {
+          "path": "F:/a",
+          "ignored": false
+        },
+        {
+          "path": "F:/",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "reference-subtracted-class",
+      "checks": [
+        {
+          "path": "F:/bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/zz",
+          "ignored": true
+        },
+        {
+          "path": "F:/aa",
+          "ignored": false
+        },
+        {
+          "path": "F:/Bb",
+          "ignored": true
+        },
+        {
+          "path": "F:/bc",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-df",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-df",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-17f",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-17f",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-131",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-131",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-130",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-130",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-212a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-212a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-e9",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-e9",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-b5",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-b5",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-40",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-40",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-5a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-5a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-7a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-7a",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-5f",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-5f",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-60",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "class-control-60",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": true
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": true
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": true
+        },
+        {
+          "path": "F:/other",
+          "ignored": true
+        }
+      ]
+    },
+    {
+      "id": "control-61",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-61",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "control-41",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    },
+    {
+      "id": "class-control-41",
+      "checks": [
+        {
+          "path": "F:/foo\u0000",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u0013",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\t",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001A",
+          "ignored": false
+        },
+        {
+          "path": "F:/foo\u001F",
+          "ignored": false
+        },
+        {
+          "path": "F:/fooa",
+          "ignored": false
+        },
+        {
+          "path": "F:/other",
+          "ignored": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "projectionLogic": {
+    "spec": {
+      "id": "album-filter-native-v7-contract-projection",
+      "version": 1,
+      "topLevel": "Drop only kind and mode; add frozenJellyfin, the exact source path, and its SHA-256; preserve schemaVersion, fixtureInputSha256, endpoints, setup, and cases.",
+      "cases": "Preserve every case, response item, JSON field, and array order verbatim. The authoritative contract excludes all runtime-native ids.",
+      "authority": "Create the projection only from the pinned main native contract, with complete HTTP, state and source preparation evidence; no legacy development fixture is required."
+    },
+    "sha256": "279e864a7721db0e5a37e6332f2bbf2a5501352bf3450e4d3bb330489b44affd"
+  },
+  "authoritativeContract": {
+    "path": ".test-input/evidence/byname-filter-inputs/album-filter-restoration-v1/native-contract.json",
+    "sha256": "dcace0a9af832e5c07189552596e50c013911d9d6bfada2721a533f13d923e64"
+  },
+  "fixtureInput": {
+    "path": "tests/library/fixtures/album-filters/input.json",
+    "sha256": "733904cf5746e11aab5db806dd41c0d8d21636e95f519bd5465327d333ef811d"
+  },
+  "trackedFixture": {
+    "path": "tests/library/fixtures/album-filters/native.json",
+    "sha256": "3bf62b8895240bb94a9c6253bf07117715a477d6538c1942a98de53b2568ece5"
+  },
+  "integrityTest": {
+    "path": "tests/library/album-filter-native-fixture.test.js",
+    "sha256": "b6cdb455e5efa414029c4dfeb9dc28dafc3749d58cc7a62ddfaffbac88245bc1"
+  },
+  "projector": {
+    "path": "tools/compat/project-album-filter-fixture.js",
+    "sha256": "9858ecf40914a851bf3c2627a4adfe83a64ac327728222114b4eaef1c27d996d"
+  }
+}

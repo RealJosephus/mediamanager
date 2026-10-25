@@ -1,0 +1,3991 @@
+{
+  "results": [
+    {
+      "name": "new-remote-primary",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "new-missing-primary-removed",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/404",
+          "cancellable": false
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": []
+    },
+    {
+      "name": "new-retryable-primary-retained",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/500",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "https://isolated.invalid/500",
+          "Type": "Primary",
+          "Width": 0,
+          "Height": 0,
+          "Blurhash": null,
+          "DateModified": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "new-image-io-retained",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/io",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "https://isolated.invalid/io",
+          "Type": "Primary",
+          "Width": 0,
+          "Height": 0,
+          "Blurhash": null,
+          "DateModified": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "new-fallback-primary",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/404",
+          "cancellable": false
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "new-local-image-dimension-failure",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 0,
+          "Height": 0,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "new-local-image-blur-failure",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "image-update-save-io-continues-final-save",
+      "exception": null,
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "final-save-io-retains-local-image",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "final-save-io-retains-retryable-stub",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/500",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": null,
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "https://isolated.invalid/500",
+          "Type": "Primary",
+          "Width": 0,
+          "Height": 0,
+          "Blurhash": null,
+          "DateModified": "0001-01-01T00:00:00.0000000Z"
+        }
+      ],
+      "files": []
+    },
+    {
+      "name": "new-image-first-insert-failure",
+      "exception": "DbUpdateException",
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": null,
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "new-image-second-insert-failure",
+      "exception": "DbUpdateException",
+      "calls": [
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "save-item-then-person-local-image",
+      "exception": null,
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        },
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "save-item-people-failure-retains-native-nfo",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        },
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "save-item-nfo-directory-error-does-not-stop-people",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "UnauthorizedAccessException",
+          "message": "Error in metadata saver"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "save-item-parent-failure-retains-native-nfo",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Old Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Original Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "save-item-credits-failure-retains-native-nfo",
+      "exception": "IOException",
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        }
+      ],
+      "credits": [
+        {
+          "Name": "Old Credit",
+          "Type": "Actor",
+          "Role": "Old Role",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [],
+      "providers": [],
+      "directories": [],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        }
+      ]
+    },
+    {
+      "name": "save-item-malformed-native-nfo-rewritten",
+      "exception": null,
+      "calls": [
+        {
+          "action": "log",
+          "level": "Error",
+          "exception": "XmlException",
+          "message": "Error reading existing nfo"
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 362,
+          "sha256": "8a6d071634d8f48af6370f344f2222f130711c7acb411d85513ca6c0b8f5b7da",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n\u003C/movie\u003E"
+        },
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    },
+    {
+      "name": "save-item-custom-native-nfo-retained",
+      "exception": null,
+      "calls": [
+        {
+          "action": "save",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": true
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "96000000-0000-0000-0000-000000000001",
+            "Name": "Saved Parent",
+            "Type": "Movie",
+            "Path": "$STATE\\media\\movie.mkv",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "reason": 8
+        },
+        {
+          "action": "credits",
+          "people": [
+            {
+              "Name": "First",
+              "Type": "Actor",
+              "Role": null,
+              "SortOrder": null,
+              "ProviderIds": {}
+            }
+          ]
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": false,
+            "ProviderIds": {},
+            "imageCount": 0
+          },
+          "parent": null
+        },
+        {
+          "action": "fetch",
+          "url": "https://isolated.invalid/ok",
+          "cancellable": false
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "updated",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "reason": 4
+        },
+        {
+          "action": "images",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          }
+        },
+        {
+          "action": "save",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "cancellable": false
+        },
+        {
+          "action": "added",
+          "item": {
+            "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+            "Name": "First",
+            "Type": "Person",
+            "Path": "$STATE\\metadata\\People\\F\\First",
+            "saved": true,
+            "ProviderIds": {},
+            "imageCount": 1
+          },
+          "parent": null
+        }
+      ],
+      "credits": [
+        {
+          "Name": "First",
+          "Type": "Actor",
+          "Role": "",
+          "ListOrder": 0,
+          "SortOrder": null
+        }
+      ],
+      "items": [
+        {
+          "Id": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Type": "MediaBrowser.Controller.Entities.Person",
+          "Data": null,
+          "Path": "$STATE\\metadata\\People\\F\\First",
+          "StartDate": null,
+          "EndDate": null,
+          "ChannelId": "00000000-0000-0000-0000-000000000000",
+          "IsMovie": false,
+          "CommunityRating": null,
+          "CustomRating": null,
+          "IndexNumber": null,
+          "IsLocked": false,
+          "Name": "First",
+          "OfficialRating": null,
+          "MediaType": "Unknown",
+          "Overview": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ProductionYear": null,
+          "Genres": "",
+          "SortName": "First",
+          "ForcedSortName": null,
+          "RunTimeTicks": null,
+          "DateCreated": "$RECENT",
+          "DateModified": "$RECENT",
+          "IsSeries": false,
+          "EpisodeTitle": null,
+          "IsRepeat": false,
+          "PreferredMetadataLanguage": null,
+          "PreferredMetadataCountryCode": null,
+          "DateLastRefreshed": null,
+          "DateLastSaved": "$RECENT",
+          "IsInMixedFolder": false,
+          "Studios": "",
+          "ExternalServiceId": null,
+          "Tags": "",
+          "IsFolder": false,
+          "InheritedParentalRatingValue": null,
+          "InheritedParentalRatingSubValue": null,
+          "UnratedType": "Other",
+          "CriticRating": null,
+          "CleanName": "first",
+          "PresentationUniqueKey": "Person-First",
+          "OriginalTitle": null,
+          "OriginalLanguage": null,
+          "PrimaryVersionId": null,
+          "DateLastMediaAdded": null,
+          "Album": null,
+          "LUFS": null,
+          "NormalizationGain": null,
+          "IsVirtualItem": false,
+          "SeriesName": null,
+          "SeasonName": null,
+          "ExternalSeriesId": null,
+          "Tagline": null,
+          "ProductionLocations": "",
+          "TotalBitrate": null,
+          "ExtraType": null,
+          "Artists": null,
+          "AlbumArtists": null,
+          "ExternalId": null,
+          "SeriesPresentationUniqueKey": null,
+          "ShowId": null,
+          "OwnerId": null,
+          "Width": 0,
+          "Height": 0,
+          "Size": null,
+          "Audio": null,
+          "ParentId": null,
+          "TopParentId": null,
+          "SeasonId": null,
+          "SeriesId": null
+        }
+      ],
+      "providers": [],
+      "directories": [
+        "$STATE\\metadata\\People",
+        "$STATE\\metadata\\People\\F",
+        "$STATE\\metadata\\People\\F\\First"
+      ],
+      "parentName": "Saved Parent",
+      "ancestors": 0,
+      "images": [
+        {
+          "ItemId": "7d36cad9-0458-5fa1-3637-5ce0df3a7708",
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "Type": "Primary",
+          "Width": 1,
+          "Height": 1,
+          "Blurhash": "controlled",
+          "DateModified": "$RECENT"
+        }
+      ],
+      "files": [
+        {
+          "Path": "$STATE\\media\\movie.nfo",
+          "bytes": 408,
+          "sha256": "df3e052134fc995002bbb56bc239ed6636fd2151574fefbe845bdebf7367d0a2",
+          "text": "\u003C?xml version=\u00221.0\u0022 encoding=\u0022utf-8\u0022 standalone=\u0022yes\u0022?\u003E\r\n\u003Cmovie\u003E\r\n  \u003Cplot /\u003E\r\n  \u003Clockdata\u003Efalse\u003C/lockdata\u003E\r\n  \u003Cdateadded\u003E2025-01-02 03:04:05\u003C/dateadded\u003E\r\n  \u003Ctitle\u003ESaved Parent\u003C/title\u003E\r\n  \u003Cart /\u003E\r\n  \u003Cactor\u003E\r\n    \u003Cname\u003EOld Credit\u003C/name\u003E\r\n    \u003Crole\u003EOld Role\u003C/role\u003E\r\n    \u003Ctype\u003EActor\u003C/type\u003E\r\n  \u003C/actor\u003E\r\n  \u003Cfileinfo\u003E\r\n    \u003Cstreamdetails /\u003E\r\n  \u003C/fileinfo\u003E\r\n  \u003Cextension attr=\u0022literal\u0022\u003Ekeep\u003C/extension\u003E\r\n\u003C/movie\u003E"
+        },
+        {
+          "Path": "$STATE\\metadata\\People\\F\\First\\folder.png",
+          "bytes": 68,
+          "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+          "text": null
+        }
+      ]
+    }
+  ],
+  "candidateVerified": false,
+  "inputSha256": "9b88a3b1214169b96dc79d666b5444ac35b654786d0f099419d0665239ce5c75",
+  "imageSha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2",
+  "boundary": "Actual LibraryManager people/image lifecycle, ProviderManager/HttpClient/ImageSaver file writes, MovieNfoSaver, ConvertImageToLocal/UpdateImages/UpdateItems/CreateItems and real EF SQLite writes. Real directories/files; controlled HTTP handler responses and dimensions/BlurHash, not actual sockets/image decoder/full HTTP refresh."
+}

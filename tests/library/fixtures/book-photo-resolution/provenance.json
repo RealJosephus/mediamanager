@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-08T16:13:38.813Z",
+  "fixtureFiles": [
+    {
+      "path": "tests/library/fixtures/book-photo-resolution/input.json",
+      "sha256": "4574189dad5c728cb83e1a8b159f41448179334b06a5ebb1bbe914bcd9f41ac1"
+    },
+    {
+      "path": "tests/library/fixtures/book-photo-resolution/Program.cs",
+      "sha256": "efbf5da58d869b70934832c5adbd0536993dd3a9ed08450ae4563493d8ae7559"
+    },
+    {
+      "path": "tests/library/fixtures/book-photo-resolution/Oracle.csproj",
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "path": "tests/library/fixtures/book-photo-resolution/native.json",
+      "sha256": "8bd9894af1f332ee3cec5d1a069d818303224418928b411a8575202576a8f1fe"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ],
+  "scope": "Actual frozen BookFileNameParser, BookResolver, PhotoResolver, PhotoAlbumResolver, ResolverHelper, ManagedFileSystem and DirectoryService over real files. Covers collection gates, supported extensions, artwork prefixes, sibling-video ownership, EnablePhotos, single-book directory collapse, parsed book metadata, resolver priorities and initialized names/paths. LibraryManager identity, parent lookup, image decoding and persistence are controls. No Folder.ValidateChildren, CreateItems, recursive scanning, database writes, watcher, metadata providers, faults, concurrency, HTTP, migration or release acceptance.",
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "a9a051747d55565befc425dd194779e2ae53c57f8740212dc929dd706b888306"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "6a29143fe5e6867f8e91b697680dce602aa422cf250786db1298911499369d62"
+    },
+    {
+      "name": "Emby.Naming",
+      "sha256": "1926203dc3a4a599b92852683d9b5c20b084665888772eb331f1d945f9ec06bf"
+    }
+  ],
+  "reference": {
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "capture": {
+    "record": "D:/mediamanager-validation/20261009/results/book-photo-resolution-oracle-v5/record.json",
+    "sourceFilesSha256": "019d8095bcbd46767f0c4e15880e6954dd47e4947c63e47bf3b4b7d9ccd7f2ab"
+  },
+  "candidateVerified": true,
+  "candidateComparison": "All six parser cases and fifteen resolver cases are compared directly with the production Book, Photo and PhotoAlbum resolvers. SQLite and PostgreSQL integration tests additionally persist book files, a collapsed single-book directory, a multi-book Folder, standalone photos and a traversed PhotoAlbum with exact ancestor rows and idempotent rescans. Full native ValidateChildren and release acceptance remain separate evidence."
+}

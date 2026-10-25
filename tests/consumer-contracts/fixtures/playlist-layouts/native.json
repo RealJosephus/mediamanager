@@ -1,0 +1,3047 @@
+{
+  "candidateVerified": false,
+  "inputSha256": "cd079c4da0d5eaf7c2bd0c6f823254fe12a914217588d3874c568ca4f5365638",
+  "results": [
+    {
+      "name": "wpl-direct-media-and-double-unescape--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/windows.WPL",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000004",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/windows.WPL",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song\u0026A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/windows.WPL",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000004",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/windows.WPL",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song\u0026A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/windows.WPL",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000004",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/windows.WPL",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song\u0026A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl-direct-media--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/zune.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/zune.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl-direct-media--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/zune.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/zune.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl-direct-media--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/zune.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/zune.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-missing-head--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-missing-head--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-missing-head--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-namespace-root--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-namespace-root--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-namespace-root--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-internal-entity--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/entity.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/entity.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-internal-entity--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/entity.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/entity.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-internal-entity--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/entity.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/entity.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-no-src--lf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-no-src--crlf",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-no-src--bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl--node-writer",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl--reordered-attributes",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl--reordered-bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.wpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl--node-writer",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl--reordered-attributes",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl--reordered-bom-lf",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/node.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "stored": {
+          "columnCount": 72,
+          "columns": {
+            "Id": "00000000-0000-0000-0000-000000000000",
+            "Album": null,
+            "AlbumArtists": null,
+            "Artists": null,
+            "Audio": null,
+            "ChannelId": "00000000-0000-0000-0000-000000000000",
+            "CleanName": null,
+            "CommunityRating": null,
+            "CriticRating": null,
+            "CustomRating": null,
+            "Data": {
+              "OwnerUserId": "00000000000000000000000000000000",
+              "OpenAccess": false,
+              "Shares": [],
+              "PlaylistMediaType": "Unknown",
+              "IsRoot": false,
+              "IsHD": false,
+              "IsShortcut": false,
+              "Width": 0,
+              "Height": 0,
+              "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+              "RemoteTrailers": []
+            },
+            "DateCreated": null,
+            "DateLastMediaAdded": null,
+            "DateLastRefreshed": null,
+            "DateLastSaved": null,
+            "DateModified": null,
+            "EndDate": null,
+            "EpisodeTitle": null,
+            "ExternalId": null,
+            "ExternalSeriesId": null,
+            "ExternalServiceId": null,
+            "ExtraType": null,
+            "ForcedSortName": null,
+            "Genres": "",
+            "Height": 0,
+            "IndexNumber": null,
+            "InheritedParentalRatingSubValue": null,
+            "InheritedParentalRatingValue": null,
+            "IsFolder": true,
+            "IsInMixedFolder": false,
+            "IsLocked": false,
+            "IsMovie": false,
+            "IsRepeat": false,
+            "IsSeries": false,
+            "IsVirtualItem": false,
+            "LUFS": null,
+            "MediaType": "Unknown",
+            "Name": null,
+            "NormalizationGain": null,
+            "OfficialRating": null,
+            "OriginalLanguage": null,
+            "OriginalTitle": null,
+            "Overview": null,
+            "OwnerId": null,
+            "ParentId": null,
+            "ParentIndexNumber": null,
+            "Path": "$STATE/media/Library/lists/node.zpl",
+            "PreferredMetadataCountryCode": null,
+            "PreferredMetadataLanguage": null,
+            "PremiereDate": null,
+            "PresentationUniqueKey": null,
+            "PrimaryVersionId": null,
+            "ProductionLocations": "",
+            "ProductionYear": null,
+            "RunTimeTicks": null,
+            "SeasonId": null,
+            "SeasonName": null,
+            "SeriesId": null,
+            "SeriesName": null,
+            "SeriesPresentationUniqueKey": null,
+            "ShowId": null,
+            "Size": null,
+            "SortName": null,
+            "StartDate": null,
+            "Studios": "",
+            "Tagline": null,
+            "Tags": "",
+            "TopParentId": null,
+            "TotalBitrate": null,
+            "Type": "MediaBrowser.Controller.Playlists.Playlist",
+            "UnratedType": "Other",
+            "Width": 0
+          },
+          "dataText": "{\u0022OwnerUserId\u0022:\u002200000000000000000000000000000000\u0022,\u0022OpenAccess\u0022:false,\u0022Shares\u0022:[],\u0022PlaylistMediaType\u0022:\u0022Unknown\u0022,\u0022IsRoot\u0022:false,\u0022IsHD\u0022:false,\u0022IsShortcut\u0022:false,\u0022Width\u0022:0,\u0022Height\u0022:0,\u0022DateLastSaved\u0022:\u00220001-01-01T00:00:00.0000000Z\u0022,\u0022RemoteTrailers\u0022:[]}",
+          "data": {
+            "OwnerUserId": "00000000000000000000000000000000",
+            "OpenAccess": false,
+            "Shares": [],
+            "PlaylistMediaType": "Unknown",
+            "IsRoot": false,
+            "IsHD": false,
+            "IsShortcut": false,
+            "Width": 0,
+            "Height": 0,
+            "DateLastSaved": "0001-01-01T00:00:00.0000000Z",
+            "RemoteTrailers": []
+          }
+        },
+        "Name": "Playlist Item Provider",
+        "Order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    }
+  ],
+  "merges": [],
+  "inputFiles": [
+    {
+      "name": "wpl-direct-media-and-double-unescape--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-direct-media-and-double-unescape--lf\\media\\Library\\lists\\windows.WPL",
+      "sha256": "052a8e0840aa93cfccb812cc86dbabbbcb0d5b6721250b5b9845948f56e86cd6",
+      "bytes": 209
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-direct-media-and-double-unescape--crlf\\media\\Library\\lists\\windows.WPL",
+      "sha256": "ad9a006da3e36b1aea5147b7a2f8571eb3d1cae7c5e198e6b257a365ba67b809",
+      "bytes": 223
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-direct-media-and-double-unescape--bom-lf\\media\\Library\\lists\\windows.WPL",
+      "sha256": "a11fa2322d072c8b444a34d6ed490fee60272cd970dd0966ca38e8e231ddd4d4",
+      "bytes": 212
+    },
+    {
+      "name": "zpl-direct-media--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl-direct-media--lf\\media\\Library\\lists\\zune.zpl",
+      "sha256": "937eb056d361a85443cf22b0feffe28e052cba6e453665f42d9d56e82a631419",
+      "bytes": 130
+    },
+    {
+      "name": "zpl-direct-media--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl-direct-media--crlf\\media\\Library\\lists\\zune.zpl",
+      "sha256": "fcab54a7f2c6be7248053cc8a9437eb2d9c7b0c699442e783053b6ce508a8767",
+      "bytes": 139
+    },
+    {
+      "name": "zpl-direct-media--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl-direct-media--bom-lf\\media\\Library\\lists\\zune.zpl",
+      "sha256": "ddbc646d983a0629531e754145a491ac95803005aeeca2a1cb303c22eb473eb9",
+      "bytes": 133
+    },
+    {
+      "name": "wpl-missing-head--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-missing-head--lf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "80353423ba25eacafc569dd4648e553dcddf026510ebe62bfc6b9a9e523d7aef",
+      "bytes": 70
+    },
+    {
+      "name": "wpl-missing-head--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-missing-head--crlf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "fab31ba1fd65c2eb47eafb7b223cd1068d2766f882b9fd3aa87af001358f87bb",
+      "bytes": 76
+    },
+    {
+      "name": "wpl-missing-head--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-missing-head--bom-lf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "082615419e56e86b76e35429548ddc01ee508a5d748f56629cd80126536225b7",
+      "bytes": 73
+    },
+    {
+      "name": "wpl-namespace-root--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-namespace-root--lf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "0c7131bb55135bf6f82dead9742e2a7599f7f7eefe873a1aed11819ba8eba469",
+      "bytes": 98
+    },
+    {
+      "name": "wpl-namespace-root--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-namespace-root--crlf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "4fa195204d541c90364d18aa43bcb0d2990765c26d58588bab888c8d96198a82",
+      "bytes": 105
+    },
+    {
+      "name": "wpl-namespace-root--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-namespace-root--bom-lf\\media\\Library\\lists\\invalid.wpl",
+      "sha256": "d44b8c3dbbd610a630cfebd656fe29f433de19435f21888f0068ff3dc5dea721",
+      "bytes": 101
+    },
+    {
+      "name": "wpl-internal-entity--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-internal-entity--lf\\media\\Library\\lists\\entity.wpl",
+      "sha256": "f7c95cc91cf5149c14997e703966a68a1d5502899fbb143923d8ac5e5847cde1",
+      "bytes": 120
+    },
+    {
+      "name": "wpl-internal-entity--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-internal-entity--crlf\\media\\Library\\lists\\entity.wpl",
+      "sha256": "e877f17904bfb8d4bf2b14c7c83719b674088fdb9b9f23e8429dbca68ebba8b6",
+      "bytes": 128
+    },
+    {
+      "name": "wpl-internal-entity--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-internal-entity--bom-lf\\media\\Library\\lists\\entity.wpl",
+      "sha256": "bbb5143a647b24cc9720e10ac039f32c0f306ce0009dc69dd4ae75778b6d7d67",
+      "bytes": 123
+    },
+    {
+      "name": "wpl-no-src--lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-no-src--lf\\media\\Library\\lists\\no-src.wpl",
+      "sha256": "9812588b7b1634153bb369421cbe1983cba1e65373342feadbdb65a94892f2c2",
+      "bytes": 59
+    },
+    {
+      "name": "wpl-no-src--crlf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-no-src--crlf\\media\\Library\\lists\\no-src.wpl",
+      "sha256": "60ef97b4df445b56b41c839837c7d2120c8ceb54cb779bd64554b025b485c941",
+      "bytes": 66
+    },
+    {
+      "name": "wpl-no-src--bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl-no-src--bom-lf\\media\\Library\\lists\\no-src.wpl",
+      "sha256": "552eff5553ddb8a3b60a573701e4f51d9e897cd54b5ba66b0ca77683c19e28b1",
+      "bytes": 62
+    },
+    {
+      "name": "wpl--node-writer",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl--node-writer\\media\\Library\\lists\\node.wpl",
+      "sha256": "d6f342cfadae7ec4435833af18a2892a8cd0f192a8616d47907566b89e0afe69",
+      "bytes": 594
+    },
+    {
+      "name": "wpl--reordered-attributes",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl--reordered-attributes\\media\\Library\\lists\\node.wpl",
+      "sha256": "2a0371a9a91a40a2582ddbf0c8e4b658fdd8fe377d5291569f2d8a076692909c",
+      "bytes": 594
+    },
+    {
+      "name": "wpl--reordered-bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\wpl--reordered-bom-lf\\media\\Library\\lists\\node.wpl",
+      "sha256": "cbd403cc1b11076e958f3b3217d5d1a3ea1d6b89db5a44e08112b2e0249cc1e2",
+      "bytes": 585
+    },
+    {
+      "name": "zpl--node-writer",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl--node-writer\\media\\Library\\lists\\node.zpl",
+      "sha256": "09aaa3e9d21ac255f46911a5512e22bc7d937746b4912cd00ea6621ca0405685",
+      "bytes": 594
+    },
+    {
+      "name": "zpl--reordered-attributes",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl--reordered-attributes\\media\\Library\\lists\\node.zpl",
+      "sha256": "a865ed9c6bb21dc9b2d616a15594c79610249e74c9dd345bb456897e4959d3ed",
+      "bytes": 594
+    },
+    {
+      "name": "zpl--reordered-bom-lf",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\state\\zpl--reordered-bom-lf\\media\\Library\\lists\\node.zpl",
+      "sha256": "05b4e670a80a8987c920f02582e3be9c46961702621b82d06fa28cba61d3b54e",
+      "bytes": 585
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "b991153c8e091e6e618b27b47ec2c070c003fc5c4453406a74fe843c43611d7e"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "5ffd9a90affb635962267da294a36a4cd6972da5f38083b51ecfb4fba4c31ee6"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "c3be3a64502dae5f458c4ed71a0a81b7b03c8d25ae7681fc90e849eccdcae3a9"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "db952e3013a6949ad22db9ac3379be2efdf441c139ddc6919e86f8c2abbc7207"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "4da187af02503e82135eb192351d01490484e8ebc8c653d849f7e2900a177672"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c86a38f99a78d9d3b9dd5ba5245fb06bf654cfa3e16ec409d3ba77b1e69ed11e"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "7b2c1b16721cf7747b572e4de3761de635fad4bd12bec346983545bee73fd92c"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "1afa73573e3bda071db199cf76b4a3e1ca62381eef3a0d3311bca56cb68f2423"
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.AspNetCore.Http.Abstractions.dll",
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89"
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Microsoft.Data.Sqlite.dll",
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.dll",
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Abstractions.dll",
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e"
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Caching.Memory.dll",
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983"
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Configuration.Abstractions.dll",
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.dll",
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a"
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.dll",
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Options.dll",
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567"
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Primitives.dll",
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1"
+    },
+    {
+      "name": "Oracle",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "sha256": "4c22d9bd09222517cc2217ed26435ce87e1bfda05de67d7bbaffabfee697f039"
+    },
+    {
+      "name": "PlaylistsNET",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\PlaylistsNET.dll",
+      "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea"
+    },
+    {
+      "name": "Polly",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\Polly.dll",
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\SQLitePCLRaw.core.dll",
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+    },
+    {
+      "name": "System.Collections",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+    },
+    {
+      "name": "System.ComponentModel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.dll",
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2"
+    },
+    {
+      "name": "System.ComponentModel.Annotations",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Annotations.dll",
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903"
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.Primitives.dll",
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62"
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ComponentModel.TypeConverter.dll",
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7"
+    },
+    {
+      "name": "System.Data.Common",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Data.Common.dll",
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc"
+    },
+    {
+      "name": "System.Diagnostics.DiagnosticSource",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Diagnostics.Tracing",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Tracing.dll",
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263"
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.Pipelines.dll",
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd"
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Linq.Expressions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.Expressions.dll",
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f"
+    },
+    {
+      "name": "System.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Net.NetworkInformation",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.NetworkInformation.dll",
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b"
+    },
+    {
+      "name": "System.Net.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Numerics.Vectors.dll",
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a"
+    },
+    {
+      "name": "System.ObjectModel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Private.Xml",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.dll",
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6"
+    },
+    {
+      "name": "System.Private.Xml.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Xml.Linq.dll",
+      "sha256": "c832b73de9783e6929ca5ff4863fc313e13ef7cfb5965c52587c4f77f6e037a7"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Intrinsics",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Intrinsics.dll",
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.CodePages",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.CodePages.dll",
+      "sha256": "226e216e33c94ef7594bdffe670ba4dc5907151c113cb41ac9e9d570227e1765"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encodings.Web.dll",
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3"
+    },
+    {
+      "name": "System.Text.Json",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "System.Threading.Thread",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.Thread.dll",
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930"
+    },
+    {
+      "name": "System.Threading.ThreadPool",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.ThreadPool.dll",
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936"
+    },
+    {
+      "name": "System.Transactions.Local",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Transactions.Local.dll",
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4"
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.ReaderWriter.dll",
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938"
+    },
+    {
+      "name": "System.Xml.XDocument",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Xml.XDocument.dll",
+      "sha256": "3ff858607de5146051498a7124ef983bea280d86e165f993516c6c26af81cfb5"
+    },
+    {
+      "name": "UtfUnknown",
+      "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\UtfUnknown.dll",
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+    },
+    {
+      "name": "netstandard",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+    }
+  ],
+  "nativeSqlite": {
+    "path": "D:\\mediamanager-validation\\20261012-r23-playlist-readers\\native\\bin\\Release\\net10.0\\e_sqlite3.dll",
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "boundary": "Actual pinned PlaylistItemsProvider, PlaylistsNET/UTF.Unknown, ManagedFileSystem and DirectoryService over real neutral files. UserRootFolder.Children and FindByPath results are controlled, not a native repository query. Actual PlaylistMetadataService.MergeData and BaseItemMapper.Map full 72-column projection; no native SaveItems or refresh lifecycle in this oracle. Cancelled-token provider calls, encoding detection and written input bytes are retained. This is not full LibraryManager, provider/write/network/HTTP/WS/SQLite exchange or release acceptance."
+}

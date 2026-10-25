@@ -1,0 +1,279 @@
+[
+  {
+    "name": "Movie cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Folder cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Folder",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Series cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Series",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Season cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Episode cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": 3
+    }
+  },
+  {
+    "name": "Audio cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": 3
+    }
+  },
+  {
+    "name": "AudioBook cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.AudioBook",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": 3
+    }
+  },
+  {
+    "name": "MusicAlbum cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "MusicArtist cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "MusicVideo cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.MusicVideo",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Video cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Video",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Trailer cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Trailer",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "BoxSet cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.BoxSet",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "Person cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Person",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "UserView cold mapper invalidates the persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.UserView",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": null,
+      "ParentIndexNumber": null
+    }
+  },
+  {
+    "name": "unchanged forced name still invalidates a persisted sort cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": "The Forced 2"
+    }
+  },
+  {
+    "name": "unchanged title with a same-value setter still invalidates the cache",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null
+    },
+    "changes": {
+      "Name": "The Title 12"
+    }
+  },
+  {
+    "name": "episode index-only changes generate a new cold sort value",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Episode",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": 3
+    },
+    "changes": {
+      "IndexNumber": 9
+    }
+  },
+  {
+    "name": "season index-only changes generate a new cold sort value",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.TV.Season",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2
+    },
+    "changes": {
+      "IndexNumber": 9
+    }
+  },
+  {
+    "name": "audio disc-only changes generate a new cold sort value",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": null,
+      "IndexNumber": 2,
+      "ParentIndexNumber": 3
+    },
+    "changes": {
+      "ParentIndexNumber": 4
+    }
+  },
+  {
+    "name": "empty forced sort falls back to the native title",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": ""
+    }
+  },
+  {
+    "name": "native Mandarin cold sort uses the supported portable spelling",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Movies.Movie",
+      "Name": "张国荣",
+      "SortName": "stale database sort",
+      "ForcedSortName": null
+    }
+  },
+  {
+    "name": "person forced sort retains its native leading-only trimming",
+    "item": {
+      "Id": "8b000000-0000-0000-0000-000000000001",
+      "Type": "MediaBrowser.Controller.Entities.Person",
+      "Name": "The Title 12",
+      "SortName": "stale database sort",
+      "ForcedSortName": " Forced Name "
+    }
+  }
+]

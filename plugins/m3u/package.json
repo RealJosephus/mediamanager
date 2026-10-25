@@ -1,0 +1,9 @@
+{
+  "name": "@mediamanager/m3u",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "exports": { ".": "./index.js", "./*": "./*" },
+  "mediamanager": { "id": "m3u", "name": "M3U Tuner", "entry": "index.js" },
+  "dependencies": { "@mediamanager/plugin-sdk": "0.1.0" }
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T01:43:45.166Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/by-name-refresh/native.json",
+      "sha256": "f50c72295ff04bee23d4af444b2a0d87ddf53295b5e92f15381918834dd4e6fe"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/by-name-refresh/input.json",
+      "sha256": "e2904f9dc6eb8956bbc5a160ba364b6be243978c55c1b1fd1240a9335960ff0f"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/by-name-refresh/Program.cs",
+      "sha256": "03480851ca6551ee44602c6983539ebcb2548dd3d4c68af966f50467d6da3833"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/by-name-refresh/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sources": {
+    "MediaBrowser.Controller/Entities/Genre.cs": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+    "MediaBrowser.Controller/Entities/Person.cs": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+    "MediaBrowser.Controller/Entities/Studio.cs": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+    "MediaBrowser.Controller/Entities/Year.cs": "9f575e9fd4f68a7523fa80c98fcd84db258ab6f6cca3d1fa36344f4349eef45b",
+    "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+    "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+    "MediaBrowser.Providers/Manager/MetadataService.cs": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Emby.Server.Implementations/ApplicationHost.cs": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef"
+  },
+  "sourceFilesSha256": "706e46fc5b356689e40295eaadf0e1ac1e45b233f018bfa51f094ff53d50144b",
+  "nativeRecordSha256": "c901e78263610125d1dd75a91c37e455b8c33fed6c5c2b8e60c93c228d0b62b7",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

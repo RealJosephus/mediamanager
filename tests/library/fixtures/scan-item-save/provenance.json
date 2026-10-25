@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T03:09:50.406Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/library/fixtures/scan-item-save/native.json",
+      "sha256": "ccee9bf0704ca040e535eb2d0a242d7eaca18f211d9bd3fce7d699e5e4a48a16"
+    },
+    "input": {
+      "path": "tests/library/fixtures/scan-item-save/input.json",
+      "sha256": "5aba450609a43408aeb7769047bc0b3c15d85575a8aa12290e4dddbfad8961c3"
+    },
+    "oracle": {
+      "path": "tests/library/fixtures/scan-item-save/Program.cs",
+      "sha256": "153311eb11ab738079da033e3129247fd971737348ca21224b5e1e5621f020c1"
+    },
+    "project": {
+      "path": "tests/library/fixtures/scan-item-save/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sources": {
+    "Emby.Server.Implementations/Library/LibraryManager.cs": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+    "MediaBrowser.Controller/Entities/BaseItem.cs": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+    "MediaBrowser.Controller/Entities/Folder.cs": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+    "MediaBrowser.Controller/Entities/CollectionFolder.cs": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+  },
+  "sourceFilesSha256": "e3d437fc3e79a74a406b3a55e421ac4f6a6db8379bcb2a547a2b7f17a40c451a",
+  "nativeRecordSha256": "a896265457e79d086b89ccea030bb345730e75459106cceb507a2d7196e504b2",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "scope": "Real attribution/package byte closure consumer; no decoder or release acceptance.",
+  "resources": [
+    {
+      "name": "licenses",
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-licenses-provenance.json",
+      "bytes": 415920,
+      "sha256": "c06810ce54cccc5e46609f722144d3fa309020782446d0fcb7798209f9bcd0fc",
+      "required": true
+    },
+    {
+      "name": "rar4",
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-rar4.provenance.json",
+      "bytes": 17163,
+      "sha256": "037ab3dfbf73e4eabafa05cc7ef4901e995a86a05cfd505cc9a9fd930c7f2be8",
+      "required": true
+    },
+    {
+      "name": "rar5",
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-rar5-provenance.json",
+      "bytes": 15968,
+      "sha256": "12d0a6211f3847ae149f03002ed0ca6cd1cbe5f44ff2360118796d583f160cb9",
+      "required": true
+    },
+    {
+      "name": "builder",
+      "filename": "D:/mediamanager/tools/archive-codec-sources.json",
+      "bytes": 4195,
+      "sha256": "78abdfea8965364d868476852a8f21accdd75b7f72461c7ff1ba2418df8513d2",
+      "required": true
+    }
+  ],
+  "localFiles": [
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-licenses.txt",
+      "bytes": 351036,
+      "sha256": "413f1dfd71e5ef0b96c1bdf94098a96407faa1cd5acad83a227021bbb39717c4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-notice.txt",
+      "bytes": 3368,
+      "sha256": "036ba25888546e5efc1c4af69218c10d9336d9f7e62d6eb411babbab00f249cc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-rar5.c",
+      "bytes": 130247,
+      "sha256": "accd665e38fd253c4b6b89ee0fb686c2eb117daac9bfeab4d7ae97b62db7010d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-rar5.patch",
+      "bytes": 3881,
+      "sha256": "0c46ee71f8b1b8b7036ed2e16e43cb8bab7810b477e569d91c6c467a483b05ca",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec.c",
+      "bytes": 4913,
+      "sha256": "77aa09a3ac7204241c9154e5aa2cca929978a83a2b48df6190e56b927fc80e5e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/src/storage/resources/archive-codec-rar4.patch",
+      "bytes": 5083,
+      "sha256": "574ddc52f53375d813ee1a86561d5aafd25f2519a4ed2f506452940fbdcab7e0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/tools/archive-codec-zlib.patch",
+      "bytes": 415,
+      "sha256": "3d61fa2660e029a46f86ccd9170c98bee9e21e93b149752f4f1f6972a99b1d65",
+      "required": true
+    }
+  ],
+  "files": [
+    {
+      "filename": "README.md",
+      "bytes": 729,
+      "sha256": "d22f06131aa85a8698f3a0c9797e79396e6a568e30764c9c3fc2b187db4336f7"
+    }
+  ]
+}

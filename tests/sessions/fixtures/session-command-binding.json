@@ -1,0 +1,37 @@
+{
+  "general": [
+    {"name":"empty","json":"{}","value":{"name":"MoveUp","controllingUserId":"00000000000000000000000000000000","arguments":{}}},
+    {"name":"null","json":"null","value":null},
+    {"name":"name","json":"{\"name\":\"SetVolume\"}","value":{"name":"SetVolume","controllingUserId":"00000000000000000000000000000000","arguments":{}}},
+    {"name":"primitive arguments","json":"{\"name\":\"setvolume\",\"arguments\":{\"Volume\":\"37\",\"Mixed\":null}}","value":{"name":"SetVolume","controllingUserId":"00000000000000000000000000000000","arguments":{"Volume":"37","Mixed":null}}},
+    {"name":"invalid name","json":"{\"name\":\"invalid\"}","error":{"exception":"JsonException","path":"$.name","line":0,"position":17}},
+    {"name":"numeric name","json":"{\"name\":999}","value":{"name":999,"controllingUserId":"00000000000000000000000000000000","arguments":{}}},
+    {"name":"null name","json":"{\"name\":null}","error":{"exception":"JsonException","path":"$.name","line":0,"position":12}},
+    {"name":"user and null arguments","json":"{\"controllingUserId\":\"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\",\"arguments\":null}","value":{"name":"MoveUp","controllingUserId":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","arguments":{}}},
+    {"name":"null user","json":"{\"controllingUserId\":null}","value":{"name":"MoveUp","controllingUserId":"00000000000000000000000000000000","arguments":{}}},
+    {"name":"invalid user","json":"{\"controllingUserId\":\"bad\"}","error":{"exception":"FormatException"}},
+    {"name":"converted arguments","json":"{\"arguments\":{\"number\":1,\"bool\":true,\"null\":null}}","value":{"name":"MoveUp","controllingUserId":"00000000000000000000000000000000","arguments":{"number":"1","bool":"true","null":null}}},
+    {"name":"object argument","json":"{\"arguments\":{\"object\":{}}}","error":{"exception":"JsonException","path":"$.arguments.object","line":0,"position":24}},
+    {"name":"array argument","json":"{\"arguments\":{\"array\":[]}}","error":{"exception":"JsonException","path":"$.arguments.array","line":0,"position":23}},
+    {"name":"array arguments","json":"{\"arguments\":[]}","error":{"exception":"JsonException","path":"$.arguments","line":0,"position":14}},
+    {"name":"string arguments","json":"{\"arguments\":\"x\"}","error":{"exception":"JsonException","path":"$.arguments","line":0,"position":16}},
+    {"name":"unknown member","json":"{\"unknown\":1}","value":{"name":"MoveUp","controllingUserId":"00000000000000000000000000000000","arguments":{}}},
+    {"name":"case duplicate","json":"{\"name\":\"MoveUp\",\"Name\":\"Back\"}","value":{"name":"Back","controllingUserId":"00000000000000000000000000000000","arguments":{}}}
+  ],
+  "message": [
+    {"name":"empty","json":"{}","value":{}},
+    {"name":"null","json":"null","value":null},
+    {"name":"text","json":"{\"text\":\"hello\"}","value":{"text":"hello"}},
+    {"name":"empty text","json":"{\"text\":\"\"}","value":{"text":""}},
+    {"name":"space text","json":"{\"text\":\" \"}","value":{"text":" "}},
+    {"name":"primitives","json":"{\"text\":1,\"header\":true,\"timeoutMs\":\"9007199254740993\"}","value":{"header":"true","text":"1","timeoutMs":"9007199254740993"}},
+    {"name":"null text","json":"{\"text\":null}","value":{}},
+    {"name":"object text","json":"{\"text\":{}}","error":{"exception":"JsonException","path":"$.text","line":0,"position":9}},
+    {"name":"timeout","json":"{\"timeoutMs\":1}","value":{"timeoutMs":"1"}},
+    {"name":"null timeout","json":"{\"timeoutMs\":null}","value":{}},
+    {"name":"invalid timeout","json":"{\"timeoutMs\":\"x\"}","error":{"exception":"JsonException","path":"$","line":0,"position":3}},
+    {"name":"overflow timeout","json":"{\"timeoutMs\":9223372036854775808}","error":{"exception":"JsonException","path":"$","line":0,"position":19}},
+    {"name":"case duplicate","json":"{\"HEADER\":\"x\",\"header\":\"y\",\"text\":\"z\"}","value":{"header":"y","text":"z"}},
+    {"name":"boolean text","json":"{\"unknown\":1,\"text\":false}","value":{"text":"false"}}
+  ]
+}

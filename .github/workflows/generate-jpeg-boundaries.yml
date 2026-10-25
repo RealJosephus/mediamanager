@@ -1,0 +1,27 @@
+name: Generate independent JPEG boundary inputs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact input producer and complete pinned sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Generate neutral CMYK, YCCK, ICC and malformed JPEG sources
+        run: python3 tools/images/generate-jpeg-boundaries.py
+      - name: Preserve actual source bytes, producer and generation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jpeg-boundary-inputs-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-jpeg-inputs/artifact
+          if-no-files-found: error
+          retention-days: 30

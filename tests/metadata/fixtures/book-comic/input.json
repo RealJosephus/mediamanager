@@ -1,0 +1,1006 @@
+{
+  "schemaVersion": 1,
+  "metadataCases": [
+    {
+      "name": "xml-rich",
+      "xml": "<ComicInfo><Title>  Native <b>Comic</b> title  </Title><Manga>YES</Manga><Series> Series </Series><Number>-12</Number><Summary>One <i>two</i> three</Summary><Year>2024</Year><Month>2</Month><Day>29</Day><Genre>Action, Action,DRAMA</Genre><Publisher> Pub </Publisher><AlternateSeries>Original</AlternateSeries><Writer>Alice, ALICE,Bob</Writer><Penciller>Pen</Penciller><Inker>Ink</Inker><Letterer>Letter</Letterer><CoverArtist>Cover</CoverArtist><Colourist>Color</Colourist><LanguageISO>fr-CA</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-empty",
+      "xml": "<ComicInfo/>"
+    },
+    {
+      "name": "xml-unrelated",
+      "xml": "<other><Title>ignored</Title></other>"
+    },
+    {
+      "name": "xml-first-field",
+      "xml": "<ComicInfo><Title>first</Title><Title>second</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-case-sensitive",
+      "xml": "<comicinfo><Title>ignored</Title></comicinfo>"
+    },
+    {
+      "name": "xml-default-namespace",
+      "xml": "<ComicInfo xmlns=\"urn:comic\"><Title>ignored</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-child-namespace",
+      "xml": "<ComicInfo><Title xmlns=\"urn:comic\">ignored</Title><Series>counts</Series></ComicInfo>"
+    },
+    {
+      "name": "xml-manga-only",
+      "xml": "<ComicInfo><Manga>No</Manga></ComicInfo>"
+    },
+    {
+      "name": "xml-alternate-only",
+      "xml": "<ComicInfo><AlternateSeries>ignored but present</AlternateSeries></ComicInfo>"
+    },
+    {
+      "name": "xml-manga-not-trimmed",
+      "xml": "<ComicInfo><Manga> Yes </Manga><AlternateSeries>ignored</AlternateSeries></ComicInfo>"
+    },
+    {
+      "name": "xml-language-only",
+      "xml": "<ComicInfo><LanguageISO>invalid_!</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-people-only",
+      "xml": "<ComicInfo><Writer>Alice</Writer></ComicInfo>"
+    },
+    {
+      "name": "xml-genre-empty-member",
+      "xml": "<ComicInfo><Genre>Action,,Drama</Genre></ComicInfo>"
+    },
+    {
+      "name": "xml-people-empty-member",
+      "xml": "<ComicInfo><Title>x</Title><Writer>Alice,,Bob</Writer></ComicInfo>"
+    },
+    {
+      "name": "xml-whitespace",
+      "xml": "<ComicInfo><Title> \t\n </Title><Summary></Summary></ComicInfo>"
+    },
+    {
+      "name": "xml-invalid-numbers",
+      "xml": "<ComicInfo><Title>x</Title><Number>1.5</Number><Year>2147483648</Year><Month>13</Month><Day>1</Day></ComicInfo>"
+    },
+    {
+      "name": "xml-leading-numbers",
+      "xml": "<ComicInfo><Number> +0012 </Number><Year>-1</Year></ComicInfo>"
+    },
+    {
+      "name": "xml-invalid-date",
+      "xml": "<ComicInfo><Year>2023</Year><Month>2</Month><Day>29</Day></ComicInfo>"
+    },
+    {
+      "name": "xml-year-only",
+      "xml": "<ComicInfo><Year>2024</Year></ComicInfo>"
+    },
+    {
+      "name": "xml-month-only",
+      "xml": "<ComicInfo><Month>2</Month></ComicInfo>"
+    },
+    {
+      "name": "xml-malformed",
+      "xml": "<ComicInfo><Title>bad</ComicInfo>"
+    },
+    {
+      "name": "xml-entity",
+      "xml": "<ComicInfo><Title>A &amp; B &#x4E2D; &#128512;</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-dtd",
+      "xml": "<!DOCTYPE ComicInfo [<!ENTITY title \"Inside entity\">]><ComicInfo><Title>&title;</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-external-dtd",
+      "xml": "<!DOCTYPE ComicInfo SYSTEM \"file:///Z:/never-comic-external.dtd\"><ComicInfo><Title>x</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-utf16",
+      "xml": "<ComicInfo><Title>漫畫 UTF16</Title></ComicInfo>",
+      "encoding": "utf16le"
+    },
+    {
+      "name": "xml-latin1",
+      "xml": "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><ComicInfo><Title>Café</Title></ComicInfo>",
+      "encoding": "latin1"
+    },
+    {
+      "name": "xml-invalid-utf8",
+      "xml": null,
+      "xmlBase64": "PENvbWljSW5mbz48VGl0bGU+/zwvVGl0bGU+PC9Db21pY0luZm8+"
+    },
+    {
+      "name": "xml-language-en-US",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>en-US</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-eng",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>eng</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-EN_us",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>EN_us</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-zh-Hant-TW",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>zh-Hant-TW</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-fra",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>fra</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-iw",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>iw</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-invalid_!",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>invalid_!</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-notvalid",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>notvalid</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-x-test",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>x-test</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-123",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO>123</LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "xml-language-empty",
+      "xml": "<ComicInfo><Title>x</Title><LanguageISO></LanguageISO></ComicInfo>"
+    },
+    {
+      "name": "json-rich",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\" Title \",\"series\":\"Series\",\"publisher\":\" Pub \",\"genre\":\"Action,Drama\",\"comments\":\" Overview \",\"publicationYear\":\"2024\",\"publicationMonth\":2,\"issue\":\"12\",\"tags\":[\"Tag\",\"Tag\",\"\"],\"language\":\"zh-Hant\",\"credits\":[{\"person\":\"Doe, Jane, Jr\",\"role\":\"Author\"},{\"person\":\"Color\",\"role\":\"cOlOrEr\"},{\"person\":\"Number\",\"role\":\"16\"},{\"person\":\"Unknown\",\"role\":\"author\"}]}}"
+    },
+    {
+      "name": "json-empty",
+      "comment": ""
+    },
+    {
+      "name": "json-spaces",
+      "comment": "  "
+    },
+    {
+      "name": "json-nonjson",
+      "comment": "Created by another packer"
+    },
+    {
+      "name": "json-null",
+      "comment": "null"
+    },
+    {
+      "name": "json-root-array",
+      "comment": "[]"
+    },
+    {
+      "name": "json-wrong-case",
+      "comment": "{\"comicbookinfo/1.0\":{\"title\":\"ignored\"}}"
+    },
+    {
+      "name": "json-metadata-null",
+      "comment": "{\"ComicBookInfo/1.0\":null}"
+    },
+    {
+      "name": "json-only-ignored",
+      "comment": "{\"ComicBookInfo/1.0\":{\"volume\":3,\"rating\":5,\"country\":\"US\"}}"
+    },
+    {
+      "name": "json-only-language",
+      "comment": "{\"ComicBookInfo/1.0\":{\"language\":\"en-US\"}}"
+    },
+    {
+      "name": "json-only-credits",
+      "comment": "{\"ComicBookInfo/1.0\":{\"credits\":[{\"person\":\"Alice\",\"role\":\"Author\"}]}}"
+    },
+    {
+      "name": "json-only-month",
+      "comment": "{\"ComicBookInfo/1.0\":{\"publicationMonth\":2}}"
+    },
+    {
+      "name": "json-tags",
+      "comment": "{\"ComicBookInfo/1.0\":{\"tags\":[\"x\",null,17,true]}}"
+    },
+    {
+      "name": "json-tags-null",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"tags\":null}}"
+    },
+    {
+      "name": "json-credits-null",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"credits\":null}}"
+    },
+    {
+      "name": "json-credit-null-member",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"credits\":[null]}}"
+    },
+    {
+      "name": "json-credit-empty-name",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"credits\":[{\"person\":\"\",\"role\":\"Author\"}]}}"
+    },
+    {
+      "name": "json-credit-spaces",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"credits\":[{\"person\":\"  \",\"role\":\"Author\"}]}}"
+    },
+    {
+      "name": "json-year-zero",
+      "comment": "{\"ComicBookInfo/1.0\":{\"publicationYear\":0,\"publicationMonth\":1}}"
+    },
+    {
+      "name": "json-invalid-date",
+      "comment": "{\"ComicBookInfo/1.0\":{\"publicationYear\":2024,\"publicationMonth\":13}}"
+    },
+    {
+      "name": "json-invalid-language",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"invalid_!\"}}"
+    },
+    {
+      "name": "json-wrong-array",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"tags\":\"bad\"}}"
+    },
+    {
+      "name": "json-wrong-credit",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"credits\":[1]}}"
+    },
+    {
+      "name": "json-ignored-invalid-number",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"volume\":\"bad\"}}"
+    },
+    {
+      "name": "json-raw-scalars",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":1e2,\"series\":false,\"issue\":\"+1\",\"publisher\":true}}"
+    },
+    {
+      "name": "json-number-decimal",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"issue\":1.0}}"
+    },
+    {
+      "name": "json-number-spaces",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"issue\":\" 12 \"}}"
+    },
+    {
+      "name": "json-int-overflow",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"issue\":2147483648}}"
+    },
+    {
+      "name": "json-duplicate-invalid-first",
+      "comment": "{\"ComicBookInfo/1.0\":{\"issue\":\"bad\",\"issue\":2,\"title\":\"x\"}}"
+    },
+    {
+      "name": "json-duplicate-valid",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"first\",\"title\":\"second\",\"issue\":2}}"
+    },
+    {
+      "name": "json-comments",
+      "comment": "{/*bad*/\"ComicBookInfo/1.0\":{\"title\":\"x\"}}"
+    },
+    {
+      "name": "json-trailing-comma",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",}}"
+    },
+    {
+      "name": "precedence-comment",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Comment\"}}",
+      "xml": "<ComicInfo><Title>External</Title></ComicInfo>",
+      "internalXml": "<ComicInfo><Title>Internal</Title></ComicInfo>"
+    },
+    {
+      "name": "precedence-external",
+      "comment": "not json",
+      "xml": "<ComicInfo><Title>External</Title></ComicInfo>",
+      "internalXml": "<ComicInfo><Title>Internal</Title></ComicInfo>"
+    },
+    {
+      "name": "precedence-internal",
+      "comment": "not json",
+      "xml": "<bad",
+      "internalXml": "<ComicInfo><Title>Internal</Title></ComicInfo>"
+    },
+    {
+      "name": "external-same-stem",
+      "xml": "<ComicInfo><Title>Stem</Title></ComicInfo>",
+      "genericXml": "<ComicInfo><Title>Generic</Title></ComicInfo>"
+    },
+    {
+      "name": "external-generic",
+      "genericXml": "<ComicInfo><Title>Generic</Title></ComicInfo>"
+    },
+    {
+      "name": "internal-key-case",
+      "internalXml": "<ComicInfo><Title>ignored</Title></ComicInfo>",
+      "internalKey": "comicinfo.xml"
+    },
+    {
+      "name": "internal-key-nested",
+      "internalXml": "<ComicInfo><Title>ignored</Title></ComicInfo>",
+      "internalKey": "nested/ComicInfo.xml"
+    },
+    {
+      "name": "upper-extension",
+      "extension": ".CBZ",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Upper\"}}"
+    },
+    {
+      "name": "cbr-zip-metadata",
+      "extension": ".cbr",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"ignored\"}}",
+      "internalXml": "<ComicInfo><Title>ignored</Title></ComicInfo>"
+    },
+    {
+      "name": "cbr-sidecar",
+      "extension": ".cbr",
+      "xml": "<ComicInfo><Title>External CBR</Title></ComicInfo>"
+    },
+    {
+      "name": "directory-cbz",
+      "directory": true,
+      "xml": "<ComicInfo><Title>Directory sidecar</Title></ComicInfo>"
+    },
+    {
+      "name": "cancelled",
+      "cancelled": true,
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"Comment\"}}",
+      "xml": "<ComicInfo><Title>External</Title></ComicInfo>",
+      "internalXml": "<ComicInfo><Title>Internal</Title></ComicInfo>"
+    },
+    {
+      "name": "lookup-failure",
+      "lookupFailure": true,
+      "xml": "<ComicInfo><Title>x</Title></ComicInfo>"
+    },
+    {
+      "name": "sidecar-lookup-failure",
+      "sidecarLookupFailure": true,
+      "extension": ".epub",
+      "xml": "<ComicInfo><Title>x</Title></ComicInfo>"
+    },
+    {
+      "name": "missing",
+      "missing": true
+    },
+    {
+      "name": "xml-cdata",
+      "xml": "<ComicInfo><Title><![CDATA[a &not; <b>]]></Title></ComicInfo>"
+    },
+    {
+      "name": "xml-unknown-entity",
+      "xml": "<ComicInfo><Title>&not;</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-invalid-numeric",
+      "xml": "<ComicInfo><Title>&#0;</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-double-escaped",
+      "xml": "<ComicInfo><Title>&amp;#123;</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-whitespace-children",
+      "xml": "<ComicInfo><Title> <a>One</a> \n <b>Two</b> </Title></ComicInfo>"
+    },
+    {
+      "name": "xml-preserve-space",
+      "xml": "<ComicInfo xml:space=\"preserve\"><Title> <a>One</a> \n <b>Two</b> </Title></ComicInfo>"
+    },
+    {
+      "name": "xml-unbound-prefix",
+      "xml": "<ComicInfo><Title><x:a>Text</x:a></Title></ComicInfo>"
+    },
+    {
+      "name": "xml-nul-char",
+      "xml": "<ComicInfo><Title>a\u0000b</Title></ComicInfo>"
+    },
+    {
+      "name": "xml-utf32le",
+      "xmlBase64": "//4AADwAAAA/AAAAeAAAAG0AAABsAAAAIAAAAHYAAABlAAAAcgAAAHMAAABpAAAAbwAAAG4AAAA9AAAAIgAAADEAAAAuAAAAMAAAACIAAAAgAAAAZQAAAG4AAABjAAAAbwAAAGQAAABpAAAAbgAAAGcAAAA9AAAAIgAAAHUAAAB0AAAAZgAAAC0AAAAzAAAAMgAAACIAAAA/AAAAPgAAADwAAABDAAAAbwAAAG0AAABpAAAAYwAAAEkAAABuAAAAZgAAAG8AAAA+AAAAPAAAAFQAAABpAAAAdAAAAGwAAABlAAAAPgAAAFUAAABUAAAARgAAADMAAAAyAAAAIAAAAC1OAACHZQAAPAAAAC8AAABUAAAAaQAAAHQAAABsAAAAZQAAAD4AAAA8AAAALwAAAEMAAABvAAAAbQAAAGkAAABjAAAASQAAAG4AAABmAAAAbwAAAD4AAAA="
+    },
+    {
+      "name": "json-language-extra-",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"\"}}"
+    },
+    {
+      "name": "json-language-extra-656e67",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"eng\"}}"
+    },
+    {
+      "name": "json-language-extra-667261",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"fra\"}}"
+    },
+    {
+      "name": "json-language-extra-6977",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"iw\"}}"
+    },
+    {
+      "name": "json-language-extra-6e6f7476616c6964",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"notvalid\"}}"
+    },
+    {
+      "name": "json-language-extra-782d74657374",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"x-test\"}}"
+    },
+    {
+      "name": "json-language-extra-656e0078",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"en\\u0000x\"}}"
+    },
+    {
+      "name": "json-language-extra-676572",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"ger\"}}"
+    },
+    {
+      "name": "json-language-extra-756e64",
+      "comment": "{\"ComicBookInfo/1.0\":{\"title\":\"x\",\"language\":\"und\"}}"
+    }
+  ],
+  "coverCases": [
+    {
+      "name": "cover-priority",
+      "entries": [
+        {
+          "key": "cover.gif",
+          "text": ".gif"
+        },
+        {
+          "key": "cover.bmp",
+          "text": ".bmp"
+        },
+        {
+          "key": "cover.webp",
+          "text": ".webp"
+        },
+        {
+          "key": "cover.jpg",
+          "text": ".jpg"
+        },
+        {
+          "key": "cover.jpeg",
+          "text": ".jpeg"
+        },
+        {
+          "key": "cover.png",
+          "text": ".png"
+        }
+      ]
+    },
+    {
+      "name": "cover-jpeg-before-jpg",
+      "entries": [
+        {
+          "key": "cover.jpg",
+          "text": "jpg"
+        },
+        {
+          "key": "cover.jpeg",
+          "text": "jpeg"
+        }
+      ]
+    },
+    {
+      "name": "cover-duplicate-first",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "first"
+        },
+        {
+          "key": "cover.png",
+          "text": "second"
+        }
+      ]
+    },
+    {
+      "name": "cover-uppercase-fallback",
+      "entries": [
+        {
+          "key": "COVER.PNG",
+          "text": "upper"
+        },
+        {
+          "key": "a.jpg",
+          "text": "a"
+        }
+      ]
+    },
+    {
+      "name": "cover-nested-fallback",
+      "entries": [
+        {
+          "key": "folder/cover.png",
+          "text": "nested"
+        },
+        {
+          "key": "001.jpg",
+          "text": "first"
+        }
+      ]
+    },
+    {
+      "name": "cover-numeric-lexical",
+      "entries": [
+        {
+          "key": "10.jpg",
+          "text": "ten"
+        },
+        {
+          "key": "2.jpg",
+          "text": "two"
+        }
+      ]
+    },
+    {
+      "name": "cover-punctuation-culture",
+      "entries": [
+        {
+          "key": "a.jpg",
+          "text": "a.jpg"
+        },
+        {
+          "key": "-b.jpg",
+          "text": "-b.jpg"
+        },
+        {
+          "key": "_c.jpg",
+          "text": "_c.jpg"
+        },
+        {
+          "key": "A.jpg",
+          "text": "A.jpg"
+        },
+        {
+          "key": "ä.jpg",
+          "text": "ä.jpg"
+        },
+        {
+          "key": "é.jpg",
+          "text": "é.jpg"
+        },
+        {
+          "key": "e.jpg",
+          "text": "e.jpg"
+        }
+      ],
+      "culture": "en-US"
+    },
+    {
+      "name": "cover-swedish-culture",
+      "entries": [
+        {
+          "key": "ä.jpg",
+          "text": "ä.jpg"
+        },
+        {
+          "key": "z.jpg",
+          "text": "z.jpg"
+        },
+        {
+          "key": "å.jpg",
+          "text": "å.jpg"
+        },
+        {
+          "key": "ö.jpg",
+          "text": "ö.jpg"
+        }
+      ],
+      "culture": "sv-SE"
+    },
+    {
+      "name": "cover-backslash-key",
+      "entries": [
+        {
+          "key": "nested\\cover.png",
+          "text": "backslash"
+        },
+        {
+          "key": "cover.JPG",
+          "text": "case"
+        }
+      ]
+    },
+    {
+      "name": "cover-dot-key",
+      "entries": [
+        {
+          "key": "../a.png",
+          "text": "dot"
+        },
+        {
+          "key": "/b.png",
+          "text": "absolute"
+        }
+      ]
+    },
+    {
+      "name": "cover-svg-only",
+      "entries": [
+        {
+          "key": "cover.svg",
+          "text": "<svg/>"
+        }
+      ]
+    },
+    {
+      "name": "cover-no-images",
+      "entries": [
+        {
+          "key": "ComicInfo.xml",
+          "text": "<ComicInfo/>"
+        }
+      ]
+    },
+    {
+      "name": "cover-invalid-bytes",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "not an actual bitmap"
+        }
+      ]
+    },
+    {
+      "name": "cover-valid-png",
+      "entries": [
+        {
+          "key": "cover.png",
+          "asset": "poster"
+        }
+      ]
+    },
+    {
+      "name": "cover-valid-jpeg",
+      "entries": [
+        {
+          "key": "cover.jpg",
+          "asset": "backdrop"
+        }
+      ]
+    },
+    {
+      "name": "cover-cbr-zip-payload",
+      "extension": ".cbr",
+      "entries": [
+        {
+          "key": "cover.gif",
+          "text": "actual ZIP payload alias"
+        }
+      ]
+    },
+    {
+      "name": "cover-wrong-filename",
+      "extension": ".pdf",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "skip"
+        }
+      ]
+    },
+    {
+      "name": "cover-tar",
+      "format": "tar",
+      "extension": ".cbt",
+      "entries": [
+        {
+          "key": "z.jpg",
+          "text": "last"
+        },
+        {
+          "key": "cover.png",
+          "text": "tar actual"
+        }
+      ]
+    },
+    {
+      "name": "cover-7z",
+      "format": "7z",
+      "extension": ".cb7",
+      "entries": [
+        {
+          "key": "z.jpg",
+          "text": "last"
+        },
+        {
+          "key": "cover.webp",
+          "text": "7z actual"
+        }
+      ]
+    },
+    {
+      "name": "cover-gzip",
+      "format": "gzip",
+      "extension": ".cbr",
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "gzip actual"
+        }
+      ]
+    },
+    {
+      "name": "cover-corrupt",
+      "format": "raw",
+      "entries": []
+    },
+    {
+      "name": "cover-missing",
+      "missing": true,
+      "entries": []
+    },
+    {
+      "name": "cover-cancelled",
+      "cancelled": true,
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "cancel"
+        }
+      ]
+    },
+    {
+      "name": "cover-ignore-request-type",
+      "imageType": "Backdrop",
+      "entries": [
+        {
+          "key": "cover.bmp",
+          "text": "bmp"
+        }
+      ]
+    },
+    {
+      "name": "cover-flag0-utf8",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "é.jpg",
+          "text": "unicode flag zero",
+          "flags": 0
+        },
+        {
+          "key": "z.jpg",
+          "text": "z"
+        }
+      ]
+    },
+    {
+      "name": "cover-flag0-nonutf8",
+      "rawZip": true,
+      "entries": [
+        {
+          "keyBytesBase64": "6S5qcGc=",
+          "key": "legacy",
+          "text": "legacy byte",
+          "flags": 0
+        },
+        {
+          "key": "z.jpg",
+          "text": "z"
+        }
+      ]
+    },
+    {
+      "name": "cover-unicode-path-extra",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "legacy.jpg",
+          "unicodePath": "cover.png",
+          "text": "unicode extra",
+          "flags": 0
+        },
+        {
+          "key": "cover.jpg",
+          "text": "ordinary jpg"
+        }
+      ]
+    },
+    {
+      "name": "cover-duplicate-central-reverse",
+      "rawZip": true,
+      "centralOrder": [
+        1,
+        0
+      ],
+      "entries": [
+        {
+          "key": "cover.png",
+          "text": "first local"
+        },
+        {
+          "key": "cover.png",
+          "text": "second local"
+        }
+      ]
+    },
+    {
+      "name": "cover-backslash-raw",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "cover\\a.png",
+          "text": "raw backslash"
+        },
+        {
+          "key": "z.jpg",
+          "text": "z"
+        }
+      ]
+    },
+    {
+      "name": "cover-unicode-path-invalid-crc",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "legacy.jpg",
+          "flags": 0,
+          "unicodePath": "cover.png",
+          "invalidCrc": true,
+          "text": "unicode-invalid-crc"
+        },
+        {
+          "key": "cover.jpg",
+          "text": "jpeg-root"
+        }
+      ]
+    },
+    {
+      "name": "cover-unicode-path-invalid-version",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "legacy.jpg",
+          "flags": 0,
+          "unicodePath": "cover.png",
+          "unicodeVersion": 2,
+          "text": "unicode-invalid-version"
+        },
+        {
+          "key": "cover.jpg",
+          "text": "jpeg-root"
+        }
+      ]
+    },
+    {
+      "name": "cover-unicode-path-utf8-flag",
+      "rawZip": true,
+      "entries": [
+        {
+          "key": "legacy.jpg",
+          "flags": 2048,
+          "unicodePath": "cover.png",
+          "text": "unicode-utf8-flag"
+        },
+        {
+          "key": "cover.jpg",
+          "text": "jpeg-root"
+        }
+      ]
+    },
+    {
+      "name": "cover-gzip-no-name-cbz",
+      "extension": ".cbz",
+      "format": "gzip-no-name",
+      "entries": [
+        {
+          "key": "ignored.png",
+          "text": "no-header-filename"
+        }
+      ]
+    },
+    {
+      "name": "cover-gzip-no-name-cbr",
+      "extension": ".cbr",
+      "format": "gzip-no-name",
+      "entries": [
+        {
+          "key": "ignored.png",
+          "text": "no-header-filename"
+        }
+      ]
+    },
+    {
+      "name": "cover-upstream-Rar-rar",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar.rar",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Rar5-rar",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.rar",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Rar5-solid-rar",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.solid.rar",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Rar5-encrypted_filesAndHeader-rar",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar5.encrypted_filesAndHeader.rar",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Rar-encrypted_filesOnly-rar",
+      "extension": ".cbr",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Rar.encrypted_filesOnly.rar",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-7Zip-LZMA2-7z",
+      "extension": ".cbz",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/7Zip.LZMA2.7z",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-7Zip-solid-7z",
+      "extension": ".cbz",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/7Zip.solid.7z",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Tar-tar-gz",
+      "extension": ".cbz",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Tar.tar.gz",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-Tar-tar-Z",
+      "extension": ".cbz",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/Tar.tar.Z",
+      "entries": []
+    },
+    {
+      "name": "cover-upstream-large_test-txt-Z",
+      "extension": ".cbz",
+      "format": "asset",
+      "assetPath": "D:/mediamanager-validation/20261016-book-stage/inputs/comic-upstream-1/large_test.txt.Z",
+      "entries": []
+    }
+  ],
+  "languages": [
+    "en-US",
+    "eng",
+    "EN_us",
+    "zh-Hant-TW",
+    "fra",
+    "iw",
+    "invalid_!",
+    "notvalid",
+    "x-test",
+    "123",
+    "",
+    "en\u0000x",
+    "abcd",
+    "abcdefgh",
+    "abc",
+    "zz",
+    "zxx",
+    "und",
+    "qaa",
+    "in",
+    "ji",
+    "iw-IL",
+    "ENG",
+    "fra-FR",
+    "ger",
+    "deu",
+    "en_US",
+    "en-US-x-test"
+  ],
+  "culture": "en-US"
+}

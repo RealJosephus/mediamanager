@@ -1,0 +1,70 @@
+{
+  "actualFrozenBookPhotoResolution": true,
+  "inputSha256": "5e3475f47cba45bad926d7688f5601ad550df51ae9baa0f6150f31a43c4f4705",
+  "parser": [],
+  "results": [
+    {
+      "name": "matching-extension-directory-only",
+      "resolver": "book",
+      "collectionType": "books",
+      "enablePhotos": true,
+      "priority": 1,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.Book",
+        "name": "Novel",
+        "path": "$MEDIA/Novel/chapter.epub",
+        "parentId": "95000000-0000-0000-0000-000000000001",
+        "IsFolder": false,
+        "mediaType": "Book",
+        "IsInMixedFolder": false,
+        "ProductionYear": null,
+        "seriesName": "",
+        "index": null,
+        "parentIndex": null
+      }
+    },
+    {
+      "name": "matching-extension-directory-plus-file",
+      "resolver": "book",
+      "collectionType": "books",
+      "enablePhotos": true,
+      "priority": 1,
+      "resolved": null
+    },
+    {
+      "name": "ordinary-file-control",
+      "resolver": "book",
+      "collectionType": "books",
+      "enablePhotos": true,
+      "priority": 1,
+      "resolved": {
+        "type": "MediaBrowser.Controller.Entities.Book",
+        "name": "Novel",
+        "path": "$MEDIA/Novel/story.epub",
+        "parentId": "95000000-0000-0000-0000-000000000001",
+        "IsFolder": false,
+        "mediaType": "Book",
+        "IsInMixedFolder": false,
+        "ProductionYear": null,
+        "seriesName": "",
+        "index": null,
+        "parentIndex": null
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e"
+    },
+    {
+      "name": "Emby.Naming",
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106"
+    }
+  ],
+  "scope": "Actual frozen BookFileNameParser, BookResolver, PhotoResolver, PhotoAlbumResolver, ResolverHelper, ManagedFileSystem and DirectoryService over real files. Covers collection gates, supported extensions, artwork prefixes, sibling-video ownership, EnablePhotos, single-book directory collapse, parsed book metadata, resolver priorities and initialized names/paths. LibraryManager identity, parent lookup, image decoding and persistence are controls. No Folder.ValidateChildren, CreateItems, recursive scanning, database writes, watcher, metadata providers, faults, concurrency, HTTP, migration or release acceptance."
+}

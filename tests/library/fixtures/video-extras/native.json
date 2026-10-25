@@ -1,0 +1,377 @@
+{
+  "actualFrozenVideoExtraResolution": true,
+  "results": [
+    {
+      "name": "direct-suffixes-and-filenames",
+      "owner": {
+        "Name": "Up",
+        "Year": null
+      },
+      "candidates": [
+        {
+          "path": "Z:\\Movies\\Up\\Up - trailer.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Suffix",
+          "ruleToken": "- trailer",
+          "resolvedName": "Up -",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\Up-trailer2.mp4",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Suffix",
+          "ruleToken": "-trailer",
+          "resolvedName": "Up-trailer2",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\Up - sample.mkv",
+          "valid": true,
+          "extraType": "Sample",
+          "extraTypeValue": 7,
+          "ruleType": "Suffix",
+          "ruleToken": "- sample",
+          "resolvedName": "Up -",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\Up-extra.mkv",
+          "valid": true,
+          "extraType": "Unknown",
+          "extraTypeValue": 0,
+          "ruleType": "Suffix",
+          "ruleToken": "-extra",
+          "resolvedName": "Up",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\Recording the audio[Bluray]-behindthescenes.mkv",
+          "valid": true,
+          "extraType": "BehindTheScenes",
+          "extraTypeValue": 3,
+          "ruleType": "Suffix",
+          "ruleToken": "-behindthescenes",
+          "resolvedName": "Recording the audio",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\Interview with the dog-interview.mkv",
+          "valid": true,
+          "extraType": "Interview",
+          "extraTypeValue": 5,
+          "ruleType": "Suffix",
+          "ruleToken": "-interview",
+          "resolvedName": "Interview with the dog",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\trailer.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Filename",
+          "ruleToken": "trailer",
+          "resolvedName": "trailer",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Elsewhere\\trailer.mkv",
+          "valid": false,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Filename",
+          "ruleToken": "trailer",
+          "resolvedName": "trailer",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\not an extra.mkv",
+          "valid": false,
+          "extraType": null,
+          "extraTypeValue": null,
+          "ruleType": null,
+          "ruleToken": null,
+          "resolvedName": "not an extra",
+          "resolvedYear": null,
+          "resolverTypes": null
+        }
+      ]
+    },
+    {
+      "name": "typed-extra-directories",
+      "owner": {
+        "Name": "Up",
+        "Year": null
+      },
+      "candidates": [
+        {
+          "path": "Z:\\Movies\\Up\\trailers\\Teaser.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "DirectoryName",
+          "ruleToken": "trailers",
+          "resolvedName": "Teaser",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\backdrops\\Backdrop.mkv",
+          "valid": true,
+          "extraType": "ThemeVideo",
+          "extraTypeValue": 9,
+          "ruleType": "DirectoryName",
+          "ruleToken": "backdrops",
+          "resolvedName": "Backdrop",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\behind the scenes\\Making Of.mkv",
+          "valid": true,
+          "extraType": "BehindTheScenes",
+          "extraTypeValue": 3,
+          "ruleType": "DirectoryName",
+          "ruleToken": "behind the scenes",
+          "resolvedName": "Making Of",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\deleted scenes\\Lost.mkv",
+          "valid": true,
+          "extraType": "DeletedScene",
+          "extraTypeValue": 4,
+          "ruleType": "DirectoryName",
+          "ruleToken": "deleted scenes",
+          "resolvedName": "Lost",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\interviews\\Cast.mkv",
+          "valid": true,
+          "extraType": "Interview",
+          "extraTypeValue": 5,
+          "ruleType": "DirectoryName",
+          "ruleToken": "interviews",
+          "resolvedName": "Cast",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\scenes\\Opening.mkv",
+          "valid": true,
+          "extraType": "Scene",
+          "extraTypeValue": 6,
+          "ruleType": "DirectoryName",
+          "ruleToken": "scenes",
+          "resolvedName": "Opening",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\samples\\Sample.mkv",
+          "valid": true,
+          "extraType": "Sample",
+          "extraTypeValue": 7,
+          "ruleType": "DirectoryName",
+          "ruleToken": "samples",
+          "resolvedName": "Sample",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\shorts\\Short.mkv",
+          "valid": true,
+          "extraType": "Short",
+          "extraTypeValue": 11,
+          "ruleType": "DirectoryName",
+          "ruleToken": "shorts",
+          "resolvedName": "Short",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\featurettes\\Feature.mkv",
+          "valid": true,
+          "extraType": "Featurette",
+          "extraTypeValue": 10,
+          "ruleType": "DirectoryName",
+          "ruleToken": "featurettes",
+          "resolvedName": "Feature",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\extras\\Bonus.mkv",
+          "valid": true,
+          "extraType": "Unknown",
+          "extraTypeValue": 0,
+          "ruleType": "DirectoryName",
+          "ruleToken": "extras",
+          "resolvedName": "Bonus",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Up\\clips\\Clip.mkv",
+          "valid": true,
+          "extraType": "Clip",
+          "extraTypeValue": 1,
+          "ruleType": "DirectoryName",
+          "ruleToken": "clips",
+          "resolvedName": "Clip",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.ExtraResolver"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Elsewhere\\trailers\\Wrong.mkv",
+          "valid": false,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "DirectoryName",
+          "ruleToken": "trailers",
+          "resolvedName": "Wrong",
+          "resolvedYear": null,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "year-and-version-prefixes",
+      "owner": {
+        "Name": "Dragon 2",
+        "Year": 2014
+      },
+      "candidates": [
+        {
+          "path": "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2014) - [1080p]-trailer.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Suffix",
+          "ruleToken": "-trailer",
+          "resolvedName": "Dragon 2",
+          "resolvedYear": 2014,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2014) - [2160p]-trailer.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Suffix",
+          "ruleToken": "-trailer",
+          "resolvedName": "Dragon 2",
+          "resolvedYear": 2014,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Dragon 2 (2014)\\trailers\\Trailer 1 (2013).mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "DirectoryName",
+          "ruleToken": "trailers",
+          "resolvedName": "Trailer 1",
+          "resolvedYear": 2013,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        },
+        {
+          "path": "Z:\\Movies\\Dragon 2 (2014)\\Dragon 2 (2015)-trailer.mkv",
+          "valid": true,
+          "extraType": "Trailer",
+          "extraTypeValue": 2,
+          "ruleType": "Suffix",
+          "ruleToken": "-trailer",
+          "resolvedName": "Dragon 2",
+          "resolvedYear": 2015,
+          "resolverTypes": [
+            "Emby.Server.Implementations.Library.Resolvers.GenericVideoResolver\u00601[[MediaBrowser.Controller.Entities.Trailer, MediaBrowser.Controller, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceFiles": [
+    "Emby.Naming/Common/NamingOptions.cs",
+    "Emby.Naming/Video/ExtraRuleResolver.cs",
+    "Emby.Naming/Video/VideoResolver.cs",
+    "Emby.Server.Implementations/Library/Resolvers/ExtraResolver.cs",
+    "Emby.Server.Implementations/Library/LibraryManager.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "MediaBrowser.Controller/Entities/Video.cs"
+  ],
+  "assemblies": [
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\video-extras-oracle-20261006-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "8d369435646570958505c58b9cb17da169855dabc105d0e933524361e9b7b1c8"
+    },
+    {
+      "name": "Emby.Naming",
+      "path": "D:\\mediamanager-validation\\20261005\\results\\video-extras-oracle-20261006-2\\bin\\Release\\net10.0\\Emby.Naming.dll",
+      "sha256": "55085cf14d1e58a7a1e99e0ffc37bde0545bbe85f7f09995388a6e465cca3a45"
+    }
+  ],
+  "scope": "Actual frozen ExtraResolver.TryGetExtraTypeForOwner, ExtraRuleResolver and VideoResolver name/year resolution. File-system enumeration, LibraryManager.FindExtras localization/numbering, ownership selection, repository persistence and native scanning are outside this oracle."
+}

@@ -1,0 +1,131 @@
+{
+  "files": [
+    {
+      "filename": "Program.cs",
+      "sha256": "c5cbda9a41e7fd5116aba58e9bc8ad8283c12aeb54e5c24bbdbef64b11c17e0b",
+      "bytes": 13042
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe",
+      "bytes": 545
+    },
+    {
+      "filename": "input.json",
+      "sha256": "c982533cfb7b48582834dd92fe14d135dd63123efc214d10fa22de1671b8d7d3",
+      "bytes": 1843
+    },
+    {
+      "filename": "native.json",
+      "sha256": "945203267e4c0723d294c6460ed18d5818212c24dacef429a47ba6fb209ffb47",
+      "bytes": 28292
+    },
+    {
+      "filename": "README.md",
+      "sha256": "e132679c80430fd8dae5d26c78ff54c4c44602fafd28dd00fcff0baba6b367e5",
+      "bytes": 1246
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780
+    }
+  ],
+  "sources": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Books/BookMetadataService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 2338,
+      "sha256": "39aa2a318535814ad94d88be202fa20f12515caca6a3f9ea85b3ff957fd659bc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 33110,
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "required": true
+    }
+  ],
+  "assemblies": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true,
+      "name": "MediaBrowser.Controller"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true,
+      "name": "MediaBrowser.Providers"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true,
+      "name": "Emby.Server.Implementations"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true,
+      "name": "Jellyfin.Server.Implementations"
+    }
+  ],
+  "record": {
+    "filename": "D:/mediamanager-validation/20261016-photo-stage/results/custom-image-native-3/record.json",
+    "available": true,
+    "kind": "file",
+    "bytes": 4450,
+    "sha256": "92de43639d4e9717afc1778ececf75421ec1a684857261bae674b2d6cde337e5",
+    "required": true
+  },
+  "sourceFilesSha256": "695bb2fd0309be3d21094a549309834ec6c9d1483799a3de3f0690c1ad8b5781"
+}

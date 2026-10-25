@@ -1,0 +1,83 @@
+{
+  "nativeSha256": "e041f74b7e22342391ba7c94fdf35201453452b4223db46fa536793371146292",
+  "inputSha256": "5635a61251089df397fddaf02f1fd77e9bbff306661cd02750b29f6dd4dd0a83",
+  "sources": [
+    {
+      "path": "Emby.Server.Implementations/Library/Validators/CollectionPosterVerifyPostScanTask.cs",
+      "sha256": "46f2801c04e0804491ad6f810a8bae871dab64bfd2c583fbaef58ce80f80d880",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "designatedSourceMatchesOracleBuildCopy": true
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "designatedSourceMatchesOracleBuildCopy": true
+    }
+  ],
+  "oracleSources": [
+    {
+      "name": "Oracle.csproj",
+      "sha256": "0b9d3e600bbf152d421f8a0ca199b075aa18811d2141e3f44f42533440e3320c"
+    },
+    {
+      "name": "Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "name": "Program.cs",
+      "sha256": "601b14d74a0ec25f3fc12535f79e354efaeb82d146609d33e31d8aff0071e378"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 32256,
+    "sha256": "1ed46d7d41049d6a6468a0a42040cf7f0ffc8942aaeccb7f0127eb4a7b6bddd9"
+  },
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261005/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager-validation/20261012-collection-poster-draft-2/input.json",
+      "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native/instances",
+      "D:\\mediamanager-validation\\20261012-collection-poster-native-2\\native/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "completeBuildInputClosure": false,
+  "phaseAcceptance": false
+}

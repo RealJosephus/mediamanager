@@ -1,0 +1,18 @@
+[
+  {"name":"replace-file-directory","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentType":"tvshows","contentTypes":[{"Name":"","Value":"drop"},{"Name":"z:\\editmedia","Value":"movies"},{"Name":"Z:\\Other","Value":"music"},{"Name":"Z:\\EditMedia","Value":"homevideos"}]},
+  {"name":"folder-path","mode":"content","type":"Folder","path":"Z:\\EditMedia\\Show","contentType":"movies"},
+  {"name":"dvd-folder","mode":"content","type":"Movie","path":"Z:\\EditMedia\\Disc","videoType":"Dvd","contentType":"movies"},
+  {"name":"stacked-dvd","mode":"content","type":"Movie","path":"Z:\\EditMedia\\Disc","videoType":"Dvd","stacked":true,"contentType":"movies"},
+  {"name":"placeholder-bluray","mode":"content","type":"Movie","path":"Z:\\EditMedia\\placeholder.iso","videoType":"BluRay","placeholder":true,"contentType":"movies"},
+  {"name":"remove-missing-query","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentTypes":[{"Name":"Z:\\EditMedia","Value":"movies"},{"Name":"Z:\\Other","Value":"music"}]},
+  {"name":"remove-whitespace-query","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentType":" \t\n\u0085","contentTypes":[{"Name":"Z:\\EditMedia","Value":"movies"}]},
+  {"name":"preserve-bom-query","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentType":"\ufeff"},
+  {"name":"arbitrary-type-text","mode":"content","type":"Audio","path":"Z:\\EditMedia\\song.mp3","contentType":" Custom&Mixed ","contentTypes":[{"Name":null,"Value":"drop"},{"Name":" \u0085","Value":"drop"},{"Name":"Z:\\Other","Value":"music"}]},
+  {"name":"missing-item","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentType":"tvshows","missing":true},
+  {"name":"save-configuration-failure","mode":"content","type":"Movie","path":"Z:\\EditMedia\\movie.mkv","contentType":"tvshows","failConfiguration":true},
+  {"name":"null-path","mode":"content","type":"Person","path":null,"contentType":"tvshows"},
+  {"name":"people-before-invalid-status","mode":"people","type":"Series","json":"{\"Name\":\"Attempt\",\"Status\":\"Returning\",\"People\":[{\"Name\":\" Actor \",\"Type\":\"Actor\",\"Role\":\" Hero \"}]}"},
+  {"name":"people-before-item-failure","mode":"people","type":"Movie","failItem":true,"json":"{\"Name\":\"Attempt\",\"People\":[{\"Name\":\" Actor \",\"Type\":\"Actor\",\"Role\":\" Hero \"},{\"Name\":\"actor\",\"Type\":\"Actor\",\"Role\":\"hero\"},{\"Name\":\"Actor\",\"Type\":\"Writer\",\"Role\":\" Novel \"}]}"},
+  {"name":"people-unsupported-folder","mode":"people","type":"Folder","json":"{\"Name\":\"Attempt\",\"People\":[{\"Name\":\"Actor\",\"Type\":\"Actor\"}]}"},
+  {"name":"people-success","mode":"people","type":"Movie","json":"{\"Name\":\"Attempt\",\"People\":[{\"Name\":\"Actor\",\"Type\":\"Actor\"}]}"}
+]

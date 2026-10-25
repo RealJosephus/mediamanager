@@ -1,0 +1,1012 @@
+{
+  "actualFrozenItemListColumns": true,
+  "results": [
+    {
+      "name": "Genres-null",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": "ArgumentNullException",
+      "mapperParameter": "source",
+      "mapperColumns": null,
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "Genres-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "|| |Alpha|​| ",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/2/Alpha",
+          "type": 2,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/2/alpha",
+          "type": 2,
+          "value": "alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/2/​",
+          "type": 2,
+          "value": "​",
+          "cleanValue": ""
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/2/​"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "|| |Alpha|​| ",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      }
+    },
+    {
+      "name": "Studios-null",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": null,
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "Studios-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "|| |Alpha|​| ",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/3/Alpha",
+          "type": 3,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/3/alpha",
+          "type": 3,
+          "value": "alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/3/​",
+          "type": 3,
+          "value": "​",
+          "cleanValue": ""
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/3/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/3/alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/3/​"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "|| |Alpha|​| ",
+        "Tags": "",
+        "ProductionLocations": ""
+      }
+    },
+    {
+      "name": "Tags-null",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "collection",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": null,
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "Tags-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "|| |Alpha|​| ",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/4/Alpha",
+          "type": 4,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/4/alpha",
+          "type": 4,
+          "value": "alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/4/​",
+          "type": 4,
+          "value": "​",
+          "cleanValue": ""
+        },
+        {
+          "id": "$NEW/6/Alpha",
+          "type": 6,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        },
+        {
+          "id": "$NEW/6/​",
+          "type": 6,
+          "value": "​",
+          "cleanValue": ""
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/4/​"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/​"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "|| |Alpha|​| ",
+        "ProductionLocations": ""
+      }
+    },
+    {
+      "name": "Artists-null",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": null,
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "Artists-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "|| |Alpha|​| ",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/0/Alpha",
+          "type": 0,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/0/alpha",
+          "type": 0,
+          "value": "alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/0/​",
+          "type": 0,
+          "value": "​",
+          "cleanValue": ""
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/0/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/0/alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/0/​"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "|| |Alpha|​| ",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      }
+    },
+    {
+      "name": "AlbumArtists-null",
+      "exception": "ArgumentNullException",
+      "exceptionParameter": "source",
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": null,
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": true,
+      "calls": [],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [],
+      "maps": [],
+      "ancestors": [],
+      "columns": null
+    },
+    {
+      "name": "AlbumArtists-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "|| |Alpha|​| ",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/1/Alpha",
+          "type": 1,
+          "value": "Alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/1/alpha",
+          "type": 1,
+          "value": "alpha",
+          "cleanValue": "alpha"
+        },
+        {
+          "id": "$NEW/1/​",
+          "type": 1,
+          "value": "​",
+          "cleanValue": ""
+        },
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/1/Alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/1/alpha"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/1/​"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "|| |Alpha|​| ",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": ""
+      }
+    },
+    {
+      "name": "ProductionLocations-null",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": null
+      }
+    },
+    {
+      "name": "ProductionLocations-values",
+      "exception": null,
+      "exceptionParameter": null,
+      "mapperException": null,
+      "mapperParameter": null,
+      "mapperColumns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "Alpha|​"
+      },
+      "nativeType": "MediaBrowser.Controller.Entities.Audio.Audio",
+      "storedDataIsNull": false,
+      "calls": [
+        {
+          "action": "added",
+          "id": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        }
+      ],
+      "collectionIds": [
+        "97b00000-0000-0000-0000-000000000004"
+      ],
+      "supportsAncestors": true,
+      "hasArtist": true,
+      "hasAlbumArtist": true,
+      "values": [
+        {
+          "id": "$NEW/6/Collection",
+          "type": 6,
+          "value": "Collection",
+          "cleanValue": "collection"
+        },
+        {
+          "id": "$NEW/6/PERMIT",
+          "type": 6,
+          "value": "PERMIT",
+          "cleanValue": "permit"
+        },
+        {
+          "id": "$NEW/6/Parent",
+          "type": 6,
+          "value": "Parent",
+          "cleanValue": "parent"
+        },
+        {
+          "id": "$NEW/6/Root",
+          "type": 6,
+          "value": "Root",
+          "cleanValue": "root"
+        }
+      ],
+      "maps": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Collection"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/PERMIT"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Parent"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "valueId": "$NEW/6/Root"
+        }
+      ],
+      "ancestors": [
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000002"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000003"
+        },
+        {
+          "itemId": "2d682f26-6d32-b16b-8b2f-986656421afb",
+          "parentId": "97b00000-0000-0000-0000-000000000004"
+        }
+      ],
+      "columns": {
+        "Artists": "",
+        "AlbumArtists": "",
+        "Genres": "",
+        "Studios": "",
+        "Tags": "",
+        "ProductionLocations": "Alpha|​"
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-list-columns-oracle-20261005-2\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "56a527307ef93f810fdadec33ba8380cc8416d38cb1cfea92297b0f65288808e"
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-list-columns-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Server.Implementations.dll",
+      "sha256": "b91a6797f81f8563b8896c3da3e5cd4e9d11c61eb084578bf7b81108c3c3e2e6"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-list-columns-oracle-20261005-2\\bin\\Release\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "ccff8514100a65508b65882d5881463fe4ff73ea07eb4d2b2d98e234d7b4ac99"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-list-columns-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "21648ea8e6eec045789c66c199b30c68b1b00f6e15918ac66347c19244b5670b"
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "path": "D:\\mediamanager\\.test-output\\validation\\item-list-columns-oracle-20261005-2\\bin\\Release\\net10.0\\Jellyfin.Database.Providers.Sqlite.dll",
+      "sha256": "eefedf49a1c6c62c7eab9b4347c0bca377c3e059ec61ef26a08148de7bba94bb"
+    }
+  ],
+  "scope": "Actual CreateItems and EF SaveItems mapper/relation persistence on Audio with null, blank and case-variant arrays in six list fields. Actual save exceptions are captured; only ArgumentNullException and NullReferenceException are admitted negative outcomes. Parent/owner lookup, user-root child list, library options and path reversal are controls. Projects six SQL list columns, exception, values/maps and events. Does not validate complete JSON bytes or complete scanner enumeration.",
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "inputSha256": "ce4139378e1fc70f16820ff5ee60513d02337a165382050b99d733ff3d1d5263",
+  "sourceFilesSha256": "c8cf6eaa5094b1d4c0686e101d5cbf2dafb72f04f6c6e374d498b272c8d9cc75"
+}

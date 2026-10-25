@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "reference": {
+    "sourceDatabase": {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/initial.db",
+      "sha256": "72e9201e55f9367c31b1ecae9c001bb568405275b916e96f78728e76c2cac400"
+    },
+    "preparationInputs": [
+      [
+        "nativeReferencePreparation",
+        "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json"
+      ],
+      [
+        "referencePreparationVerifier",
+        "tools/compat/filter-reference-inputs.mjs"
+      ],
+      [
+        "referenceBootstrapScript",
+        "tools/compat/prepare-http-filter-reference.mjs"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/verify-baseline.js"
+      ],
+      [
+        "referencePreparationVerificationTool",
+        "tools/compat/reference-inputs.js"
+      ],
+      [
+        "nativeReferenceBootstrapLog",
+        "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log"
+      ],
+      [
+        "nativeReferenceBaselineManifest",
+        "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json"
+      ],
+      [
+        "nativeReferenceModel",
+        "src/database/native-model.json"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        ".tools/dotnet/dotnet.exe"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll"
+      ],
+      [
+        "nativeReferencePreparationExecutable",
+        "../mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe"
+      ]
+    ]
+  },
+  "preparationInputFiles": [
+    {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json",
+      "sha256": "9eb48de1e56e136b2fe537380ea3329226d6dacf7e6a5a9b4119d5a21a1795fb"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/filter-reference-inputs.mjs",
+      "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/prepare-http-filter-reference.mjs",
+      "sha256": "fbebe189b2fade5075355a4f0256545ae13fb4493eb5ec20f55aa4b73bb8089d"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/verify-baseline.js",
+      "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c"
+    },
+    {
+      "filename": "D:/mediamanager/tools/compat/reference-inputs.js",
+      "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log",
+      "sha256": "0c3e6e4d0b60134925294e1f5a9cbd93d2508f2178b641c4d569136f0c06cc46"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+      "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+    },
+    {
+      "filename": "D:/mediamanager/src/database/native-model.json",
+      "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe",
+      "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+    }
+  ],
+  "runtimeDirectory": {
+    "filename": "D:/mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0",
+    "entriesSha256": "b58b4fea84e19c9a0603edac1ab4b9651e07146639b7c1f6116e5efdb226190a"
+  },
+  "sdkDirectory": {
+    "filename": "D:/mediamanager/.tools/dotnet",
+    "entriesSha256": "5b289d693d7a381abdc43016ca8cfe9b75232dce26e06c2a8cb2a7bd17d46340"
+  },
+  "independentNativeAudit": {
+    "filename": "D:/mediamanager-validation/20261011/release-results/conflict-and-syncplay-restoration-audit.json",
+    "sha256": "1bd0a91e08972fd25b5a2798515118c0d98dc1adcffb03572743d692ded817f5"
+  },
+  "recordings": [
+    {
+      "kind": "artist",
+      "logicalRoot": ".test-input/evidence/native-conflict-inputs/artist-restoration-v1",
+      "cases": 4,
+      "expectedCases": [
+        "blocked-file",
+        "first-normalized-name",
+        "same-path-name",
+        "wrong-type-id"
+      ],
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/conflict-results-attempt3/artist-restoration-v1",
+          "entriesSha256": "6007c9bf8170b102423c11eb4b2f68fb48f798d2a3a8e3f52fb93fbb15a84223"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/conflict-results-attempt3/artist-restoration-v2",
+          "entriesSha256": "a6f6a8f4f0a75a9a55067b42cf6307ba6b9200fab9ade500a5e0257b9a1fc900"
+        }
+      ],
+      "currentPhysicalTables": [
+        "AccessSchedules",
+        "ActivityLogs",
+        "AncestorIds",
+        "ApiKeys",
+        "AttachmentStreamInfos",
+        "BaseItemImageInfos",
+        "BaseItemMetadataFields",
+        "BaseItemProviders",
+        "BaseItemTrailerTypes",
+        "BaseItems",
+        "Chapters",
+        "CustomItemDisplayPreferences",
+        "DeviceOptions",
+        "Devices",
+        "DisplayPreferences",
+        "HomeSection",
+        "ImageInfos",
+        "ItemDisplayPreferences",
+        "ItemValues",
+        "ItemValuesMap",
+        "KeyframeData",
+        "LinkedChildren",
+        "MediaSegments",
+        "MediaStreamInfos",
+        "PeopleBaseItemMap",
+        "Peoples",
+        "Permissions",
+        "Preferences",
+        "TrickplayInfos",
+        "UserData",
+        "Users",
+        "__EFMigrationsHistory",
+        "__EFMigrationsLock"
+      ],
+      "artifacts": [
+        {
+          "path": "record-native.mjs",
+          "size": 17423,
+          "sha256": "5bf834ce60d681f334cc9496bac9aa059a3b7a6f24b0d71981206dea69035cd7"
+        },
+        {
+          "path": "native-http.json",
+          "size": 3129,
+          "sha256": "175eaf00206d1460b628f58c674ed7bb1e0c72bd0d212ad5fe9b44178a930df0"
+        },
+        {
+          "path": "stages.json",
+          "size": 388265,
+          "sha256": "17a6e49c9d9510084e8b369867f1099037dea24134c0e701c54e88e35399659a"
+        },
+        {
+          "path": "provenance.json",
+          "size": 5764,
+          "sha256": "0404eccae8911b09081ac65e3284692418741aa9d4dcc0b1a158edf89e389137"
+        },
+        {
+          "path": "discovery/identities.json",
+          "size": 375797,
+          "sha256": "69f9ff86988c55bce5bf4a5c2ce8c33aee169eb39cc776f7cd379f6fd6d4eccf"
+        },
+        {
+          "path": "discovery/shutdown.json",
+          "size": 60184,
+          "sha256": "ea351aa67b8c72c24683f0b3c9edf5332f798d776c40bc11ed7acde144add612"
+        },
+        {
+          "path": "native-run/shutdown.json",
+          "size": 57823,
+          "sha256": "0198cd3a70cf7c539e43437503fa3e7483c3a9703f1b28860f36feeab0354409"
+        }
+      ],
+      "originalRecorder": {
+        "filename": "D:/mediamanager/.agent-temp/record-neutral-native-conflicts.mjs",
+        "sha256": "5bf834ce60d681f334cc9496bac9aa059a3b7a6f24b0d71981206dea69035cd7"
+      },
+      "preparation": {
+        "initializedFromEmpty": true,
+        "createdThroughNativeApi": true,
+        "stopped": true,
+        "sourceDatabaseSha256": "72e9201e55f9367c31b1ecae9c001bb568405275b916e96f78728e76c2cac400",
+        "identityRemapping": {
+          "createdThroughNativeApi": true,
+          "actualUserId": "a96536b0ed38456783f97ab8f97865b4",
+          "fixtureUserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "changedReferences": [
+            {
+              "table": "ActivityLogs",
+              "column": "UserId",
+              "count": 4
+            },
+            {
+              "table": "Devices",
+              "column": "UserId",
+              "count": 1
+            },
+            {
+              "table": "Permissions",
+              "column": "UserId",
+              "count": 24
+            },
+            {
+              "table": "Preferences",
+              "column": "UserId",
+              "count": 13
+            },
+            {
+              "table": "Users",
+              "column": "Id",
+              "count": 1
+            }
+          ],
+          "scope": "Stopped isolated database: only Guid-column references to the API-created synthetic admin are remapped; native password hashing and permission records are retained."
+        },
+        "inputs": [
+          {
+            "kind": "nativeReferencePreparation",
+            "path": "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json",
+            "sha256": "9eb48de1e56e136b2fe537380ea3329226d6dacf7e6a5a9b4119d5a21a1795fb"
+          },
+          {
+            "kind": "referencePreparationVerifier",
+            "path": "tools/compat/filter-reference-inputs.mjs",
+            "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace"
+          },
+          {
+            "kind": "referenceBootstrapScript",
+            "path": "tools/compat/prepare-http-filter-reference.mjs",
+            "sha256": "fbebe189b2fade5075355a4f0256545ae13fb4493eb5ec20f55aa4b73bb8089d"
+          },
+          {
+            "kind": "referencePreparationVerificationTool",
+            "path": "tools/compat/verify-baseline.js",
+            "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c"
+          },
+          {
+            "kind": "referencePreparationVerificationTool",
+            "path": "tools/compat/reference-inputs.js",
+            "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38"
+          },
+          {
+            "kind": "nativeReferenceBootstrapLog",
+            "path": "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log",
+            "sha256": "0c3e6e4d0b60134925294e1f5a9cbd93d2508f2178b641c4d569136f0c06cc46"
+          },
+          {
+            "kind": "nativeReferenceBaselineManifest",
+            "path": "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+            "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+          },
+          {
+            "kind": "nativeReferenceModel",
+            "path": "src/database/native-model.json",
+            "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": ".tools/dotnet/dotnet.exe",
+            "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+            "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": "../mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe",
+            "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+          }
+        ]
+      },
+      "executableBindings": [
+        {
+          "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+          "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261010\\results\\jellyfin-designated-workspace-capture-v2\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+          "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261005\\tools\\jellyfin-ffmpeg-8.1.3-1\\runtime\\ffmpeg.exe",
+          "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+        }
+      ],
+      "libraryManagerSource": {
+        "filename": "D:\\mediamanager-validation\\20261010\\results\\jellyfin-designated-workspace-capture-v2\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      "nativeMeasuredIdentities": {
+        "Blocked": {
+          "Id": "AEA3B6A0-0268-8D02-5FB2-3769EE7C78C2",
+          "PersistedPath": "%MetadataPath%\\artists\\Blocked",
+          "relative": "Blocked"
+        },
+        "Mirror/A": {
+          "Id": "97632467-A904-42D6-A953-75EB3F099698",
+          "PersistedPath": "%MetadataPath%\\artists\\Mirror A",
+          "relative": "Mirror A"
+        },
+        "Shadow": {
+          "Id": "8597F317-9B32-2E00-51D6-FF3CBD1A67A3",
+          "PersistedPath": "%MetadataPath%\\artists\\Shadow",
+          "relative": "Shadow"
+        }
+      }
+    },
+    {
+      "kind": "studio",
+      "logicalRoot": ".test-input/evidence/native-conflict-inputs/studio-restoration-v1",
+      "cases": 4,
+      "expectedCases": [
+        "blocked-file",
+        "first-normalized-name",
+        "same-path-name",
+        "wrong-type-id"
+      ],
+      "repetitions": [
+        {
+          "filename": "D:/mediamanager-validation/20261011/conflict-results-attempt3/studio-restoration-v1",
+          "entriesSha256": "d91f3f72ccfbbc4fa644b8a5438e84c34a3caa38888214e0150e782b8f5cf389"
+        },
+        {
+          "filename": "D:/mediamanager-validation/20261011/conflict-results-attempt3/studio-restoration-v2",
+          "entriesSha256": "2e695c80af6bd1758d4a09b59d63a3e70e5adb8da7d2f5b87716ba6852d8c3ad"
+        }
+      ],
+      "currentPhysicalTables": [
+        "AccessSchedules",
+        "ActivityLogs",
+        "AncestorIds",
+        "ApiKeys",
+        "AttachmentStreamInfos",
+        "BaseItemImageInfos",
+        "BaseItemMetadataFields",
+        "BaseItemProviders",
+        "BaseItemTrailerTypes",
+        "BaseItems",
+        "Chapters",
+        "CustomItemDisplayPreferences",
+        "DeviceOptions",
+        "Devices",
+        "DisplayPreferences",
+        "HomeSection",
+        "ImageInfos",
+        "ItemDisplayPreferences",
+        "ItemValues",
+        "ItemValuesMap",
+        "KeyframeData",
+        "LinkedChildren",
+        "MediaSegments",
+        "MediaStreamInfos",
+        "PeopleBaseItemMap",
+        "Peoples",
+        "Permissions",
+        "Preferences",
+        "TrickplayInfos",
+        "UserData",
+        "Users",
+        "__EFMigrationsHistory",
+        "__EFMigrationsLock"
+      ],
+      "artifacts": [
+        {
+          "path": "record-native.mjs",
+          "size": 17423,
+          "sha256": "5bf834ce60d681f334cc9496bac9aa059a3b7a6f24b0d71981206dea69035cd7"
+        },
+        {
+          "path": "native-http.json",
+          "size": 3129,
+          "sha256": "e4962f82923992699f4fb0c4d54aad7ba1dab99fff8bb0849cf75edc5857324b"
+        },
+        {
+          "path": "stages.json",
+          "size": 388136,
+          "sha256": "c723b6b3099d73f238ccb5136faa75ffbb17765bb6481c60dbf0fed7800077a0"
+        },
+        {
+          "path": "provenance.json",
+          "size": 5764,
+          "sha256": "996908c704c5da92dfceb8532e2a1aa8671aa257f076196a543742b93c5a1928"
+        },
+        {
+          "path": "discovery/identities.json",
+          "size": 375692,
+          "sha256": "7eb335ef545b6fd9975186e04e222459692cb36e3cbdb6c1fb0a3f8f4c9f189d"
+        },
+        {
+          "path": "discovery/shutdown.json",
+          "size": 60149,
+          "sha256": "92a5cbc482b8d37f21ce3f8e0ecdd228974d47444704b8b515aacf2a3857a4ea"
+        },
+        {
+          "path": "native-run/shutdown.json",
+          "size": 57802,
+          "sha256": "a7be2f3aa24f71f51330245dfd25c151a10b61cff645e633b02ce14967c38eb4"
+        }
+      ],
+      "originalRecorder": {
+        "filename": "D:/mediamanager/.agent-temp/record-neutral-native-conflicts.mjs",
+        "sha256": "5bf834ce60d681f334cc9496bac9aa059a3b7a6f24b0d71981206dea69035cd7"
+      },
+      "preparation": {
+        "initializedFromEmpty": true,
+        "createdThroughNativeApi": true,
+        "stopped": true,
+        "sourceDatabaseSha256": "72e9201e55f9367c31b1ecae9c001bb568405275b916e96f78728e76c2cac400",
+        "identityRemapping": {
+          "createdThroughNativeApi": true,
+          "actualUserId": "a96536b0ed38456783f97ab8f97865b4",
+          "fixtureUserId": "5C6B5F77-BEA9-4A9A-98AA-FAE5909892B7",
+          "changedReferences": [
+            {
+              "table": "ActivityLogs",
+              "column": "UserId",
+              "count": 4
+            },
+            {
+              "table": "Devices",
+              "column": "UserId",
+              "count": 1
+            },
+            {
+              "table": "Permissions",
+              "column": "UserId",
+              "count": 24
+            },
+            {
+              "table": "Preferences",
+              "column": "UserId",
+              "count": 13
+            },
+            {
+              "table": "Users",
+              "column": "Id",
+              "count": 1
+            }
+          ],
+          "scope": "Stopped isolated database: only Guid-column references to the API-created synthetic admin are remapped; native password hashing and permission records are retained."
+        },
+        "inputs": [
+          {
+            "kind": "nativeReferencePreparation",
+            "path": "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.json",
+            "sha256": "9eb48de1e56e136b2fe537380ea3329226d6dacf7e6a5a9b4119d5a21a1795fb"
+          },
+          {
+            "kind": "referencePreparationVerifier",
+            "path": "tools/compat/filter-reference-inputs.mjs",
+            "sha256": "91de1f092df29d5144282b780dacc64255cc7779bdcf77f1202fe235aa791ace"
+          },
+          {
+            "kind": "referenceBootstrapScript",
+            "path": "tools/compat/prepare-http-filter-reference.mjs",
+            "sha256": "fbebe189b2fade5075355a4f0256545ae13fb4493eb5ec20f55aa4b73bb8089d"
+          },
+          {
+            "kind": "referencePreparationVerificationTool",
+            "path": "tools/compat/verify-baseline.js",
+            "sha256": "46991bed271e61663c6f262ff4fda0a25c7bd6f19d4c63749e6848774375c54c"
+          },
+          {
+            "kind": "referencePreparationVerificationTool",
+            "path": "tools/compat/reference-inputs.js",
+            "sha256": "11ed62001527e2a77e07ed1eec65c52b7906b4684a5d7c0b54fbc0a6cbca4b38"
+          },
+          {
+            "kind": "nativeReferenceBootstrapLog",
+            "path": "../mediamanager-validation/20261011/results/native-http-filter-reference-v1/bootstrap.log",
+            "sha256": "0c3e6e4d0b60134925294e1f5a9cbd93d2508f2178b641c4d569136f0c06cc46"
+          },
+          {
+            "kind": "nativeReferenceBaselineManifest",
+            "path": "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/manifest.json",
+            "sha256": "a278db96281767142568596a447f942e69134f05de6d26a56cbc6026db1ecbad"
+          },
+          {
+            "kind": "nativeReferenceModel",
+            "path": "src/database/native-model.json",
+            "sha256": "942796bb521d2adb04951cd184ffad4988664ea7f6371e2c378b1c207903dbe6"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": ".tools/dotnet/dotnet.exe",
+            "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": "../mediamanager-validation/20261010/results/jellyfin-designated-workspace-capture-v2/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+            "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+          },
+          {
+            "kind": "nativeReferencePreparationExecutable",
+            "path": "../mediamanager-validation/20261005/tools/jellyfin-ffmpeg-8.1.3-1/runtime/ffmpeg.exe",
+            "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+          }
+        ]
+      },
+      "executableBindings": [
+        {
+          "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+          "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261010\\results\\jellyfin-designated-workspace-capture-v2\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\jellyfin.dll",
+          "sha256": "8fb1d56d006aa01b5dc9aa5cf2578646f7013f57c9937593955bce32e23722d2"
+        },
+        {
+          "filename": "D:\\mediamanager-validation\\20261005\\tools\\jellyfin-ffmpeg-8.1.3-1\\runtime\\ffmpeg.exe",
+          "sha256": "47495334f74912826bc474d246fe69fb4c01cd0d3c612d24b6a06000fe4c1483"
+        }
+      ],
+      "libraryManagerSource": {
+        "filename": "D:\\mediamanager-validation\\20261010\\results\\jellyfin-designated-workspace-capture-v2\\source\\Emby.Server.Implementations\\Library\\LibraryManager.cs",
+        "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+      },
+      "nativeMeasuredIdentities": {
+        "Blocked": {
+          "Id": "9D1EC4CD-5403-861B-10FE-15CB8CB36CC5",
+          "PersistedPath": "%MetadataPath%\\Studio\\Blocked",
+          "relative": "Blocked"
+        },
+        "Mirror/A": {
+          "Id": "406E763E-03E1-F573-1D1C-C736003C0C4B",
+          "PersistedPath": "%MetadataPath%\\Studio\\Mirror A",
+          "relative": "Mirror A"
+        },
+        "Shadow": {
+          "Id": "85DB6991-D1F8-4873-AF52-F6AF1DBCF765",
+          "PersistedPath": "%MetadataPath%\\Studio\\Shadow",
+          "relative": "Shadow"
+        }
+      }
+    }
+  ],
+  "completeBuildInputClosure": false,
+  "releaseAcceptance": false,
+  "boundary": "Each ID used for fault injection is measured by a separate real native GET and all-table SQLite delta. All 33 physical SQLite tables are captured at every request. Actual native argv includes the hash-bound FFmpeg; every native PID and selected port was independently checked absent. This is not candidate verification or complete build/release acceptance."
+}

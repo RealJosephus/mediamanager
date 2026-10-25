@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "alist-api-only-test-host",
+  "head": "38316357f1a0507e9e8906ed9ec78e8535ba2d1c",
+  "sourceFiles": 635,
+  "sourceBytes": 2485373,
+  "sourceArchive": {
+    "bytes": 898380,
+    "sha256": "f5e9310d05ffe39085c7158fb640949c8f1f3ba686f1d8be9a29a3c1223dc1b3",
+    "required": true,
+    "path": "alist-source-38316357f1a0.zip"
+  },
+  "sourceManifest": {
+    "path": "source-manifest.json",
+    "bytes": 199046,
+    "sha256": "29f5734f2c3ca3f14e9c632b02f0a1fb4e456769f0689c03abfbae9b70054204",
+    "required": true
+  },
+  "license": {
+    "path": "LICENSE-AList.txt",
+    "bytes": 34523,
+    "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+    "required": true
+  },
+  "frontend": {
+    "required": true,
+    "bytes": 275,
+    "authoredForThisTestHost": true,
+    "sha256": "1f1bcaadfe6efad7985dc512a8ae6ebedfb04fb8b3926b0f7b55ca57d74d281a",
+    "path": "web/index.html",
+    "destination": "public/dist/index.html"
+  },
+  "frontendLicense": {
+    "bytes": 1124,
+    "sha256": "2737cc73716a9d7bf7706423e2bce50fb9e43a2386878db5970255b26c1bbf5e",
+    "required": true,
+    "path": "LICENSE-Test-Web.txt"
+  },
+  "localModifications": [
+    {
+      "path": "drivers/all.go",
+      "bytes": 3587,
+      "sha256": "92cccfa51b866556e324eeba1786ba24e7d555a3624eac7bfb4b81afccdb4ca0",
+      "tracked": true,
+      "gitMode": "100644",
+      "gitBlob": "152c6c941fcdb81f4e99f122f089e1bb3594d6d7",
+      "localModification": true
+    },
+    {
+      "path": "drivers/hf_aggregate/driver.go",
+      "bytes": 15720,
+      "sha256": "6d8f3530aafa7d64a35bb9234b75af7e167902d9002e669b427e56e9954ec3de",
+      "tracked": false,
+      "gitMode": "100644",
+      "gitBlob": null,
+      "localModification": true
+    },
+    {
+      "path": "drivers/hf_aggregate/meta.go",
+      "bytes": 872,
+      "sha256": "0039a99f8a4486aafa7f1e90ac616a147afbd002bff3c5d656c4d4372ee1b97e",
+      "tracked": false,
+      "gitMode": "100644",
+      "gitBlob": null,
+      "localModification": true
+    }
+  ],
+  "excluded": [
+    "Original ignored public/dist",
+    ".git",
+    "instance configuration, databases, logs, HF manifest/token files, binaries and caches"
+  ],
+  "reviewedPublicDefault": {
+    "valuesPrinted": false,
+    "upstream": "https://raw.githubusercontent.com/AlistGo/alist/d7aa1608ac2f3834af87b4a81b8f0970b3dadbc0/internal/offline_download/qbit/qbit.go",
+    "sha256": "52fe4510033fe49e33a4c3b049a2327fb130eb85bde1e24db11643cddd719267",
+    "path": "internal/offline_download/qbit/qbit.go",
+    "rawBytesMatched": true
+  },
+  "webUiValidated": false,
+  "originalReleaseReproduced": false,
+  "testsExecuted": false,
+  "buildExecuted": false
+}

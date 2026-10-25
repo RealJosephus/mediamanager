@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scope": "Partial Native component capture: real ApplicationHost.Init, discovered factories, ServerConfigurationManager, MyXmlSerializer and NetworkManager select captured ports/certificate and real bind inputs. Real SetupJellyfinWebServer starts Production Kestrel; selected Startup BaseUrl/ForwardedHeaders/Exception/HTTPS-redirection/MVC middleware and real ConfigurationController/SystemController/SystemManager execute. An explicitly bound actual ApplicationHost.OnConfigurationUpdated delegate observes ordered named/system effects. No replacement algorithm or handwritten Native result is used.",
+  "controlledGateways": ["authenticated administrator credential gateway", "empty completed-installations gateway", "uninvoked media encoder/library/file-system gateways throw if called", "MockNetworkSettings supplies a loopback interface input; it does not certify OS enumeration", "initial IsPortAuthorized=true is a declared post-FindParts system input"],
+  "completionBoundary": "A declared system-event barrier waits for the actual AppHost handler body, including its original thrown failure. The Native EventHelper still owns its following catch/log tail. Native logs are optional raw diagnostics and never an event-count or log-count acceptance gate. Each real endpoint is stopped/disposed, connection refusal is observed, and its physical port is rebound.",
+  "partialLimitations": ["No full Program/Main, InitializeServices/FindParts, RunStartupTasks, startup-message gate, EF/session/authentication service or hosted notifier graph", "No Node production listener, pending-restart or boot conformance yet", "No Unix socket, real interface enumeration, multicast, discovery, outbound network, hardware or media executor", "A declared fallback URL bounds the empty-address Kestrel case; the full application's default endpoint remains outside this capture", "Native exception identities and logs are raw diagnostics, never acceptance criteria", "No inferred WebSocket RestartRequired notification"],
+  "sourcePaths": [
+    "Emby.Server.Implementations/ApplicationHost.cs",
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "Emby.Server.Implementations/SystemManager.cs",
+    "MediaBrowser.Common/Events/EventHelper.cs",
+    "MediaBrowser.Common/Net/NetworkConfiguration.cs",
+    "MediaBrowser.Common/Net/NetworkConfigurationFactory.cs",
+    "MediaBrowser.Common/Net/NetworkConfigurationStore.cs",
+    "src/Jellyfin.Networking/Manager/NetworkManager.cs",
+    "Jellyfin.Server/Program.cs",
+    "Jellyfin.Server/Startup.cs",
+    "Jellyfin.Server/Extensions/WebHostBuilderExtensions.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "Jellyfin.Api/Controllers/ConfigurationController.cs",
+    "Jellyfin.Api/Controllers/SystemController.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Api/Middleware/BaseUrlRedirectionMiddleware.cs"
+  ]
+}

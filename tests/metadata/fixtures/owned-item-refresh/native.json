@@ -1,0 +1,2250 @@
+{
+  "actualFrozenOwnedItemRefresh": true,
+  "inputSha256": "bcefa7ce6279a79daf0597228465588d1ad0392c9df2409a81a7714df85a7864",
+  "results": [
+    {
+      "name": "equal-empty-defaults",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "complete-title-copy",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": "Extra",
+        "Path": null,
+        "Genres": [
+          "Drama",
+          "Sci-Fi"
+        ],
+        "Studios": [
+          "Studio"
+        ],
+        "ProductionLocations": [
+          "Taiwan"
+        ],
+        "CommunityRating": 7.5,
+        "CriticRating": 81,
+        "Overview": "Owner overview",
+        "OfficialRating": "PG",
+        "CustomRating": "TV-14",
+        "ProductionYear": 2024,
+        "PremiereDate": "2024-02-03T04:05:06.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {
+          "Tmdb": "202"
+        },
+        "Tags": [
+          "Extra tag"
+        ],
+        "OriginalTitle": "Extra original",
+        "RunTimeTicks": 9007199254740995
+      },
+      "owner": {
+        "Name": "Owner",
+        "Path": null,
+        "Genres": [
+          "Drama",
+          "Sci-Fi"
+        ],
+        "Studios": [
+          "Studio"
+        ],
+        "ProductionLocations": [
+          "Taiwan"
+        ],
+        "CommunityRating": 7.5,
+        "CriticRating": 81,
+        "Overview": "Owner overview",
+        "OfficialRating": "PG",
+        "CustomRating": "TV-14",
+        "ProductionYear": 2024,
+        "PremiereDate": "2024-02-03T04:05:06.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {
+          "Tmdb": "101"
+        },
+        "Tags": [
+          "Owner tag"
+        ],
+        "OriginalTitle": "Owner original",
+        "RunTimeTicks": 9007199254740993
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": "Extra",
+            "Path": null,
+            "Genres": [
+              "Drama",
+              "Sci-Fi"
+            ],
+            "Studios": [
+              "Studio"
+            ],
+            "ProductionLocations": [
+              "Taiwan"
+            ],
+            "CommunityRating": 7.5,
+            "CriticRating": 81,
+            "Overview": "Owner overview",
+            "OfficialRating": "PG",
+            "CustomRating": "TV-14",
+            "ProductionYear": 2024,
+            "PremiereDate": "2024-02-03T04:05:06.0000001Z",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {
+              "Tmdb": "202"
+            },
+            "Tags": [
+              "Extra tag"
+            ],
+            "OriginalTitle": "Extra original",
+            "RunTimeTicks": 9007199254740995
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": [
+              "Z:\\Film.mkv"
+            ]
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": false,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": [
+          "Z:\\Film.mkv"
+        ]
+      }
+    },
+    {
+      "name": "locked-title-is-still-copied",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": "Locked trailer",
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2025,
+        "PremiereDate": null,
+        "IsLocked": true,
+        "LockedFields": [
+          "Genres",
+          "Overview",
+          "Runtime"
+        ],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2025,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": "Locked trailer",
+            "Path": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": "Owner",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": 2025,
+            "PremiereDate": null,
+            "IsLocked": true,
+            "LockedFields": [
+              "Genres",
+              "Overview",
+              "Runtime"
+            ],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "None",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "None",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "audio-title-copy",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": "Theme song",
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [
+          "Studio"
+        ],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [
+          "Studio"
+        ],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": "Theme song",
+            "Path": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [
+              "Studio"
+            ],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": "Owner",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": 2026,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "alternate-does-not-copy-title",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": "Alternate",
+        "Path": null,
+        "Genres": [
+          "Comedy"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Alternate",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2025,
+        "PremiereDate": "2025-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": "Alternate",
+            "Path": null,
+            "Genres": [
+              "Comedy"
+            ],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": "Alternate",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00Z",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": false,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": []
+      }
+    },
+    {
+      "name": "case-distinct-genres",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "Drama"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [
+              "Drama"
+            ],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "ordered-genres",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "A",
+          "B"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          "A",
+          "B"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [
+              "A",
+              "B"
+            ],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "null-array-elements",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          null,
+          "A"
+        ],
+        "Studios": [
+          null
+        ],
+        "ProductionLocations": [
+          "",
+          null
+        ],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          null,
+          "A"
+        ],
+        "Studios": [
+          null
+        ],
+        "ProductionLocations": [
+          "",
+          null
+        ],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [
+              null,
+              "A"
+            ],
+            "Studios": [
+              null
+            ],
+            "ProductionLocations": [
+              "",
+              null
+            ],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "equal-null-elements",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          null,
+          "A"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [
+          null,
+          "A"
+        ],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [
+              null,
+              "A"
+            ],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "owner-null-genres-equals-empty",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": null,
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "owned-null-genres-equals-empty",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": null,
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": null,
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "scalar-nulls-clear-title",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "empty-title-is-not-null",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "",
+        "OfficialRating": "",
+        "CustomRating": "",
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "",
+        "OfficialRating": "",
+        "CustomRating": "",
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": "",
+            "OfficialRating": "",
+            "CustomRating": "",
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "null-owner-dates-preserve-child",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": 1990,
+            "PremiereDate": "1990-01-01T00:00:00.0000001Z",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "date-kind-does-not-change-ticks",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": "2024-01-01T00:00:00",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": "2024-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": "2024-01-01T00:00:00",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": false,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "one-tick-date-difference",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": "2024-01-01T00:00:00.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": "2024-01-01T00:00:00.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": "2024-01-01T00:00:00.0000001Z",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "zero-year-and-minimum-date-copy",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 0,
+        "PremiereDate": "0001-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 0,
+        "PremiereDate": "0001-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": 0,
+            "PremiereDate": "0001-01-01T00:00:00Z",
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "force-save-is-preserved",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": null,
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": true,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": [
+              "A",
+              "B"
+            ]
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": false,
+          "cancellationRequested": false
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": true,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    {
+      "name": "cancelled-token-reaches-child",
+      "exception": null,
+      "datesChanged": null,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [
+        {
+          "action": "RefreshSingleItem",
+          "item": {
+            "Name": null,
+            "Path": null,
+            "Genres": [],
+            "Studios": [],
+            "ProductionLocations": [],
+            "CommunityRating": null,
+            "CriticRating": null,
+            "Overview": "Owner",
+            "OfficialRating": null,
+            "CustomRating": null,
+            "ProductionYear": null,
+            "PremiereDate": null,
+            "IsLocked": false,
+            "LockedFields": [],
+            "ProviderIds": {},
+            "Tags": [],
+            "OriginalTitle": null,
+            "RunTimeTicks": null
+          },
+          "options": {
+            "ForceSave": true,
+            "MetadataRefreshMode": "Default",
+            "ImageRefreshMode": "Default",
+            "ReplaceAllMetadata": false,
+            "IsAutomated": true,
+            "SearchResult": null,
+            "RefreshPaths": null
+          },
+          "sameOptions": false,
+          "sameRefreshPaths": true,
+          "cancellationRequested": true
+        }
+      ],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "dates-only-overwrite",
+      "exception": null,
+      "datesChanged": true,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Preserve",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": "2026-01-01T00:00:00.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": "Owner",
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": "2026-01-01T00:00:00.0000001Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "dates-only-equal",
+      "exception": null,
+      "datesChanged": false,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": "2026-01-01T00:00:00",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 2026,
+        "PremiereDate": "2026-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    },
+    {
+      "name": "dates-only-null-owner",
+      "exception": null,
+      "datesChanged": false,
+      "owned": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": 1990,
+        "PremiereDate": "1990-01-01T00:00:00Z",
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "owner": {
+        "Name": null,
+        "Path": null,
+        "Genres": [],
+        "Studios": [],
+        "ProductionLocations": [],
+        "CommunityRating": null,
+        "CriticRating": null,
+        "Overview": null,
+        "OfficialRating": null,
+        "CustomRating": null,
+        "ProductionYear": null,
+        "PremiereDate": null,
+        "IsLocked": false,
+        "LockedFields": [],
+        "ProviderIds": {},
+        "Tags": [],
+        "OriginalTitle": null,
+        "RunTimeTicks": null
+      },
+      "calls": [],
+      "originalOptions": {
+        "ForceSave": false,
+        "MetadataRefreshMode": "Default",
+        "SearchResult": {
+          "Name": "Owner-specific search",
+          "ProviderIds": {},
+          "ProductionYear": null,
+          "IndexNumber": null,
+          "IndexNumberEnd": null,
+          "ParentIndexNumber": null,
+          "PremiereDate": null,
+          "ImageUrl": null,
+          "SearchProviderName": "Frozen",
+          "Overview": null,
+          "AlbumArtist": null,
+          "Artists": []
+        },
+        "RefreshPaths": null
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Controller",
+      "sha256": "051c588a8e85a3a7cdde8dc3d9a1112217fd7e973a86fe2ff90cf765bedb75a8"
+    }
+  ],
+  "scope": "Actual frozen BaseItem.RefreshMetadataForOwnedItem and InheritDatesFromOwner. Native Movie/Video/Trailer/Audio entities, metadata option copying, field mutations and child RefreshMetadata dispatch execute. ProviderManager.RefreshSingleItem and path protocol are controls; owned children have no physical parent. File discovery, provider execution, images, persistence, full owner RefreshMetadata and complete library acceptance are excluded."
+}

@@ -1,0 +1,294 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createHash, randomUUID } from 'node:crypto';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
+import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { readBlurayDiscInfo, verifyBlurayDiscInfo } from '../../src/storage/bluray-disc-info.js';
+import { blurayMediaStreams, mergeBlurayProbe } from '../../src/storage/bluray-probe-info.js';
+import { ProbeReadBridge } from '../../src/storage/probe-bridge.js';
+import { probeRaw } from '../../src/storage/ffprobe.js';
+import { normalizeProbe } from '../../src/storage/probe-normalizer.js';
+import { declareMvcInM2ts, makeBlurayFiles, makeClipInfo, makePlaylist } from './fixtures/bluray-disc-info/fixture.js';
+import { recordOracle } from '../../tools/validation/oracle.js';
+import { validationExecutable, validationOutputRoot } from '../../tools/validation/paths.js';
+
+const inputFile = new URL('./fixtures/bluray-disc-info/input.json', import.meta.url);
+const inputBytes = await readFile(inputFile), input = JSON.parse(inputBytes);
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+
+async function fixture(t, files = makeBlurayFiles(input)) {
+  const registry = new StorageRegistry(); t.after(() => registry.close());
+  registry.registerType('bluray-fixture', () => new MemoryStorageAdapter({ pageSize: 2 }));
+  const adapter = await registry.createInstance('bluray', 'bluray-fixture', {});
+  for (const name of ['/BDMV', '/BDMV/CLIPINF', '/BDMV/STREAM', '/BDMV/PLAYLIST']) await adapter.mkdir(name);
+  if ([...files.keys()].some(name => name.startsWith('BDMV/STREAM/SSIF/'))) await adapter.mkdir('/BDMV/STREAM/SSIF');
+  for (const [name, bytes] of files) await adapter.write('/' + name, bytes, { modified: new Date('2026-10-19T00:00:00Z') });
+  const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/disc', instanceId: 'bluray', capabilities: {} });
+  const active = new Set(), open = adapter.openRead.bind(adapter);
+  adapter.openRead = async (...args) => {
+    const handle = await open(...args); active.add(handle);
+    return { ...handle, close: async () => { try { await handle.close(); } finally { active.delete(handle); } } };
+  };
+  return { vfs, adapter, active };
+}
+
+function project(plan) {
+  return { playlistName: plan.playlistName, runTimeTicks: Number(plan.runTimeTicks), chapters: plan.chapters,
+    files: plan.files.map(file => ({ virtualPath: file.virtualPath.slice('/disc/'.length), timeIn: file.timeIn,
+      timeOut: file.timeOut, relativeTimeIn: file.relativeTimeIn })),
+    referenceFile: plan.referenceFile.virtualPath.slice('/disc/'.length), streams: plan.streams };
+}
+
+test('Blu-ray plans select the longest nonlooping playlist and retain clips, angles, chapters and CLPI track order', async t => {
+  const f = await fixture(t), plan = await readBlurayDiscInfo(f.vfs, '/disc');
+  assert.equal(plan.playlistName, '00001.MPLS'); assert.equal(plan.runTimeTicks, 35000000n);
+  assert.deepEqual(plan.files.map(file => [path.posix.basename(file.virtualPath), file.timeIn, file.timeOut, file.relativeTimeIn]),
+    [['00001.m2ts', 0.5, 2, 0], ['00002.m2ts', 0, 2, 1.5]]);
+  assert.deepEqual(plan.chapters, [0, 1.5]);
+  assert.equal(plan.referenceFile.virtualPath, '/disc/BDMV/STREAM/00002.m2ts');
+  assert.deepEqual(plan.streams.map(stream => [stream.pid, stream.angleIndex, stream.mediaStream.Type]),
+    [[4113, 0, 'Video'], [4113, 1, 'Video'], [4352, 0, 'Audio'], [4608, 0, 'Subtitle'], [4864, 0, 'Subtitle']]);
+  assert.deepEqual(plan.streams.slice(2).map(stream => stream.mediaStream.Language), ['eng', 'fra', 'jpn']);
+  assert.equal(plan.streams[2].mediaStream.SampleRate, 48000);
+  assert.equal(Object.hasOwn(plan.streams[2].mediaStream, 'Channels'), false, 'CLPI does not supply the elementary audio channel count.');
+  assert.deepEqual(project(await readBlurayDiscInfo(f.vfs, '/disc/BDMV/STREAM')), project(plan));
+  assert.equal(f.active.size, 0);
+});
+
+test('Blu-ray source verification ignores unrelated NFO writes and rejects descriptor, selected-media and playlist changes', async t => {
+  for (const mode of ['clip', 'media', 'new-playlist']) await t.test(mode, async t => {
+    const f = await fixture(t), before = await readBlurayDiscInfo(f.vfs, '/disc');
+    await f.adapter.write('/movie.nfo', Buffer.from('<movie/>'));
+    await verifyBlurayDiscInfo(f.vfs, before);
+    if (mode === 'clip') await f.adapter.write('/BDMV/CLIPINF/00002.clpi', makeClipInfo(input.clips[1]));
+    else if (mode === 'media') await f.adapter.write('/BDMV/STREAM/00002.m2ts', Buffer.from('replaced'));
+    else await f.adapter.write('/BDMV/PLAYLIST/00009.mpls', makePlaylist(input.playlists[0]));
+    await assert.rejects(verifyBlurayDiscInfo(f.vfs, before), { code: 'version-changed' });
+    assert.equal(f.active.size, 0);
+  });
+});
+
+test('Blu-ray source verification binds reference SSIF presence without reading or interpreting its body', async t => {
+  const files = makeBlurayFiles(input), marker = 'BDMV/STREAM/SSIF/00002.ssif';
+  files.set(marker, Buffer.from('An existence control, not an interleaved media source.'));
+  const f = await fixture(t, files), open = f.vfs.openRead.bind(f.vfs);
+  f.vfs.openRead = (source, options) => {
+    assert.ok(!source.toLowerCase().endsWith('.ssif'), 'the pinned examiner opens the original M2TS');
+    return open(source, options);
+  };
+  const present = await readBlurayDiscInfo(f.vfs, '/disc');
+  assert.equal(present.referenceSsif, '/disc/' + marker); assert.equal(present.angleCount, 1);
+  await f.adapter.write('/' + marker, Buffer.from('Changed unused body.'));
+  await verifyBlurayDiscInfo(f.vfs, present);
+  await f.adapter.delete('/' + marker);
+  await assert.rejects(verifyBlurayDiscInfo(f.vfs, present), { code: 'version-changed' });
+  const absent = await readBlurayDiscInfo(f.vfs, '/disc'); assert.equal(absent.referenceSsif, null);
+  await f.adapter.write('/' + marker, files.get(marker));
+  await assert.rejects(verifyBlurayDiscInfo(f.vfs, absent), { code: 'version-changed' });
+  assert.equal(f.active.size, 0);
+});
+
+test('Blu-ray parsing rejects corrupt records and missing selected media, while an all-looping disc has no selection', async t => {
+  for (const mode of ['header', 'length', 'missing-media', 'duplicate-pid', 'loop-only']) await t.test(mode, async t => {
+    const files = makeBlurayFiles(input);
+    if (mode === 'header') files.set('BDMV/CLIPINF/00002.clpi', Buffer.from('broken'));
+    else if (mode === 'length') {
+      const bytes = Buffer.from(files.get('BDMV/PLAYLIST/00001.mpls')); bytes.writeUInt32BE(0xffffffff, 0x40);
+      files.set('BDMV/PLAYLIST/00001.mpls', bytes);
+    } else if (mode === 'missing-media') files.delete('BDMV/STREAM/00002.m2ts');
+    else if (mode === 'duplicate-pid') files.set('BDMV/CLIPINF/00002.clpi', makeClipInfo({ streams: [input.clips[1].streams[0], input.clips[1].streams[0]] }));
+    else { files.delete('BDMV/PLAYLIST/00000.mpls'); files.delete('BDMV/PLAYLIST/00001.mpls'); }
+    const f = await fixture(t, files);
+    if (mode === 'loop-only') assert.equal(await readBlurayDiscInfo(f.vfs, '/disc'), null);
+    else await assert.rejects(readBlurayDiscInfo(f.vfs, '/disc'), { code: 'invalid-response' });
+    assert.equal(f.active.size, 0);
+  });
+});
+
+test('Blu-ray cancellation and a changing malformed input release reads and preserve the consistency failure', async t => {
+  for (const mode of ['cancel', 'versioned', 'unversioned']) await t.test(mode, async t => {
+    const f = await fixture(t), controller = new AbortController(), reason = Object.assign(new Error('cancelled while reading CLPI'),
+      { code: 'controlled-bluray-cancellation' });
+    const sourceBefore = await f.adapter.stat('/BDMV/CLIPINF/00001.clpi');
+    const open = f.vfs.openRead.bind(f.vfs), stat = f.vfs.stat.bind(f.vfs);
+    if (mode === 'unversioned') f.vfs.stat = async (...args) => ({ ...await stat(...args), version: undefined });
+    let changed = false;
+    f.vfs.openRead = async (...args) => {
+      const handle = await open(...args);
+      return { ...handle, ...(mode === 'unversioned' ? { version: undefined } : {}), stream: (async function* () {
+        for await (const bytes of handle.stream) {
+          if (!changed) {
+            changed = true;
+            if (mode === 'cancel') controller.abort(reason);
+            else await f.adapter.write('/BDMV/CLIPINF/00001.clpi', Buffer.from('broken'), { modified: new Date('2026-10-19T00:00:02Z') });
+            yield Buffer.from('broken');
+          } else yield bytes;
+        }
+      })() };
+    };
+    await assert.rejects(readBlurayDiscInfo(f.vfs, '/disc', { signal: controller.signal }),
+      { code: mode === 'cancel' ? 'cancelled' : 'version-changed' });
+    if (mode === 'cancel') {
+      assert.equal(controller.signal.aborted, true);
+      assert.equal(controller.signal.reason.code, reason.code); assert.equal(controller.signal.reason.message, reason.message);
+      t.diagnostic(JSON.stringify({ cancellationReason: { code: controller.signal.reason.code, message: controller.signal.reason.message,
+        stack: controller.signal.reason.stack } }));
+      assert.deepEqual(await f.adapter.stat('/BDMV/CLIPINF/00001.clpi'), sourceBefore);
+    }
+    assert.equal(f.active.size, 0);
+  });
+});
+
+test('Blu-ray plans match the supplied native BDInfo examiner on actual M2TS input', async t => {
+  assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'This comparison requires the current isolated native reference.');
+  const output = path.join(validationOutputRoot(), 'bluray-disc-info-' + randomUUID()), disc = path.join(output, 'disc');
+  await mkdir(output, { recursive: true });
+  const mediaFile = path.join(output, 'source.m2ts');
+  const command = ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', 'color=size=720x480:rate=30000/1001:duration=2',
+    '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', '2', '-c:v', 'mpeg2video', '-b:v', '2000k',
+    '-c:a', 'ac3', '-b:a', '192k', '-streamid', '0:4113', '-streamid', '1:4352', '-mpegts_m2ts_mode', '1', '-f', 'mpegts', mediaFile];
+  const generated = spawnSync(validationExecutable('ffmpeg'), command, { windowsHide: true, encoding: 'utf8', timeout: 30000 });
+  await writeFile(path.join(output, 'generate.json'), JSON.stringify({ command, status: generated.status, stderr: generated.stderr, error: generated.error?.message }, null, 2));
+  assert.equal(generated.status, 0, generated.stderr);
+  const files = makeBlurayFiles(input, await readFile(mediaFile));
+  for (const [filename, bytes] of files) { const target = path.join(disc, filename); await mkdir(path.dirname(target), { recursive: true }); await writeFile(target, bytes); }
+  const recording = await recordOracle({ project: 'tests/storage/fixtures/bluray-disc-info/Oracle.csproj',
+    output: path.join(output, 'native'), args: [fileURLToPath(inputFile), disc, '{output}'] });
+  const native = JSON.parse(await readFile(path.join(output, 'native/native.json')));
+  assert.equal(recording.passed, true); assert.equal(native.inputSha256, hash(inputBytes));
+  assert.equal(native.assemblies.find(row => row.name === 'jellyfin').sha256, recording.jellyfinDll.sha256);
+  assert.match(native.assemblies.find(row => row.name === 'BDInfo').version, /^0\.8\.0(?:\.|$)/u);
+  assert.deepEqual(native.sourceFiles.map(row => [row.path, row.size, row.sha256]).sort(),
+    [...files].map(([filename, bytes]) => [filename, bytes.length, hash(bytes)]).sort());
+  const f = await fixture(t, files), plan = await readBlurayDiscInfo(f.vfs, '/disc'), candidate = project(plan);
+  await writeFile(path.join(output, 'comparison.json'), JSON.stringify({ candidate, nativePlan: native.plan,
+    pendingIntegrationFields: ['codec-header extensions (including Atmos)', 'optional SSIF/MVC elementary stream'] }, null, 2));
+  assert.equal(native.plan.playlistName, '00001.MPLS'); assert.equal(native.playlists.find(row => row.Name === '00002.MPLS').HasLoops, true);
+  const { referenceFile, streams: candidateStreams, ...candidatePlan } = candidate;
+  const { streams: nativeStreams, ...nativePlan } = native.plan;
+  assert.equal(referenceFile, 'BDMV/STREAM/00002.m2ts');
+  assert.deepEqual(candidatePlan, nativePlan);
+  assert.equal(candidateStreams.length, nativeStreams.length);
+  for (let index = 0; index < candidateStreams.length; index++) {
+    const actual = candidateStreams[index], expected = nativeStreams[index];
+    assert.deepEqual([actual.pid, actual.streamType, actual.angleIndex], [expected.pid, expected.streamType, expected.angleIndex]);
+    assert.deepEqual(Object.keys(actual.mediaStream).sort(), Object.keys(expected.mediaStream).sort());
+    for (const key of Object.keys(actual.mediaStream)) {
+      if (key.endsWith('FrameRate')) assert.ok(Math.abs(actual.mediaStream[key] - expected.mediaStream[key]) < 0.0001, key);
+      else assert.equal(actual.mediaStream[key], expected.mediaStream[key], key);
+    }
+  }
+  assert.equal(native.actual.MediaStreams.find(stream => stream.Type === 0)?.Channels > 0
+    || native.actual.MediaStreams.find(stream => stream.Type === 'Audio')?.Channels > 0, true,
+  'The reference must actually inspect the audio elementary stream; the full result is retained for probe integration.');
+  const bridge = new ProbeReadBridge(f.vfs); t.after(() => bridge.close());
+  const first = await probeRaw(bridge, plan.files[0].virtualPath, { executable: validationExecutable('ffprobe'), extractChapters: true });
+  const reference = await probeRaw(bridge, plan.referenceFile.virtualPath, { executable: validationExecutable('ffprobe') });
+  const completed = blurayMediaStreams(plan, reference.raw);
+  const merged = mergeBlurayProbe(plan, normalizeProbe(first.raw, { path: plan.files[0].virtualPath, isAudio: false }), reference.raw);
+  await writeFile(path.join(output, 'probe-merge.json'), JSON.stringify({ first, reference, completed, merged,
+    native: native.actual, pendingFields: ['codec-header extensions (including Atmos)', 'optional SSIF/MVC elementary stream'] },
+  (_, value) => typeof value === 'bigint' ? value.toString() : value, 2));
+  // Compare the fields actually produced by BdInfoExaminer, before the separate
+  // FetchBdInfo first-video overlay. Keep the complete original outputs above.
+  const fields = ['Index', 'Codec', 'Language', 'Width', 'Height', 'AverageFrameRate', 'RealFrameRate',
+    'Channels', 'ChannelLayout', 'SampleRate', 'BitRate'];
+  assert.equal(completed.length, native.actual.MediaStreams.length);
+  for (let index = 0; index < completed.length; index++) {
+    const actual = completed[index], expected = native.actual.MediaStreams[index];
+    assert.equal(actual.Type, typeof expected.Type === 'number' ? ['Audio', 'Video', 'Subtitle'][expected.Type] : expected.Type);
+    assert.equal(Boolean(actual.IsInterlaced), expected.IsInterlaced);
+    for (const field of fields) {
+      if (field.endsWith('FrameRate') && actual[field] != null) assert.ok(Math.abs(actual[field] - expected[field]) < 0.0001, field);
+      else assert.equal(actual[field] ?? null, expected[field] ?? null, `${index}.${field}`);
+    }
+  }
+  assert.equal(merged.RunTimeTicks, BigInt(native.actual.RunTimeTicks));
+  assert.deepEqual(merged.Chapters.map(chapter => Number(chapter.StartPositionTicks) / 10000000), native.actual.Chapters);
+  await verifyBlurayDiscInfo(f.vfs, plan); assert.equal(f.active.size, 0);
+});
+
+test('Blu-ray MVC declared in actual M2TS is appended by the native examiner only with the reference SSIF', async t => {
+  assert.ok(process.env.MEDIAMANAGER_JELLYFIN_DLL, 'This comparison requires the current isolated native reference.');
+  const scenarioFile = new URL('./fixtures/bluray-disc-info/mvc-input.json', import.meta.url);
+  const scenarioBytes = await readFile(scenarioFile), scenario = JSON.parse(scenarioBytes);
+  const output = path.join(validationOutputRoot(), 'bluray-mvc-' + randomUUID());
+  await mkdir(output, { recursive: true });
+  const mediaFile = path.join(output, 'generated-avc.m2ts');
+  const command = ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i', 'color=size=720x480:rate=30000/1001:duration=2',
+    '-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo', '-t', '2', '-map', '0:v:0', '-map', '0:v:0', '-map', '1:a:0',
+    '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', '-bf', '0', '-g', '30', '-threads', '1',
+    '-c:a', 'ac3', '-b:a', '192k', '-streamid', '0:4113', '-streamid', '1:4114', '-streamid', '2:4352',
+    '-mpegts_m2ts_mode', '1', '-f', 'mpegts', mediaFile];
+  const generated = spawnSync(validationExecutable('ffmpeg'), command, { windowsHide: true, encoding: 'utf8', timeout: 30000 });
+  await writeFile(path.join(output, 'generate.json'), JSON.stringify({ command, status: generated.status,
+    stderr: generated.stderr, error: generated.error?.message }, null, 2));
+  assert.equal(generated.status, 0, generated.stderr);
+  const original = await readFile(mediaFile), declaration = declareMvcInM2ts(original);
+  await writeFile(path.join(output, 'declared-mvc.m2ts'), declaration.bytes);
+  await writeFile(path.join(output, 'transport-declaration.json'), JSON.stringify({
+    purpose: 'Exercise the pinned examiner PMT classification and SSIF membership; no stereoscopic decoding is claimed.',
+    original: { size: original.length, sha256: hash(original) },
+    declared: { size: declaration.bytes.length, sha256: hash(declaration.bytes) }, changes: declaration.changes,
+  }, null, 2));
+  assert.equal(declaration.bytes.length, original.length);
+  const allowed = new Set(declaration.changes.flatMap(change => [change.typeOffset,
+    change.crcOffset, change.crcOffset + 1, change.crcOffset + 2, change.crcOffset + 3]));
+  for (let index = 0; index < original.length; index++) if (original[index] !== declaration.bytes[index]) {
+    assert.ok(allowed.has(index), 'PES and every byte outside the declared PMT fields must remain original');
+  }
+  for (const withSsif of [true, false]) await t.test(withSsif ? 'with reference SSIF' : 'without reference SSIF', async t => {
+    const directory = path.join(output, withSsif ? 'with-ssif' : 'without-ssif'), disc = path.join(directory, 'disc');
+    const files = makeBlurayFiles(scenario, declaration.bytes);
+    if (withSsif) files.set('BDMV/STREAM/SSIF/00002.ssif', Buffer.from('Existence control: the pinned fork reads 00002.m2ts.'));
+    for (const [filename, bytes] of files) {
+      const target = path.join(disc, filename); await mkdir(path.dirname(target), { recursive: true }); await writeFile(target, bytes);
+    }
+    const recording = await recordOracle({ project: 'tests/storage/fixtures/bluray-disc-info/Oracle.csproj',
+      output: path.join(directory, 'native'), args: [fileURLToPath(scenarioFile), disc, '{output}'] });
+    const native = JSON.parse(await readFile(path.join(directory, 'native/native.json')));
+    assert.equal(recording.passed, true); assert.equal(native.inputSha256, hash(scenarioBytes));
+    assert.equal(native.assemblies.find(row => row.name === 'jellyfin').sha256, recording.jellyfinDll.sha256);
+    assert.match(native.assemblies.find(row => row.name === 'BDInfo').version, /^0\.8\.0(?:\.|$)/u);
+    assert.deepEqual(native.sourceFiles.map(row => [row.path, row.size, row.sha256]).sort(),
+      [...files].map(([filename, bytes]) => [filename, bytes.length, hash(bytes)]).sort());
+    const f = await fixture(t, files), plan = await readBlurayDiscInfo(f.vfs, '/disc');
+    const bridge = new ProbeReadBridge(f.vfs); t.after(() => bridge.close());
+    const reference = await probeRaw(bridge, plan.referenceFile.virtualPath, { executable: validationExecutable('ffprobe') });
+    const first = await probeRaw(bridge, plan.files[0].virtualPath, { executable: validationExecutable('ffprobe'), extractChapters: true });
+    await writeFile(path.join(directory, 'probe-raw.json'), JSON.stringify({ first, reference }, null, 2));
+    const mvc = reference.raw.streams.find(stream => Number(stream.id) === 4114);
+    assert.ok(mvc, 'The actual ffprobe output must expose the declared PID.');
+    assert.equal(mvc.codec_type, 'video'); assert.equal(mvc.codec_name, 'h264'); assert.equal(Number(mvc.codec_tag), 0x20);
+    const completed = blurayMediaStreams(plan, reference.raw);
+    const merged = mergeBlurayProbe(plan, normalizeProbe(first.raw, { path: plan.files[0].virtualPath, isAudio: false }), reference.raw);
+    await writeFile(path.join(directory, 'comparison.json'), JSON.stringify({ plan, completed, merged, native: native.actual },
+      (_, value) => typeof value === 'bigint' ? value.toString() : value, 2));
+    assert.equal(Boolean(plan.referenceSsif), withSsif);
+    assert.equal(plan.referenceFile.virtualPath, '/disc/BDMV/STREAM/00002.m2ts');
+    const candidatePlan = project(plan), nativePlan = { ...native.plan }, nativeStreams = nativePlan.streams;
+    delete candidatePlan.referenceFile; delete candidatePlan.streams; delete nativePlan.streams;
+    assert.deepEqual(candidatePlan, nativePlan);
+    assert.deepEqual(nativeStreams.filter(stream => stream.pid === 4114).map(stream => [stream.streamType, stream.angleIndex]),
+      withSsif ? [[0x20, 0], [0x20, 1]] : []);
+    assert.equal(completed.length, native.actual.MediaStreams.length);
+    for (let index = 0; index < completed.length; index++) {
+      const actual = completed[index], expected = native.actual.MediaStreams[index];
+      assert.equal(actual.Type, typeof expected.Type === 'number' ? ['Audio', 'Video', 'Subtitle'][expected.Type] : expected.Type);
+      assert.equal(Boolean(actual.IsInterlaced), expected.IsInterlaced);
+      for (const field of ['Index', 'Codec', 'Language', 'Width', 'Height', 'AverageFrameRate', 'RealFrameRate',
+        'Channels', 'ChannelLayout', 'SampleRate', 'BitRate', 'Profile', 'PixelFormat']) {
+        if (field.endsWith('FrameRate') && actual[field] != null) assert.ok(Math.abs(actual[field] - expected[field]) < 0.0001, field);
+        else assert.equal(actual[field] ?? null, expected[field] ?? null, `${index}.${field}`);
+      }
+    }
+    assert.deepEqual(merged.MediaStreams.filter(stream => stream.Codec === 'MVC'), completed.filter(stream => stream.Codec === 'MVC'));
+    assert.equal(merged.RunTimeTicks, BigInt(native.actual.RunTimeTicks));
+    assert.deepEqual(merged.Chapters.map(chapter => Number(chapter.StartPositionTicks) / 10000000), native.actual.Chapters);
+    await verifyBlurayDiscInfo(f.vfs, plan); assert.equal(f.active.size, 0);
+  });
+});

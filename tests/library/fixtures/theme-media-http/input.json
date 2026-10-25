@@ -1,0 +1,3316 @@
+{
+  "schemaVersion": 1,
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "80200000-0000-0000-0000-000000000004",
+  "warmUserViews": {
+    "configuration": {
+      "GroupedFolders": [
+        "80200000-0000-0000-0000-000000000004",
+        "80200000-0000-0000-0000-000000000006",
+        "80200000-0000-0000-0000-000000000008",
+        "80200000-0000-0000-0000-000000000010",
+        "80200000-0000-0000-0000-000000000012"
+      ],
+      "LatestItemsExcludes": [],
+      "HidePlayedInLatest": false
+    },
+    "policy": {
+      "EnableAllFolders": true,
+      "EnabledFolders": [],
+      "BlockedMediaFolders": [],
+      "AllowedTags": [],
+      "BlockedTags": [],
+      "MaxParentalRating": null,
+      "MaxParentalSubRating": null,
+      "BlockUnratedItems": [],
+      "EnableContentDeletion": false,
+      "EnableContentDeletionFromFolders": []
+    }
+  },
+  "items": [
+    {
+      "key": "aggregate",
+      "id": "f27caa37-e514-2225-cced-ed48f6553502",
+      "type": "AggregateFolder",
+      "name": "root",
+      "sortName": "root",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "aggregate"
+    },
+    {
+      "key": "userRoot",
+      "id": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "type": "UserRootFolder",
+      "name": "Media Folders",
+      "sortName": "media folders",
+      "parentId": null,
+      "topParentId": null,
+      "ancestorIds": [],
+      "pathKind": "userRoot",
+      "data": {
+        "IsRoot": true,
+        "PhysicalLocationsList": []
+      }
+    },
+    {
+      "key": "physicalA",
+      "id": "80200000-0000-0000-0000-000000000003",
+      "type": "Folder",
+      "name": "Physical A",
+      "sortName": "physical a",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalA",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryA",
+      "id": "80200000-0000-0000-0000-000000000004",
+      "type": "CollectionFolder",
+      "name": "Library A",
+      "sortName": "library a",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryA",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000003"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000004",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalB",
+      "id": "80200000-0000-0000-0000-000000000005",
+      "type": "Folder",
+      "name": "Physical B",
+      "sortName": "physical b",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalB",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryB",
+      "id": "80200000-0000-0000-0000-000000000006",
+      "type": "CollectionFolder",
+      "name": "Library B",
+      "sortName": "library b",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryB",
+      "data": {
+        "CollectionType": "movies",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000005"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000006",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalT",
+      "id": "80200000-0000-0000-0000-000000000007",
+      "type": "Folder",
+      "name": "Physical T",
+      "sortName": "physical t",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalT",
+      "topParentId": "80200000-0000-0000-0000-000000000007",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryT",
+      "id": "80200000-0000-0000-0000-000000000008",
+      "type": "CollectionFolder",
+      "name": "Library T",
+      "sortName": "library t",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryT",
+      "data": {
+        "CollectionType": "tvshows",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000007"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000008",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalK",
+      "id": "80200000-0000-0000-0000-000000000009",
+      "type": "Folder",
+      "name": "Physical K",
+      "sortName": "physical k",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalK",
+      "topParentId": "80200000-0000-0000-0000-000000000009",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryK",
+      "id": "80200000-0000-0000-0000-000000000010",
+      "type": "CollectionFolder",
+      "name": "Library K",
+      "sortName": "library k",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryK",
+      "data": {
+        "CollectionType": "books",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000009"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000010",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "physicalM",
+      "id": "80200000-0000-0000-0000-000000000011",
+      "type": "Folder",
+      "name": "Physical M",
+      "sortName": "physical m",
+      "parentId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "pathKind": "physicalM",
+      "topParentId": "80200000-0000-0000-0000-000000000011",
+      "ancestorIds": [
+        "f27caa37-e514-2225-cced-ed48f6553502"
+      ]
+    },
+    {
+      "key": "libraryM",
+      "id": "80200000-0000-0000-0000-000000000012",
+      "type": "CollectionFolder",
+      "name": "Library M",
+      "sortName": "library m",
+      "parentId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "pathKind": "libraryM",
+      "data": {
+        "CollectionType": "music",
+        "PhysicalFolderIds": [
+          "80200000-0000-0000-0000-000000000011"
+        ],
+        "PhysicalLocationsList": [],
+        "LibraryOptions": {
+          "Enabled": true
+        }
+      },
+      "topParentId": "80200000-0000-0000-0000-000000000012",
+      "ancestorIds": [
+        "e9d5075a-555c-1cbc-394e-ec4cef295274"
+      ]
+    },
+    {
+      "key": "ownerFolder",
+      "id": "984f0000-0000-0000-0000-000000000001",
+      "type": "Folder",
+      "name": "ownerFolder",
+      "sortName": "ownerfolder",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": true,
+      "mediaType": "Unknown",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {}
+    },
+    {
+      "key": "main",
+      "id": "984f0000-0000-0000-0000-000000000002",
+      "type": "Movie",
+      "name": "main",
+      "sortName": "main",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      }
+    },
+    {
+      "key": "empty",
+      "id": "984f0000-0000-0000-0000-000000000003",
+      "type": "Movie",
+      "name": "empty",
+      "sortName": "empty",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      }
+    },
+    {
+      "key": "mid",
+      "id": "984f0000-0000-0000-0000-000000000004",
+      "type": "Folder",
+      "name": "mid",
+      "sortName": "mid",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": true,
+      "mediaType": "Unknown",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {}
+    },
+    {
+      "key": "deep",
+      "id": "984f0000-0000-0000-0000-000000000005",
+      "type": "Movie",
+      "name": "deep",
+      "sortName": "deep",
+      "parentId": "984f0000-0000-0000-0000-000000000004",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      }
+    },
+    {
+      "key": "blankFolder",
+      "id": "984f0000-0000-0000-0000-000000000006",
+      "type": "Folder",
+      "name": "blankFolder",
+      "sortName": "blankfolder",
+      "parentId": "80200000-0000-0000-0000-000000000003",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": true,
+      "mediaType": "Unknown",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {}
+    },
+    {
+      "key": "blankMovie",
+      "id": "984f0000-0000-0000-0000-000000000007",
+      "type": "Movie",
+      "name": "blankMovie",
+      "sortName": "blankmovie",
+      "parentId": "984f0000-0000-0000-0000-000000000006",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      }
+    },
+    {
+      "key": "local",
+      "id": "984f0000-0000-0000-0000-000000000008",
+      "type": "Movie",
+      "name": "local",
+      "sortName": "local",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": "984f0000-0000-0000-0000-000000000002"
+    },
+    {
+      "key": "grouped",
+      "id": "984f0000-0000-0000-0000-000000000009",
+      "type": "Movie",
+      "name": "grouped",
+      "sortName": "grouped",
+      "parentId": "80200000-0000-0000-0000-000000000005",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": "984f0000-0000-0000-0000-000000000002"
+    },
+    {
+      "key": "groupedLocal",
+      "id": "984f0000-0000-0000-0000-000000000010",
+      "type": "Movie",
+      "name": "groupedLocal",
+      "sortName": "groupedlocal",
+      "parentId": "80200000-0000-0000-0000-000000000005",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": "984f0000-0000-0000-0000-000000000009"
+    },
+    {
+      "key": "nestedGroup",
+      "id": "984f0000-0000-0000-0000-000000000011",
+      "type": "Movie",
+      "name": "nestedGroup",
+      "sortName": "nestedgroup",
+      "parentId": "80200000-0000-0000-0000-000000000005",
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "primaryVersionId": "984f0000-0000-0000-0000-000000000009"
+    },
+    {
+      "key": "audioLocal",
+      "id": "984f0000-0000-0000-0000-000000000012",
+      "type": "Audio",
+      "name": "audioLocal",
+      "sortName": "audiolocal",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "ignoredAudioGroup",
+      "id": "984f0000-0000-0000-0000-000000000013",
+      "type": "Audio",
+      "name": "ignoredAudioGroup",
+      "sortName": "ignoredaudiogroup",
+      "parentId": "984f0000-0000-0000-0000-000000000001",
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "child",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "100000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      }
+    },
+    {
+      "key": "ownerFolder-song-0",
+      "id": "984f0000-0000-0000-0000-000000000014",
+      "type": "Audio",
+      "name": "ownerFolder-song-0",
+      "sortName": "ownerfolder-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000001",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "ownerFolder-video-1",
+      "id": "984f0000-0000-0000-0000-000000000015",
+      "type": "Video",
+      "name": "ownerFolder-video-1",
+      "sortName": "ownerfolder-video-1",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "1200000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000001",
+      "extraType": 9,
+      "communityRating": 4
+    },
+    {
+      "key": "mid-song-0",
+      "id": "984f0000-0000-0000-0000-000000000016",
+      "type": "Audio",
+      "name": "mid-song-0",
+      "sortName": "mid-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000004",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "main-song-0",
+      "id": "984f0000-0000-0000-0000-000000000017",
+      "type": "Audio",
+      "name": "main-song-0",
+      "sortName": "main-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000002",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "main-song-1",
+      "id": "984f0000-0000-0000-0000-000000000018",
+      "type": "Audio",
+      "name": "main-song-1",
+      "sortName": "main-song-1",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "1200000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000002",
+      "extraType": 8,
+      "communityRating": 4,
+      "inheritedParentalRatingValue": 100,
+      "officialRating": "R"
+    },
+    {
+      "key": "main-video-2",
+      "id": "984f0000-0000-0000-0000-000000000019",
+      "type": "Video",
+      "name": "main-video-2",
+      "sortName": "main-video-2",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "1800000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000002",
+      "extraType": 9,
+      "communityRating": 5
+    },
+    {
+      "key": "main-video-3",
+      "id": "984f0000-0000-0000-0000-000000000020",
+      "type": "Video",
+      "name": "main-video-3",
+      "sortName": "main-video-3",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "2400000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000002",
+      "extraType": 9,
+      "communityRating": 6
+    },
+    {
+      "key": "local-song-0",
+      "id": "984f0000-0000-0000-0000-000000000021",
+      "type": "Audio",
+      "name": "local-song-0",
+      "sortName": "local-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000008",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "local-video-1",
+      "id": "984f0000-0000-0000-0000-000000000022",
+      "type": "Video",
+      "name": "local-video-1",
+      "sortName": "local-video-1",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "1200000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000008",
+      "extraType": 9,
+      "communityRating": 4
+    },
+    {
+      "key": "grouped-song-0",
+      "id": "984f0000-0000-0000-0000-000000000023",
+      "type": "Audio",
+      "name": "grouped-song-0",
+      "sortName": "grouped-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000009",
+      "extraType": 8,
+      "communityRating": 3,
+      "tagsText": "blocked-theme"
+    },
+    {
+      "key": "grouped-video-1",
+      "id": "984f0000-0000-0000-0000-000000000024",
+      "type": "Video",
+      "name": "grouped-video-1",
+      "sortName": "grouped-video-1",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "1200000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000009",
+      "extraType": 9,
+      "communityRating": 4,
+      "tagsText": "blocked-theme"
+    },
+    {
+      "key": "groupedLocal-song-0",
+      "id": "984f0000-0000-0000-0000-000000000025",
+      "type": "Audio",
+      "name": "groupedLocal-song-0",
+      "sortName": "groupedlocal-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000010",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "nestedGroup-song-0",
+      "id": "984f0000-0000-0000-0000-000000000026",
+      "type": "Audio",
+      "name": "nestedGroup-song-0",
+      "sortName": "nestedgroup-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000005",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000011",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "audioLocal-song-0",
+      "id": "984f0000-0000-0000-0000-000000000027",
+      "type": "Audio",
+      "name": "audioLocal-song-0",
+      "sortName": "audiolocal-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000012",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "ignoredAudioGroup-song-0",
+      "id": "984f0000-0000-0000-0000-000000000028",
+      "type": "Audio",
+      "name": "ignoredAudioGroup-song-0",
+      "sortName": "ignoredaudiogroup-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "984f0000-0000-0000-0000-000000000013",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "aggregate-song-0",
+      "id": "984f0000-0000-0000-0000-000000000029",
+      "type": "Audio",
+      "name": "aggregate-song-0",
+      "sortName": "aggregate-song-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Audio",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mp3",
+        "IsShortcut": false,
+        "RemoteTrailers": []
+      },
+      "ownerId": "f27caa37-e514-2225-cced-ed48f6553502",
+      "extraType": 8,
+      "communityRating": 3
+    },
+    {
+      "key": "userRoot-video-0",
+      "id": "984f0000-0000-0000-0000-000000000030",
+      "type": "Video",
+      "name": "userRoot-video-0",
+      "sortName": "userroot-video-0",
+      "parentId": null,
+      "topParentId": "80200000-0000-0000-0000-000000000003",
+      "ancestorIds": [],
+      "pathKind": "owned",
+      "isFolder": false,
+      "mediaType": "Video",
+      "dateCreated": "2026-09-28 10:00:00",
+      "dateLastSaved": "2026-09-29 12:00:00",
+      "runTimeTicks": "600000000",
+      "data": {
+        "Container": "mkv",
+        "IsShortcut": false,
+        "RemoteTrailers": [],
+        "VideoType": "VideoFile",
+        "IsHD": false,
+        "Width": 0,
+        "Height": 0
+      },
+      "ownerId": "e9d5075a-555c-1cbc-394e-ec4cef295274",
+      "extraType": 9,
+      "communityRating": 3
+    }
+  ],
+  "links": [
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000002",
+      "childId": "984f0000-0000-0000-0000-000000000008",
+      "childType": 2,
+      "sortOrder": 0
+    },
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000002",
+      "childId": "984f0000-0000-0000-0000-000000000009",
+      "childType": 3,
+      "sortOrder": 1
+    },
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000009",
+      "childId": "984f0000-0000-0000-0000-000000000010",
+      "childType": 2,
+      "sortOrder": 2
+    },
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000009",
+      "childId": "984f0000-0000-0000-0000-000000000011",
+      "childType": 3,
+      "sortOrder": 3
+    },
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000002",
+      "childId": "984f0000-0000-0000-0000-000000000012",
+      "childType": 2,
+      "sortOrder": 4
+    },
+    {
+      "parentId": "984f0000-0000-0000-0000-000000000002",
+      "childId": "984f0000-0000-0000-0000-000000000013",
+      "childType": 3,
+      "sortOrder": 5
+    }
+  ],
+  "itemValues": [
+    {
+      "key": "blockedTag",
+      "id": "986f0000-0000-0000-0000-000000000001",
+      "type": 4,
+      "value": "blocked-theme",
+      "cleanValue": "blocked-theme"
+    },
+    {
+      "key": "blockedCanonicalTag",
+      "id": "986f0000-0000-0000-0000-000000000002",
+      "type": 4,
+      "value": "blocked theme",
+      "cleanValue": "blocked theme"
+    },
+    {
+      "key": "cachedInheritedTag",
+      "id": "986f0000-0000-0000-0000-000000000003",
+      "type": 6,
+      "value": "blocked-theme",
+      "cleanValue": "blocked theme"
+    }
+  ],
+  "itemValueLinks": [
+    {
+      "itemKey": "grouped-song-0",
+      "valueKey": "blockedTag"
+    },
+    {
+      "itemKey": "grouped-video-1",
+      "valueKey": "blockedTag"
+    },
+    {
+      "itemKey": "main-song-1",
+      "valueKey": "blockedCanonicalTag"
+    },
+    {
+      "itemKey": "local-song-0",
+      "valueKey": "cachedInheritedTag"
+    }
+  ],
+  "userData": [
+    {
+      "itemKey": "ownerFolder-song-0",
+      "played": true,
+      "isFavorite": true,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "ownerFolder-video-1",
+      "played": false,
+      "isFavorite": false,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "mid-song-0",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "main-song-0",
+      "played": false,
+      "isFavorite": true,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "main-song-1",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "main-video-2",
+      "played": false,
+      "isFavorite": false,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "main-video-3",
+      "played": true,
+      "isFavorite": true,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "local-song-0",
+      "played": false,
+      "isFavorite": false,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "local-video-1",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "grouped-song-0",
+      "played": false,
+      "isFavorite": true,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "grouped-video-1",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "groupedLocal-song-0",
+      "played": false,
+      "isFavorite": false,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "nestedGroup-song-0",
+      "played": true,
+      "isFavorite": true,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "audioLocal-song-0",
+      "played": false,
+      "isFavorite": false,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "ignoredAudioGroup-song-0",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    },
+    {
+      "itemKey": "aggregate-song-0",
+      "played": false,
+      "isFavorite": true,
+      "lastPlayedDate": null,
+      "positionTicks": "10000000",
+      "likes": null
+    },
+    {
+      "itemKey": "userRoot-video-0",
+      "played": true,
+      "isFavorite": false,
+      "lastPlayedDate": "2026-09-29 10:00:00",
+      "positionTicks": "0",
+      "likes": null
+    }
+  ],
+  "images": [
+    {
+      "id": "985f0000-0000-0000-0000-000000000001",
+      "itemKey": "ownerFolder",
+      "imageType": 4,
+      "dateModified": "2026-09-29T11:00:01.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-1"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000002",
+      "itemKey": "ownerFolder",
+      "imageType": 5,
+      "dateModified": "2026-09-29T11:00:02.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-2"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000003",
+      "itemKey": "ownerFolder",
+      "imageType": 2,
+      "dateModified": "2026-09-29T11:00:03.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-3"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000004",
+      "itemKey": "main",
+      "imageType": 4,
+      "dateModified": "2026-09-29T11:00:04.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-4"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000005",
+      "itemKey": "main",
+      "imageType": 2,
+      "dateModified": "2026-09-29T11:00:05.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-5"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000006",
+      "itemKey": "grouped",
+      "imageType": 2,
+      "dateModified": "2026-09-29T11:00:06.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-6"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000007",
+      "itemKey": "main-song-0",
+      "imageType": 4,
+      "dateModified": "2026-09-29T11:00:07.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-7"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000008",
+      "itemKey": "main-video-2",
+      "imageType": 5,
+      "dateModified": "2026-09-29T11:00:08.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-8"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000009",
+      "itemKey": "main-video-2",
+      "imageType": 2,
+      "dateModified": "2026-09-29T11:00:09.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-9"
+    },
+    {
+      "id": "985f0000-0000-0000-0000-000000000010",
+      "itemKey": "main-video-2",
+      "imageType": 2,
+      "dateModified": "2026-09-29T11:00:10.1234567Z",
+      "width": 100,
+      "height": 100,
+      "blurHash": "theme-blur-10"
+    }
+  ],
+  "cases": [
+    {
+      "name": "direct main ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct main ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct main ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit main ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit main ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit main ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct empty ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "empty",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct empty ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "empty",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct empty ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "empty",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit empty ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "empty",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit empty ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "empty",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit empty ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "empty",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct deep ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "deep",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct deep ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "deep",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct deep ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "deep",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit deep ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "deep",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit deep ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "deep",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit deep ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "deep",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct blankMovie ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "blankMovie",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct blankMovie ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "blankMovie",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct blankMovie ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "blankMovie",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit blankMovie ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "blankMovie",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit blankMovie ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "blankMovie",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit blankMovie ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "blankMovie",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct grouped ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "grouped",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct grouped ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "grouped",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct grouped ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "grouped",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit grouped ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "grouped",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit grouped ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "grouped",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit grouped ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "grouped",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct local ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "local",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct local ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "local",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct local ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "local",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit local ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "local",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit local ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "local",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit local ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "local",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct ownerFolder ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "ownerFolder",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct ownerFolder ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "ownerFolder",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "direct ownerFolder ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "ownerFolder",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit ownerFolder ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "ownerFolder",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit ownerFolder ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "ownerFolder",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "inherit ownerFolder ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "ownerFolder",
+      "query": "inheritFromParent=true",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort SortName ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=SortName&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort SortName ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=SortName&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort SortName ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=SortName&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Runtime ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Runtime ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Runtime ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort CommunityRating ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=CommunityRating&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort CommunityRating ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=CommunityRating&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort CommunityRating ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=CommunityRating&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort PlayCount ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort PlayCount ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort PlayCount ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort DatePlayed ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=DatePlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort DatePlayed ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=DatePlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort DatePlayed ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=DatePlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsFavoriteOrLiked ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=IsFavoriteOrLiked&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsFavoriteOrLiked ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=IsFavoriteOrLiked&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsFavoriteOrLiked ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=IsFavoriteOrLiked&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsUnplayed ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=IsUnplayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsUnplayed ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=IsUnplayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsUnplayed ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=IsUnplayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Default ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Default&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Default ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Default&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Default ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Default&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsPlayed ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=IsPlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsPlayed ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=IsPlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort IsPlayed ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=IsPlayed&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort VideoBitRate ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=VideoBitRate&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort VideoBitRate ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=VideoBitRate&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort VideoBitRate ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=VideoBitRate&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name,Runtime ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name,Runtime ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "sort Name,Runtime ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "unknown enum ignored ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "unknown enum ignored ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "unknown enum ignored ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "userless ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "userless ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "userless ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "api key selected user ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "userId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "api key selected user ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "userId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "api key selected user ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "userId=5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "unknown selected user ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "userId=989f0000000000000000000000000001",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "unknown selected user ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "userId=989f0000000000000000000000000001",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "unknown selected user ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "userId=989f0000000000000000000000000001",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "auth": "apiKey"
+    },
+    {
+      "name": "only initial library visible ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "only initial library visible ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "only initial library visible ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": false,
+        "EnabledFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "parental extras ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 20,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "parental extras ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 20,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "parental extras ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": 20,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "blocked extra tags ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked-theme"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "blocked extra tags ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked-theme"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "blocked extra tags ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [
+          "blocked-theme"
+        ],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "ignored DTO switches ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "fields=UnknownField&enableImages=false&enableUserData=false&limit=0",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "ignored DTO switches ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "fields=UnknownField&enableImages=false&enableUserData=false&limit=0",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "ignored DTO switches ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "fields=UnknownField&enableImages=false&enableUserData=false&limit=0",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "aggregate zero root ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000",
+      "auth": "apiKey"
+    },
+    {
+      "name": "aggregate zero root ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000",
+      "auth": "apiKey"
+    },
+    {
+      "name": "aggregate zero root ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000",
+      "auth": "apiKey"
+    },
+    {
+      "name": "user zero root ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000"
+    },
+    {
+      "name": "user zero root ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000"
+    },
+    {
+      "name": "user zero root ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "themeItemId": "00000000000000000000000000000000"
+    },
+    {
+      "name": "missing item ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 404,
+      "themeItemId": "989f0000000000000000000000000002"
+    },
+    {
+      "name": "missing item ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 404,
+      "themeItemId": "989f0000000000000000000000000002"
+    },
+    {
+      "name": "missing item ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 404,
+      "themeItemId": "989f0000000000000000000000000002"
+    },
+    {
+      "name": "invalid inherit ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "inheritFromParent=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid inherit ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "inheritFromParent=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid inherit ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "inheritFromParent=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid user ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "userId=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid user ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "userId=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid user ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "userId=invalid",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "bindingError": true
+    },
+    {
+      "name": "invalid item ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "themeItemId": "invalid",
+      "bindingError": true
+    },
+    {
+      "name": "invalid item ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "themeItemId": "invalid",
+      "bindingError": true
+    },
+    {
+      "name": "invalid item ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "themeItemId": "invalid",
+      "bindingError": true
+    },
+    {
+      "name": "userless user sort ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "expectedRuntimeError": "Sort key 'PlayCount' requires a user, but none was provided."
+    },
+    {
+      "name": "userless user sort ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "expectedRuntimeError": "Sort key 'PlayCount' requires a user, but none was provided."
+    },
+    {
+      "name": "userless user sort ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=PlayCount",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "auth": "apiKey",
+      "expectedRuntimeError": "Sort key 'PlayCount' requires a user, but none was provided."
+    },
+    {
+      "name": "excess sort orders ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "expectedRuntimeError": "Sort order count exceeds sort key count."
+    },
+    {
+      "name": "excess sort orders ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "expectedRuntimeError": "Sort order count exceeds sort key count."
+    },
+    {
+      "name": "excess sort orders ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Name&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 400,
+      "expectedRuntimeError": "Sort order count exceeds sort key count."
+    },
+    {
+      "name": "orders without sort keys ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "orders without sort keys ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "orders without sort keys ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=UnknownSort&sortOrder=Descending,Ascending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "repeat first sort order ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "repeat first sort order ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "repeat first sort order ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "sortBy=Name,Runtime&sortOrder=Descending",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200
+    },
+    {
+      "name": "delete permission enabled ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": true,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "delete permission enabled ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": true,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "delete permission enabled ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": true,
+        "EnableContentDeletionFromFolders": []
+      }
+    },
+    {
+      "name": "delete permission by library ThemeSongs",
+      "action": "theme",
+      "themeRoute": "ThemeSongs",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ]
+      }
+    },
+    {
+      "name": "delete permission by library ThemeVideos",
+      "action": "theme",
+      "themeRoute": "ThemeVideos",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ]
+      }
+    },
+    {
+      "name": "delete permission by library ThemeMedia",
+      "action": "theme",
+      "themeRoute": "ThemeMedia",
+      "detailKey": "main",
+      "query": "",
+      "scope": [],
+      "omitScope": true,
+      "endpoints": [
+        "items"
+      ],
+      "expectedStatus": 200,
+      "policy": {
+        "EnableAllFolders": true,
+        "EnabledFolders": [],
+        "BlockedMediaFolders": [],
+        "AllowedTags": [],
+        "BlockedTags": [],
+        "MaxParentalRating": null,
+        "MaxParentalSubRating": null,
+        "BlockUnratedItems": [],
+        "EnableContentDeletion": false,
+        "EnableContentDeletionFromFolders": [
+          "80200000-0000-0000-0000-000000000004"
+        ]
+      }
+    }
+  ]
+}

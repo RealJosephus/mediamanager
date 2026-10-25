@@ -1,0 +1,146 @@
+[
+  {
+    "name": "audio-cold-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": false,
+    "httpBatch": false
+  },
+  {
+    "name": "audio-cold-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": false,
+    "httpBatch": true
+  },
+  {
+    "name": "audio-warm-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "httpBatch": false
+  },
+  {
+    "name": "audio-warm-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Audio",
+    "warm": true,
+    "httpBatch": true
+  },
+  {
+    "name": "video-cold-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": false,
+    "httpBatch": false
+  },
+  {
+    "name": "video-cold-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": false,
+    "httpBatch": true
+  },
+  {
+    "name": "video-warm-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "httpBatch": false
+  },
+  {
+    "name": "video-warm-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Video",
+    "warm": true,
+    "httpBatch": true
+  },
+  {
+    "name": "folder-cold-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": false,
+    "httpBatch": false
+  },
+  {
+    "name": "folder-cold-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": false,
+    "httpBatch": true
+  },
+  {
+    "name": "folder-warm-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "httpBatch": false
+  },
+  {
+    "name": "folder-warm-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "Folder",
+    "warm": true,
+    "httpBatch": true
+  },
+  {
+    "name": "musicartist-cold-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": false,
+    "httpBatch": false
+  },
+  {
+    "name": "musicartist-cold-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": false,
+    "httpBatch": true
+  },
+  {
+    "name": "musicartist-warm-single",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "httpBatch": false
+  },
+  {
+    "name": "musicartist-warm-batch",
+    "managed": true,
+    "directory": true,
+    "owned": true,
+    "closureType": "MusicArtist",
+    "warm": true,
+    "httpBatch": true
+  }
+]

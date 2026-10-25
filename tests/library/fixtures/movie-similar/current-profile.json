@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "fixture": "movie-similar",
+  "scope": "Same-run designated Native weighted Movie/Trailer results, concrete EF SQLite and PostgreSQL consumers, functional Live TV results, controlled TMDbLib requests and exact relation exchange; component evidence only.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/Library/SimilarItems/MovieSimilarItemsProvider.cs",
+    "Emby.Server.Implementations/Library/SimilarItems/LiveTvProgramSimilarItemsProvider.cs",
+    "Emby.Server.Implementations/Library/SimilarItems/SimilarItemsManager.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/Movies/TmdbMovieSimilarProvider.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.QueryBuilding.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.TranslateQuery.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemRepository.Querying.cs",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs",
+    "MediaBrowser.Controller/Entities/InternalItemsQuery.cs",
+    "MediaBrowser.Controller/Library/SimilarItemsQuery.cs",
+    "MediaBrowser.Model/Configuration/ServerConfiguration.cs",
+    "Emby.Server.Implementations/Data/ItemTypeLookup.cs",
+    "MediaBrowser.Controller/LiveTv/LiveTvProgram.cs",
+    "MediaBrowser.Controller/Entities/BaseItem.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinQueryHelperExtensions.cs",
+    "MediaBrowser.Providers/Plugins/Tmdb/TmdbClientManager.cs"
+  ],
+  "inputs": [
+    {
+      "role": "scenarios",
+      "filename": "current/input.json",
+      "bytes": 17240,
+      "sha256": "590c680893f97a7c5146221ce133a618f7a5f7028a5ee0a481790bf65f83b290"
+    },
+    {
+      "role": "oracleSource",
+      "filename": "current/Program.cs",
+      "bytes": 19836,
+      "sha256": "74609c07cf9aec830c66f817000164b5eb8be0b32a76e431bf634853c7b5855e"
+    },
+    {
+      "role": "oracleProject",
+      "filename": "current/Oracle.csproj",
+      "bytes": 1345,
+      "sha256": "85517f503080a223ad02b544898de3832560c3e57bd871a120cb9117687bc3f6"
+    },
+    {
+      "role": "buildProperties",
+      "filename": "../../../Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  ]
+}

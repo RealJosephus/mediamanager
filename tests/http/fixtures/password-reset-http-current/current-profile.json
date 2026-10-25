@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "fixture": "password-reset-http",
+  "scope": "Two independent current designated Native MVC, UserManager, EF SQLite, crypto and PIN-file executions; complete five-table initial rows consumed by production PostgreSQL user/password services. Controlled principal/network/events; not a full Native instance or complete exchange.",
+  "cases": {
+    "total": 88,
+    "http": 83,
+    "requests": 84,
+    "snapshots": 5
+  },
+  "sourcePaths": [
+    "Jellyfin.Server.Implementations/Users/DefaultPasswordResetProvider.cs",
+    "Jellyfin.Server.Implementations/Users/UserManager.cs",
+    "Jellyfin.Server.Implementations/Users/DefaultAuthenticationProvider.cs",
+    "Jellyfin.Server.Implementations/Users/InvalidAuthProvider.cs",
+    "Emby.Server.Implementations/Cryptography/CryptographyProvider.cs",
+    "Jellyfin.Api/Controllers/UserController.cs",
+    "Jellyfin.Api/Controllers/SessionController.cs",
+    "Jellyfin.Api/Models/UserDtos/ForgotPasswordDto.cs",
+    "Jellyfin.Api/Models/UserDtos/ForgotPasswordPinDto.cs",
+    "MediaBrowser.Controller/Authentication/IPasswordResetProvider.cs",
+    "MediaBrowser.Common/Extensions/HttpContextExtensions.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "src/Jellyfin.Database/Jellyfin.Database.Implementations/JellyfinDbContext.cs"
+  ],
+  "inputs": [
+    {
+      "filename": "input.json",
+      "sha256": "d03367c4becbf12286c2168caa39c2435d7366141e2ee01aff6f9929237fcde9",
+      "bytes": 21350,
+      "role": "scenarios"
+    },
+    {
+      "filename": "Program.cs",
+      "sha256": "0f132ea30d7647e0a61eab11789dda4fb6b0c7927686860410efef2bf120997d",
+      "bytes": 22071,
+      "role": "oracleSource"
+    },
+    {
+      "filename": "Oracle.csproj",
+      "sha256": "29cf673168bab14d0ba0b7f13e9c442f4240728af26e331891eabdec84fd8ce0",
+      "bytes": 1437,
+      "role": "oracleProject"
+    },
+    {
+      "filename": "observations.js",
+      "sha256": "aa94df603ad9818a0667c0bb4eb0c46d0f38d686defff872fa369a54a000a4d0",
+      "bytes": 6075,
+      "role": "functionalProjection"
+    },
+    {
+      "filename": "../../../Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "bytes": 780,
+      "role": "buildProperties"
+    }
+  ]
+}

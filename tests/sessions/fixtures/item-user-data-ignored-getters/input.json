@@ -1,0 +1,990 @@
+[
+  {
+    "name": "type-Folder-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Folder-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Folder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AggregateFolder-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-AggregateFolder-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AggregateFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserRootFolder-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-UserRootFolder-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserRootFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-CollectionFolder-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-CollectionFolder-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "CollectionFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-UserView-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-UserView-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "UserView"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PlaylistsFolder-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-PlaylistsFolder-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PlaylistsFolder"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Playlist-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Playlist-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Playlist"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Movie-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Movie-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Movie"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Video-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Video-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Video"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Episode-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Episode-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Episode"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Series-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Series-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Series"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Season-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Season-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Season"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-BoxSet-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-BoxSet-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "BoxSet"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Audio-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Audio-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Audio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-AudioBook-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-AudioBook-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "AudioBook"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicVideo-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-MusicVideo-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicVideo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Trailer-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Trailer-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Trailer"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicAlbum-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-MusicAlbum-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicArtist-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-MusicArtist-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicArtist"
+    },
+    "parents": [
+      {
+        "id": "97800000-0000-0000-0000-000000000002",
+        "type": "Folder"
+      }
+    ],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      },
+      {
+        "id": "97800000-0000-0000-0000-000000000002"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Person-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Person-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Person"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Genre-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Genre-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Genre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-MusicGenre-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-MusicGenre-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "MusicGenre"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Studio-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Studio-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Studio"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Year-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Year-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Year"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Photo-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Photo-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Photo"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-PhotoAlbum-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-PhotoAlbum-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "PhotoAlbum"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  },
+  {
+    "name": "type-Book-runtime-aliases-false",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": false
+  },
+  {
+    "name": "type-Book-runtime-aliases-true",
+    "item": {
+      "id": "97800000-0000-0000-0000-000000000001",
+      "type": "Book"
+    },
+    "parents": [],
+    "collections": [],
+    "persistedItems": [
+      {
+        "id": "97800000-0000-0000-0000-000000000001"
+      }
+    ],
+    "ancestors": [],
+    "values": [],
+    "hydrationData": "{\"UserDataKeys\":[\"serialized-fake-key\",\"serialized-second-key\"],\"ProviderIds\":{\"Imdb\":\"serialized-imdb\",\"Tmdb\":\"serialized-tmdb\",\"Tvdb\":\"serialized-tvdb\",\"MusicBrainzAlbum\":\"serialized-album\"},\"Series\":{\"Id\":\"00000000-0000-0000-0000-000000000099\",\"ProviderIds\":{\"Custom\":\"serialized-series\"}},\"AlbumArtist\":\"serialized-album-artist\",\"Name\":\"serialized-name\",\"RemoteTrailers\":[]}",
+    "sqlListsNull": true
+  }
+]

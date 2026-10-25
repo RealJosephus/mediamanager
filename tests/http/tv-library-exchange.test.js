@@ -1,0 +1,429 @@
+import test, { after } from 'node:test';
+import { acquireTestResource } from '../helpers/test-resource-lease.js';
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+import { copyFile, cp, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
+import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
+import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
+import { validationOutputRoot } from '../../tools/validation/paths.js';
+import { startProductionInstance } from '../../src/main.js';
+import { readConfigurationDocument } from '../../src/core/configuration-xml.js';
+import { writeConfigurationFile } from '../../src/core/configuration-file.js';
+import { SqliteDatabase } from '../../src/database/sqlite.js';
+import { PostgresDatabase } from '../../src/database/postgres.js';
+import { transferDatabase, exportCurrentSqlite } from '../../src/migration/database-transfer.js';
+import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { assertFiles, assertPersisted, captureDeclaredFiles, changeNodeNfoForNative, completeSnapshot, configureStorage, databaseFilename, fileSnapshot,
+  idKey, input, inputBytes, installStoppedExport, materialize, portAvailable, prepareMedia,
+  removeSyntheticPreparation, restoreDeclaredNfoInputs, sha, stoppedDatabase, unusedPort } from './fixtures/tv-library-exchange/scenario.js';
+import { startMediaProxy } from './fixtures/tv-library-exchange/media-proxy.js';
+
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
+const enabled = process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES
+  && process.env.MEDIAMANAGER_JELLYFIN_DLL;
+const resourceLease = enabled ? await acquireTestResource('native-media-5244') : null;
+
+function publicItem(item) {
+  const value = Object.fromEntries(['Name', 'Type', 'Path', 'Overview', 'IndexNumber', 'ParentIndexNumber',
+    'SeriesName', 'SeasonName', 'Container', 'MediaType', 'RunTimeTicks'].map(key => [key, item[key] ?? null]));
+  for (const key of ['Id', 'ParentId', 'SeriesId', 'SeasonId']) value[key] = item[key] ? idKey(item[key]) : null;
+  for (const key of ['Genres', 'Tags', 'ProviderIds']) value[key] = item[key] ?? null;
+  value.MediaStreams = (item.MediaStreams ?? []).map(stream => Object.fromEntries(
+    ['Index', 'Type', 'Codec', 'Width', 'Height', 'Channels', 'SampleRate'].map(key => [key, stream[key] ?? null])));
+  return value;
+}
+
+test('real TV scan, NFO edits and cold PostgreSQL reads survive complete SQLite exchange and actual Native continuation', {
+  skip: !enabled, timeout: 900000,
+}, async t => {
+  const destination = path.join(validationOutputRoot(), 'tv-library-exchange-' + randomUUID());
+  const output = await createPrivateFilterOutput(destination);
+  output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES);
+  const secrets = new Set([process.env.MEDIAMANAGER_TEST_POSTGRES].filter(Boolean));
+  await mkdir(output.root);
+  const root = await realpath(output.root), instanceRoot = path.join(root, 'instance');
+  const nativePort = await unusedPort(), nativeOrigin = `http://127.0.0.1:${nativePort}`;
+  const report = { schemaVersion: 1, inputSha256: sha(inputBytes), requests: [], snapshots: {}, nativeImportControls: [], cleanup: [], errors: [],
+    phaseAcceptance: false, releaseAcceptance: false, completeLibraryVerified: false, fullInstanceVerified: false,
+    scope: 'One ordinary physical Series, Specials and Season 1, three initial MKV Episodes and a fourth added by actual Native. Real Node scan, local NFO read/write, real probing, cold PG reads, public Shows order, complete 31-business/2-EF-table exchange and fresh-PG reimport. No remote provider, virtual season, mixed-version, all-type or production-scale claim.' };
+  let current, native, runtime, database, returnedDatabase, sqlite, proxy, failure, safeToRemove = true;
+  const controlReferences = [];
+  let token, nodeOrigin, media, nodeNetworkBefore, ids = {};
+  const request = async (origin, route, { method = 'GET', body } = {}) => {
+    const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(30000),
+      headers: { Authorization: `MediaBrowser Token="${token}"`, Accept: 'application/json',
+        ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    const bodyText = await response.text();
+    let bodyJson;
+    try { if (bodyText !== '') bodyJson = JSON.parse(bodyText); } catch { /* Retain the actual non-JSON response. */ }
+    const result = { status: response.status, contentType: response.headers.get('content-type'), bodyText,
+      ...(bodyJson === undefined ? {} : { bodyJson }) };
+    report.requests.push({ origin, route, method, ...(body === undefined ? {} : { body }), response: result });
+    return result;
+  };
+  const idleTasks = async origin => {
+    const deadline = Date.now() + 120000;
+    while (true) {
+      const response = await request(origin, '/ScheduledTasks'); assert.equal(response.status, 200);
+      if (response.bodyJson.every(task => !['Running', 'Cancelling'].includes(task.State))) return response.bodyJson;
+      assert.ok(Date.now() < deadline, 'Registered task executions must finish before the exchange boundary.');
+      await delay(100);
+    }
+  };
+  const scan = async origin => {
+    const before = (await idleTasks(origin)).find(task => task.Key === 'RefreshLibrary'); assert.ok(before);
+    assert.equal((await request(origin, '/ScheduledTasks/Running/' + before.Id, { method: 'POST' })).status, 204);
+    const deadline = Date.now() + 180000;
+    while (true) {
+      const response = await request(origin, '/ScheduledTasks/' + before.Id); assert.equal(response.status, 200);
+      const task = response.bodyJson;
+      if (task.State === 'Idle' && task.LastExecutionResult
+        && task.LastExecutionResult.StartTimeUtc !== before.LastExecutionResult?.StartTimeUtc) {
+        assert.equal(task.LastExecutionResult.Status, 'Completed'); return task;
+      }
+      assert.ok(Date.now() < deadline, 'The actual registered RefreshLibrary task must complete a new execution.');
+      await delay(100);
+    }
+  };
+  const quietNativeTasks = async () => {
+    for (const task of await idleTasks(nativeOrigin)) assert.equal((await request(nativeOrigin,
+      '/ScheduledTasks/' + task.Id + '/Triggers', { method: 'POST', body: [] })).status, 204);
+    const quiet = await request(nativeOrigin, '/ScheduledTasks'); assert.equal(quiet.status, 200);
+    assert.ok(quiet.bodyJson.length && quiet.bodyJson.every(task => task.Triggers.length === 0));
+  };
+  const enableNfoSavers = async origin => {
+    const before = await request(origin, '/Library/VirtualFolders'); assert.equal(before.status, 200);
+    const matches = before.bodyJson.filter(folder => folder.Name === input.libraryName && folder.Locations.includes(media.root));
+    assert.equal(matches.length, 1);
+    const folder = matches[0]; assert.deepEqual(folder.LibraryOptions.MetadataSavers, []);
+    assert.equal((await request(origin, '/Library/VirtualFolders/LibraryOptions', { method: 'POST',
+      body: { Id: folder.ItemId, LibraryOptions: { ...folder.LibraryOptions, SaveLocalMetadata: true, MetadataSavers: ['Nfo'] } } })).status, 204);
+    const after = await request(origin, '/Library/VirtualFolders'); assert.equal(after.status, 200);
+    const updated = after.bodyJson.find(value => idKey(value.ItemId) === idKey(folder.ItemId));
+    assert.deepEqual(updated.LibraryOptions.MetadataSavers, ['Nfo']);
+    return { before: folder, after: updated };
+  };
+  const stopNative = async label => {
+    if (!native) return;
+    const result = await native.stop(async () => (await request(nativeOrigin, '/System/Shutdown', { method: 'POST' })).status,
+      () => portAvailable(nativePort));
+    report.cleanup.push({ name: label, ...result }); safeToRemove &&= result.pidGone;
+    if (result.pidGone) native = undefined;
+    assert.ok(result.cleanShutdown && result.pidGone && result.portAvailable, label);
+  };
+  const restoreNodeNetworkInput = async () => {
+    if (nodeNetworkBefore === undefined) return;
+    const filename = path.join(instanceRoot, 'config/network.xml');
+    await writeFile(filename, nodeNetworkBefore);
+    assert.deepEqual(await readFile(filename), nodeNetworkBefore);
+    nodeNetworkBefore = undefined;
+  };
+  const stopNode = async label => {
+    if (!runtime) { await restoreNodeNetworkInput(); return; }
+    const listeners = runtime.networkHost.listeners;
+    await runtime.close();
+    assert.ok(listeners.every(listener => !listener.server.listening)); runtime = undefined;
+    const released = (await Promise.all(listeners.filter(listener => listener.bound).map(listener => portAvailable(listener.port)))).every(Boolean);
+    report.cleanup.push({ name: label, runtimeClosed: true, portAvailable: released,
+      listeners: listeners.map(({ scheme, address, port, server }) => ({ scheme, address, port, listening: server.listening })) });
+    assert.ok(released); await restoreNodeNetworkInput();
+  };
+  const startNode = async target => {
+    t.signal.throwIfAborted();
+    const filename = path.join(instanceRoot, 'config/network.xml');
+    nodeNetworkBefore = await readFile(filename);
+    const document = readConfigurationDocument(nodeNetworkBefore, 'network');
+    await writeConfigurationFile(filename, 'network', { ...document.value, InternalHttpPort: 0,
+      LocalNetworkAddresses: ['127.0.0.1'], AutoDiscovery: false, EnablePublishedServerUriByRequest: true }, { source: document.node });
+    (report.nodeNetworkInputs ??= []).push({ previousBase64: nodeNetworkBefore.toString('base64'),
+      selectedBase64: (await readFile(filename)).toString('base64'), scope: 'Node listener input only; exact prior bytes are restored before Native continuation.' });
+    runtime = await startProductionInstance({ environment: { ...process.env, MEDIAMANAGER_INSTANCE: instanceRoot,
+      MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES, MEDIAMANAGER_POSTGRES_SCHEMA: target.schemaName,
+      MEDIAMANAGER_STORAGE: path.join(root, 'storage.json') },
+      onError: error => report.errors.push({ name: error.name, code: error.code, message: error.message }) });
+    nodeOrigin = `http://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}`; await idleTasks(nodeOrigin);
+  };
+  const observe = async (origin, { continued = false, overviews = {} } = {}) => {
+    const entries = continued ? [...media.definitions, media.continued] : media.definitions;
+    const list = await request(origin, '/Items?Recursive=true&IncludeItemTypes=Series,Season,Episode&Fields=Path');
+    assert.equal(list.status, 200); assert.equal(list.bodyJson.Items.length, entries.length);
+    const values = {};
+    for (const entry of entries) {
+      const matches = list.bodyJson.Items.filter(item => item.Path === entry.path);
+      assert.equal(matches.length, 1, entry.key + ' must be resolved from its actual filesystem path exactly once.');
+      const id = idKey(matches[0].Id);
+      if (ids[entry.key]) assert.equal(id, ids[entry.key], 'A cold/runtime transfer must retain the item identity.');
+      else ids[entry.key] = id;
+    }
+    assert.equal(new Set(Object.values(ids)).size, entries.length);
+    for (const entry of entries) {
+      const detail = await request(origin, '/Items/' + ids[entry.key]); assert.equal(detail.status, 200);
+      const item = detail.bodyJson;
+      assert.equal(item.Type, entry.type); assert.equal(item.Name, entry.name); assert.equal(item.Path, entry.path);
+      assert.equal(item.Overview, overviews[entry.key] ?? entry.overview);
+      assert.deepEqual(item.Genres, [input.genre]); assert.deepEqual(item.Tags, [input.tag]);
+      if (entry.type === 'Series') assert.equal(item.ProviderIds.Tvdb, input.series.tvdb);
+      else {
+        assert.equal(idKey(item.ParentId), ids[entry.parent]); assert.equal(idKey(item.SeriesId), ids.series);
+        assert.equal(item.IndexNumber, entry.number); assert.equal(item.SeriesName, input.series.name);
+      }
+      if (entry.type === 'Episode') {
+        assert.equal(idKey(item.SeasonId), ids[entry.parent]); assert.equal(item.ParentIndexNumber, entry.seasonNumber);
+        assert.ok(item.RunTimeTicks > 0); assert.ok(item.Container);
+        const video = media.probe.streams.find(stream => stream.codec_type === 'video');
+        const audio = media.probe.streams.find(stream => stream.codec_type === 'audio');
+        assert.ok(item.MediaStreams.some(stream => stream.Type === 'Video' && stream.Codec === video.codec_name
+          && stream.Width === video.width && stream.Height === video.height));
+        assert.ok(item.MediaStreams.some(stream => stream.Type === 'Audio' && stream.Codec === audio.codec_name && stream.Channels === audio.channels));
+      }
+      values[entry.key] = publicItem(item);
+    }
+    const seasonIds = input.seasons.map(value => ids[value.key]);
+    const ordered = continued ? [ids.episode1, ids.episode2, ids.episode3] : [ids.episode1, ids.episode2];
+    const shows = {};
+    for (const [key, route, expected, count] of [
+      ['seasons', '/Shows/' + ids.series + '/Seasons', seasonIds, seasonIds.length],
+      ['specials', '/Shows/' + ids.series + '/Episodes?seasonId=' + ids.specials, [ids.special1], 1],
+      ['seasonById', '/Shows/' + ids.series + '/Episodes?seasonId=' + ids.season1, ordered, ordered.length],
+      ['seasonByNumber', '/Shows/' + ids.series + '/Episodes?season=1', ordered, ordered.length],
+      ['page', '/Shows/' + ids.series + '/Episodes?season=1&startIndex=1&limit=1', [ids.episode2], ordered.length],
+    ]) {
+      const result = await request(origin, route); assert.equal(result.status, 200);
+      const observed = { ids: result.bodyJson.Items.map(item => idKey(item.Id)), total: result.bodyJson.TotalRecordCount };
+      assert.deepEqual(observed, { ids: expected, total: count }); shows[key] = observed;
+    }
+    return { items: values, shows };
+  };
+  const editOverview = async (origin, key, overview) => {
+    const before = await request(origin, '/Items/' + ids[key]); assert.equal(before.status, 200);
+    assert.equal((await request(origin, '/Items/' + ids[key], { method: 'POST',
+      body: { ...before.bodyJson, Overview: overview } })).status, 204);
+  };
+  const withSqlite = async (filename, operation) => {
+    await stoppedDatabase(filename);
+    sqlite = new SqliteDatabase(filename, { readOnly: true, requireMigrationHistory: true });
+    try { return await operation(sqlite); } finally { sqlite.close(); sqlite = undefined; }
+  };
+  try {
+    current = await currentNativeReference(); token = current.accessToken; secrets.add(token); output.addSecret(token);
+    report.input = current.preparation;
+    report.sourceBindings = await current.sourceBindings(['Jellyfin.Api/Controllers/LibraryStructureController.cs',
+      'Jellyfin.Api/Controllers/ItemUpdateController.cs', 'Jellyfin.Api/Controllers/TvShowsController.cs',
+      'Emby.Server.Implementations/Library/LibraryManager.cs',
+      'Emby.Server.Implementations/Library/Resolvers/TV/SeriesResolver.cs',
+      'Emby.Server.Implementations/Library/Resolvers/TV/SeasonResolver.cs',
+      'Emby.Server.Implementations/Library/Resolvers/TV/EpisodeResolver.cs',
+      'MediaBrowser.Controller/Entities/TV/Series.cs', 'MediaBrowser.Controller/Entities/TV/Season.cs',
+      'MediaBrowser.Controller/Entities/TV/Episode.cs', 'MediaBrowser.Controller/IO/LocalMediaProxy.cs',
+      'MediaBrowser.Providers/Manager/MetadataService.cs', 'MediaBrowser.Providers/Manager/ProviderManager.cs',
+      'MediaBrowser.Providers/TV/SeriesMetadataService.cs',
+      'MediaBrowser.XbmcMetadata/Providers/BaseNfoProvider.cs', 'MediaBrowser.XbmcMetadata/Providers/EpisodeNfoProvider.cs',
+      'MediaBrowser.XbmcMetadata/Providers/SeasonNfoProvider.cs',
+      'MediaBrowser.XbmcMetadata/Parsers/BaseNfoParser.cs', 'MediaBrowser.XbmcMetadata/Parsers/SeriesNfoParser.cs',
+      'MediaBrowser.XbmcMetadata/Savers/EpisodeNfoSaver.cs',
+      'MediaBrowser.XbmcMetadata/Savers/SeasonNfoSaver.cs', 'MediaBrowser.XbmcMetadata/Savers/SeriesNfoSaver.cs']);
+    await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
+    await current.prepareClone(instanceRoot, nativePort);
+    report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
+    media = await prepareMedia(root, { signal: t.signal }); report.media = media;
+    proxy = await startMediaProxy({ root, media }); report.mediaProxy = proxy.report;
+    report.mountContract = await configureStorage(root);
+    t.signal.throwIfAborted();
+    native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-empty-library', origin: nativeOrigin });
+    await native.ready();
+    await quietNativeTasks();
+    const options = { Enabled: true, EnableRealtimeMonitor: false, EnableInternetProviders: false,
+      SaveLocalMetadata: true, MetadataSavers: [], AutomaticRefreshIntervalDays: 0, EnableEmbeddedEpisodeInfos: false,
+      EnableChapterImageExtraction: false, ExtractChapterImagesDuringLibraryScan: false,
+      EnableTrickplayImageExtraction: false, ExtractTrickplayImagesDuringLibraryScan: false,
+      SeasonZeroDisplayName: 'Specials', PathInfos: [{ Path: media.root }],
+      TypeOptions: ['Series', 'Season', 'Episode', 'Genre', 'MusicGenre', 'Studio', 'Person', 'Folder', 'CollectionFolder']
+        .map(Type => ({ Type, MetadataFetchers: [], MetadataFetcherOrder: [], ImageFetchers: [], ImageFetcherOrder: [],
+          ImageOptions: [], SimilarItemProviders: [], SimilarItemProviderOrder: [] })) };
+    assert.equal((await request(nativeOrigin, '/Library/VirtualFolders?name=' + encodeURIComponent(input.libraryName)
+      + '&collectionType=tvshows&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: options } })).status, 204);
+    report.nativeEmptyScan = await scan(nativeOrigin);
+    const empty = await request(nativeOrigin, '/Items?Recursive=true&IncludeItemTypes=Series,Season,Episode');
+    assert.equal(empty.status, 200); assert.deepEqual(empty.bodyJson.Items, []);
+    await stopNative('native-empty-library');
+    const baseline = path.join(root, 'empty-native.db');
+    await stoppedDatabase(databaseFilename(instanceRoot)); await copyFile(databaseFilename(instanceRoot), baseline);
+    report.instanceBinding = { serverId: current.preparation.nativeServerId, originIdentityDigest: sha(await readFile(baseline)) };
+    database = await createPostgresTestDatabase(null, 'tv_exchange');
+    await withSqlite(baseline, async source => {
+      report.snapshots.nativeEmpty = await completeSnapshot(source);
+      report.importReceipt = await transferDatabase(source, database,
+        { instanceBinding: report.instanceBinding, portableMountContract: report.mountContract });
+    });
+    report.snapshots.postgresEmpty = await completeSnapshot(database);
+    assert.deepEqual(report.snapshots.postgresEmpty, report.snapshots.nativeEmpty);
+    await materialize(media); report.filesInput = await assertFiles(media);
+    for (const saversBeforeImport of [false, true]) {
+      const label = saversBeforeImport ? 'native-import-savers-enabled' : 'native-import-savers-disabled';
+      const referenceRoot = path.join(root, label), reference = await currentNativeReference();
+      const owner = { reference, finished: false }; controlReferences.push(owner);
+      assert.equal(reference.preparation.buildIdentitySha256, current.preparation.buildIdentitySha256);
+      assert.equal(reference.accessToken, token);
+      const control = { label, referenceRoot, origin: nativeOrigin, saversBeforeImport, preparation: reference.preparation,
+        scope: 'Independent current Native first-import lifecycle control; no rows from this clone enter the exchange chain.' };
+      report.nativeImportControls.push(control);
+      await cp(reference.sourceRoot, referenceRoot, { recursive: true, force: false, errorOnExist: true });
+      control.clone = { sourceRoot: reference.sourceRoot, sourceDatabase: await fileSnapshot(reference.sourceDatabase),
+        copiedDatabase: await fileSnapshot(databaseFilename(referenceRoot)) };
+      assert.deepEqual(control.clone.copiedDatabase, control.clone.sourceDatabase);
+      await reference.prepareClone(referenceRoot, nativePort);
+      control.syntheticPreparation = removeSyntheticPreparation(referenceRoot);
+      native = reference.start({ referenceRoot, outputRoot: root, label, origin: nativeOrigin });
+      await native.ready(); await quietNativeTasks();
+      assert.equal((await request(nativeOrigin, '/Library/VirtualFolders?name=' + encodeURIComponent(input.libraryName)
+        + '&collectionType=tvshows&refreshLibrary=false', { method: 'POST', body: { LibraryOptions: options } })).status, 204);
+      if (saversBeforeImport) control.saverConfiguration = await enableNfoSavers(nativeOrigin);
+      control.scan = await scan(nativeOrigin);
+      control.filesBeforeReads = await captureDeclaredFiles(media);
+      if (!saversBeforeImport) {
+        control.observed = await observe(nativeOrigin);
+      } else {
+        const list = await request(nativeOrigin, '/Items?Recursive=true&IncludeItemTypes=Series,Season,Episode&Fields=Path');
+        assert.equal(list.status, 200); control.items = {};
+        for (const entry of media.definitions) {
+          const matches = list.bodyJson.Items.filter(item => item.Path === entry.path);
+          assert.equal(matches.length, 1);
+          const detail = await request(nativeOrigin, '/Items/' + matches[0].Id); assert.equal(detail.status, 200);
+          control.items[entry.key] = detail.bodyJson;
+        }
+      }
+      await stopNative(label);
+      control.files = saversBeforeImport ? await captureDeclaredFiles(media) : await assertFiles(media);
+      if (saversBeforeImport) {
+        control.sidecarChanges = control.files.map((file, index) => ({ key: file.key,
+          changed: file.nfo.sha256 !== report.filesInput[index].nfo.sha256,
+          declaredInput: report.filesInput[index].nfo.sha256, observed: file.nfo.sha256 }));
+      } else assert.deepEqual(control.files, report.filesInput,
+        'Reading declared local metadata with savers disabled retains its complete original bytes.');
+      await reference.finish(); owner.finished = true; control.inputsUnchanged = true;
+    }
+    report.controlNfoRestoration = await restoreDeclaredNfoInputs(media, report.filesInput);
+    assert.deepEqual(await assertFiles(media), report.filesInput);
+    report.mainEmptyAfterControls = await fileSnapshot(databaseFilename(instanceRoot));
+    assert.equal(report.mainEmptyAfterControls.sha256, report.instanceBinding.originIdentityDigest,
+      'Independent Native controls cannot change the stopped empty instance used by the exchange.');
+    await startNode(database);
+    report.nodeScan = await scan(nodeOrigin);
+    report.nodeFilesBeforeReads = await captureDeclaredFiles(media);
+    report.nodeScanned = await observe(nodeOrigin);
+    assert.deepEqual(report.nodeScanned, report.nativeImportControls[0].observed,
+      'The same declared files and saver-disabled Native/Node first scans must return the same public TV graph.');
+    report.nodeScannedFiles = await assertFiles(media);
+    assert.deepEqual(report.nodeScannedFiles, report.filesInput);
+    report.nodeRowsScanned = await assertPersisted(database, media, ids);
+    report.nodeSaverConfiguration = await enableNfoSavers(nodeOrigin);
+    await editOverview(nodeOrigin, 'episode1', input.nodeOverview);
+    const nodeOverviews = { episode1: input.nodeOverview };
+    report.nodeEdited = await observe(nodeOrigin, { overviews: nodeOverviews });
+    await stopNode('node-before-cold-start');
+    report.nodeFiles = await assertFiles(media, { overviews: nodeOverviews });
+    const schema = database.schemaName; await database.close();
+    database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema });
+    await startNode(database);
+    report.nodeCold = await observe(nodeOrigin, { overviews: nodeOverviews });
+    assert.deepEqual(report.nodeCold, report.nodeEdited, 'A full PG connection and runtime reopen must retain the public TV result.');
+    await stopNode('node-cold-start');
+    report.nodeRows = await assertPersisted(database, media, ids);
+    report.snapshots.nodeClosed = await completeSnapshot(database);
+    const exported = path.join(root, 'node-export.db');
+    report.exportReceipt = await exportCurrentSqlite(database, exported); assert.equal(report.exportReceipt.verified, true);
+    await withSqlite(exported, async source => {
+      report.snapshots.nodeExport = await completeSnapshot(source);
+      assert.deepEqual(report.snapshots.nodeExport, report.snapshots.nodeClosed);
+      assert.deepEqual(await assertPersisted(source, media, ids), report.nodeRows);
+    });
+    await installStoppedExport(root, instanceRoot, exported);
+    t.signal.throwIfAborted();
+    native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-continuation', origin: nativeOrigin });
+    await native.ready(); await idleTasks(nativeOrigin);
+    report.nativeImported = await observe(nativeOrigin, { overviews: nodeOverviews });
+    assert.deepEqual(report.nativeImported, report.nodeCold, 'The actual Native consumer must read the Node-created TV graph and public probe metadata.');
+    report.nativeImportedFiles = await assertFiles(media, { overviews: nodeOverviews });
+    report.declaredNfoEdit = await changeNodeNfoForNative(media);
+    await materialize(media, true);
+    report.nativeScan = await scan(nativeOrigin);
+    const nativeReadOverviews = { episode1: input.nativeReadOverview };
+    report.nativeScanned = await observe(nativeOrigin, { continued: true, overviews: nativeReadOverviews });
+    await editOverview(nativeOrigin, 'season1', input.nativeSeasonOverview);
+    const returnedOverviews = { ...nativeReadOverviews, season1: input.nativeSeasonOverview };
+    report.nativeContinued = await observe(nativeOrigin, { continued: true, overviews: returnedOverviews });
+    assert.ok(proxy.report.requests.some(value => value.filename === media.continued.path
+      && value.method === 'GET' && [200, 206].includes(value.status)), 'Native must actually read the newly added media source.');
+    await stopNative('native-continuation');
+    report.nativeFiles = await assertFiles(media, { continued: true, overviews: returnedOverviews });
+    const returned = path.join(root, 'native-returned.db');
+    await stoppedDatabase(databaseFilename(instanceRoot)); await copyFile(databaseFilename(instanceRoot), returned);
+    returnedDatabase = await createPostgresTestDatabase(null, 'tv_returned');
+    await withSqlite(returned, async source => {
+      report.snapshots.nativeReturned = await completeSnapshot(source);
+      report.nativeRows = await assertPersisted(source, media, ids, true);
+      report.reimportReceipt = await transferDatabase(source, returnedDatabase,
+        { instanceBinding: report.instanceBinding, portableMountContract: report.mountContract });
+    });
+    report.snapshots.freshPostgres = await completeSnapshot(returnedDatabase);
+    assert.deepEqual(report.snapshots.freshPostgres, report.snapshots.nativeReturned,
+      'Every business table, relationship order, EF history and identity sequence must survive the fresh-PG import.');
+    assert.deepEqual(await assertPersisted(returnedDatabase, media, ids, true), report.nativeRows);
+    await startNode(returnedDatabase);
+    report.freshNode = await observe(nodeOrigin, { continued: true, overviews: returnedOverviews });
+    assert.deepEqual(report.freshNode, report.nativeContinued, 'A fresh Node runtime must read Native-created Episode and Season edits.');
+    await stopNode('node-after-native-continuation');
+    report.freshNodeFiles = await assertFiles(media, { continued: true, overviews: returnedOverviews });
+    assert.deepEqual(report.freshNodeFiles, report.nativeFiles, 'Reading the returned TV graph must retain all media and NFO bytes.');
+    assert.deepEqual(report.errors, []); assert.deepEqual(proxy.report.errors, []);
+    report.identities = ids;
+  } catch (error) { failure = error; report.failure = { name: error.name, message: error.message, stack: error.stack }; }
+  finally {
+    const attempt = async operation => { try { await operation(); } catch (error) {
+      failure ??= error; report.cleanup.push({ error: { name: error.name, code: error.code, message: error.message } });
+    } };
+    await attempt(() => stopNative('native-finally'));
+    await attempt(() => stopNode('node-finally'));
+    await attempt(() => { sqlite?.close(); sqlite = undefined; });
+    if (!runtime) {
+      await attempt(async () => { await dropPostgresTestDatabase(returnedDatabase); report.cleanup.push({ name: 'returned-postgres', dropped: Boolean(returnedDatabase) }); });
+      await attempt(async () => { await dropPostgresTestDatabase(database); report.cleanup.push({ name: 'initial-postgres', dropped: Boolean(database) }); });
+    } else {
+      safeToRemove = false;
+      await attempt(() => returnedDatabase?.close()); await attempt(() => database?.close());
+      report.cleanup.push({ name: 'postgres', dropped: false, reason: 'The owned runtime did not confirm closure.' });
+    }
+    await attempt(async () => {
+      if (!proxy) return;
+      await proxy.close();
+      const released = await portAvailable(5244);
+      report.cleanup.push({ name: 'native-media-proxy', closed: proxy.report.closed, portAvailable: released });
+      assert.ok(proxy.report.closed && released); proxy = undefined;
+    });
+    await attempt(() => current?.finish());
+    for (const owner of controlReferences) if (!owner.finished) await attempt(async () => {
+      await owner.reference.finish(); owner.finished = true;
+    });
+    report.passed = !failure;
+    await writeFile(path.join(root, 'report.json'), filterEvidenceJson(report, secrets));
+    await writeFile(path.join(root, 'provenance.json'), filterEvidenceJson({ inputSha256: sha(inputBytes),
+      nativeInput: current?.preparation, sourceBindings: report.sourceBindings,
+      actualNativeHttp: Boolean(report.nativeImported && report.nativeContinued),
+      productionPostgresRuntime: Boolean(report.nodeScan && report.nodeCold && report.freshNode),
+      completeLibraryVerified: false, fullInstanceVerified: false, phaseAcceptance: false, releaseAcceptance: false }, secrets));
+    if (native || runtime || proxy) safeToRemove = false;
+    if (safeToRemove) await attempt(() => output.publishAndClose());
+    else {
+      await mkdir(destination);
+      await writeFile(path.join(destination, 'report.json'), filterEvidenceJson({ ...report, privateRootRetained: true }, secrets));
+      failure ??= new Error('An owned TV runtime did not release its private exchange root.');
+    }
+  }
+  if (failure) throw output.publicError(failure);
+});
+
+// Release after all test hooks, streams, processes and resource postconditions.
+after(async () => { await resourceLease?.release(); });

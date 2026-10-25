@@ -1,0 +1,168 @@
+[
+  {
+    "name": "first-dynamic",
+    "first": true
+  },
+  {
+    "name": "first-empty",
+    "first": true,
+    "a": "none",
+    "b": "none"
+  },
+  {
+    "name": "existing-default",
+    "existing": true,
+    "mode": "Default"
+  },
+  {
+    "name": "nonfirst-default",
+    "mode": "Default"
+  },
+  {
+    "name": "existing-full-retain",
+    "existing": true
+  },
+  {
+    "name": "existing-full-replace",
+    "existing": true,
+    "replace": true
+  },
+  {
+    "name": "empty-then-success",
+    "a": "none"
+  },
+  {
+    "name": "failure-then-success",
+    "a": "throw"
+  },
+  {
+    "name": "provider-cancel",
+    "a": "cancel"
+  },
+  {
+    "name": "cancel-before-save",
+    "a": "cancel-return"
+  },
+  {
+    "name": "cancel-before-replace",
+    "existing": true,
+    "replace": true,
+    "a": "cancel-return"
+  },
+  {
+    "name": "save-failure",
+    "saveFailure": true
+  },
+  {
+    "name": "delete-failure",
+    "existing": true,
+    "replace": true,
+    "deleteFailure": true
+  },
+  {
+    "name": "primary-disabled",
+    "limit": 0
+  },
+  {
+    "name": "dynamic-ignores-minwidth",
+    "minWidth": 10000
+  },
+  {
+    "name": "locked-default",
+    "locked": true,
+    "mode": "Default",
+    "first": true
+  },
+  {
+    "name": "locked-full",
+    "locked": true
+  },
+  {
+    "name": "extra-dynamic",
+    "extra": true,
+    "providers": [
+      "R",
+      "A"
+    ]
+  },
+  {
+    "name": "extra-remote",
+    "extra": true,
+    "providers": [
+      "R"
+    ]
+  },
+  {
+    "name": "disabled-dynamic",
+    "enabled": [
+      "B"
+    ]
+  },
+  {
+    "name": "global-disabled",
+    "noType": true,
+    "disabled": [
+      "A"
+    ]
+  },
+  {
+    "name": "configured-order",
+    "noType": true,
+    "order": [
+      "B",
+      "A"
+    ]
+  },
+  {
+    "name": "search-first",
+    "search": "B"
+  },
+  {
+    "name": "remote-first",
+    "providers": [
+      "R",
+      "A"
+    ],
+    "existing": true,
+    "replace": true
+  },
+  {
+    "name": "dynamic-first",
+    "providers": [
+      "A",
+      "R"
+    ],
+    "existing": true,
+    "replace": true
+  },
+  {
+    "name": "empty-dynamic-remote",
+    "providers": [
+      "A",
+      "R"
+    ],
+    "a": "none"
+  },
+  {
+    "name": "local-save",
+    "local": true
+  },
+  {
+    "name": "cancelled-empty-response",
+    "providers": [
+      "A"
+    ],
+    "a": "cancel-empty"
+  },
+  {
+    "name": "cancelled-ordinary-failure",
+    "providers": [
+      "A"
+    ],
+    "a": "cancel-throw"
+  },
+  {
+    "name": "cancelled-failure-then-save",
+    "a": "cancel-throw"
+  }
+]

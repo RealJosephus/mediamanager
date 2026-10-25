@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-03T14:39:50.205Z",
+  "sourceBoundary": "Actual reference JsonDefaults DateTime and SyncPlay DTO binding: 53 date inputs and 61 DTO shapes. Native HTTP, scheduling and other native timezone environments are not recorded here.",
+  "timezone": {
+    "nodeTimezone": "Asia/Taipei",
+    "native": {
+      "type": "environment",
+      "runtime": ".NET 10.0.12",
+      "operatingSystem": "Microsoft Windows 10.0.26300",
+      "timezoneId": "Taipei Standard Time",
+      "baseUtcOffset": "08:00:00",
+      "pid": 29432,
+      "assemblies": [
+        {
+          "name": "Jellyfin.Extensions",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Extensions.dll",
+          "sha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23"
+        },
+        {
+          "name": "MediaBrowser.Model",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\MediaBrowser.Model.dll",
+          "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+        },
+        {
+          "name": "Jellyfin.Api",
+          "path": "D:\\mediamanager\\.agent-temp\\reference\\jellyfin-20261003\\source\\Jellyfin.Server\\bin\\Release\\net10.0\\Jellyfin.Api.dll",
+          "sha256": "a195ae5f016a33dd9f32a7122bf81477536525e9b628e4b649ab51c2894be9e2"
+        }
+      ]
+    }
+  },
+  "reference": {
+    "source": "D:\\jellyfin",
+    "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+    "verifiedFiles": 2620,
+    "contentUnchanged": true,
+    "statusUnchanged": true,
+    "fileDiscoveryUnchanged": true,
+    "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+  },
+  "identity": {
+    "manifestSha256": "779885e632e0d6614ca883191d883d6a11e1d02e6e8b2f849370469e227e57eb",
+    "extensionsSha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23",
+    "modelSha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737",
+    "apiSha256": "a195ae5f016a33dd9f32a7122bf81477536525e9b628e4b649ab51c2894be9e2"
+  },
+  "node": "v24.16.0",
+  "dotnetExecutable": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+  "dotnetVersion": "10.0.401",
+  "recorderSha256": "3f0037bf52aec94d59cce656dc14805872cb305e5f86ded10538078401307da0",
+  "oracleSourceSha256": "a31b44e83294b97e96f5c6df8535753d5975647725c84429390ce6e6504f4ebd",
+  "oracleProjectSha256": "cdd6f0b4e4b9c72196431282fc7f42508e52e0f6a10b88a948a157bbdabd220b",
+  "oracleDllSha256": "5e069e8dd513e0b66a0ad3e7449aa737b4e68f924e63e92e82d0483f1907fbee",
+  "bindingCasesSha256": "e446d9d6d0cd11f624ec43ebc28664d31e932067bbe1ac9dd8b9ca6e0850395e",
+  "syncplayInputSha256": "b0a830b9028c5bcefceb97b1a5f3accf2cac4e9218d9e2f829070dd6120c8daf",
+  "fixtureSha256": "96919167f4d75563645b9224344210ee4492da5f40a9467132d4f611d1c9cb7b",
+  "nativeStdoutSha256": "b29588ea0f0b09dcb56de5b35c5defa4d79f20afd7f3f15e9067b8f75f6cabcd",
+  "sourceUnchanged": true,
+  "inputAssembliesUnchanged": true,
+  "phaseAcceptance": false
+}

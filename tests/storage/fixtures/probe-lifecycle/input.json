@@ -1,0 +1,526 @@
+[
+  {
+    "name": "unchanged",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    }
+  },
+  {
+    "name": "mtime-equal",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:00.0000000Z"
+  },
+  {
+    "name": "mtime-1sec",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:01.0000000Z"
+  },
+  {
+    "name": "mtime-1sec-1tick",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:00.9999999Z"
+  },
+  {
+    "name": "mtime-1sec+1tick",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:01.0000001Z"
+  },
+  {
+    "name": "mtime-earlier",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-25T23:59:58.9999999Z"
+  },
+  {
+    "name": "missing-6",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    }
+  },
+  {
+    "name": "missing-7",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 0,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    }
+  },
+  {
+    "name": "missing-8",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "TotalBitrate": 0
+    }
+  },
+  {
+    "name": "missing-9",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "IsVirtualItem": true
+    }
+  },
+  {
+    "name": "missing-10",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "IsPlaceHolder": true
+    }
+  },
+  {
+    "name": "missing-11",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "SourceType": "Channel",
+      "Tags": [
+        "LiVeStReAm"
+      ]
+    }
+  },
+  {
+    "name": "missing-12",
+    "item": {
+      "Type": "Movie",
+      "Path": "https://invalid.example/sample.mkv",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    }
+  },
+  {
+    "name": "remote-enabled",
+    "item": {
+      "Type": "Movie",
+      "Path": "https://invalid.example/sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "remote": true
+  },
+  {
+    "name": "dvd-mtime",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "Dvd",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:02Z"
+  },
+  {
+    "name": "iso-mtime",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "Iso",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "modified": "2026-09-26T00:00:02Z"
+  },
+  {
+    "name": "subtitle-new",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.srt"
+    ]
+  },
+  {
+    "name": "subtitle-known",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [
+        "Z:\\media\\sample.en.srt"
+      ],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.srt"
+    ]
+  },
+  {
+    "name": "subtitle-deleted",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [
+        "Z:\\media\\sample.en.srt"
+      ],
+      "AudioFiles": []
+    }
+  },
+  {
+    "name": "subtitle-case-change",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [
+        "Z:\\media\\sample.en.srt"
+      ],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.EN.srt"
+    ]
+  },
+  {
+    "name": "subtitle-case-duplicate-first",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [
+        "Z:\\media\\sample.en.srt"
+      ],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.srt",
+      "Z:\\media\\sample.EN.srt"
+    ]
+  },
+  {
+    "name": "subtitle-case-duplicate-last",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [
+        "Z:\\media\\sample.en.srt"
+      ],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.EN.srt",
+      "Z:\\media\\sample.en.srt"
+    ]
+  },
+  {
+    "name": "subtitle-internal",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "internalFiles": [
+      "Z:\\metadata\\sample.en.srt"
+    ]
+  },
+  {
+    "name": "subtitle-other-stem",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample2.srt",
+      "Z:\\media\\else.srt"
+    ]
+  },
+  {
+    "name": "subtitle-idx-no-sub",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.idx"
+    ]
+  },
+  {
+    "name": "subtitle-idx-pair",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.idx",
+      "Z:\\media\\sample.sub"
+    ]
+  },
+  {
+    "name": "subtitle-placeholder",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "IsPlaceHolder": true
+    },
+    "files": [
+      "Z:\\media\\sample.srt"
+    ]
+  },
+  {
+    "name": "subtitle-channel",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [],
+      "SourceType": "Channel"
+    },
+    "files": [
+      "Z:\\media\\sample.srt"
+    ]
+  },
+  {
+    "name": "audio-new",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.wav"
+    ]
+  },
+  {
+    "name": "audio-known",
+    "item": {
+      "Type": "Movie",
+      "Path": "Z:\\media\\sample.mkv",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "VideoType": "VideoFile",
+      "SubtitleFiles": [],
+      "AudioFiles": [
+        "Z:\\media\\sample.en.wav"
+      ]
+    },
+    "files": [
+      "Z:\\media\\sample.en.wav"
+    ]
+  },
+  {
+    "name": "audio-unchanged",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": []
+    },
+    "files": []
+  },
+  {
+    "name": "audio-missing",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": null,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": []
+    },
+    "files": []
+  },
+  {
+    "name": "lyric-new",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.lrc"
+    ]
+  },
+  {
+    "name": "lyric-known",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": [
+        "Z:\\media\\sample.en.lrc"
+      ]
+    },
+    "files": [
+      "Z:\\media\\sample.en.lrc"
+    ]
+  },
+  {
+    "name": "lyric-multiple",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.en.lrc",
+      "Z:\\media\\sample.elrc",
+      "Z:\\media\\sample.txt",
+      "Z:\\media\\sample.srt"
+    ]
+  },
+  {
+    "name": "lyric-removed",
+    "item": {
+      "Type": "Audio",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": [
+        "Z:\\media\\sample.lrc"
+      ]
+    },
+    "files": []
+  },
+  {
+    "name": "book-lyric",
+    "item": {
+      "Type": "AudioBook",
+      "Path": "Z:\\media\\sample.wav",
+      "RunTimeTicks": 1,
+      "DateModified": "2026-09-26T00:00:00.0000000Z",
+      "LyricFiles": []
+    },
+    "files": [
+      "Z:\\media\\sample.lrc"
+    ]
+  }
+]

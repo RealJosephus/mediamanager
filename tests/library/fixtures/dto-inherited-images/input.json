@@ -1,0 +1,1950 @@
+{
+  "cases": [
+    {
+      "name": "parent images",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "own logo",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T01:00:00.0000000Z",
+              "hash": "own-Logo"
+            }
+          ]
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "own thumb",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T01:00:00.0000000Z",
+              "hash": "own-Thumb"
+            }
+          ]
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "own backdrop",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent",
+          "images": [
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T01:00:00.0000000Z",
+              "hash": "own-Backdrop"
+            }
+          ]
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "own logo and thumb stop traversal",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T01:00:00.0000000Z",
+              "hash": "own-Logo"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T01:00:00.0000000Z",
+              "hash": "own-Thumb"
+            }
+          ]
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "only backdrops do not admit traversal",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "types": [
+          "Backdrop"
+        ]
+      }
+    },
+    {
+      "name": "only logo",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "types": [
+          "Logo"
+        ]
+      }
+    },
+    {
+      "name": "only thumb",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "types": [
+          "Thumb"
+        ]
+      }
+    },
+    {
+      "name": "images disabled",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "enableImages": false
+      }
+    },
+    {
+      "name": "zero limit",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "limit": 0
+      }
+    },
+    {
+      "name": "one backdrop",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "limit": 1
+      }
+    },
+    {
+      "name": "two backdrops",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "limit": 2
+      }
+    },
+    {
+      "name": "art disabled",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:03.1234567Z",
+              "hash": "blur-parent-3"
+            }
+          ]
+        },
+        {
+          "key": "root",
+          "Type": "CollectionFolder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-root-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-root-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-root-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "options": {
+        "types": [
+          "Art"
+        ]
+      }
+    },
+    {
+      "name": "collection thumb excluded",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "library"
+        },
+        {
+          "key": "library",
+          "Type": "CollectionFolder",
+          "Name": "library",
+          "Path": "Z:\\ImageContracts\\library",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-library-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-library-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-library-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "user view thumb excluded",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "view"
+        },
+        {
+          "key": "view",
+          "Type": "UserView",
+          "Name": "view",
+          "Path": "Z:\\ImageContracts\\view",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-view-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-view-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-view-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "series replaces season thumb",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Episode",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "physical",
+          "season": "season",
+          "series": "series"
+        },
+        {
+          "key": "season",
+          "Type": "Season",
+          "Name": "season",
+          "Path": "Z:\\ImageContracts\\season",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-season-0"
+            },
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-season-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-season-2"
+            }
+          ],
+          "series": "series"
+        },
+        {
+          "key": "series",
+          "Type": "Series",
+          "Name": "series",
+          "Path": "Z:\\ImageContracts\\series",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-series-0"
+            },
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-series-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-series-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "Folder",
+          "Name": "physical",
+          "Path": "Z:\\ImageContracts\\physical",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "own episode thumb remains",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Episode",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "physical",
+          "season": "season",
+          "series": "series",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T02:00:00.0000000Z",
+              "hash": "own-thumb"
+            }
+          ]
+        },
+        {
+          "key": "season",
+          "Type": "Season",
+          "Name": "season",
+          "Path": "Z:\\ImageContracts\\season",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-season-0"
+            },
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-season-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-season-2"
+            }
+          ],
+          "series": "series"
+        },
+        {
+          "key": "series",
+          "Type": "Series",
+          "Name": "series",
+          "Path": "Z:\\ImageContracts\\series",
+          "images": [
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-series-0"
+            },
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-series-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-series-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "Folder",
+          "Name": "physical",
+          "Path": "Z:\\ImageContracts\\physical",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "season display series",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Season",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "physical",
+          "series": "series"
+        },
+        {
+          "key": "series",
+          "Type": "Series",
+          "Name": "series",
+          "Path": "Z:\\ImageContracts\\series",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-series-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-series-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-series-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "Folder",
+          "Name": "physical",
+          "Path": "Z:\\ImageContracts\\physical",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "owner fallback",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Audio",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "owner": "owner"
+        },
+        {
+          "key": "owner",
+          "Type": "Movie",
+          "Name": "owner",
+          "Path": "Z:\\ImageContracts\\owner",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-owner-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-owner-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-owner-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "explicit DTO owner",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Video",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target"
+        },
+        {
+          "key": "owner",
+          "Type": "Movie",
+          "Name": "owner",
+          "Path": "Z:\\ImageContracts\\owner",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-owner-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-owner-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-owner-2"
+            }
+          ]
+        }
+      ],
+      "target": "target",
+      "owner": "owner"
+    },
+    {
+      "name": "Person does not inherit",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Person",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "BoxSet does not inherit",
+      "items": [
+        {
+          "key": "target",
+          "Type": "BoxSet",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "PhotoAlbum does not inherit",
+      "items": [
+        {
+          "key": "target",
+          "Type": "PhotoAlbum",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "UserRootFolder does not inherit",
+      "items": [
+        {
+          "key": "target",
+          "Type": "UserRootFolder",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "aggregate folder inherits",
+      "items": [
+        {
+          "key": "target",
+          "Type": "AggregateFolder",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "parent"
+        },
+        {
+          "key": "parent",
+          "Type": "Folder",
+          "Name": "parent",
+          "Path": "Z:\\ImageContracts\\parent",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-parent-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-parent-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-parent-2"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "playlist view display primary",
+      "items": [
+        {
+          "key": "target",
+          "Type": "UserView",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Primary",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-target-0"
+            }
+          ],
+          "viewType": "playlists",
+          "displayParent": "display"
+        },
+        {
+          "key": "display",
+          "Type": "PlaylistsFolder",
+          "Name": "display",
+          "Path": "Z:\\ImageContracts\\display",
+          "images": [
+            {
+              "type": "Primary",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-display-0"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "other view keeps primary",
+      "items": [
+        {
+          "key": "target",
+          "Type": "UserView",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Primary",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-target-0"
+            }
+          ],
+          "viewType": "movies",
+          "displayParent": "display"
+        },
+        {
+          "key": "display",
+          "Type": "Folder",
+          "Name": "display",
+          "Path": "Z:\\ImageContracts\\display",
+          "images": [
+            {
+              "type": "Primary",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-display-0"
+            }
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "album physical parent artist",
+      "items": [
+        {
+          "key": "root",
+          "Type": "Folder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root"
+        },
+        {
+          "key": "metadata",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\metadata",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-metadata-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-metadata-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-metadata-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\physical",
+          "parent": "root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        },
+        {
+          "key": "target",
+          "Type": "MusicAlbum",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "physical",
+          "AlbumArtists": [
+            "Album Artist"
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "album scalar name selector prefers physical",
+      "items": [
+        {
+          "key": "root",
+          "Type": "Folder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root"
+        },
+        {
+          "key": "metadata",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\metadata",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-metadata-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-metadata-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-metadata-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\physical",
+          "parent": "root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        },
+        {
+          "key": "target",
+          "Type": "MusicAlbum",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "AlbumArtists": [
+            "Album Artist"
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "album batch name overrides physical parent",
+      "items": [
+        {
+          "key": "root",
+          "Type": "Folder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root"
+        },
+        {
+          "key": "metadata",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\metadata",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-metadata-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-metadata-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-metadata-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\physical",
+          "parent": "root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        },
+        {
+          "key": "target",
+          "Type": "MusicAlbum",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "physical",
+          "AlbumArtists": [
+            "Album Artist"
+          ]
+        }
+      ],
+      "target": "target",
+      "batch": true
+    },
+    {
+      "name": "audio album artist images",
+      "items": [
+        {
+          "key": "root",
+          "Type": "Folder",
+          "Name": "root",
+          "Path": "Z:\\ImageContracts\\root"
+        },
+        {
+          "key": "metadata",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\metadata",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-metadata-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-metadata-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-metadata-2"
+            }
+          ]
+        },
+        {
+          "key": "physical",
+          "Type": "MusicArtist",
+          "Name": "Album Artist",
+          "Path": "Z:\\ImageContracts\\physical",
+          "parent": "root",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-physical-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-physical-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-physical-2"
+            }
+          ]
+        },
+        {
+          "key": "album",
+          "Type": "MusicAlbum",
+          "Name": "album",
+          "Path": "Z:\\ImageContracts\\album",
+          "parent": "physical",
+          "images": [
+            {
+              "type": "Primary",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-album-0"
+            }
+          ],
+          "AlbumArtists": [
+            "Album Artist"
+          ]
+        },
+        {
+          "key": "target",
+          "Type": "Audio",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target",
+          "parent": "album",
+          "AlbumArtists": [
+            "Album Artist"
+          ]
+        }
+      ],
+      "target": "target"
+    },
+    {
+      "name": "collection folder fallback",
+      "items": [
+        {
+          "key": "userRoot",
+          "Type": "UserRootFolder",
+          "Name": "User root",
+          "Path": "Z:\\ImageContracts\\user-root"
+        },
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "target",
+          "Path": "Z:\\ImageContracts\\target"
+        },
+        {
+          "key": "library",
+          "Type": "CollectionFolder",
+          "Name": "library",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T00:00:00.1234567Z",
+              "hash": "blur-library-0"
+            },
+            {
+              "type": "Thumb",
+              "stamp": "2026-10-01T00:00:01.1234567Z",
+              "hash": "blur-library-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T00:00:02.1234567Z",
+              "hash": "blur-library-2"
+            }
+          ],
+          "parent": "userRoot"
+        }
+      ],
+      "target": "target",
+      "collectionFolders": [
+        "library"
+      ]
+    },
+    {
+      "name": "own backdrop limit",
+      "target": "target",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "Target",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T01:00:00.1234567Z",
+              "hash": "hash-0"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T01:00:01.1234567Z",
+              "hash": "hash-1"
+            },
+            {
+              "type": "Backdrop",
+              "stamp": "2026-10-01T01:00:02.1234567Z",
+              "hash": "hash-2"
+            }
+          ]
+        }
+      ],
+      "options": {
+        "limit": 1
+      }
+    },
+    {
+      "name": "duplicate own logo retains native last tag",
+      "target": "target",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "Target",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T01:00:00.1234567Z",
+              "hash": "hash-0"
+            },
+            {
+              "type": "Logo",
+              "stamp": "2026-10-01T01:00:01.1234567Z",
+              "hash": "hash-1"
+            }
+          ]
+        }
+      ],
+      "options": {}
+    },
+    {
+      "name": "Screenshot is single-image while Chapter is excluded",
+      "target": "target",
+      "items": [
+        {
+          "key": "target",
+          "Type": "Movie",
+          "Name": "Target",
+          "Path": "Z:\\ImageContracts\\target",
+          "images": [
+            {
+              "type": "Screenshot",
+              "stamp": "2026-10-01T01:00:00.1234567Z",
+              "hash": "hash-0"
+            },
+            {
+              "type": "Chapter",
+              "stamp": "2026-10-01T01:00:01.1234567Z",
+              "hash": "hash-1"
+            }
+          ]
+        }
+      ],
+      "options": {}
+    }
+  ]
+}

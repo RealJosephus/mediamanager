@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T16:57:26.576Z",
+  "project": "D:\\mediamanager\\tests\\library\\fixtures\\folder-validation-progress\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261015-node-plugins-acceptance/nfo-reader-native-2/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "a43fa24c44677e579fcec79d637789b9f36633d02e5434e76a0e03fa13027767"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager\\tests\\library\\fixtures\\folder-validation-progress\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 453,
+      "sha256": "56e42cc99a5305248cb523db75850ab8bce9868f3a283101fa0a208332829234"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\library\\fixtures\\folder-validation-progress\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 5915,
+      "sha256": "4ef56f222f174548b6014e221727a62f7152703c20f9f904ea65587f6bfb535e"
+    }
+  ],
+  "sourceFilesSha256": "ac13009d7a9aa76893b185173b80b9e9e297fd3515ca71d31585b66cb8a37b6a",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager/tests/library/fixtures/folder-validation-progress/input.json",
+      "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 382,
+      "sha256": "33f38a69cfdbbef0a63b25fe453ee89cc16f580a09b7884c256ba9056c2c0a64"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 6000,
+      "sha256": "da9d6eecf50ef3dea2475fd2870bccbf3fe1bcf7b1933bc8d6024ea62a9c1233"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-release-validation\\folder-progress-native-7\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 19456,
+    "sha256": "936f08ee2eb965ec61fd5f87fe16e3aa407f41ba3858a7652fd3b14b837f8deb"
+  },
+  "passed": true
+}

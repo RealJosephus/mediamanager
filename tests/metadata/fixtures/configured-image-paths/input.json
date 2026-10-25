@@ -1,0 +1,5 @@
+[
+  { "name": "download-completes-after-path-update", "boundary": "download" },
+  { "name": "path-update-after-target-open", "boundary": "copy" },
+  { "name": "item-save-after-path-update", "boundary": "repository" }
+]

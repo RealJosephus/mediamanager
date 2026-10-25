@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "coreTypes": [
+    { "name": "Folder", "fullName": "MediaBrowser.Controller.Entities.Folder", "requiresJson": true },
+    { "name": "AggregateFolder", "fullName": "MediaBrowser.Controller.Entities.AggregateFolder", "requiresJson": true },
+    { "name": "UserRootFolder", "fullName": "MediaBrowser.Controller.Entities.UserRootFolder", "requiresJson": true },
+    { "name": "CollectionFolder", "fullName": "MediaBrowser.Controller.Entities.CollectionFolder", "requiresJson": true },
+    { "name": "UserView", "fullName": "MediaBrowser.Controller.Entities.UserView", "requiresJson": true },
+    { "name": "PlaylistsFolder", "fullName": "Emby.Server.Implementations.Playlists.PlaylistsFolder", "requiresJson": false },
+    { "name": "Playlist", "fullName": "MediaBrowser.Controller.Playlists.Playlist", "requiresJson": true },
+    { "name": "Movie", "fullName": "MediaBrowser.Controller.Entities.Movies.Movie", "requiresJson": true },
+    { "name": "Video", "fullName": "MediaBrowser.Controller.Entities.Video", "requiresJson": true },
+    { "name": "Episode", "fullName": "MediaBrowser.Controller.Entities.TV.Episode", "requiresJson": true },
+    { "name": "Series", "fullName": "MediaBrowser.Controller.Entities.TV.Series", "requiresJson": true },
+    { "name": "Season", "fullName": "MediaBrowser.Controller.Entities.TV.Season", "requiresJson": false },
+    { "name": "BoxSet", "fullName": "MediaBrowser.Controller.Entities.Movies.BoxSet", "requiresJson": true },
+    { "name": "Audio", "fullName": "MediaBrowser.Controller.Entities.Audio.Audio", "requiresJson": true },
+    { "name": "AudioBook", "fullName": "MediaBrowser.Controller.Entities.AudioBook", "requiresJson": false },
+    { "name": "MusicVideo", "fullName": "MediaBrowser.Controller.Entities.MusicVideo", "requiresJson": true },
+    { "name": "Trailer", "fullName": "MediaBrowser.Controller.Entities.Trailer", "requiresJson": true },
+    { "name": "MusicAlbum", "fullName": "MediaBrowser.Controller.Entities.Audio.MusicAlbum", "requiresJson": false },
+    { "name": "MusicArtist", "fullName": "MediaBrowser.Controller.Entities.Audio.MusicArtist", "requiresJson": false },
+    { "name": "Person", "fullName": "MediaBrowser.Controller.Entities.Person", "requiresJson": false },
+    { "name": "Genre", "fullName": "MediaBrowser.Controller.Entities.Genre", "requiresJson": false },
+    { "name": "MusicGenre", "fullName": "MediaBrowser.Controller.Entities.Audio.MusicGenre", "requiresJson": false },
+    { "name": "Studio", "fullName": "MediaBrowser.Controller.Entities.Studio", "requiresJson": false },
+    { "name": "Year", "fullName": "MediaBrowser.Controller.Entities.Year", "requiresJson": false },
+    { "name": "Photo", "fullName": "MediaBrowser.Controller.Entities.Photo", "requiresJson": true },
+    { "name": "PhotoAlbum", "fullName": "MediaBrowser.Controller.Entities.PhotoAlbum", "requiresJson": false },
+    { "name": "Book", "fullName": "MediaBrowser.Controller.Entities.Book", "requiresJson": false }
+  ],
+  "malformedTypes": [
+    "MediaBrowser.Controller.Entities.Folder",
+    "MediaBrowser.Controller.Entities.AggregateFolder",
+    "MediaBrowser.Controller.Entities.UserRootFolder",
+    "MediaBrowser.Controller.Entities.CollectionFolder",
+    "MediaBrowser.Controller.Entities.UserView",
+    "MediaBrowser.Controller.Playlists.Playlist",
+    "MediaBrowser.Controller.Entities.Movies.Movie",
+    "MediaBrowser.Controller.Entities.Video",
+    "MediaBrowser.Controller.Entities.TV.Episode",
+    "MediaBrowser.Controller.Entities.TV.Series",
+    "MediaBrowser.Controller.Entities.Movies.BoxSet",
+    "MediaBrowser.Controller.Entities.Audio.Audio",
+    "MediaBrowser.Controller.Entities.MusicVideo",
+    "MediaBrowser.Controller.Entities.Trailer",
+    "MediaBrowser.Controller.Entities.Photo"
+  ],
+  "sourceOnlyMalformedTypes": [
+    "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+    "MediaBrowser.Controller.Entities.TV.Season",
+    "MediaBrowser.Controller.Entities.AudioBook",
+    "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+    "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+    "MediaBrowser.Controller.Entities.Person",
+    "MediaBrowser.Controller.Entities.Genre",
+    "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+    "MediaBrowser.Controller.Entities.Studio",
+    "MediaBrowser.Controller.Entities.Year",
+    "MediaBrowser.Controller.Entities.PhotoAlbum",
+    "MediaBrowser.Controller.Entities.Book"
+  ],
+  "boundaryCases": [
+    {
+      "name": "boundary-sql-null",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "sql-null"
+    },
+    {
+      "name": "boundary-json-literal-null",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "null"
+    },
+    {
+      "name": "boundary-root-array",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "[]"
+    },
+    {
+      "name": "boundary-known-wrong-type",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "{\"AdditionalParts\":\"not-an-array\"}"
+    },
+    {
+      "name": "boundary-unknown-enum-string",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "{\"VideoType\":\"not-a-native-video-type\"}"
+    },
+    {
+      "name": "boundary-unknown-property",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "{\"Container\":\"known-value\",\"UnknownProperty\":{\"nested\":true}}"
+    },
+    {
+      "name": "boundary-list-null",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "data",
+      "data": "{\"AdditionalParts\":null,\"LocalAlternateVersions\":null,\"LinkedAlternateVersions\":null,\"SubtitleFiles\":null,\"AudioFiles\":null}"
+    },
+    {
+      "name": "boundary-explicit-skip",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "explicit-skip",
+      "data": "{\"Container\":\"must-not-deserialize-explicit-skip\",\"AdditionalParts\":[\"must-not-survive.media\"]}"
+    },
+    {
+      "name": "boundary-configured-user-root-skip",
+      "fullName": "MediaBrowser.Controller.Entities.UserRootFolder",
+      "mode": "configured-skip",
+      "data": "{\"IsRoot\":false,\"Container\":\"must-not-deserialize-configured-skip\"}"
+    },
+    {
+      "name": "boundary-unknown-full-name",
+      "fullName": "MediaBrowser.Controller.Entities.Video",
+      "mode": "unknown-type",
+      "storedType": "Oracle.Unknown.BaseItem",
+      "data": "{\"Container\":\"must-not-deserialize-unknown-type\"}"
+    }
+  ],
+  "saveItemsTypes": [
+    "MediaBrowser.Controller.Entities.Folder",
+    "MediaBrowser.Controller.Entities.AggregateFolder",
+    "MediaBrowser.Controller.Entities.UserRootFolder",
+    "MediaBrowser.Controller.Entities.CollectionFolder",
+    "MediaBrowser.Controller.Entities.UserView",
+    "Emby.Server.Implementations.Playlists.PlaylistsFolder",
+    "MediaBrowser.Controller.Playlists.Playlist",
+    "MediaBrowser.Controller.Entities.Movies.Movie",
+    "MediaBrowser.Controller.Entities.Video",
+    "MediaBrowser.Controller.Entities.TV.Episode",
+    "MediaBrowser.Controller.Entities.TV.Series",
+    "MediaBrowser.Controller.Entities.TV.Season",
+    "MediaBrowser.Controller.Entities.Movies.BoxSet",
+    "MediaBrowser.Controller.Entities.Audio.Audio",
+    "MediaBrowser.Controller.Entities.AudioBook",
+    "MediaBrowser.Controller.Entities.MusicVideo",
+    "MediaBrowser.Controller.Entities.Trailer",
+    "MediaBrowser.Controller.Entities.Audio.MusicAlbum",
+    "MediaBrowser.Controller.Entities.Audio.MusicArtist",
+    "MediaBrowser.Controller.Entities.Person",
+    "MediaBrowser.Controller.Entities.Genre",
+    "MediaBrowser.Controller.Entities.Audio.MusicGenre",
+    "MediaBrowser.Controller.Entities.Studio",
+    "MediaBrowser.Controller.Entities.Year",
+    "MediaBrowser.Controller.Entities.Photo",
+    "MediaBrowser.Controller.Entities.PhotoAlbum",
+    "MediaBrowser.Controller.Entities.Book"
+  ]
+}

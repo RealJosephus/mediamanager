@@ -1,0 +1,155 @@
+{
+  "reference": "D:\\mediamanager\\.test-input\\evidence\\remaining-differences-20260927\\updates\\reference-remote",
+  "record": [
+    {
+      "id": "66666666-6666-6666-6666-000000000001",
+      "urls": "http://127.0.0.1:18370/missing|http://127.0.0.1:18370/forbidden",
+      "calls": [
+        {
+          "startedAt": "2026-09-26T16:43:57.694Z",
+          "beforeSaved": "2026-09-26 14:28:55.1015415",
+          "afterSaved": "2026-09-26 16:43:57.78263",
+          "savedChanged": true,
+          "iteration": 1,
+          "status": 500,
+          "contentType": "text/plain",
+          "length": 25,
+          "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+          "requests": [
+            "/missing",
+            "/forbidden"
+          ],
+          "images": []
+        },
+        {
+          "startedAt": "2026-09-26T16:43:58.238Z",
+          "beforeSaved": "2026-09-26 16:43:57.78263",
+          "afterSaved": "2026-09-26 16:43:57.78263",
+          "savedChanged": false,
+          "iteration": 2,
+          "status": 404,
+          "contentType": "application/json; charset=utf-8",
+          "length": 55,
+          "sha256": "b83ab5d973dfe3ed468807dfb7dc78ef8c71d393943869dd6ca62a5d0da833b9",
+          "requests": [],
+          "images": []
+        }
+      ]
+    },
+    {
+      "id": "66666666-6666-6666-6666-000000000002",
+      "urls": "http://127.0.0.1:18370/missing|http://127.0.0.1:18370/poster.png",
+      "calls": [
+        {
+          "startedAt": "2026-09-26T16:43:58.277Z",
+          "beforeSaved": "2026-09-26 14:28:55.1015415",
+          "afterSaved": "2026-09-26 16:43:58.3864791",
+          "savedChanged": true,
+          "iteration": 1,
+          "status": 200,
+          "contentType": "image/png",
+          "length": 287,
+          "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+          "requests": [
+            "/missing",
+            "/poster.png"
+          ],
+          "images": [
+            {
+              "Id": "9643D8F9-E63A-447B-9F59-60A5E611F029",
+              "Blurhash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+              "DateModified": "2026-09-26 16:43:58.3225976",
+              "Height": 6,
+              "ImageType": 0,
+              "ItemId": "66666666-6666-6666-6666-000000000002",
+              "Path": "D:\\mediamanager\\.test-input\\evidence\\remaining-differences-20260927\\updates\\reference-remote\\data\\metadata\\library\\66\\66666666666666666666000000000002\\poster.png",
+              "Width": 8
+            }
+          ]
+        },
+        {
+          "startedAt": "2026-09-26T16:43:58.419Z",
+          "beforeSaved": "2026-09-26 16:43:58.3864791",
+          "afterSaved": "2026-09-26 16:43:58.3864791",
+          "savedChanged": false,
+          "iteration": 2,
+          "status": 200,
+          "contentType": "image/png",
+          "length": 287,
+          "sha256": "027fdfbfbf3aff9228a80bccd129561b567c393a4be0b7236230465df271bab3",
+          "requests": [],
+          "images": [
+            {
+              "Id": "9643D8F9-E63A-447B-9F59-60A5E611F029",
+              "Blurhash": "VMHCJ=^+Xd?^v~.8$_M}pFInJVI:NXI.th-stJOjobwF",
+              "DateModified": "2026-09-26 16:43:58.3225976",
+              "Height": 6,
+              "ImageType": 0,
+              "ItemId": "66666666-6666-6666-6666-000000000002",
+              "Path": "D:\\mediamanager\\.test-input\\evidence\\remaining-differences-20260927\\updates\\reference-remote\\data\\metadata\\library\\66\\66666666666666666666000000000002\\poster.png",
+              "Width": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "66666666-6666-6666-6666-000000000003",
+      "urls": "http://127.0.0.1:18370/error|http://127.0.0.1:18370/poster.png",
+      "calls": [
+        {
+          "startedAt": "2026-09-26T16:43:58.454Z",
+          "beforeSaved": "2026-09-26 14:28:55.1015415",
+          "afterSaved": "2026-09-26 14:28:55.1015415",
+          "savedChanged": false,
+          "iteration": 1,
+          "status": 500,
+          "contentType": "text/plain",
+          "length": 25,
+          "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+          "requests": [
+            "/error"
+          ],
+          "images": [
+            {
+              "Id": "66666666-6666-6666-6666-000000000003",
+              "Blurhash": null,
+              "DateModified": "0001-01-01 00:00:00",
+              "Height": 0,
+              "ImageType": 0,
+              "ItemId": "66666666-6666-6666-6666-000000000003",
+              "Path": "http://127.0.0.1:18370/error|http://127.0.0.1:18370/poster.png",
+              "Width": 0
+            }
+          ]
+        },
+        {
+          "startedAt": "2026-09-26T16:43:58.490Z",
+          "beforeSaved": "2026-09-26 14:28:55.1015415",
+          "afterSaved": "2026-09-26 14:28:55.1015415",
+          "savedChanged": false,
+          "iteration": 2,
+          "status": 500,
+          "contentType": "text/plain",
+          "length": 25,
+          "sha256": "7417a6afbda132fd6848761607e6e8a1f28d5e56552e56c915199680400a352f",
+          "requests": [
+            "/error"
+          ],
+          "images": [
+            {
+              "Id": "66666666-6666-6666-6666-000000000003",
+              "Blurhash": null,
+              "DateModified": "0001-01-01 00:00:00",
+              "Height": 0,
+              "ImageType": 0,
+              "ItemId": "66666666-6666-6666-6666-000000000003",
+              "Path": "http://127.0.0.1:18370/error|http://127.0.0.1:18370/poster.png",
+              "Width": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,487 @@
+{
+  "httpCases": [
+  {
+    "name": "enabled",
+    "method": "GET",
+    "path": "/QuickConnect/Enabled"
+  },
+  {
+    "name": "disabled",
+    "method": "GET",
+    "path": "/QuickConnect/Enabled",
+    "enabled": false
+  },
+  {
+    "name": "initiate",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate"
+  },
+  {
+    "name": "initiate-disabled",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "enabled": false
+  },
+  {
+    "name": "initiate-DeviceId-null",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "DeviceId": null
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-DeviceId-",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "DeviceId": ""
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Device-null",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Device": null
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Device-",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Device": ""
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Client-null",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Client": null
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Client-",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Client": ""
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Version-null",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Version": null
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-Version-",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "Version": ""
+    },
+    "enabled": false
+  },
+  {
+    "name": "initiate-whitespace",
+    "method": "POST",
+    "path": "/QuickConnect/Initiate",
+    "auth": {
+      "DeviceId": " ",
+      "Device": " ",
+      "Client": " ",
+      "Version": " "
+    }
+  },
+  {
+    "name": "connect-pending",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secret",
+    "prepare": "pending"
+  },
+  {
+    "name": "connect-authorized",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secret",
+    "prepare": "authorized"
+  },
+  {
+    "name": "connect-lower-secret",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secretLower",
+    "prepare": "pending"
+  },
+  {
+    "name": "connect-unknown",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=unknown"
+  },
+  {
+    "name": "connect-expired",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secret",
+    "prepare": "expired"
+  },
+  {
+    "name": "connect-disabled",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=unknown",
+    "enabled": false
+  },
+  {
+    "name": "connect-missing",
+    "method": "GET",
+    "path": "/QuickConnect/Connect"
+  },
+  {
+    "name": "connect-empty",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret="
+  },
+  {
+    "name": "connect-whitespace",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=%20"
+  },
+  {
+    "name": "connect-unicode-space",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=%C2%85"
+  },
+  {
+    "name": "connect-bom",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=%EF%BB%BF"
+  },
+  {
+    "name": "connect-repeated",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secret&secret=unknown",
+    "prepare": "pending"
+  },
+  {
+    "name": "connect-auth-expired-only",
+    "method": "GET",
+    "path": "/QuickConnect/Connect?secret=$secret",
+    "prepare": "expired-authorized"
+  },
+  {
+    "name": "authorize-ordinary",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-admin-other",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=ce100000000000000000000000000002",
+    "prepare": "pending",
+    "identity": "admin"
+  },
+  {
+    "name": "authorize-ordinary-other",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=ce100000000000000000000000000002",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-api-key-empty",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "pending",
+    "identity": "apiKey"
+  },
+  {
+    "name": "authorize-api-key-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=ce100000000000000000000000000002",
+    "prepare": "pending",
+    "identity": "apiKey"
+  },
+  {
+    "name": "authorize-empty-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=00000000000000000000000000000000",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-anonymous",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "pending",
+    "identity": "anonymous"
+  },
+  {
+    "name": "authorize-anonymous-invalid",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?userId=bad",
+    "identity": "anonymous"
+  },
+  {
+    "name": "authorize-already",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "authorized"
+  },
+  {
+    "name": "authorize-unknown",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=unknown"
+  },
+  {
+    "name": "authorize-disabled",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "pending",
+    "enabled": false
+  },
+  {
+    "name": "authorize-fail",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "pending",
+    "fail": true
+  },
+  {
+    "name": "authorize-missing",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize"
+  },
+  {
+    "name": "authorize-blank",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=%20"
+  },
+  {
+    "name": "authorize-both-invalid",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=&userId=bad"
+  },
+  {
+    "name": "authorize-space-code",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=%20$code%20",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-repeated-code",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&Code=unknown",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-expired",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code",
+    "prepare": "expired"
+  },
+  {
+    "name": "authorize-invalid-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=bad",
+    "prepare": "pending"
+  },
+  {
+    "name": "authenticate-authorized",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secret\"}",
+    "prepare": "authorized"
+  },
+  {
+    "name": "authenticate-pending",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secret\"}",
+    "prepare": "pending"
+  },
+  {
+    "name": "authenticate-expired",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secret\"}",
+    "prepare": "expired-authorized"
+  },
+  {
+    "name": "authenticate-both-expired",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secret\"}",
+    "prepare": "expired-both"
+  },
+  {
+    "name": "authenticate-disabled",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secret\"}",
+    "prepare": "authorized",
+    "enabled": false
+  },
+  {
+    "name": "authenticate-lower",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"$secretLower\"}",
+    "prepare": "authorized"
+  },
+  {
+    "name": "authenticate-unknown",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"unknown\"}"
+  },
+  {
+    "name": "authenticate-empty",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{}"
+  },
+  {
+    "name": "authenticate-null",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "null"
+  },
+  {
+    "name": "authenticate-empty-secret",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"\"}"
+  },
+  {
+    "name": "authenticate-null-secret",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":null}"
+  },
+  {
+    "name": "authenticate-space-secret",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\" \"}"
+  },
+  {
+    "name": "authenticate-unicode-space",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"\\u0085\"}"
+  },
+  {
+    "name": "authenticate-bom",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":\"\\ufeff\"}"
+  },
+  {
+    "name": "authenticate-number",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":123}"
+  },
+  {
+    "name": "authenticate-boolean",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":true}"
+  },
+  {
+    "name": "authenticate-first-invalid",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":{},\"secret\":\"$secret\"}",
+    "prepare": "authorized"
+  },
+  {
+    "name": "authenticate-last-valid",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":null,\"secret\":\"$secret\",\"unknown\":{\"x\":1}}",
+    "prepare": "authorized"
+  },
+  {
+    "name": "authenticate-array",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "[]"
+  },
+  {
+    "name": "authenticate-open",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{"
+  },
+  {
+    "name": "authenticate-object-secret",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{\"Secret\":{}}"
+  },
+  {
+    "name": "authenticate-unsupported",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect",
+    "body": "{}",
+    "contentType": "text/plain"
+  },
+  {
+    "name": "authenticate-missing-body",
+    "method": "POST",
+    "path": "/Users/AuthenticateWithQuickConnect"
+  },
+  {
+    "name": "authorize-space-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=%20",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-unicode-space-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=%C2%85",
+    "prepare": "pending"
+  },
+  {
+    "name": "authorize-bom-user",
+    "method": "POST",
+    "path": "/QuickConnect/Authorize?code=$code&userId=%EF%BB%BF",
+    "prepare": "pending"
+  },
+  {
+    "name": "enabled-head",
+    "method": "HEAD",
+    "path": "/QuickConnect/Enabled"
+  },
+  {
+    "name": "connect-head",
+    "method": "HEAD",
+    "path": "/QuickConnect/Connect?secret=$secret",
+    "prepare": "pending"
+  },
+  {
+    "name": "initiate-get",
+    "method": "GET",
+    "path": "/QuickConnect/Initiate"
+  }
+],
+  "directCases": ["success", "disabled-user", "remote-denied-user", "empty-user", "missing-user", "device-denied", "session-limit", "insert-failure", "delete-failure"],
+  "expiryCases": [
+    { "name": "pending-valid", "pendingAgeMs": 540000 },
+    { "name": "pending-expired", "pendingAgeMs": 660000 },
+    { "name": "authorized-valid", "authorized": true, "pendingAgeMs": 540000, "tokenAgeMs": 540000 },
+    { "name": "authorized-token-expired", "authorized": true, "pendingAgeMs": 540000, "tokenAgeMs": 660000 },
+    { "name": "authorized-poll-expired", "authorized": true, "pendingAgeMs": 660000, "tokenAgeMs": 540000 },
+    { "name": "authorized-both-expired", "authorized": true, "pendingAgeMs": 660000, "tokenAgeMs": 660000 }
+  ]
+}

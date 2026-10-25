@@ -1,0 +1,1235 @@
+{
+  "source": {
+    "run": "https://github.com/RealJosephus/mediamanager/actions/runs/39475686291",
+    "candidate": "d40ecc1a833ad346c0a1036f377a2dc84b734ac9",
+    "packageUrl": "https://github.com/MediaBrowser/Emby.Releases/releases/download/4.10.1.0/embyserver-netcore_4.10.1.0.zip",
+    "packageSha256": "cada885b561eb4dd06fb410d09127b6948c2110662c3bdcd1e653a6cf04b9dce",
+    "producerSha256": "8d43a39c187cdabf7748ae6f0646fe95b8f5e1cfcae53ecf8f94486465cbfda0",
+    "scenarioProducerSha256": "f686089120e3d4707403b7c014eebb6668054c8ff52360f8000a21f8cc9d5f75",
+    "observationsSha256": "1ad5071790e6172561653797812dd885e6c9c83342323ffefec246f6e27bb6bc",
+    "identities": {
+      "administrator": "c68ab4ab62104bdaab4413cc24a3e696",
+      "reader": "15f02858c85c4bd39370b058863817b5",
+      "other": "8308e152bee846008c84af12a56c4132",
+      "modelSectionId": "995cfed11a6e4409821f3bdd4c2fdc8e"
+    },
+    "referenceEntriesSha256": "6618275ea7f6de2b337b85fbfd096e77fa3b9426daea89c8f7d3195d7ffc5b2f",
+    "referenceUnchanged": true,
+    "runtimeUnchanged": true,
+    "processesStopped": true,
+    "instanceRemoved": true
+  },
+  "records": [
+    {
+      "label": "model-default",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-create",
+      "method": "POST",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections",
+      "authenticated": true,
+      "requestBody": {
+        "SectionType": "items",
+        "CustomName": "Controlled model",
+        "ItemTypes": [
+          "Audio"
+        ],
+        "SortBy": "SortName",
+        "SortOrder": "descending",
+        "RefreshInterval": 1234,
+        "CardSizeOffset": -2,
+        "Monitor": [
+          "controlled"
+        ],
+        "PremiumFeature": "controlled",
+        "PremiumMessage": "Controlled feature message",
+        "TextInfo": {
+          "Id": "controlled",
+          "Name": "Controlled text",
+          "Text": "Unicode 設定\u0000text",
+          "Level": 0
+        },
+        "Query": {
+          "IsRepeat": true,
+          "IsKids": true,
+          "HasSubtitles": true,
+          "IsMovie": false,
+          "IsNews": false,
+          "IsSports": true,
+          "IsSeries": false,
+          "IsResumable": true,
+          "IsFavorite": true,
+          "IsPlayed": false,
+          "StudioIds": [],
+          "TagIds": [],
+          "GenreIds": [],
+          "CollectionTypes": [
+            "music"
+          ],
+          "UnknownFilter": "unbound"
+        },
+        "UnknownProperty": "unbound"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "label": "model-after-create",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"UserId\":\"15f02858c85c4bd39370b058863817b5\",\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"descending\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[\"music\"],\"IsFavorite\":true,\"IsPlayed\":false,\"IsResumable\":true,\"IsSports\":true,\"IsNews\":false,\"IsSeries\":false,\"IsMovie\":false,\"IsRepeat\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "UserId": "15f02858c85c4bd39370b058863817b5",
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "descending",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [
+              "music"
+            ],
+            "IsFavorite": true,
+            "IsPlayed": false,
+            "IsResumable": true,
+            "IsSports": true,
+            "IsNews": false,
+            "IsSeries": false,
+            "IsMovie": false,
+            "IsRepeat": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-string-sort-order",
+      "method": "POST",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections",
+      "authenticated": true,
+      "requestBody": {
+        "SectionType": "items",
+        "CustomName": "Controlled model",
+        "ItemTypes": [
+          "Audio"
+        ],
+        "SortBy": "SortName",
+        "SortOrder": "controlled-order",
+        "RefreshInterval": 1234,
+        "CardSizeOffset": -2,
+        "Monitor": [
+          "controlled"
+        ],
+        "PremiumFeature": "controlled",
+        "PremiumMessage": "Controlled feature message",
+        "TextInfo": {
+          "Id": "controlled",
+          "Name": "Controlled text",
+          "Text": "Unicode 設定\u0000text",
+          "Level": 0
+        },
+        "Query": {
+          "IsRepeat": true,
+          "IsKids": true,
+          "HasSubtitles": true,
+          "IsMovie": false,
+          "IsNews": false,
+          "IsSports": true,
+          "IsSeries": false,
+          "IsResumable": true,
+          "IsFavorite": true,
+          "IsPlayed": false,
+          "StudioIds": [],
+          "TagIds": [],
+          "GenreIds": [],
+          "CollectionTypes": [
+            "music"
+          ],
+          "UnknownFilter": "unbound"
+        },
+        "UnknownProperty": "unbound",
+        "Id": "995cfed11a6e4409821f3bdd4c2fdc8e"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "label": "model-string-sort-order-readback",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"UserId\":\"15f02858c85c4bd39370b058863817b5\",\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"controlled-order\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[\"music\"],\"IsFavorite\":true,\"IsPlayed\":false,\"IsResumable\":true,\"IsSports\":true,\"IsNews\":false,\"IsSeries\":false,\"IsMovie\":false,\"IsRepeat\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "UserId": "15f02858c85c4bd39370b058863817b5",
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "controlled-order",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [
+              "music"
+            ],
+            "IsFavorite": true,
+            "IsPlayed": false,
+            "IsResumable": true,
+            "IsSports": true,
+            "IsNews": false,
+            "IsSeries": false,
+            "IsMovie": false,
+            "IsRepeat": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-number-sort-order",
+      "method": "POST",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections",
+      "authenticated": true,
+      "requestBody": {
+        "SectionType": "items",
+        "CustomName": "Controlled model",
+        "ItemTypes": [
+          "Audio"
+        ],
+        "SortBy": "SortName",
+        "SortOrder": 2,
+        "RefreshInterval": 1234,
+        "CardSizeOffset": -2,
+        "Monitor": [
+          "controlled"
+        ],
+        "PremiumFeature": "controlled",
+        "PremiumMessage": "Controlled feature message",
+        "TextInfo": {
+          "Id": "controlled",
+          "Name": "Controlled text",
+          "Text": "Unicode 設定\u0000text",
+          "Level": 0
+        },
+        "Query": {
+          "IsRepeat": true,
+          "IsKids": true,
+          "HasSubtitles": true,
+          "IsMovie": false,
+          "IsNews": false,
+          "IsSports": true,
+          "IsSeries": false,
+          "IsResumable": true,
+          "IsFavorite": true,
+          "IsPlayed": false,
+          "StudioIds": [],
+          "TagIds": [],
+          "GenreIds": [],
+          "CollectionTypes": [
+            "music"
+          ],
+          "UnknownFilter": "unbound"
+        },
+        "UnknownProperty": "unbound",
+        "Id": "995cfed11a6e4409821f3bdd4c2fdc8e"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "label": "model-number-sort-order-readback",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"UserId\":\"15f02858c85c4bd39370b058863817b5\",\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"2\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[\"music\"],\"IsFavorite\":true,\"IsPlayed\":false,\"IsResumable\":true,\"IsSports\":true,\"IsNews\":false,\"IsSeries\":false,\"IsMovie\":false,\"IsRepeat\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "UserId": "15f02858c85c4bd39370b058863817b5",
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "2",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [
+              "music"
+            ],
+            "IsFavorite": true,
+            "IsPlayed": false,
+            "IsResumable": true,
+            "IsSports": true,
+            "IsNews": false,
+            "IsSeries": false,
+            "IsMovie": false,
+            "IsRepeat": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-string-boolean",
+      "method": "POST",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections",
+      "authenticated": true,
+      "requestBody": {
+        "SectionType": "items",
+        "CustomName": "Controlled model",
+        "ItemTypes": [
+          "Audio"
+        ],
+        "SortBy": "SortName",
+        "SortOrder": "descending",
+        "RefreshInterval": 1234,
+        "CardSizeOffset": -2,
+        "Monitor": [
+          "controlled"
+        ],
+        "PremiumFeature": "controlled",
+        "PremiumMessage": "Controlled feature message",
+        "TextInfo": {
+          "Id": "controlled",
+          "Name": "Controlled text",
+          "Text": "Unicode 設定\u0000text",
+          "Level": 0
+        },
+        "Query": {
+          "IsFavorite": "true"
+        },
+        "UnknownProperty": "unbound",
+        "Id": "995cfed11a6e4409821f3bdd4c2fdc8e"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "label": "model-string-boolean-readback",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"UserId\":\"15f02858c85c4bd39370b058863817b5\",\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"descending\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsFavorite\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "UserId": "15f02858c85c4bd39370b058863817b5",
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "descending",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsFavorite": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-reset-valid",
+      "method": "POST",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections",
+      "authenticated": true,
+      "requestBody": {
+        "SectionType": "items",
+        "CustomName": "Controlled model",
+        "ItemTypes": [
+          "Audio"
+        ],
+        "SortBy": "SortName",
+        "SortOrder": "descending",
+        "RefreshInterval": 1234,
+        "CardSizeOffset": -2,
+        "Monitor": [
+          "controlled"
+        ],
+        "PremiumFeature": "controlled",
+        "PremiumMessage": "Controlled feature message",
+        "TextInfo": {
+          "Id": "controlled",
+          "Name": "Controlled text",
+          "Text": "Unicode 設定\u0000text",
+          "Level": 0
+        },
+        "Query": {
+          "IsRepeat": true,
+          "IsKids": true,
+          "HasSubtitles": true,
+          "IsMovie": false,
+          "IsNews": false,
+          "IsSports": true,
+          "IsSeries": false,
+          "IsResumable": true,
+          "IsFavorite": true,
+          "IsPlayed": false,
+          "StudioIds": [],
+          "TagIds": [],
+          "GenreIds": [],
+          "CollectionTypes": [
+            "music"
+          ],
+          "UnknownFilter": "unbound"
+        },
+        "UnknownProperty": "unbound",
+        "Id": "995cfed11a6e4409821f3bdd4c2fdc8e"
+      },
+      "status": 204,
+      "contentType": null,
+      "bodyText": ""
+    },
+    {
+      "label": "model-before-restart",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"UserId\":\"15f02858c85c4bd39370b058863817b5\",\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"descending\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[\"music\"],\"IsFavorite\":true,\"IsPlayed\":false,\"IsResumable\":true,\"IsSports\":true,\"IsNews\":false,\"IsSeries\":false,\"IsMovie\":false,\"IsRepeat\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "UserId": "15f02858c85c4bd39370b058863817b5",
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "descending",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [
+              "music"
+            ],
+            "IsFavorite": true,
+            "IsPlayed": false,
+            "IsResumable": true,
+            "IsSports": true,
+            "IsNews": false,
+            "IsSeries": false,
+            "IsMovie": false,
+            "IsRepeat": true
+          }
+        }
+      ]
+    },
+    {
+      "label": "model-after-restart",
+      "method": "GET",
+      "route": "/Users/15f02858c85c4bd39370b058863817b5/HomeSections?IsEditMode=true",
+      "authenticated": true,
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "bodyText": "[{\"Name\":\"My Media\",\"Id\":\"smalllibrarytiles\",\"SectionType\":\"userviews\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":-1,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Watching\",\"Id\":\"resume\",\"SectionType\":\"resume\",\"Monitor\":[\"videoplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Continue Listening\",\"Id\":\"resumeaudio\",\"SectionType\":\"resumeaudio\",\"Monitor\":[\"audioplayback\",\"markplayed\"],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"On Now\",\"Id\":\"onnow\",\"SectionType\":\"onnow\",\"CollectionType\":\"livetv\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"PremiumFeature\":\"livetv\",\"PremiumMessage\":\"Emby Live TV & DVR require an active Emby Premiere subscription.\",\"RefreshInterval\":300000,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[]}},{\"Name\":\"Latest Media\",\"Id\":\"latestmediablock\",\"SectionType\":\"latestmediablock\",\"Monitor\":[],\"ItemTypes\":[],\"ExcludedFolders\":[],\"CardSizeOffset\":0,\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[],\"IsPlayed\":false}},{\"Name\":\"Controlled model\",\"CustomName\":\"Controlled model\",\"Id\":\"995cfed11a6e4409821f3bdd4c2fdc8e\",\"SectionType\":\"items\",\"CollectionType\":\"music\",\"Monitor\":[\"controlled\"],\"ItemTypes\":[\"Audio\"],\"ExcludedFolders\":[],\"CardSizeOffset\":-2,\"TextInfo\":{\"Text\":\"Unicode 設定\\u0000text\",\"Name\":\"Controlled text\",\"Id\":\"controlled\",\"Level\":\"Normal\"},\"PremiumFeature\":\"controlled\",\"PremiumMessage\":\"Controlled feature message\",\"RefreshInterval\":1234,\"SortBy\":\"SortName\",\"SortOrder\":\"descending\",\"IncludeNextUpInResume\":true,\"Query\":{\"StudioIds\":[],\"TagIds\":[],\"GenreIds\":[],\"CollectionTypes\":[\"music\"],\"IsFavorite\":true,\"IsPlayed\":false,\"IsResumable\":true,\"IsSports\":true,\"IsNews\":false,\"IsSeries\":false,\"IsMovie\":false,\"IsRepeat\":true}}]",
+      "bodyJson": [
+        {
+          "Name": "My Media",
+          "Id": "smalllibrarytiles",
+          "SectionType": "userviews",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -1,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Watching",
+          "Id": "resume",
+          "SectionType": "resume",
+          "Monitor": [
+            "videoplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Continue Listening",
+          "Id": "resumeaudio",
+          "SectionType": "resumeaudio",
+          "Monitor": [
+            "audioplayback",
+            "markplayed"
+          ],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "On Now",
+          "Id": "onnow",
+          "SectionType": "onnow",
+          "CollectionType": "livetv",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "PremiumFeature": "livetv",
+          "PremiumMessage": "Emby Live TV & DVR require an active Emby Premiere subscription.",
+          "RefreshInterval": 300000,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": []
+          }
+        },
+        {
+          "Name": "Latest Media",
+          "Id": "latestmediablock",
+          "SectionType": "latestmediablock",
+          "Monitor": [],
+          "ItemTypes": [],
+          "ExcludedFolders": [],
+          "CardSizeOffset": 0,
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [],
+            "IsPlayed": false
+          }
+        },
+        {
+          "Name": "Controlled model",
+          "CustomName": "Controlled model",
+          "Id": "995cfed11a6e4409821f3bdd4c2fdc8e",
+          "SectionType": "items",
+          "CollectionType": "music",
+          "Monitor": [
+            "controlled"
+          ],
+          "ItemTypes": [
+            "Audio"
+          ],
+          "ExcludedFolders": [],
+          "CardSizeOffset": -2,
+          "TextInfo": {
+            "Text": "Unicode 設定\u0000text",
+            "Name": "Controlled text",
+            "Id": "controlled",
+            "Level": "Normal"
+          },
+          "PremiumFeature": "controlled",
+          "PremiumMessage": "Controlled feature message",
+          "RefreshInterval": 1234,
+          "SortBy": "SortName",
+          "SortOrder": "descending",
+          "IncludeNextUpInResume": true,
+          "Query": {
+            "StudioIds": [],
+            "TagIds": [],
+            "GenreIds": [],
+            "CollectionTypes": [
+              "music"
+            ],
+            "IsFavorite": true,
+            "IsPlayed": false,
+            "IsResumable": true,
+            "IsSports": true,
+            "IsNews": false,
+            "IsSeries": false,
+            "IsMovie": false,
+            "IsRepeat": true
+          }
+        }
+      ]
+    }
+  ]
+}

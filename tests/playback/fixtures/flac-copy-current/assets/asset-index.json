@@ -1,0 +1,43 @@
+{
+  "repository": "https://github.com/ietf-wg-cellar/flac-test-files",
+  "commit": "aa7b0c6cf32994c106ae517a08134c28a96ff5b2",
+  "commitTree": "b67c4b7737bc8157137757249e4e8ec49429bab0",
+  "commitishTreeApiResponseSha": "aa7b0c6cf32994c106ae517a08134c28a96ff5b2",
+  "actualTreeEntriesEqualCommitishLookup": true,
+  "files": [
+    {
+      "path": "LICENSE.txt",
+      "filename": "C:\\mediamanager-validation\\asset-sources\\flac-test-files\\20261025T040658686268Z\\upstream\\LICENSE.txt",
+      "gitBlob": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+      "bytes": 7048,
+      "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "url": "https://raw.githubusercontent.com/ietf-wg-cellar/flac-test-files/aa7b0c6cf32994c106ae517a08134c28a96ff5b2/LICENSE.txt"
+    },
+    {
+      "path": "README.txt",
+      "filename": "C:\\mediamanager-validation\\asset-sources\\flac-test-files\\20261025T040658686268Z\\upstream\\README.txt",
+      "gitBlob": "7fc6c9996b78a08b1e7c39d9652ae51d032075c6",
+      "bytes": 3297,
+      "sha256": "cf37fb5c7b3bff2404cb1dfb4b37e8057b5bcba622be14952675c1f523ac3c1d",
+      "url": "https://raw.githubusercontent.com/ietf-wg-cellar/flac-test-files/aa7b0c6cf32994c106ae517a08134c28a96ff5b2/README.txt"
+    },
+    {
+      "path": "subset/README.txt",
+      "filename": "C:\\mediamanager-validation\\asset-sources\\flac-test-files\\20261025T040658686268Z\\upstream\\subset\\README.txt",
+      "gitBlob": "4cb97ce578f6e0bd4339b3eb1ac3a6498254ef1e",
+      "bytes": 5863,
+      "sha256": "46b8983cbd8884a61b77b4eb8f887dd79bd08a58aa0b7c72600f162651e92011",
+      "url": "https://raw.githubusercontent.com/ietf-wg-cellar/flac-test-files/aa7b0c6cf32994c106ae517a08134c28a96ff5b2/subset/README.txt"
+    },
+    {
+      "path": "subset/60 - mono audio.flac",
+      "filename": "C:\\mediamanager-validation\\asset-sources\\flac-test-files\\20261025T040658686268Z\\upstream\\subset\\60 - mono audio.flac",
+      "gitBlob": "9ca8a6721a5e9192ec74d97c61d7c57ce80379f0",
+      "bytes": 47782,
+      "sha256": "20539fbbd6ae28cea2b2182a4c60c6c70cbb710a136199fc83200c4e5fa00b1c",
+      "url": "https://raw.githubusercontent.com/ietf-wg-cellar/flac-test-files/aa7b0c6cf32994c106ae517a08134c28a96ff5b2/subset/60%20-%20mono%20audio.flac"
+    }
+  ],
+  "scope": "Original asset/input preparation only, with pinned commit/tree and Git blob verification. No product execution, media probing, conversion or generation.",
+  "productExecutedLocally": false
+}

@@ -1,0 +1,205 @@
+[
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "new-trailer-after-cancellation",
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "stable-trailer",
+    "existingType": true,
+    "oldName": "Trailer"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "rename-trailer",
+    "existingType": true,
+    "oldName": "Provider title"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "locked-trailer-name",
+    "existingType": true,
+    "oldName": "Provider title",
+    "lockedName": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "attached-trailer",
+    "existingType": true,
+    "oldName": "Trailer",
+    "attached": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "full-trailer",
+    "existingType": true,
+    "oldName": "Trailer",
+    "fullRefresh": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "missing-trailer",
+    "existingType": true,
+    "missing": true
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "primary-trailer.mkv"
+    ],
+    "name": "missing-trailer-after-cancellation",
+    "existingType": true,
+    "missing": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "theme.mp3"
+    ],
+    "name": "new-theme-audio"
+  },
+  {
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "files": [
+      "extras/some.mkv",
+      "extras/other.mkv"
+    ],
+    "name": "nested-video-extras"
+  },
+  {
+    "name": "series-empty",
+    "expectedType": "Series",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/episode.mkv"
+    ]
+  },
+  {
+    "name": "series-trailer",
+    "expectedType": "Series",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/trailer.mkv"
+    ]
+  },
+  {
+    "name": "season-nested-extras",
+    "expectedType": "Season",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/extras/some.mkv",
+      "primary/extras/other.mkv"
+    ]
+  },
+  {
+    "name": "artist-theme",
+    "expectedType": "MusicArtist",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/theme.mp3"
+    ]
+  },
+  {
+    "name": "album-trailer-rename",
+    "expectedType": "MusicAlbum",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/primary-trailer.mkv"
+    ],
+    "existingType": true,
+    "oldName": "Provider name"
+  },
+  {
+    "name": "album-missing-trailer",
+    "expectedType": "MusicAlbum",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": false,
+    "ownerPath": "primary",
+    "files": [
+      "primary/trailer.mkv"
+    ],
+    "existingType": true,
+    "missing": true
+  }
+]

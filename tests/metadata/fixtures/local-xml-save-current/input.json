@@ -1,0 +1,28 @@
+{
+  "item": {
+    "Name": "New common title",
+    "Overview": "New overview & 中文",
+    "OfficialRating": "PG",
+    "DateCreated": "2026-10-13T00:00:00Z",
+    "DisplayOrder": "PremiereDate",
+    "OwnerUserId": "91000000-0000-0000-0000-000000000001",
+    "Shares": [{ "UserId": "91000000-0000-0000-0000-000000000002", "CanEdit": true }],
+    "PlaylistMediaType": "Video"
+  },
+  "previous": "<?xml version=\"1.0\"?><Item><LocalTitle>Previous complete document</LocalTitle><CollectionItems><CollectionItem><Path>old.mkv</Path></CollectionItem></CollectionItems></Item>",
+  "defaultPaths": ["Z:\\NeutralMedia\\member.mkv"],
+  "cases": [
+    { "name": "existing-linked-lookup-failure", "type": "BoxSet", "existing": true, "fault": "links" },
+    { "name": "absent-linked-lookup-failure", "type": "BoxSet", "existing": false, "fault": "links" },
+    { "name": "existing-people-lookup-failure", "type": "BoxSet", "existing": true, "fault": "people" },
+    { "name": "existing-success-control", "type": "BoxSet", "existing": true, "fault": "none" },
+    { "name": "existing-invalid-null-failure", "type": "BoxSet", "existing": true, "fault": "xml-null" },
+    { "name": "existing-invalid-control-failure", "type": "BoxSet", "existing": true, "fault": "xml-control" },
+    { "name": "duplicate-member-order", "type": "BoxSet", "existing": false, "fault": "none", "paths": ["Z:\\Media\\A & <B>.mkv", null, "Z:\\Media\\A & <B>.mkv", "Z:\\Media\\Last.mkv"] },
+    { "name": "directory-playlist-with-extension", "type": "Playlist", "existing": false, "fault": "none", "paths": ["Z:\\Media\\A & <B>.mkv", null, "Z:\\Media\\A & <B>.mkv"] },
+    { "name": "file-playlist-does-not-resolve-members", "type": "Playlist", "filePlaylist": true, "existing": false, "fault": "unused-links" },
+    { "name": "large-prepared-members", "type": "BoxSet", "mode": "prepared", "existing": false, "fault": "none", "count": 4097 },
+    { "name": "remote-failed-preparation", "type": "BoxSet", "mode": "remote", "existing": true, "fault": "links" },
+    { "name": "manager-continues-after-failed-saver", "type": "BoxSet", "mode": "manager", "existing": true, "fault": "links" }
+  ]
+}

@@ -1,0 +1,587 @@
+{
+  "source": "D:/jellyfin",
+  "baselineSha256": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313",
+  "recordedAt": "2026-09-26T15:22:42.752Z",
+  "sources": [
+    {
+      "path": "MediaBrowser.Controller/Entities/BaseItem.cs",
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/Video.cs",
+      "sha256": "03df015992ee4e95e175c499b36a7b21d9facc4f391cfd89235ad652d2eb0b11"
+    },
+    {
+      "path": "MediaBrowser.Controller/Entities/MediaSourceWidthComparator.cs",
+      "sha256": "bd1bf604d1af6d0fdaf4f8db6e5dd798d8a7be8a6fba3afbc7f202c751423c51"
+    },
+    {
+      "path": "MediaBrowser.Controller/Library/VersionPlaybackSelector.cs",
+      "sha256": "98fd3564ec55d1c4612f12a5e7e78cd9665bdd0cae4351579f5c411b0b39bd57"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/MediaSourceManager.cs",
+      "sha256": "1e69414e32db4871f0866218959a50dba8e23d19e171ab71666f28ac6de21951"
+    },
+    {
+      "path": "Emby.Server.Implementations/Library/LibraryManager.cs",
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44"
+    },
+    {
+      "path": "Emby.Server.Implementations/Dto/DtoService.cs",
+      "sha256": "d00b1e73b167dc3068e619d52dbc394ea2f7187c1c87524d0e6b094d1cab5b55"
+    },
+    {
+      "path": "MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/Tmdb/TmdbExternalUrlProvider.cs",
+      "sha256": "46a76ba9db831f79250c48f35ce9ecf493d0832227dddec81ac0dddba94345be"
+    },
+    {
+      "path": "MediaBrowser.Model/Entities/MediaStream.cs",
+      "sha256": "902bf39ee73ae4a0a7813b03015001da0300f0f21b3581c2bee101f856f1fe6f"
+    },
+    {
+      "path": "Jellyfin.Api/Controllers/UserLibraryController.cs",
+      "sha256": "654720b0c5c2c02edf9712bfe298618ddc4c3baecd67ab4a4f3557d800b69197"
+    },
+    {
+      "path": "MediaBrowser.Providers/Books/ComicVine/ComicVineExternalUrlProvider.cs",
+      "sha256": "2c3c6e131d52b7c4589954d1988c94d0350b886db20cb982ab42fdb320738c49"
+    },
+    {
+      "path": "MediaBrowser.Providers/Books/GoogleBooks/GoogleBooksExternalUrlProvider.cs",
+      "sha256": "807299fc9702e89184aab1b2143d0d0f7870481d4bd23723d345b45c5e9c66aa"
+    },
+    {
+      "path": "MediaBrowser.Providers/Books/Isbn/ISBNExternalUrlProvider.cs",
+      "sha256": "09720c587ff4ec23d52576bf6119bca446babac8fa84e1c354d4d00185dbd139"
+    },
+    {
+      "path": "MediaBrowser.Providers/Movies/ImdbExternalUrlProvider.cs",
+      "sha256": "c0657a22770d74a4a6b3a8b73b66d774510423dc3ffe0fc4c4f9055b7c18caab"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/AudioDb/AudioDbAlbumExternalUrlProvider.cs",
+      "sha256": "cce0f83b1161429e68fff2eb8b5bb4f0dc4e75dc27e40176049dd70a50185765"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/AudioDb/AudioDbArtistExternalUrlProvider.cs",
+      "sha256": "3ed21cea185a2df770986f096602258b72d8e8dfb609222714a6f3ee116d0a6c"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/MusicBrainz/MusicBrainzAlbumArtistExternalUrlProvider.cs",
+      "sha256": "c59989c9cd442be26f8360b892e0dce2a992a106003451cff9bf54fd0c23fcd8"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/MusicBrainz/MusicBrainzAlbumExternalUrlProvider.cs",
+      "sha256": "c78e5c66a9c75263e487088cea8fd1101dfe2b933d73bd35e2396f88b7f71373"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/MusicBrainz/MusicBrainzArtistExternalUrlProvider.cs",
+      "sha256": "9d2a963fb2ab61746a88608a165e59f83cc3260a3d6279d57b8c9e4e26ceadf0"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/MusicBrainz/MusicBrainzReleaseGroupExternalUrlProvider.cs",
+      "sha256": "647befe35d3e7662ae88ea99145518782bdbbb58dc6713bae0aedf606a1f10a2"
+    },
+    {
+      "path": "MediaBrowser.Providers/Plugins/MusicBrainz/MusicBrainzTrackExternalUrlProvider.cs",
+      "sha256": "73692709988ad511df6d04af44c42e1da78e26229e7acffdf04f06a533201ddf"
+    },
+    {
+      "path": "MediaBrowser.Providers/TV/Zap2ItExternalUrlProvider.cs",
+      "sha256": "edceeff433fffa60a2c6b1b14fd228ac5438ed12658ad7932ca065dc7c9c8d0b"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "input.json",
+      "sha256": "d010d6c4fe23e2e2213cd47f4d4801b0cbdf63f0758a3000ad0bb6e45d33f44d"
+    },
+    {
+      "path": "native.json",
+      "sha256": "2aea96853b21fb32eebff5486a8754a3e1a4253e0c44d177118b9f0df7d99f18"
+    },
+    {
+      "path": "Program.cs",
+      "sha256": "f7c9ca106421e75e9980224c1a035bc868d8ef9f35725f5b5d0678671878c3bf"
+    },
+    {
+      "path": "Oracle.csproj",
+      "sha256": "ee8ff0899f7193f9216c81482356517995c845a6c9687f56865e4b7b796e236e"
+    },
+    {
+      "path": "reference-http-final.json",
+      "sha256": "0c2c6574fe04f583d88958c8d87d693476a38a634ba99a1ed93ef975f5362a84"
+    },
+    {
+      "path": "sqlite-http-final.json",
+      "sha256": "8cf023df6cf1fda56b4ee21c2936d16085573989fd1f5f510a25a9899a16c4be"
+    },
+    {
+      "path": "postgres-http-final.json",
+      "sha256": "1728223ee223f29a225bd3778d50d9a79d11a59ba07c0421f81234f0f344dce1"
+    }
+  ],
+  "resources": [
+    {
+      "path": "src/core/resources/invariant-char-upper.json",
+      "sha256": "cce25a93a83adc7a13231ddf4ad31305b678372f015238f8d09906e59fad555a"
+    }
+  ],
+  "normalizations": [
+    "HTTP traceId and PlaySessionId only"
+  ],
+  "limits": [
+    "Source DLL samples retain explicit SupportsTranscoding difference; HTTP samples configure native video/audio encoding permissions off.",
+    "No client UI validation or full alternative-source protocol coverage.",
+    "MediaSourceManager dependency calls in DLL oracle use in-memory test doubles; actual HTTP matrix separately validates integration."
+  ],
+  "oracleRevalidation": {
+    "recordedAt": "2026-10-03T13:48:46.415Z",
+    "baseline": {
+      "head": "208c278b75abd897aefa1e1175126eac5e4dbfaa",
+      "contentDigest": "e28a983db179b720c3b16d7416ee4112894a3115c4be6fe43c61c52e0d9a8313"
+    },
+    "files": [
+      {
+        "path": "tests/library/fixtures/media-versions/input.json",
+        "bytes": 33385,
+        "sha256": "d010d6c4fe23e2e2213cd47f4d4801b0cbdf63f0758a3000ad0bb6e45d33f44d"
+      },
+      {
+        "path": "tests/library/fixtures/media-versions/Program.cs",
+        "bytes": 7365,
+        "sha256": "f7c9ca106421e75e9980224c1a035bc868d8ef9f35725f5b5d0678671878c3bf"
+      },
+      {
+        "path": "tests/library/fixtures/media-versions/Oracle.csproj",
+        "bytes": 451,
+        "sha256": "395262c1f4956aa54d46f13d832fc0e279009c6e71cbcd903a25dafdde24d80c"
+      }
+    ],
+    "assemblies": [
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/ATL.dll",
+        "sha256": "9ade8f1b5b6b2193447c2931890f21888c96b0bba69037ad610d5dc0d0a6c38e"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/AsyncKeyedLock.dll",
+        "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/BDInfo.dll",
+        "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/BitFaster.Caching.dll",
+        "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/BlurHashSharp.SkiaSharp.dll",
+        "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/BlurHashSharp.dll",
+        "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/CommandLine.dll",
+        "sha256": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Diacritics.dll",
+        "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Core.dll",
+        "sha256": "f69c5091f7b43b00e8affca8fba08684507164050e0dfe6a854b400274ee8afe"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Iso9660.dll",
+        "sha256": "6664411665a23ff62339c865ab36a55a539c4c5585f5dad3fb42bf29b0497af6"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Streams.dll",
+        "sha256": "9de71c017c45c4dba0bc3806d56e26f9eea99391beff0f084de61686f9d917c7"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Udf.dll",
+        "sha256": "24a6b7135c505b2d87157185b239c6e6c951277b7a5adf46a3b7f22781d142bd"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/DotNet.Glob.dll",
+        "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Emby.Naming.dll",
+        "sha256": "988a1f82272eff4a0d3c0d8137a3bfd1ed6004681d5360d935f58f703418c215"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Emby.Photos.dll",
+        "sha256": "5988283088b79e3e504fe414861c9328fd02f973eea34110a097df7859654b55"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+        "sha256": "c518bc18c0f70168405721f5f89ab6ba4c4ceeb704552e146c2f9e366bf31c9d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/ExCSS.dll",
+        "sha256": "6b166e638181eba3150f0d10379d1cc8362af6dfd518e9e9e194aa9a746293c2"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/HarfBuzzSharp.dll",
+        "sha256": "072715d79f7f4a9160fc14f1085eb24a0beccfe02871f04184eaf7c94e9a1061"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/ICU4N.Transliterator.dll",
+        "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/ICU4N.dll",
+        "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Ignore.dll",
+        "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/J2N.dll",
+        "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Api.dll",
+        "sha256": "a195ae5f016a33dd9f32a7122bf81477536525e9b628e4b649ab51c2894be9e2"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Data.dll",
+        "sha256": "7174618af15c6cfdcc799b5fd8fd2817d1e891c7dd0b0e34acb7f782917c4cc8"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+        "sha256": "a4cc37b4d3db9e364904c83a6c17b47ad34cf37023bf1bdcfc6ce2770b766ddc"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+        "sha256": "5fc35aed6fdca4746c094347b70deb5bb6868921e6ed58db8148d781c4337521"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Drawing.Skia.dll",
+        "sha256": "07e4c62228d3baa8e0e077205f36ff709b0a25b5eafee7f0cb796754f899cd89"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Drawing.dll",
+        "sha256": "14b86cdae9fae08e4295df105206291c7030fb1f8a252085e1fde1d990c7f9f0"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+        "sha256": "3ca9d4009111672ba069b1076c396e92cc2ffb913a5ebd5715eaa0870510bd23"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.LiveTv.dll",
+        "sha256": "1e68f813d02a7c64c531242cda19b5ea5353f517fa7403f86ab02e42f781c012"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.MediaEncoding.Hls.dll",
+        "sha256": "136f977faa81d7ab38fff20d1d28c05debd8f4c3b1c4b53a12093fbabc1264af"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.MediaEncoding.Keyframes.dll",
+        "sha256": "a44da4a36e274168aedc322a094757f171a7ecc2a7c87e8e1a4a749deed7558d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Networking.dll",
+        "sha256": "4fa4046db0e2d3cb7db45b88bf66e939f80b89a4168308e7fa0450b8a3f3fda7"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+        "sha256": "aa009dca56edcd138a829c9c5c13ae96a7eb4f67ca462f252f99078e6f124b10"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.XmlTv.dll",
+        "sha256": "fe5a138772607a01397642745a5c4e686953cd24122ee2fdbba3ae3809f9ea62"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/LrcParser.dll",
+        "sha256": "2595f3b12c97bafc4917bfde3552a58e5d0c14ee43b46cdd65fc070aa4baab3d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Common.dll",
+        "sha256": "19ccce79888a1f77bd71fbd376cf6e1a1844c9911f6f155d54dc268e06e6c826"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+        "sha256": "a8939bae7bda1a470d7d9ec420d84b9647e74a9b308a669f81a1d72ce8a6a98f"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.LocalMetadata.dll",
+        "sha256": "cf908e89c9f621231841fbc577091213bc4b0f32f922e5ee8f4cbc87fc1b793a"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+        "sha256": "1f69b9652fe0d191349c95ce6bbbe3a4bddebf17c6512076e1917d610a436cf7"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+        "sha256": "5c81667394bb661075cffb58c071655651e407fd1ceb1fe0f7f426430c780737"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+        "sha256": "ba138e7822fb224fd9e5bc56a14e9725063870e438da8cbf13c9c7ccec646605"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.XbmcMetadata.dll",
+        "sha256": "bfcfb31e41e12ac70b8261adb9f93469fd812dad12fd691afc7fa9111ee183b1"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.Common.Json.dll",
+        "sha256": "0abef4d3cd0a8f3b312d2661cc6c9e851d7ea9de9fa28516e4a9a3a7b98470d4"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.Common.dll",
+        "sha256": "dd0b78005cce58be00d2934e1148251b958ea72de3d6d2bed3e417f2d0e7e7b3"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.MusicBrainz.dll",
+        "sha256": "06decf86fd4d12209d0b6c20bbfa66eec8e7280bf5b32f09162baf3e92f62a6b"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+        "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+        "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+        "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+        "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+        "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Extensions.DependencyModel.dll",
+        "sha256": "9237596e7cf66d2d93163fae81dc29ed5942d6376e9bcfde85bbf6f0c8186766"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll",
+        "sha256": "9791edf3b328bb50dce4570290e3602f65e2fe4be0061b4398d08c9ebcff2022"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.OpenApi.dll",
+        "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Win32.SystemEvents.dll",
+        "sha256": "a606ed156f527d4cadadcff1f23987b87daec6f41738d5b0c4b10a722116a1db"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Morestachio.dll",
+        "sha256": "008dc0205293bb5ef51f157de0102cbacdc107cf2d99ca6813097da5b604d0bb"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/NEbml.Core.dll",
+        "sha256": "9352adc0f9fe1efeda6b7715a37fc8ea7d28b76aa016698955e5dc5867ed8468"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Newtonsoft.Json.dll",
+        "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/PDFtoImage.dll",
+        "sha256": "bebf1ed3ef86674d2eec07b74de88e7bff679f3d4fb00a896b69cd70aa0cb4a3"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/PlaylistsNET.dll",
+        "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Polly.Core.dll",
+        "sha256": "f7f50017ca9f457b854498358ae595c2a8ab69c1fd8b915139d22bed8f7e4f2a"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Polly.dll",
+        "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Prometheus.AspNetCore.dll",
+        "sha256": "04fad5a2ff2c62da5bf31fe1e17978056162e57e8cdf266d89d28c4a36f61dbd"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Prometheus.NetStandard.dll",
+        "sha256": "87f007a4e95ded1e9a8b0b0cd0dca43e89822c926b8d93c15ec69a3e520f3620"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+        "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+        "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.AspNetCore.dll",
+        "sha256": "a550c57df7a04edbed00da036fc14be12acd0d425b7401855975fb628e3dbada"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Enrichers.Thread.dll",
+        "sha256": "74b88ad495b8699fb214d83f7ea371f3470ece05948111c99e72ddd5f3f1d852"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Expressions.dll",
+        "sha256": "e3fc0c1c14ab4221ce55f6b926f1a6bb33654009242d3527526064995f70b9e8"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Extensions.Hosting.dll",
+        "sha256": "3e6d0284179ee0e1c197568fd79b58f869d15298fff8ecb8447322fe87d44f47"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Extensions.Logging.dll",
+        "sha256": "80d3edbe3e3ac0b4c5bc764474220e7da11df8d285e0098f3dc1b65a734c8507"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Formatting.Compact.dll",
+        "sha256": "319fbcefc2161dd50ccdd8d60b30edee48a09f794aedb28421a23f35ddd670d9"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Settings.Configuration.dll",
+        "sha256": "de6fb7b6ee3229e0b0b9356ecdbbd05767d6490aaf0c34e9e49dbd7fe1e974a0"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Async.dll",
+        "sha256": "1031cd50ee3f0d62bbfdad3e07de0e953f26b90edac475e1b06fc65d2b42619c"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Console.dll",
+        "sha256": "dc88002ddd9f5fd0ffec9a6568ef89954671f60f2c9161593ee78932538c1e3e"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Debug.dll",
+        "sha256": "df543d3df8bd00d72e5eb2b9b2a15e67a6e4d10c13834de4cedbf500b8793e01"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.File.dll",
+        "sha256": "4f4282671c2ac68284b4dc99f7a76eac9cbd4e659978cef642cff9e6c01b676d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Graylog.Core.dll",
+        "sha256": "1aa458c5ec4d0bee8be25900d0103e345b28ac1da2c356a81641954bd5d67e19"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Graylog.dll",
+        "sha256": "1acb2f796c01331bc185cdf3ffd81fbaa3dd131335eda6a8341f1cbeb325e514"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Serilog.dll",
+        "sha256": "9fbf7441a9bdc9459652dc66e18f008040651f14cb8d7a7bb806ac4a8b722d10"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SharpCompress.dll",
+        "sha256": "f59f7159bc053f656f59ee15144f123de5d4b798c337083f3bfc6b0d30e846fd"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/ShimSkiaSharp.dll",
+        "sha256": "81605037e7c1b6515c40ac2a20cee7dcc2ec6fab2de448661ab19dcda421feb9"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SkiaSharp.HarfBuzz.dll",
+        "sha256": "a3395e68c225d9fbe950312117e50ba475240a4b6b1deb8feb3c27dfcf6a767a"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/SkiaSharp.dll",
+        "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Svg.Custom.dll",
+        "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Svg.Model.dll",
+        "sha256": "11d47f250c0afcd4d6d8a72bb7173a1c9d9e0fcfda764156f74dcbcfb02dbd82"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Svg.Skia.dll",
+        "sha256": "1879c178d0adc1438638421407f1241175905da2a0854d30198b45bc11ed56b1"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.ReDoc.dll",
+        "sha256": "b9eeab4c8d2f697cbf0a71da1a25fff537dc95040436b198aaa3961001abd728"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.Swagger.dll",
+        "sha256": "846276be474e07728eee6c60f586959c4d13f40df730c3645107d3ff115c622b"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "sha256": "2b986a27c1ce3bf2508eb100e4971380833bd52319f6b7b769016efe8e138e73"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/System.Drawing.Common.dll",
+        "sha256": "a998ea518f11dc6bc85d76abab2b99a79de3f06580fc409af8c3b344c9d8b30a"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/System.Private.Windows.Core.dll",
+        "sha256": "2cae44600028d3181b068421317c35faaee4f2e6eb990cb06a3ab60d587d5f50"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/TMDbLib.dll",
+        "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/TagLibSharp.dll",
+        "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/Ude.NetStandard.dll",
+        "sha256": "98d4b00f323dcff984c2eff193df5947f69653be13c6de98bc232a1f701c3963"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/UtfUnknown.dll",
+        "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+        "sha256": "5977c2b4a9805a275936f69ea763ae49d1986de3899dd154af149358960d6e22"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/libse.dll",
+        "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/prometheus-net.DotNetRuntime.dll",
+        "sha256": "5c9ba723966ff7f28305ebd9f8e4a2176c748dec03a1253b9894c942cd4e991d"
+      },
+      {
+        "path": ".agent-temp/reference/jellyfin-20261003/source/Jellyfin.Server/bin/Release/net10.0/zlib.net.dll",
+        "sha256": "1645161b61e85fd7b76f6b6d53f88c3006b718f25cbd2ade3dcd11a2a73f0dd4"
+      }
+    ],
+    "output": {
+      "path": ".agent-temp/reference/fixture-rebind-20261003/media-versions/native.json",
+      "sha256": "2aea96853b21fb32eebff5486a8754a3e1a4253e0c44d177118b9f0df7d99f18",
+      "bytes": 201342
+    },
+    "buildLog": ".agent-temp/reference/fixture-rebind-20261003/media-versions/build.log",
+    "executionLog": ".agent-temp/reference/fixture-rebind-20261003/media-versions/execute.log",
+    "semanticsEqual": true,
+    "normalizations": [],
+    "scope": "Actual current isolated DLL replay of the stored oracle input. Earlier HTTP artifacts were not rerun."
+  }
+}

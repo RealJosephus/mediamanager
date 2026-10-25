@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "scope": "New independently declared JPEG input generation, not native observations or decoder validation.",
+  "repository": "RealJosephus/mediamanager",
+  "commit": "00786ae67f878dc6051b45698e9527e072a0123d",
+  "runId": "40097316850",
+  "runAttempt": "1",
+  "status": "generated",
+  "commands": [
+    {
+      "name": "compiler-version",
+      "arguments": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "--version"
+      ],
+      "started": 1792847745.2272713,
+      "exitCode": 0,
+      "finished": 1792847745.2310953
+    },
+    {
+      "name": "compile-neutral-producer",
+      "arguments": [
+        "/usr/bin/x86_64-linux-gnu-gcc-13",
+        "-O2",
+        "-std=c11",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcapimin.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcapistd.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jccoefct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jccolor.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcdctmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jchuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcicc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcinit.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcmainct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcmarker.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcmaster.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcomapi.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcparam.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcphuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcprepct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jcsample.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jctrans.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdapimin.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdapistd.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdatadst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdatasrc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdcoefct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdcolor.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jddctmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdhuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdicc.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdinput.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdmainct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdmarker.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdmaster.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdmerge.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdphuff.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdpostct.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdsample.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jdtrans.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jerror.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jfdctflt.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jfdctfst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jfdctint.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jidctflt.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jidctfst.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jidctint.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jidctred.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jmemmgr.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jmemnobs.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jpeg_nbits_table.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jquant1.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jquant2.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jutils.c",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/libjpeg-turbo/jsimd_none.c",
+        "/home/runner/work/mediamanager/mediamanager/tools/images/generate-jpeg-boundaries.c",
+        "-lm",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries"
+      ],
+      "started": 1792847745.2313964,
+      "exitCode": 0,
+      "finished": 1792847754.4672744
+    },
+    {
+      "name": "generate-generated-rgb.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/generated-rgb.jpg",
+        "rgb",
+        "sequential"
+      ],
+      "started": 1792847754.4678195,
+      "exitCode": 0,
+      "finished": 1792847754.4713314
+    },
+    {
+      "name": "generate-generated-cmyk.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/generated-cmyk.jpg",
+        "cmyk",
+        "sequential"
+      ],
+      "started": 1792847754.4715095,
+      "exitCode": 0,
+      "finished": 1792847754.474889
+    },
+    {
+      "name": "generate-generated-ycck.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/generated-ycck.jpg",
+        "ycck",
+        "sequential"
+      ],
+      "started": 1792847754.475137,
+      "exitCode": 0,
+      "finished": 1792847754.4826484
+    },
+    {
+      "name": "generate-rgb-profile.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/rgb-profile.jpg",
+        "rgb",
+        "sequential",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/rgb.icc"
+      ],
+      "started": 1792847754.482908,
+      "exitCode": 0,
+      "finished": 1792847754.4863143
+    },
+    {
+      "name": "generate-cmyk-profile.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/cmyk-profile.jpg",
+        "cmyk",
+        "sequential",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/cmyk.icc"
+      ],
+      "started": 1792847754.4865124,
+      "exitCode": 0,
+      "finished": 1792847754.494012
+    },
+    {
+      "name": "generate-mismatched-profile.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/mismatched-profile.jpg",
+        "rgb",
+        "sequential",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/cmyk.icc"
+      ],
+      "started": 1792847754.4953222,
+      "exitCode": 0,
+      "finished": 1792847754.5029147
+    },
+    {
+      "name": "generate-malformed-profile.jpg",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/generate-jpeg-boundaries",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/malformed-profile.jpg",
+        "rgb",
+        "sequential",
+        "/home/runner/work/_temp/mediamanager-jpeg-inputs/artifact/assets/invalid.icc"
+      ],
+      "started": 1792847754.5039778,
+      "exitCode": 0,
+      "finished": 1792847754.5073955
+    }
+  ],
+  "sourceInputs": [
+    {
+      "filename": "libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1",
+      "role": "libjpeg-turbo",
+      "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+archive/927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz"
+    },
+    {
+      "filename": "skcms-1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "bytes": 10038666,
+      "sha256": "3e4f1f48034717cce3cc2ef3cd58e878a22cc52a4db5de7a1a11f0234a7a5807",
+      "role": "skcms",
+      "url": "https://skia.googlesource.com/skcms/+archive/1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz"
+    },
+    {
+      "filename": "generate-jpeg-boundaries.c",
+      "bytes": 2863,
+      "sha256": "ee41f7c6072b916234a62d36dd1b3600d0dde970b58bfbf4b381b5ea01d8d8f8",
+      "role": "neutral-pixel-pattern-producer"
+    }
+  ],
+  "assets": [
+    {
+      "filename": "upstream-gray.jpg",
+      "bytes": 4333,
+      "sha256": "b39ba716128c02501db3e461d025d76225f7b68710e41227fead5389a3e2288f",
+      "origin": "exact-upstream-member",
+      "member": "testimages/testout_gray_islow.jpg"
+    },
+    {
+      "filename": "upstream-progressive.jpg",
+      "bytes": 5645,
+      "sha256": "5218f80def34c0740ea4aa3625ac9320aa3b47bbc9c4e40801cb049325d0c67b",
+      "origin": "exact-upstream-member",
+      "member": "testimages/testout_420_islow_prog.jpg"
+    },
+    {
+      "filename": "upstream-rgb.jpg",
+      "bytes": 570569,
+      "sha256": "d6b302f95892d620214885cd7b8bc53fe3bdd277f577793ca5799deb50ce8c64",
+      "origin": "exact-upstream-member",
+      "member": "testimages/testout_rgb_islow.jpg"
+    },
+    {
+      "filename": "rgb.icc",
+      "bytes": 560,
+      "sha256": "e5f6ffb83b6d3491301dd750975684cc5cc2a1951c994a14b08cfdaa0d75a041",
+      "origin": "exact-upstream-member",
+      "member": "profiles/misc/AdobeRGB.icc"
+    },
+    {
+      "filename": "cmyk.icc",
+      "bytes": 654352,
+      "sha256": "06308db78447394228e90ea0f6c64d8adab627d18abb2bea9de573112de846f8",
+      "origin": "exact-upstream-member",
+      "member": "profiles/misc/Coated_FOGRA39_CMYK.icc"
+    },
+    {
+      "filename": "generated-rgb.jpg",
+      "bytes": 78374,
+      "sha256": "3c1376985fc6085701395220e4062a74de2c402ff59337f17df0f58b16050591",
+      "origin": "declared-neutral-pattern",
+      "color": "rgb",
+      "header": {
+        "jpegSignature": true,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 3
+      },
+      "profile": null
+    },
+    {
+      "filename": "generated-cmyk.jpg",
+      "bytes": 131704,
+      "sha256": "da70ee34254fa00e9929b8a063de783893164271c031189e9ed923048ad1189c",
+      "origin": "declared-neutral-pattern",
+      "color": "cmyk",
+      "header": {
+        "jpegSignature": true,
+        "adobeTransform": 0,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 4
+      },
+      "profile": null
+    },
+    {
+      "filename": "generated-ycck.jpg",
+      "bytes": 109442,
+      "sha256": "50a38e53b8e966f352c8508a9c3a9db1111f54dc5111a9e678e954670084a1be",
+      "origin": "declared-neutral-pattern",
+      "color": "ycck",
+      "header": {
+        "jpegSignature": true,
+        "adobeTransform": 2,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 4
+      },
+      "profile": null
+    },
+    {
+      "filename": "rgb-profile.jpg",
+      "bytes": 78952,
+      "sha256": "fecb41fefc4fecb30e04ae1851b9d4d54ffef44251d3511365c67e51cd1ab7b5",
+      "origin": "declared-neutral-pattern",
+      "color": "rgb",
+      "header": {
+        "jpegSignature": true,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 3
+      },
+      "profile": "rgb.icc"
+    },
+    {
+      "filename": "cmyk-profile.jpg",
+      "bytes": 786236,
+      "sha256": "64eef923bba2183cf6142acae0251dca4becb7271198266dde19a6ef27e758e0",
+      "origin": "declared-neutral-pattern",
+      "color": "cmyk",
+      "header": {
+        "jpegSignature": true,
+        "adobeTransform": 0,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 4
+      },
+      "profile": "cmyk.icc"
+    },
+    {
+      "filename": "mismatched-profile.jpg",
+      "bytes": 732906,
+      "sha256": "dff944396705574efe128e4539d352b0a11617622eca6f85d29acbcdde4dae82",
+      "origin": "declared-neutral-pattern",
+      "color": "rgb",
+      "header": {
+        "jpegSignature": true,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 3
+      },
+      "profile": "cmyk.icc"
+    },
+    {
+      "filename": "malformed-profile.jpg",
+      "bytes": 78459,
+      "sha256": "6173b4f2cd4d95151349c7e3b44d935dce0ad665bace5e1b5d9cfaa72003bf08",
+      "origin": "declared-neutral-pattern",
+      "color": "rgb",
+      "header": {
+        "jpegSignature": true,
+        "frameMarker": 192,
+        "height": 193,
+        "width": 257,
+        "components": 3
+      },
+      "profile": "invalid.icc"
+    },
+    {
+      "filename": "truncated-eoi.jpg",
+      "bytes": 78372,
+      "sha256": "9f89e2966d2a9f647fe4784fb8062a62c5627beed7b08e6e779c1d39515d2ccf",
+      "origin": "explicit-source-mutation",
+      "source": "generated-rgb.jpg",
+      "mutation": "truncated-eoi.jpg"
+    },
+    {
+      "filename": "truncated-scan.jpg",
+      "bytes": 39187,
+      "sha256": "6a1e9f715721055e60b6a9a1c13e4b413f3afc40b676e67992ac20f7e9813ae2",
+      "origin": "explicit-source-mutation",
+      "source": "generated-rgb.jpg",
+      "mutation": "truncated-scan.jpg"
+    },
+    {
+      "filename": "bad-marker.jpg",
+      "bytes": 78374,
+      "sha256": "b7053d67d2e17bab151eacc7228a344890f738775e6894b97daabd131cc48d77",
+      "origin": "explicit-source-mutation",
+      "source": "generated-rgb.jpg",
+      "mutation": "bad-marker.jpg"
+    },
+    {
+      "filename": "invalid.icc",
+      "bytes": 67,
+      "sha256": "e5b8508c22e6307173e96793d65ea1338745a071b8e3e26a70a1728bbff8180e",
+      "origin": "literal-malformed-profile"
+    }
+  ],
+  "nativeResultsRecorded": false,
+  "compiler": {
+    "filename": "x86_64-linux-gnu-gcc-13",
+    "bytes": 1023032,
+    "sha256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+  },
+  "producerBinary": {
+    "filename": "generate-jpeg-boundaries",
+    "bytes": 351800,
+    "sha256": "238bf3057027f6022ce22d5891f0e778b70f882bf741ffd74aad752f95e96f95"
+  }
+}

@@ -1,0 +1,695 @@
+{
+  "cases": [
+    {
+      "name": "get",
+      "method": "GET",
+      "path": "/Library/VirtualFolders"
+    },
+    {
+      "name": "get-ordinary",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "ordinary"
+    },
+    {
+      "name": "get-anonymous",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "anonymous"
+    },
+    {
+      "name": "get-empty",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "empty"
+    },
+    {
+      "name": "get-apiKey",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "apiKey"
+    },
+    {
+      "name": "wizard-ordinary",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "ordinary",
+      "wizard": true
+    },
+    {
+      "name": "wizard-anonymous",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "anonymous",
+      "wizard": true
+    },
+    {
+      "name": "wizard-apiKey",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "identity": "apiKey",
+      "wizard": true
+    },
+    {
+      "name": "get-remote-denied",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "remote": true,
+      "remoteDenied": true
+    },
+    {
+      "name": "wizard-remote-denied",
+      "method": "GET",
+      "path": "/Library/VirtualFolders",
+      "wizard": true,
+      "remote": true,
+      "remoteDenied": true
+    },
+    {
+      "name": "method",
+      "method": "PATCH",
+      "path": "/Library/VirtualFolders"
+    },
+    {
+      "name": "create-default",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library"
+    },
+    {
+      "name": "create-empty-object",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-null-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "null"
+    },
+    {
+      "name": "create-paths",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&paths=%20one%20,,two&collectionType=movies",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":[{\"Path\":\"ignored\"}],\"PreferredMetadataLanguage\":\"zh-CN\"}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-repeated-paths",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&paths=one,two&Paths=%20three%20&paths=",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-nested-options",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&collectionType=Music",
+      "body": "{\"LibraryOptions\":{\"EnableRealtimeMonitor\":true,\"TypeOptions\":[{\"Type\":\"Audio\",\"MetadataFetchers\":[\"Nfo\",\"Tmdb\"],\"ImageOptions\":[{\"Type\":\"Backdrop\",\"Limit\":3}]}]}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-null-arrays",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":null,\"TypeOptions\":null,\"MetadataSavers\":null}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-number-strings",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&collectionType=35",
+      "body": "{\"LibraryOptions\":{\"AutomaticRefreshIntervalDays\":\"3\",\"PreferredMetadataLanguage\":12}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-undefined-enum",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"AllowEmbeddedSubtitles\":42,\"TypeOptions\":[{\"ImageOptions\":[{\"Type\":17}]}]}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-20",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-21",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=%20",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-22",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=%20Library",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-23",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library%20",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-24",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=%C2%85Library",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-25",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library%EF%BB%BF",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-name-26",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Lib%0Arary",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-missing-name",
+      "method": "POST",
+      "path": "/Library/VirtualFolders",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-enum-invalid",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&collectionType=nope",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-enum-composite",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&collectionType=movies,music",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-refresh-empty",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&refreshLibrary=",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-refresh-whitespace",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&refreshLibrary=%20",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-refresh-invalid",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library&refreshLibrary=yes",
+      "body": "{}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-boolean-null",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"Enabled\":null}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-invalid-first-duplicate",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"Enabled\":\"yes\",\"enabled\":true}}"
+    },
+    {
+      "name": "create-valid-duplicate",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"Enabled\":false,\"enabled\":true}}"
+    },
+    {
+      "name": "create-null-path-item",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":[null,{\"Path\":null}]}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "create-invalid-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{"
+    },
+    {
+      "name": "create-array-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "[]"
+    },
+    {
+      "name": "create-unauthorized-invalid",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?collectionType=nope",
+      "identity": "ordinary",
+      "body": "{"
+    },
+    {
+      "name": "create-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=Library",
+      "body": "{}",
+      "contentType": "application/json",
+      "fail": "create"
+    },
+    {
+      "name": "delete",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders?name=Library"
+    },
+    {
+      "name": "delete-missing-name",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders"
+    },
+    {
+      "name": "delete-invalid-refresh",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders?name=Library&refreshLibrary=no"
+    },
+    {
+      "name": "delete-failure",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders?name=Library",
+      "fail": "delete"
+    },
+    {
+      "name": "rename",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed"
+    },
+    {
+      "name": "rename-case",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=library"
+    },
+    {
+      "name": "rename-same",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Library"
+    },
+    {
+      "name": "rename-refresh",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed&refreshLibrary=true"
+    },
+    {
+      "name": "rename-conflict",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Taken"
+    },
+    {
+      "name": "rename-invalid-50",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=..%2Fescape"
+    },
+    {
+      "name": "rename-invalid-51",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=."
+    },
+    {
+      "name": "rename-invalid-52",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=.."
+    },
+    {
+      "name": "rename-invalid-53",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=..."
+    },
+    {
+      "name": "rename-invalid-54",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=nested%2Fname"
+    },
+    {
+      "name": "rename-invalid-55",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Z%3A%5Cescape"
+    },
+    {
+      "name": "rename-invalid-56",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=%00"
+    },
+    {
+      "name": "rename-invalid-57",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed."
+    },
+    {
+      "name": "rename-invalid-58",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed%20"
+    },
+    {
+      "name": "rename-invalid-59",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName="
+    },
+    {
+      "name": "rename-missing",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Missing&newName=Renamed"
+    },
+    {
+      "name": "rename-missing-query",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?newName=Renamed"
+    },
+    {
+      "name": "rename-invalid-current",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=../escape&newName=Renamed"
+    },
+    {
+      "name": "rename-move-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed",
+      "fail": "move"
+    },
+    {
+      "name": "rename-stop-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed",
+      "fail": "stop"
+    },
+    {
+      "name": "path-add",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\",\"Path\":\"media\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-info-precedence",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths?refreshLibrary=true",
+      "body": "{\"Name\":\"Library\",\"Path\":\"ignored\",\"PathInfo\":{\"Path\":\"media\"}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-no-path",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-null-info",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\",\"Path\":\"media\",\"PathInfo\":null}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-no-name",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Path\":\"media\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-empty-name",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"\",\"Path\":\"media\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-no-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths"
+    },
+    {
+      "name": "path-add-null-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "null"
+    },
+    {
+      "name": "path-add-bad-body",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "[]"
+    },
+    {
+      "name": "path-add-invalid-info",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\",\"PathInfo\":{\"Path\":{}}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-add-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\",\"Path\":\"media\"}",
+      "contentType": "application/json",
+      "fail": "add-path"
+    },
+    {
+      "name": "path-add-stop-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths",
+      "body": "{\"Name\":\"Library\",\"Path\":\"media\"}",
+      "contentType": "application/json",
+      "fail": "stop"
+    },
+    {
+      "name": "path-update",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths/Update",
+      "body": "{\"Name\":\"Library\",\"PathInfo\":{\"Path\":\"unchanged\"}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-update-no-name",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths/Update",
+      "body": "{\"PathInfo\":{}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-update-no-info",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths/Update",
+      "body": "{\"Name\":\"Library\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-update-whitespace",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths/Update",
+      "body": "{\"Name\":\"\u0085\",\"PathInfo\":{}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "path-remove",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders/Paths?name=Library&path=media"
+    },
+    {
+      "name": "path-remove-refresh",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders/Paths?name=Library&path=media&refreshLibrary=true"
+    },
+    {
+      "name": "path-remove-whitespace",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders/Paths?name=Library&path=%20"
+    },
+    {
+      "name": "path-remove-missing",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders/Paths?name=Library"
+    },
+    {
+      "name": "path-remove-failure",
+      "method": "DELETE",
+      "path": "/Library/VirtualFolders/Paths?name=Library&path=media",
+      "fail": "remove-path"
+    },
+    {
+      "name": "options",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"Id\":\"ca200000000000000000000000000001\",\"LibraryOptions\":{}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-paths",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"Id\":\"ca200000000000000000000000000001\",\"LibraryOptions\":{\"PathInfos\":[{\"Path\":\"new\"},{\"Path\":\"new\"}],\"Enabled\":false}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-no-options",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"Id\":\"ca200000000000000000000000000001\"}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-null-paths",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":null}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-null-path-item",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":[null]}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-null-guid",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"Id\":null,\"LibraryOptions\":{}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-invalid-guid",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"Id\":\"bad\",\"LibraryOptions\":{}}",
+      "contentType": "application/json"
+    },
+    {
+      "name": "options-missing-item",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"LibraryOptions\":{}}",
+      "contentType": "application/json",
+      "missingItem": true
+    },
+    {
+      "name": "options-shortcut-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/LibraryOptions",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":[{\"Path\":\"new\"}]}}",
+      "contentType": "application/json",
+      "fail": "shortcut"
+    },
+    {
+      "name": "rename-case-second-move-failure",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=library",
+      "fail": "move-second"
+    },
+    {
+      "name": "rename-refresh-physical",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Name?name=Library&newName=Renamed&refreshLibrary=true",
+      "physicalRoot": true
+    },
+    {
+      "name": "create-query-and-body-errors",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?refreshLibrary=bad",
+      "body": "{\"LibraryOptions\":{\"Enabled\":null}}"
+    },
+    {
+      "name": "create-query-and-validation-errors",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?name=%20Library%20&refreshLibrary=bad",
+      "body": "{\"LibraryOptions\":{\"PathInfos\":null}}"
+    },
+    {
+      "name": "create-unsupported-before-query-errors",
+      "method": "POST",
+      "path": "/Library/VirtualFolders?refreshLibrary=bad",
+      "body": "{}",
+      "contentType": "text/plain"
+    },
+    {
+      "name": "path-query-and-body-errors",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths?refreshLibrary=bad",
+      "body": "{\"PathInfo\":{}}"
+    },
+    {
+      "name": "path-query-and-validation-errors",
+      "method": "POST",
+      "path": "/Library/VirtualFolders/Paths?refreshLibrary=bad",
+      "body": "{\"Name\":\"\"}"
+    }
+  ],
+  "markerTypes": [
+    "0",
+    "5",
+    "7",
+    "8",
+    "12",
+    "99",
+    "-1",
+    "mixed",
+    "photos",
+    "trailers",
+    "unknown",
+    "movies,tvshows",
+    "boxsets,music",
+    "\u0085movies",
+    "﻿movies"
+  ],
+  "files": [
+    {
+      "bytesBase64": "",
+      "path": "Library/movies.collection"
+    },
+    {
+      "bytesBase64": "",
+      "path": "Taken/movies.collection"
+    },
+    {
+      "bytesBase64": "TGlicmFyeSBwYXlsb2FkIOS4reaWhwpzZWNvbmQgbGluZQo=",
+      "path": "Library/notes/说明.txt"
+    },
+    {
+      "bytesBase64": "AAECDQp/gP7/",
+      "path": "Library/notes/payload.bin"
+    },
+    {
+      "bytesBase64": "RXhpc3RpbmcgZGVzdGluYXRpb24gbXVzdCBzdXJ2aXZlLgo=",
+      "path": "Taken/preserved.txt"
+    }
+  ],
+  "optionsContinuation": {
+    "SeasonZeroDisplayName": "Native continuation 中文",
+    "CustomTagDelimiters": [
+      "；",
+      "|",
+      "/"
+    ],
+    "AutomaticRefreshIntervalDays": 17,
+    "MetadataCountryCode": "TW",
+    "PreferredMetadataLanguage": "zh-TW"
+  }
+}

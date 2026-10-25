@@ -1,0 +1,607 @@
+{
+  "schemaVersion": 1,
+  "processId": 18132,
+  "runtime": ".NET 10.0.12",
+  "os": "Microsoft Windows 10.0.26300",
+  "actualFrozenSubtitleEncoder": true,
+  "actualFrozenSubtitleEditParser": true,
+  "actualFrozenStreamBuilder": true,
+  "actualFrozenStreamInfo": true,
+  "item": {
+    "Id": "22222222-2222-2222-2222-222222222222",
+    "Path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\controlled-source-does-not-exist.mkv"
+  },
+  "input": {
+    "Id": "22222222222222222222222222222222",
+    "Path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\controlled-source-does-not-exist.mkv",
+    "Container": "mkv",
+    "Index": 3,
+    "Codec": "dvdsub",
+    "SupportsExternalStream": true,
+    "IsExternal": false,
+    "IsExtractableSubtitleStream": true
+  },
+  "cache": {
+    "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\isolated-cache\\3.mks",
+    "exists": true,
+    "length": 2913,
+    "sha256": "857b36ceec74163a431f2173a48e5780088d19ca4587f6842cdbb42d15ce9ef0"
+  },
+  "sourceExists": false,
+  "readableFields": {
+    "Path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\isolated-cache\\3.mks",
+    "Protocol": 0,
+    "Format": "mks",
+    "IsExternal": false
+  },
+  "parserSupportsMks": false,
+  "results": [
+    {
+      "outputFormat": "vobsub",
+      "outcome": "exception",
+      "type": "System.ArgumentException",
+      "Message": "Unsupported file extension: mks (Parameter \u0027fileExtension\u0027)",
+      "parameter": "fileExtension",
+      "stackTrace": "   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEditParser.Parse(Stream stream, String fileExtension) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEditParser.cs:line 38\r\n   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEncoder.ConvertSubtitles(Stream stream, SubtitleInfo inputInfo, String outputFormat, Int64 startTimeTicks, Int64 endTimeTicks, Boolean preserveOriginalTimestamps) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEncoder.cs:line 85\r\n   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEncoder.MediaBrowser.Controller.MediaEncoding.ISubtitleEncoder.GetSubtitles(BaseItem item, String mediaSourceId, Int32 subtitleStreamIndex, String outputFormat, Int64 startTimeTicks, Int64 endTimeTicks, Boolean preserveOriginalTimestamps, CancellationToken cancellationToken) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEncoder.cs:line 151\r\n   at Program.\u003CMain\u003E$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\Program.cs:line 66"
+    },
+    {
+      "outputFormat": "dvdsub",
+      "outcome": "exception",
+      "type": "System.ArgumentException",
+      "Message": "Unsupported file extension: mks (Parameter \u0027fileExtension\u0027)",
+      "parameter": "fileExtension",
+      "stackTrace": "   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEditParser.Parse(Stream stream, String fileExtension) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEditParser.cs:line 38\r\n   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEncoder.ConvertSubtitles(Stream stream, SubtitleInfo inputInfo, String outputFormat, Int64 startTimeTicks, Int64 endTimeTicks, Boolean preserveOriginalTimestamps) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEncoder.cs:line 85\r\n   at MediaBrowser.MediaEncoding.Subtitles.SubtitleEncoder.MediaBrowser.Controller.MediaEncoding.ISubtitleEncoder.GetSubtitles(BaseItem item, String mediaSourceId, Int32 subtitleStreamIndex, String outputFormat, Int64 startTimeTicks, Int64 endTimeTicks, Boolean preserveOriginalTimestamps, CancellationToken cancellationToken) in D:\\mediamanager\\.test-input\\baselines\\jellyfin-current\\source\\MediaBrowser.MediaEncoding\\Subtitles\\SubtitleEncoder.cs:line 151\r\n   at Program.\u003CMain\u003E$(String[] args) in D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\Program.cs:line 66"
+    },
+    {
+      "outputFormat": "mks",
+      "outcome": "returned-stream",
+      "length": 2913,
+      "sha256": "857b36ceec74163a431f2173a48e5780088d19ca4587f6842cdbb42d15ce9ef0"
+    },
+    {
+      "outputFormat": "MKS",
+      "outcome": "returned-stream",
+      "length": 2913,
+      "sha256": "857b36ceec74163a431f2173a48e5780088d19ca4587f6842cdbb42d15ce9ef0"
+    }
+  ],
+  "advertisements": [
+    {
+      "name": "actual-http-input-dvdsub-with-vobsub-mks-profile",
+      "codec": "dvdsub",
+      "external": false,
+      "path": null,
+      "profile": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "dvdsub",
+        "IsExternal": false,
+        "Path": null,
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "advertisements": [
+        {
+          "Format": "vobsub",
+          "Method": "External",
+          "Url": "/controlled/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.vobsub",
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    },
+    {
+      "name": "dvdsub-with-dvdsub-mks-profile",
+      "codec": "dvdsub",
+      "external": false,
+      "path": null,
+      "profile": {
+        "Format": "dvdsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "dvdsub",
+        "IsExternal": false,
+        "Path": null,
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "dvdsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "advertisements": [
+        {
+          "Format": "dvdsub",
+          "Method": "External",
+          "Url": "/controlled/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.dvdsub",
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    },
+    {
+      "name": "vobsub-with-vobsub-mks-profile",
+      "codec": "vobsub",
+      "external": false,
+      "path": null,
+      "profile": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "vobsub",
+        "IsExternal": false,
+        "Path": null,
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "advertisements": [
+        {
+          "Format": "vobsub",
+          "Method": "External",
+          "Url": "/controlled/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.vobsub",
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    },
+    {
+      "name": "external-mks",
+      "codec": "dvdsub",
+      "external": true,
+      "path": "Z:\\Controlled\\subtitle.MKS",
+      "profile": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "dvdsub",
+        "IsExternal": true,
+        "Path": "Z:\\Controlled\\subtitle.MKS",
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "advertisements": [
+        {
+          "Format": "vobsub",
+          "Method": "External",
+          "Url": "/controlled/Videos/22222222-2222-2222-2222-222222222222/22222222222222222222222222222222/Subtitles/3/0/Stream.vobsub",
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    },
+    {
+      "name": "external-idx",
+      "codec": "dvdsub",
+      "external": true,
+      "path": "Z:\\Controlled\\subtitle.idx",
+      "profile": {
+        "Format": "vobsub",
+        "Container": "mks",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "dvdsub",
+        "IsExternal": true,
+        "Path": "Z:\\Controlled\\subtitle.idx",
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "dvdsub",
+        "Container": null,
+        "Method": "Encode"
+      },
+      "advertisements": [
+        {
+          "Format": "dvdsub",
+          "Method": "Encode",
+          "Url": null,
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    },
+    {
+      "name": "embedded-without-mks-container",
+      "codec": "dvdsub",
+      "external": false,
+      "path": null,
+      "profile": {
+        "Format": "vobsub",
+        "Container": "",
+        "Method": "External"
+      },
+      "stream": {
+        "Index": 3,
+        "Codec": "dvdsub",
+        "IsExternal": false,
+        "Path": null,
+        "IsExtractableSubtitleStream": true,
+        "IsVobSubSubtitleStream": true
+      },
+      "selected": {
+        "Format": "dvdsub",
+        "Container": null,
+        "Method": "Encode"
+      },
+      "advertisements": [
+        {
+          "Format": "dvdsub",
+          "Method": "Encode",
+          "Url": null,
+          "IsExternalUrl": false,
+          "Index": 3
+        }
+      ]
+    }
+  ],
+  "calls": [
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetPlaybackMediaSources",
+      "scope": "controlled-media-source-manager"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetPlaybackMediaSources",
+      "scope": "controlled-media-source-manager"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetPlaybackMediaSources",
+      "scope": "controlled-media-source-manager"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetPlaybackMediaSources",
+      "scope": "controlled-media-source-manager"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    },
+    {
+      "method": "GetSubtitlePath",
+      "args": [
+        "22222222222222222222222222222222",
+        3,
+        ".mks"
+      ],
+      "scope": "controlled-cache-path"
+    }
+  ],
+  "mediaEncoderCalls": [],
+  "httpCalls": [],
+  "assemblies": [
+    {
+      "name": "AsyncKeyedLock",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\AsyncKeyedLock.dll",
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36"
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\Emby.Server.Implementations.dll",
+      "sha256": "c63a43b6d4dc0c82f59b1d5a1c71788738f3629fdf60e01993de606b83559b1a"
+    },
+    {
+      "name": "Jellyfin.Data",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\Jellyfin.Data.dll",
+      "sha256": "8a4364a16982ff1497aba328f736886f423f9a0f81f91bbdab76199bb2d98751"
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\Jellyfin.Database.Implementations.dll",
+      "sha256": "987e24d22a0f54a0eb2c459f9073fc6721bcbed98763da7e23e85e19e3e62ed1"
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\Jellyfin.Extensions.dll",
+      "sha256": "857e4a37f69c65f1b66cd281fe735a75caf3ae76ae878726eaf20130755cabde"
+    },
+    {
+      "name": "libse",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\libse.dll",
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903"
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\MediaBrowser.Common.dll",
+      "sha256": "c26f4b04b829d85aa2d97401235d245923e5702ffa6021a90a1e27c49399ae87"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "name": "MediaBrowser.MediaEncoding",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\MediaBrowser.MediaEncoding.dll",
+      "sha256": "0f8d22de3a3aa21aa0c1d2dac0897a37ca83e552b869551238fa1a7f8e2499d1"
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\MediaBrowser.Model.dll",
+      "sha256": "991b3ca08b544ea91feff5c05d8dbb1d8b6ca3392f90753073cc09e353395946"
+    },
+    {
+      "name": "Microsoft.Extensions.Http",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Http.dll",
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695"
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App\\10.0.12\\Microsoft.Extensions.Logging.Abstractions.dll",
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3"
+    },
+    {
+      "name": "Microsoft.Win32.Registry",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\Microsoft.Win32.Registry.dll",
+      "sha256": "76849cfde4369f3ae93e28261fe5e1010dbf1332f7da95c98543cba9b03961c0"
+    },
+    {
+      "name": "netstandard",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\netstandard.dll",
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57"
+    },
+    {
+      "name": "Oracle",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\Oracle.dll",
+      "sha256": "e78f33febb77d4192fd2154bca8eeda17676b2ebb54bed6b90cd0891b6a2a141"
+    },
+    {
+      "name": "System.Collections",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.dll",
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54"
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Concurrent.dll",
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b"
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Collections.Immutable.dll",
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db"
+    },
+    {
+      "name": "System.Console",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Console.dll",
+      "sha256": "3b85daf02a3d9ed99b84bb1c639fe8b1ced46d8d157fa56f525f6b8c5be43b3e"
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.Process.dll",
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740"
+    },
+    {
+      "name": "System.Diagnostics.StackTrace",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Diagnostics.StackTrace.dll",
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797"
+    },
+    {
+      "name": "System.Drawing.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Drawing.Primitives.dll",
+      "sha256": "17585b32ca91bac8ccff2ef1c6ddf62ee9ea5efc552928c3a9d1b868394246e9"
+    },
+    {
+      "name": "System.IO.MemoryMappedFiles",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.IO.MemoryMappedFiles.dll",
+      "sha256": "6e8b281ecb2f0f5e7aad3980f61d8812caa6b37884737f542f95410a76663e0e"
+    },
+    {
+      "name": "System.Linq",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Linq.dll",
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519"
+    },
+    {
+      "name": "System.Memory",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Memory.dll",
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a"
+    },
+    {
+      "name": "System.Net.Http",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Http.dll",
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801"
+    },
+    {
+      "name": "System.Net.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Net.Primitives.dll",
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1"
+    },
+    {
+      "name": "System.ObjectModel",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.ObjectModel.dll",
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    },
+    {
+      "name": "System.Private.Uri",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.Uri.dll",
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4"
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.DispatchProxy.dll",
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560"
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.dll",
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238"
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26"
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Emit.Lightweight.dll",
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779"
+    },
+    {
+      "name": "System.Reflection.Metadata",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Metadata.dll",
+      "sha256": "82973e772017944a0548e445f30757595d95fe99e1f5c4a446df8c4db04b1c18"
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Reflection.Primitives.dll",
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28"
+    },
+    {
+      "name": "System.Runtime",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.dll",
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af"
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.InteropServices.dll",
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f"
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Runtime.Loader.dll",
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03"
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Security.Cryptography.dll",
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0"
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Encoding.Extensions.dll",
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113"
+    },
+    {
+      "name": "System.Text.Json",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.Json.dll",
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a"
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Text.RegularExpressions.dll",
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134"
+    },
+    {
+      "name": "System.Threading",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Threading.dll",
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60"
+    },
+    {
+      "name": "UtfUnknown",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\vobsub-advertisement-audit-v2\\bin\\Debug\\net10.0\\UtfUnknown.dll",
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+    }
+  ],
+  "phaseAcceptance": false,
+  "boundary": "Actual frozen DLL encoder/parser/profile selection/URL generation, real ManagedFileSystem and File IO over an exact-byte copy of prior real native HTTP MKS cache. Only source manager and cache path are controlled; source Path is intentionally absent so native cache freshness uses its recorded cached-source-unavailable fast path. No subtitle/result/error/URL is mocked. No new ffmpeg extraction, server, middleware, HTTP, DB, port, client renderer, cancellation, or source revision freshness is exercised."
+}

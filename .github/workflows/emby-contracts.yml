@@ -1,0 +1,69 @@
+name: Capture official Emby API contracts
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: Exact interoperability scenario to capture
+        type: choice
+        default: user-copy
+        options:
+          - user-copy
+          - search-history
+          - search-order
+          - home-sections
+          - home-model
+          - section-items
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      TZ: Asia/Taipei
+      DOTNET_NOLOGO: '1'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      MEDIAMANAGER_EMBY_CAPTURE_SCENARIO: ${{ inputs.scenario || 'user-copy' }}
+    steps:
+      - name: Check out exact capture producer
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Configure isolated runtime
+        shell: bash
+        run: |
+          printf 'DOTNET_INSTALL_DIR=%s\n' "$RUNNER_TEMP/emby-dotnet" >> "$GITHUB_ENV"
+          printf 'MEDIAMANAGER_VALIDATION_OUTPUT_ROOT=%s\n' "$RUNNER_TEMP/mediamanager-emby-reference/receipts" >> "$GITHUB_ENV"
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.16.0
+      - name: Set up official package runtime
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 8.0.426
+      - name: Check capture producer syntax
+        run: |
+          node --check tools/compat/capture-emby-contracts.mjs
+          node --check tools/compat/emby-search-history-scenario.mjs
+          node --check tools/compat/emby-home-sections-scenario.mjs
+          node --check tools/compat/emby-section-items-scenario.mjs
+      - name: Fetch unchanged official release
+        shell: pwsh
+        run: ./tools/ci/fetch-emby-server.ps1
+      - name: Supply pinned probe tools for the controlled media library
+        shell: pwsh
+        run: ./tools/ci/setup-media.ps1
+      - name: Capture actual isolated HTTP contracts
+        run: node tools/compat/capture-emby-contracts.mjs
+      - name: Preserve observations and input identities
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: emby-contracts-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-emby-reference/receipts/
+          if-no-files-found: error
+          retention-days: 14

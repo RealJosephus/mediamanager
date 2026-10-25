@@ -1,0 +1,2332 @@
+{
+  "candidateVerified": false,
+  "inputSha256": "652ab5733575ee5d26246e697b585f4e87ac0ad2018062e6ef1e10119242ca29",
+  "results": [
+    {
+      "name": "m3u-plain-duplicates",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/plain.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-extended-url-decoding",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/extended.M3U",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000003",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000003",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song+A.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song+A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-plain-does-not-url-decode",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/plain.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000003",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song+A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u8-unicode",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 0.87625,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/unicode.M3U8",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-utf8-bom",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 1,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/utf8.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-utf16le-bom",
+      "detection": {
+        "encoding": "utf-16",
+        "confidence": 1,
+        "preferredEncoding": "utf-16"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/utf16.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-utf16be-bom",
+      "detection": {
+        "encoding": "utf-16BE",
+        "confidence": 1,
+        "preferredEncoding": "utf-16BE"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/utf16.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-utf32le-bom",
+      "detection": {
+        "encoding": "utf-32",
+        "confidence": 1,
+        "preferredEncoding": "utf-32"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/utf32.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-windows1252",
+      "detection": {
+        "encoding": "iso-8859-1",
+        "confidence": 0.84395146,
+        "preferredEncoding": "iso-8859-1"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/legacy.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-big5",
+      "detection": {
+        "encoding": "windows-1252",
+        "confidence": 0.5,
+        "preferredEncoding": "windows-1252"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/big5.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-shiftjis",
+      "detection": {
+        "encoding": "shift_jis",
+        "confidence": 0.99,
+        "preferredEncoding": "shift_jis"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/japanese.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000007",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000007",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/日本語の歌.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/日本語の歌.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-nfd-normalization",
+      "detection": {
+        "encoding": "utf-8",
+        "confidence": 0.87625,
+        "preferredEncoding": "utf-8"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/decomposed.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000005",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Música épica/Canción.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-root-prefix-not-containment",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/prefix.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000008",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/LibraryToo/Prefix.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-absolute-and-missing-db",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/absolute.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-ignored-collections",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/ignored.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-duplicate-roots",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/roots.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-empty",
+      "detection": {
+        "encoding": null,
+        "confidence": null,
+        "preferredEncoding": "utf-8"
+      },
+      "result": null,
+      "error": {
+        "type": "ArgumentOutOfRangeException",
+        "message": "Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')"
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-header-only",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/empty.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-whitespace-lines",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/blank.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-hls-one-digit",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "FormatException",
+        "message": "Playlist appears to be a HLS playlist. Use the HLS parser instead."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "m3u-hls-two-digit-is-not-detected",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/hls.m3u8",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "m3u-duplicate-custom-property",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "ArgumentException",
+        "message": "An item with the same key has already been added. Key: EXTFOO"
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "pls-number-order-and-replacement",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/ordered.PLS",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000003",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song+A.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "pls-header-case",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/wrong.pls",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "pls-invalid-number-minus-one",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/number.pls",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "pls-null-title-only-path",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/windows.WPL",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000004",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song&A.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "zpl-direct-media",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/zune.zpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            },
+            {
+              "id": "16000000-0000-0000-0000-000000000002",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/Song B.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-missing-head",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-namespace-root",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "wpl-internal-entity",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": true,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/entity.wpl",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [
+            {
+              "id": "16000000-0000-0000-0000-000000000001",
+              "path": null,
+              "type": "Manual"
+            }
+          ],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        },
+        {
+          "method": "FindByPath",
+          "path": "$STATE/media/Library/SongA.mp3",
+          "isFolder": null
+        }
+      ]
+    },
+    {
+      "name": "wpl-no-src",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": null,
+      "error": {
+        "type": "NullReferenceException",
+        "message": "Object reference not set to an instance of an object."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "playlist-directory-with-extension",
+      "detection": null,
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/logical.m3u",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": []
+    },
+    {
+      "name": "playlist-unsupported-extension",
+      "detection": {
+        "encoding": "us-ascii",
+        "confidence": 1,
+        "preferredEncoding": "us-ascii"
+      },
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": "$STATE/media/Library/lists/unsupported.xspf",
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": []
+    },
+    {
+      "name": "playlist-file-missing",
+      "detection": null,
+      "result": null,
+      "error": {
+        "type": "DirectoryNotFoundException",
+        "message": "Could not find a part of the path '$STATE/media/Library/lists/missing.m3u'."
+      },
+      "calls": [
+        {
+          "method": "GetUserRootFolder"
+        }
+      ]
+    },
+    {
+      "name": "playlist-null-path",
+      "detection": null,
+      "result": {
+        "HasMetadata": false,
+        "item": {
+          "Name": null,
+          "path": null,
+          "IsFolder": true,
+          "mediaType": "Unknown",
+          "owner": "00000000-0000-0000-0000-000000000000",
+          "OpenAccess": false,
+          "links": [],
+          "shares": []
+        },
+        "providerName": "Playlist Item Provider",
+        "order": 100,
+        "completedWithCancelledToken": true
+      },
+      "error": null,
+      "calls": []
+    }
+  ],
+  "merges": [
+    {
+      "name": "external-replace",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-empty-target-keeps-duplicates",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Video",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Video",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-merge-new-first-id-dedup",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000003",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000003",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-empty-source-preserves-old",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "external-empty-source-replace-clears",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      }
+    },
+    {
+      "name": "managed-keeps-database-links",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/data/playlists/Managed",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/data/playlists/Managed",
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "managed-case-insensitive-prefix",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/DATA/playlists/Managed",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/DATA/playlists/Managed",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "equal-data-root-is-not-contained",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/data",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/data",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "unrelated-data-name-is-external",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/database/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/database/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "null-target-path-keeps-links",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "settings-disabled-keeps-playlist-state",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Audio",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000001",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000002",
+            "edit": true
+          }
+        ]
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Video",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          }
+        ]
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Video",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "16000000-0000-0000-0000-000000000002",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "shares-new-first-dedup",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000002",
+            "edit": true
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": true
+          }
+        ]
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000002",
+            "edit": false
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000003",
+            "edit": false
+          }
+        ]
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000002",
+            "edit": true
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000003",
+            "edit": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "shares-empty-target-keeps-duplicates",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": true
+          }
+        ]
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [],
+        "shares": [
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": false
+          },
+          {
+            "user": "16000000-0000-0000-0000-000000000001",
+            "edit": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "links-zero-id-falls-back-to-path",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": null,
+            "path": "A",
+            "type": "Manual"
+          },
+          {
+            "id": null,
+            "path": "a",
+            "type": "Manual"
+          },
+          {
+            "id": null,
+            "path": null,
+            "type": "Manual"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "path": "A",
+            "type": "Manual"
+          },
+          {
+            "id": null,
+            "path": "a",
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "00000000-0000-0000-0000-000000000000",
+        "OpenAccess": false,
+        "links": [
+          {
+            "id": null,
+            "path": "A",
+            "type": "Manual"
+          },
+          {
+            "id": null,
+            "path": "a",
+            "type": "Manual"
+          },
+          {
+            "id": null,
+            "path": null,
+            "type": "Manual"
+          }
+        ],
+        "shares": []
+      }
+    },
+    {
+      "name": "owner-and-open-access-not-merged",
+      "source": {
+        "Name": null,
+        "path": null,
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "16000000-0000-0000-0000-000000000001",
+        "OpenAccess": false,
+        "links": [],
+        "shares": []
+      },
+      "before": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "16000000-0000-0000-0000-000000000002",
+        "OpenAccess": true,
+        "links": [],
+        "shares": []
+      },
+      "after": {
+        "Name": null,
+        "path": "$STATE/media/list.m3u",
+        "IsFolder": true,
+        "mediaType": "Unknown",
+        "owner": "16000000-0000-0000-0000-000000000002",
+        "OpenAccess": true,
+        "links": [],
+        "shares": []
+      }
+    }
+  ],
+  "inputFiles": [
+    {
+      "name": "m3u-plain-duplicates",
+      "sha256": "ae4047614a7c4eded2e272d3592c51455912a83cda12dc4b0a40c46cab129cf1",
+      "bytes": 65
+    },
+    {
+      "name": "m3u-extended-url-decoding",
+      "sha256": "f71b0e3de2e684866f5fadca9299aa671aa810b9e190c773b1311dbf4ca6d45c",
+      "bytes": 69
+    },
+    {
+      "name": "m3u-plain-does-not-url-decode",
+      "sha256": "6fafa0571d645701c4d157defa3af3cef56d47b89a847d335f35788044573984",
+      "bytes": 30
+    },
+    {
+      "name": "m3u8-unicode",
+      "sha256": "bef54d8e34c2b57646a76656e7206944c146196a4daadeefefb5fb60d40a7dde",
+      "bytes": 39
+    },
+    {
+      "name": "m3u-utf8-bom",
+      "sha256": "20d61306808712a4f0b1862ab6d7e9c8e4962326610e345c6718314fc84c6f53",
+      "bytes": 42
+    },
+    {
+      "name": "m3u-utf16le-bom",
+      "sha256": "f95e8744612912ad8dd8fa695d1117aa147401be7985760b5f06d9b41fdd5075",
+      "bytes": 74
+    },
+    {
+      "name": "m3u-utf16be-bom",
+      "sha256": "657a530cb1fcb8fae4b2bdcb9379a502dbf22929794e51cd8a00afb208a1115e",
+      "bytes": 74
+    },
+    {
+      "name": "m3u-utf32le-bom",
+      "sha256": "7291628c92ff392057ae8f9b75e22e2b80a7c37724ec5defcc735bc470385e1e",
+      "bytes": 148
+    },
+    {
+      "name": "m3u-windows1252",
+      "sha256": "d3f455be74a26aba146f6c7220559d917bfb984d633355e0b1242ecd07f4999e",
+      "bytes": 54
+    },
+    {
+      "name": "m3u-big5",
+      "sha256": "a248138179a4dda9105e8053c89c9a6c8b8d4ab711efe76267bac00a82b6cdfd",
+      "bytes": 40
+    },
+    {
+      "name": "m3u-shiftjis",
+      "sha256": "68b0247bec03529793c735986d1aec68370d17fb15776ec78dbf43e6533ae3da",
+      "bytes": 44
+    },
+    {
+      "name": "m3u-nfd-normalization",
+      "sha256": "1146501beebd69e63ef47b9adf79b8dee3e06acc9bc148c40bca2f7af36646b9",
+      "bytes": 42
+    },
+    {
+      "name": "m3u-root-prefix-not-containment",
+      "sha256": "a624ec21e449c529e0534bd87185f1c560ade31957c1d97fd0b84cc07d2313f7",
+      "bytes": 52
+    },
+    {
+      "name": "m3u-absolute-and-missing-db",
+      "sha256": "17d7044bb921c431ead5e49b04313394255cd508930f567d14398180d92c1b18",
+      "bytes": 241
+    },
+    {
+      "name": "m3u-ignored-collections",
+      "sha256": "01d7dde7ab2306b7dc7a94c18111ff696b2ec881ce7b125c6135d93a60912c4d",
+      "bytes": 13
+    },
+    {
+      "name": "m3u-duplicate-roots",
+      "sha256": "01d7dde7ab2306b7dc7a94c18111ff696b2ec881ce7b125c6135d93a60912c4d",
+      "bytes": 13
+    },
+    {
+      "name": "m3u-empty",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "name": "m3u-header-only",
+      "sha256": "144659b48f342d02b9298907ab32fcf0479ac9c99a0d293c7c2ebf8df313dd12",
+      "bytes": 8
+    },
+    {
+      "name": "m3u-whitespace-lines",
+      "sha256": "d76ce5155d9ca1d7b8fe9efd0b7a0a08b15a8f3f01628032674984948dfe6631",
+      "bytes": 18
+    },
+    {
+      "name": "m3u-hls-one-digit",
+      "sha256": "c0419857b2c7e2f3dd1f89e78ea992d25433eca7de664bf03bf926eb1d84c2c1",
+      "bytes": 38
+    },
+    {
+      "name": "m3u-hls-two-digit-is-not-detected",
+      "sha256": "7ae600321d48aae2c23b55c101e772107d47795e2781fa0400699e8e38b87f0f",
+      "bytes": 39
+    },
+    {
+      "name": "m3u-duplicate-custom-property",
+      "sha256": "edac79b0212914f5fd1e0b2a2cd9639ddc96d5758e2a223162e72ac6f927c36a",
+      "bytes": 45
+    },
+    {
+      "name": "pls-number-order-and-replacement",
+      "sha256": "8e33a42ebf8c441edb85d3ff27184abc6603a52cd6ce2b8c7df9f2822704c56f",
+      "bytes": 148
+    },
+    {
+      "name": "pls-header-case",
+      "sha256": "809d75c14d3dbb7528b175357aa70f8f4b6bdb0a3d901467dba370ecf15d2a1d",
+      "bytes": 30
+    },
+    {
+      "name": "pls-invalid-number-minus-one",
+      "sha256": "4a91073d83b4649a84c4e29531596780faf6a570453931d2077d0a0108e0e053",
+      "bytes": 50
+    },
+    {
+      "name": "pls-null-title-only-path",
+      "sha256": "247342d486f47a9519651b2fe3185a206d278d12249cdb5ed2d8717189eb1f68",
+      "bytes": 45
+    },
+    {
+      "name": "wpl-direct-media-and-double-unescape",
+      "sha256": "59ac399584af23c00d981b17c2c6f1e852933b3bcbe732baee8f5e07a5afeb60",
+      "bytes": 195
+    },
+    {
+      "name": "zpl-direct-media",
+      "sha256": "d63b89118e50c0a2b874256ad6928d118df2f3bc01e1821a3a8af3164ec10df1",
+      "bytes": 121
+    },
+    {
+      "name": "wpl-missing-head",
+      "sha256": "bf68eb64cf08daf05623d9791f48071e0c1d825c1b20f0d907872ad439f474c2",
+      "bytes": 64
+    },
+    {
+      "name": "wpl-namespace-root",
+      "sha256": "53cccb9400469201754825404feadd176d28f07ca1ead73a99e7c70d9e85f763",
+      "bytes": 91
+    },
+    {
+      "name": "wpl-internal-entity",
+      "sha256": "ff00022ea461baa3cbe5754aa8c608d19a89c92217fc18a12cc2a491d10d7668",
+      "bytes": 112
+    },
+    {
+      "name": "wpl-no-src",
+      "sha256": "dab5cbdc63fbf013c6a6e6147977c133d6f2040a314052666d4525825885e9ba",
+      "bytes": 52
+    },
+    {
+      "name": "playlist-unsupported-extension",
+      "sha256": "01d7dde7ab2306b7dc7a94c18111ff696b2ec881ce7b125c6135d93a60912c4d",
+      "bytes": 13
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "sha256": "cd726ddeda5fd389b23bbcbcce978912cd4a74003a99970b33323061649a9bfd"
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "sha256": "be90abd0dfa246d4ea142c543586f86416747058d06329f950164ee02845ecaf"
+    },
+    {
+      "name": "PlaylistsNET",
+      "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea"
+    },
+    {
+      "name": "UtfUnknown",
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0"
+    }
+  ],
+  "nativeSqlite": {
+    "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e"
+  },
+  "boundary": "Actual pinned PlaylistItemsProvider, PlaylistsNET/UTF.Unknown, ManagedFileSystem and DirectoryService over real neutral files. UserRootFolder.Children and FindByPath results are controlled, not a native repository query. Actual PlaylistMetadataService.MergeData and BaseItemMapper.Map full 72-column projection; no native SaveItems or refresh lifecycle in this oracle. Cancelled-token provider calls, encoding detection and written input bytes are retained. This is not full LibraryManager, provider/write/network/HTTP/WS/SQLite exchange or release acceptance."
+}

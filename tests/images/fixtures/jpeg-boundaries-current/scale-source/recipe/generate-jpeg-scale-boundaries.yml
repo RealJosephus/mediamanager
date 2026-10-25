@@ -1,0 +1,28 @@
+name: Generate independent JPEG scale boundary inputs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact input producer and pinned encoder sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Generate fourteen real JPEG dimension boundary inputs
+        run: python3 tools/images/generate-jpeg-scale-boundaries.py
+      - name: Preserve original inputs, encoder and complete generation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jpeg-scale-boundary-inputs-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mediamanager-jpeg-scale-inputs/artifact
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,243 @@
+import { testFileSystem } from '../storage/plugin-files.js';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { createHash, randomUUID } from 'node:crypto';
+import { PostgresDatabase } from '../../src/database/postgres.js';
+import { DomainStore } from '../../src/database/domain-store.js';
+import { tableDefinition } from '../../src/database/model.js';
+import { LibraryService, DirectoryItemResolverPipeline } from '../../src/library/index.js';
+import { idKey } from '../../src/library/records.js';
+import { collectionFoldersForItem, parentChainForItem, userRootFolders } from '../../src/library/collection-membership.js';
+import { buildScanCollectionContext, configuredItemType, inheritedItemType } from '../../src/library/scan-context.js';
+import { createVideoFileResolver } from '../../src/library/video-file-resolver.js';
+import { IdentityAccessMap, StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
+import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { knownAncestorIgnoreRule } from './ignore-namespace-fixture.js';
+import { createResolvedItemLifecycleFixture } from './resolved-item-lifecycle-fixture.js';
+import { createFolderValidationScanFixture } from '../helpers/folder-validation-scan-fixture.js';
+import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
+import { assertProjectedEqual } from '../comparison-observations.js';
+
+const compare = (actual, expected) => assert.deepEqual(actual, expected);
+const hash = value => createHash('sha256').update(value).digest('hex');
+function hostAncestorControl(sample) {
+  if (process.platform === 'win32' || !['override-ancestor', 'override-ancestor-order'].includes(sample.name)) return sample;
+  // ContainsSubPath uses the host directory separator. These two controls
+  // exercise ancestor precedence, so give them equivalent host paths while
+  // preserving the sealed Windows input and all case/separator controls.
+  const relocate = value => value?.startsWith('Z:\\') ? '/native-scan-context/' + value.slice(3).replaceAll('\\', '/') : value;
+  const entity = value => ({ ...value, Path: relocate(value.Path),
+    ...(value.PhysicalLocationsList ? { PhysicalLocationsList: value.PhysicalLocationsList.map(relocate) } : {}) });
+  return { ...sample, item: entity(sample.item), parents: sample.parents.map(entity),
+    collections: sample.collections.map(entity),
+    contentTypes: sample.contentTypes.map(value => ({ ...value, Name: relocate(value.Name) })) };
+}
+const fixtures = [];
+for (const [name, count, flag] of [['native-scan-context', 28, 'actualFrozenNativeScanContext'], ['native-scan-context-edges', 43, 'actualFrozenNativeScanContextEdges']]) {
+  const root = new URL('./fixtures/' + name + '/', import.meta.url);
+  const [input, native, provenance] = await Promise.all(['input.json', 'native.json', 'provenance.json'].map(async file => JSON.parse(await readFile(new URL(file, root), 'utf8'))));
+  fixtures.push({ input: input.map(hostAncestorControl), native });
+  test(name + ' seals actual manager getter calls and live options/order controls', async () => {
+    for (const file of Object.values(provenance.files)) assert.equal(hash(await readFile(new URL('../../' + file.path, import.meta.url))), file.sha256, file.path);
+    assert.equal(native.inputSha256, provenance.files.input.sha256); assert.equal(native.sourceFilesSha256, provenance.sourceFilesSha256);
+    assert.equal(native[flag], true); assert.equal(native.candidateVerified, false); assert.equal(provenance.candidateVerified, false);
+    assert.equal(input.length, count); assert.equal(native.results.length, count);
+    assert.equal(provenance.runtime.jellyfinDll.sha256, '29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03');
+    compare(native.results.map(value => value.name), input.map(value => value.name));
+    compare(native.results.map(value => value.exception != null), input.map(value => Boolean(value.expectException)));
+  });
+}
+const userRootId = '97910000-0000-0000-0000-000000000099';
+const blank = Object.fromEntries(tableDefinition('BaseItems').columns.filter(column => !column.generated).map(column => [column.name,
+  column.nullable ? null : column.clrType === 'bool' ? false : column.type === 'TEXT' ? '' : column.clrType === 'long' ? 0n : 0]));
+const nativeType = type => type === 'Movie' ? 'MediaBrowser.Controller.Entities.Movies.Movie'
+  : type === 'PlaylistsFolder' ? 'Emby.Server.Implementations.Playlists.PlaylistsFolder' : 'MediaBrowser.Controller.Entities.' + type;
+function controlledState(sample) {
+  const entity = definition => ({ ...definition, Id: definition.id, Type: definition.type, NativeType: nativeType(definition.type), IsFolder: definition.type !== 'Movie' });
+  const item = entity(sample.item), parents = sample.parents.map(entity), collections = sample.collections.map(entity);
+  if (!Object.hasOwn(sample.item, 'ParentId')) item.ParentId = parents[0]?.Id ?? null;
+  parents.forEach((parent, index) => { parent.ParentId = parents[index + 1]?.Id ?? null; });
+  const userRoot = { Id: userRootId, Type: 'UserRootFolder', NativeType: nativeType('UserRootFolder'), IsFolder: true };
+  collections.forEach((collection, index) => { collection.ParentId = userRoot.Id; collection.SortName = String(index).padStart(3, '0'); });
+  const items = [item, ...parents, ...collections, userRoot];
+  const options = Object.fromEntries([...collections, item].filter(value => value.Type === 'CollectionFolder')
+    .map(value => [idKey(value.Id), { MetadataCountryCode: value.country ?? 'CONTROL' }]));
+  return { item, items, options, state: { items, byId: new Map(items.map(value => [idKey(value.Id), value])) } };
+}
+function projection(item, state, options, sample) {
+  const selected = collectionFoldersForItem(item, state);
+  const context = buildScanCollectionContext({ root: item, collectionFolders: selected, libraryOptions: options, state,
+    configuration: { ContentTypes: sample.contentTypes === undefined ? [] : sample.contentTypes } });
+  return { collectionIds: selected.map(value => value.Id.toLowerCase()), country: context.libraryOptions.MetadataCountryCode ?? null,
+    configured: configuredItemType(item, context.contentTypeOverrides), inherited: inheritedItemType(item, parentChainForItem(item, state), userRootFolders(state), context.contentTypeOverrides),
+    contentType: context.collectionType };
+}
+async function capture(action) {
+  try { return { exception: null, parameterName: null, result: await action() }; }
+  catch (error) { return { exception: { name: error.name, message: error.message, code: error.code, status: error.status,
+    nativeException: error.nativeException, parameterName: error.parameterName, stack: error.stack }, parameterName: error.parameterName ?? null, result: null }; }
+}
+const expectedProjection = value => ({ failed: value.exception != null, result: value.result });
+test('context comparison detects changed user-root order, options selection and override value', () => {
+  const expected = fixtures[0].native.results.find(value => value.name === 'first-high-id-movies');
+  for (const change of [value => value.result.collectionIds.reverse(), value => { value.result.country = 'BB'; }, value => { value.result.contentType = null; }]) {
+    const actual = structuredClone(expected); change(actual);
+    assert.throws(() => compare(expectedProjection(actual), expectedProjection(expected)), assert.AssertionError);
+  }
+});
+for (const fixture of fixtures) for (const sample of fixture.input) {
+  const expected = fixture.native.results.find(value => value.name === sample.name);
+  test('live native manager context projection ' + sample.name, async t => {
+    const current = controlledState(sample);
+    assertProjectedEqual(t, sample.name, await capture(() => projection(current.item, current.state, current.options, sample)), expected, expectedProjection);
+  });
+}
+function createScanJournal(name) {
+  const directory = validationOutputRoot(); mkdirSync(directory, { recursive: true });
+  const filename = path.join(directory, 'native-scan-context-' + randomUUID() + '.jsonl');
+  assertValidationOutputChild(filename);
+  writeFileSync(filename, JSON.stringify({ name, scope: 'Actual operation entry and settlement; no forced release, timeout replacement or changed functional expectation.' }) + '\n', { flag: 'wx' });
+  let sequence = 0;
+  const pending = new Map();
+  const record = value => appendFileSync(filename, JSON.stringify({ ...value, time: new Date().toISOString() }) + '\n');
+  const observe = (owner, method, label) => {
+    const original = owner?.[method]; if (typeof original !== 'function') return;
+    owner[method] = function (...args) {
+      const id = ++sequence, entry = { id, label, stack: new Error('Actual operation acquisition').stack,
+        ...(label === 'database.query' ? { sql: typeof args[0] === 'string' ? args[0] : args[0]?.text } : {}) };
+      pending.set(id, entry); record({ phase: 'start', ...entry });
+      const settled = (phase, error) => {
+        pending.delete(id); record({ id, label, phase, pending: [...pending.keys()],
+          ...(error ? { error: { name: error.name, code: error.code, message: error.message } } : {}) });
+      };
+      try {
+        const value = original.apply(this, args);
+        if (!value?.then) { settled('settled'); return value; }
+        return value.then(result => { settled('settled'); return result; }, error => { settled('failed', error); throw error; });
+      } catch (error) { settled('failed', error); throw error; }
+    };
+  };
+  return { observe, record };
+}
+async function databaseFor(t, dialect, journal) {
+  const schema = 'native_scan_context_' + randomUUID().replaceAll('-', '').slice(0, 16);
+  const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
+  const store = new DomainStore(database);
+  journal?.observe(database.client, 'query', 'database.query');
+  journal?.observe(store, 'close', 'store.close');
+  t.after(async () => { if (dialect === 'postgres') { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); } await store.close(); });
+  return { database, store };
+}
+function rowFor(item) {
+  return { ...blank, Id: item.Id, Type: item.NativeType, Name: item.Type, SortName: item.SortName ?? 'item', Path: item.Path ?? null,
+    IsFolder: item.IsFolder, ParentId: null, OwnerId: null,
+    Data: item.Type === 'PlaylistsFolder' ? null : JSON.stringify({ CollectionType: item.CollectionType ?? null,
+      PhysicalLocationsList: item.PhysicalLocationsList === undefined ? [] : item.PhysicalLocationsList,
+      PhysicalFolderIds: item.PhysicalFolderIds ?? [] }) };
+}
+async function seed(database, current) {
+  const unique = new Map(current.items.map(item => [idKey(item.Id), item]));
+  for (const item of unique.values()) await database.insert('BaseItems', rowFor(item));
+  for (const item of unique.values()) await database.update('BaseItems', { Id: item.Id }, {
+    ParentId: item.ParentId && idKey(item.ParentId) !== '00000000000000000000000000000000' ? item.ParentId : null,
+    OwnerId: item.OwnerId ?? null });
+}
+for (const dialect of ['postgres']) for (const fixture of fixtures) for (const sample of fixture.input) {
+  test(dialect + ': hydrated native collection/options/type context ' + sample.name,
+    { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+      const { database, store } = await databaseFor(t, dialect), current = controlledState(sample);
+      await seed(database, current);
+      const library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'native-scan-context', libraryOptions: current.options }); t.after(() => library.close());
+      const before = await database.rows('BaseItems'), state = await store.run(db => library.load(db, null, {
+        includeUserData: false,
+        baseRows: before,
+      }));
+      assertProjectedEqual(t, sample.name, await capture(() => projection(state.byId.get(idKey(current.item.Id)), state, current.options, sample)),
+        fixture.native.results.find(value => value.name === sample.name), expectedProjection);
+      compare(await database.rows('BaseItems'), before);
+    });
+}
+for (const dialect of ['postgres']) for (const name of ['first-high-id-movies', 'first-low-id-music', 'first-missing-type', 'physical-location-case', 'override-invalid-first', 'override-numeric-value']) {
+  test(dialect + ': Folder validation receives frozen native ordered context ' + name,
+    { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+      const fixture = fixtures[0], sample = fixture.input.find(value => value.name === name), native = fixture.native.results.find(value => value.name === name);
+      const journal = createScanJournal(name);
+      const { database, store } = await databaseFor(t, dialect, journal), current = controlledState(sample); await seed(database, current);
+      const registry = new StorageRegistry(); registry.registerType('memory', options => new MemoryStorageAdapter(options));
+      const adapter = await registry.createInstance('library', 'memory', {}), vfs = new VirtualFileSystem(registry);
+      vfs.mount({ path: '/library', instanceId: 'library', capabilities: {} }); await adapter.write('/Film.mkv', Buffer.from('native context control'));
+      const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: current.item.Path, accessRoot: '/library', style: 'windows', returnAccess: 'Isolated native context scan control' });
+      const configuration = { ContentTypes: sample.contentTypes ?? [] }, library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'native-scan-context-scanner', libraryOptions: current.options, configuration });
+      const seen = [], observer = { id: 'ordered-context-observer', priority: 1, nativeTypes: { 'MediaBrowser.Controller.Entities.Folder': { isFolder: true } },
+        resolveMultiple: ({ collectionContext }) => { seen.push({ ids: collectionContext.collectionFolderIds.map(value => value.toLowerCase()),
+          country: collectionContext.libraryOptions.MetadataCountryCode ?? null, type: collectionContext.collectionType }); return null; } };
+      const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
+      const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
+      journal.observe(library, 'load', 'library.load'); journal.observe(library, 'close', 'library.close');
+      journal.observe(lifecycleFixture, 'close', 'lifecycle.close');
+      journal.observe(lifecycleFixture.linkedChildren, 'close', 'linkedChildren.close');
+      journal.observe(lifecycleFixture.linkedChildren.resourceGraph, 'close', 'resourceGraph.close');
+      const errors = [];
+      const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
+        ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [current.item.Path] }),
+        programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
+      journal.observe(validationFixture.validation, 'validateChildren', 'validation.validateChildren');
+      journal.observe(validationFixture.itemCreation, 'withItem', 'itemCreation.withItem');
+      journal.observe(validationFixture, 'close', 'validation.close');
+      t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
+      const receipt = await validationFixture.itemCreation.withItem(current.item.Id, parent =>
+        validationFixture.validation.validateChildren(parent, { refreshChildMetadata: false }));
+      assert.deepEqual(errors, []);
+      assert.ok(seen.length > 0); for (const value of seen) compare(value, { ids: native.result.collectionIds, country: native.result.country, type: native.result.contentType });
+      // The context remains the native observation; a null content type now
+      // also admits ordinary movies through the actual mixed-library resolver.
+      const createsMovie = native.result.contentType == null || native.result.contentType === 'movies';
+      assert.equal(receipt.created.length, createsMovie ? 1 : 0);
+      const rows = (await database.rows('BaseItems', { where: { ParentId: current.item.Id } }));
+      assert.equal(rows.length, createsMovie ? 1 : 0);
+      if (rows.length) assert.equal(rows[0].Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
+    });
+}
+
+for (const dialect of ['postgres']) for (const sample of fixtures[1].input.filter(value => value.name.startsWith('deep-'))) {
+  test(dialect + ': recursive Folder validation keeps actual intermediate parents ' + sample.name,
+    { skip: dialect === 'postgres' && !process.env.MEDIAMANAGER_TEST_POSTGRES }, async t => {
+      const native = fixtures[1].native.results.find(value => value.name === sample.name);
+      const { database, store } = await databaseFor(t, dialect), current = controlledState(sample);
+      const scanRoot = current.items.find(item => idKey(item.Id) === idKey(sample.parents[1].id));
+      current.items = current.items.filter(item => ![sample.item.id, sample.parents[0].id].some(id => idKey(id) === idKey(item.Id)));
+      await seed(database, current);
+      const registry = new StorageRegistry(); registry.registerType('memory', options => new MemoryStorageAdapter(options));
+      const adapter = await registry.createInstance('library', 'memory', {}), vfs = new VirtualFileSystem(registry);
+      vfs.mount({ path: '/library', instanceId: 'library', capabilities: {} });
+      await adapter.mkdir('/A'); await adapter.mkdir('/A/B'); await adapter.write('/A/B/Film.mkv', Buffer.from('deep native context control'));
+      const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: scanRoot.Path, accessRoot: '/library', style: 'windows', returnAccess: 'Isolated native deep context scan control' });
+      const configuration = { ContentTypes: sample.contentTypes }, library = new LibraryService({fileSystem: testFileSystem,  store, serverId: 'native-deep-scan-context', libraryOptions: current.options, configuration });
+      const seen = [], observer = { id: 'deep-context-observer', priority: 1, nativeTypes: { 'MediaBrowser.Controller.Entities.Folder': { isFolder: true } },
+        resolveMultiple: ({ parent, collectionContext, available }) => {
+          seen.push({ path: parent.Path, type: collectionContext.collectionType });
+          const directories = available.filter(candidate => candidate.entry.kind === 'directory');
+          return directories.length ? { items: directories.map(candidate => ({
+            nativeType: 'MediaBrowser.Controller.Entities.Folder', primary: candidate, consumedPaths: [candidate], traversal: 'children',
+            draft: { Name: candidate.entry.name, IsFolder: true, MediaType: 'Unknown', SourceType: 'Library' }
+          })), extraFiles: available.filter(candidate => candidate.entry.kind === 'file') } : null;
+        } };
+      const programDataPath = 'C:\\ProgramData\\MediaManager', resolverPipeline = new DirectoryItemResolverPipeline({ programDataPath, configuration, resolvers: [observer, createVideoFileResolver()] });
+      const lifecycleFixture = await createResolvedItemLifecycleFixture({ store, library, vfs, identityMap, configuration });
+      const errors = [];
+      const validationFixture = createFolderValidationScanFixture({ store, library, vfs, identityMap,
+        ignoreRule: await knownAncestorIgnoreRule({ registry, vfs, identityMap, identityRoots: [scanRoot.Path] }),
+        programDataPath, configuration, resolverPipeline, lifecycleFixture, onError: error => errors.push(error) });
+      t.after(async () => { await validationFixture.close(); await lifecycleFixture.close(); await library.close(); await registry.close(); });
+      await validationFixture.itemCreation.withItem(scanRoot.Id, parent =>
+        validationFixture.validation.validateChildren(parent, { recursive: true, refreshChildMetadata: false }));
+      assert.deepEqual(errors, []);
+      compare(seen.filter(value => value.path === sample.item.Path), [{ path: sample.item.Path, type: native.result.contentType }]);
+      const videos = await database.rows('BaseItems', { where: { Path: sample.item.Path + '\\Film.mkv' } });
+      assert.equal(videos.length, native.result.contentType === 'movies' ? 1 : 0);
+      if (videos.length) assert.equal(videos[0].Type, 'MediaBrowser.Controller.Entities.Movies.Movie');
+    });
+}

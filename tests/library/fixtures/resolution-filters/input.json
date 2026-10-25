@@ -1,0 +1,632 @@
+{
+  "schemaVersion": 1,
+  "description": "Deterministic frozen-Jellyfin HTTP oracle input for Items resolution filters.",
+  "userId": "5c6b5f77-bea9-4a9a-98aa-fae5909892b7",
+  "rootId": "70000000-0000-0000-0000-000000000000",
+  "items": [
+    {
+      "key": "root",
+      "id": "70000000-0000-0000-0000-000000000000",
+      "type": "Folder",
+      "name": "Resolution Oracle Root"
+    },
+    {
+      "key": "sd",
+      "id": "70000000-0000-0000-0000-000000000101",
+      "type": "Movie",
+      "name": "Resolution SD 720",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "belowHd",
+      "id": "70000000-0000-0000-0000-000000000102",
+      "type": "Movie",
+      "name": "Resolution Below HD Boundary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 1199,
+      "height": 800
+    },
+    {
+      "key": "hdBoundary",
+      "id": "70000000-0000-0000-0000-000000000103",
+      "type": "Movie",
+      "name": "Resolution HD Boundary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 1200,
+      "height": 720
+    },
+    {
+      "key": "fullHd",
+      "id": "70000000-0000-0000-0000-000000000104",
+      "type": "Movie",
+      "name": "Resolution Full HD",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "key": "uhdWidthBoundary",
+      "id": "70000000-0000-0000-0000-000000000105",
+      "type": "Movie",
+      "name": "Resolution UHD Width Boundary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 3800,
+      "height": 2000
+    },
+    {
+      "key": "uhdHeightBoundary",
+      "id": "70000000-0000-0000-0000-000000000106",
+      "type": "Movie",
+      "name": "Resolution UHD Height Boundary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 3000,
+      "height": 2100
+    },
+    {
+      "key": "unprobed",
+      "id": "70000000-0000-0000-0000-000000000107",
+      "type": "Movie",
+      "name": "Resolution Unprobed",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "version4kPrimary",
+      "id": "70000000-0000-0000-0000-000000000110",
+      "type": "Movie",
+      "name": "Resolution Version Group 4K Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "version4kAlternate",
+      "id": "70000000-0000-0000-0000-000000000111",
+      "type": "Movie",
+      "name": "Resolution Version Group 4K Alternate",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000110",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "versionHdPrimary",
+      "id": "70000000-0000-0000-0000-000000000120",
+      "type": "Movie",
+      "name": "Resolution Version Group HD Unprobed Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "versionHdAlternate",
+      "id": "70000000-0000-0000-0000-000000000121",
+      "type": "Movie",
+      "name": "Resolution Version Group HD Alternate",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000120",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "key": "versionSdPrimary",
+      "id": "70000000-0000-0000-0000-000000000130",
+      "type": "Movie",
+      "name": "Resolution Version Group SD Unprobed Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "versionSdAlternate",
+      "id": "70000000-0000-0000-0000-000000000131",
+      "type": "Movie",
+      "name": "Resolution Version Group SD Alternate",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000130",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "versionMixedPrimary",
+      "id": "70000000-0000-0000-0000-000000000140",
+      "type": "Movie",
+      "name": "Resolution Version Group Mixed Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "versionMixedHd",
+      "id": "70000000-0000-0000-0000-000000000141",
+      "type": "Movie",
+      "name": "Resolution Version Group Mixed HD",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000140",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "key": "versionMixed4k",
+      "id": "70000000-0000-0000-0000-000000000142",
+      "type": "Movie",
+      "name": "Resolution Version Group Mixed 4K",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000140",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "descendantFolder",
+      "id": "70000000-0000-0000-0000-000000000200",
+      "type": "Folder",
+      "name": "Resolution Ordinary Descendant Folder",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "descendant4k",
+      "id": "70000000-0000-0000-0000-000000000201",
+      "type": "Movie",
+      "name": "Resolution Ordinary Descendant 4K",
+      "parentId": "70000000-0000-0000-0000-000000000200",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "linkedBoxSet",
+      "id": "70000000-0000-0000-0000-000000000300",
+      "type": "BoxSet",
+      "name": "Resolution Direct Linked BoxSet",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linked4k",
+      "id": "70000000-0000-0000-0000-000000000301",
+      "type": "Movie",
+      "name": "Resolution Direct Linked 4K",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "tall4kSelf",
+      "id": "70000000-0000-0000-0000-000000000310",
+      "type": "Movie",
+      "name": "Resolution 720 Wide 2160 Tall Self",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 2160
+    },
+    {
+      "key": "tall4kVersionPrimary",
+      "id": "70000000-0000-0000-0000-000000000311",
+      "type": "Movie",
+      "name": "Resolution Tall Alternate Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "tall4kVersionAlternate",
+      "id": "70000000-0000-0000-0000-000000000312",
+      "type": "Movie",
+      "name": "Resolution Tall Alternate File",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000311",
+      "width": 720,
+      "height": 2160
+    },
+    {
+      "key": "linkedGrandparentBoxSet",
+      "id": "70000000-0000-0000-0000-000000000320",
+      "type": "BoxSet",
+      "name": "Resolution Linked Folder Grandparent",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedGrandchildFolder",
+      "id": "70000000-0000-0000-0000-000000000321",
+      "type": "Folder",
+      "name": "Resolution Linked Folder Child",
+      "parentId": "70000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "linkedGrandchild4k",
+      "id": "70000000-0000-0000-0000-000000000322",
+      "type": "Movie",
+      "name": "Resolution Linked Folder Grandchild 4K",
+      "parentId": "70000000-0000-0000-0000-000000000321",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "versionSplitPrimary",
+      "id": "70000000-0000-0000-0000-000000000330",
+      "type": "Movie",
+      "name": "Resolution Split Bounds Primary",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "width": 720,
+      "height": 480
+    },
+    {
+      "key": "versionSplitWide",
+      "id": "70000000-0000-0000-0000-000000000331",
+      "type": "Movie",
+      "name": "Resolution Split Bounds Wide File",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000330",
+      "width": 3000,
+      "height": 1000
+    },
+    {
+      "key": "versionSplitTall",
+      "id": "70000000-0000-0000-0000-000000000332",
+      "type": "Movie",
+      "name": "Resolution Split Bounds Tall File",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "primaryVersionId": "70000000-0000-0000-0000-000000000330",
+      "width": 1000,
+      "height": 2000
+    },
+    {
+      "key": "groupFirst",
+      "id": "70000000-0000-0000-0000-000000000400",
+      "type": "Movie",
+      "name": "Resolution Group A First",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "resolution-shared-independent-group",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "groupSecond",
+      "id": "70000000-0000-0000-0000-000000000401",
+      "type": "Movie",
+      "name": "Resolution Group B Second",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "resolution-shared-independent-group",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "groupThird",
+      "id": "70000000-0000-0000-0000-000000000402",
+      "type": "Movie",
+      "name": "Resolution Group C Independent",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "presentationUniqueKey": "resolution-third-independent-group",
+      "width": 3840,
+      "height": 2160
+    },
+    {
+      "key": "owner4k",
+      "id": "70000000-0000-0000-0000-000000000410",
+      "type": "Movie",
+      "name": "Resolution Owned 4K",
+      "parentId": "70000000-0000-0000-0000-000000000000",
+      "ownerId": "70000000-0000-0000-0000-000000000101",
+      "width": 3840,
+      "height": 2160
+    }
+  ],
+  "links": [
+    {
+      "parentId": "70000000-0000-0000-0000-000000000300",
+      "childId": "70000000-0000-0000-0000-000000000301",
+      "sortOrder": 0,
+      "childType": 0
+    },
+    {
+      "parentId": "70000000-0000-0000-0000-000000000320",
+      "childId": "70000000-0000-0000-0000-000000000321",
+      "sortOrder": 0,
+      "childType": 0
+    }
+  ],
+  "cases": [
+    {
+      "name": "bucket-sd",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary", "unprobed"],
+      "query": "IsHD=false"
+    },
+    {
+      "name": "bucket-hd",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary", "unprobed"],
+      "query": "IsHD=true"
+    },
+    {
+      "name": "bucket-4k",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary", "unprobed"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "is4k-false-alone",
+      "scope": ["sd", "hdBoundary", "uhdWidthBoundary"],
+      "query": "Is4K=false"
+    },
+    {
+      "name": "bucket-hd-or-4k",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary"],
+      "query": "IsHD=true&Is4K=true"
+    },
+    {
+      "name": "bucket-sd-or-4k",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary"],
+      "query": "IsHD=false&Is4K=true"
+    },
+    {
+      "name": "min-width-inclusive",
+      "scope": ["belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary"],
+      "query": "MinWidth=1200"
+    },
+    {
+      "name": "max-width-inclusive",
+      "scope": ["belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary"],
+      "query": "MaxWidth=1200"
+    },
+    {
+      "name": "min-height-inclusive",
+      "scope": ["fullHd", "uhdWidthBoundary", "uhdHeightBoundary"],
+      "query": "MinHeight=2100"
+    },
+    {
+      "name": "max-height-inclusive",
+      "scope": ["fullHd", "uhdWidthBoundary", "uhdHeightBoundary"],
+      "query": "MaxHeight=1080"
+    },
+    {
+      "name": "dimension-range-intersection",
+      "scope": ["sd", "belowHd", "hdBoundary", "fullHd", "uhdWidthBoundary", "uhdHeightBoundary"],
+      "query": "MinWidth=1200&MaxWidth=3000&MinHeight=720&MaxHeight=2100"
+    },
+    {
+      "name": "version-4k-bucket",
+      "scope": ["version4kPrimary"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "version-4k-excluded-from-sd",
+      "scope": ["version4kPrimary"],
+      "query": "IsHD=false"
+    },
+    {
+      "name": "version-min-width",
+      "scope": ["version4kPrimary"],
+      "query": "MinWidth=3000"
+    },
+    {
+      "name": "version-max-width",
+      "scope": ["version4kPrimary"],
+      "query": "MaxWidth=1920"
+    },
+    {
+      "name": "version-min-height",
+      "scope": ["version4kPrimary"],
+      "query": "MinHeight=2000"
+    },
+    {
+      "name": "version-max-height",
+      "scope": ["version4kPrimary"],
+      "query": "MaxHeight=1080"
+    },
+    {
+      "name": "unprobed-primary-hd-by-version",
+      "scope": ["versionHdPrimary"],
+      "query": "IsHD=true"
+    },
+    {
+      "name": "unprobed-primary-sd-by-version",
+      "scope": ["versionSdPrimary"],
+      "query": "IsHD=false"
+    },
+    {
+      "name": "mixed-version-not-hd",
+      "scope": ["versionMixedPrimary"],
+      "query": "IsHD=true"
+    },
+    {
+      "name": "mixed-version-is-4k",
+      "scope": ["versionMixedPrimary"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "ordinary-folder-descendant-4k",
+      "scope": ["descendantFolder"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "ordinary-folder-dimension-does-not-descend",
+      "scope": ["descendantFolder"],
+      "query": "MinWidth=3000"
+    },
+    {
+      "name": "direct-linked-media-child-4k",
+      "scope": ["linkedBoxSet"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "direct-linked-dimension-does-not-descend",
+      "scope": ["linkedBoxSet"],
+      "query": "MinWidth=3000"
+    },
+    {
+      "name": "binding-bool-case-insensitive",
+      "scope": ["hdBoundary"],
+      "query": "isHd=TrUe"
+    },
+    {
+      "name": "binding-empty-nullable-bool",
+      "scope": ["sd", "hdBoundary"],
+      "query": "IsHD="
+    },
+    {
+      "name": "binding-invalid-bool",
+      "scope": ["sd"],
+      "query": "IsHD=1"
+    },
+    {
+      "name": "binding-invalid-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=abc"
+    },
+    {
+      "name": "binding-int32-max",
+      "scope": ["uhdWidthBoundary"],
+      "query": "MinWidth=2147483647"
+    },
+    {
+      "name": "binding-int32-overflow",
+      "scope": ["uhdWidthBoundary"],
+      "query": "MinWidth=2147483648"
+    },
+    {
+      "name": "binding-repeated-integer",
+      "scope": ["hdBoundary", "uhdWidthBoundary"],
+      "query": "MinWidth=1200&MinWidth=3800"
+    },
+    {
+      "name": "tall-self-is-sd-by-width",
+      "scope": ["tall4kSelf"],
+      "query": "IsHD=false"
+    },
+    {
+      "name": "tall-self-is-also-4k-by-height",
+      "scope": ["tall4kSelf"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "tall-alternate-excludes-primary-from-sd",
+      "scope": ["tall4kVersionPrimary"],
+      "query": "IsHD=false"
+    },
+    {
+      "name": "tall-alternate-makes-primary-4k",
+      "scope": ["tall4kVersionPrimary"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "linked-folder-matches-own-grandchild",
+      "scope": ["linkedGrandchildFolder"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "linked-grandparent-does-not-traverse-folder",
+      "scope": ["linkedGrandparentBoxSet"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "split-alternates-satisfy-combined-minima",
+      "scope": ["versionSplitPrimary"],
+      "query": "MinWidth=3000&MinHeight=2000"
+    },
+    {
+      "name": "binding-empty-nullable-integer",
+      "scope": ["sd", "hdBoundary"],
+      "query": "MinWidth="
+    },
+    {
+      "name": "binding-whitespace-nullable-integer",
+      "scope": ["sd", "hdBoundary"],
+      "query": "MinWidth=%20%20"
+    },
+    {
+      "name": "binding-floating-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=1.5"
+    },
+    {
+      "name": "binding-hex-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=0x4B0"
+    },
+    {
+      "name": "binding-hash-hex-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=%234B0"
+    },
+    {
+      "name": "binding-negative-hex-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=-0x4B0"
+    },
+    {
+      "name": "binding-positive-hex-integer",
+      "scope": ["sd"],
+      "query": "MinWidth=%2B0x4B0"
+    },
+    {
+      "name": "binding-hex-int32-max",
+      "scope": ["sd"],
+      "query": "MinWidth=0x7FFFFFFF"
+    },
+    {
+      "name": "binding-hex-int32-sign-bit",
+      "scope": ["sd"],
+      "query": "MinWidth=0x80000000"
+    },
+    {
+      "name": "binding-hex-uint32-max",
+      "scope": ["sd"],
+      "query": "MinWidth=0xFFFFFFFF"
+    },
+    {
+      "name": "binding-hex-uint32-overflow",
+      "scope": ["sd"],
+      "query": "MinWidth=0x100000000"
+    },
+    {
+      "name": "binding-int32-min",
+      "scope": ["sd", "hdBoundary"],
+      "query": "MinWidth=-2147483648"
+    },
+    {
+      "name": "binding-int32-negative-overflow",
+      "scope": ["sd"],
+      "query": "MinWidth=-2147483649"
+    },
+    {
+      "name": "binding-repeated-bool-first-empty",
+      "scope": ["sd", "hdBoundary"],
+      "query": "IsHD=&IsHD=true"
+    },
+    {
+      "name": "binding-repeated-bool-first-valid",
+      "scope": ["sd", "hdBoundary"],
+      "query": "IsHD=false&IsHD=true"
+    },
+    {
+      "name": "binding-repeated-bool-first-invalid",
+      "scope": ["sd", "hdBoundary"],
+      "query": "IsHD=1&IsHD=true"
+    },
+    {
+      "name": "binding-mixed-case-repeated-key",
+      "scope": ["sd", "hdBoundary"],
+      "query": "IsHD=false&ishd=true"
+    },
+    {
+      "name": "user-presentation-grouping",
+      "scope": ["groupFirst", "groupSecond", "groupThird"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "user-grouping-before-count-and-pagination",
+      "scope": ["groupFirst", "groupSecond", "groupThird"],
+      "query": "Is4K=true&StartIndex=1&Limit=1"
+    },
+    {
+      "name": "api-key-does-not-group-presentation-keys",
+      "scope": ["groupFirst", "groupSecond", "groupThird"],
+      "query": "Is4K=true",
+      "auth": "apiKey",
+      "endpoints": ["items"]
+    },
+    {
+      "name": "bucket-filter-includes-owned-item",
+      "scope": ["owner4k"],
+      "query": "Is4K=true"
+    },
+    {
+      "name": "numeric-filter-keeps-owned-item-hidden",
+      "scope": ["owner4k"],
+      "query": "MinWidth=3000"
+    }
+  ]
+}

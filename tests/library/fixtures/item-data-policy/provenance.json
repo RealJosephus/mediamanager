@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-05T02:23:18.003Z",
+  "candidateVerified": false,
+  "files": {
+    "native": {
+      "path": "tests/library/fixtures/item-data-policy/native.json",
+      "sha256": "7638443651ba42c7109131b264b425764d117a02be3a8a782a07e66ce0bae678"
+    },
+    "input": {
+      "path": "tests/library/fixtures/item-data-policy/input.json",
+      "sha256": "6ee56d00b2013492c38d144c40be722d0137e4832d77a93454a6043b7a15e041"
+    },
+    "oracle": {
+      "path": "tests/library/fixtures/item-data-policy/Program.cs",
+      "sha256": "cdb8a241267c9f1e91fca13d9388976f0b14d3dec6c747d2deb60cfaff3fa9dc"
+    },
+    "project": {
+      "path": "tests/library/fixtures/item-data-policy/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    }
+  },
+  "sources": {
+    "MediaBrowser.Common/RequiresSourceSerialisationAttribute.cs": "455a389f1ab0b39902bd9f37e1fcd7f469a5a280ad5207f90148317b0fcb7b95",
+    "MediaBrowser.Controller/Entities/AudioBook.cs": "1dc3ad019d579d60fac4b91d80040ebfa09dd266266057e6f4e0a656faec443c",
+    "MediaBrowser.Controller/Entities/Book.cs": "b081cbb2b7fb794d6b3d348e10c547803f4c18a58c79153f3ca3a3f10f552a0b",
+    "MediaBrowser.Controller/Entities/PhotoAlbum.cs": "5fb0ec1808b39e9dfa2d510d12f6313df860fcb1061ef593c6a093f859720895",
+    "MediaBrowser.Controller/Entities/Genre.cs": "254d23ea47309a638a92f5be367860c5e1a5cc5db395b7017d2cfb82d290c99f",
+    "MediaBrowser.Controller/Entities/Person.cs": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+    "MediaBrowser.Controller/Entities/Studio.cs": "e7ca8a9bbe8b9e869565f0eb2e1324f3852d7dd59d12764a56dfc7d616a85145",
+    "MediaBrowser.Controller/Entities/Year.cs": "9f575e9fd4f68a7523fa80c98fcd84db258ab6f6cca3d1fa36344f4349eef45b",
+    "MediaBrowser.Controller/Entities/Audio/MusicAlbum.cs": "785f3b62683ffb29f79badce2e678c03da67a5156cae889e0d766cdad454de00",
+    "MediaBrowser.Controller/Entities/Audio/MusicGenre.cs": "8901cc5615e772e8accbd9f5a2c22009faa144cecc9a38b0e68d51d7ef9e7b83",
+    "MediaBrowser.Controller/Entities/Audio/MusicArtist.cs": "18e77575002cd30efed46ffb870209100c15ed34c76254712746f6817c0f3ffa",
+    "MediaBrowser.Controller/Entities/TV/Season.cs": "3d49550fc03cfd556999e04a63bb4f692fbb574a37e946ab0b200fc9cc19ec04",
+    "Emby.Server.Implementations/Playlists/PlaylistsFolder.cs": "c621e1afdc79c1b641642cac5777964b0aa9e7464989055f5d3344e1ca87ce56",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14"
+  },
+  "sourceFilesSha256": "1804d2f7a5c4b80ec6d9e655f738bcd3dce5494a6170274d45a1e4c6f5e3b29e",
+  "nativeRecordSha256": "7734bc642f3c4bb0f7d360dbdf72f75a949af39b9c6c2b2c232e529f9390bcd5",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

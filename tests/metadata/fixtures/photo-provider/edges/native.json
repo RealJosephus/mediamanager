@@ -1,0 +1,47 @@
+{
+  "scope": "Actual PhotoProvider original-primary replacement over an unsupported extension with retained positive dimensions; no file, tag, network or decoder reads. Filesystem timestamp is controlled.",
+  "results": [
+    {
+      "source": "Z:\\Photos\\photo.raw",
+      "update": 6,
+      "statCalls": 1,
+      "images": [
+        {
+          "Path": "Z:\\Photos\\photo.raw",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": "old-blurhash",
+          "dateModified": "2026-10-01T01:02:03.0000000Z"
+        }
+      ]
+    },
+    {
+      "source": "https://images.invalid/photo.raw",
+      "update": 6,
+      "statCalls": 0,
+      "images": [
+        {
+          "Path": "https://images.invalid/photo.raw",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "dateModified": "0001-01-01T00:00:00.0000000"
+        }
+      ]
+    },
+    {
+      "source": "HTTP://images.invalid/photo.raw",
+      "update": 6,
+      "statCalls": 0,
+      "images": [
+        {
+          "Path": "HTTP://images.invalid/photo.raw",
+          "Width": 0,
+          "Height": 0,
+          "BlurHash": null,
+          "dateModified": "0001-01-01T00:00:00.0000000"
+        }
+      ]
+    }
+  ]
+}

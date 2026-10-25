@@ -1,0 +1,2123 @@
+{
+  "schemaVersion": 1,
+  "kind": "jpeg-scaled-wasm",
+  "status": "built",
+  "repository": "RealJosephus/mediamanager",
+  "commit": "127a76c91b323ec860f346893b646ebbfde25b85",
+  "runId": "40099830198",
+  "runAttempt": "1",
+  "workflowRef": "RealJosephus/mediamanager/.github/workflows/build-jpeg-codec.yml@refs/heads/main",
+  "runnerOs": "Linux",
+  "runnerArch": "X64",
+  "imageVersion": "20261023.334.3",
+  "sourceOffer": {
+    "path": "source-offer.json",
+    "bytes": 6935,
+    "sha256": "448b258af2fe2252745c3e6ad5794a0d161d8bbec1a1eab5f53f74252c19f5b3"
+  },
+  "inputs": [
+    {
+      "path": "libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1",
+      "role": "libjpeg-turbo",
+      "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+archive/927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz"
+    },
+    {
+      "path": "skcms-1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "bytes": 10038666,
+      "sha256": "3e4f1f48034717cce3cc2ef3cd58e878a22cc52a4db5de7a1a11f0234a7a5807",
+      "role": "skcms",
+      "url": "https://skia.googlesource.com/skcms/+archive/1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz"
+    },
+    {
+      "path": "emsdk-15915cad554b707837024dc2758b6a1c5b94b036.tar.gz",
+      "bytes": 208128,
+      "sha256": "b61f041e9cb38a0d439d8ad62c6c4459028348ed2c1d25d090e6fa65b629d358",
+      "role": "emsdk",
+      "url": "https://codeload.github.com/emscripten-core/emsdk/tar.gz/15915cad554b707837024dc2758b6a1c5b94b036"
+    },
+    {
+      "path": "bridge.c",
+      "bytes": 6766,
+      "sha256": "aad456c175f8f50a8ef60111899b86e682b7b70db0606f3879b09a20149b60e8",
+      "role": "bridge"
+    },
+    {
+      "path": "SkJpegCodec.reference.cpp",
+      "bytes": 55191,
+      "sha256": "beaa7ac3b5eec527d83944b750313b0896a6bf6402629f844a60cb1d38469e92",
+      "role": "decoderReference"
+    },
+    {
+      "path": "Skia.DEPS",
+      "bytes": 9049,
+      "sha256": "a0e1e0cc4e1a9a06ab68eaf649741114dd2bc7404d290564a40bcd395740898a",
+      "role": "sourceDependencyReference"
+    },
+    {
+      "path": "LICENSE.Skia",
+      "bytes": 1507,
+      "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
+      "role": "sourceLicense"
+    },
+    {
+      "path": "LICENSE.skcms",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+      "role": "sourceLicense"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1",
+      "role": "sourceLicense"
+    },
+    {
+      "path": "README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb",
+      "role": "sourceLicense"
+    },
+    {
+      "path": "NOTICE.txt",
+      "bytes": 816,
+      "sha256": "657d27677b327c75297aaa8d004101871c570ec4190544fb786a6863b138c834",
+      "role": "notice"
+    },
+    {
+      "path": "smoke-jpeg-codec.mjs",
+      "bytes": 2292,
+      "sha256": "29349f799134daf0338df2a7c9b9eeb3c97072cd4b26ff41272edabb2058b391",
+      "role": "moduleCheck"
+    },
+    {
+      "path": "build-jpeg-codec.yml",
+      "bytes": 1072,
+      "sha256": "fd1825e092415d44e776f69e23182f261dfb1e15f3d95527c325ec80a010b78e",
+      "role": "buildWorkflow"
+    },
+    {
+      "path": "SkJpegDecoderMgr.reference.cpp",
+      "bytes": 5153,
+      "sha256": "0b8cade96f3b0eb5dfe36b7a56d98a67669c51156a50011ad8bf70702bcaec3d",
+      "role": "incompleteDecodeReference"
+    },
+    {
+      "path": "SkJpegSourceMgr.reference.cpp",
+      "bytes": 17501,
+      "sha256": "806d75a1ed5c8bc53f2741411fc31b6c270ceb8ea1985219a7432f9bb5317e1f",
+      "role": "incompleteDecodeReference"
+    },
+    {
+      "path": "SkCodec.reference.cpp",
+      "bytes": 36498,
+      "sha256": "17ca5074174fd199b7e1a6573191d638b1dfcb212186a0bb925ce09d0413dc44",
+      "role": "incompleteDecodeReference"
+    },
+    {
+      "path": "SkSampler.reference.cpp",
+      "bytes": 2251,
+      "sha256": "5eb4a481401fd6fd7e903c98a861bd91d6f3f7e938ce0a41b78f6d53d5754d24",
+      "role": "incompleteDecodeReference"
+    }
+  ],
+  "commands": [
+    {
+      "name": "install-emsdk",
+      "arguments": [
+        "python3",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/emsdk.py",
+        "install",
+        "4.0.22"
+      ],
+      "timeoutSeconds": 900,
+      "started": 1792849883.39371,
+      "exitCode": 0,
+      "finished": 1792849906.060423,
+      "stdout": {
+        "path": "install-emsdk.stdout.txt",
+        "bytes": 1899,
+        "sha256": "305904c883bcd3dd5108c4e008b6e295cb2bdc098a10a8a5f58c2044630cf767"
+      },
+      "stderr": {
+        "path": "install-emsdk.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "activate-emsdk",
+      "arguments": [
+        "python3",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/emsdk.py",
+        "activate",
+        "4.0.22"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849906.0606523,
+      "exitCode": 0,
+      "finished": 1792849906.1751337,
+      "stdout": {
+        "path": "activate-emsdk.stdout.txt",
+        "bytes": 998,
+        "sha256": "ac70b7dfcb807702cd6dc21e05572f80c4e458f250ed2e6fb7bf46f8e6592519"
+      },
+      "stderr": {
+        "path": "activate-emsdk.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compiler-version",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "--version"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849907.2959218,
+      "exitCode": 0,
+      "finished": 1792849907.610668,
+      "stdout": {
+        "path": "compiler-version.stdout.txt",
+        "bytes": 331,
+        "sha256": "012d809c58d5152d9f237a7ed73d3a738381abd852b39e8ca04eb13e2532ed9f"
+      },
+      "stderr": {
+        "path": "compiler-version.stderr.txt",
+        "bytes": 49,
+        "sha256": "168c391f7cc4779e18a3702ce1d7b3339d316ea1e35fc1e5a68a49451d1889b3"
+      }
+    },
+    {
+      "name": "compile-jcapimin",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcapimin.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcapimin.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849919.3835049,
+      "exitCode": 0,
+      "finished": 1792849919.5480287,
+      "stdout": {
+        "path": "compile-jcapimin.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcapimin.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcapistd",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcapistd.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcapistd.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849919.5482817,
+      "exitCode": 0,
+      "finished": 1792849919.6624377,
+      "stdout": {
+        "path": "compile-jcapistd.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcapistd.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jccoefct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jccoefct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jccoefct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849919.6626809,
+      "exitCode": 0,
+      "finished": 1792849919.8271046,
+      "stdout": {
+        "path": "compile-jccoefct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jccoefct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jccolor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jccolor.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jccolor.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849919.8273487,
+      "exitCode": 0,
+      "finished": 1792849920.041888,
+      "stdout": {
+        "path": "compile-jccolor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jccolor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcdctmgr",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcdctmgr.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcdctmgr.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849920.0421371,
+      "exitCode": 0,
+      "finished": 1792849920.2065551,
+      "stdout": {
+        "path": "compile-jcdctmgr.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcdctmgr.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jchuff",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jchuff.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jchuff.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849920.2067978,
+      "exitCode": 0,
+      "finished": 1792849920.9728339,
+      "stdout": {
+        "path": "compile-jchuff.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jchuff.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcicc",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcicc.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcicc.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849920.97311,
+      "exitCode": 0,
+      "finished": 1792849921.0873945,
+      "stdout": {
+        "path": "compile-jcicc.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcicc.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcinit",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcinit.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcinit.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.0876403,
+      "exitCode": 0,
+      "finished": 1792849921.201944,
+      "stdout": {
+        "path": "compile-jcinit.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcinit.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcmainct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcmainct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmainct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.2021906,
+      "exitCode": 0,
+      "finished": 1792849921.3163843,
+      "stdout": {
+        "path": "compile-jcmainct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcmainct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcmarker",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcmarker.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmarker.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.3166356,
+      "exitCode": 0,
+      "finished": 1792849921.4809144,
+      "stdout": {
+        "path": "compile-jcmarker.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcmarker.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcmaster",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcmaster.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmaster.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.4811513,
+      "exitCode": 0,
+      "finished": 1792849921.6454175,
+      "stdout": {
+        "path": "compile-jcmaster.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcmaster.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcomapi",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcomapi.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcomapi.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.6456625,
+      "exitCode": 0,
+      "finished": 1792849921.7598755,
+      "stdout": {
+        "path": "compile-jcomapi.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcomapi.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcparam",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcparam.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcparam.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.7601113,
+      "exitCode": 0,
+      "finished": 1792849921.924442,
+      "stdout": {
+        "path": "compile-jcparam.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcparam.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcphuff",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcphuff.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcphuff.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849921.924685,
+      "exitCode": 0,
+      "finished": 1792849922.1392887,
+      "stdout": {
+        "path": "compile-jcphuff.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcphuff.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcprepct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcprepct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcprepct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.139531,
+      "exitCode": 0,
+      "finished": 1792849922.303821,
+      "stdout": {
+        "path": "compile-jcprepct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcprepct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jcsample",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jcsample.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcsample.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.3041024,
+      "exitCode": 0,
+      "finished": 1792849922.468385,
+      "stdout": {
+        "path": "compile-jcsample.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jcsample.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jctrans",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jctrans.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jctrans.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.468634,
+      "exitCode": 0,
+      "finished": 1792849922.632968,
+      "stdout": {
+        "path": "compile-jctrans.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jctrans.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdapimin",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdapimin.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdapimin.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.6332142,
+      "exitCode": 0,
+      "finished": 1792849922.7474988,
+      "stdout": {
+        "path": "compile-jdapimin.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdapimin.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdapistd",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdapistd.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdapistd.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.747738,
+      "exitCode": 0,
+      "finished": 1792849922.912187,
+      "stdout": {
+        "path": "compile-jdapistd.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdapistd.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdatadst",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdatadst.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdatadst.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849922.912459,
+      "exitCode": 0,
+      "finished": 1792849923.0266535,
+      "stdout": {
+        "path": "compile-jdatadst.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdatadst.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdatasrc",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdatasrc.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdatasrc.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.0269277,
+      "exitCode": 0,
+      "finished": 1792849923.1410758,
+      "stdout": {
+        "path": "compile-jdatasrc.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdatasrc.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdcoefct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdcoefct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdcoefct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.1413243,
+      "exitCode": 0,
+      "finished": 1792849923.3557107,
+      "stdout": {
+        "path": "compile-jdcoefct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdcoefct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdcolor",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdcolor.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdcolor.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.3560042,
+      "exitCode": 0,
+      "finished": 1792849923.620499,
+      "stdout": {
+        "path": "compile-jdcolor.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdcolor.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jddctmgr",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jddctmgr.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jddctmgr.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.620758,
+      "exitCode": 0,
+      "finished": 1792849923.7351217,
+      "stdout": {
+        "path": "compile-jddctmgr.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jddctmgr.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdhuff",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdhuff.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdhuff.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.735365,
+      "exitCode": 0,
+      "finished": 1792849923.9498892,
+      "stdout": {
+        "path": "compile-jdhuff.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdhuff.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdicc",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdicc.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdicc.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849923.9501436,
+      "exitCode": 0,
+      "finished": 1792849924.0642912,
+      "stdout": {
+        "path": "compile-jdicc.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdicc.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdinput",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdinput.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdinput.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.0645368,
+      "exitCode": 0,
+      "finished": 1792849924.2289767,
+      "stdout": {
+        "path": "compile-jdinput.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdinput.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdmainct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdmainct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmainct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.2292244,
+      "exitCode": 0,
+      "finished": 1792849924.3935428,
+      "stdout": {
+        "path": "compile-jdmainct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdmainct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdmarker",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdmarker.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmarker.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.3937876,
+      "exitCode": 0,
+      "finished": 1792849924.608213,
+      "stdout": {
+        "path": "compile-jdmarker.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdmarker.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdmaster",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdmaster.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmaster.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.608454,
+      "exitCode": 0,
+      "finished": 1792849924.7729683,
+      "stdout": {
+        "path": "compile-jdmaster.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdmaster.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdmerge",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdmerge.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmerge.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.7732108,
+      "exitCode": 0,
+      "finished": 1792849924.9876096,
+      "stdout": {
+        "path": "compile-jdmerge.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdmerge.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdphuff",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdphuff.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdphuff.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849924.9878995,
+      "exitCode": 0,
+      "finished": 1792849925.1521964,
+      "stdout": {
+        "path": "compile-jdphuff.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdphuff.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdpostct",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdpostct.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdpostct.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.1524425,
+      "exitCode": 0,
+      "finished": 1792849925.2665591,
+      "stdout": {
+        "path": "compile-jdpostct.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdpostct.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdsample",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdsample.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdsample.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.2667956,
+      "exitCode": 0,
+      "finished": 1792849925.4311044,
+      "stdout": {
+        "path": "compile-jdsample.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdsample.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jdtrans",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jdtrans.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdtrans.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.4313488,
+      "exitCode": 0,
+      "finished": 1792849925.5454845,
+      "stdout": {
+        "path": "compile-jdtrans.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jdtrans.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jerror",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jerror.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jerror.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.5457876,
+      "exitCode": 0,
+      "finished": 1792849925.6600804,
+      "stdout": {
+        "path": "compile-jerror.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jerror.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jfdctflt",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jfdctflt.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctflt.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.6603281,
+      "exitCode": 0,
+      "finished": 1792849925.7746534,
+      "stdout": {
+        "path": "compile-jfdctflt.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jfdctflt.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jfdctfst",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jfdctfst.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctfst.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.7749069,
+      "exitCode": 0,
+      "finished": 1792849925.8890486,
+      "stdout": {
+        "path": "compile-jfdctfst.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jfdctfst.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jfdctint",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jfdctint.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctint.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849925.8892872,
+      "exitCode": 0,
+      "finished": 1792849926.003393,
+      "stdout": {
+        "path": "compile-jfdctint.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jfdctint.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jidctflt",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jidctflt.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctflt.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.0036252,
+      "exitCode": 0,
+      "finished": 1792849926.117914,
+      "stdout": {
+        "path": "compile-jidctflt.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jidctflt.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jidctfst",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jidctfst.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctfst.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.1181622,
+      "exitCode": 0,
+      "finished": 1792849926.2323537,
+      "stdout": {
+        "path": "compile-jidctfst.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jidctfst.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jidctint",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jidctint.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctint.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.232593,
+      "exitCode": 0,
+      "finished": 1792849926.4971685,
+      "stdout": {
+        "path": "compile-jidctint.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jidctint.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jidctred",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jidctred.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctred.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.4974134,
+      "exitCode": 0,
+      "finished": 1792849926.661772,
+      "stdout": {
+        "path": "compile-jidctred.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jidctred.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jmemmgr",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jmemmgr.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jmemmgr.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.6620495,
+      "exitCode": 0,
+      "finished": 1792849926.8263633,
+      "stdout": {
+        "path": "compile-jmemmgr.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jmemmgr.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jmemnobs",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jmemnobs.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jmemnobs.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.8266041,
+      "exitCode": 0,
+      "finished": 1792849926.940838,
+      "stdout": {
+        "path": "compile-jmemnobs.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jmemnobs.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jpeg_nbits_table",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jpeg_nbits_table.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jpeg_nbits_table.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849926.9410992,
+      "exitCode": 0,
+      "finished": 1792849927.1053991,
+      "stdout": {
+        "path": "compile-jpeg_nbits_table.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jpeg_nbits_table.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jquant1",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jquant1.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jquant1.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849927.105642,
+      "exitCode": 0,
+      "finished": 1792849927.3201149,
+      "stdout": {
+        "path": "compile-jquant1.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jquant1.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jquant2",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jquant2.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jquant2.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849927.3203683,
+      "exitCode": 0,
+      "finished": 1792849927.5849977,
+      "stdout": {
+        "path": "compile-jquant2.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jquant2.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jutils",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jutils.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jutils.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849927.5852442,
+      "exitCode": 0,
+      "finished": 1792849927.6994207,
+      "stdout": {
+        "path": "compile-jutils.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jutils.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-jsimd_none",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo/jsimd_none.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jsimd_none.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849927.6996632,
+      "exitCode": 0,
+      "finished": 1792849927.8138137,
+      "stdout": {
+        "path": "compile-jsimd_none.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-jsimd_none.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-skcms",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/em++",
+        "-std=c++17",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-DSKCMS_PORTABLE",
+        "-DSKCMS_NO_RUNTIME_CPU_DETECTION",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-c",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms/skcms.cc",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/skcms.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849927.8140764,
+      "exitCode": 0,
+      "finished": 1792849928.3794596,
+      "stdout": {
+        "path": "compile-skcms.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-skcms.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "compile-bridge",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/emcc",
+        "-std=c11",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-strict-aliasing",
+        "-DNO_GETENV",
+        "-DNO_PUTENV",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/libjpeg-turbo",
+        "-I/home/runner/work/_temp/mediamanager-jpeg-codec-build/skcms",
+        "-c",
+        "/home/runner/work/mediamanager/mediamanager/src/images/jpeg-codec/bridge.c",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/bridge.o"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849928.3796897,
+      "exitCode": 0,
+      "finished": 1792849928.5440881,
+      "stdout": {
+        "path": "compile-bridge.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "compile-bridge.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "link-codec",
+      "arguments": [
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/emsdk/emsdk-15915cad554b707837024dc2758b6a1c5b94b036/upstream/emscripten/em++",
+        "-O3",
+        "--no-entry",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/bridge.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcapimin.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcapistd.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jccoefct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jccolor.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcdctmgr.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jchuff.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcicc.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcinit.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmainct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmarker.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcmaster.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcomapi.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcparam.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcphuff.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcprepct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jcsample.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jctrans.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdapimin.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdapistd.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdatadst.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdatasrc.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdcoefct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdcolor.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jddctmgr.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdhuff.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdicc.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdinput.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmainct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmarker.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmaster.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdmerge.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdphuff.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdpostct.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdsample.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jdtrans.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jerror.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctflt.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctfst.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jfdctint.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctflt.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctfst.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctint.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jidctred.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jmemmgr.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jmemnobs.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jpeg_nbits_table.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jquant1.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jquant2.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jsimd_none.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/jutils.o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/objects/skcms.o",
+        "-o",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/artifact/runtime/jpeg-codec.mjs",
+        "-sENVIRONMENT=node",
+        "-sFILESYSTEM=0",
+        "-sMODULARIZE=1",
+        "-sEXPORT_ES6=1",
+        "-sEXPORT_NAME=createJpegCodec",
+        "-sALLOW_MEMORY_GROWTH=1",
+        "-sABORTING_MALLOC=0",
+        "-sMAXIMUM_MEMORY=2147483648",
+        "-sEXPORTED_FUNCTIONS=[\"_malloc\", \"_free\", \"_mm_jpeg_decode\", \"_mm_jpeg_succeeded\", \"_mm_jpeg_width\", \"_mm_jpeg_height\", \"_mm_jpeg_pixels\", \"_mm_jpeg_error\", \"_mm_jpeg_free\"]",
+        "-sEXPORTED_RUNTIME_METHODS=[\"HEAPU8\", \"UTF8ToString\"]"
+      ],
+      "timeoutSeconds": 300,
+      "started": 1792849928.5447614,
+      "exitCode": 0,
+      "finished": 1792849930.1155646,
+      "stdout": {
+        "path": "link-codec.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "link-codec.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "load-generated-module",
+      "arguments": [
+        "node",
+        "/home/runner/work/mediamanager/mediamanager/tools/images/smoke-jpeg-codec.mjs",
+        "/home/runner/work/_temp/mediamanager-jpeg-codec-build/artifact/runtime"
+      ],
+      "timeoutSeconds": 120,
+      "started": 1792849932.5503194,
+      "exitCode": 0,
+      "finished": 1792849932.6146128,
+      "stdout": {
+        "path": "load-generated-module.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "load-generated-module.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "nativeParityValidated": false,
+  "historicalBinaryReplacement": false,
+  "offlineSdkReplaySelfContained": false,
+  "sourceUnchangedDuringBuild": true,
+  "runtime": [
+    {
+      "path": "LICENSE.emscripten",
+      "bytes": 5093,
+      "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
+    },
+    {
+      "path": "LICENSE.libjpeg-turbo.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1"
+    },
+    {
+      "path": "LICENSE.skcms",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "NOTICE.txt",
+      "bytes": 816,
+      "sha256": "657d27677b327c75297aaa8d004101871c570ec4190544fb786a6863b138c834"
+    },
+    {
+      "path": "README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+    },
+    {
+      "path": "build-smoke.json",
+      "bytes": 483,
+      "sha256": "c43c5528c98fa92119ca39b41b57d70687f0f3a5d34b1b37104fa63078214d15"
+    },
+    {
+      "path": "jpeg-codec.mjs",
+      "bytes": 11582,
+      "sha256": "e50bcf26bb5487b85a9b740e87ee43b697883cd1827ce60edcf2a5b936a8bb83"
+    },
+    {
+      "path": "jpeg-codec.wasm",
+      "bytes": 178450,
+      "sha256": "5ccd7fb7a3b1aca8593edd85211a1c69e3339bd291588c8f99b6d8cef4a3d550"
+    }
+  ],
+  "runtimeSourceArchive": {
+    "path": "emscripten-runtime-source.tar.gz",
+    "bytes": 109197563,
+    "sha256": "3bd6f5a6950b51b850de627db9ef140e3949c751111b3fece15d40f99551d029"
+  },
+  "sourceOfferFiles": [
+    {
+      "path": "LICENSE.Skia",
+      "bytes": 1507,
+      "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 5213,
+      "sha256": "60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1"
+    },
+    {
+      "path": "LICENSE.skcms",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "NOTICE.txt",
+      "bytes": 816,
+      "sha256": "657d27677b327c75297aaa8d004101871c570ec4190544fb786a6863b138c834"
+    },
+    {
+      "path": "README.ijg",
+      "bytes": 12732,
+      "sha256": "4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb"
+    },
+    {
+      "path": "SkCodec.reference.cpp",
+      "bytes": 36498,
+      "sha256": "17ca5074174fd199b7e1a6573191d638b1dfcb212186a0bb925ce09d0413dc44"
+    },
+    {
+      "path": "SkJpegCodec.reference.cpp",
+      "bytes": 55191,
+      "sha256": "beaa7ac3b5eec527d83944b750313b0896a6bf6402629f844a60cb1d38469e92"
+    },
+    {
+      "path": "SkJpegDecoderMgr.reference.cpp",
+      "bytes": 5153,
+      "sha256": "0b8cade96f3b0eb5dfe36b7a56d98a67669c51156a50011ad8bf70702bcaec3d"
+    },
+    {
+      "path": "SkJpegSourceMgr.reference.cpp",
+      "bytes": 17501,
+      "sha256": "806d75a1ed5c8bc53f2741411fc31b6c270ceb8ea1985219a7432f9bb5317e1f"
+    },
+    {
+      "path": "SkSampler.reference.cpp",
+      "bytes": 2251,
+      "sha256": "5eb4a481401fd6fd7e903c98a861bd91d6f3f7e938ce0a41b78f6d53d5754d24"
+    },
+    {
+      "path": "Skia.DEPS",
+      "bytes": 9049,
+      "sha256": "a0e1e0cc4e1a9a06ab68eaf649741114dd2bc7404d290564a40bcd395740898a"
+    },
+    {
+      "path": "bridge.c",
+      "bytes": 6766,
+      "sha256": "aad456c175f8f50a8ef60111899b86e682b7b70db0606f3879b09a20149b60e8"
+    },
+    {
+      "path": "build-jpeg-codec.py",
+      "bytes": 9902,
+      "sha256": "b6caf47d99c420c66dca4d2f07e1635bba375f74e78b4bd037f9c688fbd3b4b7"
+    },
+    {
+      "path": "build-jpeg-codec.yml",
+      "bytes": 1072,
+      "sha256": "fd1825e092415d44e776f69e23182f261dfb1e15f3d95527c325ec80a010b78e"
+    },
+    {
+      "path": "emscripten-runtime-source.tar.gz",
+      "bytes": 109197563,
+      "sha256": "3bd6f5a6950b51b850de627db9ef140e3949c751111b3fece15d40f99551d029"
+    },
+    {
+      "path": "emsdk-15915cad554b707837024dc2758b6a1c5b94b036.tar.gz",
+      "bytes": 208128,
+      "sha256": "b61f041e9cb38a0d439d8ad62c6c4459028348ed2c1d25d090e6fa65b629d358"
+    },
+    {
+      "path": "libjpeg-turbo-927aabfcd26897abb9776ecf2a6c38ea5bb52ab6.tar.gz",
+      "bytes": 2329095,
+      "sha256": "a6f1f337693fcb5b64e6e5a0e005e53f361a4363567dbcb71e4e09ffdf60c0e1"
+    },
+    {
+      "path": "skcms-1323db7bd0b43b2b4d90aebc0cd4ba6409f689de.tar.gz",
+      "bytes": 10038666,
+      "sha256": "3e4f1f48034717cce3cc2ef3cd58e878a22cc52a4db5de7a1a11f0234a7a5807"
+    },
+    {
+      "path": "smoke-jpeg-codec.mjs",
+      "bytes": 2292,
+      "sha256": "29349f799134daf0338df2a7c9b9eeb3c97072cd4b26ff41272edabb2058b391"
+    },
+    {
+      "path": "source-offer.json",
+      "bytes": 6935,
+      "sha256": "448b258af2fe2252745c3e6ad5794a0d161d8bbec1a1eab5f53f74252c19f5b3"
+    }
+  ]
+}

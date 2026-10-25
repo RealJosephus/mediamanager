@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "candidateVerified": false,
+  "recordedAt": "2026-10-04T23:47:22.739Z",
+  "files": {
+    "native": {
+      "path": "tests/metadata/fixtures/people-image-file-lifecycle/native.json",
+      "sha256": "831f3e3d4057c97c6ceb638837c986ea0a5de7ce6cc5dbbb15df34bf464e57df"
+    },
+    "input": {
+      "path": "tests/metadata/fixtures/people-image-file-lifecycle/input.json",
+      "sha256": "9b88a3b1214169b96dc79d666b5444ac35b654786d0f099419d0665239ce5c75"
+    },
+    "oracle": {
+      "path": "tests/metadata/fixtures/people-image-file-lifecycle/Program.cs",
+      "sha256": "30f3a8a6ceb4d95a70d5c869423f7fdbc23b59599655a7a5e12bd4aae0c5a61f"
+    },
+    "project": {
+      "path": "tests/metadata/fixtures/people-image-file-lifecycle/Oracle.csproj",
+      "sha256": "cbe1a514da582cbf55a443ee14c93f731f84816d10e7672fb713045ac5d78efe"
+    },
+    "buildProperties": {
+      "path": "tests/Directory.Build.props",
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    "image": {
+      "path": "tests/images/fixtures/processor/original-http.png",
+      "sha256": "9827c0a80d2e1fd8b86664dfe1be25995b4a9d1259de36500cb0e988c87948a2"
+    }
+  },
+  "sources": {
+    "Emby.Server.Implementations/Library/LibraryManager.cs": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+    "MediaBrowser.Controller/Entities/Person.cs": "964033d4f43f7c7885c300207e36ecb70e36140ce41b61b3f1cc1111344f750b",
+    "Jellyfin.Server.Implementations/Item/PeopleRepository.cs": "13c7a00ea7fe4a0ee70c398237032ffad286ee2e7de65deb0ed824aa8579b100",
+    "Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+    "Jellyfin.Server.Implementations/Item/BaseItemMapper.cs": "eea80de6656ccd8f988c610b48c69a93dae9e48fffbbb7a2c568a963b3451e92",
+    "Jellyfin.Server.Implementations/Item/MediaStreamRepository.cs": "9e44c7a62b23f82631d5708c860f4a0439e6a46f091654fc380f9dade03f93d5",
+    "MediaBrowser.Providers/Manager/MetadataService.cs": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+    "MediaBrowser.Providers/Manager/ProviderManager.cs": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+    "MediaBrowser.Providers/Manager/ImageSaver.cs": "b3f51c08b91ffd4062945c840493b0133f39aed7cfea01e9d8cc79b950851e53",
+    "MediaBrowser.XbmcMetadata/Savers/MovieNfoSaver.cs": "798ee312e03df03c3ab6e33ecdcf97fc7943cb21a7bbb8bc6018baeb41b166d9",
+    "MediaBrowser.XbmcMetadata/Savers/BaseNfoSaver.cs": "cce645ecaca664b1bd21d30c44a48bb497f27da9a96f03271164fa8251361809"
+  },
+  "sourceFilesSha256": "baba60f78e84f7b90d0ebd897945f2d99ecd6c97a51013f367191d1459340a39",
+  "nativeRecordSha256": "86b82169a224ea6271fc1843e28945f1f1c7d39f8fe594c6b39846b6c23de7d7",
+  "runtime": {
+    "timezone": "Asia/Taipei",
+    "dotnet": {
+      "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+      "available": true,
+      "kind": "file",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+    },
+    "jellyfinDll": {
+      "filename": "D:/mediamanager/.test-output/reference-20261003/jellyfin-baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "available": true,
+      "kind": "file",
+      "bytes": 506368,
+      "sha256": "29c34541350089dc0522c4309ecd617e78fd402774681f32491d089803939c03"
+    }
+  }
+}

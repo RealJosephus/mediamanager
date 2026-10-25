@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-15T18:19:31.681Z",
+  "project": "D:\\mediamanager\\.agent-temp\\photo-provider-native\\Oracle.csproj",
+  "dotnet": {
+    "filename": "D:\\mediamanager\\.tools\\dotnet\\dotnet.exe",
+    "available": true,
+    "kind": "file",
+    "bytes": 167208,
+    "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6"
+  },
+  "node": "v24.16.0",
+  "timezone": "Asia/Taipei",
+  "jellyfinDll": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 506368,
+    "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26"
+  },
+  "sourceFiles": [
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\photo-provider-native\\Oracle.csproj",
+      "available": true,
+      "kind": "file",
+      "bytes": 403,
+      "sha256": "3f2610631c594ffd08dcc82f03d3509abc1c9c9541f159519800df046fc770ee"
+    },
+    {
+      "filename": "D:\\mediamanager\\tests\\Directory.Build.props",
+      "available": true,
+      "kind": "file",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd"
+    },
+    {
+      "filename": "D:\\mediamanager\\.agent-temp\\photo-provider-native\\Program.cs",
+      "available": true,
+      "kind": "file",
+      "bytes": 6902,
+      "sha256": "f99414f671903d28e3d8d37c0d8f27a34a6c02061ab39964cc6b50b666186a85"
+    }
+  ],
+  "sourceFilesSha256": "dd28fc7e209160b35bc8333a97a44952cde67f1adced11b642636c1a9f0e62f5",
+  "build": {
+    "args": [
+      "build",
+      "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\project\\Oracle.csproj",
+      "-c",
+      "Release",
+      "--nologo",
+      "-v",
+      "minimal",
+      "-p:BaseOutputPath=D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\bin\\",
+      "-p:BaseIntermediateOutputPath=D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\obj\\"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "process": {
+    "args": [
+      "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\bin\\Release\\net10.0\\Oracle.dll",
+      "D:/mediamanager-validation/20261016-photo-stage/inputs/photo-provider-synthetic-2/input.json",
+      "D:/mediamanager-validation/20261016-photo-stage/inputs/photo-provider-synthetic-2/assets",
+      "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4/native.json"
+    ],
+    "status": 0,
+    "signal": null
+  },
+  "outputs": [
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\build.stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\build.stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 382,
+      "sha256": "f6ee494243223bb03d5c04c7188bd17969cc7797415e0aa80c7d47e1a5b2afe8"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\native.json",
+      "available": true,
+      "kind": "file",
+      "bytes": 99160,
+      "sha256": "67a2050d113f3bef3b2a4ed5df89cb18938cd1186f08804f968eec1ab327c012"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\stderr.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\stdout.txt",
+      "available": true,
+      "kind": "file",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "oracleAssembly": {
+    "filename": "D:\\mediamanager-validation\\20261016-photo-stage\\results\\photo-provider-native-4\\bin\\Release\\net10.0\\Oracle.dll",
+    "available": true,
+    "kind": "file",
+    "bytes": 34816,
+    "sha256": "c70caad14be6b8431a8ff14fcca8b2f47bc07cdd2d66282221cd2abd1cd6a032"
+  },
+  "passed": true
+}

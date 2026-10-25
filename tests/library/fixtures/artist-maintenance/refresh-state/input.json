@@ -1,0 +1,95 @@
+[
+  {
+    "Name": "matched curated refresh state",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "Curated": true
+  },
+  {
+    "Name": "fallback curated refresh state",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Jazz",
+    "NeverRefreshed": true,
+    "Curated": true
+  },
+  {
+    "Name": "matched curated persistence",
+    "Names": [
+      "Rock"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "Curated": true,
+    "PersistRefresh": true
+  },
+  {
+    "Name": "fallback curated persistence",
+    "Names": [
+      "Rock"
+    ],
+    "InitialLookup": "Rock",
+    "InitialName": "Jazz",
+    "NeverRefreshed": true,
+    "Curated": true,
+    "PersistRefresh": true
+  },
+  {
+    "Name": "shared mutable initial artist",
+    "Names": [
+      "Rock",
+      "ROCK!!!"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "MutateRefresh": true
+  },
+  {
+    "Name": "shared mutable failure",
+    "Names": [
+      "Rock",
+      "ROCK!!!"
+    ],
+    "Existing": [
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "MutateRefresh": true,
+    "FailRefresh": [
+      "Rock"
+    ],
+    "Dead": true
+  },
+  {
+    "Name": "fresh mutable identity",
+    "Names": [
+      "Rock",
+      "rock"
+    ],
+    "MutateRefresh": true
+  },
+  {
+    "Name": "repository change after batch lookup",
+    "Names": [
+      "Jazz",
+      "Rock"
+    ],
+    "Existing": [
+      "Jazz",
+      "Rock"
+    ],
+    "NeverRefreshed": true,
+    "MutateOther": true
+  }
+]

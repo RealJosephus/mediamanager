@@ -1,0 +1,464 @@
+[
+  {
+    "name": "resolve-empty-root",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "update-empty-root",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "resolve-named-exclusion",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "update-named-exclusion",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "resolve-ordered-negation",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv\n!Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "update-ordered-negation",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv\n!Film.mkv"
+      }
+    ]
+  },
+  {
+    "name": "resolve-comment-root",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "update-comment-root",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "resolve-ancestor-exclusion",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": ".ignore",
+        "text": "*.mkv"
+      }
+    ]
+  },
+  {
+    "name": "update-ancestor-exclusion",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": ".ignore",
+        "text": "*.mkv"
+      }
+    ]
+  },
+  {
+    "name": "resolve-nested-nearest",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "nested/Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      },
+      {
+        "path": "media/nested/.ignore",
+        "text": "# nearest\n"
+      }
+    ]
+  },
+  {
+    "name": "update-nested-nearest",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "nested/Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": ""
+      },
+      {
+        "path": "media/nested/.ignore",
+        "text": "# nearest\n"
+      }
+    ]
+  },
+  {
+    "name": "resolve-utf16-exclusion",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv",
+        "encoding": "utf16le"
+      }
+    ]
+  },
+  {
+    "name": "update-utf16-exclusion",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv",
+        "encoding": "utf16le"
+      }
+    ]
+  },
+  {
+    "name": "resolve-all-invalid",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "\\q"
+      }
+    ]
+  },
+  {
+    "name": "update-all-invalid",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "\\q"
+      }
+    ]
+  },
+  {
+    "name": "resolve-existing-bypasses-exclusion",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "existingType": true,
+    "runtimeTicks": "9007199254740995"
+  },
+  {
+    "name": "update-existing-bypasses-exclusion",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "existingType": true,
+    "runtimeTicks": "9007199254740995"
+  },
+  {
+    "name": "resolve-wrong-type-before-exclusion",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "wrongType": true
+  },
+  {
+    "name": "update-wrong-type-before-exclusion",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "wrongType": true
+  },
+  {
+    "name": "resolve-wrong-type-before-exclusion-cancelled",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "wrongType": true
+  },
+  {
+    "name": "update-wrong-type-before-exclusion-cancelled",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "*.mkv"
+      }
+    ],
+    "wrongType": true,
+    "cancelled": true,
+    "expectException": "OperationCanceledException"
+  },
+  {
+    "name": "resolve-core-hidden",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      ".hidden.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "update-core-hidden",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      ".hidden.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "resolve-core-trailer",
+    "operation": "resolve",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film-trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  },
+  {
+    "name": "update-core-trailer",
+    "operation": "update",
+    "expectedType": "Movie",
+    "resolverType": "Video",
+    "parseName": true,
+    "mixed": true,
+    "files": [
+      "Film-trailer.mkv"
+    ],
+    "ignoreFiles": [
+      {
+        "path": "media/.ignore",
+        "text": "# controlled\n"
+      }
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/adamhathcock/sharpcompress",
+  "commit": "c083c6efd843a844b0c8f7878787360e815be781",
+  "file": "assets/Rar.solid.rar",
+  "gitBlob": "ef56f892bf4ed17e1c54bd5f0fce65e3c1a5ec0b",
+  "url": "https://raw.githubusercontent.com/adamhathcock/sharpcompress/c083c6efd843a844b0c8f7878787360e815be781/tests/TestArchives/Archives/Rar.solid.rar",
+  "bytes": 60001,
+  "sha256": "e7e62f24f22f195d21437be09667c8956837d99ba48d7270090251a8e32babc5",
+  "license": "../../../metadata/fixtures/book-comic-current/assets/LICENSE.txt",
+  "originalSha256Recovered": true
+}

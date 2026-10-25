@@ -1,0 +1,667 @@
+{
+  "PageMovies": 1001,
+  "Items": [
+    {
+      "Number": 1,
+      "Kind": "AggregateFolder"
+    },
+    {
+      "Number": 2,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "z"
+    },
+    {
+      "Number": 3,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "a"
+    },
+    {
+      "Number": 4,
+      "Kind": "CollectionFolder",
+      "Parent": 1,
+      "Sort": "b",
+      "Data": "{\"PhysicalFolderIds\":[\"cb210000-0000-0000-0000-000000000002\"]}"
+    },
+    {
+      "Number": 5,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "c"
+    },
+    {
+      "Number": 6,
+      "Kind": "BoxSet",
+      "Parent": 1,
+      "Sort": "d"
+    },
+    {
+      "Number": 7,
+      "Kind": "Playlist",
+      "Parent": 1,
+      "Sort": "e"
+    },
+    {
+      "Number": 8,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "f",
+      "Data": "{\"DisplayParentId\":\"cb210000-0000-0000-0000-000000000004\"}"
+    },
+    {
+      "Number": 9,
+      "Kind": "CollectionFolder",
+      "Parent": 1,
+      "Sort": "g",
+      "Data": "{\"PhysicalFolderIds\":[]}"
+    },
+    {
+      "Number": 10,
+      "Kind": "Unknown",
+      "Parent": 1,
+      "Sort": "000"
+    },
+    {
+      "Number": 11,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "h",
+      "Owner": 2
+    },
+    {
+      "Number": 12,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "i",
+      "Owner": 2,
+      "Extra": 2
+    },
+    {
+      "Number": 13,
+      "Kind": "Folder",
+      "Parent": 1,
+      "Sort": "j",
+      "Primary": 2,
+      "Top": 2
+    },
+    {
+      "Number": 15,
+      "Kind": "BoxSet",
+      "Sort": "k"
+    },
+    {
+      "Number": 16,
+      "Kind": "Folder",
+      "Sort": "l"
+    },
+    {
+      "Number": 18,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "m",
+      "Data": "{\"DisplayParentId\":\"cb210000-0000-0000-0000-000000000003\"}"
+    },
+    {
+      "Number": 19,
+      "Kind": "BoxSet",
+      "Parent": 1,
+      "Sort": "n"
+    },
+    {
+      "Number": 21,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "o"
+    },
+    {
+      "Number": 100,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "01",
+      "PresentationKey": "same"
+    },
+    {
+      "Number": 101,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "02",
+      "PresentationKey": "same"
+    },
+    {
+      "Number": 102,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "03",
+      "Virtual": true
+    },
+    {
+      "Number": 103,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "04",
+      "MediaType": "Audio"
+    },
+    {
+      "Number": 104,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "05",
+      "Owner": 100
+    },
+    {
+      "Number": 105,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "06",
+      "Owner": 100,
+      "Extra": 2
+    },
+    {
+      "Number": 106,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "07",
+      "Primary": 100
+    },
+    {
+      "Number": 107,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}",
+      "Sort": "08",
+      "Primary": 201
+    },
+    {
+      "Number": 108,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Before invalid\",\"TmdbCollectionName\":{}}",
+      "Sort": "09"
+    },
+    {
+      "Number": 109,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\",\"TmdbCollectionName\":\"saga\"}",
+      "Sort": "10"
+    },
+    {
+      "Number": 200,
+      "Kind": "Movie",
+      "Parent": 2,
+      "Top": 2,
+      "Ancestors": [
+        2
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 201,
+      "Kind": "Movie",
+      "Parent": 2,
+      "Top": 2,
+      "Ancestors": [
+        2
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 202,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 203,
+      "Kind": "Movie",
+      "Parent": 16,
+      "Top": 16,
+      "Ancestors": [
+        16
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 204,
+      "Kind": "Movie",
+      "Parent": 6,
+      "Top": 6,
+      "Ancestors": [
+        6
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 205,
+      "Kind": "Movie",
+      "Parent": 9,
+      "Top": 3,
+      "Ancestors": [
+        9
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 206,
+      "Kind": "Movie",
+      "Parent": 19,
+      "Top": 19,
+      "Ancestors": [
+        19
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 208,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        1
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Saga\"}"
+    },
+    {
+      "Number": 110,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 3,
+      "Ancestors": [
+        3
+      ],
+      "Sort": "11",
+      "PrimaryEmpty": true,
+      "Data": "{\"TmdbCollectionName\":\"Non-null empty primary\"}"
+    },
+    {
+      "Number": 22,
+      "Kind": "CollectionFolder",
+      "Parent": 1,
+      "Sort": "p",
+      "Data": "{\"PhysicalFolderIds\":null}"
+    },
+    {
+      "Number": 23,
+      "Kind": "CollectionFolder",
+      "Parent": 1,
+      "Sort": "q",
+      "Data": "{\"PhysicalFolderIds\":[\" {CB210000-0000-0000-0000-000000000002} \"]}"
+    },
+    {
+      "Number": 24,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "r",
+      "Data": "{\"ViewType\":10}"
+    },
+    {
+      "Number": 25,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "s",
+      "Data": "{\"DisplayParentId\":\" {CB210000-0000-0000-0000-000000000004} \"}"
+    },
+    {
+      "Number": 209,
+      "Kind": "Movie",
+      "Parent": 24,
+      "Top": 24,
+      "Ancestors": [
+        24
+      ],
+      "Data": "{\"TmdbCollectionName\":\"TV\"}"
+    },
+    {
+      "Number": 26,
+      "Kind": "PlaylistsFolder",
+      "Sort": "t",
+      "Data": "{}"
+    },
+    {
+      "Number": 27,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Sort": "u",
+      "Data": "{\"DisplayParentId\":\"cb210000-0000-0000-0000-000000000026\"}"
+    },
+    {
+      "Number": 210,
+      "Kind": "Movie",
+      "Parent": 26,
+      "Top": 26,
+      "Ancestors": [
+        26
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Plugin\"}"
+    },
+    {
+      "Number": 211,
+      "Kind": "Movie",
+      "Parent": 3,
+      "Top": 26,
+      "Ancestors": [
+        3
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Plugin\"}"
+    },
+    {
+      "Number": 32,
+      "Kind": "BoxSet",
+      "Parent": 1
+    },
+    {
+      "Number": 33,
+      "Kind": "Folder",
+      "Ancestors": [
+        32
+      ]
+    },
+    {
+      "Number": 34,
+      "Kind": "Folder",
+      "Ancestors": [
+        33
+      ]
+    },
+    {
+      "Number": 35,
+      "Kind": "Folder"
+    },
+    {
+      "Number": 300,
+      "Kind": "Movie",
+      "Data": "{\"TmdbCollectionName\":\"Link target\"}"
+    },
+    {
+      "Number": 301,
+      "Kind": "Movie",
+      "Ancestors": [
+        34
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Excluded closure\"}"
+    },
+    {
+      "Number": 36,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Data": "{\"DisplayParentId\":\"cb210000-0000-0000-0000-000000000010\"}"
+    },
+    {
+      "Number": 302,
+      "Kind": "Movie",
+      "Ancestors": [
+        10
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Unknown target fallback\"}"
+    },
+    {
+      "Number": 303,
+      "Kind": "Movie",
+      "Top": 10,
+      "Data": "{\"TmdbCollectionName\":\"Unknown top parent\"}"
+    },
+    {
+      "Number": 37,
+      "Kind": "UserView",
+      "Parent": 1,
+      "Data": "{\"DisplayParentId\":\"cb210000-0000-0000-0000-000000000038\"}"
+    },
+    {
+      "Number": 38,
+      "Kind": "Folder",
+      "Parent": 10
+    },
+    {
+      "Number": 304,
+      "Kind": "Movie",
+      "Ancestors": [
+        38
+      ],
+      "Data": "{\"TmdbCollectionName\":\"Unknown ancestor fallback\"}"
+    },
+    {
+      "Number": 305,
+      "Kind": "Movie",
+      "Top": 38,
+      "Data": "{\"TmdbCollectionName\":\"Unknown ancestor top\"}"
+    }
+  ],
+  "Links": [
+    {
+      "Parent": 6,
+      "Child": 200
+    },
+    {
+      "Parent": 6,
+      "Child": 15
+    },
+    {
+      "Parent": 6,
+      "Child": 16
+    },
+    {
+      "Parent": 15,
+      "Child": 201
+    },
+    {
+      "Parent": 15,
+      "Child": 6
+    },
+    {
+      "Parent": 200,
+      "Child": 202,
+      "Type": 3
+    },
+    {
+      "Parent": 7,
+      "Child": 15
+    },
+    {
+      "Parent": 32,
+      "Child": 35,
+      "Type": 0
+    },
+    {
+      "Parent": 34,
+      "Child": 300,
+      "Type": 0
+    },
+    {
+      "Parent": 35,
+      "Child": 34,
+      "Type": 0
+    }
+  ],
+  "Queries": [
+    {
+      "Name": "Root 2",
+      "Parent": 2,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 3",
+      "Parent": 3,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 4",
+      "Parent": 4,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 6",
+      "Parent": 6,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 7",
+      "Parent": 7,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 8",
+      "Parent": 8,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 9",
+      "Parent": 9,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 18",
+      "Parent": 18,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 19",
+      "Parent": 19,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 21",
+      "Parent": 21,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Repository offset",
+      "Parent": 3,
+      "Start": 2,
+      "Limit": 1
+    },
+    {
+      "Name": "Full gate page",
+      "Parent": 5,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "After full gate page",
+      "Parent": 5,
+      "Start": 1000,
+      "Limit": 1000
+    },
+    {
+      "Name": "After last page",
+      "Parent": 5,
+      "Start": 2000,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 22",
+      "Parent": 22,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 23",
+      "Parent": 23,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 24",
+      "Parent": 24,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 25",
+      "Parent": 25,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 26",
+      "Parent": 26,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Root 27",
+      "Parent": 27,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Link-owner before linked-folder",
+      "Parent": 32,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Unknown display target",
+      "Parent": 36,
+      "Start": 0,
+      "Limit": 1000
+    },
+    {
+      "Name": "Unknown parent context",
+      "Parent": 37,
+      "Start": 0,
+      "Limit": 1000
+    }
+  ]
+}

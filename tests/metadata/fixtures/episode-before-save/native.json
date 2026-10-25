@@ -1,0 +1,641 @@
+{
+  "phaseAcceptance": false,
+  "actualFrozenEpisodeMetadataService": true,
+  "processId": 21876,
+  "runtime": ".NET 10.0.12",
+  "results": [
+    {
+      "control": {
+        "Name": "existing-None-initial-orphan",
+        "First": false,
+        "Mode": 0,
+        "IndexNumber": null,
+        "End": 9,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": null,
+        "IndexNumberEnd": 9,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "existing-None-initial-reversed",
+        "First": false,
+        "Mode": 0,
+        "IndexNumber": 5,
+        "End": 3,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 5,
+        "IndexNumberEnd": 3,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 5,
+        "IndexNumberEnd": null,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "first-None-initial-orphan",
+        "First": true,
+        "Mode": 0,
+        "IndexNumber": null,
+        "End": 9,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": null,
+        "IndexNumberEnd": 9,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": null,
+        "IndexNumberEnd": null,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "first-Default-initial-reversed",
+        "First": true,
+        "Mode": 2,
+        "IndexNumber": 5,
+        "End": 3,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 5,
+        "IndexNumberEnd": 3,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider-before",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T10:26:19.1667037Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": null,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T10:26:19.1667037Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 5,
+        "IndexNumberEnd": null,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T10:26:19.1667037Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "existing-None-valid",
+        "First": false,
+        "Mode": 0,
+        "IndexNumber": 3,
+        "End": 5,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "existing-Default-valid",
+        "First": false,
+        "Mode": 2,
+        "IndexNumber": 3,
+        "End": 5,
+        "ProviderIndex": null,
+        "ProviderEnd": null
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 1,
+      "error": null,
+      "events": [],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T10:26:19.167941Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "existing-Default-provider-orphan",
+        "First": false,
+        "Mode": 2,
+        "IndexNumber": 3,
+        "End": 5,
+        "ProviderIndex": null,
+        "ProviderEnd": 7
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T09:00:00Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "provider-before",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 3,
+            "IndexNumberEnd": 5,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider-after",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": 7,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T09:00:00Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": null,
+            "IndexNumberEnd": 7,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T10:26:19.1684756Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": null,
+        "IndexNumberEnd": 7,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T10:26:19.1684756Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    },
+    {
+      "control": {
+        "Name": "first-Default-provider-reversed",
+        "First": true,
+        "Mode": 2,
+        "IndexNumber": 3,
+        "End": 5,
+        "ProviderIndex": 5,
+        "ProviderEnd": 3
+      },
+      "before": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 3,
+        "IndexNumberEnd": 5,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "0001-01-01T00:00:00",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "result": 3,
+      "error": null,
+      "events": [
+        {
+          "kind": "save",
+          "reason": 2,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 3,
+            "IndexNumberEnd": 5,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider-before",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 3,
+            "IndexNumberEnd": 5,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "provider-after",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": 3,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "0001-01-01T00:00:00",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "save",
+          "reason": 3,
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": 3,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T10:26:19.1685621Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        },
+        {
+          "kind": "reattach",
+          "item": {
+            "Id": "99800000-0000-0000-0000-000000000001",
+            "IndexNumber": 5,
+            "IndexNumberEnd": 3,
+            "PresentationUniqueKey": "99800000000000000000000000000001",
+            "SeriesId": "00000000-0000-0000-0000-000000000000",
+            "SeasonId": "00000000-0000-0000-0000-000000000000",
+            "SeriesName": null,
+            "SeasonName": "Season Unknown",
+            "SeriesPresentationUniqueKey": null,
+            "DateLastRefreshed": "2026-10-03T10:26:19.1685621Z",
+            "DateLastSaved": "0001-01-01T00:00:00"
+          }
+        }
+      ],
+      "item": {
+        "Id": "99800000-0000-0000-0000-000000000001",
+        "IndexNumber": 5,
+        "IndexNumberEnd": 3,
+        "PresentationUniqueKey": "99800000000000000000000000000001",
+        "SeriesId": "00000000-0000-0000-0000-000000000000",
+        "SeasonId": "00000000-0000-0000-0000-000000000000",
+        "SeriesName": null,
+        "SeasonName": "Season Unknown",
+        "SeriesPresentationUniqueKey": null,
+        "DateLastRefreshed": "2026-10-03T10:26:19.1685621Z",
+        "DateLastSaved": "0001-01-01T00:00:00"
+      },
+      "actualServiceType": "MediaBrowser.Providers.TV.EpisodeMetadataService"
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "MediaBrowser.Providers",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\episode-before-save-native-audit-v1\\bin\\Release\\net10.0\\MediaBrowser.Providers.dll",
+      "sha256": "7c996d97b210dba488b82f9d3e86a148e3fb52a7edb37e52db13e440d8d09191"
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "path": "D:\\mediamanager\\.test-input\\evidence\\episode-before-save-native-audit-v1\\bin\\Release\\net10.0\\MediaBrowser.Controller.dll",
+      "sha256": "0b7bd01db6605bb54658d07e8b7d5d70615a7f741cfdd6615b0cfa628f0d1644"
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "path": "D:\\mediamanager\\.tools\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.12\\System.Private.CoreLib.dll",
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678"
+    }
+  ],
+  "limitations": "Actual frozen EpisodeMetadataService subclass. Library/options, absent parent/season, image/probe filesystem, custom provider, repository saves and user data reattachment are controlled dependencies. No SQL, HTTP, directory creation or PostgreSQL. Parent typed hooks and complete refresh acceptance remain open."
+}

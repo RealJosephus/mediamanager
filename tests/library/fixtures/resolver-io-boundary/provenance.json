@@ -1,0 +1,2710 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual native CoreAppHost resolver discovery and LibraryManager.ResolvePaths over ordinary Folder and actual manager AggregateFolder parents, real outer directory entries and real VIDEO_TS structure. A forwarding IFileSystem seam throws IOException exactly at either outer GetFileSystemEntries or nested GetFilePaths. Actual return items/errors/stacks are observed, without expected resolver or fallback results supplied to the native host. No item save, recursive scan, metadata or release acceptance.",
+  "rawRecording": {
+    "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/native.json",
+    "bytes": 60813,
+    "sha256": "e8a6e14c6b42389b4c85acf0d0257fe43c17780c6dbffbc2d0b0f3b301c824eb",
+    "required": true
+  },
+  "executionRecord": {
+    "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/record.json",
+    "bytes": 4957,
+    "sha256": "918219af836a02f5d8c78dcc27d9dfd0ea7a197c2967106f175eddfc2b78cb26",
+    "required": true
+  },
+  "oracleAssembly": {
+    "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Oracle.dll",
+    "bytes": 93184,
+    "sha256": "2218078afbef3b76285e6f0b3c87d94bc2de7a255c5cd114a08d07abcc3b3402",
+    "required": true
+  },
+  "nativeBuildReceipt": {
+    "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+    "bytes": 14246,
+    "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+    "required": true
+  },
+  "originalHost": {
+    "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/global-scan-native-4/project/NativeScanHost.cs",
+    "bytes": 32232,
+    "sha256": "7b2e629fac51b99f0a86883cc540a9fdf82db4ea116d6692191506751585f157",
+    "required": true
+  },
+  "sourceFilesSha256": "9458d7e429aa6ce1f9798e465dfdb5f9d5e9d5ea7fe5da1d82d7f8bead1ffeba",
+  "recordedRuntimeSha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+  "loadedAssemblies": [
+    {
+      "name": "AsyncKeyedLock",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/AsyncKeyedLock.dll",
+      "bytes": 147968,
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36",
+      "required": true
+    },
+    {
+      "name": "BDInfo",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/BDInfo.dll",
+      "bytes": 120832,
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f",
+      "required": true
+    },
+    {
+      "name": "BitFaster.Caching",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/BitFaster.Caching.dll",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff",
+      "required": true
+    },
+    {
+      "name": "Diacritics",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Diacritics.dll",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0",
+      "required": true
+    },
+    {
+      "name": "DotNet.Glob",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/DotNet.Glob.dll",
+      "bytes": 35328,
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80",
+      "required": true
+    },
+    {
+      "name": "Emby.Naming",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Naming.dll",
+      "bytes": 105984,
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106",
+      "required": true
+    },
+    {
+      "name": "Emby.Photos",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Photos.dll",
+      "bytes": 10240,
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e",
+      "required": true
+    },
+    {
+      "name": "Emby.Server.Implementations",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "name": "Ignore",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Ignore.dll",
+      "bytes": 27136,
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Data",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Database.Implementations",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Database.Providers.Sqlite",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Extensions",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.LiveTv",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.LiveTv.dll",
+      "bytes": 428544,
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.MediaEncoding.Hls",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Hls.dll",
+      "bytes": 17920,
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.MediaEncoding.Keyframes",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Keyframes.dll",
+      "bytes": 11776,
+      "sha256": "88669ac070abfd6b7378ae6db21d6cab69846df39af0bee0dddb6a3b017985d9",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Networking",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Networking.dll",
+      "bytes": 46592,
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff",
+      "required": true
+    },
+    {
+      "name": "Jellyfin.Server.Implementations",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Common",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Controller",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.LocalMetadata",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.LocalMetadata.dll",
+      "bytes": 57344,
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.MediaEncoding",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+      "bytes": 215552,
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Model",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.Providers",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "name": "MediaBrowser.XbmcMetadata",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.XbmcMetadata.dll",
+      "bytes": 84992,
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67",
+      "required": true
+    },
+    {
+      "name": "Microsoft.AspNetCore.Cors",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Cors.dll",
+      "bytes": 91944,
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8",
+      "required": true
+    },
+    {
+      "name": "Microsoft.AspNetCore.Http.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "bytes": 325416,
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "required": true
+    },
+    {
+      "name": "Microsoft.AspNetCore.Mvc.Core",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Mvc.Core.dll",
+      "bytes": 1931088,
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Data.Sqlite",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Abstractions",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Relational",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "name": "Microsoft.EntityFrameworkCore.Sqlite",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "bytes": 75560,
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Caching.Memory",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "bytes": 100136,
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Configuration.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "bytes": 46888,
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "bytes": 227152,
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "bytes": 141096,
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "bytes": 42792,
+      "sha256": "3df995e75029f967a5fc9b30523c0655fc70682495a2cb08e15a7aaaaee5a6af",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Hosting.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Hosting.Abstractions.dll",
+      "bytes": 79656,
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Http",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Http.dll",
+      "bytes": 198440,
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Logging",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "bytes": 100176,
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Logging.Abstractions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Options",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "bytes": 141096,
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "required": true
+    },
+    {
+      "name": "Microsoft.Extensions.Primitives",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "bytes": 83752,
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "required": true
+    },
+    {
+      "name": "Microsoft.OpenApi",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.OpenApi.dll",
+      "bytes": 486752,
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5",
+      "required": true
+    },
+    {
+      "name": "Oracle",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Oracle.dll",
+      "bytes": 93184,
+      "sha256": "2218078afbef3b76285e6f0b3c87d94bc2de7a255c5cd114a08d07abcc3b3402",
+      "required": true
+    },
+    {
+      "name": "Polly",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.batteries_v2",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.core",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "name": "SQLitePCLRaw.provider.e_sqlite3",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "name": "Swashbuckle.AspNetCore.SwaggerGen",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "bytes": 157696,
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9",
+      "required": true
+    },
+    {
+      "name": "System.Collections",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "name": "System.Collections.Concurrent",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "name": "System.Collections.Immutable",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "bytes": 976680,
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "bytes": 30544,
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.Annotations",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "bytes": 198480,
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.Primitives",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "bytes": 79656,
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "required": true
+    },
+    {
+      "name": "System.ComponentModel.TypeConverter",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "bytes": 767784,
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "required": true
+    },
+    {
+      "name": "System.Data.Common",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "bytes": 2770728,
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.DiagnosticSource",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "bytes": 501544,
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.Process",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "bytes": 329552,
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.StackTrace",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.StackTrace.dll",
+      "bytes": 46888,
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797",
+      "required": true
+    },
+    {
+      "name": "System.Diagnostics.Tracing",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "bytes": 16208,
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "required": true
+    },
+    {
+      "name": "System.IO.Pipelines",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Pipelines.dll",
+      "bytes": 190248,
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd",
+      "required": true
+    },
+    {
+      "name": "System.Linq",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "name": "System.Linq.Expressions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "bytes": 3639080,
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "required": true
+    },
+    {
+      "name": "System.Linq.Queryable",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "bytes": 182056,
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "required": true
+    },
+    {
+      "name": "System.Memory",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "name": "System.Net.Http",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "bytes": 1746768,
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "required": true
+    },
+    {
+      "name": "System.Net.NetworkInformation",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "bytes": 157520,
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "required": true
+    },
+    {
+      "name": "System.Net.Primitives",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "bytes": 210728,
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "required": true
+    },
+    {
+      "name": "System.Net.Sockets",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Sockets.dll",
+      "bytes": 530216,
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a",
+      "required": true
+    },
+    {
+      "name": "System.Net.WebSockets",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.WebSockets.dll",
+      "bytes": 243496,
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e",
+      "required": true
+    },
+    {
+      "name": "System.Numerics.Vectors",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "name": "System.ObjectModel",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "bytes": 79656,
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "required": true
+    },
+    {
+      "name": "System.Private.CoreLib",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "name": "System.Private.Uri",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "name": "System.Private.Xml",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "bytes": 7788328,
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.DispatchProxy",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit.ILGeneration",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Emit.Lightweight",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "name": "System.Reflection.Primitives",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "name": "System.Runtime",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.Extensions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Extensions.dll",
+      "bytes": 17704,
+      "sha256": "3d7b517d4fd89ee58c53e0f642cc9be42e7a8669b51a85e861dafe118067cbfd",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.InteropServices",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.Intrinsics",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "name": "System.Runtime.Loader",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "required": true
+    },
+    {
+      "name": "System.Security.Cryptography",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "name": "System.Text.Encoding.Extensions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "name": "System.Text.Encodings.Web",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "name": "System.Text.Json",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "name": "System.Text.RegularExpressions",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "bytes": 1034064,
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "required": true
+    },
+    {
+      "name": "System.Threading",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "name": "System.Threading.Channels",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "bytes": 157480,
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39",
+      "required": true
+    },
+    {
+      "name": "System.Threading.Tasks.Parallel",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Tasks.Parallel.dll",
+      "bytes": 132904,
+      "sha256": "6fa359bdbebb56be96339f244ed41658afcead5e010074da470df1115d1e7699",
+      "required": true
+    },
+    {
+      "name": "System.Threading.Thread",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "bytes": 15696,
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "required": true
+    },
+    {
+      "name": "System.Threading.ThreadPool",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "bytes": 15656,
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "required": true
+    },
+    {
+      "name": "System.Transactions.Local",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "bytes": 640808,
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "required": true
+    },
+    {
+      "name": "System.Xml.ReaderWriter",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "bytes": 21840,
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "required": true
+    },
+    {
+      "name": "System.Xml.XmlSerializer",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.XmlSerializer.dll",
+      "bytes": 17744,
+      "sha256": "0b7d057c2b5b2272e8d4096a755edfd96f3cf03ab9aaa3fef54b462bf48d517e",
+      "required": true
+    },
+    {
+      "name": "jellyfin",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "name": "libse",
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/libse.dll",
+      "bytes": 2984448,
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903",
+      "required": true
+    },
+    {
+      "name": "netstandard",
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "bytes": 100648,
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "required": true
+    }
+  ],
+  "requiredInputs": [
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/prepare.mjs",
+      "bytes": 2320,
+      "sha256": "66ccef2ed6eb9482fe50fcb965d911fc96bae30e49ddc9fed46048b8b5b00493",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/Program.cs",
+      "bytes": 2899,
+      "sha256": "bc749dced3a37165cfc68cd8bccaeef378aee02e291267b3676fde426beb31ef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/NativeScanHost.cs",
+      "bytes": 32643,
+      "sha256": "ba50086bf1ac7c95b5d3ac234da085bfd87a87b96eea16dd4fc6b742b7f0b220",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/Oracle.csproj",
+      "bytes": 1350,
+      "sha256": "13c92320a209130a4608c802479e1abab17eb15c16d61614cacec52f99025b10",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/NuGet.Config",
+      "bytes": 112,
+      "sha256": "7d59a339f0f6022f0710d690fe52e2a0f868519847651f6c10f6c9ff1bd7213a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/input.json",
+      "bytes": 922,
+      "sha256": "7816e20a42e2501103bb7d2ac261928afefa721538d86c0843262f86a691751c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/run.mjs",
+      "bytes": 3829,
+      "sha256": "2f220fc7764051e5d4648a16c7bd58681f1a98ecbe498caa7a756e407f040494",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/LibraryManager.cs",
+      "bytes": 157087,
+      "sha256": "4729de97560262702a44c5829bf93bbc5deec379e9b3018b231aaa6d65643c44",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/Folder.cs",
+      "bytes": 83390,
+      "sha256": "d5f227d462ce3c2df0d5a45d912778427f87321fc9d6e13d863ec28bb639e0c1",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/AggregateFolder.cs",
+      "bytes": 7278,
+      "sha256": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/AggregateFolder.cs",
+      "bytes": 7278,
+      "sha256": "94f28ac08c6542de3541e8490d53381131d223826fbfadb43dd67a3a5afa08aa",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "bytes": 5120,
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/UserRootFolder.cs",
+      "bytes": 5120,
+      "sha256": "7c0349155c4959d5e6fb95d613739f88991cad85c7e3019104a0f76c80e48d4c",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "bytes": 13354,
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/CollectionFolder.cs",
+      "bytes": 13354,
+      "sha256": "6250b085fafa9adbaa153063ef2abccbde20a2b04f372dbbc8fa80ee73151487",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Entities/BaseItem.cs",
+      "bytes": 105800,
+      "sha256": "9dc7b96a93c9fbe874cdcededdca395b5aa2df6070f5cfc9c8959539dcd76469",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/IO/FileData.cs",
+      "bytes": 4160,
+      "sha256": "0df3e4678a1ef3ed21e7e74b1f3f7d828fc62104d6d394d2c3ca555fcdb41184",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/IO/FileData.cs",
+      "bytes": 4160,
+      "sha256": "0df3e4678a1ef3ed21e7e74b1f3f7d828fc62104d6d394d2c3ca555fcdb41184",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+      "bytes": 10009,
+      "sha256": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Library/ItemResolveArgs.cs",
+      "bytes": 10009,
+      "sha256": "6ccba267faebc220fbe374550eed30921a57587831c2b18d5484364e28032a25",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Providers/DirectoryService.cs",
+      "bytes": 6936,
+      "sha256": "46d8feb177e5eeb9332d1bd5d355c33e592fb41ae0ebccf83e7150548ad0b711",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Providers/DirectoryService.cs",
+      "bytes": 6936,
+      "sha256": "46d8feb177e5eeb9332d1bd5d355c33e592fb41ae0ebccf83e7150548ad0b711",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/LibraryTaskScheduler/LimitedConcurrencyLibraryScheduler.cs",
+      "bytes": 14480,
+      "sha256": "6f12fba06b37eafd31b1f50e02b9c01e0c2459771e8246c11a0fe7c1cfc46ba8",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/ApplicationHost.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/ApplicationHost.cs",
+      "bytes": 42960,
+      "sha256": "11119ed0761ae8fdf4e0fa6f9cae175c969ff0b1f563a43f4dc013617fc9c5ef",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server/CoreAppHost.cs",
+      "bytes": 5682,
+      "sha256": "4bfe4b08ba183d83b02b887c50e011ee27ab2b15a7364c20fb1dc57b64766c4d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/CoreAppHost.cs",
+      "bytes": 5682,
+      "sha256": "4bfe4b08ba183d83b02b887c50e011ee27ab2b15a7364c20fb1dc57b64766c4d",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/IO/ManagedFileSystem.cs",
+      "bytes": 27461,
+      "sha256": "280ea08cf13065d8cd3790edf551b28ddfc9f352f4758d4fe0e62a55dbe0b14e",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+      "bytes": 954,
+      "sha256": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/IO/MbLinkShortcutHandler.cs",
+      "bytes": 954,
+      "sha256": "f1b08e5d84e036d0d2b58959e080745e8049e0e0233134fdc1113da58a522afd",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "bytes": 9940,
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/BaseItemRepository.cs",
+      "bytes": 9940,
+      "sha256": "05c7bab92d023931d165d462a244701980d0c2b7c1f12fb9129f2e55a5487798",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "bytes": 33110,
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs",
+      "bytes": 33110,
+      "sha256": "df64ede4e72fca107cb86127e44b4c81321b3cf560ea3b7f0eccf4462f148d14",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/ProviderManager.cs",
+      "bytes": 55938,
+      "sha256": "ce45e7c317afeddb32166eea4387b187fc9a6d0f3e9f59c33cdf949c220d6c55",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Manager/MetadataService.cs",
+      "bytes": 61028,
+      "sha256": "6e08f11ce31d47be3e09787ebe2c1edff9bda5684d4444c2444f399e4b2dd7d5",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+      "bytes": 1992,
+      "sha256": "a3bf9c0c0e652dc00244b56f1a2ef7d02ac5b5746ae0b45652e05322fc452640",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Folders/FolderMetadataService.cs",
+      "bytes": 1992,
+      "sha256": "a3bf9c0c0e652dc00244b56f1a2ef7d02ac5b5746ae0b45652e05322fc452640",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs",
+      "bytes": 1931,
+      "sha256": "0c88bd596cf8077a5fb0278cda989e364501a4530172712ed72ade80777fe337",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Providers/Folders/CollectionFolderMetadataService.cs",
+      "bytes": 1931,
+      "sha256": "0c88bd596cf8077a5fb0278cda989e364501a4530172712ed72ade80777fe337",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Plugins/PluginManager.cs",
+      "bytes": 39982,
+      "sha256": "5de68dbbe5d918c2cdfb4022fed8ffd6c07df625643a0f435269444505dccc70",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Plugins/PluginManager.cs",
+      "bytes": 39982,
+      "sha256": "5de68dbbe5d918c2cdfb4022fed8ffd6c07df625643a0f435269444505dccc70",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Data/CleanDatabaseScheduledTask.cs",
+      "bytes": 5766,
+      "sha256": "b9af424fbd924239184a0869ad2f00c9aaaa22b5323bbfe6776f53ae25d7bcd7",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Data/CleanDatabaseScheduledTask.cs",
+      "bytes": 5766,
+      "sha256": "b9af424fbd924239184a0869ad2f00c9aaaa22b5323bbfe6776f53ae25d7bcd7",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/CollectionPosterVerifyPostScanTask.cs",
+      "bytes": 2405,
+      "sha256": "46f2801c04e0804491ad6f810a8bae871dab64bfd2c583fbaef58ce80f80d880",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/CollectionPosterVerifyPostScanTask.cs",
+      "bytes": 2405,
+      "sha256": "46f2801c04e0804491ad6f810a8bae871dab64bfd2c583fbaef58ce80f80d880",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/ArtistsPostScanTask.cs",
+      "bytes": 1583,
+      "sha256": "c8e51387a331e10563b321ddd04779e4ee945ca225c1b9e3fc9aa7fdfe73bce2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/ArtistsPostScanTask.cs",
+      "bytes": 1583,
+      "sha256": "c8e51387a331e10563b321ddd04779e4ee945ca225c1b9e3fc9aa7fdfe73bce2",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/StudiosPostScanTask.cs",
+      "bytes": 1588,
+      "sha256": "cff3778c37694bea3ca7d0d242999970fc83525c8a09c76bcc2c1ddffbf5ef19",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/StudiosPostScanTask.cs",
+      "bytes": 1588,
+      "sha256": "cff3778c37694bea3ca7d0d242999970fc83525c8a09c76bcc2c1ddffbf5ef19",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/GenresPostScanTask.cs",
+      "bytes": 1576,
+      "sha256": "9883290e20824d4c95ed1d396a95f93c2b5511e966837a04bc7aecbc0448083c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/GenresPostScanTask.cs",
+      "bytes": 1576,
+      "sha256": "9883290e20824d4c95ed1d396a95f93c2b5511e966837a04bc7aecbc0448083c",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/MusicGenresPostScanTask.cs",
+      "bytes": 1610,
+      "sha256": "1ecd19d7cf7eb0ddd7c204be785aa2cf63a08dc19f7d408cf8251e8a30f7defa",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/MusicGenresPostScanTask.cs",
+      "bytes": 1610,
+      "sha256": "1ecd19d7cf7eb0ddd7c204be785aa2cf63a08dc19f7d408cf8251e8a30f7defa",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Validators/CollectionPostScanTask.cs",
+      "bytes": 5244,
+      "sha256": "65c3607091c17d95340808cfef31dc41c18111fc86a78b937688d99006004ba5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Validators/CollectionPostScanTask.cs",
+      "bytes": 5244,
+      "sha256": "65c3607091c17d95340808cfef31dc41c18111fc86a78b937688d99006004ba5",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/SplashscreenPostScanTask.cs",
+      "bytes": 3571,
+      "sha256": "5cb0d8c14a96c14a742b2e447abb48aad822c67065c864b235913ad4fae94de5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/SplashscreenPostScanTask.cs",
+      "bytes": 3571,
+      "sha256": "5cb0d8c14a96c14a742b2e447abb48aad822c67065c864b235913ad4fae94de5",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/MediaBrowser.Controller/Library/ILibraryPostScanTask.cs",
+      "bytes": 615,
+      "sha256": "d65336487ca5ff6d8bf3621179da64c7071c9a86944f757934f74010e00c8194",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/MediaBrowser.Controller/Library/ILibraryPostScanTask.cs",
+      "bytes": 615,
+      "sha256": "d65336487ca5ff6d8bf3621179da64c7071c9a86944f757934f74010e00c8194",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/PathManager.cs",
+      "bytes": 4940,
+      "sha256": "35db88229462c4531839f6bb19ed3cdd00a354eaf96eeac8422307bca5e9e98b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/PathManager.cs",
+      "bytes": 4940,
+      "sha256": "35db88229462c4531839f6bb19ed3cdd00a354eaf96eeac8422307bca5e9e98b",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "bytes": 14797,
+      "sha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Collections/CollectionManager.cs",
+      "bytes": 14797,
+      "sha256": "32ed12ef23ccedcb7893f429661db5576e2016e78e9922d73626d193119a36c8",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/src/Jellyfin.Drawing.Skia/SkiaEncoder.cs",
+      "bytes": 34013,
+      "sha256": "8c3c61b8be155b57460374c2bb7c7fba3cdddf8d3db4c75e4f8f9e113c4c83bc",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/BaseVideoResolver.cs",
+      "bytes": 11005,
+      "sha256": "bd67ff9d8f91d38923ddb07a7d99a49947a73a8d2a3a844f7bc9c101b43c2dc1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/BaseVideoResolver.cs",
+      "bytes": 11005,
+      "sha256": "bd67ff9d8f91d38923ddb07a7d99a49947a73a8d2a3a844f7bc9c101b43c2dc1",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs",
+      "bytes": 21507,
+      "sha256": "0a74d2079340fcfc85c9d72839112d42dbafe4285b286ceab137c0092c3f6e15",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/Movies/MovieResolver.cs",
+      "bytes": 21507,
+      "sha256": "0a74d2079340fcfc85c9d72839112d42dbafe4285b286ceab137c0092c3f6e15",
+      "required": true
+    },
+    {
+      "filename": "D:/jellyfin/Emby.Server.Implementations/Library/Resolvers/FolderResolver.cs",
+      "bytes": 920,
+      "sha256": "6167ebff3f21cec97e1f74c94caff26a167f0f29f64d58147a9a09d39c5cf954",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Emby.Server.Implementations/Library/Resolvers/FolderResolver.cs",
+      "bytes": 920,
+      "sha256": "6167ebff3f21cec97e1f74c94caff26a167f0f29f64d58147a9a09d39c5cf954",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/AsyncKeyedLock.dll",
+      "bytes": 147968,
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/ATL.dll",
+      "bytes": 686080,
+      "sha256": "9ade8f1b5b6b2193447c2931890f21888c96b0bba69037ad610d5dc0d0a6c38e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/BDInfo.dll",
+      "bytes": 120832,
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/BitFaster.Caching.dll",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/BlurHashSharp.dll",
+      "bytes": 11776,
+      "sha256": "a49914606d6785f13c82481ff6fea946c39a82188b31f38046fa872ae11ad292",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/BlurHashSharp.SkiaSharp.dll",
+      "bytes": 7168,
+      "sha256": "934aa821abf5c8808ad184b814cd9e99e19bbdae85a689a5769f6c2ca506ef7f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/CommandLine.dll",
+      "bytes": 225280,
+      "sha256": "8a55501cd1a1590a4bd93a17c6fdd2c01a0ed5bff1aea9036bdc78d98c9a3fad",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Diacritics.dll",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Core.dll",
+      "bytes": 176128,
+      "sha256": "f69c5091f7b43b00e8affca8fba08684507164050e0dfe6a854b400274ee8afe",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Iso9660.dll",
+      "bytes": 51200,
+      "sha256": "6664411665a23ff62339c865ab36a55a539c4c5585f5dad3fb42bf29b0497af6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Streams.dll",
+      "bytes": 79360,
+      "sha256": "9de71c017c45c4dba0bc3806d56e26f9eea99391beff0f084de61686f9d917c7",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/DiscUtils.Udf.dll",
+      "bytes": 36352,
+      "sha256": "24a6b7135c505b2d87157185b239c6e6c951277b7a5adf46a3b7f22781d142bd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/DotNet.Glob.dll",
+      "bytes": 35328,
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Naming.dll",
+      "bytes": 105984,
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Photos.dll",
+      "bytes": 10240,
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/ExCSS.dll",
+      "bytes": 347136,
+      "sha256": "6b166e638181eba3150f0d10379d1cc8362af6dfd518e9e9e194aa9a746293c2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/HarfBuzzSharp.dll",
+      "bytes": 122720,
+      "sha256": "072715d79f7f4a9160fc14f1085eb24a0beccfe02871f04184eaf7c94e9a1061",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/ICU4N.dll",
+      "bytes": 13657600,
+      "sha256": "ba54b8bb8e9785b7a7e83b03c8b9b8407582e07b11c95bb805e930e6c0b0e6af",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/ICU4N.Transliterator.dll",
+      "bytes": 687616,
+      "sha256": "5a0935d0ddc51d755a32921ea53dbd76c5350f7d0322844bab05f0cd456b2793",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Ignore.dll",
+      "bytes": 27136,
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/J2N.dll",
+      "bytes": 590848,
+      "sha256": "93afc2ad2a3a7335992791ebe116a57908ebb027571c67c8ac8844fe12696c8c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Api.dll",
+      "bytes": 683008,
+      "sha256": "0b7296dbcfe4c11d27a0faa827abd37e53cd53e7c936b1b0ee6fb24439ceb56b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Drawing.dll",
+      "bytes": 18944,
+      "sha256": "842750d9d64969910b6d4aedd1cefbf2a10c4af4f2bc07717596d84a5f69c3de",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Drawing.Skia.dll",
+      "bytes": 37376,
+      "sha256": "4177bf7f1b889c109d4b042e0e22097678ce0ffbd06f14ed9dd877b79fa98886",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.LiveTv.dll",
+      "bytes": 428544,
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.MediaEncoding.Hls.dll",
+      "bytes": 17920,
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.MediaEncoding.Keyframes.dll",
+      "bytes": 11776,
+      "sha256": "88669ac070abfd6b7378ae6db21d6cab69846df39af0bee0dddb6a3b017985d9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Networking.dll",
+      "bytes": 46592,
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Jellyfin.XmlTv.dll",
+      "bytes": 38912,
+      "sha256": "fe5a138772607a01397642745a5c4e686953cd24122ee2fdbba3ae3809f9ea62",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/libse.dll",
+      "bytes": 2984448,
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/LrcParser.dll",
+      "bytes": 40960,
+      "sha256": "2595f3b12c97bafc4917bfde3552a58e5d0c14ee43b46cdd65fc070aa4baab3d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.LocalMetadata.dll",
+      "bytes": 57344,
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+      "bytes": 215552,
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MediaBrowser.XbmcMetadata.dll",
+      "bytes": 84992,
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.Common.dll",
+      "bytes": 18432,
+      "sha256": "dd0b78005cce58be00d2934e1148251b958ea72de3d6d2bed3e417f2d0e7e7b3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.Common.Json.dll",
+      "bytes": 31232,
+      "sha256": "0abef4d3cd0a8f3b312d2661cc6c9e851d7ea9de9fa28516e4a9a3a7b98470d4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/MetaBrainz.MusicBrainz.dll",
+      "bytes": 285184,
+      "sha256": "06decf86fd4d12209d0b6c20bbfa66eec8e7280bf5b32f09162baf3e92f62a6b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Extensions.DependencyModel.dll",
+      "bytes": 84816,
+      "sha256": "9237596e7cf66d2d93163fae81dc29ed5942d6376e9bcfde85bbf6f0c8186766",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll",
+      "bytes": 21800,
+      "sha256": "9791edf3b328bb50dce4570290e3602f65e2fe4be0061b4398d08c9ebcff2022",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.OpenApi.dll",
+      "bytes": 486752,
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Microsoft.Win32.SystemEvents.dll",
+      "bytes": 27416,
+      "sha256": "a606ed156f527d4cadadcff1f23987b87daec6f41738d5b0c4b10a722116a1db",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Morestachio.dll",
+      "bytes": 609792,
+      "sha256": "008dc0205293bb5ef51f157de0102cbacdc107cf2d99ca6813097da5b604d0bb",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/NEbml.Core.dll",
+      "bytes": 24576,
+      "sha256": "9352adc0f9fe1efeda6b7715a37fc8ea7d28b76aa016698955e5dc5867ed8468",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Newtonsoft.Json.dll",
+      "bytes": 723368,
+      "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/PDFtoImage.dll",
+      "bytes": 96096,
+      "sha256": "bebf1ed3ef86674d2eec07b74de88e7bff679f3d4fb00a896b69cd70aa0cb4a3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/PlaylistsNET.dll",
+      "bytes": 47104,
+      "sha256": "5aa82f779725f5a70be2082118e797e6d84c8b6f174f6e9c10b08fe5a427afea",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Polly.Core.dll",
+      "bytes": 223136,
+      "sha256": "f7f50017ca9f457b854498358ae595c2a8ab69c1fd8b915139d22bed8f7e4f2a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/prometheus-net.DotNetRuntime.dll",
+      "bytes": 94720,
+      "sha256": "5c9ba723966ff7f28305ebd9f8e4a2176c748dec03a1253b9894c942cd4e991d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Prometheus.AspNetCore.dll",
+      "bytes": 47104,
+      "sha256": "04fad5a2ff2c62da5bf31fe1e17978056162e57e8cdf266d89d28c4a36f61dbd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Prometheus.NetStandard.dll",
+      "bytes": 197632,
+      "sha256": "87f007a4e95ded1e9a8b0b0cd0dca43e89822c926b8d93c15ec69a3e520f3620",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.AspNetCore.dll",
+      "bytes": 17920,
+      "sha256": "a550c57df7a04edbed00da036fc14be12acd0d425b7401855975fb628e3dbada",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.dll",
+      "bytes": 161792,
+      "sha256": "9fbf7441a9bdc9459652dc66e18f008040651f14cb8d7a7bb806ac4a8b722d10",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Enrichers.Thread.dll",
+      "bytes": 6656,
+      "sha256": "74b88ad495b8699fb214d83f7ea371f3470ece05948111c99e72ddd5f3f1d852",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Expressions.dll",
+      "bytes": 200704,
+      "sha256": "e3fc0c1c14ab4221ce55f6b926f1a6bb33654009242d3527526064995f70b9e8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Extensions.Hosting.dll",
+      "bytes": 35840,
+      "sha256": "3e6d0284179ee0e1c197568fd79b58f869d15298fff8ecb8447322fe87d44f47",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Extensions.Logging.dll",
+      "bytes": 28672,
+      "sha256": "80d3edbe3e3ac0b4c5bc764474220e7da11df8d285e0098f3dc1b65a734c8507",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Formatting.Compact.dll",
+      "bytes": 9728,
+      "sha256": "319fbcefc2161dd50ccdd8d60b30edee48a09f794aedb28421a23f35ddd670d9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Settings.Configuration.dll",
+      "bytes": 71680,
+      "sha256": "de6fb7b6ee3229e0b0b9356ecdbbd05767d6490aaf0c34e9e49dbd7fe1e974a0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Async.dll",
+      "bytes": 14848,
+      "sha256": "1031cd50ee3f0d62bbfdad3e07de0e953f26b90edac475e1b06fc65d2b42619c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Console.dll",
+      "bytes": 38400,
+      "sha256": "dc88002ddd9f5fd0ffec9a6568ef89954671f60f2c9161593ee78932538c1e3e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Debug.dll",
+      "bytes": 7168,
+      "sha256": "df543d3df8bd00d72e5eb2b9b2a15e67a6e4d10c13834de4cedbf500b8793e01",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.File.dll",
+      "bytes": 36864,
+      "sha256": "4f4282671c2ac68284b4dc99f7a76eac9cbd4e659978cef642cff9e6c01b676d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Graylog.Core.dll",
+      "bytes": 33792,
+      "sha256": "1aa458c5ec4d0bee8be25900d0103e345b28ac1da2c356a81641954bd5d67e19",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Serilog.Sinks.Graylog.dll",
+      "bytes": 10240,
+      "sha256": "1acb2f796c01331bc185cdf3ffd81fbaa3dd131335eda6a8341f1cbeb325e514",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SharpCompress.dll",
+      "bytes": 2461696,
+      "sha256": "f59f7159bc053f656f59ee15144f123de5d4b798c337083f3bfc6b0d30e846fd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/ShimSkiaSharp.dll",
+      "bytes": 189952,
+      "sha256": "81605037e7c1b6515c40ac2a20cee7dcc2ec6fab2de448661ab19dcda421feb9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SkiaSharp.dll",
+      "bytes": 489824,
+      "sha256": "aaaaa18c68ba1f3a3408b00dff28b11d5705198e17ba9d3aa59222bfd35407c8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SkiaSharp.HarfBuzz.dll",
+      "bytes": 23904,
+      "sha256": "a3395e68c225d9fbe950312117e50ba475240a4b6b1deb8feb3c27dfcf6a767a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Svg.Custom.dll",
+      "bytes": 737792,
+      "sha256": "70f43c2be9911d1999cffbba95135d9b045e9d98326bd2aee2f82272c2e1445d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Svg.Model.dll",
+      "bytes": 187392,
+      "sha256": "11d47f250c0afcd4d6d8a72bb7173a1c9d9e0fcfda764156f74dcbcfb02dbd82",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Svg.Skia.dll",
+      "bytes": 94208,
+      "sha256": "1879c178d0adc1438638421407f1241175905da2a0854d30198b45bc11ed56b1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.ReDoc.dll",
+      "bytes": 386560,
+      "sha256": "b9eeab4c8d2f697cbf0a71da1a25fff537dc95040436b198aaa3961001abd728",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.Swagger.dll",
+      "bytes": 23040,
+      "sha256": "846276be474e07728eee6c60f586959c4d13f40df730c3645107d3ff115c622b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "bytes": 157696,
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+      "bytes": 727552,
+      "sha256": "2b986a27c1ce3bf2508eb100e4971380833bd52319f6b7b769016efe8e138e73",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/System.Drawing.Common.dll",
+      "bytes": 485664,
+      "sha256": "a998ea518f11dc6bc85d76abab2b99a79de3f06580fc409af8c3b344c9d8b30a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/System.Private.Windows.Core.dll",
+      "bytes": 854808,
+      "sha256": "2cae44600028d3181b068421317c35faaee4f2e6eb990cb06a3ab60d587d5f50",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/TagLibSharp.dll",
+      "bytes": 500224,
+      "sha256": "dad93b152d55cf6a58b2037bcf9dd34b45d87761fe5ed61a232b3d4641d2a5d3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/TMDbLib.dll",
+      "bytes": 401920,
+      "sha256": "30af00d4ab894b91c50e36b78ee11c3d5e34fb1a6c32540405b8b4008d10c794",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/Ude.NetStandard.dll",
+      "bytes": 164864,
+      "sha256": "98d4b00f323dcff984c2eff193df5947f69653be13c6de98bc232a1f701c3963",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/UtfUnknown.dll",
+      "bytes": 256512,
+      "sha256": "83df6c4ef2be11436c4d3aa9bf9b70d34d9bb372f82585e423fa2b2d140b10a0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/zlib.net.dll",
+      "bytes": 56320,
+      "sha256": "1645161b61e85fd7b76f6b6d53f88c3006b718f25cbd2ade3dcd11a2a73f0dd4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/runtimes/win-x64/native/e_sqlite3.dll",
+      "bytes": 1978880,
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/baseline/source/Jellyfin.Server/bin/Release/net10.0/runtimes/win-x64/native/libSkiaSharp.dll",
+      "bytes": 11628896,
+      "sha256": "7dec3ba900ab353491e6446f0083739924c6f8dd668832e2f09d38ebffdbbe1c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/dotnet.exe",
+      "bytes": 167208,
+      "sha256": "21a46f1e5235cf4e844b9de5429f0e198b9c97a41f0503a66442f1d639ca3ee6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/tools/validation/oracle.js",
+      "bytes": 4232,
+      "sha256": "3610af39fc5077a87971f6afec6930350ba4647cf73854239038305abe3455dd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/tests/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/AsyncKeyedLock.dll",
+      "bytes": 147968,
+      "sha256": "e9ae58a8c68db178ad4ec944626036fa6eca814947c64fbb8ec74c29b2ed0b36",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/BDInfo.dll",
+      "bytes": 120832,
+      "sha256": "e9766558f835a3dcdfc24e02cc88a11992f73e463afe289cb81db90a122ecf3f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/BitFaster.Caching.dll",
+      "bytes": 195584,
+      "sha256": "a58275640773dc3ff06ceafad752fd399e4ed7cef93039354b7eb06a126590ff",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Diacritics.dll",
+      "bytes": 30720,
+      "sha256": "893640462f6bfaa8cf5c18698ee655a1777b05d359963c129e95c2ffb94307b0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/DotNet.Glob.dll",
+      "bytes": 35328,
+      "sha256": "2ab2c4dcda2649b078ad11cbefd7a29b38743ad076b37dced42f7546c92ead80",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Naming.dll",
+      "bytes": 105984,
+      "sha256": "860fd6bd1d790f51a0f0c7bccbdf4ef37cab75a797417588d28d6f327cdfb106",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Photos.dll",
+      "bytes": 10240,
+      "sha256": "ea702e040524dc0aeaef127012d4f4900d7a90c48caa09e0a55b4b2c7ebaac1e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Emby.Server.Implementations.dll",
+      "bytes": 1673728,
+      "sha256": "9c732ba80d1b1980c36d2d64780da28d64c0a8d503bf044c89bc35285eab219e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Ignore.dll",
+      "bytes": 27136,
+      "sha256": "e362b92af4a52f6bfd5b94f2692acdf3a1f3491477a12ce2ea5394cde369de2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Data.dll",
+      "bytes": 18432,
+      "sha256": "78863aaacadbd2f9878e8c0f272f04829e9f11f53b92a6bd47fb39d05d21a2e4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Database.Implementations.dll",
+      "bytes": 249344,
+      "sha256": "28803e21ebd1ebaf0cc3189e4f5b1ad5b476cab0f08327b9be09c235b3da169f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Database.Providers.Sqlite.dll",
+      "bytes": 1109504,
+      "sha256": "296a0503f875c70401150236d430ac4e58d68e415a7b21e2c090a3d6c0c89f18",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Extensions.dll",
+      "bytes": 37888,
+      "sha256": "0ded3efa5eb05eb48ffc2e32a48a1a51da78a1d9b05f5b87904cf4f1ee697716",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.LiveTv.dll",
+      "bytes": 428544,
+      "sha256": "8b745072fa22685aea5deac3742fabb2ee3d09a81ba50dae9e46a046a34d1bbc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Hls.dll",
+      "bytes": 17920,
+      "sha256": "77b083f4bf52719b793ae42352baa85ff0c86c65b6eee9a50e93a5337c47592e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.MediaEncoding.Keyframes.dll",
+      "bytes": 11776,
+      "sha256": "88669ac070abfd6b7378ae6db21d6cab69846df39af0bee0dddb6a3b017985d9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Networking.dll",
+      "bytes": 46592,
+      "sha256": "ab0375f70fbed9d95678bdf21d1cc85e2952d33963fa10d13fdc2468e948baff",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Jellyfin.Server.Implementations.dll",
+      "bytes": 664064,
+      "sha256": "f163fb6064b99bf6c240264e7bed0263da272d6380756c19c3f94dbf6c4365c1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Common.dll",
+      "bytes": 48640,
+      "sha256": "da09560f84366fe4f2667391ce443b6e1d67d9ab891e8d230acb96d54e9ce12b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Controller.dll",
+      "bytes": 655872,
+      "sha256": "e4f1e201e43c9e22fd07cbd0ed2c52c427b0bdaa2dfe0ed5e5ab7ee604b537cf",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.LocalMetadata.dll",
+      "bytes": 57344,
+      "sha256": "d87ddd8d1fe866f1d87980220a9e0d1c760a8dcb6d232855684281769f3d4c65",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.MediaEncoding.dll",
+      "bytes": 215552,
+      "sha256": "b4301e181cdfc0b803bb5e715f4b7fd3f30606d881381d087a517a3f93c51a38",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Model.dll",
+      "bytes": 489472,
+      "sha256": "5e5db1a105d41d913eb36d7bd9e1aeb62d3ae4809b00c12023f2eb99f019d372",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.Providers.dll",
+      "bytes": 1030656,
+      "sha256": "4aa9ca407da2bb0db21ef0a7da5bdef162260fd9c5873f06cfb239780ccc4e3e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/MediaBrowser.XbmcMetadata.dll",
+      "bytes": 84992,
+      "sha256": "3f75a7fe29586a69b98e13b61b73752cf859d322298ec760e668990cf6ddfe67",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Cors.dll",
+      "bytes": 91944,
+      "sha256": "9fb130ef9b9ea9101a2dec73bdc518add30a1d8e7d8a5d6d2596a6e18e7ec1b8",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Http.Abstractions.dll",
+      "bytes": 325416,
+      "sha256": "1fae7aa024a039a404141ec7846a016e271fd9b8bc53960cb1b17a33ffbc1a89",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.AspNetCore.Mvc.Core.dll",
+      "bytes": 1931088,
+      "sha256": "1356da94b4d872025f64fd7e788e3065bf149a9edb920c892e331cad3dbaa4b6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.Data.Sqlite.dll",
+      "bytes": 177504,
+      "sha256": "4abd9c2a61e580eb853e93ca8953a3cef2c05714ae28d2d1859d4dbc5e5700bc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "bytes": 2829112,
+      "sha256": "9cf183abffc9d6920e8366b75af8388bc502febaaa0e3d9fe41a4906a68d3065",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "bytes": 34616,
+      "sha256": "6c6401703d480f3fb49ca47ea746c46557779c7ac4406e29f8a8956b151877d2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "bytes": 2194784,
+      "sha256": "301f57f6e6a919b139307ed0b0820e74cedb1ccace5cb234470f35ff4600d7c4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "bytes": 311648,
+      "sha256": "6c1737c1f1ba7b32c2a39d838b8ab5f5dbcc1639ca2fdf1aa6699d01444e0210",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Abstractions.dll",
+      "bytes": 75560,
+      "sha256": "d6c5e46c7c43834235abbbcb9767756f8e210f0fcc4b92137c57a2aa83b81b2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Caching.Memory.dll",
+      "bytes": 100136,
+      "sha256": "50df53585dac029895a6d50a32212424aafbae87b9cc20ac0af5338677492983",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "bytes": 46888,
+      "sha256": "63a89b1becd68c2f5051df9c042b46bdf41fba72393bb1ef29b52b701b155c31",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.dll",
+      "bytes": 227152,
+      "sha256": "6424c0b19a1cef1977db79eee164dcaeb3cba6abdaa583d6f5ff6413f7f7244a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "bytes": 141096,
+      "sha256": "0e2feec8beaa131967d1f0d70684500183227d1ef58c617b8fadb793c3387e93",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll",
+      "bytes": 42792,
+      "sha256": "3df995e75029f967a5fc9b30523c0655fc70682495a2cb08e15a7aaaaee5a6af",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Hosting.Abstractions.dll",
+      "bytes": 79656,
+      "sha256": "95f5e2e5ab0a8fc6c4fd35f1db331b7aa2852ab2cc7ca148be72320289bfedda",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Http.dll",
+      "bytes": 198440,
+      "sha256": "2cd8cf43d2b12b0c167e35fc6218945537f484899607279af8de23147755b695",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.dll",
+      "bytes": 100176,
+      "sha256": "afd93f320e217561e674f8c6d44ce1f0846d6ae2f26c0263f6b662476d4b570c",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Logging.Abstractions.dll",
+      "bytes": 153424,
+      "sha256": "90c41d68d297e54c4def3cfd38eb620513a744ab01131840ea3e2634cf973be3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Options.dll",
+      "bytes": 141096,
+      "sha256": "02a3cad0e05023f129c0717ba99d171ac524bf5f7c955863e17e3f7441107567",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.AspNetCore.App/10.0.12/Microsoft.Extensions.Primitives.dll",
+      "bytes": 83752,
+      "sha256": "5b40af41b1b354f88e64e5b04619f70aaefe693ff377ac0bb9bc7f70c4018cc1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Microsoft.OpenApi.dll",
+      "bytes": 486752,
+      "sha256": "64497b0a954493014d15494bb89f09dbed059b13efe64cdf008d5f0f6bf197e5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Oracle.dll",
+      "bytes": 93184,
+      "sha256": "2218078afbef3b76285e6f0b3c87d94bc2de7a255c5cd114a08d07abcc3b3402",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Polly.dll",
+      "bytes": 288160,
+      "sha256": "cecb78ee944fd7cd1889c21602cc905df8f72af06a3798fb0fd75d96d436891e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.batteries_v2.dll",
+      "bytes": 5120,
+      "sha256": "815ce410c9eab531dd219318e3ba16c5e38e83d361cfbbdbb4bbca222c497b0b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.core.dll",
+      "bytes": 51200,
+      "sha256": "af340ac9eb9195795660d7fc1114f486b6ab63998f33176e2f24c8e0acb9aa84",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+      "bytes": 36864,
+      "sha256": "df996bcae63c2cabcfe8d4b9c5110eb39a2a4706178b07d875665391c6eb3995",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "bytes": 157696,
+      "sha256": "5c28c464b321683a220364e1aafc9d07d38dcc3ff4e361e0e41c5176ccee23d9",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.dll",
+      "bytes": 296744,
+      "sha256": "df6f2037eabee28100184e92f7536427ba2f086c1110629804d466b124bc4d54",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Concurrent.dll",
+      "bytes": 231248,
+      "sha256": "082f4bc0da1141eb65111b6da633d75624adfb7bb067d7ee90c5622c8b30885b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Collections.Immutable.dll",
+      "bytes": 976680,
+      "sha256": "b527dd7b2beb82c22aa39787298cbeb33f3eac9eb9b83a0f0271353421db28db",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.dll",
+      "bytes": 30544,
+      "sha256": "e3b6f75864ee944898540937c1f300e04f44a1b2729516f0bbf948589a8b14b2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Annotations.dll",
+      "bytes": 198480,
+      "sha256": "e3be2d35d81e6475c64110cfc099895b71df22c8b46a18c2d7c76a913b8ba903",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.Primitives.dll",
+      "bytes": 79656,
+      "sha256": "1e2451184c287409ea25acde3c90f25950bf34d16458a6e52a94ca4292434f62",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ComponentModel.TypeConverter.dll",
+      "bytes": 767784,
+      "sha256": "10dae312a6697718f8ce3dfcdb17d6ae4b74687c765d74d50de8a8e69e08f5e7",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Data.Common.dll",
+      "bytes": 2770728,
+      "sha256": "66bdd62047ee460e2ce2c33d15dd1173ac97997b2745864a905179594f821acc",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.DiagnosticSource.dll",
+      "bytes": 501544,
+      "sha256": "6267c1bd1bdf2bdd4b5748b885b0adcda10f18697adfea8488a19a009ad44fdb",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Process.dll",
+      "bytes": 329552,
+      "sha256": "51a57fbe918f8b68930c090792b718fc0850ea12da869d50b97a3796af29a740",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.StackTrace.dll",
+      "bytes": 46888,
+      "sha256": "8f6397c1e2ba9b8b8bfa317962151b5035049ce8d6b3575e5027a0d0eeacc797",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Diagnostics.Tracing.dll",
+      "bytes": 16208,
+      "sha256": "9563d5eec35f94d13a5e62eaa9535dbe0e9ea474f055da132fb8af46b0b01263",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.IO.Pipelines.dll",
+      "bytes": 190248,
+      "sha256": "ee9f0fd6c659f50799afd103c6ed9c5e408967e28dfa059bddf4b0a3fd2557dd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.dll",
+      "bytes": 698192,
+      "sha256": "284d38945b6e92e847129bd28af458b19818d0f2181f79882888ab2003f4c519",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Expressions.dll",
+      "bytes": 3639080,
+      "sha256": "8830f4a6a6982f53cfbb54f992858ee36b4994a6ff6e6078c39627e77bef282f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Linq.Queryable.dll",
+      "bytes": 182056,
+      "sha256": "b3b3a9c1b87a51dacd46a3f9ec392c5d05e449152d44d6bd495df0994350e2fa",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Memory.dll",
+      "bytes": 161576,
+      "sha256": "f8f9d38efd6b0de30954d6bf1f353e9617bfb36d3d245c013a3b12be9f6bd88a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Http.dll",
+      "bytes": 1746768,
+      "sha256": "b98ed0cb80dd54c33fc049f33af5448710752155bbd5cc8cbcd932e01f066801",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.NetworkInformation.dll",
+      "bytes": 157520,
+      "sha256": "7e8791833eb2d0aea77b119fed3cab8bf501f6a553155cc1c4e5b1c02f65593b",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Primitives.dll",
+      "bytes": 210728,
+      "sha256": "4dbb41a178ef013a898327152eccd146228dd2eb83859b9bb36078333b41f0f1",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.Sockets.dll",
+      "bytes": 530216,
+      "sha256": "645c56d637ce15976998119e50722a911315682ce141b4aab98874ce1b063f3a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Net.WebSockets.dll",
+      "bytes": 243496,
+      "sha256": "c014a074d408c71011e26eac69be85003a852cfe115e8608bb5d4fd70536eb2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Numerics.Vectors.dll",
+      "bytes": 15656,
+      "sha256": "a9a980ee33ed0c798a5e1960c4557521f465ac9e0987dfd2c3049d53b1f2fa5a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.ObjectModel.dll",
+      "bytes": 79656,
+      "sha256": "2179bb19f335b4fcacd0994ad2ccfdac6840deff09c7889debfe9dbb5b88a3e6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.CoreLib.dll",
+      "bytes": 16033576,
+      "sha256": "1125acc8106c43fc8bad2d203c4c4485df6182d292846c2fff415c1040c54678",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Uri.dll",
+      "bytes": 255824,
+      "sha256": "b15c84d2120e1ec9612c66ba59bc3d7e67d841e2bce7b7d0478cb212537539b4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Private.Xml.dll",
+      "bytes": 7788328,
+      "sha256": "d71e72a7a9de324352edd281a46466b51bd0bdd2831b1573f8d3bae8bd2dd4a6",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.DispatchProxy.dll",
+      "bytes": 75600,
+      "sha256": "bf93a361c0bba8497889c9f7713add5968ba39394f9e6bda27e86294c6c43560",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.dll",
+      "bytes": 309032,
+      "sha256": "09059981bbeea0fdc5df589be5d7e3937d57e22bec4d78ceb492c587926fc238",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 15656,
+      "sha256": "6b42ddd05b0ca1c7342d73ea9f401fe588044215d65c67b756deb780f0894a26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 15656,
+      "sha256": "d2724a2b7b46146877ec1f6e400c49ea05f84bdd31f3bba52ae139ee68a4f779",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Reflection.Primitives.dll",
+      "bytes": 15656,
+      "sha256": "c2bbd885d03da5e880667c228ac1f56a5f3a72ea37d43f010ada000adc33da28",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.dll",
+      "bytes": 44840,
+      "sha256": "76be53624f64b23d0249dfa0bbe85390086de7c44bfd490642ea86c6faaf44af",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Extensions.dll",
+      "bytes": 17704,
+      "sha256": "3d7b517d4fd89ee58c53e0f642cc9be42e7a8669b51a85e861dafe118067cbfd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.InteropServices.dll",
+      "bytes": 112464,
+      "sha256": "e5eb1679f3579c9141e2bb9dbdce62624a623f38d299805cc1de07bacd21841f",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Intrinsics.dll",
+      "bytes": 17192,
+      "sha256": "b07694ec91f3a200acf0f8b37c6ce5fcf05126a9198ae156d839fa5ca8439dc5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Runtime.Loader.dll",
+      "bytes": 15656,
+      "sha256": "9b9b2a4f0358d9146e76178ddb87d019be380c78baa7dac853493d45df089f03",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Security.Cryptography.dll",
+      "bytes": 2549544,
+      "sha256": "e0a839a540e47343b53a936b32d91599a3470005228d50fd0b896f8bbdcc65b0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encoding.Extensions.dll",
+      "bytes": 15656,
+      "sha256": "8f51b9535db64fe027a40d6076200b1a6b0889bf05f62bb8e68c3eb083c7f113",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Encodings.Web.dll",
+      "bytes": 124752,
+      "sha256": "d20431f20d992e71a4e82e5f25c822474e2f4097d8527972d3d78ea1f26e47c3",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.Json.dll",
+      "bytes": 1890128,
+      "sha256": "fa99f413be21ed5f484a09093fe5f0beba7de3062cf9cc9f847dbf8108dba55a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Text.RegularExpressions.dll",
+      "bytes": 1034064,
+      "sha256": "060bcc88a688e687ff1404b83b5fb5cf17e19ec57f33d5b8a48ab494da83c134",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.dll",
+      "bytes": 83792,
+      "sha256": "6c32ed1bf8067e4169e8feddd15e6489b89d19d1c7aae1520a551b57745d0a60",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Channels.dll",
+      "bytes": 157480,
+      "sha256": "afc5deb3c32b3f64bced2025d0b01b316d41b691ebc6ccb1a2ec445ad4c15e39",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Tasks.Parallel.dll",
+      "bytes": 132904,
+      "sha256": "6fa359bdbebb56be96339f244ed41658afcead5e010074da470df1115d1e7699",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.Thread.dll",
+      "bytes": 15696,
+      "sha256": "ce71949bb1ea67b686e799128582015ebf8758f1107e59e43f342ece3f662930",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Threading.ThreadPool.dll",
+      "bytes": 15656,
+      "sha256": "58fbc6c4b9c72087152fd0f0670a527098c00b0c19ba8d0979d3ca5ce07c6936",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Transactions.Local.dll",
+      "bytes": 640808,
+      "sha256": "8d0283a311a16333ffb6f966d9765e4d8b866777ad99291a93b30db349a15bc4",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.ReaderWriter.dll",
+      "bytes": 21840,
+      "sha256": "8e48fed4d12bcffff01e8059caafb564697275797d2f5ec6823fdd82b87fe938",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/System.Xml.XmlSerializer.dll",
+      "bytes": 17744,
+      "sha256": "0b7d057c2b5b2272e8d4096a755edfd96f3cf03ab9aaa3fef54b462bf48d517e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/jellyfin.dll",
+      "bytes": 506368,
+      "sha256": "474c7c638fe93cc61f1a588849fb93c81a2927388f6f4cf19953b3a76e9deb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/libse.dll",
+      "bytes": 2984448,
+      "sha256": "d435c3c4b3cb15331c8b2bf596c9db414e159db6b082b6e404e9738faa505903",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager/.tools/dotnet/shared/Microsoft.NETCore.App/10.0.12/netstandard.dll",
+      "bytes": 100648,
+      "sha256": "3dc81dbc9dacd28261632c94410859eda24c2db50cd6c14309cbb2a434b50c57",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/native.json",
+      "bytes": 60813,
+      "sha256": "e8a6e14c6b42389b4c85acf0d0257fe43c17780c6dbffbc2d0b0f3b301c824eb",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/record.json",
+      "bytes": 4957,
+      "sha256": "918219af836a02f5d8c78dcc27d9dfd0ea7a197c2967106f175eddfc2b78cb26",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/build.stdout.txt",
+      "bytes": 402,
+      "sha256": "9e4745d2b5212a312b55c0f0e1eca3d2a0b149e96d3f5acdaae990afccd21a89",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/build.stderr.txt",
+      "bytes": 664,
+      "sha256": "8028e19cf4d872dc4f45e7a15c0928914784761d7b0007964b588d69906be9d0",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/project/Program.cs",
+      "bytes": 2899,
+      "sha256": "bc749dced3a37165cfc68cd8bccaeef378aee02e291267b3676fde426beb31ef",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/project/NativeScanHost.cs",
+      "bytes": 32643,
+      "sha256": "ba50086bf1ac7c95b5d3ac234da085bfd87a87b96eea16dd4fc6b742b7f0b220",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/project/Oracle.csproj",
+      "bytes": 1350,
+      "sha256": "13c92320a209130a4608c802479e1abab17eb15c16d61614cacec52f99025b10",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/project/Directory.Build.props",
+      "bytes": 780,
+      "sha256": "d13564ee3d33568e7f897c6fe74ea5e71cc5ef9539e16854e628c5295c2319bd",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2/bin/Release/net10.0/e_sqlite3.dll",
+      "bytes": 1978880,
+      "sha256": "b7385d722c83fb52142a00477a726723745916d22a555711ee89834c1111fb2e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2-inputs/before-pins.json",
+      "bytes": 50057,
+      "sha256": "faa26e9e9fd120c0a620aa42c860208a8e9e0958e86eb950df513ef906ca003d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/resolver-io-boundary-native-2-inputs/after.json",
+      "bytes": 32796,
+      "sha256": "e11954bfb30cda5a3bb9c16947f0f0959eef9dd1d183ebc7d1120e6aaeaf6401",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-native-build-closure/final-build-receipt.json",
+      "bytes": 14246,
+      "sha256": "44711dacc1c4e65d2f36202267423d3212c3577c41383696643ff04ebe8c49d2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/global-scan-native-4/project/NativeScanHost.cs",
+      "bytes": 32232,
+      "sha256": "7b2e629fac51b99f0a86883cc540a9fdf82db4ea116d6692191506751585f157",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/results/global-scan-native-4/project/Oracle.csproj",
+      "bytes": 1145,
+      "sha256": "bbafd317fae140aed4d20d63314fd5337015eae6bd03017457702f75ab471222",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/post-scan-composition-native-1/run.mjs",
+      "bytes": 3604,
+      "sha256": "6e10e3c9ab4728a9570a748ec0c821bcebe60368c826a9427196f36d94ddc9b2",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-1/NativeScanHost.cs",
+      "bytes": 32594,
+      "sha256": "b1d940c9c38274aa4dd330d7ee7c81b322c625f89a67d250fc7aecbbcd74844d",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-1/Program.cs",
+      "bytes": 2693,
+      "sha256": "4a3d347225a4586748c6cc44e3730738f86298b08a3504dcf1810846ade112e5",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-1/Oracle.csproj",
+      "bytes": 1350,
+      "sha256": "ad8a465a486a09f296852b9fd016bf29183a2bc12c08068a90e60ce42a522b91",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-1/NuGet.Config",
+      "bytes": 112,
+      "sha256": "7d59a339f0f6022f0710d690fe52e2a0f868519847651f6c10f6c9ff1bd7213a",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-1/run.mjs",
+      "bytes": 3829,
+      "sha256": "68de94fd6043f4463dd6214b2830ad1f2299d5f5133c3715a616ae462c65cf6e",
+      "required": true
+    },
+    {
+      "filename": "D:/mediamanager-validation/20261016-full-scan-stage/preparation/resolver-io-boundary-native-2/seal-fixture.mjs",
+      "bytes": 8049,
+      "sha256": "dad97fa78134746bc62a53331169f31d503ca44d30b3adb6adc79b25b27a0824",
+      "required": true
+    }
+  ],
+  "files": [
+    {
+      "path": "native.json",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/native.json",
+      "bytes": 60813,
+      "sha256": "e8a6e14c6b42389b4c85acf0d0257fe43c17780c6dbffbc2d0b0f3b301c824eb",
+      "required": true
+    },
+    {
+      "path": "input.json",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/input.json",
+      "bytes": 922,
+      "sha256": "7816e20a42e2501103bb7d2ac261928afefa721538d86c0843262f86a691751c",
+      "required": true
+    },
+    {
+      "path": "Program.cs",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/Program.cs",
+      "bytes": 2899,
+      "sha256": "bc749dced3a37165cfc68cd8bccaeef378aee02e291267b3676fde426beb31ef",
+      "required": true
+    },
+    {
+      "path": "NativeScanHost.cs",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/NativeScanHost.cs",
+      "bytes": 32643,
+      "sha256": "ba50086bf1ac7c95b5d3ac234da085bfd87a87b96eea16dd4fc6b742b7f0b220",
+      "required": true
+    },
+    {
+      "path": "Oracle.csproj",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/Oracle.csproj",
+      "bytes": 1350,
+      "sha256": "13c92320a209130a4608c802479e1abab17eb15c16d61614cacec52f99025b10",
+      "required": true
+    },
+    {
+      "path": "NuGet.Config",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/NuGet.Config",
+      "bytes": 112,
+      "sha256": "7d59a339f0f6022f0710d690fe52e2a0f868519847651f6c10f6c9ff1bd7213a",
+      "required": true
+    },
+    {
+      "path": "README.md",
+      "filename": "D:/mediamanager/tests/library/fixtures/resolver-io-boundary/README.md",
+      "bytes": 3500,
+      "sha256": "72970676c6391a2505ca611b066312b87c4a2086e66b51d01b476011ed542099",
+      "required": true
+    }
+  ]
+}

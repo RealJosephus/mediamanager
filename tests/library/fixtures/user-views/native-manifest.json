@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "source": ".test-input/evidence/user-views-native-v1/native-run-v4",
+  "referenceRoot": "D:\\mediamanager\\.test-input\\evidence\\user-views-native-v1\\native-run-v4\\reference",
+  "sourceFiles": {
+    "summary.json": {
+      "sha256": "4401b6fba8d3c7b123f5fe8b49a6ed7b5341e21c8e7e4cc89a7c4e05e1ecaf3e",
+      "bytes": 649,
+      "semanticSha256": "9cf6f8c024ef5c122f3dcba1edf42e1618d460f6ec1037cd3a5acb572f25c474"
+    },
+    "stages.json": {
+      "sha256": "1b64c8f2cf64e765ee52508eedae255abeac7447960bc70e20e740798d3051a7",
+      "bytes": 671071,
+      "semanticSha256": "0793d4afe3914826b2e692af56d58a95bed2d36035c2c60d5d52324172e114b2"
+    },
+    "case-stages.json": {
+      "sha256": "46acc38ac15c8e4f0078707d984c5819aea12f38a2005dc8b44f43914d02ae6f",
+      "bytes": 40543111,
+      "semanticSha256": "f8d370932c3bf548183c9623b9b7d286e4f2ef45c2e1fdbf686237f61036dee4"
+    },
+    "native-http.json": {
+      "sha256": "73752fb4ec2f2abb0ed415d751e652d9a8516f04b8cf2310af7e10b815bc2e59",
+      "bytes": 4348472,
+      "semanticSha256": "b9c37e7c0ffe9e92467b9d639e8e8952ee30b3e0a4b7d8207b74b63a64b5efc7"
+    },
+    "server-configuration.json": {
+      "sha256": "b33b9f74951a6e17918737deaf9c9c84da5ea90a3ce2ada3df78d69ebb9ef752",
+      "bytes": 4862,
+      "semanticSha256": "21d4db43697ae0749ebbecf5501b512df6de9db0c32449040f91f7a364cba4b5"
+    },
+    "actors.json": {
+      "sha256": "0387346b563b09e4d360025057abaab3f4a6e912028fa9bd09447fe58777913f",
+      "bytes": 200,
+      "semanticSha256": "8478d7b3f81d11b87bc8297f42be10e4726d4dfc14e590d0a9091593f9300e9a"
+    },
+    "input.json": {
+      "sha256": "ed8a59b8da30f7e696b60aa383ed91abfeffdd7c9e5186572f76d5046daeb338",
+      "bytes": 59174
+    },
+    "record-native.mjs": {
+      "sha256": "48198dd842653e850a09400c4ed8d164a96a6eaf2835da4556c10a5474ca222d",
+      "bytes": 28258
+    },
+    "initial.db": {
+      "sha256": "f548d2699c29900b51f88746eaf1114bee7b3b43a5286f318af78fa9e855657b",
+      "bytes": 679936
+    }
+  },
+  "projection": {
+    "file": "native-contract.json.gz",
+    "sha256": "2011fd2b87c78e3b96a1c08351c6713082d7bc7bc741cdb0c0b443f92d784e10",
+    "bytes": 64531
+  },
+  "coverage": {
+    "httpResponses": 108,
+    "endpointSnapshots": 108,
+    "initialItems": 47,
+    "finalItems": 64
+  },
+  "seed": "All 13 initial media tables and four empty/directory-only filesystem domains are reconstructed from complete native before observations. Accounts are created with fresh synthetic passwords and native actor IDs; original authentication rows are excluded."
+}

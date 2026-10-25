@@ -1,0 +1,3663 @@
+{
+  "scope": "Deterministic direct projection of actual raw native observations. IDs/state roots normalized by actual persisted path; generated IDs, times and cumulative logs excluded.",
+  "cases": [
+    {
+      "name": "book-comic-internal",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-comic",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "First Comic Title",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "First Comic Title",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace-comic-input",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Changed Comic Title",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-comic-local-cover",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-comic",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Local Cover Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "local",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Local Cover Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "local",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-local-reader-precedence",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-three-reader-inputs",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "External Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "External Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-external-comic",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "External Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-epub-positive",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-epub",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-epub",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-epub-separator-control",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-standard-container-keys",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Story",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Subjects",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Story.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Story",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Subjects",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-collapse-expand",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "single-book-directory",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/edition.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "second-book-expands-folder",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Novel",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/edition.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/second.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Second Book",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": "Scan Saga",
+              "index": 2,
+              "overview": null,
+              "genres": "Adventure|Science",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-second-book-collapses-directory",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/edition.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/edition.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-extension-named-directory",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "matching-extension-is-directory",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Novel",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Novel",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace-directory-with-real-epub",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-fresh-nested-album",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-two-album-levels",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Outer",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Inner",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Outer",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/Sunset.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Outer",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Inner",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Outer",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/Sunset.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-earlier-child",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Outer",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Inner",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Outer",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/AA.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "AA",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/Sunset.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-original-child",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Outer",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Inner",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Outer",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/AA.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "AA",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Outer",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Inner",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Outer",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Outer/Inner/AA.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "AA",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Outer/Inner",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Outer",
+                "$MEDIA/Subjects/Outer/Inner",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-order-and-metadata",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-filename-and-title-inputs",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/a-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "a-name",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/z-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/a-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "a-name",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/z-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace-current-first-input",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/a-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "a-name",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/z-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "3ea14c8406697c22d53839e51ec96631fa87f3e515868775c65ead0b2754db48"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/a-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "a-name",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/z-name.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-folder-album-folder",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "metadata-only-directory",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Changing",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-photo",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Changing",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Changing",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Changing",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Changing",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Changing",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Changing",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-photo",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Changing",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Changing",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Changing",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-local-cover",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "discover-photo",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-earlier-photo",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/AA.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "AA",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/AA.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "AA",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "a729b8340d27546ad6280e36b9cbe69b739c8f261e6c9fd09dc169ec386d9fb9"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Photo.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "photo-and-book-parser-failures",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "invalid-photo-keeps-real-save-failure-boundary",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Bad.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "Bad",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 0,
+                  "height": 0,
+                  "blurHash": "",
+                  "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 0,
+                  "height": 0,
+                  "blurHash": "",
+                  "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Bad.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "Bad",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 0,
+                  "height": 0,
+                  "blurHash": "",
+                  "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace-invalid-photo",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album",
+              "type": "MediaBrowser.Controller.Entities.PhotoAlbum",
+              "name": "Album",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "internal",
+                  "width": 0,
+                  "height": 0,
+                  "blurHash": "",
+                  "sha256": "44275f51235c3c76d7349f2e74a03a36e664db90550072d1a79942302f3739ef"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Album/Bad.jpg",
+              "type": "MediaBrowser.Controller.Entities.Photo",
+              "name": "XMP title",
+              "isFolder": false,
+              "mediaType": "Photo",
+              "parent": "$MEDIA/Subjects/Album",
+              "seriesName": null,
+              "index": null,
+              "overview": "XMP overview",
+              "genres": "",
+              "width": 8,
+              "height": 6,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".jpg",
+                  "location": "local",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM44:fp2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "6999f5a213f39a41fba09ee9d1f5a987bbe80dc5e9651abb8744bc971cf2398a"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Album",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-corrupt-epub",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "corrupt-archive-input",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Broken.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Broken",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Subjects",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Broken.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Broken",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "Subjects",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repair-archive-input",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Broken.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": " Rich title ",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": " Series ",
+              "index": 2,
+              "overview": "Overview nested tail & value",
+              "genres": "Fiction|History|Art|Science|Adventure|Fantasy",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 8,
+                  "height": 6,
+                  "blurHash": "VM4EU8p2fQp2fQpMkDfQkDfQfQfQfQfQfQpMkDfQkDfQ",
+                  "sha256": "95cfaeba3dde34423ea3e89d30ee8fb41d9331d5aef6c520b8cbd4521c91cd1d"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "book-extension-directory-plus-book",
+      "steps": [
+        {
+          "name": "empty-first-scan",
+          "error": null,
+          "scanException": null,
+          "items": []
+        },
+        {
+          "name": "matching-extension-directory-and-genuine-comic",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Novel",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "chapter.epub",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Sibling Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": "Novel",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "repeat-without-input-change",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Novel",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "chapter.epub",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/Story.cbz",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Sibling Comic",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects/Novel",
+              "seriesName": "Novel",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [
+                {
+                  "kind": 0,
+                  "extension": ".png",
+                  "location": "internal",
+                  "width": 240,
+                  "height": 360,
+                  "blurHash": "d0HenH~q-j~q_3oexGj^nNv*e@NJ~DRlw}6|W,S5SwEg",
+                  "sha256": "f56b8c908ee572720fdfc3f6550be78a9fce29d850b9a38d945b08bf56a5c7af"
+                }
+              ],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$MEDIA/Subjects/Novel",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "remove-sibling-book",
+          "error": null,
+          "scanException": null,
+          "items": [
+            {
+              "path": "$MEDIA/Subjects",
+              "type": "MediaBrowser.Controller.Entities.Folder",
+              "name": "Subjects",
+              "isFolder": true,
+              "mediaType": "Unknown",
+              "parent": "$PROGRAM/root",
+              "seriesName": null,
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            },
+            {
+              "path": "$MEDIA/Subjects/Novel/chapter.epub",
+              "type": "MediaBrowser.Controller.Entities.Book",
+              "name": "Novel",
+              "isFolder": false,
+              "mediaType": "Book",
+              "parent": "$MEDIA/Subjects",
+              "seriesName": "",
+              "index": null,
+              "overview": null,
+              "genres": "",
+              "width": 0,
+              "height": 0,
+              "images": [],
+              "ancestors": [
+                "$MEDIA/Subjects",
+                "$PROGRAM/root",
+                "$PROGRAM/root/default/Subjects"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

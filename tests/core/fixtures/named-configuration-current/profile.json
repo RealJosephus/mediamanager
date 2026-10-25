@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent current encoding/metadata named factories, manager, actual XML files and linked target, GetTranscodePath markers, MVC manual JsonDocument decode, authorization and exception middleware. No media executor or full production runtime is started.",
+  "sourcePaths": [
+    "Emby.Server.Implementations/AppBase/BaseConfigurationManager.cs",
+    "Emby.Server.Implementations/AppBase/BaseApplicationPaths.cs",
+    "Emby.Server.Implementations/AppBase/ConfigurationHelper.cs",
+    "Emby.Server.Implementations/Configuration/ServerConfigurationManager.cs",
+    "Emby.Server.Implementations/ServerApplicationPaths.cs",
+    "Emby.Server.Implementations/Serialization/MyXmlSerializer.cs",
+    "MediaBrowser.Common/Configuration/ConfigurationStore.cs",
+    "MediaBrowser.Common/Configuration/EncodingConfigurationExtensions.cs",
+    "MediaBrowser.Controller/Library/MetadataConfigurationStore.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationFactory.cs",
+    "MediaBrowser.MediaEncoding/Configuration/EncodingConfigurationStore.cs",
+    "MediaBrowser.Model/Configuration/EncodingOptions.cs",
+    "MediaBrowser.Model/Configuration/MetadataConfiguration.cs",
+    "Jellyfin.Api/Controllers/ConfigurationController.cs",
+    "Jellyfin.Api/Middleware/ExceptionMiddleware.cs",
+    "Jellyfin.Api/Auth/DefaultAuthorizationPolicy/DefaultAuthorizationHandler.cs",
+    "Jellyfin.Server/Extensions/ApiServiceCollectionExtensions.cs",
+    "src/Jellyfin.Extensions/Json/JsonDefaults.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonStringConverter.cs",
+    "src/Jellyfin.Extensions/Json/Converters/JsonDefaultStringEnumConverterFactory.cs"
+  ]
+}

@@ -1,0 +1,601 @@
+{
+  "parserCases": [
+    {
+      "name": "empty-root--crlf",
+      "xml": "<Item />"
+    },
+    {
+      "name": "empty-root--lf",
+      "xml": "<Item />"
+    },
+    {
+      "name": "empty-root--bom-lf",
+      "xml": "﻿<Item />"
+    },
+    {
+      "name": "empty-explicit--crlf",
+      "xml": "<Any>\r\n</Any>"
+    },
+    {
+      "name": "empty-explicit--lf",
+      "xml": "<Any>\n</Any>"
+    },
+    {
+      "name": "empty-explicit--bom-lf",
+      "xml": "﻿<Any>\n</Any>"
+    },
+    {
+      "name": "strings--crlf",
+      "xml": "<Any>\r\n<LocalTitle>  Title &amp; 　 </LocalTitle>\r\n<OriginalTitle> Original </OriginalTitle>\r\n<SortTitle> Sort </SortTitle>\r\n<Overview> Overview </Overview>\r\n<Description> Last </Description>\r\n<Language> zh-CN </Language>\r\n<CountryCode> TW </CountryCode>\r\n<ContentRating> PG </ContentRating>\r\n<MPAARating> R </MPAARating>\r\n<CustomRating> custom </CustomRating>\r\n<LockData> TrUe </LockData>\r\n</Any>"
+    },
+    {
+      "name": "strings--lf",
+      "xml": "<Any>\n<LocalTitle>  Title &amp; 　 </LocalTitle>\n<OriginalTitle> Original </OriginalTitle>\n<SortTitle> Sort </SortTitle>\n<Overview> Overview </Overview>\n<Description> Last </Description>\n<Language> zh-CN </Language>\n<CountryCode> TW </CountryCode>\n<ContentRating> PG </ContentRating>\n<MPAARating> R </MPAARating>\n<CustomRating> custom </CustomRating>\n<LockData> TrUe </LockData>\n</Any>"
+    },
+    {
+      "name": "strings--bom-lf",
+      "xml": "﻿<Any>\n<LocalTitle>  Title &amp; 　 </LocalTitle>\n<OriginalTitle> Original </OriginalTitle>\n<SortTitle> Sort </SortTitle>\n<Overview> Overview </Overview>\n<Description> Last </Description>\n<Language> zh-CN </Language>\n<CountryCode> TW </CountryCode>\n<ContentRating> PG </ContentRating>\n<MPAARating> R </MPAARating>\n<CustomRating> custom </CustomRating>\n<LockData> TrUe </LockData>\n</Any>"
+    },
+    {
+      "name": "case-sensitive--crlf",
+      "xml": "<Item>\r\n<localtitle>Ignored</localtitle>\r\n<Overview />\r\n<Taglines>\r\n<Tagline>Ignored</Tagline>\r\n</Taglines>\r\n<TagLines>\r\n<Tagline> First </Tagline>\r\n<Tagline> </Tagline>\r\n<Tagline> Last </Tagline>\r\n</TagLines>\r\n<Countries>\r\n<Country>Ignored</Country>\r\n</Countries>\r\n<PlaceOfBirth>Ignored</PlaceOfBirth>\r\n<AspectRatio>Ignored</AspectRatio>\r\n<Format3D>HSBS</Format3D>\r\n</Item>"
+    },
+    {
+      "name": "case-sensitive--lf",
+      "xml": "<Item>\n<localtitle>Ignored</localtitle>\n<Overview />\n<Taglines>\n<Tagline>Ignored</Tagline>\n</Taglines>\n<TagLines>\n<Tagline> First </Tagline>\n<Tagline> </Tagline>\n<Tagline> Last </Tagline>\n</TagLines>\n<Countries>\n<Country>Ignored</Country>\n</Countries>\n<PlaceOfBirth>Ignored</PlaceOfBirth>\n<AspectRatio>Ignored</AspectRatio>\n<Format3D>HSBS</Format3D>\n</Item>"
+    },
+    {
+      "name": "case-sensitive--bom-lf",
+      "xml": "﻿<Item>\n<localtitle>Ignored</localtitle>\n<Overview />\n<Taglines>\n<Tagline>Ignored</Tagline>\n</Taglines>\n<TagLines>\n<Tagline> First </Tagline>\n<Tagline> </Tagline>\n<Tagline> Last </Tagline>\n</TagLines>\n<Countries>\n<Country>Ignored</Country>\n</Countries>\n<PlaceOfBirth>Ignored</PlaceOfBirth>\n<AspectRatio>Ignored</AspectRatio>\n<Format3D>HSBS</Format3D>\n</Item>"
+    },
+    {
+      "name": "dates--crlf",
+      "xml": "<Item>\r\n<Added>2026-10-09T08:09:10.1234567+08:00</Added>\r\n<ProductionYear>1900</ProductionYear>\r\n<PremiereDate>0001-02-03</PremiereDate>\r\n<EndDate>2024-02-29</EndDate>\r\n</Item>"
+    },
+    {
+      "name": "dates--lf",
+      "xml": "<Item>\n<Added>2026-10-09T08:09:10.1234567+08:00</Added>\n<ProductionYear>1900</ProductionYear>\n<PremiereDate>0001-02-03</PremiereDate>\n<EndDate>2024-02-29</EndDate>\n</Item>"
+    },
+    {
+      "name": "dates--bom-lf",
+      "xml": "﻿<Item>\n<Added>2026-10-09T08:09:10.1234567+08:00</Added>\n<ProductionYear>1900</ProductionYear>\n<PremiereDate>0001-02-03</PremiereDate>\n<EndDate>2024-02-29</EndDate>\n</Item>"
+    },
+    {
+      "name": "invalid-dates--crlf",
+      "xml": "<Item>\r\n<Added>invalid</Added>\r\n<PremiereDate> 2026-10-10 </PremiereDate>\r\n<FirstAired>2026-02-29</FirstAired>\r\n<DeathDate>2026-1-01</DeathDate>\r\n<ProductionYear>1850</ProductionYear>\r\n</Item>"
+    },
+    {
+      "name": "invalid-dates--lf",
+      "xml": "<Item>\n<Added>invalid</Added>\n<PremiereDate> 2026-10-10 </PremiereDate>\n<FirstAired>2026-02-29</FirstAired>\n<DeathDate>2026-1-01</DeathDate>\n<ProductionYear>1850</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "invalid-dates--bom-lf",
+      "xml": "﻿<Item>\n<Added>invalid</Added>\n<PremiereDate> 2026-10-10 </PremiereDate>\n<FirstAired>2026-02-29</FirstAired>\n<DeathDate>2026-1-01</DeathDate>\n<ProductionYear>1850</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "date-aliases--crlf",
+      "xml": "<Item>\r\n<BirthDate>1977-01-02</BirthDate>\r\n<FirstAired>2001-03-04</FirstAired>\r\n<DeathDate>2002-05-06</DeathDate>\r\n</Item>"
+    },
+    {
+      "name": "date-aliases--lf",
+      "xml": "<Item>\n<BirthDate>1977-01-02</BirthDate>\n<FirstAired>2001-03-04</FirstAired>\n<DeathDate>2002-05-06</DeathDate>\n</Item>"
+    },
+    {
+      "name": "date-aliases--bom-lf",
+      "xml": "﻿<Item>\n<BirthDate>1977-01-02</BirthDate>\n<FirstAired>2001-03-04</FirstAired>\n<DeathDate>2002-05-06</DeathDate>\n</Item>"
+    },
+    {
+      "name": "runtime-int32--crlf",
+      "xml": "<Item>\r\n<RunningTime>-2147483648 minutes</RunningTime>\r\n<ProductionYear>+2147483647</ProductionYear>\r\n</Item>"
+    },
+    {
+      "name": "runtime-int32--lf",
+      "xml": "<Item>\n<RunningTime>-2147483648 minutes</RunningTime>\n<ProductionYear>+2147483647</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "runtime-int32--bom-lf",
+      "xml": "﻿<Item>\n<RunningTime>-2147483648 minutes</RunningTime>\n<ProductionYear>+2147483647</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "runtime-invalid--crlf",
+      "xml": "<Item>\r\n<RunningTime>2147483648</RunningTime>\r\n<RunningTime>1.5</RunningTime>\r\n<ProductionYear>1,999</ProductionYear>\r\n</Item>"
+    },
+    {
+      "name": "runtime-invalid--lf",
+      "xml": "<Item>\n<RunningTime>2147483648</RunningTime>\n<RunningTime>1.5</RunningTime>\n<ProductionYear>1,999</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "runtime-invalid--bom-lf",
+      "xml": "﻿<Item>\n<RunningTime>2147483648</RunningTime>\n<RunningTime>1.5</RunningTime>\n<ProductionYear>1,999</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "floats--crlf",
+      "xml": "<Item>\r\n<CriticRating>1,234.56789e-2</CriticRating>\r\n<Rating> 7,25 </Rating>\r\n</Item>"
+    },
+    {
+      "name": "floats--lf",
+      "xml": "<Item>\n<CriticRating>1,234.56789e-2</CriticRating>\n<Rating> 7,25 </Rating>\n</Item>"
+    },
+    {
+      "name": "floats--bom-lf",
+      "xml": "﻿<Item>\n<CriticRating>1,234.56789e-2</CriticRating>\n<Rating> 7,25 </Rating>\n</Item>"
+    },
+    {
+      "name": "float-overflow--crlf",
+      "xml": "<Item>\r\n<CriticRating>1e100</CriticRating>\r\n<Rating>Infinity</Rating>\r\n</Item>"
+    },
+    {
+      "name": "float-overflow--lf",
+      "xml": "<Item>\n<CriticRating>1e100</CriticRating>\n<Rating>Infinity</Rating>\n</Item>"
+    },
+    {
+      "name": "float-overflow--bom-lf",
+      "xml": "﻿<Item>\n<CriticRating>1e100</CriticRating>\n<Rating>Infinity</Rating>\n</Item>"
+    },
+    {
+      "name": "float-nan--crlf",
+      "xml": "<Item>\r\n<CriticRating>NaN</CriticRating>\r\n<IMDBrating>NaN</IMDBrating>\r\n</Item>"
+    },
+    {
+      "name": "float-nan--lf",
+      "xml": "<Item>\n<CriticRating>NaN</CriticRating>\n<IMDBrating>NaN</IMDBrating>\n</Item>"
+    },
+    {
+      "name": "float-nan--bom-lf",
+      "xml": "﻿<Item>\n<CriticRating>NaN</CriticRating>\n<IMDBrating>NaN</IMDBrating>\n</Item>"
+    },
+    {
+      "name": "float-style--crlf",
+      "xml": "<Item>\r\n<Rating>-7.5</Rating>\r\n<CriticRating> -Infinity </CriticRating>\r\n<Rating>1e2</Rating>\r\n</Item>"
+    },
+    {
+      "name": "float-style--lf",
+      "xml": "<Item>\n<Rating>-7.5</Rating>\n<CriticRating> -Infinity </CriticRating>\n<Rating>1e2</Rating>\n</Item>"
+    },
+    {
+      "name": "float-style--bom-lf",
+      "xml": "﻿<Item>\n<Rating>-7.5</Rating>\n<CriticRating> -Infinity </CriticRating>\n<Rating>1e2</Rating>\n</Item>"
+    },
+    {
+      "name": "enum-values--crlf",
+      "xml": "<Item>\r\n<LockedFields> cast |Name,Overview|+99|invalid|-1|2147483648</LockedFields>\r\n<PlaylistMediaType>Video,Audio</PlaylistMediaType>\r\n<DisplayOrder> SortName </DisplayOrder>\r\n</Item>"
+    },
+    {
+      "name": "enum-values--lf",
+      "xml": "<Item>\n<LockedFields> cast |Name,Overview|+99|invalid|-1|2147483648</LockedFields>\n<PlaylistMediaType>Video,Audio</PlaylistMediaType>\n<DisplayOrder> SortName </DisplayOrder>\n</Item>"
+    },
+    {
+      "name": "enum-values--bom-lf",
+      "xml": "﻿<Item>\n<LockedFields> cast |Name,Overview|+99|invalid|-1|2147483648</LockedFields>\n<PlaylistMediaType>Video,Audio</PlaylistMediaType>\n<DisplayOrder> SortName </DisplayOrder>\n</Item>"
+    },
+    {
+      "name": "enum-case--crlf",
+      "xml": "<Item>\r\n<PlaylistMediaType>audio</PlaylistMediaType>\r\n<LockedFields> </LockedFields>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "enum-case--lf",
+      "xml": "<Item>\n<PlaylistMediaType>audio</PlaylistMediaType>\n<LockedFields> </LockedFields>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "enum-case--bom-lf",
+      "xml": "﻿<Item>\n<PlaylistMediaType>audio</PlaylistMediaType>\n<LockedFields> </LockedFields>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "enum-numeric--crlf",
+      "xml": "<Item>\r\n<PlaylistMediaType>-25</PlaylistMediaType>\r\n</Item>"
+    },
+    {
+      "name": "enum-numeric--lf",
+      "xml": "<Item>\n<PlaylistMediaType>-25</PlaylistMediaType>\n</Item>"
+    },
+    {
+      "name": "enum-numeric--bom-lf",
+      "xml": "﻿<Item>\n<PlaylistMediaType>-25</PlaylistMediaType>\n</Item>"
+    },
+    {
+      "name": "arrays--crlf",
+      "xml": "<Item>\r\n<Network>A,B|C|| D </Network>\r\n<Genres>\r\n<Genre> Drama </Genre>\r\n<Genre>drama</Genre>\r\n<Genre>Action</Genre>\r\n<other>\r\n<Genre>Hidden</Genre>\r\n</other>\r\n</Genres>\r\n<Studios>\r\n<Studio>S</Studio>\r\n<Studio>s</Studio>\r\n</Studios>\r\n<Tags>\r\n<Tag>T</Tag>\r\n<Tag>T</Tag>\r\n<Tag>t</Tag>\r\n<Tag> </Tag>\r\n</Tags>\r\n<Trailer>HTTP://example/a</Trailer>\r\n<Trailers>\r\n<Trailer>http://example/A</Trailer>\r\n<Trailer> B </Trailer>\r\n</Trailers>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "arrays--lf",
+      "xml": "<Item>\n<Network>A,B|C|| D </Network>\n<Genres>\n<Genre> Drama </Genre>\n<Genre>drama</Genre>\n<Genre>Action</Genre>\n<other>\n<Genre>Hidden</Genre>\n</other>\n</Genres>\n<Studios>\n<Studio>S</Studio>\n<Studio>s</Studio>\n</Studios>\n<Tags>\n<Tag>T</Tag>\n<Tag>T</Tag>\n<Tag>t</Tag>\n<Tag> </Tag>\n</Tags>\n<Trailer>HTTP://example/a</Trailer>\n<Trailers>\n<Trailer>http://example/A</Trailer>\n<Trailer> B </Trailer>\n</Trailers>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "arrays--bom-lf",
+      "xml": "﻿<Item>\n<Network>A,B|C|| D </Network>\n<Genres>\n<Genre> Drama </Genre>\n<Genre>drama</Genre>\n<Genre>Action</Genre>\n<other>\n<Genre>Hidden</Genre>\n</other>\n</Genres>\n<Studios>\n<Studio>S</Studio>\n<Studio>s</Studio>\n</Studios>\n<Tags>\n<Tag>T</Tag>\n<Tag>T</Tag>\n<Tag>t</Tag>\n<Tag> </Tag>\n</Tags>\n<Trailer>HTTP://example/a</Trailer>\n<Trailers>\n<Trailer>http://example/A</Trailer>\n<Trailer> B </Trailer>\n</Trailers>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "empty-containers--crlf",
+      "xml": "<Item>\r\n<Tags />\r\n<Genres />\r\n<Studios />\r\n<Shares />\r\n<PlaylistItems />\r\n<CollectionItems />\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "empty-containers--lf",
+      "xml": "<Item>\n<Tags />\n<Genres />\n<Studios />\n<Shares />\n<PlaylistItems />\n<CollectionItems />\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "empty-containers--bom-lf",
+      "xml": "﻿<Item>\n<Tags />\n<Genres />\n<Studios />\n<Shares />\n<PlaylistItems />\n<CollectionItems />\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "replace-containers--crlf",
+      "xml": "<Item>\r\n<Tags>\r\n</Tags>\r\n<Shares>\r\n</Shares>\r\n<PlaylistItems>\r\n</PlaylistItems>\r\n<CollectionItems>\r\n</CollectionItems>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "replace-containers--lf",
+      "xml": "<Item>\n<Tags>\n</Tags>\n<Shares>\n</Shares>\n<PlaylistItems>\n</PlaylistItems>\n<CollectionItems>\n</CollectionItems>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "replace-containers--bom-lf",
+      "xml": "﻿<Item>\n<Tags>\n</Tags>\n<Shares>\n</Shares>\n<PlaylistItems>\n</PlaylistItems>\n<CollectionItems>\n</CollectionItems>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "people--crlf",
+      "xml": "<Item>\r\n<Director>A, B</Director>\r\n<Writer>C|D</Writer>\r\n<Actors>A/B,A</Actors>\r\n<GuestStars>A</GuestStars>\r\n<Persons>\r\n<Person>\r\n<Name>A</Name>\r\n<Role> Writer </Role>\r\n<Type>Actor</Type>\r\n<SortOrder>2</SortOrder>\r\n<thumb> image </thumb>\r\n</Person>\r\n<Actor>\r\n<name>Z</name>\r\n<type>99</type>\r\n<role> R </role>\r\n<order>3</order>\r\n<order>bad</order>\r\n</Actor>\r\n<Person>\r\n<Name> </Name>\r\n</Person>\r\n<Person />\r\n</Persons>\r\n</Item>"
+    },
+    {
+      "name": "people--lf",
+      "xml": "<Item>\n<Director>A, B</Director>\n<Writer>C|D</Writer>\n<Actors>A/B,A</Actors>\n<GuestStars>A</GuestStars>\n<Persons>\n<Person>\n<Name>A</Name>\n<Role> Writer </Role>\n<Type>Actor</Type>\n<SortOrder>2</SortOrder>\n<thumb> image </thumb>\n</Person>\n<Actor>\n<name>Z</name>\n<type>99</type>\n<role> R </role>\n<order>3</order>\n<order>bad</order>\n</Actor>\n<Person>\n<Name> </Name>\n</Person>\n<Person />\n</Persons>\n</Item>"
+    },
+    {
+      "name": "people--bom-lf",
+      "xml": "﻿<Item>\n<Director>A, B</Director>\n<Writer>C|D</Writer>\n<Actors>A/B,A</Actors>\n<GuestStars>A</GuestStars>\n<Persons>\n<Person>\n<Name>A</Name>\n<Role> Writer </Role>\n<Type>Actor</Type>\n<SortOrder>2</SortOrder>\n<thumb> image </thumb>\n</Person>\n<Actor>\n<name>Z</name>\n<type>99</type>\n<role> R </role>\n<order>3</order>\n<order>bad</order>\n</Actor>\n<Person>\n<Name> </Name>\n</Person>\n<Person />\n</Persons>\n</Item>"
+    },
+    {
+      "name": "people-invalid-type--crlf",
+      "xml": "<Item>\r\n<Persons>\r\n<Person>\r\n<Name>A</Name>\r\n<Type>Writer</Type>\r\n<Type>bad</Type>\r\n</Person>\r\n<Actor>\r\n<Name>A</Name>\r\n<Role>GuestStar</Role>\r\n<Type>Actor</Type>\r\n</Actor>\r\n<Actor>\r\n<Name>a</Name>\r\n<Type>Actor</Type>\r\n<thumb>x</thumb>\r\n</Actor>\r\n</Persons>\r\n</Item>"
+    },
+    {
+      "name": "people-invalid-type--lf",
+      "xml": "<Item>\n<Persons>\n<Person>\n<Name>A</Name>\n<Type>Writer</Type>\n<Type>bad</Type>\n</Person>\n<Actor>\n<Name>A</Name>\n<Role>GuestStar</Role>\n<Type>Actor</Type>\n</Actor>\n<Actor>\n<Name>a</Name>\n<Type>Actor</Type>\n<thumb>x</thumb>\n</Actor>\n</Persons>\n</Item>"
+    },
+    {
+      "name": "people-invalid-type--bom-lf",
+      "xml": "﻿<Item>\n<Persons>\n<Person>\n<Name>A</Name>\n<Type>Writer</Type>\n<Type>bad</Type>\n</Person>\n<Actor>\n<Name>A</Name>\n<Role>GuestStar</Role>\n<Type>Actor</Type>\n</Actor>\n<Actor>\n<Name>a</Name>\n<Type>Actor</Type>\n<thumb>x</thumb>\n</Actor>\n</Persons>\n</Item>"
+    },
+    {
+      "name": "providers--crlf",
+      "externalIds": [
+        "Tmdb",
+        "tmdb",
+        "Custom",
+        "Imdb"
+      ],
+      "xml": "<Item>\r\n<TmDbId>+123</TmDbId>\r\n<CustomId> value </CustomId>\r\n<CustomID> last </CustomID>\r\n<IMDB>tt123</IMDB>\r\n<ImdbId>bad</ImdbId>\r\n<CollectionNumber>45</CollectionNumber>\r\n<UnknownId>ignored</UnknownId>\r\n</Item>"
+    },
+    {
+      "name": "providers--lf",
+      "externalIds": [
+        "Tmdb",
+        "tmdb",
+        "Custom",
+        "Imdb"
+      ],
+      "xml": "<Item>\n<TmDbId>+123</TmDbId>\n<CustomId> value </CustomId>\n<CustomID> last </CustomID>\n<IMDB>tt123</IMDB>\n<ImdbId>bad</ImdbId>\n<CollectionNumber>45</CollectionNumber>\n<UnknownId>ignored</UnknownId>\n</Item>"
+    },
+    {
+      "name": "providers--bom-lf",
+      "externalIds": [
+        "Tmdb",
+        "tmdb",
+        "Custom",
+        "Imdb"
+      ],
+      "xml": "﻿<Item>\n<TmDbId>+123</TmDbId>\n<CustomId> value </CustomId>\n<CustomID> last </CustomID>\n<IMDB>tt123</IMDB>\n<ImdbId>bad</ImdbId>\n<CollectionNumber>45</CollectionNumber>\n<UnknownId>ignored</UnknownId>\n</Item>"
+    },
+    {
+      "name": "unregistered-ids--crlf",
+      "xml": "<Item>\r\n<TmdbId>123</TmdbId>\r\n<ImdbId>tt123</ImdbId>\r\n<IMDB>tt321</IMDB>\r\n<CollectionNumber>0</CollectionNumber>\r\n<OpenAccess>true</OpenAccess>\r\n</Item>"
+    },
+    {
+      "name": "unregistered-ids--lf",
+      "xml": "<Item>\n<TmdbId>123</TmdbId>\n<ImdbId>tt123</ImdbId>\n<IMDB>tt321</IMDB>\n<CollectionNumber>0</CollectionNumber>\n<OpenAccess>true</OpenAccess>\n</Item>"
+    },
+    {
+      "name": "unregistered-ids--bom-lf",
+      "xml": "﻿<Item>\n<TmdbId>123</TmdbId>\n<ImdbId>tt123</ImdbId>\n<IMDB>tt321</IMDB>\n<CollectionNumber>0</CollectionNumber>\n<OpenAccess>true</OpenAccess>\n</Item>"
+    },
+    {
+      "name": "links-shares--crlf",
+      "xml": "<Item>\r\n<OwnerUserId>{20000000-0000-0000-0000-000000000001}</OwnerUserId>\r\n<Shares>\r\n<Share>\r\n<UserId>20000000000000000000000000000001</UserId>\r\n<CanEdit>TRUE</CanEdit>\r\n</Share>\r\n<Share>\r\n<UserId>20000000-0000-0000-0000-000000000001</UserId>\r\n</Share>\r\n<Share>\r\n<UserId>00000000-0000-0000-0000-000000000000</UserId>\r\n<CanEdit>1</CanEdit>\r\n</Share>\r\n<Share>\r\n<UserId>invalid</UserId>\r\n</Share>\r\n</Shares>\r\n<PlaylistItems>\r\n<PlaylistItem>\r\n<Path> Z:\\media\\A.mkv </Path>\r\n<ItemId> literal-id </ItemId>\r\n</PlaylistItem>\r\n<PlaylistItem>\r\n<ItemId>invalid</ItemId>\r\n</PlaylistItem>\r\n<PlaylistItem />\r\n<PlaylistItem>\r\n<Path> </Path>\r\n</PlaylistItem>\r\n</PlaylistItems>\r\n<CollectionItems>\r\n<CollectionItem>\r\n<Path>Z:\\media\\A.mkv</Path>\r\n<Path>Z:\\media\\B.mkv</Path>\r\n<ItemId>10000000000000000000000000000001</ItemId>\r\n</CollectionItem>\r\n</CollectionItems>\r\n</Item>"
+    },
+    {
+      "name": "links-shares--lf",
+      "xml": "<Item>\n<OwnerUserId>{20000000-0000-0000-0000-000000000001}</OwnerUserId>\n<Shares>\n<Share>\n<UserId>20000000000000000000000000000001</UserId>\n<CanEdit>TRUE</CanEdit>\n</Share>\n<Share>\n<UserId>20000000-0000-0000-0000-000000000001</UserId>\n</Share>\n<Share>\n<UserId>00000000-0000-0000-0000-000000000000</UserId>\n<CanEdit>1</CanEdit>\n</Share>\n<Share>\n<UserId>invalid</UserId>\n</Share>\n</Shares>\n<PlaylistItems>\n<PlaylistItem>\n<Path> Z:\\media\\A.mkv </Path>\n<ItemId> literal-id </ItemId>\n</PlaylistItem>\n<PlaylistItem>\n<ItemId>invalid</ItemId>\n</PlaylistItem>\n<PlaylistItem />\n<PlaylistItem>\n<Path> </Path>\n</PlaylistItem>\n</PlaylistItems>\n<CollectionItems>\n<CollectionItem>\n<Path>Z:\\media\\A.mkv</Path>\n<Path>Z:\\media\\B.mkv</Path>\n<ItemId>10000000000000000000000000000001</ItemId>\n</CollectionItem>\n</CollectionItems>\n</Item>"
+    },
+    {
+      "name": "links-shares--bom-lf",
+      "xml": "﻿<Item>\n<OwnerUserId>{20000000-0000-0000-0000-000000000001}</OwnerUserId>\n<Shares>\n<Share>\n<UserId>20000000000000000000000000000001</UserId>\n<CanEdit>TRUE</CanEdit>\n</Share>\n<Share>\n<UserId>20000000-0000-0000-0000-000000000001</UserId>\n</Share>\n<Share>\n<UserId>00000000-0000-0000-0000-000000000000</UserId>\n<CanEdit>1</CanEdit>\n</Share>\n<Share>\n<UserId>invalid</UserId>\n</Share>\n</Shares>\n<PlaylistItems>\n<PlaylistItem>\n<Path> Z:\\media\\A.mkv </Path>\n<ItemId> literal-id </ItemId>\n</PlaylistItem>\n<PlaylistItem>\n<ItemId>invalid</ItemId>\n</PlaylistItem>\n<PlaylistItem />\n<PlaylistItem>\n<Path> </Path>\n</PlaylistItem>\n</PlaylistItems>\n<CollectionItems>\n<CollectionItem>\n<Path>Z:\\media\\A.mkv</Path>\n<Path>Z:\\media\\B.mkv</Path>\n<ItemId>10000000000000000000000000000001</ItemId>\n</CollectionItem>\n</CollectionItems>\n</Item>"
+    },
+    {
+      "name": "zero-owner--crlf",
+      "xml": "<Item>\r\n<OwnerUserId>bad</OwnerUserId>\r\n<OwnerUserId>00000000-0000-0000-0000-000000000000</OwnerUserId>\r\n<PlaylistMediaType>Audio</PlaylistMediaType>\r\n</Item>"
+    },
+    {
+      "name": "zero-owner--lf",
+      "xml": "<Item>\n<OwnerUserId>bad</OwnerUserId>\n<OwnerUserId>00000000-0000-0000-0000-000000000000</OwnerUserId>\n<PlaylistMediaType>Audio</PlaylistMediaType>\n</Item>"
+    },
+    {
+      "name": "zero-owner--bom-lf",
+      "xml": "﻿<Item>\n<OwnerUserId>bad</OwnerUserId>\n<OwnerUserId>00000000-0000-0000-0000-000000000000</OwnerUserId>\n<PlaylistMediaType>Audio</PlaylistMediaType>\n</Item>"
+    },
+    {
+      "name": "alphabetic-guid--crlf",
+      "xml": "<Item>\r\n<OwnerUserId>abcdef12-abcd-abcd-abcd-abcdef123456</OwnerUserId>\r\n<Shares>\r\n<Share>\r\n<UserId>{ABCDEF12-ABCD-ABCD-ABCD-ABCDEF123456}</UserId>\r\n</Share>\r\n</Shares>\r\n</Item>"
+    },
+    {
+      "name": "alphabetic-guid--lf",
+      "xml": "<Item>\n<OwnerUserId>abcdef12-abcd-abcd-abcd-abcdef123456</OwnerUserId>\n<Shares>\n<Share>\n<UserId>{ABCDEF12-ABCD-ABCD-ABCD-ABCDEF123456}</UserId>\n</Share>\n</Shares>\n</Item>"
+    },
+    {
+      "name": "alphabetic-guid--bom-lf",
+      "xml": "﻿<Item>\n<OwnerUserId>abcdef12-abcd-abcd-abcd-abcdef123456</OwnerUserId>\n<Shares>\n<Share>\n<UserId>{ABCDEF12-ABCD-ABCD-ABCD-ABCDEF123456}</UserId>\n</Share>\n</Shares>\n</Item>"
+    },
+    {
+      "name": "xml-comment-pi--crlf",
+      "xml": "<?xml version=\"1.0\"?>\r\n<Item>\r\n<!-- hi -->\r\n<?app hi?>\r\n<LocalTitle>A<![CDATA[<B>]]>C&#x0;</LocalTitle>\r\n</Item>"
+    },
+    {
+      "name": "xml-comment-pi--lf",
+      "xml": "<?xml version=\"1.0\"?>\n<Item>\n<!-- hi -->\n<?app hi?>\n<LocalTitle>A<![CDATA[<B>]]>C&#x0;</LocalTitle>\n</Item>"
+    },
+    {
+      "name": "xml-comment-pi--bom-lf",
+      "xml": "﻿<?xml version=\"1.0\"?>\n<Item>\n<!-- hi -->\n<?app hi?>\n<LocalTitle>A<![CDATA[<B>]]>C&#x0;</LocalTitle>\n</Item>"
+    },
+    {
+      "name": "xml-line-endings--crlf",
+      "xml": "<Item>\r\n<LocalTitle>A\r\nB\rC</LocalTitle>\r\n<Overview>X&#13;Y&#10;Z</Overview>\r\n</Item>"
+    },
+    {
+      "name": "xml-line-endings--lf",
+      "xml": "<Item>\n<LocalTitle>A\nB\rC</LocalTitle>\n<Overview>X&#13;Y&#10;Z</Overview>\n</Item>"
+    },
+    {
+      "name": "xml-line-endings--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>A\nB\rC</LocalTitle>\n<Overview>X&#13;Y&#10;Z</Overview>\n</Item>"
+    },
+    {
+      "name": "numeric-trailing-nul--crlf",
+      "xml": "<Item>\r\n<CriticRating>1.25&#0;</CriticRating>\r\n<Rating>2.75&#0;</Rating>\r\n<RunningTime>12&#0;</RunningTime>\r\n<ProductionYear>1999&#0;</ProductionYear>\r\n</Item>"
+    },
+    {
+      "name": "numeric-trailing-nul--lf",
+      "xml": "<Item>\n<CriticRating>1.25&#0;</CriticRating>\n<Rating>2.75&#0;</Rating>\n<RunningTime>12&#0;</RunningTime>\n<ProductionYear>1999&#0;</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "numeric-trailing-nul--bom-lf",
+      "xml": "﻿<Item>\n<CriticRating>1.25&#0;</CriticRating>\n<Rating>2.75&#0;</Rating>\n<RunningTime>12&#0;</RunningTime>\n<ProductionYear>1999&#0;</ProductionYear>\n</Item>"
+    },
+    {
+      "name": "invalid-scalar-after-comments--crlf",
+      "xml": "<Item>\r\n<LocalTitle>First</LocalTitle>\r\n<!-- ignored -->\r\n<?app ignored?>\r\n<Broken a=</Item>"
+    },
+    {
+      "name": "invalid-scalar-after-comments--lf",
+      "xml": "<Item>\n<LocalTitle>First</LocalTitle>\n<!-- ignored -->\n<?app ignored?>\n<Broken a=</Item>"
+    },
+    {
+      "name": "invalid-scalar-after-comments--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>First</LocalTitle>\n<!-- ignored -->\n<?app ignored?>\n<Broken a=</Item>"
+    },
+    {
+      "name": "partial-container-next-invalid--crlf",
+      "xml": "<Item>\r\n<Genres>\r\n<Genre>First</Genre>\r\n<Broken a=</Genres>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-container-next-invalid--lf",
+      "xml": "<Item>\n<Genres>\n<Genre>First</Genre>\n<Broken a=</Genres>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-container-next-invalid--bom-lf",
+      "xml": "﻿<Item>\n<Genres>\n<Genre>First</Genre>\n<Broken a=</Genres>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "invalid-guid-x--crlf",
+      "xml": "<Item>\r\n<OwnerUserId>{0xabcdef12,0xabcd,0xabcd,{0xab,0xcd,0xab,0xcd,0xef,0x12,0x34,0x56}}</OwnerUserId>\r\n</Item>"
+    },
+    {
+      "name": "invalid-guid-x--lf",
+      "xml": "<Item>\n<OwnerUserId>{0xabcdef12,0xabcd,0xabcd,{0xab,0xcd,0xab,0xcd,0xef,0x12,0x34,0x56}}</OwnerUserId>\n</Item>"
+    },
+    {
+      "name": "invalid-guid-x--bom-lf",
+      "xml": "﻿<Item>\n<OwnerUserId>{0xabcdef12,0xabcd,0xabcd,{0xab,0xcd,0xab,0xcd,0xef,0x12,0x34,0x56}}</OwnerUserId>\n</Item>"
+    },
+    {
+      "name": "malformed-next-scalar--crlf",
+      "xml": "<Item>\r\n<LocalTitle>First</LocalTitle>\r\n<Broken a=</Item>"
+    },
+    {
+      "name": "malformed-next-scalar--lf",
+      "xml": "<Item>\n<LocalTitle>First</LocalTitle>\n<Broken a=</Item>"
+    },
+    {
+      "name": "malformed-next-scalar--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>First</LocalTitle>\n<Broken a=</Item>"
+    },
+    {
+      "name": "malformed-next-container--crlf",
+      "xml": "<Item>\r\n<Tags>\r\n<Tag>First</Tag>\r\n</Tags>\r\n<Broken a=</Item>",
+      "seed": true
+    },
+    {
+      "name": "malformed-next-container--lf",
+      "xml": "<Item>\n<Tags>\n<Tag>First</Tag>\n</Tags>\n<Broken a=</Item>",
+      "seed": true
+    },
+    {
+      "name": "malformed-next-container--bom-lf",
+      "xml": "﻿<Item>\n<Tags>\n<Tag>First</Tag>\n</Tags>\n<Broken a=</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-genres--crlf",
+      "xml": "<Item>\r\n<Genres>\r\n<Genre>First</Genre> <Genre>\r\n<nested />\r\n</Genre>\r\n</Genres>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-genres--lf",
+      "xml": "<Item>\n<Genres>\n<Genre>First</Genre> <Genre>\n<nested />\n</Genre>\n</Genres>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-genres--bom-lf",
+      "xml": "﻿<Item>\n<Genres>\n<Genre>First</Genre> <Genre>\n<nested />\n</Genre>\n</Genres>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-tags--crlf",
+      "xml": "<Item>\r\n<Tags>\r\n<Tag>First</Tag> <Tag>\r\n<nested />\r\n</Tag>\r\n</Tags>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-tags--lf",
+      "xml": "<Item>\n<Tags>\n<Tag>First</Tag> <Tag>\n<nested />\n</Tag>\n</Tags>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-tags--bom-lf",
+      "xml": "﻿<Item>\n<Tags>\n<Tag>First</Tag> <Tag>\n<nested />\n</Tag>\n</Tags>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-person--crlf",
+      "xml": "<Item>\r\n<Persons>\r\n<Person>\r\n<Name>First</Name>\r\n</Person>\r\n<Person>\r\n<Name>\r\n<nested />\r\n</Name>\r\n</Person>\r\n</Persons>\r\n</Item>"
+    },
+    {
+      "name": "partial-person--lf",
+      "xml": "<Item>\n<Persons>\n<Person>\n<Name>First</Name>\n</Person>\n<Person>\n<Name>\n<nested />\n</Name>\n</Person>\n</Persons>\n</Item>"
+    },
+    {
+      "name": "partial-person--bom-lf",
+      "xml": "﻿<Item>\n<Persons>\n<Person>\n<Name>First</Name>\n</Person>\n<Person>\n<Name>\n<nested />\n</Name>\n</Person>\n</Persons>\n</Item>"
+    },
+    {
+      "name": "partial-links--crlf",
+      "xml": "<Item>\r\n<PlaylistItems>\r\n<PlaylistItem>\r\n<Path>A</Path>\r\n</PlaylistItem>\r\n<PlaylistItem>\r\n<Path>\r\n<nested />\r\n</Path>\r\n</PlaylistItem>\r\n</PlaylistItems>\r\n<CollectionItems>\r\n<CollectionItem>\r\n<Path>A</Path>\r\n</CollectionItem>\r\n<CollectionItem>\r\n<Path>\r\n<nested />\r\n</Path>\r\n</CollectionItem>\r\n</CollectionItems>\r\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-links--lf",
+      "xml": "<Item>\n<PlaylistItems>\n<PlaylistItem>\n<Path>A</Path>\n</PlaylistItem>\n<PlaylistItem>\n<Path>\n<nested />\n</Path>\n</PlaylistItem>\n</PlaylistItems>\n<CollectionItems>\n<CollectionItem>\n<Path>A</Path>\n</CollectionItem>\n<CollectionItem>\n<Path>\n<nested />\n</Path>\n</CollectionItem>\n</CollectionItems>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "partial-links--bom-lf",
+      "xml": "﻿<Item>\n<PlaylistItems>\n<PlaylistItem>\n<Path>A</Path>\n</PlaylistItem>\n<PlaylistItem>\n<Path>\n<nested />\n</Path>\n</PlaylistItem>\n</PlaylistItems>\n<CollectionItems>\n<CollectionItem>\n<Path>A</Path>\n</CollectionItem>\n<CollectionItem>\n<Path>\n<nested />\n</Path>\n</CollectionItem>\n</CollectionItems>\n</Item>",
+      "seed": true
+    },
+    {
+      "name": "cancelled-empty--crlf",
+      "xml": "<Item />",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-empty--lf",
+      "xml": "<Item />",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-empty--bom-lf",
+      "xml": "﻿<Item />",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-root-end--crlf",
+      "xml": "<Item>\r\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-root-end--lf",
+      "xml": "<Item>\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-root-end--bom-lf",
+      "xml": "﻿<Item>\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-fields--crlf",
+      "xml": "<Item>\r\n<LocalTitle>First</LocalTitle>\r\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-fields--lf",
+      "xml": "<Item>\n<LocalTitle>First</LocalTitle>\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "cancelled-fields--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>First</LocalTitle>\n</Item>",
+      "cancelled": true
+    },
+    {
+      "name": "dtd--crlf",
+      "xml": "<!DOCTYPE Item [<!ENTITY a 'X'>]>\r\n<Item>\r\n<LocalTitle>&a;</LocalTitle>\r\n</Item>"
+    },
+    {
+      "name": "dtd--lf",
+      "xml": "<!DOCTYPE Item [<!ENTITY a 'X'>]>\n<Item>\n<LocalTitle>&a;</LocalTitle>\n</Item>"
+    },
+    {
+      "name": "dtd--bom-lf",
+      "xml": "﻿<!DOCTYPE Item [<!ENTITY a 'X'>]>\n<Item>\n<LocalTitle>&a;</LocalTitle>\n</Item>"
+    },
+    {
+      "name": "invalid-namespace--crlf",
+      "xml": "<Item>\r\n<LocalTitle>First</LocalTitle>\r\n<p:Unknown />\r\n</Item>"
+    },
+    {
+      "name": "invalid-namespace--lf",
+      "xml": "<Item>\n<LocalTitle>First</LocalTitle>\n<p:Unknown />\n</Item>"
+    },
+    {
+      "name": "invalid-namespace--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>First</LocalTitle>\n<p:Unknown />\n</Item>"
+    },
+    {
+      "name": "multiple-roots--crlf",
+      "xml": "<Item>\r\n<LocalTitle>First</LocalTitle>\r\n</Item>\r\n<Second />"
+    },
+    {
+      "name": "multiple-roots--lf",
+      "xml": "<Item>\n<LocalTitle>First</LocalTitle>\n</Item>\n<Second />"
+    },
+    {
+      "name": "multiple-roots--bom-lf",
+      "xml": "﻿<Item>\n<LocalTitle>First</LocalTitle>\n</Item>\n<Second />"
+    },
+    {
+      "name": "nested-known-field--crlf",
+      "xml": "<Item>\r\n<Overview>\r\n<x>nested</x>\r\n</Overview>\r\n</Item>"
+    },
+    {
+      "name": "nested-known-field--lf",
+      "xml": "<Item>\n<Overview>\n<x>nested</x>\n</Overview>\n</Item>"
+    },
+    {
+      "name": "nested-known-field--bom-lf",
+      "xml": "﻿<Item>\n<Overview>\n<x>nested</x>\n</Overview>\n</Item>"
+    }
+  ],
+  "providerCases": [],
+  "pipelineCases": [],
+  "mergeCases": []
+}
