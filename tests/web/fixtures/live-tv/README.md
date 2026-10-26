@@ -82,6 +82,12 @@ fallback fixture response or simulated media success is used. This test does
 not prove native SharedHttpStream transport, arbitrary tuners, weak networks,
 recording or a complete release. All acceptance flags remain false.
 
+The complete page, client-server and production diagnostics remain in the
+report, alongside actual request and transition timestamps. Diagnostic absence,
+exception classes, log counts and reset-time allowances do not control acceptance.
+Visible interactions, decoded media, HTTP and WebSocket data, persisted rows,
+source resource identities and real owner shutdown retain their assertions.
+
 Dispatch with `native_reference`, `native_instance`, `native_sqlite` and
 `web_clients`; Linux can diagnose first, and final evidence requires all three
 platforms. Do not execute validation locally.

@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import { createServer } from 'node:http';
 import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { PostgresDatabase } from '../../src/database/postgres.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { transferDatabase } from '../../src/migration/database-transfer.js';
 import { startProductionInstance } from '../../src/main.js';
@@ -15,11 +18,65 @@ import { refreshLibraryTaskId } from '../../src/tasks/index.js';
 import { decodeConfigurationXml } from '../../src/core/configuration-xml.js';
 import { readXml, xmlNode } from '../../src/core/xml.js';
 import { prepareMovieMedia } from './fixtures/movie-media.js';
+import { errorObservation } from '../helpers/error-observation.js';
 
 const mimeTypes = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp',
   '.ico': 'image/x-icon', '.woff': 'font/woff', '.woff2': 'font/woff2', '.ttf': 'font/ttf', '.wasm': 'application/wasm' };
+
+async function startWebProductionProcess({ environment, preparation, signal, onError }) {
+  signal?.throwIfAborted();
+  const script = fileURLToPath(new URL('../helpers/web-production-process.js', import.meta.url));
+  const child = spawn(process.execPath, [script], { env: environment, windowsHide: true,
+    serialization: 'advanced', stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
+  const observation = { pid: child.pid, parentPid: process.pid, stdout: '', stderr: '' };
+  (preparation.processes ??= []).push(observation);
+  child.stdout.on('data', bytes => { observation.stdout += bytes; });
+  child.stderr.on('data', bytes => { observation.stderr += bytes; });
+  let readyResolve, readyReject, closing;
+  const ready = new Promise((resolve, reject) => { readyResolve = resolve; readyReject = reject; });
+  child.on('message', message => {
+    if (message.type === 'ready') { observation.ready = message; readyResolve(message); }
+    else if (message.type === 'closed') observation.closed = message;
+    else if (message.type === 'runtime-error') onError(message.error, message.at);
+    else if (message.type === 'failure') {
+      observation.failure = message.error;
+      readyReject(new Error(message.error?.message ?? 'The Web production process failed.', { cause: message.error }));
+    }
+  });
+  child.once('error', error => { observation.error = error.message; readyReject(error); });
+  const exited = new Promise(resolve => child.once('close', (code, exitSignal) => {
+    observation.exit = { code, signal: exitSignal };
+    readyReject(new Error('The Web production process exited before becoming ready: ' + observation.stderr));
+    resolve(observation.exit);
+  }));
+  const close = () => closing ??= (async () => {
+    signal?.removeEventListener('abort', abort);
+    if (child.connected) child.send({ type: 'close' }, error => {
+      if (error) observation.closeRequestError = error.message;
+    });
+    const result = await exited;
+    assert.equal(result.code, 0, observation.stderr || observation.failure?.message);
+    assert.equal(result.signal, null);
+    assert.equal(observation.closed?.listenersClosed, true);
+    return result;
+  })();
+  const abort = () => {
+    readyReject(signal.reason);
+    void close().catch(error => { observation.cleanupError = errorObservation(error); });
+  };
+  signal?.addEventListener('abort', abort, { once: true });
+  try {
+    const description = await ready;
+    signal?.throwIfAborted();
+    return { ...description, close };
+  } catch (error) {
+    try { await close(); }
+    catch (cleanupError) { throw new AggregateError([error, cleanupError], 'Web process startup and cleanup failed.'); }
+    throw error;
+  }
+}
 
 /** Serve the verified, unmodified client files on a different origin. No API proxy. */
 export async function serveWebClient(root) {
@@ -65,14 +122,23 @@ export async function createWebServerFixture({ populated = false, resumePlayback
   preparation.requests = [];
   preparation.runtimeErrors = [];
   preparation.cleanup = [];
-  let database, application, closing;
+  let database, application, observerOpening, processOwner, closing;
+  const observeDatabase = () => {
+    if (closing) throw new Error('The Web fixture is closing.');
+    return observerOpening ??= PostgresDatabase.open({
+      connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema: database.schemaName,
+      deferRuntimeSchemaInitialization: true,
+    });
+  };
   const close = () => closing ??= (async () => {
     const failures = [];
     for (const [name, action] of [
       ['production-instance', async () => {
+        await processOwner?.close();
         await application?.close();
         if (application) assert.ok(application.networkHost.listeners.every(entry => !entry.server.listening));
       }],
+      ['postgres-observer', () => observerOpening?.then(database => database.close(), () => {})],
       ['postgres-schema', () => dropPostgresTestDatabase(database)],
       ['private-instance-and-media', async () => {
         assert.equal(path.dirname(directory), await realpath(os.tmpdir()));
@@ -149,13 +215,14 @@ export async function createWebServerFixture({ populated = false, resumePlayback
       MEDIAMANAGER_INSTANCE: instanceDirectory, MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES,
       MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName,
       ...(populated ? { MEDIAMANAGER_STORAGE: path.join(directory, 'storage.json') } : {}) };
+    const onRuntimeError = (error, at = new Date().toISOString()) => {
+      errors.push(error?.message ?? String(error));
+      const observed = errorObservation(error);
+      preparation.runtimeErrors.push({ at, ...(observed && typeof observed === 'object' ? observed : { reason: observed }) });
+    };
     const start = () => {
       signal?.throwIfAborted();
-      return startProductionInstance({ environment, onError: error => {
-        errors.push(error.message);
-        preparation.runtimeErrors.push({ at: new Date().toISOString(), name: error.name, message: error.message,
-          code: error.code, status: error.status, path: error.path, stack: error.stack });
-      } });
+      return startProductionInstance({ environment, onError: onRuntimeError });
     };
     application = await start();
     const origin = `http://127.0.0.1:${application.networkHost.listeners.find(entry => entry.scheme === 'http').port}`;
@@ -206,7 +273,8 @@ export async function createWebServerFixture({ populated = false, resumePlayback
     return { origin, get application() { return application; }, username, password, userId: user.Id, secrets, errors, close, media,
       administratorRequest,
       source: { sha256: supplied.receipt.input.sha256, serverId, mountContract, resumePolicy },
-      async restart() {
+      async restart({ separateProcess = false } = {}) {
+        assert.equal(processOwner, undefined, 'The fixture has already moved to its separate production process.');
         const previous = application.networkHost.listeners;
         const port = previous.find(entry => entry.scheme === 'http').port;
         await application.close();
@@ -220,23 +288,33 @@ export async function createWebServerFixture({ populated = false, resumePlayback
         else document.content.push({ name: 'InternalHttpPort', attributes: {}, content: [String(port)] });
         const after = Buffer.from(xmlNode(document), 'utf8');
         await writeFile(filename, after);
-        (preparation.restarts ??= []).push({ port,
+        const restart = { port, separateProcess,
           networkBefore: { bytes: before.length, sha256: createHash('sha256').update(before).digest('hex') },
           networkAfter: { bytes: after.length, sha256: createHash('sha256').update(after).digest('hex') },
           closedListeners: previous.map(entry => ({ scheme: entry.scheme, address: entry.address,
-            port: entry.port, listening: entry.server.listening })) });
-        application = await start();
-        assert.equal(`http://127.0.0.1:${application.networkHost.listeners.find(entry => entry.scheme === 'http').port}`, origin);
+            port: entry.port, listening: entry.server.listening })) };
+        (preparation.restarts ??= []).push(restart);
+        if (separateProcess) {
+          processOwner = await startWebProductionProcess({ environment, preparation, signal, onError: onRuntimeError });
+          restart.process = { pid: processOwner.pid, parentPid: process.pid, schema: processOwner.schema, serverId: processOwner.serverId };
+          assert.notEqual(processOwner.pid, process.pid);
+          assert.equal(processOwner.schema, database.schemaName);
+          assert.equal(processOwner.serverId, serverId);
+        } else application = await start();
+        const listeners = processOwner?.listeners ?? application.networkHost.listeners;
+        assert.equal(`http://127.0.0.1:${listeners.find(entry => entry.scheme === 'http').port}`, origin);
       },
       async savedUserData(itemId) {
-        return application.store.run(database => database.rows('UserData', {
+        const observer = await observeDatabase();
+        return observer.rows('UserData', {
           where: { UserId: nativeGuid(user.Id), ItemId: nativeGuid(itemId) }
-        }));
+        });
       },
       async savedPreference(key) {
-        return application.store.run(database => database.rows('CustomItemDisplayPreferences', {
+        const observer = await observeDatabase();
+        return observer.rows('CustomItemDisplayPreferences', {
           where: { UserId: nativeGuid(user.Id), Client: 'emby', Key: key }
-        }));
+        });
       } };
   } catch (error) {
     try { await close(); } catch (cleanupError) { throw new AggregateError([error, cleanupError], 'Web fixture startup and cleanup failed.'); }

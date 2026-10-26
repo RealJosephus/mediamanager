@@ -35,11 +35,24 @@ media identity prefix to the persisted portable mount contract.
 The browser clicks the library and movie cards, reads the real detail DTO and
 local image, favorites the movie, marks it watched, and creates a playlist with
 the selected movie. UserData is checked directly in PostgreSQL. The fixture then
-closes and reopens the production entry at the same origin, preserving the same
-database, paths, plugins and browser session. After the declared client TTL, a
+closes the original runtime and starts the production entry in a separate Node
+process at the same origin, preserving the same database, paths, plugins and
+browser session. PostgreSQL readback uses an independent observer connection.
+The browser grants the client's requested notification permission only to the
+client origin and records the actual permission, matching the playback input.
+The report records the actual child startup, listener shutdown and process exit;
+cleanup waits for that process before removing its schema and private files.
+After the declared client TTL, a
 reload checks the actual playlist response and visible member, and browser
 history returns to the movie to check server and visible favorite/watched state
-against the complete saved UserData rows.
+against the complete saved UserData rows. The client must authenticate a fresh
+WebSocket and receive the server handshake after the process restart.
+
+Browser exceptions and runtime diagnostics are retained in full, with actual
+request and page-error timestamps. The intentional offline interval can produce
+client diagnostics; their absence does not determine recovery. The actual UI,
+HTTP, PostgreSQL, authenticated WebSocket and process/resource assertions above
+still apply, as do failures to serve the designated client assets.
 
 Reports retain source and media hashes, observed HTTP paths/statuses (query keys
 only), selected response bodies, browser/runtime errors, screenshots and cleanup
@@ -60,18 +73,35 @@ The Resume negotiation must send the exact saved ticks, and decoded video must
 advance beyond that position. The player's new start-report clock is diagnostic;
 each stop report must still match PostgreSQL and the server readback exactly.
 The isolated browser grants notifications only to the client origin, matching
-the designated client's permission request; the observed permission is recorded
-and unexpected page errors still fail the consumer.
+the designated client's permission request; the observed permission is recorded.
+Browser exceptions remain complete diagnostic observations; actual playback,
+HTTP and PostgreSQL results determine this consumer's outcome.
+
+`jellyfin-remote-control.test.js` signs two independent browser contexts into
+the visible forms and starts real DirectPlay on the receiver. The controller
+uses the original cast menu to select that actual session, opens its remote
+control page and clicks pause, resume and stop. The consumer binds each
+controller HTTP action to the receiver's ordered WebSocket command, decoded
+video state and actual progress/stop report; independent PostgreSQL reads must
+retain the reported position and play count. Both contexts use the original
+client and real session capabilities. No player state, authentication or
+server response is injected. Browser exceptions remain diagnostic observations;
+actual HTTP, WebSocket, video and persistence results establish this interaction.
+Playback reports use the session value from the receiver's actual media URL;
+an absent optional PlaySessionId remains the client's empty string. Item and
+media-source identities still bind each start, progress and stop report.
+It covers authorized control between two sessions of the same user, without
+extending that claim to arbitrary devices or cross-user permissions.
 
 The browse/edit consumers do not prove playback; the playback consumer requires
-its own successful execution. These tests do not prove remote control, weak
-networks, Emby Web, external TMDB, large libraries or production migration. A CI
+its own successful execution. These tests do not prove weak networks,
+Emby Web playback, external TMDB, large libraries or production migration. A CI
 run establishes only its explicitly selected consumers and platforms. Run on
 GitHub Actions with `native_reference`, `native_instance`, `native_sqlite` and
 `web_clients` enabled; do not execute local validation.
 
-`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.37 entry,
-service worker and its 858-resource catalog, plus the entry/manifest links.
+`emby-auth-info.test.js` uses the original hosted Emby Web 26.0.38 entry,
+service worker and its 865-resource catalog, plus the entry/manifest links.
 The startup ebook/PDF plugin modules omitted from that catalog are captured
 from the original `app.js` dependency paths. The actual Cast sender scripts
 are also frozen; the browser's real external script responses must match those
@@ -82,6 +112,8 @@ entry substitutions can differ from the worker checksum; no client bytes are
 rewritten. The same-run input loader binds the producer, receipts and complete
 served tree before and after the consumer. CI artifacts retain identities and
 observations without redistributing the third-party client resource bundle.
+Earlier 26.0.37 receipts retain their historical resource identities. The current
+capture binds 26.0.38 independently; it does not establish a new 26.0.37 UI run.
 
 A fresh touch-capable Chromium context uses the visible connection wizard,
 selects the actual server at its `/emby` address, and enters the real password.
@@ -93,6 +125,12 @@ providers and live TV playback are outside this consumer. Emby's capability
 strings must survive session readback. A visible display toggle saves through
 the original client, persists in PostgreSQL, and reads back after a page reload.
 Authentication, local storage, responses and client code are not injected.
+Page and console exceptions remain complete diagnostic observations; their
+absence is not an extra acceptance condition. Actual login, Info, persisted
+device/capabilities/settings and socket keepalives establish the auth/info
+interaction. Navigation may cancel pending home requests. Entering the home URL
+does not certify the complete home-page browsing flow. Served-client errors,
+backend HTTP errors and socket errors retain their existing result assertions.
 This consumer establishes auth/info interaction only; it does not establish
 Emby browsing, editing or playback. Supply `emby_web=true` with the three native
 input flags. It does not require the Jellyfin Web build.

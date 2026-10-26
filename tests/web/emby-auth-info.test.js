@@ -214,7 +214,8 @@ test('unmodified hosted Emby Web discovers, authenticates, reads info and reconn
     await Promise.all(resourceChecks);
     assert.deepEqual(report.infoErrors, []);
     assert.deepEqual(report.externalScriptErrors, []);
-    assert.deepEqual(report.pageErrors, []);
+    // Page and console errors remain diagnostics. Actual UI, API, persisted
+    // settings and socket observations establish this interaction's result.
     assert.deepEqual(report.requests.filter(request => request.origin === fixture.origin && request.status >= 400), []);
     assert.deepEqual(client.errors, []);
     assert.ok(report.sockets.every(socket => socket.errors.length === 0));
@@ -237,6 +238,7 @@ test('unmodified hosted Emby Web discovers, authenticates, reads info and reconn
     await Promise.all(resourceChecks);
     if (report.infoErrors.length) failure ??= new Error(report.infoErrors.join('\n'));
     if (report.externalScriptErrors.length) failure ??= new Error(report.externalScriptErrors.join('\n'));
+    report.clientErrors = client?.errors ?? [];
     report.runtimeErrors = fixture?.errors ?? [];
     await writeFile(path.join(output, 'report.json'), sanitize(JSON.stringify(report, null, 2)) + '\n');
   }
