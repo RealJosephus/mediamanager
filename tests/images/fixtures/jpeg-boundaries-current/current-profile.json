@@ -234,8 +234,8 @@
     {
       "role": "jpegCodec",
       "filename": "../../../../src/images/jpeg-codec/index.js",
-      "bytes": 1861,
-      "sha256": "872f7fd171201f4ff9719828cc02009270fbf1c2fd62910d5ef7685d36018068"
+      "bytes": 2334,
+      "sha256": "4914c28bbcd7ffbdd869c8f0d3683e2979cfca8b5ac82af45d1c451805b555e4"
     },
     {
       "role": "jpegCodec",

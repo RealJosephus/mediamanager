@@ -1,0 +1,8 @@
+{
+  "sources": [
+    { "path": "src/Jellyfin.Drawing/ImageProcessor.cs", "sha256": "1bcb1ce0922820316b892f7947f706f960bdc6790f46add7d3bb08ec7e59f7a5" },
+    { "path": "MediaBrowser.Common/Extensions/BaseExtensions.cs", "sha256": "09b2eee468abee1feb0e16c0280c538c23c63acd3b34a7ce7d942430b573032c" },
+    { "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/ImageInfo.cs", "sha256": "9a657ed8681d8fb4b041a86228ed8bbd8575f159748fb88faf85f44318019256" },
+    { "path": "src/Jellyfin.Database/Jellyfin.Database.Implementations/Entities/User.cs", "sha256": "66283a001640450d95c460a4b3225d932c62dfc02152a8aeaec9645735075104" }
+  ]
+}

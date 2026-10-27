@@ -49,7 +49,7 @@ export function transformSplashscreen(pixels, sourceWidth = wallWidth, sourceHei
 async function decodeImage(filename, { assets, signal }) {
   let info;
   try { info = await assets.stat(filename, { signal }); }
-  catch (error) { if (error.code === 'not-found') return null; throw error; }
+  catch (error) { if (error?.code === 'not-found') return null; throw error; }
   if (info.kind !== 'file') throw Object.assign(new Error('File not found'), { code: 'not-found', path: filename });
   const bytes = await assets.read(filename, { signal });
   // The native bitmap decoder does not rasterize XML/SVG in this path.
@@ -143,7 +143,7 @@ export class SplashscreenImageGenerator {
     try { await this.assets.fileSystem.writeFile(path.join(this.dataPath, 'splashscreen.png'), output, { signal: this.#lifetime.signal }); }
     catch (error) {
       // SKFileWStream reports failed output writes as false; the builder ignores it.
-      if (this.#lifetime.signal.aborted || !/^E[A-Z0-9]+$/u.test(error.code ?? '')) throw error;
+      if (this.#lifetime.signal.aborted || !/^E[A-Z0-9]+$/u.test(error?.code ?? '')) throw error;
     }
   }
 

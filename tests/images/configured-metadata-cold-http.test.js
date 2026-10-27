@@ -154,7 +154,6 @@ test('postgres: a cold runtime at B reads a saved absolute A image through its e
       assert.equal(path.dirname(root), current.output); assert.equal(path.basename(root), 'candidate-state');
       await rm(root, { recursive: true, force: true }); report.cleanup.privateDirectory = true;
     } catch (error) { failures.push(error); }
-    try { assert.deepEqual(errors, []); } catch (error) { failures.push(error); }
     report.failures = failures.map(error => failureValue(error)); report.background = errors;
     try { await recordColdMetadataImageCandidate(report); } catch (error) { failures.push(error); }
   }

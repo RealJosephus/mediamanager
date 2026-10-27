@@ -92,14 +92,14 @@ export class ImageService {
     const metadataPath = this.metadataPath;
     const assets = new MetadataImageAssets({ fileSystem: this.assets.fileSystem, vfs: this.vfs, identityMap: this.identityMap, metadataPath });
     let item;
-    try { item = await this.library.getItemRecord(itemId, { user }); } catch (error) { if (error.status === 404) throw missing(); throw error; }
+    try { item = await this.library.getItemRecord(itemId, { user }); } catch (error) { if (error?.status === 404) throw missing(); throw error; }
     const rows = await this.store.run(db => readItemImageRows(db, item.Id));
     const ordered = rows;
     const parentRow = nonemptyId(item.ParentId) ? await this.store.run(async db => (await db.rows('BaseItems', { where: { Id: item.ParentId } }))[0]) : undefined;
     const expand = this.library.options.expandPath ?? (value => value);
     let accessPath;
     if (this.mediaIdentityMap && isFileProtocol(item)) try { accessPath = this.mediaIdentityMap.resolve({ itemId: item.Id, identityPath: item.Path, style: /^[A-Za-z]:[\\/]|^\\\\/.test(item.Path) ? 'windows' : 'posix' }); }
-    catch (error) { if (error.code !== 'not-found') throw error; }
+    catch (error) { if (error?.code !== 'not-found') throw error; }
     const library = this.library;
     const capturePathScope = ({ imageAssets = assets } = {}) => {
       const metadataPath = this.metadataPath;
@@ -115,7 +115,7 @@ export class ImageService {
     if (this.mediaIdentityMap && isFileProtocol(item)) try {
       accessPath = this.mediaIdentityMap.resolve({ itemId: item.Id, identityPath: item.Path,
         style: /^[A-Za-z]:[\\/]|^\\\\/.test(item.Path) ? 'windows' : 'posix' });
-    } catch (error) { if (error.code !== 'not-found') throw error; }
+    } catch (error) { if (error?.code !== 'not-found') throw error; }
     const filename = (this.library.options.expandPath ?? (value => value))(image.Path);
     const bytes = await this.assets.forItem(item, accessPath).read(filename, { signal: this.#lifetime.signal });
     const size = await this.processor.getImageSize(bytes, filename, { signal: this.#lifetime.signal });
@@ -182,7 +182,7 @@ export class ImageService {
       let saved = false;
       for (const url of image.Path.split('|')) {
         try { await this.metadataImages.saveRemote(context, loaded.images, { Url: url, Type: image.Type }, { signal: combined, index }); saved = true; break; }
-        catch (error) { if (error.code !== 'http-error' || ![403, 404].includes(error.status)) throw error; }
+        catch (error) { if (error?.code !== 'http-error' || ![403, 404].includes(error.status)) throw error; }
       }
       if (!saved) {
         loaded.images.splice(loaded.images.indexOf(image), 1); await update();
@@ -243,6 +243,7 @@ export class ImageService {
       const controller = new AbortController(), abort = () => controller.abort();
       this.#lifetime.signal.addEventListener('abort', abort, { once: true }); this.#responses.add(response);
       request.once('aborted', abort); response.once('close', abort);
+      const previousLength = response.getHeader('Content-Length');
       let handle;
       try {
         image = await this.localize(loaded, image, index, controller.signal, { reload: true, user: context.auth?.User });
@@ -287,7 +288,10 @@ export class ImageService {
         }
       } catch (error) {
         if (response.headersSent || controller.signal.aborted) { response.destroy(); return; }
-        error.status ??= ({ 'not-found': 404, 'permission-denied': 403, 'unmapped-path': 501, 'not-supported': 501, timeout: 504 })[error.code];
+        // Restore the unpublished length before the application writes its error body.
+        if (previousLength === undefined) response.removeHeader('Content-Length'); else response.setHeader('Content-Length', previousLength);
+        const status = ({ 'not-found': 404, 'permission-denied': 403, 'unmapped-path': 501, 'not-supported': 501, timeout: 504 })[error?.code];
+        if (status != null && error?.status == null) error.status = status;
         throw error;
       } finally {
         request.removeListener('aborted', abort); response.removeListener('close', abort);

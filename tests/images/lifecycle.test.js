@@ -1,7 +1,12 @@
 import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { EventEmitter } from 'node:events';
+import { createServer, request } from 'node:http';
+import { once } from 'node:events';
+import { fstatSync } from 'node:fs';
+import { mkdtemp, writeFile, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { ImageService } from '../../src/images/service.js';
 import { DomainStore } from '../../src/database/domain-store.js';
 import { readItemImageRows } from '../../src/library/image-order.js';
@@ -65,36 +70,66 @@ test('PostgreSQL image persistence uses two set writes and publishes its committ
   assert.deepEqual(await store.run(db => readItemImageRows(db, itemId)), rows);
 });
 
-test('image shutdown waits for delayed VFS handle cleanup', async () => {
-  const opened = Promise.withResolvers(), release = Promise.withResolvers();
+test('image shutdown waits for delayed VFS handle cleanup', { timeout: 30000 }, async t => {
+  const opened = Promise.withResolvers(), cleanupStarted = Promise.withResolvers(), release = Promise.withResolvers();
+  const sent = Promise.withResolvers(), clientFinished = Promise.withResolvers();
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'image-shutdown-'));
+  const filename = path.join(directory, 'image.png');
+  await writeFile(filename, Buffer.from([137]));
   let closeStarted = false, closeFinished = false, serviceFinished = false;
-  const service = new ImageService({fileSystem: testFileSystem,  processor: { async process() { return { original: true, path: '/image.png', mimeType: 'image/png', dateModified: stamp }; } } });
-  const image = { Path: '/image.png', Type: 'Primary', DateModified: stamp };
+  const service = new ImageService({fileSystem: testFileSystem,  processor: { async process() { return { original: true, path: filename, mimeType: 'image/png', dateModified: stamp }; } } });
+  const image = { Path: filename, Type: 'Primary', DateModified: stamp };
   const loaded = { item: {}, imageAssets: {
     async stat() { return { size: 1n, modified: stamp }; },
     async openRead(_path, { signal }) {
+      const file = await testFileSystem.open(filename, 'r'), descriptor = file.fd;
       return {
         stream: (async function* () {
+          try {
+            const bytes = Buffer.alloc(1);
+            assert.equal((await file.read(bytes, 0, 1, 0)).bytesRead, 1);
+            assert.deepEqual(bytes, Buffer.from([137]));
+          } catch (error) { opened.reject(error); throw error; }
           await new Promise((_resolve, reject) => {
             const abort = () => reject(signal.reason);
             if (signal.aborted) abort(); else signal.addEventListener('abort', abort, { once: true });
             opened.resolve();
           });
         })(),
-        async close() { closeStarted = true; await release.promise; closeFinished = true; },
+        async close() {
+          closeStarted = true; cleanupStarted.resolve(); await release.promise;
+          await file.close();
+          assert.throws(() => fstatSync(descriptor), { code: 'EBADF' });
+          closeFinished = true;
+        },
       };
     },
   } };
-  const request = Object.assign(new EventEmitter(), { method: 'GET', headers: {} });
-  const response = Object.assign(new EventEmitter(), { headersSent: false, setHeader() {}, appendHeader() {}, write() { return true; }, end() {}, destroy() { this.emit('close'); } });
-  const sending = service.result({ loaded, image, options: {}, context: { query: new URLSearchParams() }, index: 0 }).send(request, response);
+  const server = createServer((incoming, response) => {
+    service.result({ loaded, image, options: {}, context: { query: new URLSearchParams() }, index: 0 }).send(incoming, response)
+      .then(sent.resolve, error => { opened.reject(error); cleanupStarted.reject(error); sent.reject(error); response.destroy(); });
+  });
+  sent.promise.catch(() => {}); cleanupStarted.promise.catch(() => {});
+  let client;
+  t.after(async () => {
+    release.resolve(); client?.destroy();
+    await service.close();
+    server.closeAllConnections();
+    await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+    await rm(directory, { recursive: true });
+  });
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  client = request(`http://127.0.0.1:${server.address().port}`, response => {
+    response.resume(); response.once('close', () => clientFinished.resolve());
+  });
+  client.once('error', error => clientFinished.resolve(error)); client.end();
   await opened.promise;
   const stopping = service.close().then(() => { serviceFinished = true; });
   try {
-    await nextTurn(); assert.equal(closeStarted, true); assert.equal(closeFinished, false); assert.equal(serviceFinished, false);
-  } finally { release.resolve(); await Promise.all([sending, stopping]); }
+    await cleanupStarted.promise;
+    assert.equal(closeStarted, true); assert.equal(closeFinished, false); assert.equal(serviceFinished, false);
+  } finally { release.resolve(); await Promise.all([sent.promise, stopping, clientFinished.promise]); }
   assert.equal(closeFinished, true); assert.equal(serviceFinished, true);
-  assert.equal(request.listenerCount('aborted'), 0); assert.equal(response.listenerCount('close'), 0);
 });
 
 test('image shutdown waits for image-info persistence before returning', async () => {

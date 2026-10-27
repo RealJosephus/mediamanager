@@ -19,6 +19,11 @@ async function pixels(sample, kind) {
   assert.equal(hash(bytes), descriptor.sha256);
   return bytes;
 }
+const cancellation = signal => error => {
+  assert.deepEqual({ message: error?.message, code: error?.code, cause: error?.cause },
+    { message: signal.reason?.message, code: signal.reason?.code, cause: signal.reason?.cause });
+  return true;
+};
 
 test('resampling evidence binds current designated libraries, unchanged inputs and normalized RGBA bytes', async () => {
   assert.equal(native.actualExecution, true);
@@ -110,10 +115,11 @@ for (const image of input.images) {
 test('JPEG decoding rejects bad input and cancellation, then closes active and queued processor work', async () => {
   const image = input.images.find(sample => sample.name.endsWith('.jpg')), bytes = await assetBytes(image);
   await assert.rejects(decodeJpegScaled(Buffer.from('Not a JPEG image.'), 1), { code: 'invalid-image' });
-  await assert.rejects(decodeJpegScaled(bytes, 1, { signal: AbortSignal.abort() }), { name: 'AbortError' });
+  const preCancelled = AbortSignal.abort();
+  await assert.rejects(decodeJpegScaled(bytes, 1, { signal: preCancelled }), cancellation(preCancelled));
   const controller = new AbortController(), interrupted = decodeJpegScaled(bytes, 1, { signal: controller.signal });
   controller.abort();
-  await assert.rejects(interrupted, { name: 'AbortError' });
+  await assert.rejects(interrupted, cancellation(controller.signal));
   const sample = native.results.find(row => row.name === image.name), decoded = await decodeJpegScaled(bytes, sample.scale);
   const recoveryProcessor = new ImageProcessor();
   let recovered;
@@ -128,6 +134,6 @@ test('JPEG decoding rejects bad input and cancellation, then closes active and q
   const results = Promise.allSettled([first, second]);
   await processor.close();
   assert.deepEqual((await results).map(row => row.status), ['rejected', 'rejected']);
-  await assert.rejects(processor.getImageBlurHash(bytes, image.name, sample.original), { name: 'AbortError' });
+  await assert.rejects(processor.getImageBlurHash(bytes, image.name, sample.original), cancellation(AbortSignal.abort()));
   assert.equal(hash(bytes), image.sha256);
 });

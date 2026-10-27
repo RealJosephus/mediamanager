@@ -11,21 +11,27 @@ import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
-import { parseLosslessJson } from '../../src/core/json.js';
+import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
 import { nativeGuid } from '../../src/users/native.js';
 import { rawHttp } from './http-client.js';
 import { imageHeaderProjection } from './header-projection.js';
 import { observeComparison } from '../comparison-observations.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
+import { currentImageCacheTagOracle, currentImageInfoResponse } from './cache-tag-oracle.js';
 import sharp from 'sharp';
+
+export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 
 const fixture = new URL('./fixtures/http/', import.meta.url);
 const input = parseLosslessJson(await readFile(new URL('input.json', fixture), 'utf8'));
-const native = JSON.parse(await readFile(new URL('native.json', fixture), 'utf8'));
-const canonicalBody = value => Array.isArray(value) ? value.map(canonicalBody) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, value]) => [key, canonicalBody(value)])) : value;
+const native = parseLosslessJson(await readFile(new URL('native.json', fixture), 'utf8'));
 const significantHeaders = ['content-type', 'content-length', 'content-language', 'content-disposition', 'etag', 'cache-control', 'pragma', 'last-modified', 'vary', 'transfermode.dlna.org', 'realtimeinfo.dlna.org'];
 
 test('PostgreSQL image HTTP reproduces native originals, conditions, binding, chapters, profiles and info', async t => {
+  const oracle = await currentImageCacheTagOracle();
+  const expectedResponses = native.map(expected => currentImageInfoResponse(expected, input, oracle));
+  const records = [];
+  t.after(() => writeFile(path.join(oracle.output, 'image-http.json'), stringifyNativeJson({ records }) + '\n', { flag: 'wx' }));
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'image-http-'));
   const schema = `image_http_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
   const database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
@@ -53,22 +59,23 @@ test('PostgreSQL image HTTP reproduces native originals, conditions, binding, ch
   let opens = 0;
   const originalOpen = vfs.openRead.bind(vfs);
   vfs.openRead = (...args) => { opens++; return originalOpen(...args); };
-  const records = [], failures = [];
-  for (const expected of native) {
+  const failures = [];
+  for (const [index, expected] of expectedResponses.entries()) {
     const pathname = expected.request.pathname.replaceAll(input.userId, user.Id);
     const previousOpens = opens;
     const selectedToken = expected.request.authRole === 'blocked' ? blockedToken : expected.request.authenticated ? token : undefined;
     const actual = await rawHttp(origin + pathname, { method: expected.request.method, headers: { ...expected.request.headers, ...(selectedToken ? { Authorization: `${authBase}, Token="${selectedToken}"` } : {}) } });
     let body;
-    if (!actual.headers['content-type']?.startsWith('image/')) { body = actual.bytes.toString(); try { body = JSON.parse(body); } catch {} }
+    if (!actual.headers['content-type']?.startsWith('image/')) { body = actual.bytes.toString(); try { body = parseLosslessJson(body); } catch {} }
     const comparable = response => ({ status: response.status, headers: Object.fromEntries(significantHeaders.filter(key => response.headers[key] != null).map(key => [key, response.headers[key]])),
-      ...(response.body === undefined ? { length: response.length, sha256: response.sha256 } : { body: canonicalBody(response.body) }) });
+      ...(response.body === undefined ? { length: response.length, sha256: response.sha256 } : { body: projectProblemTrace(response.body, response.status) }) });
     const record = { name: expected.name, status: actual.status, headers: actual.headers, body, length: actual.bytes.length, sha256: createHash('sha256').update(actual.bytes).digest('hex') };
     const left = comparable(expected), right = comparable(record);
     const completeLeft = { ...left, headers: imageHeaderProjection(left.headers) },
       completeRight = { ...right, headers: imageHeaderProjection(right.headers) };
     if (expected.name === 'type-composite') { delete completeLeft.headers['last-modified']; delete completeRight.headers['last-modified']; }
     record.compatible = isDeepStrictEqual(completeLeft, completeRight);
+    record.historicalExpected = comparable(native[index]);
     record.expected = completeLeft; record.actual = completeRight; records.push(record);
     observeComparison(t, expected.name + ' image response headers', actual.headers, expected.headers);
     if (expected.request.method !== 'HEAD' && actual.status !== 304 && actual.headers['content-length'] != null)

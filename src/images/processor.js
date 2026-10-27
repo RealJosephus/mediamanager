@@ -78,7 +78,7 @@ export class ImageProcessor {
   async #process({ item = {}, image, assets, signal, ...options }, cachePath) {
     const original = originalResult(image), size = image.Width > 0 && image.Height > 0 ? { Width: image.Width, Height: image.Height } : undefined;
     signal.throwIfAborted();
-    try { await assets.stat(image.Path, { signal }); } catch (error) { if (error.code === 'not-found') return original; throw error; }
+    try { await assets.stat(image.Path, { signal }); } catch (error) { if (error?.code === 'not-found') return original; throw error; }
     if (original.mimeType === 'image/gif') return original;
     const autoOrient = item.Type === 'Photo' && item.Orientation !== 'TopLeft' && item.Orientation !== 1;
     if (hasDefaultImageOptions(options, image.Path, size) && (!autoOrient || options.RequiresAutoOrientation === false)) return original;
@@ -87,7 +87,7 @@ export class ImageProcessor {
     const format = formats.includes('Webp') ? 'Webp' : transparency && formats.includes('Png') ? 'Png' : formats.find(value => ['Webp', 'Jpg', 'Png', 'Svg'].includes(value)) ?? 'Jpg';
     const cache = cachePath && this.#cacheFile(cachePath, image, options, format);
     try {
-      if (cache) try { const bytes = await this.fileSystem.readFile(cache), info = await this.fileSystem.stat(cache); return { bytes, path: cache, mimeType: imageMime(cache), dateModified: info.mtime.toISOString(), original: false }; } catch (error) { if (error.code !== 'ENOENT') throw error; }
+      if (cache) try { const bytes = await this.fileSystem.readFile(cache), info = await this.fileSystem.stat(cache); return { bytes, path: cache, mimeType: imageMime(cache), dateModified: info.mtime.toISOString(), original: false }; } catch (error) { if (error?.code !== 'ENOENT') throw error; }
       if (!supported.has(extension(image.Path))) return original;
       const bytes = await assets.read(image.Path, { signal }); checkSvg(bytes, image.Path);
       if (format === 'Svg' && extension(image.Path) !== 'svg') throw new Error('SVG output requires SVG input.');

@@ -1,0 +1,15 @@
+[
+  { "name": "min-date", "path": "X", "modified": "0001-01-01 00:00:00" },
+  { "name": "whole-second", "path": "X", "modified": "2026-09-27 12:34:56" },
+  { "name": "tenths", "path": "X", "modified": "2026-09-27 12:34:56.1" },
+  { "name": "microseconds", "path": "X", "modified": "2026-09-27 12:34:56.123456" },
+  { "name": "100ns", "path": "X", "modified": "2026-09-27 12:34:56.1234567" },
+  { "name": "leap-day", "path": "X", "modified": "2000-02-29 12:34:56.1" },
+  { "name": "max-date", "path": "X", "modified": "9999-12-31 23:59:59.9999999" },
+  { "name": "windows-path", "path": "D:\\Library\\Movie\\poster.png", "modified": "2024-04-03 04:13:14" },
+  { "name": "windows-path-case", "path": "d:\\Library\\Movie\\poster.png", "modified": "2024-04-03 04:13:14" },
+  { "name": "forward-slashes", "path": "D:/Library/Movie/poster.png", "modified": "2024-04-03 04:13:14" },
+  { "name": "unicode-composed", "path": "/media/Été 中文 😀/poster.png", "modified": "2024-04-03 04:13:14.0000001" },
+  { "name": "unicode-decomposed", "path": "/media/Été 中文 😀/poster.png", "modified": "2024-04-03 04:13:14.0000001" },
+  { "name": "distinct-image-path", "path": "/media/movie.mkv", "imagePath": "/metadata/poster.png", "modified": "2024-04-03 04:13:14.1234567" }
+]

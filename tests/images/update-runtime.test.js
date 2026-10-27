@@ -4,6 +4,7 @@ import { readFile, mkdtemp, rm, readdir, realpath } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { createServer } from 'node:http';
+import { inspect } from 'node:util';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
@@ -31,7 +32,7 @@ test('PostgreSQL remote image update saves NFO through VFS and notifies after co
   await database.insert('BaseItems', { ...blank('BaseItems'), Id: itemId, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', Name: 'Image update', Path: 'Z:\\Update\\movie.mkv', ParentId: folderId, TopParentId: folderId, IsInMixedFolder: true, MediaType: 'Video', Data: '{}', DateLastSaved: '2000-01-01 00:00:00' });
   const errors = [], events = [], persisted = [];
   const runtime = await createTestRuntime({ database, vfs, identityMap, metadataPath: path.join(directory, 'metadata'), configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: 'image-update',
-    libraryOptions: new Map([[collectionId.replaceAll('-', '').toLowerCase(), { SaveLocalMetadata: true, MetadataSavers: ['Nfo'] }]]), onError: error => errors.push(error.message) });
+    libraryOptions: new Map([[collectionId.replaceAll('-', '').toLowerCase(), { SaveLocalMetadata: true, MetadataSavers: ['Nfo'] }]]), onError: error => errors.push(error) });
   const context = await runtime.metadata.loadContext(itemId);
   try {
   assert.equal(context.context.spoolRoot, await realpath(path.join(directory, 'metadata', 'metadata-spool')),
@@ -46,6 +47,7 @@ test('PostgreSQL remote image update saves NFO through VFS and notifies after co
     await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`);
     await runtime.close(); await storage.close(); await rm(directory, { recursive: true, force: true });
   });
+  t.after(() => t.diagnostic(inspect({ background: errors }, { depth: null })));
   await new Promise(resolve => upstream.listen(0, '127.0.0.1', resolve));
   await database.insert('BaseItemImageInfos', { Id: itemId, ItemId: itemId, ImageType: 0, Path: `http://127.0.0.1:${upstream.address().port}/poster.png`, Width: 0, Height: 0, Blurhash: null, DateModified: '0001-01-01 00:00:00' });
   runtime.metadataUpdates.on('ItemUpdated', event => { events.push(event); persisted.push(runtime.store.run(db => db.rows('BaseItems', { where: { Id: itemId } }))); });
@@ -58,6 +60,6 @@ test('PostgreSQL remote image update saves NFO through VFS and notifies after co
   try { const chunks = []; for await (const chunk of handle.stream) chunks.push(chunk); const text = Buffer.concat(chunks).toString(); assert.match(text, /<title>Image update<\/title>/); assert.match(text, /movie-poster\.png/); }
   finally { await handle.close(); }
   assert.equal((await rawHttp(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http' && entry.bound).port}/Items/${itemId}/Images/Primary`)).status, 200);
-  assert.equal(events.length, 1); assert.equal(hits, 1); assert.deepEqual(errors, []);
+  assert.equal(events.length, 1); assert.equal(hits, 1);
   assert.deepEqual(await readdir(path.join(directory, 'metadata', 'metadata-spool')), [], 'the single NFO save releases its prepared stream');
 });

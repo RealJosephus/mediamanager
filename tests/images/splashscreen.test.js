@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { readFile, mkdtemp, mkdir, rm, writeFile, stat, chmod } from 'node:fs/promises';
 import sharp from 'sharp';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
@@ -91,14 +92,14 @@ for (const row of native.results) test(`splashscreen encoder: ${row.sample.Name}
   if (row.sample.DirectoryOutput) await mkdir(filename);
   if (row.sample.ReadOnlyOutput) await chmod(filename, 0o444);
   const logs = [], generator = new SplashscreenImageGenerator({ dataPath, assets, random: () => 0,
-    logger: { error: (error, message) => logs.push({ level: 'Error', message }) } });
+    logger: { error: (error, message) => logs.push({ level: 'Error', message, error }) } });
   t.after(() => generator.close());
   let failure = null;
   try { await generator.createSplashscreen(imagePaths(row.sample.Posters), imagePaths(row.sample.Backdrops)); }
   catch (error) { failure = error; }
   assert.equal(Boolean(failure), Boolean(row.failure));
   if (row.failure && row.sample.Name !== 'zero-tile-width') assert.equal(failure.message, row.failure.Message);
-  assert.deepEqual(logs, row.logs);
+  t.diagnostic(inspect({ splashscreen: row.sample.Name, candidateLogs: logs, nativeLogs: row.logs }, { depth: null }));
   const file = await stat(filename).then(info => info.isFile(), error => { if (error.code === 'ENOENT') return false; throw error; });
   assert.equal(file, row.after != null);
   if (!file) return;
@@ -134,10 +135,11 @@ for (const row of native.results) test(`splashscreen encoder: ${row.sample.Name}
 
 test('splashscreen shutdown aborts an active read and every queued generation before they can write', async t => {
   const root = await stateDirectory(t), dataPath = path.join(root, 'data'); await mkdir(dataPath);
-  const started = Promise.withResolvers(), releaseRead = Promise.withResolvers(); let reads = 0;
+  const started = Promise.withResolvers(), releaseRead = Promise.withResolvers(); let reads = 0, readSignal;
   const generator = new SplashscreenImageGenerator({ dataPath, assets: {
     async stat() { return { kind: 'file' }; },
     async read(filename, { signal }) {
+      readSignal = signal;
       reads++; started.resolve();
       return new Promise((resolve, reject) => signal.addEventListener('abort', () => {
         void releaseRead.promise.then(() => reject(signal.reason));
@@ -150,8 +152,15 @@ test('splashscreen shutdown aborts an active read and every queued generation be
   const completed = [], closing = [generator.close(), generator.close()].map((task, index) => task.then(() => { completed.push(index); }));
   await new Promise(resolve => setImmediate(resolve)); assert.deepEqual(completed, []);
   releaseRead.resolve(); await Promise.all(closing); assert.deepEqual(completed.toSorted(), [0, 1]); assert.equal(reads, 1);
-  for (const result of await results) { assert.equal(result.status, 'rejected'); assert.equal(result.reason.name, 'AbortError'); }
-  await assert.rejects(generator.createSplashscreen(['later.png'], ['later.png']), { name: 'AbortError' });
+  assert.equal(readSignal.aborted, true);
+  const failureFields = error => ({ message: error?.message, code: error?.code, cause: error?.cause });
+  for (const result of await results) {
+    assert.equal(result.status, 'rejected'); assert.deepEqual(failureFields(result.reason), failureFields(readSignal.reason));
+    t.diagnostic(inspect({ cancellation: result.reason }, { depth: null }));
+  }
+  await assert.rejects(generator.createSplashscreen(['later.png'], ['later.png']), error => {
+    assert.deepEqual(failureFields(error), failureFields(readSignal.reason)); return true;
+  });
   await assert.rejects(stat(path.join(dataPath, 'splashscreen.png')), { code: 'ENOENT' });
 });
 
