@@ -1,0 +1,32 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Sat, 15 Feb 2025 14:21:30 +0100
+Subject: [PATCH 1/1] configure: avoid disabling thread safety if pthreads is
+ unavailable
+
+Specifically, Windows does not require pthreads.
+
+Regressed since the migration of the build system to autosetup.
+
+Upstream-Status: Inappropriate [libvips specific - https://sqlite.org/forum/forumpost/93bedd58e5c4e6ea]
+
+diff --git a/autosetup/sqlite-config.tcl b/autosetup/sqlite-config.tcl
+index 1111111..2222222 100644
+--- a/autosetup/sqlite-config.tcl
++++ b/autosetup/sqlite-config.tcl
+@@ -935,10 +935,10 @@ proc sqlite-handle-threadsafe {} {
+   define LDFLAGS_PTHREAD ""
+   set enable 0
+   proj-if-opt-truthy threadsafe {
++    set enable 1
+     msg-result "Checking for libs..."
+     if {[proj-check-function-in-lib pthread_create pthread]
+         && [proj-check-function-in-lib pthread_mutexattr_init pthread]} {
+-      set enable 1
+       define LDFLAGS_PTHREAD [get-define lib_pthread_create]
+       undefine lib_pthread_create
+       undefine lib_pthread_mutexattr_init

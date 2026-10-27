@@ -1,0 +1,85 @@
+{
+  "selectedSource": {
+    "file": "mozjpeg-0826579.tar.gz",
+    "sha256": "375d19302f09dfa267651dcfd3ddb62862ab3a488862b6168ce755bb1a925860",
+    "url": "https://github.com/mozilla/mozjpeg/tarball/0826579/mozjpeg-0826579.tar.gz",
+    "url2": "",
+    "packages": [
+      "mozjpeg"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://github.com/mozilla/mozjpeg/tarball/0826579/mozjpeg-0826579.tar.gz",
+    "responseUrl": "https://codeload.github.com/mozilla/mozjpeg/legacy.tar.gz/08265790774cd0714832c9e675522acbe5581437",
+    "status": 200,
+    "headers": [
+      [
+        "Access-Control-Allow-Origin",
+        "https://render.githubusercontent.com"
+      ],
+      [
+        "content-disposition",
+        "attachment; filename=mozilla-mozjpeg-v4.1.5-279-g0826579.tar.gz"
+      ],
+      [
+        "Content-Security-Policy",
+        "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+      ],
+      [
+        "Content-Type",
+        "application/x-gzip"
+      ],
+      [
+        "cross-origin-resource-policy",
+        "cross-origin"
+      ],
+      [
+        "ETag",
+        "\"0ca13381530d8e822d6e5b2862769e01a387d96a3f888649c7cd8fc38512feb4\""
+      ],
+      [
+        "Strict-Transport-Security",
+        "max-age=31536000"
+      ],
+      [
+        "Vary",
+        "Authorization,Accept-Encoding"
+      ],
+      [
+        "X-Content-Type-Options",
+        "nosniff"
+      ],
+      [
+        "X-Frame-Options",
+        "deny"
+      ],
+      [
+        "X-XSS-Protection",
+        "1; mode=block"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:10 GMT"
+      ],
+      [
+        "Transfer-Encoding",
+        "chunked"
+      ],
+      [
+        "X-GitHub-Request-Id",
+        "E48A:D9EDA:25D2:6B89:6AE0B536"
+      ],
+      [
+        "x-github-edge-region",
+        "switzerlandnorth"
+      ],
+      [
+        "connection",
+        "close"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:13.323565+00:00",
+    "bytes": 2442626,
+    "sha256": "375d19302f09dfa267651dcfd3ddb62862ab3a488862b6168ce755bb1a925860"
+  }
+}

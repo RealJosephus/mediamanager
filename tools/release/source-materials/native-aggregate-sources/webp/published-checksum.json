@@ -1,0 +1,20 @@
+{
+  "kind": "storage#object",
+  "id": "downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz/1752101736302012",
+  "selfLink": "https://www.googleapis.com/storage/v1/b/downloads.webmproject.org/o/releases%2Fwebp%2Flibwebp-1.6.0.tar.gz",
+  "mediaLink": "https://storage.googleapis.com/download/storage/v1/b/downloads.webmproject.org/o/releases%2Fwebp%2Flibwebp-1.6.0.tar.gz?generation=1752101736302012&alt=media",
+  "name": "releases/webp/libwebp-1.6.0.tar.gz",
+  "bucket": "downloads.webmproject.org",
+  "generation": "1752101736302012",
+  "metageneration": "2",
+  "contentType": "application/x-tar",
+  "storageClass": "STANDARD",
+  "size": "4296070",
+  "md5Hash": "zOtkRxgPlhRzsYHJ7zi2MA==",
+  "crc32c": "it5wog==",
+  "etag": "CLyL6czvsI4DEAI=",
+  "timeCreated": "2025-07-09T22:55:36.341Z",
+  "updated": "2025-07-09T22:55:50.333Z",
+  "timeStorageClassUpdated": "2025-07-09T22:55:36.341Z",
+  "timeFinalized": "2025-07-09T22:55:36.341Z"
+}

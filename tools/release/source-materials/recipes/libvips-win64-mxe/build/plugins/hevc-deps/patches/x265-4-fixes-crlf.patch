@@ -1,0 +1,31 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Sun, 27 Sep 2020 14:00:00 +0200
+Subject: [PATCH 1/1] win32: ensure data symbols are correctly annotated
+
+Without this, the linker may treat data symbols as functions and
+generate import thunks for them, which can cause crashes.
+
+Upstream-Status: Backport [https://github.com/Multicorewareinc/x265/commit/ccdf5b2b0323fb413c04a4ce3459c8fa75bf91ae]
+
+diff --git a/source/x265.def.in b/source/x265.def.in
+index 1111111..2222222 100644
+--- a/source/x265.def.in
++++ b/source/x265.def.in
+@@ -9,9 +9,9 @@ x265_picture_init
+ x265_picture_alloc
+ x265_picture_free
+ x265_param_apply_profile
+-x265_max_bit_depth
+-x265_version_str
+-x265_build_info_str
++x265_max_bit_depth DATA
++x265_version_str DATA
++x265_build_info_str DATA
+ x265_encoder_headers
+ x265_encoder_parameters
+ x265_encoder_reconfig

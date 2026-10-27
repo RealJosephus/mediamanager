@@ -1,0 +1,42 @@
+{
+  "requestedUrl": "https://cairographics.org/releases/pixman-0.46.4.tar.gz",
+  "responseUrl": "https://cairographics.org/releases/pixman-0.46.4.tar.gz",
+  "status": 200,
+  "headers": [
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:50 GMT"
+    ],
+    [
+      "Server",
+      "Apache"
+    ],
+    [
+      "Last-Modified",
+      "Sun, 20 Jul 2025 16:16:23 GMT"
+    ],
+    [
+      "ETag",
+      "\"c9f3e-63a5eae2bceb9\""
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Content-Length",
+      "827198"
+    ],
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:53.595047+00:00",
+  "bytes": 827198,
+  "sha256": "d09c44ebc3bd5bee7021c79f922fe8fb2fb57f7320f55e97ff9914d2346a591c"
+}

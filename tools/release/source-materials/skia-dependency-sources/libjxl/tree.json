@@ -1,0 +1,7142 @@
+[
+  {
+    "path": ".bazelignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "912eacc1b52742021f71c258619d79ecbd0fda8c",
+    "bytes": 12
+  },
+  {
+    "path": ".clang-format",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a61b61c5697247e8aded521acea49c6c9b690b99",
+    "bytes": 93
+  },
+  {
+    "path": ".clang-tidy",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11c6d2bcdd6e7ed13bdb5e9b51bf2042b94d7007",
+    "bytes": 3187
+  },
+  {
+    "path": ".github",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5f60b516f6d2b6b273acd975d5310e6a7cfaab5c",
+    "bytes": null
+  },
+  {
+    "path": ".github/ISSUE_TEMPLATE",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7a9901d5e0602ea8b0955086700f689ca3465e2e",
+    "bytes": null
+  },
+  {
+    "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a7a14298617ce0073cf0363c369e2c7e623bddd6",
+    "bytes": 981
+  },
+  {
+    "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbcbbe7d61558adde3cbfd0c7a63a67c27ed6d30",
+    "bytes": 595
+  },
+  {
+    "path": ".github/PULL_REQUEST_TEMPLATE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ccfc33f90457a5796ff1421f6cf3fa206540078",
+    "bytes": 874
+  },
+  {
+    "path": ".github/dependabot.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9756ceea5c250615816d47ab7f88d972ce80e94a",
+    "bytes": 703
+  },
+  {
+    "path": ".github/workflows",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9a320b17129acb8450288e69ba648b0174eeeecd",
+    "bytes": null
+  },
+  {
+    "path": ".github/workflows/build_test.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f47ae0b404bad9a7da6f4124f6e79ba13267a9f5",
+    "bytes": 12640
+  },
+  {
+    "path": ".github/workflows/build_test_bazel.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea8764ce46cdcf3a3e306d878ccb53874e1fd052",
+    "bytes": 1757
+  },
+  {
+    "path": ".github/workflows/build_test_cross.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5c527875ea6963f1421a73d003a9680ad265b909",
+    "bytes": 10159
+  },
+  {
+    "path": ".github/workflows/build_test_md.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "223e971dbf0cfb239eea1a36b7dc677ceb12515b",
+    "bytes": 1760
+  },
+  {
+    "path": ".github/workflows/build_test_msys2.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a8338740e53f88b65d9a8d25f2c6b5f2f25af197",
+    "bytes": 3491
+  },
+  {
+    "path": ".github/workflows/build_test_wasm.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d4478991877c1dd9d511db58b8a82ed5790f9da9",
+    "bytes": 4125
+  },
+  {
+    "path": ".github/workflows/codeql.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "81f9bb8119303161de9680eb233451240f669584",
+    "bytes": 3690
+  },
+  {
+    "path": ".github/workflows/conformance.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96c0c5b1b47448ea44e36acded380f3fbc647a4a",
+    "bytes": 7912
+  },
+  {
+    "path": ".github/workflows/debug_ci.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d694a8a538c7eae97c107f89916b5b8ec81586c",
+    "bytes": 4202
+  },
+  {
+    "path": ".github/workflows/dependency-review.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df481028c1ddf5ca470ed871acba2f67a47ee0c3",
+    "bytes": 1373
+  },
+  {
+    "path": ".github/workflows/fuzz.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "53fbdea74188923f4ac764ce0042543a10508524",
+    "bytes": 2140
+  },
+  {
+    "path": ".github/workflows/gitlab_mirror.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34c141a27dee3ba9d6eb8eb686958d901e00f280",
+    "bytes": 1386
+  },
+  {
+    "path": ".github/workflows/highway.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c53b280ff38e13f4bac7ea0487bb29c0ccc33cb",
+    "bytes": 1059
+  },
+  {
+    "path": ".github/workflows/pages.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d611253e08c921140248fd47c0272bb469fffef9",
+    "bytes": 2097
+  },
+  {
+    "path": ".github/workflows/pull_request.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f77ba2afb83bc3c32e72948d48051f0ef6ff70d",
+    "bytes": 2471
+  },
+  {
+    "path": ".github/workflows/release.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b4eeb451b65bda368ec86bdc01ea8a02f3c8a8e",
+    "bytes": 12727
+  },
+  {
+    "path": ".github/workflows/scorecard.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8149c88b3751008eab314cc240da957650e8f3d0",
+    "bytes": 2951
+  },
+  {
+    "path": ".github/workflows/test_new_highway.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bce13bcd9fae85b4aec01d473684b500f87b64fe",
+    "bytes": 2208
+  },
+  {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb4acb8f8296a1b2d4822367a5257e0520811fc7",
+    "bytes": 356
+  },
+  {
+    "path": ".gitmodules",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99b500fa68a9c5653211471e29b624a0fc715abe",
+    "bytes": 1048
+  },
+  {
+    "path": ".pre-commit-config.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96b5d7fb5254c86384eac9ee693ef81ccba966fe",
+    "bytes": 681
+  },
+  {
+    "path": ".readthedocs.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee25fed4816ff1cc5ce375b4e79419e4dcfe459b",
+    "bytes": 508
+  },
+  {
+    "path": "AUTHORS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "afd884bc79df5ace3141f2083a803092c7c77889",
+    "bytes": 3381
+  },
+  {
+    "path": "BUILD.bazel",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "45c5261a2ea47f2f773c5dd8942a827c57da7016",
+    "bytes": 738
+  },
+  {
+    "path": "BUILDING.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7e9bc2aad3a40064f0eb61dda9d45cea4d9fccaf",
+    "bytes": 2490
+  },
+  {
+    "path": "BUILDING_Haiku.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ffca1453c77b2f8bb81d9c000383bd43cc39c5b",
+    "bytes": 785
+  },
+  {
+    "path": "BUILDING_OSX.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b5f5e34db711e14418758e69ddfe395e7e5334c5",
+    "bytes": 1188
+  },
+  {
+    "path": "CHANGELOG.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a422fd4c0841fb392a8e90958ac9f30362750360",
+    "bytes": 18577
+  },
+  {
+    "path": "CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e5a1650e92422740c895203291bafd8f52fd565",
+    "bytes": 21022
+  },
+  {
+    "path": "CODE_OF_CONDUCT.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2d81a32142dec5cea8aab6341894fb3b2d4063d",
+    "bytes": 4489
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a255ba40b33b9fe352b4e8517ad0d2e76c726ec",
+    "bytes": 6054
+  },
+  {
+    "path": "CONTRIBUTORS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "848096f9219b7ec8e7b9368f1f77abacb129c789",
+    "bytes": 672
+  },
+  {
+    "path": "LICENSE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c66034b105f23d108a51b45c846d5b5c194cc229",
+    "bytes": 1508
+  },
+  {
+    "path": "MODULE.bazel",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "150cb39a1ab2340f76dedf42d15741ff4a485319",
+    "bytes": 868
+  },
+  {
+    "path": "MODULE.bazel.lock",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee137ee43b08ff0f8f7d2a4ba7d01dad08492e9c",
+    "bytes": 25755
+  },
+  {
+    "path": "PATENTS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c95b8f4105f210ceb06fe638d033d13b24e227a2",
+    "bytes": 1333
+  },
+  {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "877eabac8f94d1c94a990b392645e759223a8041",
+    "bytes": 6851
+  },
+  {
+    "path": "SECURITY.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d03012a63ad9401040a2e78686948ecf31f3fabb",
+    "bytes": 3232
+  },
+  {
+    "path": "bash_test.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9472c85970bf6814be9d4921f0a0cac068a9ce5b",
+    "bytes": 9121
+  },
+  {
+    "path": "ci.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c70bca46f8a3ca216223e7c8dab627189b899a29",
+    "bytes": 51778
+  },
+  {
+    "path": "cmake",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f82f7e45135d06133d157a66cb81ef9a28c77c5e",
+    "bytes": null
+  },
+  {
+    "path": "cmake/FindAtomics.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a6cdc39ec38d361f632f4f55ed69215e137e46e",
+    "bytes": 1699
+  },
+  {
+    "path": "cmake/FindBrotli.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fb78e47d89646f1e3eef30542e72538268dcd0c",
+    "bytes": 2259
+  },
+  {
+    "path": "cmake/FindHWY.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eab306a8b782656336b093f2d7e6152164e3eb9a",
+    "bytes": 2643
+  },
+  {
+    "path": "cmake/FindLCMS2.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a7b54eb963cbde53921da549f7b9b315a908497",
+    "bytes": 2063
+  },
+  {
+    "path": "debian",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "dbeb0f267c301f2af3553f863d1197a199900bf3",
+    "bytes": null
+  },
+  {
+    "path": "debian/changelog",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c322e28d2bb66197151b04ba3f979fea89838b98",
+    "bytes": 3367
+  },
+  {
+    "path": "debian/compat",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f599e28b8ab0d8c9c57a486c89c4a5132dcbd3b2",
+    "bytes": 3
+  },
+  {
+    "path": "debian/control",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dee14af9205357e3b0b9d38f17e78653f55aa398",
+    "bytes": 2838
+  },
+  {
+    "path": "debian/copyright",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7786a8775b058b5fa7ef428f6e652301e7dd9aa1",
+    "bytes": 10405
+  },
+  {
+    "path": "debian/jxl.install",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c3bae3ed10b988cacaf714bdfa067a0006b180c3",
+    "bytes": 62
+  },
+  {
+    "path": "debian/libjxl-dev.install",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ebe4ac4ae577c0aa3b8f25e45d8fcc708247ea5a",
+    "bytes": 60
+  },
+  {
+    "path": "debian/libjxl-gdk-pixbuf.install",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12d2ab250f97be041bc7eaae4ff46bc57f1b8a5d",
+    "bytes": 112
+  },
+  {
+    "path": "debian/libjxl-gimp-plugin.install",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "353431dba3607a064605791de345bd849e0a2c18",
+    "bytes": 13
+  },
+  {
+    "path": "debian/libjxl.install",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd157a7a5cbf7058bf5e551fc029f0bfb77fdaa1",
+    "bytes": 23
+  },
+  {
+    "path": "debian/rules",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6259dbfc61e5c13e4e50698ddf388d733244596c",
+    "bytes": 642
+  },
+  {
+    "path": "debian/source",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "91b36eb62cd6a56b0eb689d9cde9e0f28955e334",
+    "bytes": null
+  },
+  {
+    "path": "debian/source/format",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "163aaf8d82b6c54f23c45f32895dbdfdcc27b047",
+    "bytes": 12
+  },
+  {
+    "path": "deps.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f97fab7ab3fdf774c20b6bf5b20dcb9874cca955",
+    "bytes": 3176
+  },
+  {
+    "path": "doc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "39370da8a6058e9246d04f54c1ea2e1b584f4843",
+    "bytes": null
+  },
+  {
+    "path": "doc/api.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7d20e32f25b53c2e522255af9f9102d0d5ff0550",
+    "bytes": 902
+  },
+  {
+    "path": "doc/benchmarking.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bac3200b08153da15bab25dabf8a2e43f203f480",
+    "bytes": 4090
+  },
+  {
+    "path": "doc/building_and_testing.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38b6c9046879ef3034c3bba1699910821ae3b09f",
+    "bytes": 5576
+  },
+  {
+    "path": "doc/building_wasm.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d15bc432fdf45d061c0f59278b7d29a604e6dd4",
+    "bytes": 1929
+  },
+  {
+    "path": "doc/color_management.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88a7b60afa13636c5eeb25d6cb8d1d4ddc640a95",
+    "bytes": 2882
+  },
+  {
+    "path": "doc/debugging_workflows.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bac97d2ec8427dcd1beeb7359fd11794f3f0a6a1",
+    "bytes": 2441
+  },
+  {
+    "path": "doc/developing_in_debian.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a79af72d23a329fb9f63447c2aa4175cb9afd800",
+    "bytes": 1681
+  },
+  {
+    "path": "doc/developing_in_github.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f075e36cd0357e9ec29af708ad0ae00e5d5a32a9",
+    "bytes": 13783
+  },
+  {
+    "path": "doc/developing_in_windows_msys.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3e86d5dd8631a3fd1fc7ccd0cfae05c0ef11e7fc",
+    "bytes": 8301
+  },
+  {
+    "path": "doc/developing_in_windows_vcpkg.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7ef603e2be0dbfa418d551495b8cf8cfe9d17d8",
+    "bytes": 2849
+  },
+  {
+    "path": "doc/developing_with_crossroad.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7c2f23f994e91735ea04fc24d0481378d46dfa5",
+    "bytes": 3980
+  },
+  {
+    "path": "doc/encode_effort.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "221b2bf6492fe4eaba972a1afbdcd78c91f576ec",
+    "bytes": 2937
+  },
+  {
+    "path": "doc/format_overview.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4614df5509caa5afcf41b62b154f38e9607d7aa9",
+    "bytes": 13625
+  },
+  {
+    "path": "doc/fuzzing.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2bd84030fcf7b16070dd21002831540afd1cfb09",
+    "bytes": 8756
+  },
+  {
+    "path": "doc/jxl.svg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a80778b0b7d490d6ea4f81db382fa36f23b15ca0",
+    "bytes": 1229
+  },
+  {
+    "path": "doc/man",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "912e21ae6f7cf0b6a6d0264c3cb022138d889b9c",
+    "bytes": null
+  },
+  {
+    "path": "doc/man/cjxl.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "261742a689030d4b01f42e7cdb86e5d77fffc601",
+    "bytes": 2875
+  },
+  {
+    "path": "doc/man/djxl.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd57b4420e9a6de1fbca5447164c1dbd13259f57",
+    "bytes": 1276
+  },
+  {
+    "path": "doc/release.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3448640f675644e182f2aeafd195c0b008f7380d",
+    "bytes": 15932
+  },
+  {
+    "path": "doc/software_support.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "047d37fed94818d053a539c5c8702a28eab13420",
+    "bytes": 5824
+  },
+  {
+    "path": "doc/sphinx",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "31676ab23e528b6bf8b92d461826bf88c6c0c555",
+    "bytes": null
+  },
+  {
+    "path": "doc/sphinx/api.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d79041f7d3314e4c8f9db05d8d6c43e4d285c63",
+    "bytes": 316
+  },
+  {
+    "path": "doc/sphinx/api_color.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e40d482953648917045f6469dd1045064d86a4d",
+    "bytes": 126
+  },
+  {
+    "path": "doc/sphinx/api_common.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7114b51cd56afd15e1be97629a8a0a3bbb744d90",
+    "bytes": 107
+  },
+  {
+    "path": "doc/sphinx/api_cpp.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc5e9856a59e79fe26fa39a1f51c274b4409bdd6",
+    "bytes": 88
+  },
+  {
+    "path": "doc/sphinx/api_decoder.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f8db228d4e607b8ac0698dc02d1c3bb2903e1f6",
+    "bytes": 130
+  },
+  {
+    "path": "doc/sphinx/api_encoder.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c76cc88911acade2b36c308665ea7fb7dc9a681",
+    "bytes": 130
+  },
+  {
+    "path": "doc/sphinx/api_metadata.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ddc5b030454b1addd4fd43435d8e5a5e7b94da51",
+    "bytes": 119
+  },
+  {
+    "path": "doc/sphinx/api_threads.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78dba657df9b6da029342e8e68d7cc9d4cfc4c57",
+    "bytes": 130
+  },
+  {
+    "path": "doc/sphinx/conf.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1591aefc70c0a7485fb7c2535540d22c7458f83b",
+    "bytes": 3219
+  },
+  {
+    "path": "doc/sphinx/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a57074b0bdd59faec78c45a6c631f3815328e55",
+    "bytes": 272
+  },
+  {
+    "path": "doc/sphinx/requirements.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28179eafa23692d7824e77dc9e99a6811e247c98",
+    "bytes": 32
+  },
+  {
+    "path": "doc/vuln_playbook.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b22c1c4d086eb4a43761f0a8f69c29d5c68cdc62",
+    "bytes": 11209
+  },
+  {
+    "path": "doc/xl_overview.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "80e1cb15d4222e9f5cb7dba67ce6bb3f626888e6",
+    "bytes": 6849
+  },
+  {
+    "path": "examples",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "002644754e2c7fd35268d6478696deec58f07176",
+    "bytes": null
+  },
+  {
+    "path": "examples/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b2b99c12459b560e0f08cff6f44affddc38cc42",
+    "bytes": 955
+  },
+  {
+    "path": "examples/decode_exif_metadata.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1609edde326a2a28842675d2377f8b4effba226",
+    "bytes": 5281
+  },
+  {
+    "path": "examples/decode_oneshot.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7e17c21a497a005c7e7f113d585c451dc5313f2",
+    "bytes": 8494
+  },
+  {
+    "path": "examples/decode_progressive.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a3a9aa33b70272d2459188deb6f7672ac141e37",
+    "bytes": 7833
+  },
+  {
+    "path": "examples/encode_oneshot.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6c45a70411e630256b544eeb9799ec27916d49a9",
+    "bytes": 8558
+  },
+  {
+    "path": "examples/examples.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b13731ca3c1eb0f224482858bbb3731dc662a1b6",
+    "bytes": 729
+  },
+  {
+    "path": "flake.lock",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3bfd004b14863051fd5eb5f6eac155cc28446f23",
+    "bytes": 1497
+  },
+  {
+    "path": "flake.nix",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64a36311ab13b3cb9cd981fc9735bced8c492e2d",
+    "bytes": 841
+  },
+  {
+    "path": "lib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "03bc311343569779f5fd8830fbc05ae71a385eb1",
+    "bytes": null
+  },
+  {
+    "path": "lib/BUILD",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d48919f7775e6527fba0cd6c5f8cb31df4584f6",
+    "bytes": 8425
+  },
+  {
+    "path": "lib/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f80cbfb6c4bef9fda84a0235c49a8f2620c34747",
+    "bytes": 5541
+  },
+  {
+    "path": "lib/extras",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "763e6a5740e8adf1226b4bc455bdc1f6f9c38b56",
+    "bytes": null
+  },
+  {
+    "path": "lib/extras/LICENSE.apngdis",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eb0ba7c07b180c8b2e84977dcca28e7697c2c34e",
+    "bytes": 1017
+  },
+  {
+    "path": "lib/extras/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06a9b5ea0782b76854c80aa8a1b561b57f478792",
+    "bytes": 194
+  },
+  {
+    "path": "lib/extras/alpha_blend.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e34d56cecbb910d8b336f1cb510261a381ba427",
+    "bytes": 2082
+  },
+  {
+    "path": "lib/extras/alpha_blend.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b388a5e22aa482c241b57d49b39292bc8bd3dc7d",
+    "bytes": 501
+  },
+  {
+    "path": "lib/extras/codec.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba4bcfebbc47520ee5ebafd93156bb448f1a3acd",
+    "bytes": 3488
+  },
+  {
+    "path": "lib/extras/codec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fd61503cb4585c283445a326dab7cb1c213d5fa",
+    "bytes": 1941
+  },
+  {
+    "path": "lib/extras/codec_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6cbed220975efde9404fd12c2c27c080aef77fb7",
+    "bytes": 18086
+  },
+  {
+    "path": "lib/extras/common.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56abd13ea6699ff12f24b69742550a939061b88b",
+    "bytes": 2129
+  },
+  {
+    "path": "lib/extras/common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88ed581af3dc10e2fbdfb6f1b3304cd5f9689034",
+    "bytes": 674
+  },
+  {
+    "path": "lib/extras/compressed_icc.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52d433d4f9d3030e57c04962af86ce82fa6d3989",
+    "bytes": 2199
+  },
+  {
+    "path": "lib/extras/compressed_icc_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2aa994d6e69e8ba59161400b659afbef4558ef9f",
+    "bytes": 1445
+  },
+  {
+    "path": "lib/extras/dec",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e8b815c89cabb3af7256ad240523635712545fe9",
+    "bytes": null
+  },
+  {
+    "path": "lib/extras/dec/apng.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24b4795d03dc6dceda38f7ee2ca76e2e84b3b25c",
+    "bytes": 47311
+  },
+  {
+    "path": "lib/extras/dec/apng.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7ebc2ee7c8ae1faf02c66b092dd195c5a3dd6fbe",
+    "bytes": 826
+  },
+  {
+    "path": "lib/extras/dec/color_description.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd84455c41095dd506a9b4ef4e6373ab0b890c40",
+    "bytes": 7935
+  },
+  {
+    "path": "lib/extras/dec/color_description.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23680ff7c6a2419e68a00b51a2e186aea9b43103",
+    "bytes": 617
+  },
+  {
+    "path": "lib/extras/dec/color_description_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6e34f0edf0617c534e9879d028f0b32d6486a51",
+    "bytes": 1217
+  },
+  {
+    "path": "lib/extras/dec/color_hints.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1edd9f6eabf4dfdf9dcb139d26265814096b9d1",
+    "bytes": 2949
+  },
+  {
+    "path": "lib/extras/dec/color_hints.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "036f203e261b470a3bdf705892680a66eb98e9c0",
+    "bytes": 2342
+  },
+  {
+    "path": "lib/extras/dec/decode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2581d53f633c0221017a5063c3251dd5d668abe1",
+    "bytes": 4496
+  },
+  {
+    "path": "lib/extras/dec/decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbffc7e0f0a330704439cad37ace42f688c585d7",
+    "bytes": 1464
+  },
+  {
+    "path": "lib/extras/dec/exr.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "59edd63eb863f97b5916956bf371197c44830465",
+    "bytes": 8039
+  },
+  {
+    "path": "lib/extras/dec/exr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65078d030ff978d3e132516b8333d1710923a473",
+    "bytes": 887
+  },
+  {
+    "path": "lib/extras/dec/gif.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a87beb901acf73d1c8cf5d6708cb61bd4c0b408d",
+    "bytes": 15612
+  },
+  {
+    "path": "lib/extras/dec/gif.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4d5be8664e72045937d52b95ae3e0de3329f456d",
+    "bytes": 884
+  },
+  {
+    "path": "lib/extras/dec/jpegli.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c307105139173908cd141cb5c2304d39257379a2",
+    "bytes": 9376
+  },
+  {
+    "path": "lib/extras/dec/jpegli.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "574df54c8e4530e3b2fb809ea94b439f8510832c",
+    "bytes": 1099
+  },
+  {
+    "path": "lib/extras/dec/jpg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "35f7b51e0c68a1a0f783880e7af1b48e74a254cf",
+    "bytes": 12294
+  },
+  {
+    "path": "lib/extras/dec/jpg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e7b2f786b054ba18c311951c0a9dd2f857d9250",
+    "bytes": 1259
+  },
+  {
+    "path": "lib/extras/dec/jxl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "83170b2b9fcec6f902026bb23d4f2619ce1a2b90",
+    "bytes": 23600
+  },
+  {
+    "path": "lib/extras/dec/jxl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c80280c033ad7947a9b01d5f3c9561ad2e7f287",
+    "bytes": 2384
+  },
+  {
+    "path": "lib/extras/dec/pgx.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4499069d7708b59d9c86fff74ca691fb27f09188",
+    "bytes": 6438
+  },
+  {
+    "path": "lib/extras/dec/pgx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ce852e6965537c7d73add75fda875804d163b0c9",
+    "bytes": 857
+  },
+  {
+    "path": "lib/extras/dec/pgx_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9370e5d5ae2bff8cda1a52b8638940ac9c823a57",
+    "bytes": 2889
+  },
+  {
+    "path": "lib/extras/dec/pnm.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "587cd189a9d0431ac5bad6267f4408a823f84861",
+    "bytes": 19021
+  },
+  {
+    "path": "lib/extras/dec/pnm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a6ad14fdc8f6b39b8587f216a2016a574ec75515",
+    "bytes": 1659
+  },
+  {
+    "path": "lib/extras/enc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b09012d10aa0709d70cf14c18512117d06c7e2cc",
+    "bytes": null
+  },
+  {
+    "path": "lib/extras/enc/apng.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4d3ce8c17ab5ca85212a96e1734dcf931062bd15",
+    "bytes": 18932
+  },
+  {
+    "path": "lib/extras/enc/apng.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a2139c8fac18878415c0ee45f14f42661c99fe0",
+    "bytes": 486
+  },
+  {
+    "path": "lib/extras/enc/encode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "71be78e36cc22ba1d1a270feecb17f3930631fc4",
+    "bytes": 5505
+  },
+  {
+    "path": "lib/extras/enc/encode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a71f3b220fc7bd02eeba33de705bee297b5ccae0",
+    "bytes": 2734
+  },
+  {
+    "path": "lib/extras/enc/exr.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a4f7d768c3d963027528fabd55917c09b05fc12",
+    "bytes": 6910
+  },
+  {
+    "path": "lib/extras/enc/exr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1baaa0272f5eb8213110bac62171dc914cb82a60",
+    "bytes": 485
+  },
+  {
+    "path": "lib/extras/enc/jpegli.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52de317399a6e7fa50f77e9ab12e491fb83af18b",
+    "bytes": 20641
+  },
+  {
+    "path": "lib/extras/enc/jpegli.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9538b2e3fc92e36e40a04baab0f446671569dfbe",
+    "bytes": 1640
+  },
+  {
+    "path": "lib/extras/enc/jpg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9209ffce0eec10ac374a0c73e172a6e25b655ba",
+    "bytes": 22308
+  },
+  {
+    "path": "lib/extras/enc/jpg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "20b37cd168446a12e37d55072ed6c374e3fb45cd",
+    "bytes": 495
+  },
+  {
+    "path": "lib/extras/enc/jxl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15f62673161da5d638690fc97f664359b9780f37",
+    "bytes": 15315
+  },
+  {
+    "path": "lib/extras/enc/jxl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a6573eb129ffaf551d4ed2acaff91e5490652d20",
+    "bytes": 3019
+  },
+  {
+    "path": "lib/extras/enc/npy.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38777a3535412c38ecae36947c323eb23e841f1c",
+    "bytes": 9641
+  },
+  {
+    "path": "lib/extras/enc/npy.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ee6208ec290c35069fb8ceb9c365f4ba87c91e0",
+    "bytes": 514
+  },
+  {
+    "path": "lib/extras/enc/pgx.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb47b3e1a97d5ced2be38a10349eff1b5ef06421",
+    "bytes": 4411
+  },
+  {
+    "path": "lib/extras/enc/pgx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f24e391b0917a87e898e6e93f72bbe3425677fe9",
+    "bytes": 503
+  },
+  {
+    "path": "lib/extras/enc/pnm.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c4aa8d12eb4d6113a941b850f8d0f8ecd28c01a2",
+    "bytes": 12419
+  },
+  {
+    "path": "lib/extras/enc/pnm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1e0020cdbd88492f72a74045ae5eaa090d914295",
+    "bytes": 766
+  },
+  {
+    "path": "lib/extras/exif.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aea632732b8d9cfbb2c0dab210f0fb374424bba1",
+    "bytes": 1467
+  },
+  {
+    "path": "lib/extras/exif.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f22b2ccef54f861528b94b538f87edfcd5b3c354",
+    "bytes": 470
+  },
+  {
+    "path": "lib/extras/gain_map.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cce67161bb84f3a72c065a8c646794f6a0e43d7",
+    "bytes": 8116
+  },
+  {
+    "path": "lib/extras/gain_map_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b4864974c07a60d1e25eecd3718493780b1388e",
+    "bytes": 6467
+  },
+  {
+    "path": "lib/extras/hlg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d92272052b96976b3e311db800b61407d363f085",
+    "bytes": 1990
+  },
+  {
+    "path": "lib/extras/hlg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4cfec444f4c50e7fdaf9991feeccd93620bce874",
+    "bytes": 561
+  },
+  {
+    "path": "lib/extras/jpegli_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d22afd0e851d369099f2097b50bd37a26447ee3e",
+    "bytes": 14528
+  },
+  {
+    "path": "lib/extras/metrics.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55c11309444800d93b95999d93d54bcf0a01dba3",
+    "bytes": 7159
+  },
+  {
+    "path": "lib/extras/metrics.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87a69a99cea51f195eaacc7ea12c23c922eb62f8",
+    "bytes": 816
+  },
+  {
+    "path": "lib/extras/mmap.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f5bba97edae54ad94f0f54f3f38df5c02bb10e0",
+    "bytes": 4010
+  },
+  {
+    "path": "lib/extras/mmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60cc215993eeaf4516a939486d7bc123c9f13d23",
+    "bytes": 850
+  },
+  {
+    "path": "lib/extras/packed_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ebed27779f2616a2710e28711957b688513e231",
+    "bytes": 10221
+  },
+  {
+    "path": "lib/extras/packed_image_convert.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7bdb3cdf64a3dde4e68ac15067a1e2448a479c60",
+    "bytes": 15570
+  },
+  {
+    "path": "lib/extras/packed_image_convert.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "20ed330b84719f0c6a90c0eccadb56b1345ffffc",
+    "bytes": 1516
+  },
+  {
+    "path": "lib/extras/size_constraints.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf06f8cb22814cc7f746c98077f39cee40426491",
+    "bytes": 1329
+  },
+  {
+    "path": "lib/extras/time.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "344994f78da7ae546dc5b212465925a1eff1ac24",
+    "bytes": 1442
+  },
+  {
+    "path": "lib/extras/time.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c71414b877b84029302327b3e85f05509aab93d9",
+    "bytes": 486
+  },
+  {
+    "path": "lib/extras/tone_mapping.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a700c48a32f09894efc7c53d9e81d56e36ba42c",
+    "bytes": 4738
+  },
+  {
+    "path": "lib/extras/tone_mapping.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f474101eb443ef4dcb49bdbad4aa45a9d5abbab",
+    "bytes": 1153
+  },
+  {
+    "path": "lib/extras/tone_mapping_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "30b4e6e7e0930e97801777a25ef11365622fbded",
+    "bytes": 1957
+  },
+  {
+    "path": "lib/gbench_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1cc17720177d8a3c3df1c2ae0911906a5fd2cec8",
+    "bytes": 227
+  },
+  {
+    "path": "lib/include",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "52a5bc5e5551ce20e0e1a7320d99c94c1f68394d",
+    "bytes": null
+  },
+  {
+    "path": "lib/include/jxl",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ec563a5339b2626dd9b13d1b19507a2f8df67742",
+    "bytes": null
+  },
+  {
+    "path": "lib/include/jxl/cms.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6616a2681c58f88192498e1f2dec6bf584e0e68c",
+    "bytes": 474
+  },
+  {
+    "path": "lib/include/jxl/cms_interface.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "137fb42d8ca9ea16fb20fdf35d9984fa6b722812",
+    "bytes": 10202
+  },
+  {
+    "path": "lib/include/jxl/codestream_header.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "513c92f1dda2d48f904cfe2b41969e013a789f38",
+    "bytes": 15157
+  },
+  {
+    "path": "lib/include/jxl/color_encoding.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14dcdeb0a21233cfd46c61a84c2be42bcf872ecf",
+    "bytes": 5652
+  },
+  {
+    "path": "lib/include/jxl/compressed_icc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "10232794b69d36b8282a123f2db009911464993c",
+    "bytes": 2737
+  },
+  {
+    "path": "lib/include/jxl/decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "69c00243d66337daa887bf1bdd4bf307086c8d22",
+    "bytes": 70762
+  },
+  {
+    "path": "lib/include/jxl/decode_cxx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6089538dbe76c4f05f20f58f348ad46e28116d22",
+    "bytes": 1879
+  },
+  {
+    "path": "lib/include/jxl/encode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a57f60aa602bce504d77d2c80d5f0dc4f08b1f15",
+    "bytes": 70051
+  },
+  {
+    "path": "lib/include/jxl/encode_cxx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e552357ac1c5b651918de4212de7dd6546ad15d",
+    "bytes": 1878
+  },
+  {
+    "path": "lib/include/jxl/gain_map.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1b314b56cbd9e60bf054ac6a2f8cc13ff1507ad",
+    "bytes": 5260
+  },
+  {
+    "path": "lib/include/jxl/memory_manager.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05b4abe90b520ff40c263b9d54cc0d8fe3dc8849",
+    "bytes": 2109
+  },
+  {
+    "path": "lib/include/jxl/parallel_runner.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "742f9598e90a52623da409236a37b16f723c02e1",
+    "bytes": 6843
+  },
+  {
+    "path": "lib/include/jxl/resizable_parallel_runner.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b0bf68091ea21b8b11ab1624ce69b415cded3220",
+    "bytes": 2731
+  },
+  {
+    "path": "lib/include/jxl/resizable_parallel_runner_cxx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "344c96cc9ebf9956b0741f685da4a76a18c86123",
+    "bytes": 2340
+  },
+  {
+    "path": "lib/include/jxl/stats.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "35930b4da1547208bca3b14e3e548cfbb0eb524c",
+    "bytes": 2876
+  },
+  {
+    "path": "lib/include/jxl/thread_parallel_runner.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fbfe9e20749aa1e7b4a6b679ff502ad310040267",
+    "bytes": 2459
+  },
+  {
+    "path": "lib/include/jxl/thread_parallel_runner_cxx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f35ca00e28986dcffa28cc00f3cd7170382a381",
+    "bytes": 2373
+  },
+  {
+    "path": "lib/include/jxl/types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1844375f68dacd520fb2479004ad1dae878197cc",
+    "bytes": 5109
+  },
+  {
+    "path": "lib/jpegli.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a471c8b2abd8cde6faeb395ea0d39656777f9ec6",
+    "bytes": 5919
+  },
+  {
+    "path": "lib/jpegli",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "097f4dc70a4df87ed14d40f3b7eb9533d03e0cc6",
+    "bytes": null
+  },
+  {
+    "path": "lib/jpegli/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7241d1eaabfd969a8ccf670d74a3cd318a3b77e6",
+    "bytes": 2211
+  },
+  {
+    "path": "lib/jpegli/adaptive_quantization.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11367ee66083f0747c192b16e5fed9274ec8693b",
+    "bytes": 21637
+  },
+  {
+    "path": "lib/jpegli/adaptive_quantization.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8537e85df2a0098f239da63c8c9e6e478145c5e",
+    "bytes": 442
+  },
+  {
+    "path": "lib/jpegli/bit_writer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9788f35b8d40591cbd4924160075f5be06286dc1",
+    "bytes": 1719
+  },
+  {
+    "path": "lib/jpegli/bit_writer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3adf1eaca1f24a1dea77868812f67757b13eea59",
+    "bytes": 3139
+  },
+  {
+    "path": "lib/jpegli/bitstream.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4dbeb738bba2d5356d110b270174dd2826e3db47",
+    "bytes": 15335
+  },
+  {
+    "path": "lib/jpegli/bitstream.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bed441aefe4380d99e25a9f69bd4085e807fbfdf",
+    "bytes": 1572
+  },
+  {
+    "path": "lib/jpegli/color_quantize.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5b0097f3d066228814cd32b1fa8c3bfdf251249",
+    "bytes": 18298
+  },
+  {
+    "path": "lib/jpegli/color_quantize.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92b922f7564cf730d503a9376fdc4e2a8b5265d8",
+    "bytes": 696
+  },
+  {
+    "path": "lib/jpegli/color_transform.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ec906bedce4141ce4b85bf46eadc15a7a235c20f",
+    "bytes": 17151
+  },
+  {
+    "path": "lib/jpegli/color_transform.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d58f8849a4e98f4d678920ccbf8b98c6215dcfd",
+    "bytes": 515
+  },
+  {
+    "path": "lib/jpegli/common.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5f34372f3e534647d3b39d1520496596d85a2c1d",
+    "bytes": 1602
+  },
+  {
+    "path": "lib/jpegli/common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "731a2e9d3f3618dae8fa702a79f77c790a14bedc",
+    "bytes": 1382
+  },
+  {
+    "path": "lib/jpegli/common_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd0a86d3b08647d904d0cf108b2ccbeaa65ccae8",
+    "bytes": 4553
+  },
+  {
+    "path": "lib/jpegli/dct-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb54a152d59c36a60a996b48e5125f37935841b8",
+    "bytes": 8167
+  },
+  {
+    "path": "lib/jpegli/decode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "832f0df87681bd6b42a802852f822e00a03558be",
+    "bytes": 37938
+  },
+  {
+    "path": "lib/jpegli/decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78c39b409cd16bb426418bca5434c646287574d0",
+    "bytes": 3701
+  },
+  {
+    "path": "lib/jpegli/decode_api_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7ce6bb4d7340f6210123b32c970a725b3a7fdf1",
+    "bytes": 48453
+  },
+  {
+    "path": "lib/jpegli/decode_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c36f6774b9ca69215310921c3c6b0c2b0f139be4",
+    "bytes": 4593
+  },
+  {
+    "path": "lib/jpegli/decode_marker.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2621ed08670ccbedf49a06e9c14321a4cf3fa0c5",
+    "bytes": 20970
+  },
+  {
+    "path": "lib/jpegli/decode_marker.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3d47f6ad27bc8ae215134884c5ceb58d7133482",
+    "bytes": 1201
+  },
+  {
+    "path": "lib/jpegli/decode_scan.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6c4e5ac5f77e5bb665948545b9e37b199bd34a36",
+    "bytes": 17101
+  },
+  {
+    "path": "lib/jpegli/decode_scan.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd1bfcd110283c45d095b235c3c43bc65e75a478",
+    "bytes": 1076
+  },
+  {
+    "path": "lib/jpegli/destination_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05d35797b87cb6581fe007268574560d8b6d07e0",
+    "bytes": 5436
+  },
+  {
+    "path": "lib/jpegli/downsample.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1e5bb1563b190bfd7bd363066c059c0e79e0c4ed",
+    "bytes": 12332
+  },
+  {
+    "path": "lib/jpegli/downsample.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ccf069e4e50cc5647599f517c84ffe0f93c3227",
+    "bytes": 507
+  },
+  {
+    "path": "lib/jpegli/encode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "410eeed8083ecabcca0f164371c7c936d949b576",
+    "bytes": 46169
+  },
+  {
+    "path": "lib/jpegli/encode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54ff9d1f9eec6941d6a447b4e25e117a94c05ce8",
+    "bytes": 6294
+  },
+  {
+    "path": "lib/jpegli/encode_api_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c8a8e21f677aa7143096e3cd5006baf5692040d6",
+    "bytes": 29432
+  },
+  {
+    "path": "lib/jpegli/encode_finish.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cc3b8d27503be568f6c5802da802534187e43e6",
+    "bytes": 7589
+  },
+  {
+    "path": "lib/jpegli/encode_finish.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f6862decb9243a042d924fbe435890318e099376",
+    "bytes": 416
+  },
+  {
+    "path": "lib/jpegli/encode_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4dbef97538660a814994457aff6f7a73d5a9a2df",
+    "bytes": 4433
+  },
+  {
+    "path": "lib/jpegli/encode_streaming.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff43864a47baeaec6f25e1e7b7b3ed9017b609e8",
+    "bytes": 8655
+  },
+  {
+    "path": "lib/jpegli/encode_streaming.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "69acff4eaf2f21e6b7c83529a4258c0508004f73",
+    "bytes": 535
+  },
+  {
+    "path": "lib/jpegli/entropy_coding-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bfb436d7954da0ea8ba3d849fb756208d0d38e4d",
+    "bytes": 7290
+  },
+  {
+    "path": "lib/jpegli/entropy_coding.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0cbedf38bd3e4f9d61bcfd4eafa6ef536fc5a52",
+    "bytes": 30140
+  },
+  {
+    "path": "lib/jpegli/entropy_coding.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a552219ec388ed2fd18da29a29b109cffec73a76",
+    "bytes": 750
+  },
+  {
+    "path": "lib/jpegli/error.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b3ccab0452e74338e334b08e89bd8ab53f75c2d4",
+    "bytes": 3190
+  },
+  {
+    "path": "lib/jpegli/error.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb5dc411a8b6d9821bd8c0081c77abf33d734d67",
+    "bytes": 1937
+  },
+  {
+    "path": "lib/jpegli/error_handling_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da85dbcb0b3dbaf3f71c50219705f9b877a3c188",
+    "bytes": 41832
+  },
+  {
+    "path": "lib/jpegli/fuzztest.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5cde97713e6764bc93cc965c4fa2cdd0881d064",
+    "bytes": 550
+  },
+  {
+    "path": "lib/jpegli/huffman.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b068ab64f6ad1c9891e1a9ea281a0297eb1c9c9",
+    "bytes": 11964
+  },
+  {
+    "path": "lib/jpegli/huffman.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99549668cffe72dccc7f92fe960c5a28af1cfb26",
+    "bytes": 2005
+  },
+  {
+    "path": "lib/jpegli/idct.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "665a00d826de0d2f01174ca6b2a333141eaf164b",
+    "bytes": 26909
+  },
+  {
+    "path": "lib/jpegli/idct.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "746b1562c15246d60cd9091e671e5e1d4c331ee1",
+    "bytes": 430
+  },
+  {
+    "path": "lib/jpegli/input.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16299477f7b324ef7e65944f8216ea0e9dc7cd10",
+    "bytes": 16428
+  },
+  {
+    "path": "lib/jpegli/input.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f54d0bee438d8ecae51ec373acc7582102194cfc",
+    "bytes": 386
+  },
+  {
+    "path": "lib/jpegli/input_suspension_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6fa1416213ce680725c188197d03f2fe13862834",
+    "bytes": 22719
+  },
+  {
+    "path": "lib/jpegli/jpeg.version.62",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a8d1f5ec5f00f52cac7bbc93e1419416e7daa3c",
+    "bytes": 118
+  },
+  {
+    "path": "lib/jpegli/jpeg.version.8",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aa891f85716e58a78392467f95d7c74fd0747a28",
+    "bytes": 80
+  },
+  {
+    "path": "lib/jpegli/libjpeg_test_util.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76746a8fddb34658ee4c8dc5a64e7194c2e05b9c",
+    "bytes": 10605
+  },
+  {
+    "path": "lib/jpegli/libjpeg_test_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "18cc1e57b54a1c435c1f50875986f8abd1790c50",
+    "bytes": 1425
+  },
+  {
+    "path": "lib/jpegli/libjpeg_wrapper.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2b333afef2c719891982edea862eded70b6e969",
+    "bytes": 7956
+  },
+  {
+    "path": "lib/jpegli/memory_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a8f230e63800190e3dc28e3086082f07cc2d466",
+    "bytes": 6155
+  },
+  {
+    "path": "lib/jpegli/memory_manager.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c650caad49ed86361afa0bfb9d2b2fc65fabb99f",
+    "bytes": 1391
+  },
+  {
+    "path": "lib/jpegli/output_suspension_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44d63fdcbb4d011b3806c75bab39a38dd744d52e",
+    "bytes": 7623
+  },
+  {
+    "path": "lib/jpegli/quant.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "764e1b6e782f9b28df2884b984012569c61a5267",
+    "bytes": 24750
+  },
+  {
+    "path": "lib/jpegli/quant.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb37757ae204b51c6df1e55c916627d4317b7cad",
+    "bytes": 604
+  },
+  {
+    "path": "lib/jpegli/render.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1510401fa70e673d2032075c61e6990425eab4e3",
+    "bytes": 29715
+  },
+  {
+    "path": "lib/jpegli/render.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad69335d70bb3357d08a07bf55811d7d5fe2a8ec",
+    "bytes": 611
+  },
+  {
+    "path": "lib/jpegli/simd.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e849393426acba3bc267deca37fc41e39b8c061",
+    "bytes": 853
+  },
+  {
+    "path": "lib/jpegli/simd.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aec772e2d4a47eb21c01f4be51ecac277287157e",
+    "bytes": 385
+  },
+  {
+    "path": "lib/jpegli/source_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0f0b4c275a1272f480aaff3e2c21478f1580cf0",
+    "bytes": 3225
+  },
+  {
+    "path": "lib/jpegli/source_manager_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b70b43d8dbef32fb11bae54d86b43008cc31c38b",
+    "bytes": 4628
+  },
+  {
+    "path": "lib/jpegli/streaming_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de0eeef920a04b7095d4b310aa982481df905162",
+    "bytes": 8826
+  },
+  {
+    "path": "lib/jpegli/test_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ab9fa573ae601a00ac637ae55fcc923b0ad3815",
+    "bytes": 4806
+  },
+  {
+    "path": "lib/jpegli/test_utils-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da1a924e21f853bbe3f00193531698d10f63b89e",
+    "bytes": 15547
+  },
+  {
+    "path": "lib/jpegli/test_utils.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2b903fa0c022f87a684c1e7946779bea27b7d07c",
+    "bytes": 30572
+  },
+  {
+    "path": "lib/jpegli/test_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ebd7ffbc82241223094e104cd6e5d1b16984879",
+    "bytes": 4521
+  },
+  {
+    "path": "lib/jpegli/testing.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58df563f06644329896c7cfbff828737b819fd2a",
+    "bytes": 1153
+  },
+  {
+    "path": "lib/jpegli/transcode_api_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42d7e4f7fe32455e00afcf6bc571e2f3717af7ce",
+    "bytes": 4564
+  },
+  {
+    "path": "lib/jpegli/transpose-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cdc289f96c4c820b95564c1fbdf9ac5bfefeacce",
+    "bytes": 3684
+  },
+  {
+    "path": "lib/jpegli/types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c0c0450c1865d98a2dccfeac17fdf409f6421995",
+    "bytes": 802
+  },
+  {
+    "path": "lib/jpegli/upsample.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7dae841b8a359d9d9226d618ad623fc2b6d6eded",
+    "bytes": 4647
+  },
+  {
+    "path": "lib/jpegli/upsample.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a057208dcc25a7928349df9ba3064df011724f7",
+    "bytes": 804
+  },
+  {
+    "path": "lib/jxl.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "59b2cca4265abd9e0941eea2b2af37578b21142c",
+    "bytes": 10233
+  },
+  {
+    "path": "lib/jxl",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "bfb2361c71212da70e21aad8442d9099e5492e0b",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/ac_context.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6529a9bb88bcb269a67ca293b778f89468c5b814",
+    "bytes": 6292
+  },
+  {
+    "path": "lib/jxl/ac_strategy.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "69e8ae6f470c1dc4a6b00ba09cc6fb4153518cf1",
+    "bytes": 3278
+  },
+  {
+    "path": "lib/jxl/ac_strategy.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c3191c791a903624e4f5a507ed3fc4b1f36542a",
+    "bytes": 9481
+  },
+  {
+    "path": "lib/jxl/ac_strategy_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6405fc86b25a8832c519743c70ed74b7a50f2d0",
+    "bytes": 10467
+  },
+  {
+    "path": "lib/jxl/alpha.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48d7e7ee921f909e2a89a6ed770a62090da68a86",
+    "bytes": 3933
+  },
+  {
+    "path": "lib/jxl/alpha.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "efb76c800f8628886785238206bec462ce555594",
+    "bytes": 2348
+  },
+  {
+    "path": "lib/jxl/alpha_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e26e77be6a7c294809bb017a5eec8683f0f6ebe",
+    "bytes": 4262
+  },
+  {
+    "path": "lib/jxl/ans_common.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "306ecb7276782aead689421e40f9ce75a5e1a6c6",
+    "bytes": 6433
+  },
+  {
+    "path": "lib/jxl/ans_common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "20897028f026a42e163e790d606e7ac8b0cec17c",
+    "bytes": 6006
+  },
+  {
+    "path": "lib/jxl/ans_common_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b97f5186f9fae3e7e421c9b2517b3cad709435aa",
+    "bytes": 1525
+  },
+  {
+    "path": "lib/jxl/ans_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4bbc284c0bf4944a1ae73cb18ee1d5b886046731",
+    "bytes": 1116
+  },
+  {
+    "path": "lib/jxl/ans_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8bed98895f4c19e415caa88ddcf62b603f23d756",
+    "bytes": 10109
+  },
+  {
+    "path": "lib/jxl/base",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "83830d19857fc2bfc6b11c8c36a7922337967bfb",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/base/arch_macros.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a98301915e5b8779f97ccd73b1fcae4b7b9f847e",
+    "bytes": 674
+  },
+  {
+    "path": "lib/jxl/base/bits.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a79fdc2c991448caa3e8ddc80bf69c188ba58d1f",
+    "bytes": 4123
+  },
+  {
+    "path": "lib/jxl/base/byte_order.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf8d7db082ca231a1392d25531807b6df05f5ab3",
+    "bytes": 7548
+  },
+  {
+    "path": "lib/jxl/base/c_callback_support.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aee0ce5346592ac327a29063790cdfabbd722f4d",
+    "bytes": 865
+  },
+  {
+    "path": "lib/jxl/base/common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0893ef26b5a5a6b2814d502d80f68765146e3989",
+    "bytes": 3612
+  },
+  {
+    "path": "lib/jxl/base/compiler_specific.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb1a8a038641f0edbcb1a9e6a355464b81bcb27d",
+    "bytes": 6602
+  },
+  {
+    "path": "lib/jxl/base/data_parallel.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e39f46c75b929817ba455cfc33496016b6800b66",
+    "bytes": 4877
+  },
+  {
+    "path": "lib/jxl/base/exif.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "acaa1a1ce43613bb7ff2bb919f952eab69c8b131",
+    "bytes": 2971
+  },
+  {
+    "path": "lib/jxl/base/fast_math-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa749cc25703da159e14bc197cdccd051217464c",
+    "bytes": 8389
+  },
+  {
+    "path": "lib/jxl/base/float.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "50af582b6f54a7bc5443911d81c5e326f14e6201",
+    "bytes": 2860
+  },
+  {
+    "path": "lib/jxl/base/iaca.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e5732dae5c81c76a8803c3855bc5aaf212d940a5",
+    "bytes": 1920
+  },
+  {
+    "path": "lib/jxl/base/include_jpeglib.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f72d13d04bad08b5db3ceef97b4c5a0395d0557d",
+    "bytes": 596
+  },
+  {
+    "path": "lib/jxl/base/matrix_ops.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1f8753932581edf74880e2f54cfae05789ad8a3",
+    "bytes": 3039
+  },
+  {
+    "path": "lib/jxl/base/os_macros.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "84d0b82bf5c14f15b37042973791ce6a6df82383",
+    "bytes": 864
+  },
+  {
+    "path": "lib/jxl/base/override.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da070e6e62430e782405f4274368c728670f2215",
+    "bytes": 866
+  },
+  {
+    "path": "lib/jxl/base/printf_macros.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3215052afdec418f08862ecfde172ef1cebd6e92",
+    "bytes": 822
+  },
+  {
+    "path": "lib/jxl/base/random.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6922e282e83bc5e81aa5ea6a85cad9d03ab8c709",
+    "bytes": 2802
+  },
+  {
+    "path": "lib/jxl/base/rational_polynomial-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a89c0bac1e38e18b7d6060e9a3a32d1c0a2df1f",
+    "bytes": 3969
+  },
+  {
+    "path": "lib/jxl/base/rect.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31fe12dfb9529007a12f9515bbe397f7b82b4022",
+    "bytes": 6217
+  },
+  {
+    "path": "lib/jxl/base/sanitizer_definitions.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "315f3bd0035f99d660174f9986b00d7a23a2c472",
+    "bytes": 1085
+  },
+  {
+    "path": "lib/jxl/base/sanitizers.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "57dc3c13a53d3af04566e578e16b7ab4a68d3aa9",
+    "bytes": 7863
+  },
+  {
+    "path": "lib/jxl/base/scope_guard.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "418ce2172321c84fd076ecff54a5d571369a8f50",
+    "bytes": 1246
+  },
+  {
+    "path": "lib/jxl/base/span.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6c0edfca89977e8755d9604942d9de5034be8108",
+    "bytes": 2186
+  },
+  {
+    "path": "lib/jxl/base/status.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6578abdcf82b71f62b1e0605c9a32deed12af339",
+    "bytes": 14296
+  },
+  {
+    "path": "lib/jxl/bit_reader_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "67cd3f8a4b8af61aa448853a55866dbe3488df54",
+    "bytes": 8309
+  },
+  {
+    "path": "lib/jxl/bits_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8340db5a389f89dd0c7583274ef1f376dd69b92d",
+    "bytes": 3087
+  },
+  {
+    "path": "lib/jxl/blending.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5947a00a80614d5c962abd76907cb6740209d9b8",
+    "bytes": 6288
+  },
+  {
+    "path": "lib/jxl/blending.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7933bee2ddadec137778c1ab9ff824b24b00a10",
+    "bytes": 943
+  },
+  {
+    "path": "lib/jxl/blending_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7182616e2cf5316a857deb210beabad531ba9a86",
+    "bytes": 2020
+  },
+  {
+    "path": "lib/jxl/box_content_decoder.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "079298254fc3a637ffb953f052cc6ea4e34da59e",
+    "bytes": 3203
+  },
+  {
+    "path": "lib/jxl/box_content_decoder.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "17db7faa3b6f8c5b818e5eb38f86b4aca3e0e738",
+    "bytes": 1361
+  },
+  {
+    "path": "lib/jxl/butteraugli",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9550f4f2dfd61f06673459ba2b804bd6b863ddb4",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/butteraugli/butteraugli.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "83d1fd2678588f020062f5638c2986aa8179f14a",
+    "bytes": 81907
+  },
+  {
+    "path": "lib/jxl/butteraugli/butteraugli.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "823b3ba1acd94e71e1c655d1eb0e7b341c573a9d",
+    "bytes": 8267
+  },
+  {
+    "path": "lib/jxl/butteraugli/butteraugli_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2681fe4a28bc6ba284c33588f7971bf10bcfc530",
+    "bytes": 3807
+  },
+  {
+    "path": "lib/jxl/byte_order_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "17d7ef66431127979869e61084426449fbaaa981",
+    "bytes": 1191
+  },
+  {
+    "path": "lib/jxl/chroma_from_luma.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a44e777815294eeffd8d6202493ea9190fbb63a",
+    "bytes": 1939
+  },
+  {
+    "path": "lib/jxl/chroma_from_luma.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b23c82cc4d0efbefe1c0cdab80c3d703c8157b05",
+    "bytes": 4597
+  },
+  {
+    "path": "lib/jxl/cms",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ea328f8a5b2c74b39666d7fdf0ccac864bd72255",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/cms/color_encoding_cms.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28a74d7d76567624bfedb6290ced1fc71f02f7e9",
+    "bytes": 20359
+  },
+  {
+    "path": "lib/jxl/cms/jxl_cms.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "319557b27ebd7f62d7a949c9b1a8a0e0e86b3dad",
+    "bytes": 47929
+  },
+  {
+    "path": "lib/jxl/cms/jxl_cms_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "152f867ea35718ff06119903e1b9add8657ba003",
+    "bytes": 39095
+  },
+  {
+    "path": "lib/jxl/cms/opsin_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0af852c745f9b0b9624519d6609143380a0138e3",
+    "bytes": 5418
+  },
+  {
+    "path": "lib/jxl/cms/tone_mapping-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7d09beed32baed89e7baff5011978b2932b59e78",
+    "bytes": 7008
+  },
+  {
+    "path": "lib/jxl/cms/tone_mapping.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1f43f4d3157ff74a1e7ee658924cede054bed8d",
+    "bytes": 7036
+  },
+  {
+    "path": "lib/jxl/cms/tone_mapping_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0d569640aa6c01e737b203223e123bd40f13067",
+    "bytes": 5487
+  },
+  {
+    "path": "lib/jxl/cms/transfer_functions-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9db6455c95cf64b9540ca541a6c10505257682bf",
+    "bytes": 12873
+  },
+  {
+    "path": "lib/jxl/cms/transfer_functions.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e620f940eb789a4bc7249a3263debcd75c78b3e3",
+    "bytes": 4340
+  },
+  {
+    "path": "lib/jxl/cms/transfer_functions_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a7bd7f43f64a1e764fd6b2c77b0bd334a31c6e7",
+    "bytes": 3215
+  },
+  {
+    "path": "lib/jxl/codec_in_out.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f71fa9643e63dea97a55a17808177b68cd4dd6ce",
+    "bytes": 3457
+  },
+  {
+    "path": "lib/jxl/coeff_order.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c741cbed91304fe325c9594f67fcb281749d0099",
+    "bytes": 5293
+  },
+  {
+    "path": "lib/jxl/coeff_order.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2620d918e3b9af64b986aff7ca675a784642b925",
+    "bytes": 2030
+  },
+  {
+    "path": "lib/jxl/coeff_order_fwd.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e5e72a4913c895b5162d1ae864bd093703effbed",
+    "bytes": 1466
+  },
+  {
+    "path": "lib/jxl/coeff_order_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75aca356cce9f9cc0b768eadc07837a1152e7e49",
+    "bytes": 3471
+  },
+  {
+    "path": "lib/jxl/color_encoding_internal.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "43f34a65222cdfaa36697d068a588dbd5fa532e3",
+    "bytes": 7247
+  },
+  {
+    "path": "lib/jxl/color_encoding_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "73148b4ff7daf15081d09edce9aae577e93ed166",
+    "bytes": 12548
+  },
+  {
+    "path": "lib/jxl/color_encoding_internal_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a7ce308b2657f041e10952678e9636747a72df56",
+    "bytes": 5049
+  },
+  {
+    "path": "lib/jxl/color_management_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a56edd316b0e3111e4268f54b23e42477a4e9f0",
+    "bytes": 18183
+  },
+  {
+    "path": "lib/jxl/common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5932444330e1e561ac4248eda20775b47486a2f",
+    "bytes": 2171
+  },
+  {
+    "path": "lib/jxl/compressed_dc.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "994232c8e4605fca21ec10944fc64c382a892adf",
+    "bytes": 11319
+  },
+  {
+    "path": "lib/jxl/compressed_dc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12e70d84cfd36e4368638de31b210007a4d37f6a",
+    "bytes": 1231
+  },
+  {
+    "path": "lib/jxl/convolve-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d515b4c45eccfe5b084d8116b6fca9d26cec1d9",
+    "bytes": 11471
+  },
+  {
+    "path": "lib/jxl/convolve.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e9b3ae66f6aeb1e119aaf7fa99f461e726699701",
+    "bytes": 2841
+  },
+  {
+    "path": "lib/jxl/convolve_separable5.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0331da30ee9dafa6453bc291238a670084a0df10",
+    "bytes": 9723
+  },
+  {
+    "path": "lib/jxl/convolve_slow.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c7dbe6935d4a71432685dc64f05ae7f4a93e68e",
+    "bytes": 7480
+  },
+  {
+    "path": "lib/jxl/convolve_symmetric3.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4adf4ad3469fd589bc2008d152b339523011c4f9",
+    "bytes": 7031
+  },
+  {
+    "path": "lib/jxl/convolve_symmetric5.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "327ca286020e582244c4310d65d4877732b8faaf",
+    "bytes": 7210
+  },
+  {
+    "path": "lib/jxl/convolve_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a8ff1f29686c1f8b4fdcddbaf59af2ceed8a5c2",
+    "bytes": 10428
+  },
+  {
+    "path": "lib/jxl/data_parallel_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f81d0309e69aad525c0a85cc9ef8a26a2a4674a",
+    "bytes": 3319
+  },
+  {
+    "path": "lib/jxl/dct-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e1b3bd6aa2ae87a92f32f008589afcb7247891e",
+    "bytes": 12426
+  },
+  {
+    "path": "lib/jxl/dct_block-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6db5f0e7c826afbfaea1c5ffdfda9277d25fbec2",
+    "bytes": 3214
+  },
+  {
+    "path": "lib/jxl/dct_for_test.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29c189261d2ad2b82ef6a5f3a23067d4c58ff115",
+    "bytes": 2749
+  },
+  {
+    "path": "lib/jxl/dct_scales.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da92734e266abcfac7cbe0f2beb52a79a49c228b",
+    "bytes": 1327
+  },
+  {
+    "path": "lib/jxl/dct_scales.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23af03d60ff7e3f7b824ea3940689e6d2ae056a0",
+    "bytes": 12557
+  },
+  {
+    "path": "lib/jxl/dct_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e8f2544ab5fd04aa5ac258e23d68aa48217042a",
+    "bytes": 11610
+  },
+  {
+    "path": "lib/jxl/dct_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0036db8c0103a8cd2662b3af7eb0b958fa91cf1",
+    "bytes": 2563
+  },
+  {
+    "path": "lib/jxl/dec_ans.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d459d49181e38e06b77b3be71e1613d504410243",
+    "bytes": 15861
+  },
+  {
+    "path": "lib/jxl/dec_ans.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e437fffa80fb9142d4971bb530f73c86abd1c34",
+    "bytes": 19460
+  },
+  {
+    "path": "lib/jxl/dec_bit_reader.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7f53c127accbb9882f55047d00eba479cc7730b",
+    "bytes": 11484
+  },
+  {
+    "path": "lib/jxl/dec_cache.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92a59c1487105309d24e9c63f5b2a4004378ae80",
+    "bytes": 13571
+  },
+  {
+    "path": "lib/jxl/dec_cache.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d3204faa73118105ffef1693a8d74c3369f1b69",
+    "bytes": 7359
+  },
+  {
+    "path": "lib/jxl/dec_context_map.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a2a6e5354172ce8d8a6dccc45129ece4c48bba5",
+    "bytes": 2975
+  },
+  {
+    "path": "lib/jxl/dec_context_map.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f7ac4f87edbf8152240007f96d4f4bd135b3756",
+    "bytes": 883
+  },
+  {
+    "path": "lib/jxl/dec_external_image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e3da68edb98fc995deafb3d125d137b0257591a",
+    "bytes": 20027
+  },
+  {
+    "path": "lib/jxl/dec_external_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a29981694a565e9daf256a5a264ab5773c5134a",
+    "bytes": 2875
+  },
+  {
+    "path": "lib/jxl/dec_external_image_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "670f403668cdb209c21c5e6459b1b1ea4baca068",
+    "bytes": 2272
+  },
+  {
+    "path": "lib/jxl/dec_frame.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "04c3ee0c9c2f0ad95eca9874170675ee05c6d48b",
+    "bytes": 34281
+  },
+  {
+    "path": "lib/jxl/dec_frame.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "26412fd2f18608a7d581a4f33e2cbd09b7e81f49",
+    "bytes": 14103
+  },
+  {
+    "path": "lib/jxl/dec_group.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d1abe2fa7f983f81a7e79e4f9469339d7341e29c",
+    "bytes": 33239
+  },
+  {
+    "path": "lib/jxl/dec_group.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e954ba9914dd1ed81020613df068fe0e9c566a6",
+    "bytes": 1796
+  },
+  {
+    "path": "lib/jxl/dec_group_border.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c9d105690cade44c37408d8e1e01eff3aa015cbc",
+    "bytes": 8456
+  },
+  {
+    "path": "lib/jxl/dec_group_border.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06b2fb5573830222a88d0572006c2030e1be06e4",
+    "bytes": 1416
+  },
+  {
+    "path": "lib/jxl/dec_huffman.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "849b1a5f647a120293b95f1036dc1e5a0a9d5151",
+    "bytes": 7615
+  },
+  {
+    "path": "lib/jxl/dec_huffman.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "162c3e309c4d1b1375c9b9d7162db82014740a08",
+    "bytes": 867
+  },
+  {
+    "path": "lib/jxl/dec_modular.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e8dc17fa7dc491aef10a837e1c7bd8ee0848ebbc",
+    "bytes": 33601
+  },
+  {
+    "path": "lib/jxl/dec_modular.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6081b52221f353ce8e1fa063416b5904bf9110f6",
+    "bytes": 5817
+  },
+  {
+    "path": "lib/jxl/dec_noise.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "949ddc8237cf8d23c003ec48bc5f6a7db178eb2d",
+    "bytes": 5361
+  },
+  {
+    "path": "lib/jxl/dec_noise.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cefba9f08f7ac84c8d620167987a2703010100c",
+    "bytes": 908
+  },
+  {
+    "path": "lib/jxl/dec_patch_dictionary.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41eb1cf170eec4498037d4b311252d0f21a1632c",
+    "bytes": 13175
+  },
+  {
+    "path": "lib/jxl/dec_patch_dictionary.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca3923bf809cac245d2d8dd64615c45cf22aa352",
+    "bytes": 5418
+  },
+  {
+    "path": "lib/jxl/dec_transforms-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24a1738077d68d822c7581781cf084c21c95d043",
+    "bytes": 26586
+  },
+  {
+    "path": "lib/jxl/dec_transforms_testonly.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bed47ee863f289d1aaeec7c0bbfae2b99b60ddf3",
+    "bytes": 1338
+  },
+  {
+    "path": "lib/jxl/dec_transforms_testonly.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cbac3cc752234cf5550a167bd996c66b46c40c05",
+    "bytes": 1076
+  },
+  {
+    "path": "lib/jxl/dec_xyb-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c223e05e754008852b4700f7bc0db270acbfdd48",
+    "bytes": 14355
+  },
+  {
+    "path": "lib/jxl/dec_xyb.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66a45a7dde596806ee3f8c310e3201c5e32fd45e",
+    "bytes": 12656
+  },
+  {
+    "path": "lib/jxl/dec_xyb.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee9a51f1dfef1f909ee0dfcaddb5db5c2cb3c788",
+    "bytes": 3312
+  },
+  {
+    "path": "lib/jxl/decode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "302e5115cd6c397605382b2918c665dff773d5cf",
+    "bytes": 105213
+  },
+  {
+    "path": "lib/jxl/decode_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cbb87559e0e9a5bf3dc5e997ed8575d2a255a992",
+    "bytes": 232013
+  },
+  {
+    "path": "lib/jxl/decode_to_jpeg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78941a495b0f225121a5b2cbdc8790e38338c568",
+    "bytes": 6564
+  },
+  {
+    "path": "lib/jxl/decode_to_jpeg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8dd32d63b4874859a66ceea1badd17dcf5835198",
+    "bytes": 7786
+  },
+  {
+    "path": "lib/jxl/enc_ac_strategy.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "940c738a1179c41b07f796c59474e846f7a7cfd8",
+    "bytes": 48525
+  },
+  {
+    "path": "lib/jxl/enc_ac_strategy.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d7ec6ca86b2058d331b225dc924418606396324",
+    "bytes": 3064
+  },
+  {
+    "path": "lib/jxl/enc_adaptive_quantization.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "98471fc618e26458e8cfa2a85377448b9614ed6b",
+    "bytes": 53125
+  },
+  {
+    "path": "lib/jxl/enc_adaptive_quantization.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "26f6965ac4507ea24311733b02265fcd2e93fbfb",
+    "bytes": 2540
+  },
+  {
+    "path": "lib/jxl/enc_ans.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f42fc6dd889d4b71c3ef61435d16139f37034acc",
+    "bytes": 70545
+  },
+  {
+    "path": "lib/jxl/enc_ans.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48a7d5400d2d34935d146bec212d9d014fa7b3af",
+    "bytes": 4870
+  },
+  {
+    "path": "lib/jxl/enc_ans_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23921097b48db5445b301af9c305b934044a40bc",
+    "bytes": 2567
+  },
+  {
+    "path": "lib/jxl/enc_aux_out.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78634f20f454a305e3eb79affb4e093f3af551f6",
+    "bytes": 3749
+  },
+  {
+    "path": "lib/jxl/enc_aux_out.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5536a605da937860e54008d834161c012aa8f0b",
+    "bytes": 2543
+  },
+  {
+    "path": "lib/jxl/enc_bit_writer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d03d6d6d4ad21a4fa52eac6beae74520a32ec63",
+    "bytes": 7556
+  },
+  {
+    "path": "lib/jxl/enc_bit_writer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ed7342477beac33de6631e928dfbec544d14973",
+    "bytes": 5046
+  },
+  {
+    "path": "lib/jxl/enc_butteraugli_comparator.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa807ffcd0136d78aa3501b38afa5f62933f708b",
+    "bytes": 3724
+  },
+  {
+    "path": "lib/jxl/enc_butteraugli_comparator.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f900503e9246ebefcfad8703458260f480846393",
+    "bytes": 1311
+  },
+  {
+    "path": "lib/jxl/enc_cache.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fee884a20b2ca30461d43447015a29c620b225c6",
+    "bytes": 10201
+  },
+  {
+    "path": "lib/jxl/enc_cache.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "138a7c8ce897d8ec34b9d24e17ef31362ba50c9a",
+    "bytes": 2691
+  },
+  {
+    "path": "lib/jxl/enc_chroma_from_luma.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2cf21bd73803f8a0fe3c4f1d2f95870bf2511454",
+    "bytes": 16260
+  },
+  {
+    "path": "lib/jxl/enc_chroma_from_luma.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54e6e623759ab818562a3ce9257dd9fea3e7e3d5",
+    "bytes": 2355
+  },
+  {
+    "path": "lib/jxl/enc_cluster.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65eb464cdc606a80ff97d0f1a5abbf0867e3d824",
+    "bytes": 12768
+  },
+  {
+    "path": "lib/jxl/enc_cluster.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3182970d2823decf892108f64b3fead951a3e51a",
+    "bytes": 1801
+  },
+  {
+    "path": "lib/jxl/enc_coeff_order.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "acc13f1225d4ce88157eb131dd71d8728a78445c",
+    "bytes": 12602
+  },
+  {
+    "path": "lib/jxl/enc_coeff_order.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6c57a97cd7aad71fc53a06dce8c3c00fb7a15adf",
+    "bytes": 2212
+  },
+  {
+    "path": "lib/jxl/enc_comparator.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4bb722ac425106a9f27c4fb32129ab56635edf8b",
+    "bytes": 5147
+  },
+  {
+    "path": "lib/jxl/enc_comparator.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ae6913abe8989444689bea9d225ff87d0802391",
+    "bytes": 2146
+  },
+  {
+    "path": "lib/jxl/enc_context_map.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5a9a515b162eb7183b5d9a005e7211c6fd59811",
+    "bytes": 6058
+  },
+  {
+    "path": "lib/jxl/enc_context_map.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba770a939bd3e0ec72e51aac20f440bacff4e59b",
+    "bytes": 1143
+  },
+  {
+    "path": "lib/jxl/enc_debug_image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a1fd91045508502314c300c27152f9e698be3883",
+    "bytes": 4416
+  },
+  {
+    "path": "lib/jxl/enc_debug_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "98d27e705cdf209df5304256be29dd4517f87e83",
+    "bytes": 1279
+  },
+  {
+    "path": "lib/jxl/enc_detect_dots.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6fde418f8b42dc045dc5d695b9e7ec0d5326cb84",
+    "bytes": 23225
+  },
+  {
+    "path": "lib/jxl/enc_detect_dots.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "91174463f74c6f118814081bf6ad5e5f0b120d5b",
+    "bytes": 2342
+  },
+  {
+    "path": "lib/jxl/enc_dot_dictionary.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8d538fef3bb92313d9bd7f218dfbfdf24049c12",
+    "bytes": 2807
+  },
+  {
+    "path": "lib/jxl/enc_dot_dictionary.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15eecc9853827b2752e4e5d6856ef77bf71b804b",
+    "bytes": 873
+  },
+  {
+    "path": "lib/jxl/enc_entropy_coder.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f7e67870b43b562df652e5cac92a0f055671ee8",
+    "bytes": 10443
+  },
+  {
+    "path": "lib/jxl/enc_entropy_coder.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "74941b913d86ccac655d9822f7f55e5341140a2c",
+    "bytes": 1572
+  },
+  {
+    "path": "lib/jxl/enc_external_image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aafcf3860b28a54dc2455c82a03cb509244d1e62",
+    "bytes": 10307
+  },
+  {
+    "path": "lib/jxl/enc_external_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d0fb75c5d4b1852b3c23d6f4452d8a4fff2879b",
+    "bytes": 2996
+  },
+  {
+    "path": "lib/jxl/enc_external_image_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f6aa7f49d88af76f32710521ab7f1b74803c102",
+    "bytes": 1626
+  },
+  {
+    "path": "lib/jxl/enc_external_image_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e620695a98d2bfc4c327c8b59c80cfe64d746bc8",
+    "bytes": 2788
+  },
+  {
+    "path": "lib/jxl/enc_fast_lossless.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16b3e608634e6a0f444e09b799f6bd59afd84c63",
+    "bytes": 157763
+  },
+  {
+    "path": "lib/jxl/enc_fast_lossless.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c370ab60b354be749f8768e39b0f48888b8b2c3",
+    "bytes": 4621
+  },
+  {
+    "path": "lib/jxl/enc_fields.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b1fff00f2fe5ac8669f8453a2e6f5d5210053fe",
+    "bytes": 7801
+  },
+  {
+    "path": "lib/jxl/enc_fields.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "79d4eba2574579c3232af49247fee31246d4c4c9",
+    "bytes": 1290
+  },
+  {
+    "path": "lib/jxl/enc_frame.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66d1a5e92a2af99a178c24ded8c532a9775b4ef9",
+    "bytes": 107979
+  },
+  {
+    "path": "lib/jxl/enc_frame.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e96f077373de001115b388c75357e2028be50621",
+    "bytes": 4339
+  },
+  {
+    "path": "lib/jxl/enc_gaborish.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e24abf3ffd68f91ad19cabcad6bcc6f3a15021e",
+    "bytes": 3220
+  },
+  {
+    "path": "lib/jxl/enc_gaborish.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ce1c211ffa4a2f5def67bc60a93e155eeb2d4ecc",
+    "bytes": 798
+  },
+  {
+    "path": "lib/jxl/enc_gaborish_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "906a9a57103fe60ebda64c58cdf36711bfedec1c",
+    "bytes": 2673
+  },
+  {
+    "path": "lib/jxl/enc_gamma_correct.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d1b9123e057f850ed5734035d9df98ed8552a7d",
+    "bytes": 953
+  },
+  {
+    "path": "lib/jxl/enc_group.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8896ee3b28fed47b5ad24e38ee8d6aef2594a8c7",
+    "bytes": 21347
+  },
+  {
+    "path": "lib/jxl/enc_group.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "884e3bdd0eea7577f1718ee1fd9cf60944eaecf1",
+    "bytes": 957
+  },
+  {
+    "path": "lib/jxl/enc_heuristics.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a8bf24160f617ae98ffd5894b645c21ff2fb8a5c",
+    "bytes": 48256
+  },
+  {
+    "path": "lib/jxl/enc_heuristics.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a1843410ba1dc4aaf6f1db9ba109a732f29bdba6",
+    "bytes": 1871
+  },
+  {
+    "path": "lib/jxl/enc_huffman.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dbba42b198c66abc78f1454f20736198a51dae20",
+    "bytes": 7097
+  },
+  {
+    "path": "lib/jxl/enc_huffman.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2787d357059a1455eb5b34bf8e29cd406e267622",
+    "bytes": 837
+  },
+  {
+    "path": "lib/jxl/enc_huffman_tree.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a5804969d2c7c02f49fec57abee9a6994ddb4af",
+    "bytes": 10319
+  },
+  {
+    "path": "lib/jxl/enc_huffman_tree.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7d716cd3b51f4f985ee0dcfc0bd167a999d2be2b",
+    "bytes": 1696
+  },
+  {
+    "path": "lib/jxl/enc_icc_codec.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e294de7c82ea5eddc984636f717e5a1ba5e32f62",
+    "bytes": 17955
+  },
+  {
+    "path": "lib/jxl/enc_icc_codec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7141550267b023205283a08d760eb6f82c09cd6e",
+    "bytes": 804
+  },
+  {
+    "path": "lib/jxl/enc_image_bundle.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d9cb7acc02ae5e5241dda1a59cfa638272cc405",
+    "bytes": 6465
+  },
+  {
+    "path": "lib/jxl/enc_image_bundle.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1180a6da8fbc64f0dbd54f175dd6739b46df702",
+    "bytes": 1530
+  },
+  {
+    "path": "lib/jxl/enc_linalg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ca34a9ad5707acdd2aa5c7e4d8c95c22b6ffa03",
+    "bytes": 1100
+  },
+  {
+    "path": "lib/jxl/enc_linalg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9a36c7ca10f0083140841cf175d8b3d56259cb6",
+    "bytes": 598
+  },
+  {
+    "path": "lib/jxl/enc_linalg_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b5678863dbf73a538db0b88ad80aac0ca317ff12",
+    "bytes": 2519
+  },
+  {
+    "path": "lib/jxl/enc_modular.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1620a5be640fdc85d567c3b82d9433ad5ec32fce",
+    "bytes": 74353
+  },
+  {
+    "path": "lib/jxl/enc_modular.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de5291736b98b70a7bcd3eecbb0bc9473d3cf893",
+    "bytes": 5295
+  },
+  {
+    "path": "lib/jxl/enc_noise.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f823652f7473473d6598aa744f927daf5f3b2569",
+    "bytes": 13342
+  },
+  {
+    "path": "lib/jxl/enc_noise.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b4bf73fc4a3171684908b4a36dde10755234ef0",
+    "bytes": 1003
+  },
+  {
+    "path": "lib/jxl/enc_optimize.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "561aa736a5cf4fb4707b4f271595cba57f48523e",
+    "bytes": 4216
+  },
+  {
+    "path": "lib/jxl/enc_optimize_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4151c3eb831f61a65977a5f4d35a4d07ee1a73a9",
+    "bytes": 2712
+  },
+  {
+    "path": "lib/jxl/enc_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c7e54ae77eda6cb4231449131154a6ffd8e7dc5",
+    "bytes": 6908
+  },
+  {
+    "path": "lib/jxl/enc_patch_dictionary.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fdfc57d587fb09e230eb439500afb0ed45d387e",
+    "bytes": 32854
+  },
+  {
+    "path": "lib/jxl/enc_patch_dictionary.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2afb6959bc7db011cc55e11e8ca2d93075408e8e",
+    "bytes": 3656
+  },
+  {
+    "path": "lib/jxl/enc_photon_noise.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1933435753b9cf95cc82ef7e7b3c9c20f5618ac9",
+    "bytes": 3379
+  },
+  {
+    "path": "lib/jxl/enc_photon_noise.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d3c6d843afee62a97929d26aabe04ac8ce4885f8",
+    "bytes": 642
+  },
+  {
+    "path": "lib/jxl/enc_photon_noise_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "db172fb699617b3f34f47eb9bd8cdc57467bcf75",
+    "bytes": 1516
+  },
+  {
+    "path": "lib/jxl/enc_progressive_split.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "811c9455c213b821e514badebc21ac7a4d8b224f",
+    "bytes": 3161
+  },
+  {
+    "path": "lib/jxl/enc_progressive_split.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2cd169752afcbd39071f9a18e7d590878b409b1a",
+    "bytes": 4476
+  },
+  {
+    "path": "lib/jxl/enc_quant_weights.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a74593a0e5ee98be36b12d3d8684ee87b1f27088",
+    "bytes": 7959
+  },
+  {
+    "path": "lib/jxl/enc_quant_weights.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fac3cde2d8861b5f85aba8f842819ca3af88303a",
+    "bytes": 1702
+  },
+  {
+    "path": "lib/jxl/enc_splines.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b354d8bbb62f356b03f2f8f41fc2173f426cf174",
+    "bytes": 3226
+  },
+  {
+    "path": "lib/jxl/enc_splines.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f4aa4ae53dfe5a608a1459a419a6acd20e4f3358",
+    "bytes": 780
+  },
+  {
+    "path": "lib/jxl/enc_toc.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0237a01f366857d7f8aca460078657b5a02830c",
+    "bytes": 1757
+  },
+  {
+    "path": "lib/jxl/enc_toc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "574439c6ced0f9d1fb3d85b3273a9523aeb7fd52",
+    "bytes": 805
+  },
+  {
+    "path": "lib/jxl/enc_transforms-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cadd83b6de533fec1661e8985ae6b2fd26424a15",
+    "bytes": 26716
+  },
+  {
+    "path": "lib/jxl/enc_transforms.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f14c0eb99b581c438ae26ab1559fbd9924fb3b9",
+    "bytes": 1296
+  },
+  {
+    "path": "lib/jxl/enc_transforms.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ae0e71ff93750d0e3bd4adc9501aed01978f369",
+    "bytes": 998
+  },
+  {
+    "path": "lib/jxl/enc_xyb.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "796855c113a79835c1c5d7f520a1e0992e03796f",
+    "bytes": 15864
+  },
+  {
+    "path": "lib/jxl/enc_xyb.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37ae66d024cf5b6f9124690fc90e18b8a85fbfb1",
+    "bytes": 2015
+  },
+  {
+    "path": "lib/jxl/encode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12e6f2bcd23218222d73003386fd3b20cd30a360",
+    "bytes": 112715
+  },
+  {
+    "path": "lib/jxl/encode_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16ddd3205029bfcc09cfe6530512ba26a524519b",
+    "bytes": 24237
+  },
+  {
+    "path": "lib/jxl/encode_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c71855eaa9a11920d2bc639bb2d03eeea58ffbfc",
+    "bytes": 85334
+  },
+  {
+    "path": "lib/jxl/entropy_coder.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d86546557701629a769256bb78b1a43192ab7f4",
+    "bytes": 1991
+  },
+  {
+    "path": "lib/jxl/entropy_coder.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f66f54840d451f03c58793c3316c5b404be4ad46",
+    "bytes": 1515
+  },
+  {
+    "path": "lib/jxl/entropy_coder_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0389490d8eb3101a9bb31ba78c5f7873913f60d7",
+    "bytes": 1853
+  },
+  {
+    "path": "lib/jxl/epf.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc1d81e842ea0fe932e01de7a9b9e3a75fa2d9df",
+    "bytes": 4969
+  },
+  {
+    "path": "lib/jxl/epf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e4f056680c33d6fa873dbdcd62ea4e194b521b8",
+    "bytes": 1021
+  },
+  {
+    "path": "lib/jxl/fake_parallel_runner_testonly.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ca422e9a48d134ea3956de696013e4f9d6f8044",
+    "bytes": 2597
+  },
+  {
+    "path": "lib/jxl/fast_math_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "30029567cd7d4fe47f3dd03226ea150788af8761",
+    "bytes": 8865
+  },
+  {
+    "path": "lib/jxl/field_encodings.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6da6db3d3935062573a492b4b26e7a5f047654a7",
+    "bytes": 4000
+  },
+  {
+    "path": "lib/jxl/fields.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6cbdd2edaa74731c6f15bf6ac433617205939269",
+    "bytes": 20931
+  },
+  {
+    "path": "lib/jxl/fields.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1c37e2ca3f308f54c4d11ae93bebb241835919b",
+    "bytes": 13948
+  },
+  {
+    "path": "lib/jxl/fields_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8358bd6cdc16da56a1a29e90a916a598a764374a",
+    "bytes": 15444
+  },
+  {
+    "path": "lib/jxl/frame_dimensions.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7493f88b22568049d94b2cba20903de351041e7",
+    "bytes": 4091
+  },
+  {
+    "path": "lib/jxl/frame_header.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "afb578a1a68b441eb3c65034f9ee33b1e0e6d812",
+    "bytes": 19829
+  },
+  {
+    "path": "lib/jxl/frame_header.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d60a908350a170a87298191ce56bab5298bdd830",
+    "bytes": 16987
+  },
+  {
+    "path": "lib/jxl/fuzztest.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "870ecf1b140dd96565c49b430ad936af3950526d",
+    "bytes": 541
+  },
+  {
+    "path": "lib/jxl/gamma_correct_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "131ec4fa83d50bbb1ee95ecef3538907743cf2de",
+    "bytes": 1124
+  },
+  {
+    "path": "lib/jxl/gradient_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1be2ac6dca0b835f9942870e82d123b4453958e",
+    "bytes": 7626
+  },
+  {
+    "path": "lib/jxl/headers.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6ac044c5cc3e9bd8960932857cd3625471041e0",
+    "bytes": 6674
+  },
+  {
+    "path": "lib/jxl/headers.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3cce84dabcd6cddbc9ade04f52b9d4f5398b3fd2",
+    "bytes": 2419
+  },
+  {
+    "path": "lib/jxl/huffman_table.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9ae7865af62c515eee5db6e21fdf35b9f4859c07",
+    "bytes": 5302
+  },
+  {
+    "path": "lib/jxl/huffman_table.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11cdb2fc45961bfd557b1e4d5d89c20bc5b937e4",
+    "bytes": 870
+  },
+  {
+    "path": "lib/jxl/iaca_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e25d9316d59b24eddd7633c4ac86ddc3bc2286d3",
+    "bytes": 462
+  },
+  {
+    "path": "lib/jxl/icc_codec.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24b57532bf14f896d504751b8eec66ee080aa070",
+    "bytes": 16212
+  },
+  {
+    "path": "lib/jxl/icc_codec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "046487e6c3570df2cb23508c066284a1503b6a5e",
+    "bytes": 1125
+  },
+  {
+    "path": "lib/jxl/icc_codec_common.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0583396ada7a898942ede9df0251ba5e8a063b75",
+    "bytes": 5755
+  },
+  {
+    "path": "lib/jxl/icc_codec_common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2401f341406a5e070347f5e3f7c73b52ab028799",
+    "bytes": 4240
+  },
+  {
+    "path": "lib/jxl/icc_codec_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "304445271710144594a9948ebba31cceca8ad1cd",
+    "bytes": 10981
+  },
+  {
+    "path": "lib/jxl/image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7a05c82745a3411192560c8183e59217d08a5b5",
+    "bytes": 3457
+  },
+  {
+    "path": "lib/jxl/image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "633213d25731e725248729c8feabd0c26a9a80dd",
+    "bytes": 12584
+  },
+  {
+    "path": "lib/jxl/image_bundle.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6953c6a566a2fab086847ffc61ea7185a0148d4",
+    "bytes": 4512
+  },
+  {
+    "path": "lib/jxl/image_bundle.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1da70e318fb6862354306cdef4468bce5274cb3a",
+    "bytes": 9233
+  },
+  {
+    "path": "lib/jxl/image_bundle_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c92449968eefd622ce9d8c40e4cbc6af8c4e1936",
+    "bytes": 1420
+  },
+  {
+    "path": "lib/jxl/image_metadata.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14fac9d685dd2a989a7e0dce716c98d00c68d16c",
+    "bytes": 20547
+  },
+  {
+    "path": "lib/jxl/image_metadata.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e5bf6dc7e0904f6387790128f3d7512658214ad",
+    "bytes": 16094
+  },
+  {
+    "path": "lib/jxl/image_ops.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c87643a869d6485926e42c10e127de83250c3a0a",
+    "bytes": 3554
+  },
+  {
+    "path": "lib/jxl/image_ops.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0dc4948e8ecc2c15393cfad7ed129829dfc330ff",
+    "bytes": 10162
+  },
+  {
+    "path": "lib/jxl/image_ops_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c17660de9897ddd42b63a4a5f11b2267baebf73",
+    "bytes": 3480
+  },
+  {
+    "path": "lib/jxl/image_test_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3b2aaae0742124fbc76b2d11ff75b0f6a0ac589c",
+    "bytes": 8735
+  },
+  {
+    "path": "lib/jxl/inverse_mtf-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c63316f3f1021c6815b62f67d7a3a7e74a547e1",
+    "bytes": 2236
+  },
+  {
+    "path": "lib/jxl/jpeg",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b0771592e0ac2ff641a071f45de1f8fea5addad9",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_data.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b896f55240f141e06dbf99c3c711e0db17c03bd",
+    "bytes": 5210
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_data.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9d50bf9f84013e8bc402821c367985af9481130",
+    "bytes": 523
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_data_writer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fb664d3667a05dee0a5f61cd0bea470fedb935d",
+    "bytes": 33652
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_data_writer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6f70ff8b17402abb8e5123c39a524787b6be997",
+    "bytes": 844
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_output_chunk.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70aa8df949465201fc78449fbb02fda94208ff66",
+    "bytes": 2142
+  },
+  {
+    "path": "lib/jxl/jpeg/dec_jpeg_serialization_state.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9950dc17447593e4a361f943fa31b8c91a68758e",
+    "bytes": 2453
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_data.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3aeeb68047ad0e9d277bbe27653f07aaa8527a07",
+    "bytes": 14477
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_data.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe5fe75a019ccbf45ea6bd1a0ace3806bdfbf310",
+    "bytes": 1438
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_data_reader.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "149bde1cda19654a2992907c8373e74b73babea7",
+    "bytes": 35602
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_data_reader.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4389b2ffe3bfe5de1ee3d13b310afce9b174acbe",
+    "bytes": 1072
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_huffman_decode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38282e640a6d08402df680ebc8dde87bc0a5fc1a",
+    "bytes": 3229
+  },
+  {
+    "path": "lib/jxl/jpeg/enc_jpeg_huffman_decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc9bd17baa0b8b1ca1952ea8f9a2a550cbe6f0fd",
+    "bytes": 1915
+  },
+  {
+    "path": "lib/jxl/jpeg/jpeg_data.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87bb0eeb6506d2fb9e635da069f347cad877aa12",
+    "bytes": 18309
+  },
+  {
+    "path": "lib/jxl/jpeg/jpeg_data.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f1dceb06a85988b915d7b2609e6801985737387",
+    "bytes": 7176
+  },
+  {
+    "path": "lib/jxl/jxl.syms",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f398d71519f261803f9566419ca630639b59db3",
+    "bytes": 39
+  },
+  {
+    "path": "lib/jxl/jxl.version",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "26b0e9e54d9b1d2cb2667485172ab9ede0721cb7",
+    "bytes": 610
+  },
+  {
+    "path": "lib/jxl/jxl_osx.syms",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96bc568025d6b3947031891ca2de437a006dd8ed",
+    "bytes": 6
+  },
+  {
+    "path": "lib/jxl/jxl_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ddf98427b1f3da2a54c3e4988dbfb0ba979b3855",
+    "bytes": 69848
+  },
+  {
+    "path": "lib/jxl/lehmer_code.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2de2981c77cc434ded338e8c9287247c2dccb09",
+    "bytes": 2872
+  },
+  {
+    "path": "lib/jxl/lehmer_code_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3275b27dd4ec8f6be31877403798e60b74cfb508",
+    "bytes": 2902
+  },
+  {
+    "path": "lib/jxl/libjxl.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f5a9c43650f240c2069e9a3f2b8c4addeb8afc10",
+    "bytes": 404
+  },
+  {
+    "path": "lib/jxl/libjxl_cms.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "deab7367ac0044dfef605dcaf5368af8758d8fea",
+    "bytes": 429
+  },
+  {
+    "path": "lib/jxl/loop_filter.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "566ddd670089ee10024737934621798c40207e81",
+    "bytes": 3930
+  },
+  {
+    "path": "lib/jxl/loop_filter.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bebc046738282e330edc4901a40fdb041f7d4191",
+    "bytes": 2119
+  },
+  {
+    "path": "lib/jxl/luminance.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7af4b2f9a940f7b89a10359aa3aca114451b34ed",
+    "bytes": 711
+  },
+  {
+    "path": "lib/jxl/luminance.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31815768231baa3e77267bc46c60eb1eeb79641a",
+    "bytes": 653
+  },
+  {
+    "path": "lib/jxl/memory_manager_internal.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8806d246c90ca37ccf8f64311185cf82fa363af5",
+    "bytes": 5258
+  },
+  {
+    "path": "lib/jxl/memory_manager_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "30d2d8602627661f1d1dd7883d38128098f8e938",
+    "bytes": 6126
+  },
+  {
+    "path": "lib/jxl/modular",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ff191528f93a669f9e0e236f56f077af937e1af7",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/modular/encoding",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b961929359c356e30bcf906657bb0ce9cfe5b6bc",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/modular/encoding/context_predict.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a71bec24faf596b366626f90bfebb737013c75d",
+    "bytes": 25841
+  },
+  {
+    "path": "lib/jxl/modular/encoding/dec_ma.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8278005639c26db5ea4c6649cb2289a5f361e5ee",
+    "bytes": 5192
+  },
+  {
+    "path": "lib/jxl/modular/encoding/dec_ma.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1bce21b32b8332e714cf27e552af3dbd14fc8052",
+    "bytes": 2061
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_debug_tree.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f6d73a9ded4d9e872b6632fddb03b06035ea0d5e",
+    "bytes": 2905
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_debug_tree.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a87960db228a5b264b8d4afc815faa9b6a085c1a",
+    "bytes": 495
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_encoding.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3fd845b9edbf53e8bf5b8efc07428c2bf902e93f",
+    "bytes": 30517
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_encoding.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c2d7358065bde13d41ea16ddd7f86be68c2f504",
+    "bytes": 1651
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_ma.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96f47dd19b73bf7916491a41a8ef95352a995c79",
+    "bytes": 38538
+  },
+  {
+    "path": "lib/jxl/modular/encoding/enc_ma.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aaf823ef1ac48cc71fa1c7f24abb6a2bdb5c8b81",
+    "bytes": 6481
+  },
+  {
+    "path": "lib/jxl/modular/encoding/encoding.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2e4a00bc8c4fd146a10e6a25ab775fc18fff504",
+    "bytes": 28335
+  },
+  {
+    "path": "lib/jxl/modular/encoding/encoding.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0127d79238778b70c46a9a55afbdc42a3b149b48",
+    "bytes": 5432
+  },
+  {
+    "path": "lib/jxl/modular/encoding/ma_common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "71b78473213f3c5146157423a8ddf27dd0180c73",
+    "bytes": 638
+  },
+  {
+    "path": "lib/jxl/modular/modular_image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e5ab61f1ff8dbb3d9973ac2169061d374507b53",
+    "bytes": 3086
+  },
+  {
+    "path": "lib/jxl/modular/modular_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fdae8b9c6b0f7e3c23e20e3dc178497c9c366a5b",
+    "bytes": 3883
+  },
+  {
+    "path": "lib/jxl/modular/options.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5b08236ff2ff3972be781e2c05b5876fd0cd12b6",
+    "bytes": 3457
+  },
+  {
+    "path": "lib/jxl/modular/transform",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c4a30fb495b5e3062f73e856fb594be232a63f22",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_palette.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3392b4f8b62d05e1f17e2f8d3812787265949fb3",
+    "bytes": 24805
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_palette.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f3d66825b4a64b187e04e539216c4f983b90666",
+    "bytes": 737
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_rct.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6de214e5a35b40288e15c4434785e009c357ddb4",
+    "bytes": 2517
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_rct.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb5a193c8d9bda5095efebf00b4b32155aae5a82",
+    "bytes": 477
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_squeeze.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34dcd868eecb0cc4a83b7b2aa9f4c2776be3ee7e",
+    "bytes": 5283
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_squeeze.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "39b001017b3d7dad89755887c113b0fcfa1c9048",
+    "bytes": 594
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_transform.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bdaaf9f87eb6e9fabe3de331bef9ddd963aa4b85",
+    "bytes": 1585
+  },
+  {
+    "path": "lib/jxl/modular/transform/enc_transform.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "07659e1b0a614460bf4719c1ea590a2e026aa765",
+    "bytes": 697
+  },
+  {
+    "path": "lib/jxl/modular/transform/palette.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab4ff11002bc813dc937518782288b28972e1308",
+    "bytes": 7795
+  },
+  {
+    "path": "lib/jxl/modular/transform/palette.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9daf83e74314450b2396320cc9f9ed93f4d36b87",
+    "bytes": 5511
+  },
+  {
+    "path": "lib/jxl/modular/transform/rct.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff77812e6745b01f904e7c32edcc4215c3b06cc4",
+    "bytes": 5075
+  },
+  {
+    "path": "lib/jxl/modular/transform/rct.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ab57fec69e8f9b60ab77983c340455495498f07",
+    "bytes": 570
+  },
+  {
+    "path": "lib/jxl/modular/transform/squeeze.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de685f77bc2fb8b6342905c12d0055cb015a7274",
+    "bytes": 18538
+  },
+  {
+    "path": "lib/jxl/modular/transform/squeeze.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f56d6dd7e98a8333047136679909feee9b34bf49",
+    "bytes": 3502
+  },
+  {
+    "path": "lib/jxl/modular/transform/transform.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05a18215d1291c62b7cb58f280f16a057bd40773",
+    "bytes": 3557
+  },
+  {
+    "path": "lib/jxl/modular/transform/transform.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb46d0888f2005d55fec2633d546c39d96d461f9",
+    "bytes": 5395
+  },
+  {
+    "path": "lib/jxl/modular_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "030e46aeac05de361ff909c24b6cbd95bbf792e8",
+    "bytes": 20997
+  },
+  {
+    "path": "lib/jxl/noise.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c588c59d339411c6c8d86df7e50ef9e3eaef97a9",
+    "bytes": 1491
+  },
+  {
+    "path": "lib/jxl/opsin_image_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a00df6b8b8dd89cb20d4bbc70804a3cbd3c9e55a",
+    "bytes": 4577
+  },
+  {
+    "path": "lib/jxl/opsin_inverse_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aa1ae384c6b685d9e0c9f34d0f30e42b480d7d22",
+    "bytes": 2592
+  },
+  {
+    "path": "lib/jxl/opsin_params.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8aae4e3597f646be141ce3cb9fbd97290fb9e99b",
+    "bytes": 1409
+  },
+  {
+    "path": "lib/jxl/opsin_params.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ed2124fd7174a4f65c642d4dc886c5de56c9ce9",
+    "bytes": 788
+  },
+  {
+    "path": "lib/jxl/pack_signed.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "326f06e6f8709a5b4de44366953898b41cc9ac64",
+    "bytes": 1020
+  },
+  {
+    "path": "lib/jxl/padded_bytes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "826b79d21d658fcf339102d165be3ee6f12a36ff",
+    "bytes": 6302
+  },
+  {
+    "path": "lib/jxl/padded_bytes_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6c7c184f305130d7d29e87423c50246197ad49f",
+    "bytes": 2147
+  },
+  {
+    "path": "lib/jxl/passes_state.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be6302bfe6e25d04edd0558fc2e2657bc47965ed",
+    "bytes": 3253
+  },
+  {
+    "path": "lib/jxl/passes_state.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d697093590ce74406843eae73269f4c0a7e826b",
+    "bytes": 3085
+  },
+  {
+    "path": "lib/jxl/passes_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "418f5d056d96bc5fdc2081deb52effecd56c130b",
+    "bytes": 15466
+  },
+  {
+    "path": "lib/jxl/patch_dictionary_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c44bce2e9c5ce8e2e141bc085e378ea82f3bbcf",
+    "bytes": 756
+  },
+  {
+    "path": "lib/jxl/patch_dictionary_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32f021a764e91758d8c9d669cb6e5401e06a3b46",
+    "bytes": 2044
+  },
+  {
+    "path": "lib/jxl/preview_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c49bc361ce24772f906f906e751aa98388a547d",
+    "bytes": 2460
+  },
+  {
+    "path": "lib/jxl/quant_weights.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "793ae4399834aa69e90f013734b3f96e3b2e316f",
+    "bytes": 53271
+  },
+  {
+    "path": "lib/jxl/quant_weights.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60c84abded55309b956c8963649721662e2b7547",
+    "bytes": 15590
+  },
+  {
+    "path": "lib/jxl/quant_weights_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "514c5ca1bc811fd42903c844760b8e2aaee19b61",
+    "bytes": 10176
+  },
+  {
+    "path": "lib/jxl/quantizer-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64d273c5526033132a0c931cfb106632b7d215c8",
+    "bytes": 2354
+  },
+  {
+    "path": "lib/jxl/quantizer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41e2608d12c67b5f5aa8eab5227ad46a738635fc",
+    "bytes": 5682
+  },
+  {
+    "path": "lib/jxl/quantizer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a28d627b43e9619f7946f33c363a925ffca1bd1",
+    "bytes": 5930
+  },
+  {
+    "path": "lib/jxl/quantizer_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dcc3cbd5868734424b87efa19a58772272c92bb3",
+    "bytes": 3413
+  },
+  {
+    "path": "lib/jxl/rational_polynomial_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0162887c7287d7a2d3c8defd01773c65df363002",
+    "bytes": 8506
+  },
+  {
+    "path": "lib/jxl/render_pipeline",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "608c94f839b5d4c727237f55d5ac705e7b20a90e",
+    "bytes": null
+  },
+  {
+    "path": "lib/jxl/render_pipeline/low_memory_render_pipeline.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3853d330ef92b51ec33e06a5a9fa497e040d591a",
+    "bytes": 37553
+  },
+  {
+    "path": "lib/jxl/render_pipeline/low_memory_render_pipeline.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1d23b8bbffd359df7b792ed764ec236014d5b96",
+    "bytes": 4309
+  },
+  {
+    "path": "lib/jxl/render_pipeline/render_pipeline.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "047470257e9e29bdd06ab23b9a28c1d2fa92fc6a",
+    "bytes": 4863
+  },
+  {
+    "path": "lib/jxl/render_pipeline/render_pipeline.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "073f377f90d006b64be0a48cae20d315f7e2dbdf",
+    "bytes": 5019
+  },
+  {
+    "path": "lib/jxl/render_pipeline/render_pipeline_stage.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c9b83addd56d36c17344d1c60e29a65aa280ec9",
+    "bytes": 7067
+  },
+  {
+    "path": "lib/jxl/render_pipeline/render_pipeline_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "378588383d01266f144332027d43a04332a472b2",
+    "bytes": 20570
+  },
+  {
+    "path": "lib/jxl/render_pipeline/simple_render_pipeline.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2d34f2ce1b8e9acb893d8eedd49f4d218530b51d",
+    "bytes": 11414
+  },
+  {
+    "path": "lib/jxl/render_pipeline/simple_render_pipeline.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ddf0a9c9d196d1a96035ff9657071981a7b3cf6",
+    "bytes": 1456
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_blending.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96db74c8c0495aa0a99fc83a9fec9770734a72eb",
+    "bytes": 9036
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_blending.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aedc8c2e9972c5c52e6b9e8f92b6768cb5e0577c",
+    "bytes": 769
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_chroma_upsampling.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2bc88ada6778318994f4e85652485064a6f90570",
+    "bytes": 4441
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_chroma_upsampling.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b4d0cbdfd3bc3df6a7691e75036ca113cfa0432b",
+    "bytes": 828
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_cms.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ae0afbd78442715dd5448367bea1fada7084633e",
+    "bytes": 5194
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_cms.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23277ae6f735a8d46e3b64a1b35000e2af8746ec",
+    "bytes": 564
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_epf.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66fef87c56a8c8da6eb24853a35d0ff725d9a39a",
+    "bytes": 19466
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_epf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0fd7b672b10ae7784dd01833a26e90731d35b121",
+    "bytes": 1056
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_from_linear.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "daeefb23e06c19326d95808651c01bfec2078198",
+    "bytes": 6189
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_from_linear.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "548ab50b8ce4d3da3b9fd92e29fc6ee8c9edff75",
+    "bytes": 653
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_gaborish.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6313de05ec0d400afa0bf97ce43a6b541424f5d",
+    "bytes": 4061
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_gaborish.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55166e3ed8a92d3dedbbbfa14e2f0c9cf9709ddc",
+    "bytes": 712
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_noise.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a241183bedd543f8496bef34ea106ee11afef8b",
+    "bytes": 12135
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_noise.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06b4cb6bdb5d1e79ea7310bcc7c270b6d88bf62f",
+    "bytes": 883
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_patches.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f9863f026c29917a9d3beb3addda0e6be9e8ef7",
+    "bytes": 2118
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_patches.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3280e813e8f91ddc5dd25e7ca7b3f2b6595d1e73",
+    "bytes": 724
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_splines.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "670287ec8049b9c189eb3b45e95aae2c513018db",
+    "bytes": 2020
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_splines.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "363af393ec3aa7646b9805a3c4ada36addf83c2e",
+    "bytes": 583
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_spot.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e69b3a4fee61995a66bcc770913565b7b06c0309",
+    "bytes": 1915
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_spot.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "639e6849530fc0b26e5999b6597b30d8694f9e60",
+    "bytes": 647
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_to_linear.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96c90dd722bf28e9ea615aaea84035bd4b808e1b",
+    "bytes": 6338
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_to_linear.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ccee7b09f0a66c55b0c187db75f7246df9da8667",
+    "bytes": 656
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_tone_mapping.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66744e6935b630465eb6aca2c1cdd361541dc3f7",
+    "bytes": 5792
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_tone_mapping.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "57eb9a9abfb89a558c45c7fdebf025a6401897ed",
+    "bytes": 1340
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_upsampling.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad31d82be7c7dbc0ae17d6853b340c2acdc00e5a",
+    "bytes": 6388
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_upsampling.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7d5defd23cfc6e2295eb484fbb7c1dbd448fc2e9",
+    "bytes": 763
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_write.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "533ff5bd48294d368a33ff8a4315e0e833ac44b2",
+    "bytes": 27441
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_write.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a7f2dbb10456e59261b8be60271071f7cccd9a7",
+    "bytes": 1336
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_xyb.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "74d2899e5880f57a3d06187130077970d328ba87",
+    "bytes": 6654
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_xyb.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b06345c366f87d856d9128f3be453b8e6e152e0",
+    "bytes": 919
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_ycbcr.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f21a00c728f035cd198e02c673cd05f1988dd47e",
+    "bytes": 2789
+  },
+  {
+    "path": "lib/jxl/render_pipeline/stage_ycbcr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3e99af7a38b0cfd175654731b860288979a9a8c7",
+    "bytes": 648
+  },
+  {
+    "path": "lib/jxl/render_pipeline/test_render_pipeline_stages.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "363079e3082f5213eaf7fb607d6eb6c9aa2c39c7",
+    "bytes": 3509
+  },
+  {
+    "path": "lib/jxl/roundtrip_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56f040a6ff5bdd38d65848456775acf2c11fc46f",
+    "bytes": 46961
+  },
+  {
+    "path": "lib/jxl/simd_util-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77b207ffe816f413ebe307fc4ef471373fc99e18",
+    "bytes": 12991
+  },
+  {
+    "path": "lib/jxl/simd_util.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f33797877c6ccd12a63fd3c252c0d939369b01e",
+    "bytes": 1016
+  },
+  {
+    "path": "lib/jxl/simd_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a7ab50558df241a48764ce9ff947f1943ed11fa0",
+    "bytes": 382
+  },
+  {
+    "path": "lib/jxl/simd_util_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "94f7788a8e2185a7940a71b8779fb2717d24860f",
+    "bytes": 2465
+  },
+  {
+    "path": "lib/jxl/speed_tier_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4fedfaef6290d5ed5b6cb8f161293233a556004f",
+    "bytes": 4695
+  },
+  {
+    "path": "lib/jxl/splines.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52b1c05402ddc89e100f0309e61c086da6fc0e1e",
+    "bytes": 28564
+  },
+  {
+    "path": "lib/jxl/splines.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1de65a7312c0249611adea5d16894b3762882b1",
+    "bytes": 4819
+  },
+  {
+    "path": "lib/jxl/splines_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e61eabfdda60b70054158a251d981dcbcfce7841",
+    "bytes": 2364
+  },
+  {
+    "path": "lib/jxl/splines_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "03c77599cf6554c45a6387d78ae33145020666d1",
+    "bytes": 15784
+  },
+  {
+    "path": "lib/jxl/test_image.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef09c2673778c5c6ccd18209c1e1596e5fb4548c",
+    "bytes": 16167
+  },
+  {
+    "path": "lib/jxl/test_image.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48afe886607c5c23517de3f52c716ffe49b4516a",
+    "bytes": 2480
+  },
+  {
+    "path": "lib/jxl/test_memory_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab999e6b6f1c0f11ff428765227af3e2be1445a7",
+    "bytes": 643
+  },
+  {
+    "path": "lib/jxl/test_memory_manager.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a1ec6a5282b99eede3664d0a13ba8e8a064eaec",
+    "bytes": 441
+  },
+  {
+    "path": "lib/jxl/test_utils.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "895d86830f4abed78fd7b68d22557140f89cf717",
+    "bytes": 34069
+  },
+  {
+    "path": "lib/jxl/test_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a8d331221a0ce6c58dfed7720b51d525ff588662",
+    "bytes": 9421
+  },
+  {
+    "path": "lib/jxl/testing.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "492034760d737f9959220455ec1677d293ca32b0",
+    "bytes": 3242
+  },
+  {
+    "path": "lib/jxl/tf_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6cfd3734bb51a40af4a53ce9ea9877bbaaa7b060",
+    "bytes": 5563
+  },
+  {
+    "path": "lib/jxl/toc.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62b987f67f3ee2a7ee17a054994a4d9220252c6e",
+    "bytes": 3921
+  },
+  {
+    "path": "lib/jxl/toc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbc0549e67ab2304a68fc0d6007c80fdd0237fd6",
+    "bytes": 1973
+  },
+  {
+    "path": "lib/jxl/toc_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0494dc4d6b2d6955c8fe6b238c089a210b8ebab3",
+    "bytes": 3485
+  },
+  {
+    "path": "lib/jxl/transpose-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "efe7d90569d6699c9821b381fb675009af7e16bf",
+    "bytes": 7428
+  },
+  {
+    "path": "lib/jxl/version.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b5a462e52e187d73045dd39fac4f929d4ed457f9",
+    "bytes": 1181
+  },
+  {
+    "path": "lib/jxl/xorshift128plus-inl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7967655df1deca6d89f3abd3c3a4d0a88e923bd",
+    "bytes": 3076
+  },
+  {
+    "path": "lib/jxl/xorshift128plus_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4facf35f1bc460c9ac80601b443245a1234c5069",
+    "bytes": 17922
+  },
+  {
+    "path": "lib/jxl_benchmark.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d7a5a1144e80a569832f2c38937ac8db3bccd32d",
+    "bytes": 1329
+  },
+  {
+    "path": "lib/jxl_cms.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62d5b651fd5fcf25b8853a813f8e1c3098c2e93f",
+    "bytes": 2407
+  },
+  {
+    "path": "lib/jxl_extras.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a45d9c971ca2cbb4fc125247b779740c528b387",
+    "bytes": 6645
+  },
+  {
+    "path": "lib/jxl_lists.bzl",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99b205876f00a03250781553aa6e1e4b70060380",
+    "bytes": 18333
+  },
+  {
+    "path": "lib/jxl_lists.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff0d780e49769fc5a1bbb84ab1e33cf2a1fe7cb7",
+    "bytes": 15694
+  },
+  {
+    "path": "lib/jxl_tests.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88ffde8a6913ae0af04d5f98d130d40e0dea28d3",
+    "bytes": 3037
+  },
+  {
+    "path": "lib/jxl_threads.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "43552fc0d04ad6042f026dae119645d75d144288",
+    "bytes": 3232
+  },
+  {
+    "path": "lib/jxl_vars.bzl",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb00f6e34cb4c5cb4eed8402608e6a4f5b7dabbd",
+    "bytes": 1653
+  },
+  {
+    "path": "lib/lib.gni",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea91b53c3ee86d46fb9501ed811b70bbba76efcd",
+    "bytes": 18329
+  },
+  {
+    "path": "lib/nothing.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e65f587da6b33902f8db8b0ecf5fd15f4e57b402",
+    "bytes": 223
+  },
+  {
+    "path": "lib/threads",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "aaab8b64383fb3c69268f73e808a598c617fa444",
+    "bytes": null
+  },
+  {
+    "path": "lib/threads/libjxl_threads.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dfbaa3ffb54c7160fed90c9df826d90b27096789",
+    "bytes": 415
+  },
+  {
+    "path": "lib/threads/resizable_parallel_runner.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "238ccbf20c14cf969bfbc1e714c0378c99f12186",
+    "bytes": 6014
+  },
+  {
+    "path": "lib/threads/thread_parallel_runner.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "558c9dbe42303c5607a038fe2d56d2b90b3c9a60",
+    "bytes": 3838
+  },
+  {
+    "path": "lib/threads/thread_parallel_runner_internal.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "47b9e14b6781851b1bea42ae38d5edeec2753a21",
+    "bytes": 5792
+  },
+  {
+    "path": "lib/threads/thread_parallel_runner_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a26d481360b4ef2df859102e3544fe33e84b0aaf",
+    "bytes": 6305
+  },
+  {
+    "path": "lib/threads/thread_parallel_runner_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7da636c82f8913408006382f30c08f7582e21567",
+    "bytes": 4173
+  },
+  {
+    "path": "plugins",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "21ac8cf68b1352a48c06b3958d8f78a7ead8a9d6",
+    "bytes": null
+  },
+  {
+    "path": "plugins/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bff1bff29dff924662d5a9fc95ccecb02e5b05e2",
+    "bytes": 667
+  },
+  {
+    "path": "plugins/gdk-pixbuf",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e4a300fb56cdf9e48cab4b24e0bdc6c9365db41e",
+    "bytes": null
+  },
+  {
+    "path": "plugins/gdk-pixbuf/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12c1a83753e1a16dcb1476311a9dbd6889ef4331",
+    "bytes": 3479
+  },
+  {
+    "path": "plugins/gdk-pixbuf/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "185919436fcd48c90a8aee7c44ca71838fca4f42",
+    "bytes": 1540
+  },
+  {
+    "path": "plugins/gdk-pixbuf/jxl.thumbnailer",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1bcaab61fcbd2842c354d68ffbfe058148055574",
+    "bytes": 129
+  },
+  {
+    "path": "plugins/gdk-pixbuf/loaders_test.cache",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "95c62c8fc3224a6412712d28315261e0557e1bae",
+    "bytes": 492
+  },
+  {
+    "path": "plugins/gdk-pixbuf/pixbufloader-jxl.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6a0de0486b1a086ac1040185658791ed052b7810",
+    "bytes": 28488
+  },
+  {
+    "path": "plugins/gdk-pixbuf/pixbufloader_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2e5dc970321f88fc11b19f96c0f19049f9102a4",
+    "bytes": 1263
+  },
+  {
+    "path": "plugins/gimp",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3d4a0ce1092dbaae53165582526aec341883e2af",
+    "bytes": null
+  },
+  {
+    "path": "plugins/gimp/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f0a49005ed2be1a2ca92e10084a3ea7ef6369e78",
+    "bytes": 851
+  },
+  {
+    "path": "plugins/gimp/common.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a40340aacab53fea43d6f267543eabf96ff4a9dc",
+    "bytes": 625
+  },
+  {
+    "path": "plugins/gimp/common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3fe63c1a47d50d42f41ea44c874e5a810da00795",
+    "bytes": 898
+  },
+  {
+    "path": "plugins/gimp/file-jxl-load.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9abd6e8a9b916db591f6185f969961fda427d0c7",
+    "bytes": 17661
+  },
+  {
+    "path": "plugins/gimp/file-jxl-load.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef5b92fef62e1ad02f6e217b89b2e1ea7583eacb",
+    "bytes": 429
+  },
+  {
+    "path": "plugins/gimp/file-jxl-save.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65b637d4197490073b02e4b78fda7cf1b9518252",
+    "bytes": 30048
+  },
+  {
+    "path": "plugins/gimp/file-jxl-save.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c9d0e8091f95e2b8c8d8c63d6846fe70d9602b5d",
+    "bytes": 491
+  },
+  {
+    "path": "plugins/gimp/file-jxl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "743495a2e0c5198c4a47b0e59c3c132d26cd874d",
+    "bytes": 5689
+  },
+  {
+    "path": "plugins/mime",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b82c0ddeffc882926fcf2021936f57588e25a8d3",
+    "bytes": null
+  },
+  {
+    "path": "plugins/mime/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f2a0f919c17bc3d126d1a72c61af8c3b32f247e",
+    "bytes": 233
+  },
+  {
+    "path": "plugins/mime/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6954a91e4825ae2d6637c8e59499036bf20d7ba1",
+    "bytes": 1037
+  },
+  {
+    "path": "plugins/mime/image-jxl.xml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cab9018c7da48fd89c39c979cfa1479385196a55",
+    "bytes": 519
+  },
+  {
+    "path": "testdata",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "ff8d743aaba05b3014f17e5475e576242fa979fc",
+    "bytes": null
+  },
+  {
+    "path": "third_party",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "27c5f637c398c62b380ecb5c9340144dd9568b86",
+    "bytes": null
+  },
+  {
+    "path": "third_party/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "efe3e56f4684073c22eb5f64678c45efd5b7ea7c",
+    "bytes": 7637
+  },
+  {
+    "path": "third_party/HEVCSoftware",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "51b0db996e22dbf1d8afc86634305ace252f7b88",
+    "bytes": null
+  },
+  {
+    "path": "third_party/HEVCSoftware/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70ebaeba33f6ecaa401d831959938513d1a18305",
+    "bytes": 181
+  },
+  {
+    "path": "third_party/HEVCSoftware/cfg",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "97745346deaa7e504463221433398a2707f05216",
+    "bytes": null
+  },
+  {
+    "path": "third_party/HEVCSoftware/cfg/LICENSE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9d8844e42393a8ca9b79fb1cc81aa983b916cc3",
+    "bytes": 1744
+  },
+  {
+    "path": "third_party/HEVCSoftware/cfg/encoder_intra_main_scc_10.cfg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5f6b95836d598f4d538baf7f65d12be190eb5bd8",
+    "bytes": 11340
+  },
+  {
+    "path": "third_party/brotli",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "36533a866ed1ca4b75cf049f4521e4ec5fe24727",
+    "bytes": null
+  },
+  {
+    "path": "third_party/dirent.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3906084e03274e496ce0281f001649fe78f68515",
+    "bytes": 4626
+  },
+  {
+    "path": "third_party/dirent.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37a08f425be9260bce8f3c463a6f223629bd9de8",
+    "bytes": 1290
+  },
+  {
+    "path": "third_party/googletest",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "6910c9d9165801d8827d628cb72eb7ea9dd538c5",
+    "bytes": null
+  },
+  {
+    "path": "third_party/highway",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "457c891775a7397bdb0376bb1031e6e027af1c48",
+    "bytes": null
+  },
+  {
+    "path": "third_party/lcms",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "5176347635785e53ee5cee92328f76fda766ecc6",
+    "bytes": null
+  },
+  {
+    "path": "third_party/lcms2.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dec6be9367a8698141a29f1dff168a848a3ebe56",
+    "bytes": 2281
+  },
+  {
+    "path": "third_party/libjpeg-turbo",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "8ecba3647edb6dd940463fedf38ca33a8e2a73d1",
+    "bytes": null
+  },
+  {
+    "path": "third_party/libpng",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "872555f4ba910252783af1507f9e7fe1653be252",
+    "bytes": null
+  },
+  {
+    "path": "third_party/sjpeg",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "94e0df6d0f8b44228de5be0ff35efb9f946a13c9",
+    "bytes": null
+  },
+  {
+    "path": "third_party/sjpeg.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1a69252ba472611ffef5d42c4006806a5d3ebfc",
+    "bytes": 1173
+  },
+  {
+    "path": "third_party/skcms",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "b2e692629c1fb19342517d7fb61f1cf83d075492",
+    "bytes": null
+  },
+  {
+    "path": "third_party/skcms.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1e70c2aa07632d871e97eee671892d3b0ee95af6",
+    "bytes": 2918
+  },
+  {
+    "path": "third_party/testing.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d8ad927598b962985f5e0c13d305560978d450e",
+    "bytes": 2643
+  },
+  {
+    "path": "third_party/zlib",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
+    "bytes": null
+  },
+  {
+    "path": "tools",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e1d194a2eee9f14edde8b33b362126297ae2434e",
+    "bytes": null
+  },
+  {
+    "path": "tools/BUILD",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58e0e9a74cbffaf9d107162f3bdd146341844a28",
+    "bytes": 53
+  },
+  {
+    "path": "tools/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "423074d8bdc8979222f3a4fc2df4f579d6ac3306",
+    "bytes": 19252
+  },
+  {
+    "path": "tools/args.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0eba8771cc0142e98d2a08133aafed181cbddab4",
+    "bytes": 2746
+  },
+  {
+    "path": "tools/benchmark",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "36820fd3b03fa0eb8d9fac51d3763cd5713231f9",
+    "bytes": null
+  },
+  {
+    "path": "tools/benchmark/benchmark_args.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e3305f2eb3fff90f701831deee5c447cb166ff66",
+    "bytes": 11080
+  },
+  {
+    "path": "tools/benchmark/benchmark_args.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6ec68e35d2810beabd16067d4c53634be2dd239",
+    "bytes": 5259
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9365be93d7034bbd0583960fac331a5c0b42104",
+    "bytes": 6587
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44b5fa6248213b0f30254221dbcedc87f203e98a",
+    "bytes": 3023
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_avif.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "330659338352878a40d857ddbf8033f03a50f003",
+    "bytes": 16038
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_avif.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c3816cf41405ea48953dd4436ecb61d31a32ad53",
+    "bytes": 702
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_custom.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "530663cf46d61fd6a730fc5f7f80b92f45034574",
+    "bytes": 7534
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_custom.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e3d017ac6a2ae9a3bec9970cfd885a39b232811",
+    "bytes": 1659
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_jpeg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "757e3ae50731485ef2b7af2bd393d58ba61ced41",
+    "bytes": 12751
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_jpeg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9f0c35d215fc473898b2f19705326f8a840a4eb",
+    "bytes": 702
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_jxl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "525991506db0b405916db288003d349664c3ca82",
+    "bytes": 15915
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_jxl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d04731ffd40f7b3f0577d9f486b3527c69a32803",
+    "bytes": 843
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_png.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "357d62cd4d7fce6c8e43b920b99ffa507079ecfb",
+    "bytes": 2326
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_png.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f2958390d7634b0fec22833abf05f2828d41c7b",
+    "bytes": 715
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_webp.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44b22fb6ca5a1925fda2a1123e8afe7b92c2cfcf",
+    "bytes": 12131
+  },
+  {
+    "path": "tools/benchmark/benchmark_codec_webp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37d3c584e8c682c11b0c4ba1a5df3d55efbd7ae9",
+    "bytes": 778
+  },
+  {
+    "path": "tools/benchmark/benchmark_file_io.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e4662c61fd9bae4537740e37d0d3459babefe23",
+    "bytes": 6822
+  },
+  {
+    "path": "tools/benchmark/benchmark_file_io.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2d54b16fc7c006cda87dae58bdd8b24f10cce9a7",
+    "bytes": 1764
+  },
+  {
+    "path": "tools/benchmark/benchmark_stats.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd232d9df6bd12b3474efc9bd8552955df3970e8",
+    "bytes": 15334
+  },
+  {
+    "path": "tools/benchmark/benchmark_stats.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a52cd39ede88297fcf84b60a7fafe71302cfb590",
+    "bytes": 2380
+  },
+  {
+    "path": "tools/benchmark/benchmark_utils.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2559d674bd553977058a772de71e2f0b93d223fd",
+    "bytes": 3355
+  },
+  {
+    "path": "tools/benchmark/benchmark_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5df2bec59ae323d6075684f934bf2f30fccdc8dc",
+    "bytes": 1029
+  },
+  {
+    "path": "tools/benchmark/benchmark_xl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e4195406f62b71f0273b66175eb57aa2e48ce3e4",
+    "bytes": 42644
+  },
+  {
+    "path": "tools/benchmark/hm",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e9669dbb74f3e9b1bd61337f08eeb79e0f207da2",
+    "bytes": null
+  },
+  {
+    "path": "tools/benchmark/hm/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e54904eff9fa85980d0d3cd3e3b20c596ad0ba39",
+    "bytes": 579
+  },
+  {
+    "path": "tools/benchmark/hm/decode.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0aec27141f12780cb23e6cc53423582515d4c9af",
+    "bytes": 2253
+  },
+  {
+    "path": "tools/benchmark/hm/encode.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2f1753ba7473ab8fcde2b5495e9b1bfc0c8dae0d",
+    "bytes": 2093
+  },
+  {
+    "path": "tools/benchmark/metrics",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7732f2db1eebde3a28fca7f1001c5130fb99b537",
+    "bytes": null
+  },
+  {
+    "path": "tools/benchmark/metrics/compute-hdrvdp.m",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60e40bf32f807b1cc9203a45ce90dcc3e7847521",
+    "bytes": 438
+  },
+  {
+    "path": "tools/benchmark/metrics/compute-pumetrics.m",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df0fe4bd0e982ae1f3524a9d50575f867852a6f4",
+    "bytes": 599
+  },
+  {
+    "path": "tools/benchmark/metrics/compute_octave_metric.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a31c2665928f1215c709d23fca3942538944ab58",
+    "bytes": 1126
+  },
+  {
+    "path": "tools/benchmark/metrics/dists-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/fsim-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/fsim-y.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/gmsd-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/hdr_plots.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5628f2a3c27a8a1e602704270f8ef61cd0e04dc7",
+    "bytes": 411
+  },
+  {
+    "path": "tools/benchmark/metrics/hdrvdp-fixes.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23f3f17b6d69e71f6cc1c0c77218cd12223dc1c9",
+    "bytes": 3850
+  },
+  {
+    "path": "tools/benchmark/metrics/hdrvdp.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ddee7fa2eb725405e800baadbe6ed9374aa80a11",
+    "bytes": 371
+  },
+  {
+    "path": "tools/benchmark/metrics/iqa.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1be9699926b28ccd1c8a58cb5c704186bfdc110e",
+    "bytes": 2685
+  },
+  {
+    "path": "tools/benchmark/metrics/iqa_wrapper.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a67d4800c8a6b7505544fb1d1a56267c36a5a86b",
+    "bytes": 278
+  },
+  {
+    "path": "tools/benchmark/metrics/lpips-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/mrse.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "816aaf5ced3e81cf0202aec2b57d678737b3f40b",
+    "bytes": 1025
+  },
+  {
+    "path": "tools/benchmark/metrics/msssim-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/msssim-y.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/nlpd-y.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/plots.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "04b2bb24e56c5c810b81032ff0a739a9c831ae7d",
+    "bytes": 6718
+  },
+  {
+    "path": "tools/benchmark/metrics/prepare_metrics.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f82e52c80ef49bba901059275a1509d43d883231",
+    "bytes": 1586
+  },
+  {
+    "path": "tools/benchmark/metrics/pupsnr.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5159fafb4d0094c8d07453ebf3163b0eec995f27",
+    "bytes": 371
+  },
+  {
+    "path": "tools/benchmark/metrics/pussim.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "4a0696dd362efa3f628de60ba094ca840e97d829",
+    "bytes": 371
+  },
+  {
+    "path": "tools/benchmark/metrics/run_all_hdr_metrics.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a0dbe92c5a9ad42f0fdbcbcd2b46b6cafed736be",
+    "bytes": 678
+  },
+  {
+    "path": "tools/benchmark/metrics/run_all_sdr_metrics.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6c9528e8ac56b7a031af8701c1cafc1f600b5863",
+    "bytes": 1070
+  },
+  {
+    "path": "tools/benchmark/metrics/sdr_plots.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "435e530f2885f486289359535068f568ed87d067",
+    "bytes": 411
+  },
+  {
+    "path": "tools/benchmark/metrics/ssim-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/ssim-y.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/ssimulacra.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "007a16b92bfbc469b21e6624c4e4ec923988defb",
+    "bytes": 318
+  },
+  {
+    "path": "tools/benchmark/metrics/vif-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/benchmark/metrics/vmaf.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6e6d7568d5a52686d4225f9dbd02878776106d1c",
+    "bytes": 1633
+  },
+  {
+    "path": "tools/benchmark/metrics/vsi-rgb.sh",
+    "mode": "120000",
+    "type": "blob",
+    "sha": "9e57c8f660c4e4c89b92412ced57808bd5d09981",
+    "bytes": 14
+  },
+  {
+    "path": "tools/butteraugli_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ed6ff5d75d20ed858549c67903417a46795934d",
+    "bytes": 6770
+  },
+  {
+    "path": "tools/cjpegli.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "08f5dc4ac8fd0379b96a052ff21311d408cc09f8",
+    "bytes": 9389
+  },
+  {
+    "path": "tools/cjxl_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f65c224f85e2b86910e3065979c58a2833b8e98",
+    "bytes": 8793
+  },
+  {
+    "path": "tools/cjxl_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85b9c1159854423f773b2aad565c9ee78ba85ec7",
+    "bytes": 49305
+  },
+  {
+    "path": "tools/cmdline.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0e0feca39e0df1e6da239f4f5a121a7bba9d5fb4",
+    "bytes": 3413
+  },
+  {
+    "path": "tools/cmdline.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "088fd06dd0dbef7cffea6318115f72e83082813e",
+    "bytes": 14780
+  },
+  {
+    "path": "tools/codec_config.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8efc26c22136e2d337fd4ec9fd884bb4377ad441",
+    "bytes": 1311
+  },
+  {
+    "path": "tools/codec_config.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d1c73f79eed2ee79a73b9236967aa18c905f0f5",
+    "bytes": 621
+  },
+  {
+    "path": "tools/color_encoding_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a005eeab87d3daf4cb5bea875c8db86a7887793e",
+    "bytes": 855
+  },
+  {
+    "path": "tools/comparison_viewer",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "25794be76ce619e94cd275ada3ed3f99cffc9903",
+    "bytes": null
+  },
+  {
+    "path": "tools/comparison_viewer/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "db8c1d72290a9ed811ab8762c533f2f32295a968",
+    "bytes": 1603
+  },
+  {
+    "path": "tools/comparison_viewer/codec_comparison_window.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ecd5798ac901be085e154e646d85557bac434ba",
+    "bytes": 11211
+  },
+  {
+    "path": "tools/comparison_viewer/codec_comparison_window.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb233149cf44eafd54d093ee84aeb91495008f4c",
+    "bytes": 2305
+  },
+  {
+    "path": "tools/comparison_viewer/codec_comparison_window.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85ba81021637df9dedcce5ae84b4f519daf63d7f",
+    "bytes": 5076
+  },
+  {
+    "path": "tools/comparison_viewer/compare_codecs.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ab4c8df26aa3c5d7df9c71cab030fb2404c409d",
+    "bytes": 2538
+  },
+  {
+    "path": "tools/comparison_viewer/compare_images.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b63152f27da1cd110f6739b7bb8aae044369fb9e",
+    "bytes": 5558
+  },
+  {
+    "path": "tools/comparison_viewer/image_loading.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb267239dce829ee58176fc3e6c13cc6b3d26de2",
+    "bytes": 4634
+  },
+  {
+    "path": "tools/comparison_viewer/image_loading.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37baaef1b196973b886380549fbedf12e536a93b",
+    "bytes": 952
+  },
+  {
+    "path": "tools/comparison_viewer/settings.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8bdabc8572c58e16c58a7e5fb161d6bb02ea77c0",
+    "bytes": 3143
+  },
+  {
+    "path": "tools/comparison_viewer/settings.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41ed2c1c6bba0ecf2a2f34bd4359bfc37e8d68a5",
+    "bytes": 1023
+  },
+  {
+    "path": "tools/comparison_viewer/settings.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b917280c18f10a386a191843240adcd4bd2f0549",
+    "bytes": 5593
+  },
+  {
+    "path": "tools/comparison_viewer/split_image_renderer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "911229ce7ae2ccb9b913f2f7bf7e948eae3e3d83",
+    "bytes": 7780
+  },
+  {
+    "path": "tools/comparison_viewer/split_image_renderer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "309f8804a27373ec3ac8e365745509c390371137",
+    "bytes": 2657
+  },
+  {
+    "path": "tools/comparison_viewer/split_image_view.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "00bef4bdf5c8695443f5bb229e0a3f091448835d",
+    "bytes": 2794
+  },
+  {
+    "path": "tools/comparison_viewer/split_image_view.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "33a7ee6194bc5ca7f893448bd08387b8177282ed",
+    "bytes": 1002
+  },
+  {
+    "path": "tools/comparison_viewer/split_image_view.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3b80c9473ce406030a54eaf7b8c34c4686e9d44",
+    "bytes": 4266
+  },
+  {
+    "path": "tools/conformance",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "506ccdde4da53a406a283df06af6fee08a076072",
+    "bytes": null
+  },
+  {
+    "path": "tools/conformance/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "36249048c59209dd0c57166dff5a27305f17da24",
+    "bytes": 813
+  },
+  {
+    "path": "tools/conformance/conformance.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6f5ccb659f10c107f1c08baaf62362904b35e988",
+    "bytes": 10348
+  },
+  {
+    "path": "tools/conformance/generator.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e2a9b2e66a4529c7d4c152e3210af24591fe18a4",
+    "bytes": 4579
+  },
+  {
+    "path": "tools/conformance/lcms2.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7f6550def9a885379f693dbd546903b12e0140b",
+    "bytes": 3944
+  },
+  {
+    "path": "tools/conformance/tooling_test.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "40dfdaf73cf554a85469ce0f1821241863a56072",
+    "bytes": 1521
+  },
+  {
+    "path": "tools/decode_and_encode.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b93595fe7ea0378b18e0ead06081e248a48fe124",
+    "bytes": 2162
+  },
+  {
+    "path": "tools/decode_basic_info_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "08d4a9ac124cef6b21086f5b9316ab65a7e5aa88",
+    "bytes": 2144
+  },
+  {
+    "path": "tools/demo_vardct_select.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3412fa1a29b8620c17b234c279d57885cd13a3e5",
+    "bytes": 2437
+  },
+  {
+    "path": "tools/djpegli.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a3843672f016773fc754bc1d5468bd940f90ad1",
+    "bytes": 5871
+  },
+  {
+    "path": "tools/djxl_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5228152ec06ae2922f368f165076ddd4af2fea52",
+    "bytes": 21954
+  },
+  {
+    "path": "tools/djxl_fuzzer_corpus.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b61bf85d73e9c0fad1f03ad25e54237e6c7347f",
+    "bytes": 17132
+  },
+  {
+    "path": "tools/djxl_fuzzer_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5da3baa329d1e689eb98d4d39e737fc0c35a6b6",
+    "bytes": 1916
+  },
+  {
+    "path": "tools/djxl_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "090189c2927d0b9c202613c4d6dc5ca7d9275044",
+    "bytes": 23855
+  },
+  {
+    "path": "tools/example_tree.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06e2ed2e0167ca846f693c38c0930b919e5e47d1",
+    "bytes": 1123
+  },
+  {
+    "path": "tools/example_tree2.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29ef70e8167d50f72696d0563c80cca5cfbba1eb",
+    "bytes": 1797
+  },
+  {
+    "path": "tools/fast_lossless",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "eeee64015ce31e978f72886c02eadf2ae19e7d17",
+    "bytes": null
+  },
+  {
+    "path": "tools/fast_lossless/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "567609b1234a9b8806c5a05da6c866e480aa148d",
+    "bytes": 7
+  },
+  {
+    "path": "tools/fast_lossless/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5f99c133d8fda1695324ec6d5e56edb7e9a0cf0a",
+    "bytes": 544
+  },
+  {
+    "path": "tools/fast_lossless/build-android.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "cf037f005eee9725970291e9bc1bc9b4d95aa7c3",
+    "bytes": 1058
+  },
+  {
+    "path": "tools/fast_lossless/build.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2bbc76b5051ad47d0b5252aeda8940386c2c4a40",
+    "bytes": 1012
+  },
+  {
+    "path": "tools/fast_lossless/cross_compile_aarch64.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "aa8833db1838c4810f670b8c79d9713e56d2e08d",
+    "bytes": 982
+  },
+  {
+    "path": "tools/fast_lossless/fast_lossless_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6258ce325ff96650ef7713c2bd6bc84e343215ad",
+    "bytes": 3447
+  },
+  {
+    "path": "tools/fast_lossless/pam-input.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "865091eb94ecf060ce92c61d0a354533b208d2f2",
+    "bytes": 8314
+  },
+  {
+    "path": "tools/fields_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9e26deb05e541ce65718027caae759bbabac921",
+    "bytes": 3222
+  },
+  {
+    "path": "tools/file_io.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de9004faa708aad949d29d6d076ac17e8fdab415",
+    "bytes": 4065
+  },
+  {
+    "path": "tools/flicker_test",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fd6b01d7f463d76e96aea9a1ae4148e7cd5a30ce",
+    "bytes": null
+  },
+  {
+    "path": "tools/flicker_test/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "427a34f100b281cdb36f20882789bb95d497e14c",
+    "bytes": 857
+  },
+  {
+    "path": "tools/flicker_test/main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9617765ba0630239dea519897c3f31af9073de72",
+    "bytes": 628
+  },
+  {
+    "path": "tools/flicker_test/parameters.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "460867be8f4cc859e19bb63493e666b97c91acf9",
+    "bytes": 3215
+  },
+  {
+    "path": "tools/flicker_test/parameters.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "777d479d8d1ba4f8399c0b1423a6d6d214e9f8ef",
+    "bytes": 792
+  },
+  {
+    "path": "tools/flicker_test/setup.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff172861bf8940e23d62dc07cc9f490167f79a33",
+    "bytes": 5781
+  },
+  {
+    "path": "tools/flicker_test/setup.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e034e28430c3da8d2252e0fa96d571195320295a",
+    "bytes": 1052
+  },
+  {
+    "path": "tools/flicker_test/setup.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44b850c5aa0b8988bf74c639b906787fed5669a3",
+    "bytes": 12804
+  },
+  {
+    "path": "tools/flicker_test/split_view.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87df95ecc7de5c95dcc21ff8ef147fdb96e91159",
+    "bytes": 5669
+  },
+  {
+    "path": "tools/flicker_test/split_view.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37c5f7eb787e7f0ff313f5b3e28cb22c2c36200d",
+    "bytes": 2033
+  },
+  {
+    "path": "tools/flicker_test/test_window.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "abc702b09ce6d57f3b4f7e4153f8b7bb3f3ac349",
+    "bytes": 6979
+  },
+  {
+    "path": "tools/flicker_test/test_window.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad712afec83c63c066dee8cc0d4f534498a9a28c",
+    "bytes": 1381
+  },
+  {
+    "path": "tools/flicker_test/test_window.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd42873d13e071d35d571a797f0f0757d36c47bd",
+    "bytes": 3411
+  },
+  {
+    "path": "tools/fuzzer_stub.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cbe89d44f76337d9204a60927f7d3943b2728c83",
+    "bytes": 1606
+  },
+  {
+    "path": "tools/gauss_blur.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42ed8ee4777f409764b21b1e59d82b7de8f250ff",
+    "bytes": 19783
+  },
+  {
+    "path": "tools/gauss_blur.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6333dcc9718752d3305e5dbb2c70ff9c1e8acf8b",
+    "bytes": 2065
+  },
+  {
+    "path": "tools/gauss_blur_gbench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "72be870ba4c0963f35539cb20ad1dac44a352a36",
+    "bytes": 3098
+  },
+  {
+    "path": "tools/gauss_blur_test.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e7cc06d07b3d5e80325e327e9eb5d3d1a4a7698",
+    "bytes": 28398
+  },
+  {
+    "path": "tools/git_version.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4d216e8f577e4cf2e705dcfadb0057a4d563d763",
+    "bytes": 1110
+  },
+  {
+    "path": "tools/hdr",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "34f71ae60dd7fb5d6d07bf07795fb7c3188de5aa",
+    "bytes": null
+  },
+  {
+    "path": "tools/hdr/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba9fc1dec9fea07e83fcb0b93092237516337323",
+    "bytes": 6539
+  },
+  {
+    "path": "tools/hdr/display_to_hlg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e86ac9f5c34b469264e71fb3916ec2026d86899",
+    "bytes": 3517
+  },
+  {
+    "path": "tools/hdr/exr_to_pq.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3889983b9cddbd7848cdb6516ed173065f3de794",
+    "bytes": 6657
+  },
+  {
+    "path": "tools/hdr/generate_lut_template.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b2010dde592752530df6e0e65259c8ebb9b18e2",
+    "bytes": 2620
+  },
+  {
+    "path": "tools/hdr/image_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "962f1cbc4c5c59784aa7d95efba7991a35f5d926",
+    "bytes": 6768
+  },
+  {
+    "path": "tools/hdr/local_tone_map.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11e2f2111fecd3315968b5bc7fe7dd905533d7f4",
+    "bytes": 13198
+  },
+  {
+    "path": "tools/hdr/pq_to_hlg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6284dddddbb2c308459562a1df6f3e55a1b078d7",
+    "bytes": 3547
+  },
+  {
+    "path": "tools/hdr/render_hlg.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f73418196c22f5bb65ef08ff64a8c0f335e99032",
+    "bytes": 4002
+  },
+  {
+    "path": "tools/hdr/texture_to_cube.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c189242fcc6897a959986ae21ec423663310875",
+    "bytes": 2581
+  },
+  {
+    "path": "tools/hdr/tone_map.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5862a2e7a9210b66d75813fc26fd550781259702",
+    "bytes": 3812
+  },
+  {
+    "path": "tools/icc_codec_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c96de8e99412408d9fe02961ad3d48c4825142a",
+    "bytes": 3321
+  },
+  {
+    "path": "tools/icc_detect",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "cd25e9a53f9f7b756f31e1533a0338005b2be485",
+    "bytes": null
+  },
+  {
+    "path": "tools/icc_detect/icc_detect.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "deca6d7d192f8db6c09852e0978080f727336271",
+    "bytes": 512
+  },
+  {
+    "path": "tools/icc_detect/icc_detect_empty.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "421ac50e93e242f725b42b64646b5a515c3faf4a",
+    "bytes": 393
+  },
+  {
+    "path": "tools/icc_detect/icc_detect_win32.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f06e6885184e3ce0c788c8897eb0313932c5315c",
+    "bytes": 1852
+  },
+  {
+    "path": "tools/icc_detect/icc_detect_x11.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e67b30ebf140d4295cf3fc9501c82783da0e801c",
+    "bytes": 2529
+  },
+  {
+    "path": "tools/icc_simplify.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d54ca98b096b29a0b94a8d08e3e045d3d5471327",
+    "bytes": 2923
+  },
+  {
+    "path": "tools/jni",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "169f941b7c72b4024b484c225087db90088770b0",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "454050739912c0ebd43240367eb2c25029187254",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "17cbfbd2df3bc16b60eaaf0e5753c1c22a89cf24",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e6181a999c06f3f9b0a65a766fca3eadd781ee20",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1f48e59d2cbc607172fe2601cdea8f605791a6b6",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/Encoder.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "617bdee414217eea42e62b4a8db727fa465f120a",
+    "bytes": 2623
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/EncoderTest.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0659cb92c0f5d58b39fffef45869368d2dce31d5",
+    "bytes": 1309
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/JniHelper.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99daa1d051838200884e1da47a0592d18e2444aa",
+    "bytes": 1295
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/encoder_jni.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5972b6e2a499899f1b2cd205bced2d9eccfe03dd",
+    "bytes": 10015
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/encoder_jni.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c35cff01be6c7e6009cd7b654069a442b3b15fb",
+    "bytes": 963
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegli/wrapper/encoder_jni_onload.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76936ae19cb91b616bf21ce803ea078f613712a7",
+    "bytes": 573
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9137c464e9d9c7121129bfbd254fe6efa00fd47c",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b542b0d46ec10683d31cf94c1c0ff6fba76b247d",
+    "bytes": null
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/Decoder.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7af5da495609a7c20560b2ec661d857c27a7fb4a",
+    "bytes": 1671
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/DecoderJni.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a2f2bf7edec10f33da43a1b6251b29b30f23ef7",
+    "bytes": 2267
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/DecoderTest.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "330d4c6e05343679802bb26554152ee88d270676",
+    "bytes": 3693
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/ImageData.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a449529a5a43b82ef8e4167051cc2aabdda9f18d",
+    "bytes": 675
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/JniHelper.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "02a25f76462e15d504729ece3c3579bdc47bb80e",
+    "bytes": 1295
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/PixelFormat.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5df122574048e80ad7e28988f60edfeadd46a496",
+    "bytes": 303
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/Status.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a87206a166b78936a4c2a8668cb3c82725c011d2",
+    "bytes": 392
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/StreamInfo.java",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2419b37f23bef2c134b4236da775225d8911582c",
+    "bytes": 433
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/decoder_jni.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef41bb876b1b8427bb1c98455d15ad9a64c3bba3",
+    "bytes": 8582
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/decoder_jni.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8237fc95a2b405b5096a858f7cc271815835e85e",
+    "bytes": 1356
+  },
+  {
+    "path": "tools/jni/org/jpeg/jpegxl/wrapper/decoder_jni_onload.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5e6ba3e0fe1eeddb814d28288594aa573cd5018",
+    "bytes": 1458
+  },
+  {
+    "path": "tools/jpegli_dec_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8dadac279b2332e2eece59ab9e6ea63eacd6801b",
+    "bytes": 6833
+  },
+  {
+    "path": "tools/jpegli_dec_fuzzer_corpus.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8902ab6ca97bd6a38656e217d505860b9af5c05f",
+    "bytes": 11759
+  },
+  {
+    "path": "tools/jxl_from_tree.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65693a35d16b9b2f3c138bb19e684cb7a327e08c",
+    "bytes": 18809
+  },
+  {
+    "path": "tools/jxlinfo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88689cf0fd6e88f2ce71a95e82c117458d7803fc",
+    "bytes": 20336
+  },
+  {
+    "path": "tools/libjxl_test.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f56a1fa414511262c412263ebea0e889da3fc2a5",
+    "bytes": 548
+  },
+  {
+    "path": "tools/no_memory_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a39daac221cf2ae06dc6ee3ceab3bb9bfcfb9988",
+    "bytes": 657
+  },
+  {
+    "path": "tools/no_memory_manager.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28de15c2702508deeacf6f48f5232413d89fa762",
+    "bytes": 439
+  },
+  {
+    "path": "tools/optimizer",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8c88c8ddc43ec93a3a8fba94ad89b79e82ade8f5",
+    "bytes": null
+  },
+  {
+    "path": "tools/optimizer/apply_simplex.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2f56766ebab01709d01dff7da8814983e33ebd7b",
+    "bytes": 3840
+  },
+  {
+    "path": "tools/optimizer/simplex_fork.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a63589d0aed19df0760a8acea1456143a9046135",
+    "bytes": 7433
+  },
+  {
+    "path": "tools/optimizer/update_jpegli_global_scale.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "1a57c59db67f0356753b653e8255094064ba7e84",
+    "bytes": 3090
+  },
+  {
+    "path": "tools/rans_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51fb7a904bb08df9574725506e6046ba5bef4b7d",
+    "bytes": 2470
+  },
+  {
+    "path": "tools/scripts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a534c6af6a5a1dd851f2d36077d72514d0291657",
+    "bytes": null
+  },
+  {
+    "path": "tools/scripts/bisector",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b6a82d0b4d771ae1c56176676ae53706a1ab5559",
+    "bytes": 10294
+  },
+  {
+    "path": "tools/scripts/build_cleaner.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7a357103d8bb6cd1b14f3b6cd7de5d7b99b70405",
+    "bytes": 9561
+  },
+  {
+    "path": "tools/scripts/build_stats.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d95396968ac87471e5729469db395493c3fe026c",
+    "bytes": 14518
+  },
+  {
+    "path": "tools/scripts/check_author.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7e168593351eb3f839ceb21c7007528db251a4ef",
+    "bytes": 3703
+  },
+  {
+    "path": "tools/scripts/cjxl_bisect_bpp",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "35f0f332889a2041e1fb52f527bf3c34cc6f8334",
+    "bytes": 1594
+  },
+  {
+    "path": "tools/scripts/cjxl_bisect_size",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f006a00a85e406c965652f8d9164ed55f630cc6c",
+    "bytes": 1308
+  },
+  {
+    "path": "tools/scripts/demo_progressive_saliency_encoding.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6eb5cadd5401ecfcb93e267544db18cd5165c67a",
+    "bytes": 6944
+  },
+  {
+    "path": "tools/scripts/fix_headers.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "77d8879e054ed1e4303a03a493a1d5360069762e",
+    "bytes": 898
+  },
+  {
+    "path": "tools/scripts/jpegli_tools_test.sh",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9e8501a4323d58ec32ad1700427bbf5d2518898",
+    "bytes": 9392
+  },
+  {
+    "path": "tools/scripts/jxl-eval.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e28107cfea4dbd1ea2653f54e709a3952f2ed6a0",
+    "bytes": 3060
+  },
+  {
+    "path": "tools/scripts/ossfuzz-build.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9412e2c272201ae6eac7446d417d71b0750d8361",
+    "bytes": 2008
+  },
+  {
+    "path": "tools/scripts/progressive_saliency.conf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "987651a431968d82103377f7d9e285b41c72df26",
+    "bytes": 1574
+  },
+  {
+    "path": "tools/scripts/progressive_sizes.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9aeff07b1726893883d3dda0bad99852573c5528",
+    "bytes": 758
+  },
+  {
+    "path": "tools/scripts/reference_zip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "84e44998d96711e7bf113bcfdf822f66424a338c",
+    "bytes": 1778
+  },
+  {
+    "path": "tools/scripts/roundtrip_test.sh",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d2779d54a5c5376c36f5bef01bdebd4dadecb0e6",
+    "bytes": 5148
+  },
+  {
+    "path": "tools/scripts/test_cost-arm64-lowprecision.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92045e2f9204e641789921c0dcc1a44e7872cd19",
+    "bytes": 68578
+  },
+  {
+    "path": "tools/scripts/test_cost-arm64.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d196ed9da84d99279bd67afb3e160b32cac99d0",
+    "bytes": 68013
+  },
+  {
+    "path": "tools/scripts/test_cost-armhf.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "988c96de56f8d9df52e42e5a6284578256671a60",
+    "bytes": 68129
+  },
+  {
+    "path": "tools/scripts/test_cost-i386.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "718789ffd68b0c02bd417a82b32020f6242b4798",
+    "bytes": 73964
+  },
+  {
+    "path": "tools/scripts/transform_sources_list.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1194fe0738998d90580707e0d7786957f47656bc",
+    "bytes": 1890
+  },
+  {
+    "path": "tools/scripts/typos.toml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7843c46a57e7cc2683dcedd0c1103cdc52ebe89",
+    "bytes": 1058
+  },
+  {
+    "path": "tools/set_from_bytes_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ba6087ee48de2ab4004ff49f6e5227bccbd4687",
+    "bytes": 1892
+  },
+  {
+    "path": "tools/speed_stats.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6a96996cd19f018dbc6a4cc1aec90f66acfa39b",
+    "bytes": 3076
+  },
+  {
+    "path": "tools/speed_stats.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "870523f6f1b04e6752abc762c9ef698efba1a742",
+    "bytes": 1409
+  },
+  {
+    "path": "tools/ssimulacra.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99b21ccdffbf6462c7f6e124bf91b998ea343f97",
+    "bytes": 12579
+  },
+  {
+    "path": "tools/ssimulacra.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fac0b71ea60c3a1e15f106651136c5bcc256eeb3",
+    "bytes": 858
+  },
+  {
+    "path": "tools/ssimulacra.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cedda2ae13993dface2cbc35424eb32d4dc03f32",
+    "bytes": 16032
+  },
+  {
+    "path": "tools/ssimulacra2.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb84bf5ce3a740f04cf7c62f6fb6a92e8ab22a97",
+    "bytes": 20589
+  },
+  {
+    "path": "tools/ssimulacra2.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "68337977752419a3c099403788581e0b1e31654a",
+    "bytes": 1058
+  },
+  {
+    "path": "tools/ssimulacra2_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6237f0454c77518c7d909de3d831489ea6656cf",
+    "bytes": 3489
+  },
+  {
+    "path": "tools/ssimulacra_main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7090ae82f8b40d0daf256129173b1b11e9ca6bf",
+    "bytes": 2750
+  },
+  {
+    "path": "tools/streaming_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "72ea34a6dfaa683f8ed4515639d39b8f8edcf8d1",
+    "bytes": 13074
+  },
+  {
+    "path": "tools/thread_pool_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cfcefeb85603309fa90654026ee0c99daef721c4",
+    "bytes": 1473
+  },
+  {
+    "path": "tools/tool_version.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "152689dbe5344ae5e008170c835fa2b747ef34f5",
+    "bytes": 406
+  },
+  {
+    "path": "tools/tool_version.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6f7c16253dbc2ee01bdacffc568beb267242acd",
+    "bytes": 581
+  },
+  {
+    "path": "tools/tracking_memory_manager.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e8c8aa26f1f3d609ec40a9379dce2175dfc5932a",
+    "bytes": 3582
+  },
+  {
+    "path": "tools/tracking_memory_manager.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "07ca86fbf7424b1c8995078f5685db169f38e599",
+    "bytes": 1372
+  },
+  {
+    "path": "tools/transforms_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9a1c836b7083a98c0747d7295795f53d4765315",
+    "bytes": 5944
+  },
+  {
+    "path": "tools/upscaling_coefficients",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4a22031aab230e2a2ab02b863ad03f5c1a44781d",
+    "bytes": null
+  },
+  {
+    "path": "tools/upscaling_coefficients/generate_upscaling_coefficients.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "17c404d1cd250b70c086be78848290136e8f8620",
+    "bytes": 8070
+  },
+  {
+    "path": "tools/upscaling_coefficients/upscaler_demo.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e873bd10dc87cb87394f01ef7a79b5a61e956993",
+    "bytes": 54125
+  },
+  {
+    "path": "tools/utf8.manifest",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dab929e1515a2bdf20e2e89afe9cc3985ca95da2",
+    "bytes": 327
+  },
+  {
+    "path": "tools/utf8.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62bdbdc36221c139bca90764454e9b62eb0fe70a",
+    "bytes": 85
+  },
+  {
+    "path": "tools/viewer",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7b2d79cd091e130a44d86973852a1f220b8e6a47",
+    "bytes": null
+  },
+  {
+    "path": "tools/viewer/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2b25e266640d6a0cbeb0d5586111833177ea975e",
+    "bytes": 890
+  },
+  {
+    "path": "tools/viewer/load_jxl.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b97a906bd0a44e76271e2515c7d3eeec73a2465e",
+    "bytes": 6150
+  },
+  {
+    "path": "tools/viewer/load_jxl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85dc1a9e525de28e7372fea71668aced47331c19",
+    "bytes": 580
+  },
+  {
+    "path": "tools/viewer/main.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1e80be3e7458d1c5df9b5783d03f301ddc6115c3",
+    "bytes": 561
+  },
+  {
+    "path": "tools/viewer/viewer_window.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b5f912d6d46b43ca89913f3d4fe622f0aeac08e",
+    "bytes": 4017
+  },
+  {
+    "path": "tools/viewer/viewer_window.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78aafb9f82d13f556d7ee4ddf3ae2dcb811a1f64",
+    "bytes": 1005
+  },
+  {
+    "path": "tools/viewer/viewer_window.ui",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9539890550a6bcd45249709de462a1b596425bef",
+    "bytes": 3315
+  },
+  {
+    "path": "tools/wasm_demo",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "96747196de11d1387d6b33eccbc8def0f7a92f95",
+    "bytes": null
+  },
+  {
+    "path": "tools/wasm_demo/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ec335d37284c173d044708f7389af12c8095ec55",
+    "bytes": 1951
+  },
+  {
+    "path": "tools/wasm_demo/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29521b1da283359fb3272a0f90173cd362869821",
+    "bytes": 5720
+  },
+  {
+    "path": "tools/wasm_demo/build_site.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f47fa976b415fc7770c992e7eafcf5eb690a2b58",
+    "bytes": 4189
+  },
+  {
+    "path": "tools/wasm_demo/client_worker.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5751b3887a2708d03ea3cc3df319e8d7181b0fdc",
+    "bytes": 2753
+  },
+  {
+    "path": "tools/wasm_demo/jxl_decoder.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b56e55dea1e5dda99e5e340b48ef899672066f2",
+    "bytes": 7102
+  },
+  {
+    "path": "tools/wasm_demo/jxl_decoder.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad6d88e082ca47e7e607db919b5bec791491e05d",
+    "bytes": 1130
+  },
+  {
+    "path": "tools/wasm_demo/jxl_decoder_test.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "22dfa0724cd3651f5236ecc14a77e738e25c56e6",
+    "bytes": 4470
+  },
+  {
+    "path": "tools/wasm_demo/jxl_decompressor.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7413a52868b256fa74605bfc494086dfff80d1b4",
+    "bytes": 3483
+  },
+  {
+    "path": "tools/wasm_demo/jxl_decompressor.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ba16a0e6aba30ce302daf2483342dcafea9dae8",
+    "bytes": 753
+  },
+  {
+    "path": "tools/wasm_demo/manual_decode_demo.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ff3fc08530506e3e92ad0a223cf271ba27b20e8",
+    "bytes": 9954
+  },
+  {
+    "path": "tools/wasm_demo/netlify.toml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44d9d5697d86628b1879821d409d135a48f86298",
+    "bytes": 660
+  },
+  {
+    "path": "tools/wasm_demo/netlify",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "97ca4c454ec0860e1146c24897dd62a64d66729a",
+    "bytes": null
+  },
+  {
+    "path": "tools/wasm_demo/netlify/edge-functions",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "206d0fc5a2803cf630a5f5dcc7b905010fedb8b3",
+    "bytes": null
+  },
+  {
+    "path": "tools/wasm_demo/netlify/edge-functions/precompressed.ts",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c169432b6c8063abec4473814b62f957c9fbbb57",
+    "bytes": 3668
+  },
+  {
+    "path": "tools/wasm_demo/no_png.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f6868f363aae538ce609297f445cad85470f9854",
+    "bytes": 6552
+  },
+  {
+    "path": "tools/wasm_demo/no_png.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1486c479426c28a2907189359fdb34e0a5e906a4",
+    "bytes": 675
+  },
+  {
+    "path": "tools/wasm_demo/one_line_demo.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2966ac651c8d157c08e2585435f1309a55e057a",
+    "bytes": 481
+  },
+  {
+    "path": "tools/wasm_demo/one_line_demo_with_console.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e2c52ae1d836366f13b447cb611c0cf7f146c418",
+    "bytes": 925
+  },
+  {
+    "path": "tools/wasm_demo/service_worker.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "531e5c2772bd17a7d0854a90db396ba3c9485023",
+    "bytes": 10211
+  },
+  {
+    "path": "tools/xyb_range.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85ac711431fa4e39ad719de3bcb2397bcfcd36db",
+    "bytes": 3074
+  }
+]

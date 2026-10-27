@@ -1,0 +1,480 @@
+name: Build skia
+
+on:
+  push:
+    branches:
+      - release
+    tags-ignore:
+      - '**'
+
+env:
+  MACOSX_DEPLOYMENT_TARGET: '10.13'
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    name: stable - ${{ matrix.os }} - build skia
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: List llvm dir
+        if: matrix.os == 'windows-latest'
+        run: ls -R "C:\Program Files\LLVM"
+        shell: bash
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Set env
+        run: echo "${PWD}/depot_tools" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install tools on macOS
+        run: brew install ninja
+        if: matrix.os == 'macos-latest'
+
+      - name: Install tools on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install llvm ninja -y
+          pip install certifi
+
+      # See https://github.com/ilammy/msvc-dev-cmd?tab=readme-ov-file#caveats
+      - name: Remove GNU link.exe from GH actions
+        if: runner.os == 'Windows'
+        run: rm /usr/bin/link
+        shell: bash
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_CONTAINER_UNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync deps on host
+        run: python ./tools/git-sync-deps
+        if: matrix.os == 'ubuntu-latest'
+        working-directory: skia
+
+      - name: Compile skia
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          docker pull ghcr.io/brooooooklyn/canvas/ubuntu-builder:jammy
+          docker tag ghcr.io/brooooooklyn/canvas/ubuntu-builder:jammy builder
+          docker run --user "$(id -u):$(id -g)" -e PYTHONHTTPSVERIFY=0 -e SKIP_SYNC_SK_DEPS=0 --rm -v $(pwd):/canvas -w /canvas builder node ./scripts/build-skia.js
+
+      - name: Compile skia
+        if: matrix.os == 'macos-latest'
+        env:
+          PYTHONHTTPSVERIFY: 0
+        run: |
+          clang --version
+          node ./scripts/build-skia.js --target=x86_64-apple-darwin
+
+      - name: Compile skia
+        shell: powershell
+        if: matrix.os == 'windows-latest'
+        env:
+          PYTHONHTTPSVERIFY: 0
+        run: node ./scripts/build-skia.js
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows-arm64:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - windows-arm64 - build skia
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: List llvm dir
+        run: ls -R "C:\Program Files\LLVM"
+        shell: bash
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Set env
+        run: echo "${PWD}/depot_tools" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install tools on Windows
+        run: |
+          choco install llvm ninja -y
+          pip install certifi
+
+      # See https://github.com/ilammy/msvc-dev-cmd?tab=readme-ov-file#caveats
+      - name: Remove GNU link.exe from GH actions
+        run: rm /usr/bin/link
+        shell: bash
+
+      - name: Compile skia
+        shell: powershell
+        env:
+          PYTHONHTTPSVERIFY: 0
+        run: node ./scripts/build-skia.js --target=aarch64-pc-windows-msvc
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=aarch64-pc-windows-msvc
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-apple-silicon:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - apple-silicon - build skia
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Set env
+        run: echo "${PWD}/depot_tools" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install tools on macOS
+        run: brew install ninja
+
+      - name: Compile skia
+        run: |
+          clang --version
+          node ./scripts/build-skia.js --target=aarch64-apple-darwin
+        env:
+          MACOSX_DEPLOYMENT_TARGET: '11.0'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=aarch64-apple-darwin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-x64-linux-musl:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - linux-x64-musl - build skia
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.15.1
+      - name: Install cargo-zigbuild
+        uses: taiki-e/install-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tool: cargo-zigbuild
+
+      - name: Compile skia
+        run: node ./scripts/build-skia.js --target=x86_64-unknown-linux-musl
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=x86_64-unknown-linux-musl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-aarch64-linux-gnu:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+    name: stable - aarch64-linux-gnu - build skia
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Sync deps on host
+        run: python ./tools/git-sync-deps
+        working-directory: skia
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_CONTAINER_UNAME }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile skia
+        run: |
+          docker pull ghcr.io/brooooooklyn/canvas/ubuntu-builder:jammy-aarch64
+          docker tag ghcr.io/brooooooklyn/canvas/ubuntu-builder:jammy-aarch64 builder
+          docker run --user "$(id -u):$(id -g)" -e SKIP_SYNC_SK_DEPS=0 --rm -v $(pwd):/canvas -w /canvas builder node ./scripts/build-skia.js --target=aarch64-unknown-linux-gnu
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=aarch64-unknown-linux-gnu
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-aarch64-linux-musl:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - linux-aarch64-musl - build skia
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: 0.15.1
+      - name: Install cargo-zigbuild
+        uses: taiki-e/install-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tool: cargo-zigbuild
+
+      - name: Compile skia
+        run: node ./scripts/build-skia.js --target=aarch64-unknown-linux-musl
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=aarch64-unknown-linux-musl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-armv7-linux-gnu:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - armv7-linux - build skia
+    runs-on: ubuntu-latest
+    container:
+      image: debian:11
+
+    steps:
+      - name: Setup tools
+        run: |
+          # Debian 11 LTS ended on 2026-08-31. The bullseye-security index is frozen
+          # (Valid-Until 2026-09-07) and its pool is now only partially mirrored:
+          # deb.debian.org and security.debian.org each return 404 for files the
+          # other still serves. Add both mirrors plus a dated snapshot so apt can
+          # fall back, and accept the frozen index on those entries only. Live
+          # repositories added below (nodesource) keep their expiry check.
+          sed -i 's|^deb http://deb.debian.org/debian-security|deb [check-valid-until=no] http://deb.debian.org/debian-security|' /etc/apt/sources.list
+          echo "deb [check-valid-until=no] http://security.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
+          echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20260824T000000Z bullseye-security main" >> /etc/apt/sources.list
+          # apt 2.2 retries zero times by default, which turns a rate-limit or
+          # timeout on any mirror into a failed build. Retry transient errors.
+          # A 404 stays a permanent error, so mirror fallback is still immediate.
+          echo 'Acquire::Retries "3";' > /etc/apt/apt.conf.d/80retries
+          apt-get update
+          apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf libatomic1-armhf-cross git build-essential cmake ninja-build wget curl python3
+          curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+          apt-get install -y nodejs
+          npm install -g yarn corepack
+          ln -s /usr/bin/python3 /usr/bin/python
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Sync deps
+        uses: nick-fields/retry@v4
+        with:
+          timeout_minutes: 10
+          max_attempts: 5
+          command: |
+            cd skia
+            python ./tools/git-sync-deps
+        env:
+          PYTHONHTTPSVERIFY: 0
+
+      - name: Compile skia
+        run: node ./scripts/build-skia.js --target=armv7-unknown-linux-gnueabihf
+        env:
+          SKIP_SYNC_SK_DEPS: 0
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+          git config --global --add safe.directory "$(pwd)/skia"
+          node ./scripts/release-skia-binary.mjs --upload --target=armv7-unknown-linux-gnueabihf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-aarch64-linux-android:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+
+    name: stable - aarch64-linux-android - build skia
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Set env
+        run: echo "${PWD}/depot_tools" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build -y
+
+      - name: Compile skia
+        run: node ./scripts/build-skia.js --target=aarch64-linux-android
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=aarch64-linux-android
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-riscv64-linux-gnu:
+    if: "!contains(github.event.head_commit.message, 'skip skia')"
+    name: stable - riscv64-linux-gnu - build skia
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'yarn'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+      - name: Set env
+        run: echo "${PWD}/depot_tools" >> $GITHUB_PATH
+        shell: bash
+      - name: Install cross compile tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build gcc-riscv64-linux-gnu g++-riscv64-linux-gnu -y
+      - name: Compile skia
+        run: node ./scripts/build-skia.js --target=riscv64gc-unknown-linux-gnu
+        env:
+          CC: riscv64-linux-gnu-gcc
+          CXX: riscv64-linux-gnu-g++
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upload release
+        run: node ./scripts/release-skia-binary.mjs --upload --target=riscv64gc-unknown-linux-gnu
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

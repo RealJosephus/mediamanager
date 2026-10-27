@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "commit": "6bba067cc59d5d499d46a828797bfa65adf7be81",
+    "tree": "4843312ccf47a168e3292117ec00b3d911fcea5b"
+  },
+  "builtWith": {
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "platform": "linux",
+    "architecture": "x64",
+    "libc": "2.39"
+  },
+  "manifest": {
+    "path": "release.json",
+    "bytes": 1150569,
+    "sha256": "920b981e4cdb3f769d345234b11f03c0ec22916d25c5154736c6fe8f933f8f4b"
+  }
+}

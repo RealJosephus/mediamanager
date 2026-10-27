@@ -1,0 +1,48 @@
+[
+  {
+    "path": "proxy-libintl-0.5/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "proxy-libintl-0.5/COPYING",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 25292,
+    "sha256": "d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5",
+    "gitBlob": "bf50f20de6ef55b52fe7832d3a4ed05f0c69d452"
+  },
+  {
+    "path": "proxy-libintl-0.5/README.md",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2039,
+    "sha256": "a0cea22d295c8e9d020f6a8b32936443233b685d314e5ded96296cd92bd421cd",
+    "gitBlob": "6bd2d2a409ddcafc1981bde75b272279b924b17a"
+  },
+  {
+    "path": "proxy-libintl-0.5/libintl.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 7326,
+    "sha256": "ffdca4ee882e133ecee5b996f3c38e08e94f7c8075d6ce1ad392e37d3eb28f62",
+    "gitBlob": "05a8377488f523d20db279f3dc5bf3a77e87d560"
+  },
+  {
+    "path": "proxy-libintl-0.5/libintl.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3852,
+    "sha256": "36c160ad164e51a56113b1d4a94df95e7bcf04df837b3db08aea03550ae93e5f",
+    "gitBlob": "791cc10ab8fdd745e3f5932b122c5e4e5cf0b5ac"
+  },
+  {
+    "path": "proxy-libintl-0.5/meson.build",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 735,
+    "sha256": "8126a9bc4955fd3b1c2defeb41f1eef4cf2cebf37e20bee5e00a76aeea54a62f",
+    "gitBlob": "758feec4f87c27ec9f779b8a636012db3ad4158e"
+  }
+]

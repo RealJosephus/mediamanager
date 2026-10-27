@@ -1,0 +1,10 @@
+{
+  "executable": "make",
+  "args": [
+    "--version"
+  ],
+  "code": 0,
+  "signal": null,
+  "overflow": false,
+  "expired": false
+}

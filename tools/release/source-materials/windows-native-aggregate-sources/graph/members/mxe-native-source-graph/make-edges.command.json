@@ -1,0 +1,21 @@
+{
+  "executable": "make",
+  "args": [
+    "--no-print-directory",
+    "-f",
+    "Makefile",
+    "-f",
+    "/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/capture.mk",
+    "mediamanager-source-graph",
+    "MXE_TARGETS=x86_64-w64-mingw32.static",
+    "MXE_PLUGIN_DIRS=/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/mxe/mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3/plugins/llvm-mingw /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl",
+    "GIT_HEAD=d973945bb92c7783d5afa41bb2b8d2e1a04eaba3",
+    "MXE_USE_CCACHE=",
+    "MM_PHASE=edges",
+    "MM_RECORDS=/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-source-graph/edges.tsv"
+  ],
+  "code": 0,
+  "signal": null,
+  "overflow": false,
+  "expired": false
+}

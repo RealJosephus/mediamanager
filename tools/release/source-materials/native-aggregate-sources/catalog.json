@@ -1,0 +1,1542 @@
+{
+  "retrievedOn": "2026-10-27",
+  "recipe": {
+    "sourceId": "sharp-libvips",
+    "versionFile": "versions.properties",
+    "buildFile": "build/posix.sh"
+  },
+  "profiles": [
+    "linux-x64-glibc",
+    "darwin-arm64"
+  ],
+  "alreadySupplied": {
+    "nativeFullSources": "native-full-sources.json",
+    "nativePackages": "native-packages.json"
+  },
+  "components": [
+    {
+      "name": "aom",
+      "version": "3.15.0",
+      "versionVariable": "VERSION_AOM",
+      "workingDirectory": "aom",
+      "downloadTemplate": "https://storage.googleapis.com/aom-releases/libaom-${VERSION_AOM}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/aom/libaom-3.15.0.tar.gz",
+        "bytes": 6622801,
+        "sha256": "ea08c38ecc078bc85bb1b691020e52b06250f1a81fe7ca5b624629225081af96",
+        "url": "https://storage.googleapis.com/aom-releases/libaom-3.15.0.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/aom/archive-http.json",
+        "bytes": 1633,
+        "sha256": "e7607ffc36123ec7c3770ced4a1162352dfb6073e6da2e6909f10c75a478d0de"
+      },
+      "root": "libaom-3.15.0/",
+      "members": {
+        "path": "native-aggregate-sources/aom/members.json",
+        "bytes": 413368,
+        "sha256": "b4fddb59d1cf88e654760d70528f6bba65d95e3e774481aec62ca72d00201be3"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/aom/notices/AUTHORS",
+          "bytes": 13178,
+          "sha256": "c31b80ca48fde06ca03aef2f3dec15413fe0c2661fe6b56e86ccd69dbc6f9a1d",
+          "member": "libaom-3.15.0/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/LICENSE",
+          "bytes": 1316,
+          "sha256": "4764a286d8b2faeaf42f4418e7d7a28d58fc8fd4d00a3d0a7f44b0a4099de7f2",
+          "member": "libaom-3.15.0/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/PATENTS",
+          "bytes": 5701,
+          "sha256": "661fb8e504744e95587b556b94a58343448300606a41bea8c7a9b97125696e61",
+          "member": "libaom-3.15.0/PATENTS"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/fastfeat/LICENSE",
+          "bytes": 1504,
+          "sha256": "499041ddee5227b6f29ca06c17803e5fe24d60f243c69635cd76b7ba08d0ddd5",
+          "member": "libaom-3.15.0/third_party/fastfeat/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/googletest/src/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+          "member": "libaom-3.15.0/third_party/googletest/src/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/highway/LICENSE-BSD3",
+          "bytes": 1515,
+          "sha256": "d25e82e26acd42ca3ccc9993622631163425b869b9e16284226d534cff6470f2",
+          "member": "libaom-3.15.0/third_party/highway/LICENSE-BSD3"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/libwebm/AUTHORS.TXT",
+          "bytes": 137,
+          "sha256": "3edb5f5496bfff3d6d4a62fa75fe996b814920d0d6e348c2e65c589e7ac5d177",
+          "member": "libaom-3.15.0/third_party/libwebm/AUTHORS.TXT"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/libwebm/LICENSE.TXT",
+          "bytes": 1496,
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+          "member": "libaom-3.15.0/third_party/libwebm/LICENSE.TXT"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/libwebm/PATENTS.TXT",
+          "bytes": 1436,
+          "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+          "member": "libaom-3.15.0/third_party/libwebm/PATENTS.TXT"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/libyuv/LICENSE",
+          "bytes": 1506,
+          "sha256": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f",
+          "member": "libaom-3.15.0/third_party/libyuv/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/vector/LICENSE",
+          "bytes": 1084,
+          "sha256": "ff6c857ce2708e87701323078aef115c1872a1f80a9649f86dc899b48083bc60",
+          "member": "libaom-3.15.0/third_party/vector/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/third_party/x86inc/LICENSE",
+          "bytes": 936,
+          "sha256": "719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8",
+          "member": "libaom-3.15.0/third_party/x86inc/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/aom/notices/tools/gen_authors.sh",
+          "bytes": 249,
+          "sha256": "45c9424801e8f2e7b6476b34013c9430eff58c642a588c747dcc3d7636424500",
+          "member": "libaom-3.15.0/tools/gen_authors.sh"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-google-object-metadata",
+        "receipt": {
+          "path": "native-aggregate-sources/aom/published-checksum.json",
+          "bytes": 828,
+          "sha256": "fe45471250e95b04d8ccdbe0de977d32e12d3160c0dae9f320234aa92391846b"
+        },
+        "httpReceipt": {
+          "path": "native-aggregate-sources/aom/published-checksum-http.json",
+          "bytes": 1256,
+          "sha256": "c4fb587e785644b46a47a44d1d0f4ff474f0e34d000d22b6d8edd796a791a0e2"
+        }
+      }
+    },
+    {
+      "name": "archive",
+      "version": "3.8.9",
+      "versionVariable": "VERSION_ARCHIVE",
+      "workingDirectory": "archive",
+      "downloadTemplate": "https://github.com/libarchive/libarchive/releases/download/v${VERSION_ARCHIVE}/libarchive-${VERSION_ARCHIVE}.tar.xz",
+      "archive": {
+        "path": "native-aggregate-sources/archive/libarchive-3.8.9.tar.xz",
+        "bytes": 6617696,
+        "sha256": "888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde",
+        "url": "https://github.com/libarchive/libarchive/releases/download/v3.8.9/libarchive-3.8.9.tar.xz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/archive/archive-http.json",
+        "bytes": 2818,
+        "sha256": "a893ed28be75061123670333feab167c4d0dd0d3b6ff14fae5e944860b5621ea"
+      },
+      "root": "libarchive-3.8.9/",
+      "members": {
+        "path": "native-aggregate-sources/archive/members.json",
+        "bytes": 472460,
+        "sha256": "270ccf0732877f2db8f82d8bd10ba7b331cc5fce7e9bd7cb1270e5e9389900ae"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/archive/notices/COPYING",
+          "bytes": 3089,
+          "sha256": "30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229",
+          "member": "libarchive-3.8.9/COPYING"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "prefix": "libarchive"
+      }
+    },
+    {
+      "name": "cgif",
+      "version": "0.5.3",
+      "versionVariable": "VERSION_CGIF",
+      "workingDirectory": "cgif",
+      "downloadTemplate": "https://github.com/dloebl/cgif/archive/v${VERSION_CGIF}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/cgif/v0.5.3.tar.gz",
+        "bytes": 40021,
+        "sha256": "dcc7731e974ee77db75df26c99aca4d95f11ca2d267d870d42bce1e0d1e1e75f",
+        "url": "https://github.com/dloebl/cgif/archive/v0.5.3.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/cgif/archive-http.json",
+        "bytes": 1497,
+        "sha256": "e10122d224ae9fce47c7bdbd470f1d69f61984edb548d17f89c8e33e1d464a48"
+      },
+      "root": "cgif-0.5.3/",
+      "members": {
+        "path": "native-aggregate-sources/cgif/members.json",
+        "bytes": 19753,
+        "sha256": "6c9e3fd28d5461f66127c8e2a7ab557f486546eace52fec4198753302853dee0"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/cgif/notices/AUTHORS",
+          "bytes": 193,
+          "sha256": "76ed8a61cb7e254cab424641ebbb4069d08bf820dfe00f6f7ab5485057ca003d",
+          "member": "cgif-0.5.3/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/cgif/notices/LICENSE",
+          "bytes": 1099,
+          "sha256": "7264dede477abab4ac3fe8236beb8153845c04ccd33b18f281085087e219fc6d",
+          "member": "cgif-0.5.3/LICENSE"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "dloebl/cgif",
+        "ref": "v0.5.3",
+        "commit": "b4fd26662122eefd53ed12e7ff9b89990455bbbe",
+        "tree": "c7f9f15055aa0b7d8fc6c1005abd24a810c6b6a0",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/cgif/commit.json",
+          "bytes": 4364,
+          "sha256": "00ad111cb739825abdee182b38c024a0e0d9bef55717127be698e2e9ab0dbf7a",
+          "url": "https://api.github.com/repos/dloebl/cgif/commits/v0.5.3"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/cgif/tree.json",
+          "bytes": 18561,
+          "sha256": "262824f35c41496a6322098fc1c22423d4ae742a0156fd26ffa138dddb5ef1a3",
+          "url": "https://api.github.com/repos/dloebl/cgif/git/trees/c7f9f15055aa0b7d8fc6c1005abd24a810c6b6a0?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/cgif.mk",
+        "prefix": "$(PKG)"
+      }
+    },
+    {
+      "name": "expat",
+      "version": "2.8.3",
+      "versionVariable": "VERSION_EXPAT",
+      "workingDirectory": "expat",
+      "downloadTemplate": "https://github.com/libexpat/libexpat/releases/download/R_${VERSION_EXPAT//./_}/expat-${VERSION_EXPAT}.tar.xz",
+      "archive": {
+        "path": "native-aggregate-sources/expat/expat-2.8.3.tar.xz",
+        "bytes": 517264,
+        "sha256": "f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85",
+        "url": "https://github.com/libexpat/libexpat/releases/download/R_2_8_3/expat-2.8.3.tar.xz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/expat/archive-http.json",
+        "bytes": 2803,
+        "sha256": "cb03ceec965ed1a98a22f40ac379e358691dc8c2970e396cc942f8fa2562b6b3"
+      },
+      "root": "expat-2.8.3/",
+      "members": {
+        "path": "native-aggregate-sources/expat/members.json",
+        "bytes": 44271,
+        "sha256": "3637ea73a4ff3dcc6e09c54e593ae15ab22aa46152c4e5b61ec66de10dac2d5a"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/expat/notices/COPYING",
+          "bytes": 1144,
+          "sha256": "31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87",
+          "member": "expat-2.8.3/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/expat/notices/AUTHORS",
+          "bytes": 142,
+          "sha256": "59f14371c6b75912cfebb46e6247ee5146766e803a0365b124e5d3011e7d0877",
+          "member": "expat-2.8.3/AUTHORS"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "prefix": "expat"
+      }
+    },
+    {
+      "name": "ffi",
+      "version": "3.8.0",
+      "versionVariable": "VERSION_FFI",
+      "workingDirectory": "ffi",
+      "downloadTemplate": "https://github.com/libffi/libffi/releases/download/v${VERSION_FFI}/libffi-${VERSION_FFI}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/ffi/libffi-3.8.0.tar.gz",
+        "bytes": 1581626,
+        "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4",
+        "url": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/ffi/archive-http.json",
+        "bytes": 2795,
+        "sha256": "41923bf102cb550846f1679397cf6b201df740243f01f39042fabe24dfdef5e1"
+      },
+      "root": "libffi-3.8.0/",
+      "members": {
+        "path": "native-aggregate-sources/ffi/members.json",
+        "bytes": 132306,
+        "sha256": "20e52a09681f4ea0023586a4abf39352d826118cafd6b3958a6a72c38db7dba3"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/ffi/notices/LICENSE-BUILDTOOLS",
+          "bytes": 18698,
+          "sha256": "e67978cd18816c0cb7d29aaaacde7b7447402c2fb321a051698890a8eaedda94",
+          "member": "libffi-3.8.0/LICENSE-BUILDTOOLS"
+        },
+        {
+          "path": "native-aggregate-sources/ffi/notices/LICENSE",
+          "bytes": 1132,
+          "sha256": "17b64dc60f3b6897a60f971e288b973f655c2edcdf08b25f3c3dd5549857881c",
+          "member": "libffi-3.8.0/LICENSE"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "prefix": "libffi"
+      }
+    },
+    {
+      "name": "fontconfig",
+      "version": "2.18.3",
+      "versionVariable": "VERSION_FONTCONFIG",
+      "workingDirectory": "fontconfig",
+      "downloadTemplate": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/${VERSION_FONTCONFIG}/fontconfig-${VERSION_FONTCONFIG}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/fontconfig/fontconfig-2.18.3.tar.gz",
+        "bytes": 666753,
+        "sha256": "9ae01e1d53acdef56010c5451cd34aa41d325b2faccd8606448d8fa01b2496b3",
+        "url": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.18.3/fontconfig-2.18.3.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/fontconfig/archive-http.json",
+        "bytes": 2348,
+        "sha256": "65897f5844b3f11dab1b175850be66f63f5d5a49c236a11f72662600d4856bc8"
+      },
+      "root": "fontconfig-2.18.3/",
+      "members": {
+        "path": "native-aggregate-sources/fontconfig/members.json",
+        "bytes": 186948,
+        "sha256": "bf62f73ab7f43af44211f692339f34c4ca08eda6f05caf0a121cc28be004a4aa"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/fontconfig/notices/AUTHORS",
+          "bytes": 62,
+          "sha256": "db6d73a160bb2de10268f88ef60aae91771fefdeee4992b791c76ce6592a4a4b",
+          "member": "fontconfig-2.18.3/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/fontconfig/notices/COPYING",
+          "bytes": 8616,
+          "sha256": "51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067",
+          "member": "fontconfig-2.18.3/COPYING"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "https://gitlab.freedesktop.org/fontconfig/fontconfig.git",
+        "ref": "2.18.3",
+        "commit": "0f236723a3c26bd9745e32ba2b3ee21e5f809295",
+        "tree": "0d294db970499280dc9a8c6c067d5d09f0452d61",
+        "kind": "original-git-object",
+        "commitObject": {
+          "path": "native-aggregate-sources/fontconfig/commit.object",
+          "bytes": 229,
+          "sha256": "2ac83d49a326edd78f2d80061d99142fade4a8835e07031af15cb3c758c874ce"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/fontconfig/tree.json",
+          "bytes": 108916,
+          "sha256": "4fc717a1f8f8a85c213824b14135d3336dce7b9ced6ecd77f9a2453ae4271f82"
+        },
+        "gitlinks": [],
+        "exportedOut": [
+          ".clang-format",
+          ".clang-format-ignore",
+          ".editorconfig",
+          ".gitattributes",
+          ".gitignore",
+          ".gitlab-ci.yml",
+          ".gitlab-ci",
+          ".gitlab-ci/.abidiff",
+          ".gitlab-ci/.gitignore",
+          ".gitlab-ci/BUILD_CONFIG.md",
+          ".gitlab-ci/aarch64-linux-android.txt",
+          ".gitlab-ci/abicheck.sh",
+          ".gitlab-ci/abidiff2xml.py",
+          ".gitlab-ci/alpine-cross.sh",
+          ".gitlab-ci/alpine-install.sh",
+          ".gitlab-ci/alpine-setup.sh",
+          ".gitlab-ci/apicheck.py",
+          ".gitlab-ci/build.py",
+          ".gitlab-ci/build.yaml",
+          ".gitlab-ci/check-style.sh",
+          ".gitlab-ci/ci.template",
+          ".gitlab-ci/config.yml",
+          ".gitlab-ci/fedora-cross.sh",
+          ".gitlab-ci/fedora-install.sh",
+          ".gitlab-ci/freebsd-cross.sh",
+          ".gitlab-ci/freebsd-install.sh",
+          ".gitlab-ci/linux-mingw-w64-64bit.txt",
+          ".gitlab-ci/msys2-install.sh",
+          ".gitlab-ci/msys2.yml",
+          ".gitlab-ci/other.yml",
+          ".gitlab-ci/symbol.list",
+          ".gitlab-ci/test-cache-compat.sh",
+          ".gitlab-ci/test-meson-install-shared.sh",
+          ".gitlab-ci/test-meson-install-static.sh",
+          ".gitlab-ci/ubuntu-cross.sh",
+          ".gitlab-ci/x86_64-w64-mingw32-clang.txt",
+          "subprojects/.gitignore"
+        ],
+        "exportAttributes": {
+          "path": "native-aggregate-sources/fontconfig/.gitattributes.original",
+          "bytes": 159,
+          "sha256": "f0ed191e332526ba07fb7c72aff022b5a92b62eeff377e01e30ee7fd64adc8cc",
+          "member": ".gitattributes"
+        }
+      }
+    },
+    {
+      "name": "freetype",
+      "version": "2.14.3",
+      "versionVariable": "VERSION_FREETYPE",
+      "workingDirectory": "freetype",
+      "downloadTemplate": "https://github.com/freetype/freetype/archive/VER-${VERSION_FREETYPE//./-}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/freetype/VER-2-14-3.tar.gz",
+        "bytes": 2515533,
+        "sha256": "dc49de6b01a266eef4876a4dd34d9842c475d3e28ff2eff63bd2fb760ab56261",
+        "url": "https://github.com/freetype/freetype/archive/VER-2-14-3.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/freetype/archive-http.json",
+        "bytes": 1529,
+        "sha256": "6beefc071f57cd3bd04f81a3e6cd5ec2a662999ebeace5329d5d3adff9c62dab"
+      },
+      "root": "freetype-VER-2-14-3/",
+      "members": {
+        "path": "native-aggregate-sources/freetype/members.json",
+        "bytes": 204411,
+        "sha256": "c61b292512a490a0450038f77199f3517bec05cfb75a31a4f42510c0f93140e0"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/freetype/notices/LICENSE.TXT",
+          "bytes": 2149,
+          "sha256": "bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b",
+          "member": "freetype-VER-2-14-3/LICENSE.TXT"
+        },
+        {
+          "path": "native-aggregate-sources/freetype/notices/src/tools/no-copyright",
+          "bytes": 1282,
+          "sha256": "3e2c8db4e09e12e9a138ba7ba8c0b762eff36802c6c1273d73ac049d4949a298",
+          "member": "freetype-VER-2-14-3/src/tools/no-copyright"
+        },
+        {
+          "path": "native-aggregate-sources/freetype/notices/src/tools/update-copyright",
+          "bytes": 383,
+          "sha256": "ae5b05f1d3f5235eb91ce41518be95022443f68bce5d200b6e1cc1fb57a5017e",
+          "member": "freetype-VER-2-14-3/src/tools/update-copyright"
+        },
+        {
+          "path": "native-aggregate-sources/freetype/notices/src/tools/update-copyright-year",
+          "bytes": 4272,
+          "sha256": "f3e4b6f122dce96b6ba85c3d600fd19a766ab5e0fd0cbdeee785d0d88f111d3a",
+          "member": "freetype-VER-2-14-3/src/tools/update-copyright-year"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "freetype/freetype",
+        "ref": "VER-2-14-3",
+        "commit": "0a0221a1347e2f1e07c395263540026e9a0aa7c7",
+        "tree": "589225074ab1eb876682820c482069693c251e88",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/freetype/commit.json",
+          "bytes": 15743,
+          "sha256": "099c56bfc730933a2421b434eb1ae6493afbccdfd6d0535238c6d0d7301e20c7",
+          "url": "https://api.github.com/repos/freetype/freetype/commits/VER-2-14-3"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/freetype/tree.json",
+          "bytes": 187439,
+          "sha256": "adc439bbc26e86a0ca7f0ba7ea39873da97f9f975c8d2c292604c0aa69e74611",
+          "url": "https://api.github.com/repos/freetype/freetype/git/trees/589225074ab1eb876682820c482069693c251e88?recursive=1"
+        },
+        "gitlinks": [
+          {
+            "path": "subprojects/dlg",
+            "mode": "160000",
+            "type": "commit",
+            "sha": "395ccad2c1e0daae535c4d20bb0a3f2424648e17"
+          }
+        ],
+        "exportedOut": []
+      }
+    },
+    {
+      "name": "harfbuzz",
+      "version": "14.3.1",
+      "versionVariable": "VERSION_HARFBUZZ",
+      "workingDirectory": "harfbuzz",
+      "downloadTemplate": "https://github.com/harfbuzz/harfbuzz/archive/${VERSION_HARFBUZZ}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/harfbuzz/14.3.1.tar.gz",
+        "bytes": 37889473,
+        "sha256": "05e602daf0846d7497d842807766ea32ca270f3e2c9284ce03811a2a1ed669c9",
+        "url": "https://github.com/harfbuzz/harfbuzz/archive/14.3.1.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/harfbuzz/archive-http.json",
+        "bytes": 1518,
+        "sha256": "101cfb5b341aa785a4bc01b1bdc533512feaf1453fecc8ee7d77cbe34e393d04"
+      },
+      "root": "harfbuzz-14.3.1/",
+      "members": {
+        "path": "native-aggregate-sources/harfbuzz/members.json",
+        "bytes": 1148907,
+        "sha256": "81a7858aacce95ca8a654fe5cd3db0a169e7ea2514f24d1e8caf982f03797386"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/AUTHORS",
+          "bytes": 201,
+          "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+          "member": "harfbuzz-14.3.1/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/COPYING",
+          "bytes": 1971,
+          "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+          "member": "harfbuzz-14.3.1/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/src/ms-use/COPYING",
+          "bytes": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "member": "harfbuzz-14.3.1/src/ms-use/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/test/COPYING",
+          "bytes": 4370,
+          "sha256": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7",
+          "member": "harfbuzz-14.3.1/test/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/test/shape/data/aots/COPYING",
+          "bytes": 593,
+          "sha256": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb",
+          "member": "harfbuzz-14.3.1/test/shape/data/aots/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/harfbuzz/notices/test/shape/data/text-rendering-tests/COPYING",
+          "bytes": 584,
+          "sha256": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f",
+          "member": "harfbuzz-14.3.1/test/shape/data/text-rendering-tests/COPYING"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "harfbuzz/harfbuzz",
+        "ref": "14.3.1",
+        "commit": "ab5ecbb83985034a76214ac0b2b833dcd590d774",
+        "tree": "5da30ac2aec85e70b45b70387f408b9976c2289a",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/harfbuzz/commit.json",
+          "bytes": 6019,
+          "sha256": "27dc4d9c6773c52866a487fd122f8bb643c4e00d1f7fd6ae8866a078b28e9e71",
+          "url": "https://api.github.com/repos/harfbuzz/harfbuzz/commits/14.3.1"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/harfbuzz/tree.json",
+          "bytes": 1059525,
+          "sha256": "723a608080dc3b02325aba8b35f266550c6e8f744d14a4c4b3764afd95d5c7ea",
+          "url": "https://api.github.com/repos/harfbuzz/harfbuzz/git/trees/5da30ac2aec85e70b45b70387f408b9976c2289a?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      }
+    },
+    {
+      "name": "highway",
+      "version": "1.4.0",
+      "versionVariable": "VERSION_HIGHWAY",
+      "workingDirectory": "highway",
+      "downloadTemplate": "https://github.com/google/highway/archive/${VERSION_HIGHWAY}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/highway/1.4.0.tar.gz",
+        "bytes": 3691240,
+        "sha256": "e72241ac9524bb653ae52ced768b508045d4438726a303f10181a38f764a453c",
+        "url": "https://github.com/google/highway/archive/1.4.0.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/highway/archive-http.json",
+        "bytes": 1504,
+        "sha256": "ec911181fe11fcc6ec4954f75118fa00bf61d2502dd619bc533edb1aac001a1d"
+      },
+      "root": "highway-1.4.0/",
+      "members": {
+        "path": "native-aggregate-sources/highway/members.json",
+        "bytes": 75740,
+        "sha256": "3d7e50d675a4aa359109bcc1acd250006f561e5f40e75154583c1b524a2cb8d5"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/highway/notices/LICENSE",
+          "bytes": 20785,
+          "sha256": "e340270d4f64384569a91d546acb5b094d69ce47f0c015db77abb74dc6f815af",
+          "member": "highway-1.4.0/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/highway/notices/debian/copyright",
+          "bytes": 825,
+          "sha256": "6e4ecf1cae052b678ea3178dd4b3652d581ee66a82d58db8800dd7d80dd6de76",
+          "member": "highway-1.4.0/debian/copyright"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "google/highway",
+        "ref": "1.4.0",
+        "commit": "2607d3b5b0113992fe84d3848859eae13b3b52c1",
+        "tree": "e240dc0bc54afd953256adbe67eb2f267beb9d86",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/highway/commit.json",
+          "bytes": 13469,
+          "sha256": "96134a774dc36509dd6028a62214c8856286399285d3e1a74bdf5d215a6a34f1",
+          "url": "https://api.github.com/repos/google/highway/commits/1.4.0"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/highway/tree.json",
+          "bytes": 70766,
+          "sha256": "8206e2e847a67c3954535b08f9ceaf61959ae5d895e71a88f29f894ef6984575",
+          "url": "https://api.github.com/repos/google/highway/git/trees/e240dc0bc54afd953256adbe67eb2f267beb9d86?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      }
+    },
+    {
+      "name": "imagequant",
+      "version": "2.4.1",
+      "versionVariable": "VERSION_IMAGEQUANT",
+      "workingDirectory": "imagequant",
+      "downloadTemplate": "https://github.com/lovell/libimagequant/archive/v${VERSION_IMAGEQUANT}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/imagequant/v2.4.1.tar.gz",
+        "bytes": 45792,
+        "sha256": "47d2a84b7b1052975c9d50a3d4e3cacbf57b43d84a4c3131210848ead9964dfb",
+        "url": "https://github.com/lovell/libimagequant/archive/v2.4.1.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/imagequant/archive-http.json",
+        "bytes": 1523,
+        "sha256": "8d83d21f828623fdc5efa4152c39edf1f693713193036ec56e8e30660987bb29"
+      },
+      "root": "libimagequant-2.4.1/",
+      "members": {
+        "path": "native-aggregate-sources/imagequant/members.json",
+        "bytes": 7940,
+        "sha256": "78bb34f1155a934be5050b9c8be2145d3611cb2775b08c0c6a89f522b3886702"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/imagequant/notices/COPYRIGHT",
+          "bytes": 1851,
+          "sha256": "7391bfbcde4404cefb9849553362c3ab436f929f5cc1abb57071ec045590ee99",
+          "member": "libimagequant-2.4.1/COPYRIGHT"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "lovell/libimagequant",
+        "ref": "v2.4.1",
+        "commit": "ce5fdeb1ccd9db288950faa21fd09c42c0a59bbb",
+        "tree": "dfb54f9cec722174d82766a8f2e26b8785ad40c2",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/imagequant/commit.json",
+          "bytes": 7663,
+          "sha256": "da5b10fe8063097875066184065a7fea3ea09f7f693825e3ba48b3fab603211b",
+          "url": "https://api.github.com/repos/lovell/libimagequant/commits/v2.4.1"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/imagequant/tree.json",
+          "bytes": 7568,
+          "sha256": "620fe1bd1b31dcd3fa385443d370c0f7e73d5a77bd5f829205d5b721c3790cd7",
+          "url": "https://api.github.com/repos/lovell/libimagequant/git/trees/dfb54f9cec722174d82766a8f2e26b8785ad40c2?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/libimagequant.mk",
+        "prefix": "$(PKG)"
+      }
+    },
+    {
+      "name": "lcms",
+      "version": "2.19.1",
+      "versionVariable": "VERSION_LCMS",
+      "workingDirectory": "lcms",
+      "downloadTemplate": "https://github.com/mm2/Little-CMS/releases/download/lcms${VERSION_LCMS}/lcms2-${VERSION_LCMS}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/lcms/lcms2-2.19.1.tar.gz",
+        "bytes": 5728743,
+        "sha256": "bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8",
+        "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.19.1/lcms2-2.19.1.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/lcms/archive-http.json",
+        "bytes": 2798,
+        "sha256": "11a2754a6c8e42694d5d855344e6cf87e0ca94c87c069a73699ad4aafe977044"
+      },
+      "root": "lcms2-2.19.1/",
+      "members": {
+        "path": "native-aggregate-sources/lcms/members.json",
+        "bytes": 102608,
+        "sha256": "286c43e3bd8a7f6c4d09b6aa0534ef2f0052aa7f76afd10834c26f9938af8f9b"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/lcms/notices/LICENSE",
+          "bytes": 1080,
+          "sha256": "6dbd60437f8ef91d8de1f08ad75882547fd4931bfcc3566a0735f28db1484d31",
+          "member": "lcms2-2.19.1/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/lcms/notices/plugins/fast_float/COPYING.GPL3",
+          "bytes": 35146,
+          "sha256": "c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271",
+          "member": "lcms2-2.19.1/plugins/fast_float/COPYING.GPL3"
+        },
+        {
+          "path": "native-aggregate-sources/lcms/notices/plugins/threaded/COPYING.GPL3",
+          "bytes": 35146,
+          "sha256": "c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271",
+          "member": "lcms2-2.19.1/plugins/threaded/COPYING.GPL3"
+        },
+        {
+          "path": "native-aggregate-sources/lcms/notices/utils/jpgicc/LICENSE_iccjpeg",
+          "bytes": 3234,
+          "sha256": "8baac37d14eed89b82ffcb041677dd701164eb5cc0f26e165fe47eb11afa0dca",
+          "member": "lcms2-2.19.1/utils/jpgicc/LICENSE_iccjpeg"
+        },
+        {
+          "path": "native-aggregate-sources/lcms/notices/AUTHORS",
+          "bytes": 1010,
+          "sha256": "4847d97cd41e980794939b1d2694bd8f67b92856ec80e95c2fcfc34066f0df93",
+          "member": "lcms2-2.19.1/AUTHORS"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-github-release-asset",
+        "receipt": {
+          "path": "native-aggregate-sources/lcms/release.json",
+          "bytes": 4987,
+          "sha256": "6095110d43cdf757cf53aaef1792962a3ea794d9ebb148f3ec92ff62b05e46af",
+          "url": "https://api.github.com/repos/mm2/Little-CMS/releases/tags/lcms2.19.1"
+        }
+      }
+    },
+    {
+      "name": "mozjpeg",
+      "version": "0826579",
+      "versionVariable": "VERSION_MOZJPEG",
+      "workingDirectory": "jpeg",
+      "downloadTemplate": "https://github.com/mozilla/mozjpeg/archive/${VERSION_MOZJPEG}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/mozjpeg/0826579.tar.gz",
+        "bytes": 2443542,
+        "sha256": "b680167bd5d9afebdd576a12f8c49d2c9066a3b92ef96a2b2c5f7829b8600fe5",
+        "url": "https://github.com/mozilla/mozjpeg/archive/0826579.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/mozjpeg/archive-http.json",
+        "bytes": 1571,
+        "sha256": "a22b90711dd76cdac1ce535ef29a0c6c0af44c71b148f21eb10466c1d8d2cabb"
+      },
+      "root": "mozjpeg-08265790774cd0714832c9e675522acbe5581437/",
+      "members": {
+        "path": "native-aggregate-sources/mozjpeg/members.json",
+        "bytes": 166492,
+        "sha256": "aaa54bc9c0e59db19339425e88322e75b0fa4535b9d4bba10df06fcfef9f7264"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/mozjpeg/notices/LICENSE.md",
+          "bytes": 5620,
+          "sha256": "96f5b328adbb78eeaaec6980d73fd558cb1e4d62560ed615646bc3cf5e532430",
+          "member": "mozjpeg-08265790774cd0714832c9e675522acbe5581437/LICENSE.md"
+        },
+        {
+          "path": "native-aggregate-sources/mozjpeg/notices/java/doc/legal/ADDITIONAL_LICENSE_INFO",
+          "bytes": 2114,
+          "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916",
+          "member": "mozjpeg-08265790774cd0714832c9e675522acbe5581437/java/doc/legal/ADDITIONAL_LICENSE_INFO"
+        },
+        {
+          "path": "native-aggregate-sources/mozjpeg/notices/java/doc/legal/LICENSE",
+          "bytes": 19274,
+          "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+          "member": "mozjpeg-08265790774cd0714832c9e675522acbe5581437/java/doc/legal/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/mozjpeg/notices/release/License.rtf",
+          "bytes": 2172,
+          "sha256": "933e1427ec78050c76396182fd9819a23fef58c17e997b67581852167be971db",
+          "member": "mozjpeg-08265790774cd0714832c9e675522acbe5581437/release/License.rtf"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "mozilla/mozjpeg",
+        "ref": "0826579",
+        "commit": "08265790774cd0714832c9e675522acbe5581437",
+        "tree": "3d69f90b239f346c3cd3ffd5081236aa6cf9ef83",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/mozjpeg/commit.json",
+          "bytes": 8323,
+          "sha256": "d504c81bb493d2c4637531edb72dc1bee728a0db7f268da9420401d0af823fd6",
+          "url": "https://api.github.com/repos/mozilla/mozjpeg/commits/0826579"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/mozjpeg/tree.json",
+          "bytes": 135225,
+          "sha256": "c20f18c86091682c121d8e14a0417b3373ac23a393ad2689c111ad72fc4f2f99",
+          "url": "https://api.github.com/repos/mozilla/mozjpeg/git/trees/3d69f90b239f346c3cd3ffd5081236aa6cf9ef83?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": [
+          ".gitattributes",
+          ".github",
+          ".github/pull_request_template.md",
+          "appveyor.yml"
+        ],
+        "exportAttributes": {
+          "path": "native-aggregate-sources/mozjpeg/.gitattributes.original",
+          "bytes": 131,
+          "sha256": "8758cc3b68779a643b028dec301dd409cdfb142b8f2dbea01d462ee6223a63fb",
+          "member": ".gitattributes"
+        }
+      }
+    },
+    {
+      "name": "pixman",
+      "version": "0.46.4",
+      "versionVariable": "VERSION_PIXMAN",
+      "workingDirectory": "pixman",
+      "downloadTemplate": "https://cairographics.org/releases/pixman-${VERSION_PIXMAN}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/pixman/pixman-0.46.4.tar.gz",
+        "bytes": 827198,
+        "sha256": "d09c44ebc3bd5bee7021c79f922fe8fb2fb57f7320f55e97ff9914d2346a591c",
+        "url": "https://cairographics.org/releases/pixman-0.46.4.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/pixman/archive-http.json",
+        "bytes": 797,
+        "sha256": "baa5b457ed00a7d52dadfecdbda0b23eb9b9e839b3ad3933f3b52e51dee00da8"
+      },
+      "root": "pixman-0.46.4/",
+      "members": {
+        "path": "native-aggregate-sources/pixman/members.json",
+        "bytes": 59228,
+        "sha256": "8b8ce7e0f56cff05efc73eea2fd78cc4e8372d7306102012b2cce5b219ac0765"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/pixman/notices/AUTHORS",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "pixman-0.46.4/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/pixman/notices/COPYING",
+          "bytes": 2087,
+          "sha256": "fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793",
+          "member": "pixman-0.46.4/COPYING"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "https://gitlab.freedesktop.org/pixman/pixman.git",
+        "ref": "pixman-0.46.4",
+        "commit": "9cc163c9da0fb4da430641715313d95a6ec466d9",
+        "tree": "8b8f70a2168447b445f51469426bf929514b7212",
+        "kind": "original-git-object",
+        "commitObject": {
+          "path": "native-aggregate-sources/pixman/commit.object",
+          "bytes": 247,
+          "sha256": "fa80e5fc1a84e840d0e5931cf49544589cd3e86eae31f6ee0af3a5139516353a"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/pixman/tree.json",
+          "bytes": 34623,
+          "sha256": "f7597f8dbebb3a8ee567d52e5a6349a2b795c2a7f0ff2ebc61659928b778a919"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      }
+    },
+    {
+      "name": "png",
+      "version": "1.6.58",
+      "versionVariable": "VERSION_PNG",
+      "workingDirectory": "png",
+      "downloadTemplate": "https://github.com/pnggroup/libpng/archive/v${VERSION_PNG}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/png/v1.6.58.tar.gz",
+        "bytes": 1592190,
+        "sha256": "a9d4df463d36a6e5f9c29bd6f4967312d17e996c1854f3511f833924eb1993cf",
+        "url": "https://github.com/pnggroup/libpng/archive/v1.6.58.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/png/archive-http.json",
+        "bytes": 1510,
+        "sha256": "c96ffc06c17e92c807fe90feba5669f65218706a83a3256669550fc61f650989"
+      },
+      "root": "libpng-1.6.58/",
+      "members": {
+        "path": "native-aggregate-sources/png/members.json",
+        "bytes": 167381,
+        "sha256": "70cd294b8e30369538706d700716ea95696690d3465c7478f33908ec783ca90a"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/png/notices/AUTHORS",
+          "bytes": 1773,
+          "sha256": "0c777e9f2a67bd4058ab91050eb7a56106c92ed038ba8fe5f54c83344f2d93ca",
+          "member": "libpng-1.6.58/AUTHORS"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/LICENSE",
+          "bytes": 5345,
+          "sha256": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526",
+          "member": "libpng-1.6.58/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/ci/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "libpng-1.6.58/ci/LICENSE_MIT.txt"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/contrib/gregbook/COPYING",
+          "bytes": 18097,
+          "sha256": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572",
+          "member": "libpng-1.6.58/contrib/gregbook/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/contrib/gregbook/LICENSE",
+          "bytes": 2373,
+          "sha256": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438",
+          "member": "libpng-1.6.58/contrib/gregbook/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/contrib/pngexif/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "libpng-1.6.58/contrib/pngexif/LICENSE_MIT.txt"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/contrib/pngminus/LICENSE.txt",
+          "bytes": 1164,
+          "sha256": "1806f1f10d393e9e377b3a8d1b968452b54f1a90378f14eeef45426946ace330",
+          "member": "libpng-1.6.58/contrib/pngminus/LICENSE.txt"
+        },
+        {
+          "path": "native-aggregate-sources/png/notices/scripts/cmake/AUTHORS.md",
+          "bytes": 862,
+          "sha256": "50633b976f0133862c921aa67d56de2c0b42eb344c8ca3853686efb092a447db",
+          "member": "libpng-1.6.58/scripts/cmake/AUTHORS.md"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "pnggroup/libpng",
+        "ref": "v1.6.58",
+        "commit": "3061454d980de7d53608f594194cfac722721d2a",
+        "tree": "6937cb18b7d1402af72e93af2ef8e9772bb1d2da",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/png/commit.json",
+          "bytes": 24828,
+          "sha256": "be319c6136c0ed95279eb14624c1bc6e6d07a3a3b052fcc90f43b429fd5d5b6d",
+          "url": "https://api.github.com/repos/pnggroup/libpng/commits/v1.6.58"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/png/tree.json",
+          "bytes": 156067,
+          "sha256": "79dddf5a6e53b5ae3089b3618dfff5e82233ec0ce169365d78b99b942f0de1f3",
+          "url": "https://api.github.com/repos/pnggroup/libpng/git/trees/6937cb18b7d1402af72e93af2ef8e9772bb1d2da?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      }
+    },
+    {
+      "name": "tiff",
+      "version": "4.7.2",
+      "versionVariable": "VERSION_TIFF",
+      "workingDirectory": "tiff",
+      "downloadTemplate": "https://gitlab.com/libtiff/libtiff/-/archive/v${VERSION_TIFF}/libtiff-v${VERSION_TIFF}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/tiff/libtiff-v4.7.2.tar.gz",
+        "bytes": 2616788,
+        "sha256": "62b15f44c10106065211efa22a2dc77937bd97ee1f6e3afd2c9659010de112eb",
+        "url": "https://gitlab.com/libtiff/libtiff/-/archive/v4.7.2/libtiff-v4.7.2.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/tiff/archive-http.json",
+        "bytes": 4050,
+        "sha256": "da37d4475c28dd24de985742a913c48f7496fea1eeac9daf9c46c63685595a6e"
+      },
+      "root": "libtiff-v4.7.2/",
+      "members": {
+        "path": "native-aggregate-sources/tiff/members.json",
+        "bytes": 176773,
+        "sha256": "bf0564bad8c1123c31a18269ac938d6167f9f364de64c44b7f22f0e60e2b11ee"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/tiff/notices/LICENSE.md",
+          "bytes": 2416,
+          "sha256": "0e27c2382d7b8147972bbb746e04059a1152c8d0fda9d03ef1399d1a433c4ade",
+          "member": "libtiff-v4.7.2/LICENSE.md"
+        },
+        {
+          "path": "native-aggregate-sources/tiff/notices/doc/project/license.rst",
+          "bytes": 1181,
+          "sha256": "02e86af3b805e0f2075ebb5ac512831f6ab2a97ddeb186de076c418956418ba1",
+          "member": "libtiff-v4.7.2/doc/project/license.rst"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "https://gitlab.com/libtiff/libtiff.git",
+        "ref": "v4.7.2",
+        "commit": "d01a94be176f5f6a87f7ee1c0b32e65416aa2b4d",
+        "tree": "383ac4e604330018281e552e169d91a5f3ed25a1",
+        "kind": "original-git-object",
+        "commitObject": {
+          "path": "native-aggregate-sources/tiff/commit.object",
+          "bytes": 377,
+          "sha256": "bd348260f9ab89cb28c8f36c9fdf2eb7f92cdf45b9af38b263472d99a8351410"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/tiff/tree.json",
+          "bytes": 102067,
+          "sha256": "df3788cde50167df4301cb086032d8c9b86b38b8e6696a5f3c5d0c73d3919be5"
+        },
+        "gitlinks": [],
+        "exportedOut": [],
+        "exportAttributes": {
+          "path": "native-aggregate-sources/tiff/.gitattributes.original",
+          "bytes": 358,
+          "sha256": "f55ff40c9d3c109300bb126dbc55b2629cd0ecf38b5b8f7ba6bb4935cdfe720a",
+          "member": ".gitattributes"
+        },
+        "exportConversions": [
+          {
+            "member": "build/gitlab-ci.ps1",
+            "kind": "original-attributes-crlf-export",
+            "attributeRule": "*.ps1 text eol=crlf",
+            "originalBlob": {
+              "path": "native-aggregate-sources/tiff/git-original/build/gitlab-ci.ps1",
+              "bytes": 9532,
+              "sha256": "46fb43d4cfcb494706331634f950d5c4a3bfa331fd3dd56f7e116c578a081b8c",
+              "gitBlob": "a69357ddecb6a4be3721a40a79a6e6147c6f9846",
+              "url": "https://gitlab.com/api/v4/projects/libtiff%2Flibtiff/repository/blobs/a69357ddecb6a4be3721a40a79a6e6147c6f9846/raw"
+            },
+            "httpReceipt": {
+              "path": "native-aggregate-sources/tiff/git-original/build/gitlab-ci.ps1.http.json",
+              "bytes": 2190,
+              "sha256": "0417b75ffca1ecca901e4b660ed651aa693f33aa2b5cfdcf15dc16a1566682b1"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "uhdr",
+      "version": "2.0.2",
+      "versionVariable": "VERSION_UHDR",
+      "workingDirectory": "uhdr",
+      "downloadTemplate": "https://github.com/google/libultrahdr/archive/v${VERSION_UHDR}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/uhdr/v2.0.2.tar.gz",
+        "bytes": 1518872,
+        "sha256": "aa8d193bb887c348c419780511dd03b374f4e07af8812b6d3f80c8537cf1ef2c",
+        "url": "https://github.com/google/libultrahdr/archive/v2.0.2.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/uhdr/archive-http.json",
+        "bytes": 1521,
+        "sha256": "082fa879ef62b3ff1e71e54a69738a9e5d98191a027b3d956ff80acdf1655080"
+      },
+      "root": "libultrahdr-2.0.2/",
+      "members": {
+        "path": "native-aggregate-sources/uhdr/members.json",
+        "bytes": 70550,
+        "sha256": "428a5c25332f6b43284f267f948883faf164e99e9f3186c176c5aa721472c44d"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/uhdr/notices/LICENSE",
+          "bytes": 12566,
+          "sha256": "c9247b5cb07866938643cc238292434e6f2af8642e1fce10771c0e4cc7909316",
+          "member": "libultrahdr-2.0.2/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/LICENSE-APACHE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "member": "libultrahdr-2.0.2/LICENSE-APACHE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/LICENSE-MIT",
+          "bytes": 1088,
+          "sha256": "029624bf1488ed7b8c92727d267c95f588c9c12fa6932c207884c2641a7e9d37",
+          "member": "libultrahdr-2.0.2/LICENSE-MIT"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/adobe-hdr-gain-map-license/NOTICE",
+          "bytes": 66,
+          "sha256": "746d8c9c414b335bb7c9615918a15a6489a4dcc1c5c3aac2bda410d1072c332a",
+          "member": "libultrahdr-2.0.2/adobe-hdr-gain-map-license/NOTICE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/tests/data/LICENSE",
+          "bytes": 19354,
+          "sha256": "c4b2cd68902b8c4a82c9b5ddebe15538acbce7f70a88fcc751e1e921bde89f7f",
+          "member": "libultrahdr-2.0.2/tests/data/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/third_party/image_io/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "member": "libultrahdr-2.0.2/third_party/image_io/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/third_party/image_io/MODULE_LICENSE_APACHE2",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "libultrahdr-2.0.2/third_party/image_io/MODULE_LICENSE_APACHE2"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/third_party/image_io/src/modp_b64/LICENSE",
+          "bytes": 1721,
+          "sha256": "d47e8390fb0d7ad4a18f26aedd6283c7ab6b5b4fabab536ccb4db7f9f6d90c08",
+          "member": "libultrahdr-2.0.2/third_party/image_io/src/modp_b64/LICENSE"
+        },
+        {
+          "path": "native-aggregate-sources/uhdr/notices/third_party/image_io/src/modp_b64/MODULE_LICENSE_BSD",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "libultrahdr-2.0.2/third_party/image_io/src/modp_b64/MODULE_LICENSE_BSD"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "google/libultrahdr",
+        "ref": "v2.0.2",
+        "commit": "e5f5a022fe96fc4dc2ee35c19f733a50df807abe",
+        "tree": "753e6315ba59ad9fdabb41994e90ca5f11825132",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/uhdr/commit.json",
+          "bytes": 5917,
+          "sha256": "9f348b2d3bdad3309bcb20dd557da1202000780d93dde218fbaadb166d896546",
+          "url": "https://api.github.com/repos/google/libultrahdr/commits/v2.0.2"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/uhdr/tree.json",
+          "bytes": 68617,
+          "sha256": "bdc4c63c7f172e70adb447271d127e7a719aeae606d851abc6752d532eeb19a2",
+          "url": "https://api.github.com/repos/google/libultrahdr/git/trees/753e6315ba59ad9fdabb41994e90ca5f11825132?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": []
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/uhdr.mk",
+        "prefix": "$(PKG)"
+      }
+    },
+    {
+      "name": "webp",
+      "version": "1.6.0",
+      "versionVariable": "VERSION_WEBP",
+      "workingDirectory": "webp",
+      "downloadTemplate": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${VERSION_WEBP}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/webp/libwebp-1.6.0.tar.gz",
+        "bytes": 4296070,
+        "sha256": "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564",
+        "url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/webp/archive-http.json",
+        "bytes": 1873,
+        "sha256": "82c130c159c80bb87683554f21dfc16ec30e8f656f638a529632f2601fc4566b"
+      },
+      "root": "libwebp-1.6.0/",
+      "members": {
+        "path": "native-aggregate-sources/webp/members.json",
+        "bytes": 96412,
+        "sha256": "9440db04407e8287b37b989cbd822934fb7d0510082a9a4ea0cbd26e1125fcc9"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/webp/notices/PATENTS",
+          "bytes": 1436,
+          "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+          "member": "libwebp-1.6.0/PATENTS"
+        },
+        {
+          "path": "native-aggregate-sources/webp/notices/COPYING",
+          "bytes": 1496,
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+          "member": "libwebp-1.6.0/COPYING"
+        },
+        {
+          "path": "native-aggregate-sources/webp/notices/AUTHORS",
+          "bytes": 3279,
+          "sha256": "f251be89fd442bd9d701360730aea163cc8e2076ff03528f59267dc2c4f8b60a",
+          "member": "libwebp-1.6.0/AUTHORS"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-google-object-metadata",
+        "receipt": {
+          "path": "native-aggregate-sources/webp/published-checksum.json",
+          "bytes": 944,
+          "sha256": "dfe7aaaa6941f5f175aa27700ac1e61f296b34805227b861e8bcba0dd8042175"
+        },
+        "httpReceipt": {
+          "path": "native-aggregate-sources/webp/published-checksum-http.json",
+          "bytes": 1311,
+          "sha256": "a11095b10d8947f965696c3b80ec0c3f493706536a174077f22e9dbb838cc360"
+        }
+      }
+    },
+    {
+      "name": "xml2",
+      "version": "2.15.3",
+      "versionVariable": "VERSION_XML2",
+      "workingDirectory": "xml2",
+      "downloadTemplate": "https://download.gnome.org/sources/libxml2/$(without_patch $VERSION_XML2)/libxml2-${VERSION_XML2}.tar.xz",
+      "archive": {
+        "path": "native-aggregate-sources/xml2/libxml2-2.15.3.tar.xz",
+        "bytes": 3152452,
+        "sha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+        "url": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.tar.xz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/xml2/archive-http.json",
+        "bytes": 1432,
+        "sha256": "a5a51733cdbbaf26c1d2e2c63f9e244701fb5a7ecd0a745423598d63823a32b3"
+      },
+      "root": "libxml2-2.15.3/",
+      "members": {
+        "path": "native-aggregate-sources/xml2/members.json",
+        "bytes": 1172902,
+        "sha256": "969f95960b395e1ddbcfcf36d3973da39ddb37d742e50e5b61e4753be4eaa2d9"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/xml2/notices/Copyright",
+          "bytes": 1314,
+          "sha256": "5d4873884a890122a4b9b20ad56ac6f7da1d796a5bfcf04a427970ac96217626",
+          "member": "libxml2-2.15.3/Copyright"
+        },
+        {
+          "path": "native-aggregate-sources/xml2/notices/test/html-tokenizer/NOTICE",
+          "bytes": 1270,
+          "sha256": "d6a2cb265a0a249a234b89eeffa7f316ebe5bff546672a0a2b1a861dd2238460",
+          "member": "libxml2-2.15.3/test/html-tokenizer/NOTICE"
+        },
+        {
+          "path": "native-aggregate-sources/xml2/notices/result/html-tokenizer/NOTICE",
+          "bytes": 1270,
+          "sha256": "d6a2cb265a0a249a234b89eeffa7f316ebe5bff546672a0a2b1a861dd2238460",
+          "member": "libxml2-2.15.3/result/html-tokenizer/NOTICE"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "checksum": {
+        "kind": "original-gnome-sha256",
+        "receipt": {
+          "path": "native-aggregate-sources/xml2/published-checksum.txt",
+          "bytes": 174,
+          "sha256": "23a0184100e4bb7fc729d8d58f07b8eef532bd837c7b7bf1fef222773ae2ddf0",
+          "url": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.sha256sum"
+        },
+        "httpReceipt": {
+          "path": "native-aggregate-sources/xml2/published-checksum-http.json",
+          "bytes": 1473,
+          "sha256": "42e41d5fcab42c9f1ccfa093ca3e3e813aa980d99971d4a2bfb03ff20d75211c"
+        }
+      }
+    },
+    {
+      "name": "zlib-ng",
+      "version": "2.3.3",
+      "versionVariable": "VERSION_ZLIB_NG",
+      "workingDirectory": "zlib-ng",
+      "downloadTemplate": "https://github.com/zlib-ng/zlib-ng/archive/${VERSION_ZLIB_NG}.tar.gz",
+      "archive": {
+        "path": "native-aggregate-sources/zlib-ng/2.3.3.tar.gz",
+        "bytes": 2447397,
+        "sha256": "f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1",
+        "url": "https://github.com/zlib-ng/zlib-ng/archive/2.3.3.tar.gz"
+      },
+      "httpReceipt": {
+        "path": "native-aggregate-sources/zlib-ng/archive-http.json",
+        "bytes": 1506,
+        "sha256": "a6093e246ca4b906818d6b953bd001e1fa2773259894bccc853ba440a2897401"
+      },
+      "root": "zlib-ng-2.3.3/",
+      "members": {
+        "path": "native-aggregate-sources/zlib-ng/members.json",
+        "bytes": 96665,
+        "sha256": "f3cde2942d938f944c22a429603001c3d53afc0359d4209bf0b7958aa6e431c8"
+      },
+      "notices": [
+        {
+          "path": "native-aggregate-sources/zlib-ng/notices/LICENSE.md",
+          "bytes": 867,
+          "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+          "member": "zlib-ng-2.3.3/LICENSE.md"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-recipe-url-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original complete response container at the retained POSIX recipe URL. Not a recovered historical producer response, binary replay, Windows build attribution or compiler closure."
+      },
+      "git": {
+        "repository": "zlib-ng/zlib-ng",
+        "ref": "2.3.3",
+        "commit": "12731092979c6d07f42da27da673a9f6c7b13586",
+        "tree": "baa7e2050b51c3db4c88bc8f2daf93ca0ae88a98",
+        "commitReceipt": {
+          "path": "native-aggregate-sources/zlib-ng/commit.json",
+          "bytes": 6929,
+          "sha256": "8c34ac16ad803a4cb0f9cc7c03c8835293238f66084898cb2c65d93658532d87",
+          "url": "https://api.github.com/repos/zlib-ng/zlib-ng/commits/2.3.3"
+        },
+        "treeReceipt": {
+          "path": "native-aggregate-sources/zlib-ng/tree.json",
+          "bytes": 94502,
+          "sha256": "f927158ee8f945c062dac9bd3d0a73cf1fc24fa4b1270eaad97a8d5dd0f1668f",
+          "url": "https://api.github.com/repos/zlib-ng/zlib-ng/git/trees/baa7e2050b51c3db4c88bc8f2daf93ca0ae88a98?recursive=1"
+        },
+        "gitlinks": [],
+        "exportedOut": [
+          ".gitattributes",
+          ".github",
+          ".github/FUNDING.yml",
+          ".github/dependabot.yml",
+          ".github/workflows",
+          ".github/workflows/analyze.yml",
+          ".github/workflows/cmake.yml",
+          ".github/workflows/codeql.yml",
+          ".github/workflows/configure.yml",
+          ".github/workflows/fuzz.yml",
+          ".github/workflows/libpng.yml",
+          ".github/workflows/link.yml",
+          ".github/workflows/lint.yml",
+          ".github/workflows/osb.yml",
+          ".github/workflows/pigz.yml",
+          ".github/workflows/pkgcheck.yml",
+          ".github/workflows/release.yml",
+          ".gitignore",
+          "arch/.gitignore",
+          "test/.gitignore"
+        ],
+        "exportAttributes": {
+          "path": "native-aggregate-sources/zlib-ng/.gitattributes.original",
+          "bytes": 288,
+          "sha256": "9874fa075c23bf944111849d94801e50e9d2c89a36ec8c657e22084617f4e256",
+          "member": ".gitattributes"
+        }
+      },
+      "checksum": {
+        "kind": "original-mxe-recipe-sha256",
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/plugins/zlib-ng/zlib-ng.mk",
+        "prefix": "$(PKG)"
+      }
+    }
+  ],
+  "ultrahdrPatch": {
+    "repository": "google/libultrahdr",
+    "pull": 383,
+    "originalRecipeUrl": "https://patch-diff.githubusercontent.com/raw/google/libultrahdr/pull/383.patch",
+    "pullReceipt": {
+      "path": "native-aggregate-sources/ultrahdr-patch/pull.json",
+      "bytes": 17505,
+      "sha256": "161b489c797e189a274f895918e2404e1a3070b9854e6ba1254a5da85f9d004e",
+      "url": "https://api.github.com/repos/google/libultrahdr/pulls/383"
+    },
+    "commitsReceipt": {
+      "path": "native-aggregate-sources/ultrahdr-patch/commits.json",
+      "bytes": 6723,
+      "sha256": "0583523001a3bf5ff5f3d95944dc44aabd2f888ec02c0a6d12dedea46bdf9e00",
+      "url": "https://api.github.com/repos/google/libultrahdr/pulls/383/commits?per_page=100"
+    },
+    "currentResponse": {
+      "path": "native-aggregate-sources/ultrahdr-patch/383.patch",
+      "bytes": 7567,
+      "sha256": "57658db2a11ae964755e513b01db21bcfa408c350b11b3a6ef9bc8576fb749ba"
+    },
+    "httpReceipt": {
+      "path": "native-aggregate-sources/ultrahdr-patch/383.patch.http.json",
+      "bytes": 5965,
+      "sha256": "dc52c0b590a073448bb4b1a9b8a8afa9be2ab7f9c8088f82b4e154f52e65a58c"
+    },
+    "commits": [
+      {
+        "path": "native-aggregate-sources/ultrahdr-patch/e2daed8da97d8857dcec2fd68d2f6f3326170f67.patch",
+        "bytes": 6305,
+        "sha256": "e0106f9458626f6745a9a9a3841478b7a42f6905f67373d19f6f9b897c33ada5",
+        "commit": "e2daed8da97d8857dcec2fd68d2f6f3326170f67",
+        "url": "https://github.com/google/libultrahdr/commit/e2daed8da97d8857dcec2fd68d2f6f3326170f67.patch"
+      },
+      {
+        "path": "native-aggregate-sources/ultrahdr-patch/7af35883ee575266cc43bbd05686734ebd5b1a82.patch",
+        "bytes": 1253,
+        "sha256": "93fe6e8cac53ea6df20d3e44145211a72f28644b03e58109fd3f4826d63b646a",
+        "commit": "7af35883ee575266cc43bbd05686734ebd5b1a82",
+        "url": "https://github.com/google/libultrahdr/commit/7af35883ee575266cc43bbd05686734ebd5b1a82.patch"
+      }
+    ],
+    "sourceFiles": [
+      "CMakeLists.txt",
+      "cmake/package.cmake"
+    ],
+    "inlineEdit": "sed -i'.bak' 's/CMAKE_CROSSCOMPILING AND UHDR_ENABLE_INSTALL/FALSE/' CMakeLists.txt",
+    "acquisition": "Current PR response and immutable individual commit patch responses. Their ordered diffs must agree and be applied to the actual 2.0.2 source in CI; no original historical HTTP response is claimed."
+  },
+  "instructions": {
+    "path": "native-aggregate-sources/SOURCE-ACCESS.md",
+    "bytes": 10717,
+    "sha256": "1fab1d6b74c2f9339a0c43cfb277c23e1201d0fdd0f268c94345848091e93fbc"
+  },
+  "limitations": [
+    "These are the nineteen previously unsupplied complete native inputs selected by the retained Sharp/libvips POSIX recipe for Linux x64 glibc and macOS arm64. Existing eight complete native libraries, proxy-libintl and GVDB are supplied by their original separate catalogs.",
+    "Current exact-version response containers are unmodified. Complete published release archives and Git export archives retain their own meanings; separately held Git trees, export attributes and checksums record the applicable source identities.",
+    "The Ultra HDR PR response is acquired now, not recovered from the historical build. CI applies its two matching fixed-commit diffs and the original inline edit to the pristine 2.0.2 source without compiling it.",
+    "POSIX librsvg current effective Rust selection is separately scoped. Windows uses a distinct MXE producer, including AOM 3.14.1 rather than POSIX 3.15.0; a current compatible selected MXE/native aggregate process and its remaining sources are not established by this group.",
+    "These source and patch arrangements do not claim a successful modified aggregate compile, relink or runtime replacement, historical toolchain replay, byte-identical old binaries or any licensing compatibility conclusion."
+  ]
+}

@@ -1,0 +1,1858 @@
+{
+  "retrievedOn": "2026-10-27",
+  "runId": 40502027602,
+  "runReceipt": {
+    "path": "canvas-current-graphs/run.json",
+    "bytes": 12790,
+    "sha256": "e6e1e6c0f9d66c75ab9bca43aa97eab12bb398f21c36457c8a42226e13e393ed"
+  },
+  "jobsReceipt": {
+    "path": "canvas-current-graphs/jobs.json",
+    "bytes": 10849,
+    "sha256": "eca9d27e810e3af875fdd34d6df73131087619f37fa8154928afc5296edc2cc9"
+  },
+  "artifactsReceipt": {
+    "path": "canvas-current-graphs/artifacts.json",
+    "bytes": 3026,
+    "sha256": "862fc13568ae14c82a04ca15bd128d2f323b6d7c656fa3d385fd38487b405b89"
+  },
+  "producer": [
+    {
+      "path": "canvas-current-graphs/producer/native-source-graph.yml.original",
+      "bytes": 3226,
+      "sha256": "fa8b05939a712e51551ed0de8124ff445e5a2b9665df5299c3b46db0b16d84f1",
+      "upstreamPath": ".github/workflows/native-source-graph.yml",
+      "gitBlob": "3b805927108f787d4effbe989c72534e166b37eb"
+    },
+    {
+      "path": "canvas-current-graphs/producer/capture-canvas-source-graph.js.original",
+      "bytes": 8416,
+      "sha256": "4d02cab9490e54f663735eaab73a92bbda2d0392cf91d677fd7698987f757636",
+      "upstreamPath": "tools/release/capture-canvas-source-graph.js",
+      "gitBlob": "642a163b41fece8d43b69062b069e8ce56343de3"
+    },
+    {
+      "path": "canvas-current-graphs/producer/materials.js.original",
+      "bytes": 47011,
+      "sha256": "2d24e844dd04f17928297acb81678d63594177c3f7cbf3fc0cc106ea9d3a890d",
+      "upstreamPath": "tools/release/materials.js",
+      "gitBlob": "a29ac9abd9fcd198a3b67f2f115e97da2ced3e19"
+    },
+    {
+      "path": "canvas-current-graphs/producer/license-texts.js.original",
+      "bytes": 4376,
+      "sha256": "437fac712273de7e7151bc09b5aa4cfc4695c090857b13630d7c66014f1ac4fc",
+      "upstreamPath": "tools/release/license-texts.js",
+      "gitBlob": "977150b96d78e162b4f41b8d2400be8595ae32dd"
+    }
+  ],
+  "producerTrees": [
+    {
+      "prefix": "",
+      "gitTree": "509933aa58ff3b0a2c4629251c9327c5cd40dc50",
+      "object": {
+        "path": "canvas-current-graphs/producer-trees/root.tree",
+        "bytes": 397,
+        "sha256": "5ac058abec5aa2613f8f68f963907c893e1ef85b1950ad3708e329cda5b8cb3c"
+      }
+    },
+    {
+      "prefix": ".github",
+      "gitTree": "756a87ad62bc28717fcbfe70c91157f05f7091f9",
+      "object": {
+        "path": "canvas-current-graphs/producer-trees/.github.tree",
+        "bytes": 36,
+        "sha256": "08a821450adce3830e68fb65ffd99be57b9ecb8e59739c1928f75ab12ecb58ac"
+      }
+    },
+    {
+      "prefix": ".github/workflows",
+      "gitTree": "5bf55bef7b03e62a523bfc8507e04864930162ba",
+      "object": {
+        "path": "canvas-current-graphs/producer-trees/.github-workflows.tree",
+        "bytes": 582,
+        "sha256": "b41e14e8b08bc8dec9fa1c30846aca985f353b38fe74c0b1c361300cce6e44e5"
+      }
+    },
+    {
+      "prefix": "tools",
+      "gitTree": "c868f383478cb69e81138b575226e175ab41ca80",
+      "object": {
+        "path": "canvas-current-graphs/producer-trees/tools.tree",
+        "bytes": 803,
+        "sha256": "86d54e61c4e4385b09a0a8fc9e2ac8c6a0de813ecc64be9b7b4550f8d30b6e14"
+      }
+    },
+    {
+      "prefix": "tools/release",
+      "gitTree": "64f72098944724f8d69280fa95a1d58e40c0c90c",
+      "object": {
+        "path": "canvas-current-graphs/producer-trees/tools-release.tree",
+        "bytes": 866,
+        "sha256": "ee432bbb5f346da879b1d4a7af67fc6fc13e2741f8c2d2fb5916ad10f2749db1"
+      }
+    }
+  ],
+  "inputBindings": [
+    {
+      "original": {
+        "path": "native-packages.json",
+        "bytes": 488139,
+        "sha256": "480203923d74941226466046b8d23e06abd11944008893fd08eb6d8515acd6e4"
+      },
+      "supplied": {
+        "path": "canvas-current-graphs/producer-inputs/native-packages.json",
+        "bytes": 488139,
+        "sha256": "480203923d74941226466046b8d23e06abd11944008893fd08eb6d8515acd6e4"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources.json",
+        "bytes": 1210475,
+        "sha256": "a98b26ccd529a67b0510a7f2f2fcbb7affec8ac84af6a7d5d52d94d2c4a833cc"
+      },
+      "supplied": {
+        "path": "canvas-current-graphs/producer-inputs/canvas-cargo-sources.json",
+        "bytes": 1210475,
+        "sha256": "a98b26ccd529a67b0510a7f2f2fcbb7affec8ac84af6a7d5d52d94d2c4a833cc"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.gitmodules",
+        "bytes": 172,
+        "sha256": "42bbce9349d520c24475215871371def98636c3d8b9f7bdce138302f492f648c"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.gitmodules",
+        "bytes": 172,
+        "sha256": "42bbce9349d520c24475215871371def98636c3d8b9f7bdce138302f492f648c"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/Cargo.lock",
+        "bytes": 21730,
+        "sha256": "a4cb753b26f4b1b173d6b9f3e41771075d54e5986c5110f69ca83d07d05df80a"
+      },
+      "supplied": {
+        "path": "recipes/canvas/Cargo.lock",
+        "bytes": 21730,
+        "sha256": "a4cb753b26f4b1b173d6b9f3e41771075d54e5986c5110f69ca83d07d05df80a"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/Cargo.toml",
+        "bytes": 1610,
+        "sha256": "bf0cc0fc2e03062e4b8357751cd99c834a4a0094df1bee0c95e19e2b9a77b0b2"
+      },
+      "supplied": {
+        "path": "recipes/canvas/Cargo.toml",
+        "bytes": 1610,
+        "sha256": "bf0cc0fc2e03062e4b8357751cd99c834a4a0094df1bee0c95e19e2b9a77b0b2"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/LICENSE",
+        "bytes": 1075,
+        "sha256": "8802fecf9da4367bc23bcf20b21cc143785fc6c92b152f3fa7fbe6ce08d344d6"
+      },
+      "supplied": {
+        "path": "recipes/canvas/LICENSE",
+        "bytes": 1075,
+        "sha256": "8802fecf9da4367bc23bcf20b21cc143785fc6c92b152f3fa7fbe6ce08d344d6"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/build.rs",
+        "bytes": 6798,
+        "sha256": "d86c9adbf8692be58b03ac937a121a4078dfd71d7f90d900e28c2f1976e445fc"
+      },
+      "supplied": {
+        "path": "recipes/canvas/build.rs",
+        "bytes": 6798,
+        "sha256": "d86c9adbf8692be58b03ac937a121a4078dfd71d7f90d900e28c2f1976e445fc"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/llvm-version",
+        "bytes": 7,
+        "sha256": "561efeeac48a935bc47d83bedf27d80c39a58de2541be03c7cfbc72612242593"
+      },
+      "supplied": {
+        "path": "recipes/canvas/llvm-version",
+        "bytes": 7,
+        "sha256": "561efeeac48a935bc47d83bedf27d80c39a58de2541be03c7cfbc72612242593"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.github/workflows/CI.yaml",
+        "bytes": 24651,
+        "sha256": "21769bb30327d45c07aed49490aed334f526036ab20417cc4b10ba7e16c3a9e1"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.github/workflows/CI.yaml",
+        "bytes": 24651,
+        "sha256": "21769bb30327d45c07aed49490aed334f526036ab20417cc4b10ba7e16c3a9e1"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/scripts/release-skia-binary.mjs",
+        "bytes": 4920,
+        "sha256": "e6ae2fab88c575efc7fe164788d172f58a89adc5595c2cc9cd8bcb754ced9ca6"
+      },
+      "supplied": {
+        "path": "recipes/canvas/scripts/release-skia-binary.mjs",
+        "bytes": 4920,
+        "sha256": "e6ae2fab88c575efc7fe164788d172f58a89adc5595c2cc9cd8bcb754ced9ca6"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/scripts/utils.mjs",
+        "bytes": 2526,
+        "sha256": "9675995e32f98007b10d8ecd8df5f783cbc2e67918153f383d3f8a975346b6d0"
+      },
+      "supplied": {
+        "path": "recipes/canvas/scripts/utils.mjs",
+        "bytes": 2526,
+        "sha256": "9675995e32f98007b10d8ecd8df5f783cbc2e67918153f383d3f8a975346b6d0"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.github/actions/setup-rust/action.yaml",
+        "bytes": 1214,
+        "sha256": "1673bbdfa35b0a8c5b647ebebed49bf292660eba81fffd7e9a7cfcea73a85c4e"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.github/actions/setup-rust/action.yaml",
+        "bytes": 1214,
+        "sha256": "1673bbdfa35b0a8c5b647ebebed49bf292660eba81fffd7e9a7cfcea73a85c4e"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.github/workflows/skia.yaml",
+        "bytes": 14430,
+        "sha256": "d8aa95373f36366844d4473d8d23b858fbd6cba4acfee9d06bde073c40e75eec"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.github/workflows/skia.yaml",
+        "bytes": 14430,
+        "sha256": "d8aa95373f36366844d4473d8d23b858fbd6cba4acfee9d06bde073c40e75eec"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/avif.rs",
+        "bytes": 11177,
+        "sha256": "b466cb55d699c9d0bb88e6f02d714ed4081e7d80f9d4d03ae39a49186527cab7"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/avif.rs",
+        "bytes": 11177,
+        "sha256": "b466cb55d699c9d0bb88e6f02d714ed4081e7d80f9d4d03ae39a49186527cab7"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/ctx.rs",
+        "bytes": 121203,
+        "sha256": "ebdf54662361d25863d88e29e094b63b0ac92ee23f16404feb08f9b8fca91f2d"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/ctx.rs",
+        "bytes": 121203,
+        "sha256": "ebdf54662361d25863d88e29e094b63b0ac92ee23f16404feb08f9b8fca91f2d"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/error.rs",
+        "bytes": 1709,
+        "sha256": "c8eaa36fcb3d79591f14db2cff06b8603a97ae1c6a91951bb992ef6792e40cd0"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/error.rs",
+        "bytes": 1709,
+        "sha256": "c8eaa36fcb3d79591f14db2cff06b8603a97ae1c6a91951bb992ef6792e40cd0"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/filter.rs",
+        "bytes": 18713,
+        "sha256": "5a7964bddb57d5fc3332bd391c4b8181887be5bf362f2a7bd469f47fec9e5963"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/filter.rs",
+        "bytes": 18713,
+        "sha256": "5a7964bddb57d5fc3332bd391c4b8181887be5bf362f2a7bd469f47fec9e5963"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/font.rs",
+        "bytes": 15367,
+        "sha256": "727cfee111056aa68e993eabd4c7100d98137b8ae0b836cafc2aa73b43e34a33"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/font.rs",
+        "bytes": 15367,
+        "sha256": "727cfee111056aa68e993eabd4c7100d98137b8ae0b836cafc2aa73b43e34a33"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/gif.rs",
+        "bytes": 7872,
+        "sha256": "d5bfe9ac0b21f3cec0457b7c2907df19ba58abb963dec7691eaaeb4377b0750f"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/gif.rs",
+        "bytes": 7872,
+        "sha256": "d5bfe9ac0b21f3cec0457b7c2907df19ba58abb963dec7691eaaeb4377b0750f"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/global_fonts.rs",
+        "bytes": 6957,
+        "sha256": "6bab86033e65c8c3588848f90a7c75f526eafe8999fadcfa63e7492c6a425c2b"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/global_fonts.rs",
+        "bytes": 6957,
+        "sha256": "6bab86033e65c8c3588848f90a7c75f526eafe8999fadcfa63e7492c6a425c2b"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/gradient.rs",
+        "bytes": 10085,
+        "sha256": "71b48c4a5129a88ccd50ab4c14e813fd0bfbeb67f4403f3148453c2dbd38a639"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/gradient.rs",
+        "bytes": 10085,
+        "sha256": "71b48c4a5129a88ccd50ab4c14e813fd0bfbeb67f4403f3148453c2dbd38a639"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/image.rs",
+        "bytes": 47834,
+        "sha256": "c17415a55efd5c1de08be3acafe7f5660ff8d9c1ba83afdb90c40cd26dddef63"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/image.rs",
+        "bytes": 47834,
+        "sha256": "c17415a55efd5c1de08be3acafe7f5660ff8d9c1ba83afdb90c40cd26dddef63"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/lib.rs",
+        "bytes": 32652,
+        "sha256": "9935b6bf154e8b70a02be7dd300085925b75a106d8e6cad9cb16c95a5bd142e1"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/lib.rs",
+        "bytes": 32652,
+        "sha256": "9935b6bf154e8b70a02be7dd300085925b75a106d8e6cad9cb16c95a5bd142e1"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/lottie.rs",
+        "bytes": 3503,
+        "sha256": "c2af81ebd32ec03882f62b53fc8bdd30f16e70dacf2019bb66dc05ddae12c710"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/lottie.rs",
+        "bytes": 3503,
+        "sha256": "c2af81ebd32ec03882f62b53fc8bdd30f16e70dacf2019bb66dc05ddae12c710"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/page_recorder.rs",
+        "bytes": 12628,
+        "sha256": "a0989019d399e12d82097372c863e6ff62f3da3dde9b9a9f683cdfb78e8575b2"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/page_recorder.rs",
+        "bytes": 12628,
+        "sha256": "a0989019d399e12d82097372c863e6ff62f3da3dde9b9a9f683cdfb78e8575b2"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/path.rs",
+        "bytes": 9474,
+        "sha256": "1c0d1c10b2f86a7f890471ebfd13ee81c3f44ec8644055282abbd956508a8c07"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/path.rs",
+        "bytes": 9474,
+        "sha256": "1c0d1c10b2f86a7f890471ebfd13ee81c3f44ec8644055282abbd956508a8c07"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/pattern.rs",
+        "bytes": 6176,
+        "sha256": "091f15c8f27441240de0462515171a51338b2d5caaac3df13b447ebafeadd88c"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/pattern.rs",
+        "bytes": 6176,
+        "sha256": "091f15c8f27441240de0462515171a51338b2d5caaac3df13b447ebafeadd88c"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/picture_recorder.rs",
+        "bytes": 1259,
+        "sha256": "0aca583621f3cc00baac6573b77e30eeef0a146b5640b5849312f09ea2618be3"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/picture_recorder.rs",
+        "bytes": 1259,
+        "sha256": "0aca583621f3cc00baac6573b77e30eeef0a146b5640b5849312f09ea2618be3"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/sk.rs",
+        "bytes": 130760,
+        "sha256": "fb19e61bb1ed59e43b88c7ed52b7c9033caf9afb56bc9e2964021ef2a7540a55"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/sk.rs",
+        "bytes": 130760,
+        "sha256": "fb19e61bb1ed59e43b88c7ed52b7c9033caf9afb56bc9e2964021ef2a7540a55"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/state.rs",
+        "bytes": 3034,
+        "sha256": "c1f2381556efc2525d0df1f640f38a005919d43d444c43e8e436b4368fe45ed2"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/state.rs",
+        "bytes": 3034,
+        "sha256": "c1f2381556efc2525d0df1f640f38a005919d43d444c43e8e436b4368fe45ed2"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/svg.rs",
+        "bytes": 1063,
+        "sha256": "6ca35ee79c354c1ce6554821b1662c531026e0b5a50417d37ef34a2c8d0b3118"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/svg.rs",
+        "bytes": 1063,
+        "sha256": "6ca35ee79c354c1ce6554821b1662c531026e0b5a50417d37ef34a2c8d0b3118"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/src/unpremul.rs",
+        "bytes": 14140,
+        "sha256": "4b9645af4d25abe362a3c13e0fff13a630180129377f90b7132d38d3e80e252e"
+      },
+      "supplied": {
+        "path": "recipes/canvas/src/unpremul.rs",
+        "bytes": 14140,
+        "sha256": "4b9645af4d25abe362a3c13e0fff13a630180129377f90b7132d38d3e80e252e"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/skia-c/skia_c.cpp",
+        "bytes": 100977,
+        "sha256": "7374151f36347669216c3fb06f4661fd3a90ad71031e756e6ad23fa1c77d17dc"
+      },
+      "supplied": {
+        "path": "recipes/canvas/skia-c/skia_c.cpp",
+        "bytes": 100977,
+        "sha256": "7374151f36347669216c3fb06f4661fd3a90ad71031e756e6ad23fa1c77d17dc"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/skia-c/skia_c.hpp",
+        "bytes": 54863,
+        "sha256": "adc280c95b657864a2d4e619cac541b10067ef7e3eca21638c9cde84fadaf81a"
+      },
+      "supplied": {
+        "path": "recipes/canvas/skia-c/skia_c.hpp",
+        "bytes": 54863,
+        "sha256": "adc280c95b657864a2d4e619cac541b10067ef7e3eca21638c9cde84fadaf81a"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/package.json",
+        "bytes": 4280,
+        "sha256": "d9347925fd5a69185d1a3d984d2a8128794db619e28f9663fb9c180674afb689"
+      },
+      "supplied": {
+        "path": "recipes/canvas/package.json",
+        "bytes": 4280,
+        "sha256": "d9347925fd5a69185d1a3d984d2a8128794db619e28f9663fb9c180674afb689"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/rust-toolchain.toml",
+        "bytes": 51,
+        "sha256": "95831e86ed45e5f59d037dd2965d2f679ecb4525e915d6b9aebb205f9bf46a5c"
+      },
+      "supplied": {
+        "path": "recipes/canvas/rust-toolchain.toml",
+        "bytes": 51,
+        "sha256": "95831e86ed45e5f59d037dd2965d2f679ecb4525e915d6b9aebb205f9bf46a5c"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/yarn.lock",
+        "bytes": 217942,
+        "sha256": "850c9a0f04118be54c7ad14bc5b1270a56a6128b33abc1c8dceea3167de8837d"
+      },
+      "supplied": {
+        "path": "recipes/canvas/yarn.lock",
+        "bytes": 217942,
+        "sha256": "850c9a0f04118be54c7ad14bc5b1270a56a6128b33abc1c8dceea3167de8837d"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.yarnrc.yml",
+        "bytes": 128,
+        "sha256": "b1dc8cf0260fae76f5581f0ca89a9aae58b08dc3f0dcfe7ab067670ccb5e78b0"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.yarnrc.yml",
+        "bytes": 128,
+        "sha256": "b1dc8cf0260fae76f5581f0ca89a9aae58b08dc3f0dcfe7ab067670ccb5e78b0"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.npmrc",
+        "bytes": 35,
+        "sha256": "c2df2465884206f81fd8d518a4a05b9bb69372bdf4a8297c150843433737fe72"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.npmrc",
+        "bytes": 35,
+        "sha256": "c2df2465884206f81fd8d518a4a05b9bb69372bdf4a8297c150843433737fe72"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/Dockerfile",
+        "bytes": 2549,
+        "sha256": "5c56bb1f1679cae39d395f36a9da841cbab15c0df3c3592a3d36dca89dbec410"
+      },
+      "supplied": {
+        "path": "recipes/canvas/Dockerfile",
+        "bytes": 2549,
+        "sha256": "5c56bb1f1679cae39d395f36a9da841cbab15c0df3c3592a3d36dca89dbec410"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/scripts/build-c++abi.mjs",
+        "bytes": 1238,
+        "sha256": "043ce15c2dbb91a3a57b8021ac497a9593309d0199b8e6038c7689ae66ee14fe"
+      },
+      "supplied": {
+        "path": "recipes/canvas/scripts/build-c++abi.mjs",
+        "bytes": 1238,
+        "sha256": "043ce15c2dbb91a3a57b8021ac497a9593309d0199b8e6038c7689ae66ee14fe"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/scripts/build-skia.js",
+        "bytes": 18859,
+        "sha256": "b57ac406de01ec885c10cfb63e55ea3eb55d30f01a8a7ec17306f0949ea0b6f0"
+      },
+      "supplied": {
+        "path": "recipes/canvas/scripts/build-skia.js",
+        "bytes": 18859,
+        "sha256": "b57ac406de01ec885c10cfb63e55ea3eb55d30f01a8a7ec17306f0949ea0b6f0"
+      }
+    },
+    {
+      "original": {
+        "path": "recipes/canvas/.cargo/config.toml",
+        "bytes": 635,
+        "sha256": "307993a1bf945d1f95a20d4b3c6256d50b104f480d12f28171c1f139bbc3e43f"
+      },
+      "supplied": {
+        "path": "recipes/canvas/.cargo/config.toml",
+        "bytes": 635,
+        "sha256": "307993a1bf945d1f95a20d4b3c6256d50b104f480d12f28171c1f139bbc3e43f"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/anyhow/anyhow-1.0.104.crate",
+        "bytes": 48819,
+        "sha256": "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/anyhow/anyhow-1.0.104.crate",
+        "bytes": 48819,
+        "sha256": "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/base64-simd/base64-simd-0.8.0.crate",
+        "bytes": 12531,
+        "sha256": "339abbe78e73178762e23bea9dfd08e697eb3f3301cd4be981c0f78ba5859195"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/base64-simd/base64-simd-0.8.0.crate",
+        "bytes": 12531,
+        "sha256": "339abbe78e73178762e23bea9dfd08e697eb3f3301cd4be981c0f78ba5859195"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/outref/outref-0.5.2.crate",
+        "bytes": 5621,
+        "sha256": "1a80800c0488c3a21695ea981a54918fbb37abf04f4d0720c453632255e2ff0e"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/outref/outref-0.5.2.crate",
+        "bytes": 5621,
+        "sha256": "1a80800c0488c3a21695ea981a54918fbb37abf04f4d0720c453632255e2ff0e"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/vsimd/vsimd-0.8.0.crate",
+        "bytes": 21377,
+        "sha256": "5c3082ca00d5a5ef149bb8b555a72ae84c9c59f7250f013ac822ac2e49b19c64"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/vsimd/vsimd-0.8.0.crate",
+        "bytes": 21377,
+        "sha256": "5c3082ca00d5a5ef149bb8b555a72ae84c9c59f7250f013ac822ac2e49b19c64"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/cssparser/cssparser-0.38.0.crate",
+        "bytes": 57272,
+        "sha256": "11119743ad110e8c1bdccd930d7f5c30c99e5fc76a7b63ec9807e84eef0c5f59"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/cssparser/cssparser-0.38.0.crate",
+        "bytes": 57272,
+        "sha256": "11119743ad110e8c1bdccd930d7f5c30c99e5fc76a7b63ec9807e84eef0c5f59"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/cssparser-macros-0.7.0/cssparser-macros-0.7.0.crate",
+        "bytes": 8167,
+        "sha256": "10a2a99df6e410a8ff4245aa2006499ea662245f967cc7c0a38c83ef8eb44dbf"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/cssparser-macros-0.7.0/cssparser-macros-0.7.0.crate",
+        "bytes": 8167,
+        "sha256": "10a2a99df6e410a8ff4245aa2006499ea662245f967cc7c0a38c83ef8eb44dbf"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/quote-1.0.47/quote-1.0.47.crate",
+        "bytes": 31622,
+        "sha256": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/quote-1.0.47/quote-1.0.47.crate",
+        "bytes": 31622,
+        "sha256": "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/proc-macro2-1.0.107/proc-macro2-1.0.107.crate",
+        "bytes": 59588,
+        "sha256": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/proc-macro2-1.0.107/proc-macro2-1.0.107.crate",
+        "bytes": 59588,
+        "sha256": "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/unicode-ident-1.0.24/unicode-ident-1.0.24.crate",
+        "bytes": 49298,
+        "sha256": "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/unicode-ident-1.0.24/unicode-ident-1.0.24.crate",
+        "bytes": 49298,
+        "sha256": "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/syn-2.0.119/syn-2.0.119.crate",
+        "bytes": 307407,
+        "sha256": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/syn-2.0.119/syn-2.0.119.crate",
+        "bytes": 307407,
+        "sha256": "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/dtoa-short-0.3.5/dtoa-short-0.3.5.crate",
+        "bytes": 8287,
+        "sha256": "cd1511a7b6a56299bd043a9c167a6d2bfb37bf84a6dfceaba651168adfb43c87"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/dtoa-short-0.3.5/dtoa-short-0.3.5.crate",
+        "bytes": 8287,
+        "sha256": "cd1511a7b6a56299bd043a9c167a6d2bfb37bf84a6dfceaba651168adfb43c87"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/dtoa-1.0.11/dtoa-1.0.11.crate",
+        "bytes": 21122,
+        "sha256": "4c3cf4824e2d5f025c7b531afcb2325364084a16806f6d47fbc1f5fbd9960590"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/dtoa-1.0.11/dtoa-1.0.11.crate",
+        "bytes": 21122,
+        "sha256": "4c3cf4824e2d5f025c7b531afcb2325364084a16806f6d47fbc1f5fbd9960590"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/itoa-1.0.18/itoa-1.0.18.crate",
+        "bytes": 15935,
+        "sha256": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/itoa-1.0.18/itoa-1.0.18.crate",
+        "bytes": 15935,
+        "sha256": "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/phf/phf-0.14.0.crate",
+        "bytes": 27393,
+        "sha256": "010378780309880b08997fae13be7834dba947d36393bd372f2b1556deb2a2f6"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/phf/phf-0.14.0.crate",
+        "bytes": 27393,
+        "sha256": "010378780309880b08997fae13be7834dba947d36393bd372f2b1556deb2a2f6"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/phf_macros/phf_macros-0.14.0.crate",
+        "bytes": 23963,
+        "sha256": "5fa8d0ca26d424d27630da600c6624696e7dec8bf7b3b492b383c5dc49e5e085"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/phf_macros/phf_macros-0.14.0.crate",
+        "bytes": 23963,
+        "sha256": "5fa8d0ca26d424d27630da600c6624696e7dec8bf7b3b492b383c5dc49e5e085"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/phf_generator/phf_generator-0.14.0.crate",
+        "bytes": 20446,
+        "sha256": "aeb62e0959d5a1bebc965f4d15d9e2b7cea002b6b0f5ba8cde6cc26738467100"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/phf_generator/phf_generator-0.14.0.crate",
+        "bytes": 20446,
+        "sha256": "aeb62e0959d5a1bebc965f4d15d9e2b7cea002b6b0f5ba8cde6cc26738467100"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/fastrand-2.5.0/fastrand-2.5.0.crate",
+        "bytes": 20782,
+        "sha256": "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/fastrand-2.5.0/fastrand-2.5.0.crate",
+        "bytes": 20782,
+        "sha256": "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/phf_shared-0.14.0/phf_shared-0.14.0.crate",
+        "bytes": 20291,
+        "sha256": "c6fd9027e2d9319be6349febd1db4e8d02aa544921200c9b777720ac34a3aa89"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/phf_shared-0.14.0/phf_shared-0.14.0.crate",
+        "bytes": 20291,
+        "sha256": "c6fd9027e2d9319be6349febd1db4e8d02aa544921200c9b777720ac34a3aa89"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/siphasher-1.0.3/siphasher-1.0.3.crate",
+        "bytes": 11643,
+        "sha256": "8ee5873ec9cce0195efcb7a4e9507a04cd49aec9c83d0389df45b1ef7ba2e649"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/siphasher-1.0.3/siphasher-1.0.3.crate",
+        "bytes": 11643,
+        "sha256": "8ee5873ec9cce0195efcb7a4e9507a04cd49aec9c83d0389df45b1ef7ba2e649"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/smallvec-1.15.2/smallvec-1.15.2.crate",
+        "bytes": 34899,
+        "sha256": "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/smallvec-1.15.2/smallvec-1.15.2.crate",
+        "bytes": 34899,
+        "sha256": "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/cssparser-color/cssparser-color-0.6.0.crate",
+        "bytes": 17824,
+        "sha256": "cc0e59e8bcc238f0f9b9f29f4d649e5c192dbf277999d0c23d1a312af3fb7a3e"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/cssparser-color/cssparser-color-0.6.0.crate",
+        "bytes": 17824,
+        "sha256": "cc0e59e8bcc238f0f9b9f29f4d649e5c192dbf277999d0c23d1a312af3fb7a3e"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/gif/gif-0.14.2.crate",
+        "bytes": 38710,
+        "sha256": "ee8cfcc411d9adbbaba82fb72661cc1bcca13e8bba98b364e62b2dba8f960159"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/gif/gif-0.14.2.crate",
+        "bytes": 38710,
+        "sha256": "ee8cfcc411d9adbbaba82fb72661cc1bcca13e8bba98b364e62b2dba8f960159"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/color_quant/color_quant-1.1.0.crate",
+        "bytes": 6649,
+        "sha256": "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/color_quant/color_quant-1.1.0.crate",
+        "bytes": 6649,
+        "sha256": "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/weezl/weezl-0.1.12.crate",
+        "bytes": 46045,
+        "sha256": "a28ac98ddc8b9274cb41bb4d9d4d5c425b6020c50c46f25559911905610b4a88"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/weezl/weezl-0.1.12.crate",
+        "bytes": 46045,
+        "sha256": "a28ac98ddc8b9274cb41bb4d9d4d5c425b6020c50c46f25559911905610b4a88"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/imagesize/imagesize-0.15.0.crate",
+        "bytes": 29653,
+        "sha256": "65b27460c2c92b037f3f94c538ed9a3342f3fdf923606781629ccb35f82d042a"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/imagesize/imagesize-0.15.0.crate",
+        "bytes": 29653,
+        "sha256": "65b27460c2c92b037f3f94c538ed9a3342f3fdf923606781629ccb35f82d042a"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/infer/infer-0.22.0.crate",
+        "bytes": 20946,
+        "sha256": "f4200d433cbd5178df7797c9c2e75b348b728e39631cf14520d1e2fc424201f4"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/infer/infer-0.22.0.crate",
+        "bytes": 20946,
+        "sha256": "f4200d433cbd5178df7797c9c2e75b348b728e39631cf14520d1e2fc424201f4"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/cfb/cfb-0.14.0.crate",
+        "bytes": 82256,
+        "sha256": "a347dcabdae9c31b0825fd6a8bed285ec9c2acb89c47827126d52fa4f59cece3"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/cfb/cfb-0.14.0.crate",
+        "bytes": 82256,
+        "sha256": "a347dcabdae9c31b0825fd6a8bed285ec9c2acb89c47827126d52fa4f59cece3"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/fnv/fnv-1.0.7.crate",
+        "bytes": 11266,
+        "sha256": "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/fnv/fnv-1.0.7.crate",
+        "bytes": 11266,
+        "sha256": "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/uuid/uuid-1.24.0.crate",
+        "bytes": 63882,
+        "sha256": "bf3923a6f5c4c6382e0b653c4117f48d631ea17f38ed86e2a828e6f7412f5239"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/uuid/uuid-1.24.0.crate",
+        "bytes": 63882,
+        "sha256": "bf3923a6f5c4c6382e0b653c4117f48d631ea17f38ed86e2a828e6f7412f5239"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/web-time/web-time-1.1.0.crate",
+        "bytes": 18026,
+        "sha256": "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/web-time/web-time-1.1.0.crate",
+        "bytes": 18026,
+        "sha256": "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
+      }
+    },
+    {
+      "original": {
+        "path": "cargo/libavif/libavif-0.14.0.crate",
+        "bytes": 17241,
+        "sha256": "0b710faf0de92da0e32a9a9c89bbf849e37277fd447b4f17b0f0f798796ae1f2"
+      },
+      "supplied": {
+        "path": "cargo/libavif/libavif-0.14.0.crate",
+        "bytes": 17241,
+        "sha256": "0b710faf0de92da0e32a9a9c89bbf849e37277fd447b4f17b0f0f798796ae1f2"
+      }
+    },
+    {
+      "original": {
+        "path": "cargo/libavif-sys/libavif-sys-0.17.0+libavif.1.0.4.crate",
+        "bytes": 1293639,
+        "sha256": "490ca74b61e773140bebb086c81facb23273a99364a9ab0c92ab1532b90ade35"
+      },
+      "supplied": {
+        "path": "cargo/libavif-sys/libavif-sys-0.17.0+libavif.1.0.4.crate",
+        "bytes": 1293639,
+        "sha256": "490ca74b61e773140bebb086c81facb23273a99364a9ab0c92ab1532b90ade35"
+      }
+    },
+    {
+      "original": {
+        "path": "cargo/libaom-sys/libaom-sys-0.17.2+libaom.3.11.0.crate",
+        "bytes": 3953263,
+        "sha256": "7c4fce8aaf0c2d8534529b0698ed98ec1da8d35319588d20b0d79ce6446e4194"
+      },
+      "supplied": {
+        "path": "cargo/libaom-sys/libaom-sys-0.17.2+libaom.3.11.0.crate",
+        "bytes": 3953263,
+        "sha256": "7c4fce8aaf0c2d8534529b0698ed98ec1da8d35319588d20b0d79ce6446e4194"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/cmake/cmake-0.1.58.crate",
+        "bytes": 20474,
+        "sha256": "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/cmake/cmake-0.1.58.crate",
+        "bytes": 20474,
+        "sha256": "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/cc/cc-1.4.0.crate",
+        "bytes": 97878,
+        "sha256": "5add81bb678e6cb321aff7fa0dc7689ad82b112dbc032cea19f91d6b8e3582b9"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/cc/cc-1.4.0.crate",
+        "bytes": 97878,
+        "sha256": "5add81bb678e6cb321aff7fa0dc7689ad82b112dbc032cea19f91d6b8e3582b9"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/find-msvc-tools/find-msvc-tools-0.1.9.crate",
+        "bytes": 31493,
+        "sha256": "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/find-msvc-tools/find-msvc-tools-0.1.9.crate",
+        "bytes": 31493,
+        "sha256": "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/shlex/shlex-2.0.1.crate",
+        "bytes": 19332,
+        "sha256": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/shlex/shlex-2.0.1.crate",
+        "bytes": 19332,
+        "sha256": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/libc-0.2.189/libc-0.2.189.crate",
+        "bytes": 851502,
+        "sha256": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/libc-0.2.189/libc-0.2.189.crate",
+        "bytes": 851502,
+        "sha256": "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
+      }
+    },
+    {
+      "original": {
+        "path": "cargo/mimalloc-safe/mimalloc-safe-0.1.64.crate",
+        "bytes": 7437,
+        "sha256": "afd082b59cfceeb3bf31dbff65e7b96e1f94fa9b918e131d02353e6867a12824"
+      },
+      "supplied": {
+        "path": "cargo/mimalloc-safe/mimalloc-safe-0.1.64.crate",
+        "bytes": 7437,
+        "sha256": "afd082b59cfceeb3bf31dbff65e7b96e1f94fa9b918e131d02353e6867a12824"
+      }
+    },
+    {
+      "original": {
+        "path": "cargo/libmimalloc-sys2/libmimalloc-sys2-0.1.60.crate",
+        "bytes": 1650943,
+        "sha256": "921641155d9dc4f434332abd912518e33c70e37c557434818b6cfd1fbbb6138d"
+      },
+      "supplied": {
+        "path": "cargo/libmimalloc-sys2/libmimalloc-sys2-0.1.60.crate",
+        "bytes": 1650943,
+        "sha256": "921641155d9dc4f434332abd912518e33c70e37c557434818b6cfd1fbbb6138d"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/napi/napi-3.12.1.crate",
+        "bytes": 210736,
+        "sha256": "459197f1592f4c3dbbf9c1b13f5a4599a343e4ef66b96bc340e2a518b36a6662"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/napi/napi-3.12.1.crate",
+        "bytes": 210736,
+        "sha256": "459197f1592f4c3dbbf9c1b13f5a4599a343e4ef66b96bc340e2a518b36a6662"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/bitflags-2.13.1/bitflags-2.13.1.crate",
+        "bytes": 51395,
+        "sha256": "b588b76d00fde79687d7646a9b5bdf3cc0f655e0bbd080335a95d7e96f3587da"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/bitflags-2.13.1/bitflags-2.13.1.crate",
+        "bytes": 51395,
+        "sha256": "b588b76d00fde79687d7646a9b5bdf3cc0f655e0bbd080335a95d7e96f3587da"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/ctor/ctor-1.0.11.crate",
+        "bytes": 48017,
+        "sha256": "e9bb72bb94fdc1bd619f4c18cc91ecf6302aeb333d31b3c6ec0bb841cd920209"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/ctor/ctor-1.0.11.crate",
+        "bytes": 48017,
+        "sha256": "e9bb72bb94fdc1bd619f4c18cc91ecf6302aeb333d31b3c6ec0bb841cd920209"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures/futures-0.3.33.crate",
+        "bytes": 61764,
+        "sha256": "a88cf1f829d945f548cf8fec32c61b1f202b6d93b45848602fc02af4b12ad218"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures/futures-0.3.33.crate",
+        "bytes": 61764,
+        "sha256": "a88cf1f829d945f548cf8fec32c61b1f202b6d93b45848602fc02af4b12ad218"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-channel/futures-channel-0.3.33.crate",
+        "bytes": 33168,
+        "sha256": "262590f4fe6afeb0bc83be1daa64e52657fe185690a958af7f3ad0e92085c5ae"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-channel/futures-channel-0.3.33.crate",
+        "bytes": 33168,
+        "sha256": "262590f4fe6afeb0bc83be1daa64e52657fe185690a958af7f3ad0e92085c5ae"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-core/futures-core-0.3.33.crate",
+        "bytes": 14691,
+        "sha256": "2cd50c473c80f6d7c3670a752354b8e569b1a7cbfdc0419ec88e5edad85e0dc7"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-core/futures-core-0.3.33.crate",
+        "bytes": 14691,
+        "sha256": "2cd50c473c80f6d7c3670a752354b8e569b1a7cbfdc0419ec88e5edad85e0dc7"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-sink/futures-sink-0.3.33.crate",
+        "bytes": 8108,
+        "sha256": "e34418ac499d6305c2fb5ad0ed2f6ac998c5f8ca209b4510f7f94242c647e307"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-sink/futures-sink-0.3.33.crate",
+        "bytes": 8108,
+        "sha256": "e34418ac499d6305c2fb5ad0ed2f6ac998c5f8ca209b4510f7f94242c647e307"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-executor/futures-executor-0.3.33.crate",
+        "bytes": 18557,
+        "sha256": "6754879cc9f2c66f88c6e5c35344bb0bdb0708b0352b1201815667c7eabc7458"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-executor/futures-executor-0.3.33.crate",
+        "bytes": 18557,
+        "sha256": "6754879cc9f2c66f88c6e5c35344bb0bdb0708b0352b1201815667c7eabc7458"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-task/futures-task-0.3.33.crate",
+        "bytes": 11381,
+        "sha256": "b231ed28831efb4a61a08580c4bc233ec56bc009f4cd8f52da2c3cb97df0c109"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-task/futures-task-0.3.33.crate",
+        "bytes": 11381,
+        "sha256": "b231ed28831efb4a61a08580c4bc233ec56bc009f4cd8f52da2c3cb97df0c109"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-util/futures-util-0.3.33.crate",
+        "bytes": 169725,
+        "sha256": "a77a90a256fce34da66415271e30f94ee91c57b04b8a2c042d9cf3220179deaa"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-util/futures-util-0.3.33.crate",
+        "bytes": 169725,
+        "sha256": "a77a90a256fce34da66415271e30f94ee91c57b04b8a2c042d9cf3220179deaa"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-io/futures-io-0.3.33.crate",
+        "bytes": 9190,
+        "sha256": "4577ecaa3c4f96589d473f679a71b596316f6641bc350038b962a5daf0085d7a"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-io/futures-io-0.3.33.crate",
+        "bytes": 9190,
+        "sha256": "4577ecaa3c4f96589d473f679a71b596316f6641bc350038b962a5daf0085d7a"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/futures-macro/futures-macro-0.3.33.crate",
+        "bytes": 11928,
+        "sha256": "2d6d3cde68c518367be28956066ddfef33813991b77a55005a69dae04bf3b10b"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/futures-macro/futures-macro-0.3.33.crate",
+        "bytes": 11928,
+        "sha256": "2d6d3cde68c518367be28956066ddfef33813991b77a55005a69dae04bf3b10b"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/memchr-2.8.3/memchr-2.8.3.crate",
+        "bytes": 99165,
+        "sha256": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/memchr-2.8.3/memchr-2.8.3.crate",
+        "bytes": 99165,
+        "sha256": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/pin-project-lite-0.2.17/pin-project-lite-0.2.17.crate",
+        "bytes": 31034,
+        "sha256": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/pin-project-lite-0.2.17/pin-project-lite-0.2.17.crate",
+        "bytes": 31034,
+        "sha256": "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/slab-0.4.12/slab-0.4.12.crate",
+        "bytes": 19080,
+        "sha256": "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/slab-0.4.12/slab-0.4.12.crate",
+        "bytes": 19080,
+        "sha256": "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/napi-sys/napi-sys-3.3.0.crate",
+        "bytes": 7970,
+        "sha256": "85fbf1fa9f1babfe396d74bbbf52b3643770243e8f5b0b46715d4caf7f0dfc9a"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/napi-sys/napi-sys-3.3.0.crate",
+        "bytes": 7970,
+        "sha256": "85fbf1fa9f1babfe396d74bbbf52b3643770243e8f5b0b46715d4caf7f0dfc9a"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/libloading/libloading-0.9.0.crate",
+        "bytes": 33816,
+        "sha256": "754ca22de805bb5744484a5b151a9e1a8e837d5dc232c2d7d8c2e3492edc8b60"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/libloading/libloading-0.9.0.crate",
+        "bytes": 33816,
+        "sha256": "754ca22de805bb5744484a5b151a9e1a8e837d5dc232c2d7d8c2e3492edc8b60"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/cfg-if-1.0.4/cfg-if-1.0.4.crate",
+        "bytes": 9360,
+        "sha256": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/cfg-if-1.0.4/cfg-if-1.0.4.crate",
+        "bytes": 9360,
+        "sha256": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/nohash-hasher/nohash-hasher-0.2.0.crate",
+        "bytes": 8051,
+        "sha256": "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/nohash-hasher/nohash-hasher-0.2.0.crate",
+        "bytes": 8051,
+        "sha256": "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/rustc-hash-2.1.3/rustc-hash-2.1.3.crate",
+        "bytes": 14811,
+        "sha256": "6b1e7f9a428571be2dc5bc0505c13fb6bf936822b894ec87abf8a08a4e51742d"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/rustc-hash-2.1.3/rustc-hash-2.1.3.crate",
+        "bytes": 14811,
+        "sha256": "6b1e7f9a428571be2dc5bc0505c13fb6bf936822b894ec87abf8a08a4e51742d"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/serde-1.0.229/serde-1.0.229.crate",
+        "bytes": 83669,
+        "sha256": "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/serde-1.0.229/serde-1.0.229.crate",
+        "bytes": 83669,
+        "sha256": "4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/serde_core-1.0.229/serde_core-1.0.229.crate",
+        "bytes": 63100,
+        "sha256": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/serde_core-1.0.229/serde_core-1.0.229.crate",
+        "bytes": 63100,
+        "sha256": "67dca2c9c51e58a4791a4b1ed58308b39c64224d349a935ab5039aa360942a48"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/serde_json/serde_json-1.0.151.crate",
+        "bytes": 156556,
+        "sha256": "c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/serde_json/serde_json-1.0.151.crate",
+        "bytes": 156556,
+        "sha256": "c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/zmij/zmij-1.0.23.crate",
+        "bytes": 28612,
+        "sha256": "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/zmij/zmij-1.0.23.crate",
+        "bytes": 28612,
+        "sha256": "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/tokio/tokio-1.53.1.crate",
+        "bytes": 920101,
+        "sha256": "202caea871b69668250d242070849eb495be178ed697a3e98aebce5bc81a0bed"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/tokio/tokio-1.53.1.crate",
+        "bytes": 920101,
+        "sha256": "202caea871b69668250d242070849eb495be178ed697a3e98aebce5bc81a0bed"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/tokio-stream/tokio-stream-0.1.19.crate",
+        "bytes": 48088,
+        "sha256": "a3d06f0b082ba57c26b79407372e57cf2a1e28124f78e9479fe80322cf53420b"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/tokio-stream/tokio-stream-0.1.19.crate",
+        "bytes": 48088,
+        "sha256": "a3d06f0b082ba57c26b79407372e57cf2a1e28124f78e9479fe80322cf53420b"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/napi-build/napi-build-2.4.1.crate",
+        "bytes": 5071,
+        "sha256": "60fdf9b392c50e7c4170fa633bd909490ed7835cea4c046776d1a4dd8d2ae0ab"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/napi-build/napi-build-2.4.1.crate",
+        "bytes": 5071,
+        "sha256": "60fdf9b392c50e7c4170fa633bd909490ed7835cea4c046776d1a4dd8d2ae0ab"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/napi-derive/napi-derive-3.6.3.crate",
+        "bytes": 23009,
+        "sha256": "0fa55ea69990c90b888e9e77044410e304ce7f35de599dc6d0b5c1923d2e59af"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/napi-derive/napi-derive-3.6.3.crate",
+        "bytes": 23009,
+        "sha256": "0fa55ea69990c90b888e9e77044410e304ce7f35de599dc6d0b5c1923d2e59af"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/convert_case/convert_case-0.11.0.crate",
+        "bytes": 31545,
+        "sha256": "affbf0190ed2caf063e3def54ff444b449371d55c58e513a95ab98eca50adb49"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/convert_case/convert_case-0.11.0.crate",
+        "bytes": 31545,
+        "sha256": "affbf0190ed2caf063e3def54ff444b449371d55c58e513a95ab98eca50adb49"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/unicode-segmentation/unicode-segmentation-1.13.3.crate",
+        "bytes": 112325,
+        "sha256": "c6f5d3c3b1bf09027a88a6bc961fc00497d651009560b5463668dc81b0fa87a8"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/unicode-segmentation/unicode-segmentation-1.13.3.crate",
+        "bytes": 112325,
+        "sha256": "c6f5d3c3b1bf09027a88a6bc961fc00497d651009560b5463668dc81b0fa87a8"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/napi-derive-backend/napi-derive-backend-6.1.2.crate",
+        "bytes": 41747,
+        "sha256": "df4056ac7c18e4438ccf0edaed4340ca0d269278c8ec19284f7b23cb039fd0ae"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/napi-derive-backend/napi-derive-backend-6.1.2.crate",
+        "bytes": 41747,
+        "sha256": "df4056ac7c18e4438ccf0edaed4340ca0d269278c8ec19284f7b23cb039fd0ae"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/nom/nom-8.0.0.crate",
+        "bytes": 135590,
+        "sha256": "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/nom/nom-8.0.0.crate",
+        "bytes": 135590,
+        "sha256": "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/num_cpus/num_cpus-1.17.0.crate",
+        "bytes": 15874,
+        "sha256": "91df4bbde75afed763b708b7eee1e8e7651e02d97f6d5dd763e89367e957b23b"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/num_cpus/num_cpus-1.17.0.crate",
+        "bytes": 15874,
+        "sha256": "91df4bbde75afed763b708b7eee1e8e7651e02d97f6d5dd763e89367e957b23b"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/regex-1.13.1/regex-1.13.1.crate",
+        "bytes": 157118,
+        "sha256": "f020237b6c8eed93db2e2cb53c00c60a8e1bc73da7d073199a1180401450218d"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/regex-1.13.1/regex-1.13.1.crate",
+        "bytes": 157118,
+        "sha256": "f020237b6c8eed93db2e2cb53c00c60a8e1bc73da7d073199a1180401450218d"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/aho-corasick/aho-corasick-1.1.4.crate",
+        "bytes": 184015,
+        "sha256": "ddd31a130427c27518df266943a5308ed92d4b226cc639f5a8f1002816174301"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/aho-corasick/aho-corasick-1.1.4.crate",
+        "bytes": 184015,
+        "sha256": "ddd31a130427c27518df266943a5308ed92d4b226cc639f5a8f1002816174301"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/regex-automata/regex-automata-0.4.16.crate",
+        "bytes": 627556,
+        "sha256": "8fcfdb36bda0c880c5931cdc7a2bcdc8ba4556847b9d912bca70bc94708711ad"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/regex-automata/regex-automata-0.4.16.crate",
+        "bytes": 627556,
+        "sha256": "8fcfdb36bda0c880c5931cdc7a2bcdc8ba4556847b9d912bca70bc94708711ad"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/regex-syntax-0.8.11/regex-syntax-0.8.11.crate",
+        "bytes": 359055,
+        "sha256": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/regex-syntax-0.8.11/regex-syntax-0.8.11.crate",
+        "bytes": 359055,
+        "sha256": "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/rgb-0.8.53/rgb-0.8.53.crate",
+        "bytes": 18607,
+        "sha256": "47b34b781b31e5d73e9fbc8689c70551fd1ade9a19e3e28cfec8580a79290cc4"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/rgb-0.8.53/rgb-0.8.53.crate",
+        "bytes": 18607,
+        "sha256": "47b34b781b31e5d73e9fbc8689c70551fd1ade9a19e3e28cfec8580a79290cc4"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/bytemuck-1.25.2/bytemuck-1.25.2.crate",
+        "bytes": 54075,
+        "sha256": "95832e849adfb21180ccb6826a99da14e5d266ae5c2e668e1602cf234f153797"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/bytemuck-1.25.2/bytemuck-1.25.2.crate",
+        "bytes": 54075,
+        "sha256": "95832e849adfb21180ccb6826a99da14e5d266ae5c2e668e1602cf234f153797"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/serde_derive/serde_derive-1.0.229.crate",
+        "bytes": 59864,
+        "sha256": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/serde_derive/serde_derive-1.0.229.crate",
+        "bytes": 59864,
+        "sha256": "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
+      }
+    },
+    {
+      "original": {
+        "path": "rsvg-cargo-sources/syn-3.0.3/syn-3.0.3.crate",
+        "bytes": 312999,
+        "sha256": "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
+      },
+      "supplied": {
+        "path": "rsvg-cargo-sources/syn-3.0.3/syn-3.0.3.crate",
+        "bytes": 312999,
+        "sha256": "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/thiserror/thiserror-2.0.19.crate",
+        "bytes": 29026,
+        "sha256": "09a43598840e33d5b0331f38c5e30d13bb11c11210a4b58f0d9b18a5a5eefcd9"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/thiserror/thiserror-2.0.19.crate",
+        "bytes": 29026,
+        "sha256": "09a43598840e33d5b0331f38c5e30d13bb11c11210a4b58f0d9b18a5a5eefcd9"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/thiserror-impl/thiserror-impl-2.0.19.crate",
+        "bytes": 21408,
+        "sha256": "43cbfe0cf76104d42a574802844187e84a305e531ed54455f11fbde0f10541cd"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/thiserror-impl/thiserror-impl-2.0.19.crate",
+        "bytes": 21408,
+        "sha256": "43cbfe0cf76104d42a574802844187e84a305e531ed54455f11fbde0f10541cd"
+      }
+    },
+    {
+      "original": {
+        "path": "canvas-cargo-sources/crates/windows-link/windows-link-0.2.1.crate",
+        "bytes": 6133,
+        "sha256": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+      },
+      "supplied": {
+        "path": "canvas-cargo-sources/crates/windows-link/windows-link-0.2.1.crate",
+        "bytes": 6133,
+        "sha256": "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+      }
+    }
+  ],
+  "graphs": [
+    {
+      "runner": "ubuntu-24.04",
+      "host": {
+        "platform": "linux",
+        "architecture": "x64"
+      },
+      "target": "x86_64-unknown-linux-gnu",
+      "jobId": 122181818285,
+      "artifactId": 12733761231,
+      "artifactName": "canvas-source-graph-ubuntu-24.04-bd8f848c074f2ad5838b86a1d5d1ad9d80ef9d77",
+      "archive": {
+        "path": "canvas-current-graphs/ubuntu-24.04/original-artifact.zip",
+        "bytes": 18888,
+        "sha256": "9d7217260990ab95f6719b1f1948024afd0f94d48e69781f40dc5f82c799bdd4"
+      },
+      "members": [
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/receipt.json",
+          "bytes": 49978,
+          "sha256": "f9e1e4b123c91991c7b2156430e3ad196c9741821f6ab227bf79dd83205198d4",
+          "member": "receipt.json",
+          "crc32": "11a1c698"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/Cargo.lock",
+          "bytes": 21730,
+          "sha256": "a4cb753b26f4b1b173d6b9f3e41771075d54e5986c5110f69ca83d07d05df80a",
+          "member": "Cargo.lock",
+          "crc32": "42587bb3"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/cargo-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/cargo-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/cargo-version.stdout",
+          "bytes": 335,
+          "sha256": "4265e22043d855cb3fc78365fbf272d2b2158881fe23035a18a92f0b0743dee8",
+          "member": "logs/cargo-version.stdout",
+          "crc32": "d2b2be74"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/library-tree.stderr",
+          "bytes": 2626,
+          "sha256": "8f325543fe77e2f7c9ea3c5bb5eaeb019844303b779629a8d0c3b481c838e086",
+          "member": "logs/library-tree.stderr",
+          "crc32": "1f225837"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/library-tree.stdout",
+          "bytes": 6455,
+          "sha256": "3bb6ddd2085b3dd34f6a62aed50e4ab9a428610485a0363c53a7a123577e0cbd",
+          "member": "logs/library-tree.stdout",
+          "crc32": "bf5d1a53"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/rustc-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/rustc-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/ubuntu-24.04/members/logs/rustc-version.stdout",
+          "bytes": 196,
+          "sha256": "f22d5e4e9ced367e774ce5bc140d9e6b1235c1882fec80d011044851f3ae6369",
+          "member": "logs/rustc-version.stdout",
+          "crc32": "35e8c2b7"
+        }
+      ]
+    },
+    {
+      "runner": "macos-15",
+      "host": {
+        "platform": "darwin",
+        "architecture": "arm64"
+      },
+      "target": "aarch64-apple-darwin",
+      "jobId": 122181818299,
+      "artifactId": 12733237352,
+      "artifactName": "canvas-source-graph-macos-15-bd8f848c074f2ad5838b86a1d5d1ad9d80ef9d77",
+      "archive": {
+        "path": "canvas-current-graphs/macos-15/original-artifact.zip",
+        "bytes": 18892,
+        "sha256": "e5a99a4461a3400dcec88886b112c8aacc88a1177cd479de051fafa16aca5386"
+      },
+      "members": [
+        {
+          "path": "canvas-current-graphs/macos-15/members/receipt.json",
+          "bytes": 49973,
+          "sha256": "2263d82ac4aa609819a2e07ffe05d828ea5eb236317838ccad5a118e90a5eac5",
+          "member": "receipt.json",
+          "crc32": "04fed15b"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/Cargo.lock",
+          "bytes": 21730,
+          "sha256": "a4cb753b26f4b1b173d6b9f3e41771075d54e5986c5110f69ca83d07d05df80a",
+          "member": "Cargo.lock",
+          "crc32": "42587bb3"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/cargo-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/cargo-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/cargo-version.stdout",
+          "bytes": 335,
+          "sha256": "6b62f3cb98accd92794afcdc55bc0d15b6e8301d164494901329aac600d37b77",
+          "member": "logs/cargo-version.stdout",
+          "crc32": "2131749f"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/library-tree.stderr",
+          "bytes": 2626,
+          "sha256": "aecf064f81df34d5b0be27fbf9689b88ab094ae16ac2157230b2afcea639c629",
+          "member": "logs/library-tree.stderr",
+          "crc32": "85c8c11d"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/library-tree.stdout",
+          "bytes": 6420,
+          "sha256": "8586071bd8edbe28a693dfa5846ba336e54c597288fb584778d99abc75a1aae7",
+          "member": "logs/library-tree.stdout",
+          "crc32": "08d14d73"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/rustc-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/rustc-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/macos-15/members/logs/rustc-version.stdout",
+          "bytes": 192,
+          "sha256": "e003fd3d385fcd0de16bc6b049124efb20207831dd810fd4ab39ff079bbb12a5",
+          "member": "logs/rustc-version.stdout",
+          "crc32": "59418793"
+        }
+      ]
+    },
+    {
+      "runner": "windows-2025",
+      "host": {
+        "platform": "win32",
+        "architecture": "x64"
+      },
+      "target": "x86_64-pc-windows-msvc",
+      "jobId": 122181818287,
+      "artifactId": 12732853299,
+      "artifactName": "canvas-source-graph-windows-2025-bd8f848c074f2ad5838b86a1d5d1ad9d80ef9d77",
+      "archive": {
+        "path": "canvas-current-graphs/windows-2025/original-artifact.zip",
+        "bytes": 18845,
+        "sha256": "76e9b73fbd88c6e76360eafe7eb52a0ae77426267a7689fd587e37497bcedff0"
+      },
+      "members": [
+        {
+          "path": "canvas-current-graphs/windows-2025/members/receipt.json",
+          "bytes": 49999,
+          "sha256": "e9d464a05993b99b86bfc9c681d73e059eac1eaa52b00c7b10e103afa78aa6fd",
+          "member": "receipt.json",
+          "crc32": "dae6bb64"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/Cargo.lock",
+          "bytes": 21730,
+          "sha256": "a4cb753b26f4b1b173d6b9f3e41771075d54e5986c5110f69ca83d07d05df80a",
+          "member": "Cargo.lock",
+          "crc32": "42587bb3"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/cargo-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/cargo-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/cargo-version.stdout",
+          "bytes": 325,
+          "sha256": "e569e17e69d1abc27efd9ab072a32f4fbad521e3ae1d77a462226786d3d39972",
+          "member": "logs/cargo-version.stdout",
+          "crc32": "491353bd"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/library-tree.stderr",
+          "bytes": 2632,
+          "sha256": "44b1fa7a2900bdf004357f89e9d8d831e8efdd2bf6cc122e029dbb56ae884087",
+          "member": "logs/library-tree.stderr",
+          "crc32": "8f79c7fe"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/library-tree.stdout",
+          "bytes": 6356,
+          "sha256": "e755dd20e59655909ebe56b1721ea91e2b372c4d96ccdd8856d5250f00d5420b",
+          "member": "logs/library-tree.stdout",
+          "crc32": "4e5c90e1"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/rustc-version.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "logs/rustc-version.stderr",
+          "crc32": "00000000"
+        },
+        {
+          "path": "canvas-current-graphs/windows-2025/members/logs/rustc-version.stdout",
+          "bytes": 194,
+          "sha256": "341fed434cf52bd9ba5ab2f3507dbd943a2062212028574e529fc3e7e5ecd7a8",
+          "member": "logs/rustc-version.stdout",
+          "crc32": "df455e8d"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "The three actual current default normal/build source graphs use the original Canvas source/manifest/lock on matching Linux x64 glibc, Windows x64 MSVC and macOS arm64 hosts/targets. Each selects one local Canvas package and 83 registry versions; their union is the 84 exact already supplied registry containers.",
+    "The complete original Actions artifact ZIPs match their original API digest and contain every supplied capture member. Original stdout/stderr, tool identities, source inputs, candidate/producer Git identities and unchanged original lock remain separately inspectable.",
+    "The current graphs do not reconstruct historical Cargo cache/fingerprint/link reachability, optional/dev/test configurations or any successful modified Rust/Skia/native aggregate build.",
+    "Unselected original lock entries are not made mandatory source inputs. The current Cargo/Rust identities are observations, not an old compiler, SDK, runner, binary-identical output or offline prepare prerequisite.",
+    "Original publication compile logs and source containers are unchanged. These named source-coverage results do not establish final release acceptance or a licensing compatibility conclusion."
+  ],
+  "instructions": {
+    "path": "canvas-current-graphs/SOURCE-ACCESS.md",
+    "bytes": 3544,
+    "sha256": "ded8f29220910b8b72e490f281e629d84e5332402c0c7d52f583b40263f68be4"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "executable": "make",
+  "args": [
+    "--no-print-directory",
+    "-f",
+    "Makefile",
+    "-f",
+    "/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/capture.mk",
+    "mediamanager-source-graph",
+    "MXE_TARGETS=x86_64-w64-mingw32.static",
+    "MXE_PLUGIN_DIRS=/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/mxe/mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3/plugins/llvm-mingw /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl",
+    "GIT_HEAD=d973945bb92c7783d5afa41bb2b8d2e1a04eaba3",
+    "MXE_USE_CCACHE=",
+    "MM_PHASE=sources",
+    "MM_RECORDS=/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-source-graph/sources.tsv",
+    "MM_FILTER=x86_64-w64-mingw32.static~aom x86_64-w64-mingw32.static~cairo x86_64-w64-mingw32.static~cgif x86_64-w64-mingw32.static~expat x86_64-w64-mingw32.static~fontconfig x86_64-w64-mingw32.static~freetype x86_64-w64-mingw32.static~freetype-bootstrap x86_64-w64-mingw32.static~fribidi x86_64-w64-mingw32.static~glib x86_64-w64-mingw32.static~harfbuzz x86_64-w64-mingw32.static~highway x86_64-w64-mingw32.static~lcms x86_64-w64-mingw32.static~libarchive x86_64-w64-mingw32.static~libexif x86_64-w64-mingw32.static~libffi x86_64-w64-mingw32.static~libheif x86_64-w64-mingw32.static~libimagequant x86_64-w64-mingw32.static~libpng x86_64-w64-mingw32.static~librsvg x86_64-w64-mingw32.static~libwebp x86_64-w64-mingw32.static~libxml2 x86_64-w64-mingw32.static~mozjpeg x86_64-w64-mingw32.static~pango x86_64-w64-mingw32.static~pixman x86_64-w64-mingw32.static~proxy-libintl x86_64-w64-mingw32.static~tiff x86_64-w64-mingw32.static~uhdr x86_64-w64-mingw32.static~vips-web x86_64-w64-mingw32.static~zlib-ng"
+  ],
+  "code": 0,
+  "signal": null,
+  "overflow": false,
+  "expired": false
+}

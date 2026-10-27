@@ -1,0 +1,37 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Wed, 7 Oct 2020 18:43:50 +0200
+Subject: [PATCH 1/1] aom_thread: fix potentially bad call to execute
+
+Incorporates the changes from:
+https://chromium.googlesource.com/webm/libwebp/+/fde2782ecbb95043c9640f53682d128713542c49
+
+diff --git a/aom_util/aom_thread.c b/aom_util/aom_thread.c
+index 1111111..2222222 100644
+--- a/aom_util/aom_thread.c
++++ b/aom_util/aom_thread.c
+@@ -40,10 +40,9 @@ struct AVxWorkerImpl {
+ 
+ //------------------------------------------------------------------------------
+ 
+-static void execute(AVxWorker *const worker);  // Forward declaration.
+-
+ static THREADFN thread_loop(void *ptr) {
+   AVxWorker *const worker = (AVxWorker *)ptr;
++  const AVxWorkerInterface *const winterface = aom_get_worker_interface();
+ #ifdef HAVE_PTHREAD_SETNAME_NP
+ #ifdef __APPLE__
+   if (worker->thread_name != NULL) {
+@@ -81,7 +80,7 @@ static THREADFN thread_loop(void *ptr) {
+       // When the worker reacquires worker->impl_->mutex_, worker->status_ must
+       // still be AVX_WORKER_STATUS_WORKING.
+       pthread_mutex_unlock(&worker->impl_->mutex_);
+-      execute(worker);
++      winterface->execute(worker);
+       pthread_mutex_lock(&worker->impl_->mutex_);
+       assert(worker->status_ == AVX_WORKER_STATUS_WORKING);
+       worker->status_ = AVX_WORKER_STATUS_OK;

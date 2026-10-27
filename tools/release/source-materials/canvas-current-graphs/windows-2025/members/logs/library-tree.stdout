@@ -1,0 +1,145 @@
+canvas v0.1.0 (D:\a\_temp\mediamanager-canvas-source-graph\working-source) | 
+anyhow v1.0.104 | default,std
+base64-simd v0.8.0 | alloc,default,detect,std
+outref v0.5.2 | 
+vsimd v0.8.0 | alloc,detect,std
+cssparser v0.38.0 | default,fast_match_byte,fast_match_color
+cssparser-macros v0.7.0 (proc-macro) | 
+quote v1.0.47 | default,proc-macro
+proc-macro2 v1.0.107 | default,proc-macro
+unicode-ident v1.0.24 | 
+syn v2.0.119 | clone-impls,default,derive,extra-traits,fold,full,parsing,printing,proc-macro
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+unicode-ident v1.0.24 | 
+dtoa-short v0.3.5 | 
+dtoa v1.0.11 | 
+itoa v1.0.18 | 
+phf v0.14.0 | default,macros,phf_macros,std
+phf_macros v0.14.0 (proc-macro) | 
+phf_generator v0.14.0 | 
+fastrand v2.5.0 | 
+phf_shared v0.14.0 | 
+siphasher v1.0.3 | default,std
+phf_shared v0.14.0 |  (*)
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v2.0.119 | clone-impls,default,derive,extra-traits,fold,full,parsing,printing,proc-macro (*)
+phf_shared v0.14.0 | std
+siphasher v1.0.3 | default,std
+smallvec v1.15.2 | 
+cssparser-color v0.6.0 | default
+cssparser v0.38.0 | default,fast_match_byte,fast_match_color (*)
+gif v0.14.2 | color_quant,default,raii_no_panic,std
+color_quant v1.1.0 | 
+weezl v0.1.12 | alloc,default,std
+imagesize v0.15.0 | gif,heif,jpeg,png,webp
+infer v0.22.0 | alloc,cfb,default,std
+cfb v0.14.0 | 
+fnv v1.0.7 | default,std
+uuid v1.24.0 | default,std
+web-time v1.1.0 | 
+libavif v0.14.0 | codec-aom
+libavif-sys v0.17.0+libavif.1.0.4 | codec-aom,libaom-sys
+libaom-sys v0.17.2+libaom.3.11.0 | av1_decoder,av1_encoder,default
+cmake v0.1.58 | 
+cc v1.4.0 | 
+find-msvc-tools v0.1.9 | 
+shlex v2.0.1 | default,std
+libc v0.2.189 | default,std
+cmake v0.1.58 |  (*)
+libavif-sys v0.17.0+libavif.1.0.4 | codec-aom,libaom-sys (*)
+mimalloc-safe v0.1.64 | default,skip_collect_on_exit
+libmimalloc-sys2 v0.1.60 | skip_collect_on_exit
+libc v0.2.189 | default,std
+cc v1.4.0 |  (*)
+cmake v0.1.58 |  (*)
+napi v3.12.1 | futures-core,napi1,napi2,napi3,napi4,napi5,serde,serde-json,serde_json,tokio,tokio-stream,tokio_rt,web_stream
+bitflags v2.13.1 | 
+ctor v1.0.11 | 
+futures v0.3.33 | alloc,async-await,default,executor,futures-executor,std
+futures-channel v0.3.33 | alloc,futures-sink,sink,std
+futures-core v0.3.33 | alloc,default,std
+futures-sink v0.3.33 | alloc,std
+futures-core v0.3.33 | alloc,default,std
+futures-executor v0.3.33 | std
+futures-core v0.3.33 | alloc,default,std
+futures-task v0.3.33 | alloc,std
+futures-util v0.3.33 | alloc,async-await,async-await-macro,channel,futures-channel,futures-io,futures-macro,futures-sink,io,memchr,sink,slab,std
+futures-channel v0.3.33 | alloc,futures-sink,sink,std (*)
+futures-core v0.3.33 | alloc,default,std
+futures-io v0.3.33 | std
+futures-macro v0.3.33 (proc-macro) | 
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v2.0.119 | clone-impls,default,derive,extra-traits,fold,full,parsing,printing,proc-macro (*)
+futures-sink v0.3.33 | alloc,std
+futures-task v0.3.33 | alloc,std
+memchr v2.8.3 | alloc,default,std
+pin-project-lite v0.2.17 | 
+slab v0.4.12 | std
+futures-io v0.3.33 | std
+futures-sink v0.3.33 | alloc,std
+futures-task v0.3.33 | alloc,std
+futures-util v0.3.33 | alloc,async-await,async-await-macro,channel,futures-channel,futures-io,futures-macro,futures-sink,io,memchr,sink,slab,std (*)
+futures-core v0.3.33 | alloc,default,std
+napi-sys v3.3.0 | napi1,napi2,napi3,napi4,napi5
+libloading v0.9.0 | default,std
+windows-link v0.2.1 | 
+nohash-hasher v0.2.0 | default,std
+rustc-hash v2.1.3 | default,std
+serde v1.0.229 | default,std
+serde_core v1.0.229 | result,std
+serde_json v1.0.151 | default,std
+itoa v1.0.18 | 
+memchr v2.8.3 | alloc,default,std
+serde_core v1.0.229 | result,std
+zmij v1.0.23 | 
+tokio v1.53.1 | default,rt,rt-multi-thread,sync,time
+pin-project-lite v0.2.17 | 
+tokio-stream v0.1.19 | default,time
+futures-core v0.3.33 | alloc,default,std
+pin-project-lite v0.2.17 | 
+tokio v1.53.1 | default,rt,rt-multi-thread,sync,time (*)
+napi-build v2.4.1 | 
+napi-derive v3.6.3 (proc-macro) | 
+convert_case v0.11.0 | 
+unicode-segmentation v1.13.3 | 
+napi-derive-backend v6.1.2 | 
+convert_case v0.11.0 |  (*)
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v2.0.119 | clone-impls,default,derive,extra-traits,fold,full,parsing,printing,proc-macro (*)
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v2.0.119 | clone-impls,default,derive,extra-traits,fold,full,parsing,printing,proc-macro (*)
+nom v8.0.0 | alloc,default,std
+memchr v2.8.3 | alloc,default,std
+num_cpus v1.17.0 | 
+regex v1.13.1 | default,perf,perf-backtrack,perf-cache,perf-dfa,perf-inline,perf-literal,perf-onepass,std,unicode,unicode-age,unicode-bool,unicode-case,unicode-gencat,unicode-perl,unicode-script,unicode-segment
+aho-corasick v1.1.4 | perf-literal,std
+memchr v2.8.3 | alloc,default,std
+memchr v2.8.3 | alloc,default,std
+regex-automata v0.4.16 | alloc,dfa-onepass,hybrid,meta,nfa-backtrack,nfa-pikevm,nfa-thompson,perf-inline,perf-literal,perf-literal-multisubstring,perf-literal-substring,std,syntax,unicode,unicode-age,unicode-bool,unicode-case,unicode-gencat,unicode-perl,unicode-script,unicode-segment,unicode-word-boundary
+aho-corasick v1.1.4 | perf-literal,std (*)
+memchr v2.8.3 | alloc,default,std
+regex-syntax v0.8.11 | default,std,unicode,unicode-age,unicode-bool,unicode-case,unicode-gencat,unicode-perl,unicode-script,unicode-segment
+regex-syntax v0.8.11 | default,std,unicode,unicode-age,unicode-bool,unicode-case,unicode-gencat,unicode-perl,unicode-script,unicode-segment
+rgb v0.8.53 | argb,as-bytes,bytemuck,default,grb
+bytemuck v1.25.2 | 
+serde v1.0.229 | default,std (*)
+serde_derive v1.0.229 (proc-macro) | default
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v3.0.3 | clone-impls,default,derive,parsing,printing,proc-macro
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+unicode-ident v1.0.24 | 
+serde_json v1.0.151 | default,std (*)
+thiserror v2.0.19 | default,std
+thiserror-impl v2.0.19 (proc-macro) | 
+proc-macro2 v1.0.107 | default,proc-macro (*)
+quote v1.0.47 | default,proc-macro (*)
+syn v3.0.3 | clone-impls,default,derive,parsing,printing,proc-macro (*)
+cc v1.4.0 |  (*)
+napi-build v2.4.1 | 

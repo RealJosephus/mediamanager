@@ -1,0 +1,15 @@
+diff --git a/cplusplus/meson.build b/cplusplus/meson.build
+index a47ad6ccf..e72bdd706 100644
+--- a/cplusplus/meson.build
++++ b/cplusplus/meson.build
+@@ -8,8 +8,8 @@ libvips_cpp_lib = library('vips-cpp',
+     'VError.cpp',
+     dependencies: libvips_dep,
+     include_directories: libvips_cpp_includedir,
+-    version: library_version,
+-    darwin_versions: darwin_versions,
++    version: meson.project_version(),
++    soversion: meson.project_version(),
+     gnu_symbol_visibility: 'hidden',
+     install: true,
+ )

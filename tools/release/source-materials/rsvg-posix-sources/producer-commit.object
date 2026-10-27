@@ -1,0 +1,6 @@
+tree 15bc5a27089e69b00c0fca1da9395628a25ca0f2
+parent 1a07ae9f3dbc288bbb03bc916395347b84491bbb
+author RealJosephus <148736309+RealJosephus@users.noreply.github.com> 1793109979 +0800
+committer RealJosephus <148736309+RealJosephus@users.noreply.github.com> 1793109979 +0800
+
+ci(release): capture the current post-edit librsvg graph on both POSIX hosts

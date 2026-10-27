@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "commit": "6bba067cc59d5d499d46a828797bfa65adf7be81",
+    "tree": "4843312ccf47a168e3292117ec00b3d911fcea5b"
+  },
+  "builtWith": {
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "platform": "win32",
+    "architecture": "x64",
+    "libc": null
+  },
+  "manifest": {
+    "path": "release.json",
+    "bytes": 1147709,
+    "sha256": "8921d95b7720582f92f45bf907fa535bfb5136a5b4c92f976d81fd7de65c784f"
+  }
+}

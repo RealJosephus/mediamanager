@@ -1,0 +1,101 @@
+{
+  "selectedSource": {
+    "file": "libaom-3.14.1.tar.gz",
+    "sha256": "44bf90dbd23e734d50e70a8c41c285193922938bd0d3bc2ee56764d181d55ef5",
+    "url": "https://storage.googleapis.com/aom-releases/libaom-3.14.1.tar.gz",
+    "url2": "",
+    "packages": [
+      "aom"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://storage.googleapis.com/aom-releases/libaom-3.14.1.tar.gz",
+    "responseUrl": "https://storage.googleapis.com/aom-releases/libaom-3.14.1.tar.gz",
+    "status": 200,
+    "headers": [
+      [
+        "X-GUploader-UploadID",
+        "AP6rU81BITrNc3j5h_ELwf_K-JXH8MWCn1u1k6NF0EKVLwT5rmuPGW2s5_xI0RGL0n5Z3d9W"
+      ],
+      [
+        "x-goog-generation",
+        "1779477091458380"
+      ],
+      [
+        "x-goog-metageneration",
+        "1"
+      ],
+      [
+        "x-goog-stored-content-encoding",
+        "identity"
+      ],
+      [
+        "x-goog-stored-content-length",
+        "6368868"
+      ],
+      [
+        "x-goog-hash",
+        "crc32c=XvJIDg=="
+      ],
+      [
+        "x-goog-hash",
+        "md5=SmibvCfsCV0lPtjSQQd61Q=="
+      ],
+      [
+        "x-goog-storage-class",
+        "STANDARD"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ],
+      [
+        "Content-Length",
+        "6368868"
+      ],
+      [
+        "Server",
+        "UploadServer"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:07 GMT"
+      ],
+      [
+        "Expires",
+        "Tue, 27 Oct 2026 15:29:07 GMT"
+      ],
+      [
+        "Cache-Control",
+        "public, max-age=3600"
+      ],
+      [
+        "Last-Modified",
+        "Fri, 22 May 2026 19:11:31 GMT"
+      ],
+      [
+        "ETag",
+        "\"4a689bbc27ec095d253ed8d241077ad5\""
+      ],
+      [
+        "Content-Type",
+        "application/x-tar"
+      ],
+      [
+        "Age",
+        "0"
+      ],
+      [
+        "Alt-Svc",
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      [
+        "Connection",
+        "close"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:09.627159+00:00",
+    "bytes": 6368868,
+    "sha256": "44bf90dbd23e734d50e70a8c41c285193922938bd0d3bc2ee56764d181d55ef5"
+  }
+}

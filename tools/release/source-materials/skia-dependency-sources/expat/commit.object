@@ -1,0 +1,26 @@
+tree 3ee679127df994917b069ff28f4374c9207a5b62
+parent 6a814cae2cccc9597e46527ff70d290600cb51d5
+parent d5fa769b7a7290a7e2c4a0b2287106dec9b3c030
+author Sebastian Pipping <sebastian@pipping.org> 1773686958 +0100
+committer GitHub <noreply@github.com> 1773686958 +0100
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJpuFCuCRC1aQ7uu5UhlAAAA2gQAEoP90FKT1RSejBnfGI9d4k3
+ /40cxbSg4ot1EOt64rN4+LbXXgFtxZPVGzyruIcEbFjpsO09um5i2tBy0yCTkOnF
+ f5KDau3+jcWS1ahPT3Hb69nj2bje88Y2LfFLcWNvxW6CrKv/g46o7GiMXlElPscM
+ 4SAa6Xrzu4sXG5Z+Zvw4NYhQWXQ5Tn+UkTd2ClzRuLlNtVG9MkhTkm5QSndF5zzZ
+ Hy++6oNYOF8/Q1MFZcO3kAhb1GOrLl7EF+wuByiDbS0z5FOTI6/l/ZfZW7/wCysC
+ VAcosV307oeR0xtLhiY1zpTAE/iddHoVMDg3GAX++ppahznmywNuKhZJ9FWyUIam
+ ubO2pT8VwGmIls218eOvzSQ4MdG/jrPFhzSHR5M2VLW5WmhAICcUj1dqX8w6am21
+ zS33ORHZLjvD3ZhxL5An9vrHI7fVqTrbnoOdFCshk5VokviuGAkN2SXGmZVv8Snw
+ fnp1UVQy83upLed4AFXEwrWbLXDXWywbCJWkMzbt7Z2ISFZoBPYIFq77rFsyI0OT
+ NfIk5blItWy7gznaduHywlZXUaSqQekkUZlEz35x5Il4k1iucPBw5WdL8SAi3fr6
+ ZsFfYzgByFEy8gSw+5SZe3Ceukqizz3vvkxpY1xUhjGiW41sCHeRLwYfrNBNysBg
+ p6HA+fXO6Qcun6vCTC/L
+ =sAxB
+ -----END PGP SIGNATURE-----
+ 
+
+Merge pull request #1163 from Laserbear/fix/setContext-zombie
+
+[CVE-2026-32778] Fix `NULL` deref in `setContext` on retry after OOM

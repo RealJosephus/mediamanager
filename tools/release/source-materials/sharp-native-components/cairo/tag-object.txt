@@ -1,0 +1,40 @@
+object 4541e0cd3a751b85e52e2a83d02ac6145a5efa85
+type commit
+tag 1.18.4
+tagger Emmanuele Bassi <ebassi@gnome.org> 1741444901 +0000
+
+Cairo 1.18.4 (stable)
+
+A new stable release.
+
+The dependency on LZO has been made optional through a build time
+configuration toggle. [!580]
+
+You can build Cairo against a Freetype installation that does not have the
+FT_Color type. [#792]
+
+Cairo tests now build on Solaris 11.4 with GCC 14. [!599]
+
+The DirectWrite backend now builds on MINGW 11. [!600]
+
+Thanks to Luca Bacci, the DirectWrite backend now supports font
+variations and proper glyph coverage. [#877, !602]
+
+Support for Windows 98 has been removed. The minimum requirement for
+Windows is now Vista.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEU+89w7Y+KJknG9JjIugJHuoRu7cFAmfMVz8ACgkQIugJHuoR
+u7f3RA//TK56Yca4ZGUhqGt5Xa+tgBNn1etqdFtzGJ9RCvxBck1Xx0VSILSb6nuh
+Kd0hMVJcFc8Atbx6Ru4YIBIOVhs+GL7ZIlPDCHHlD7OPMMjvv8akMyM56myE6urS
+4x0GlXxSoba4TO/TlTbMSebENvfC08Iwa7qy6rUkKccOCohAQE2QumXpd4pSAS4L
+tQ3eTLSXd6ZHT07NykBg0h/F8uXP7qpE1D2bKFuijxL7ggfpldkXReDRHtTuhx3G
+UZL0Zy/P8XURVg6o9opPR/z958+k3YYnFUL+vXmgZcqTF9kLPWvXdhL2tt83Pibb
+N5aIgV7OhbeF0qjNCOpYB43v5KimjqUKVeM4nhi6JAEAcnghyVPYroa+C/kkxtBz
+s4Ssl/r/OnQP9K9CRfpv6ykRfEaDq0R0aV26g8hQYLa+BRSA+323Amt4N7JLswi6
++InJHtJGnVBWv+hbst3Fdho+FEhwLaP/guLJLD1WV5LJcaWirY06DAGWUCcYo7wQ
+KIHLO1pNX+R7fb4qIn0lJOMQMew0PlTqJDKKFeeRbdJ3a3U/lf+unf4k+WoUK1c5
+nH9ECRf3g9gnntANV9AUh5Lx38ZM4Sf2YVTkQWYPK2vMjy+yNNqKWm0usbYOVCVt
+/9XUNxa/6CYRRfEpKYxFPxQGkDnD2+XANnCrQrz3W0IKiP8SyGc=
+=0KZI
+-----END PGP SIGNATURE-----

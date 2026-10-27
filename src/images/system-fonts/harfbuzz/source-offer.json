@@ -1,0 +1,90 @@
+{
+  "scope": "Pinned input archives and the recorded Makefile patch for the existing HarfBuzz runtime. This source recovery does not rebuild or replace the runtime.",
+  "buildRecord": {
+    "path": "build.json",
+    "bytes": 5921,
+    "sha256": "a91af4dc4b3dbe45a87d552e9ada59b8fce3ab5bc429ca6a56b9fa88b7405781"
+  },
+  "originalBuild": {
+    "repository": "RealJosephus/mediamanager",
+    "commit": "cf9ed939f1adfcfea1830c1bed4207d9ff080f3d",
+    "runId": "39175865595",
+    "runAttempt": "1",
+    "artifactName": "harfbuzz-complete-1",
+    "url": "https://github.com/RealJosephus/mediamanager/actions/runs/39175865595",
+    "recipe": "tools/ci/build-harfbuzz.py",
+    "workflow": ".github/workflows/build-harfbuzz.yml"
+  },
+  "recovery": {
+    "checkedDate": "2026-10-26",
+    "originalRunApiStatus": 404,
+    "artifactsFoundByName": 0,
+    "archiveOrigin": "Downloaded from the upstream URLs recorded in build.json; every archive matches its recorded size and SHA-256.",
+    "buildRecordOrigin": "The existing repository-preserved build.json is retained unchanged. The original Actions artifact was not recovered."
+  },
+  "archives": [
+    {
+      "path": "sources/hbjs.tar.gz",
+      "bytes": 1275421,
+      "sha256": "017e3289b3a98ac7a07c22e8561b8249ba520d97e7f27ca74bcf43d8347988c4",
+      "url": "https://codeload.github.com/harfbuzz/harfbuzzjs/tar.gz/79860e8f1343093469dace1546aad148e08b47de"
+    },
+    {
+      "path": "sources/harfbuzz.tar.gz",
+      "bytes": 38888629,
+      "sha256": "10dcea60bd85ff219490d55525630650ac8c57044c4efdc878162f286451775b",
+      "url": "https://codeload.github.com/harfbuzz/harfbuzz/tar.gz/c7a7457b7385f33178e8cf87615ca077a810bbe7"
+    },
+    {
+      "path": "sources/emsdk.tar.gz",
+      "bytes": 200908,
+      "sha256": "bf4e2482096e80fdb2f2883ca87fb129d3ade763cc13b7802531479c1628b46f",
+      "url": "https://codeload.github.com/emscripten-core/emsdk/tar.gz/404dc1ec13f64fce1af1eaf5c007e18212f63527"
+    },
+    {
+      "path": "sources/npm.tar.gz",
+      "bytes": 492574,
+      "sha256": "d911e1d8ffe0ba977f6a693d3b9a83941384c8df84087ff5d5e5ec8d1f085b8c",
+      "url": "https://registry.npmjs.org/harfbuzzjs/-/harfbuzzjs-1.6.3.tgz"
+    }
+  ],
+  "patch": {
+    "inputArchive": "sources/hbjs.tar.gz",
+    "inputMember": "harfbuzzjs-79860e8f1343093469dace1546aad148e08b47de/Makefile",
+    "operation": "remove exactly one -DHB_TINY compiler flag",
+    "beforeSha256": "ec8a3a7f71b95207579bfd31bd5b186b7a255d40cddbfddcb1495e7117105e40",
+    "after": {
+      "path": "sources/Makefile.complete",
+      "bytes": 2055,
+      "sha256": "8a141e1244d7e50a63d8d562fd9ccecb98a06fda5ca5bf6b5e1ba9b46cd169c5"
+    },
+    "origin": "Recovered from the pinned upstream Makefile using the recorded text change. Both before and after identities match build.json; this file was not downloaded from the original artifact."
+  },
+  "licenses": [
+    {
+      "path": "LICENSE.harfbuzz",
+      "bytes": 1971,
+      "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+      "sourceArchive": "sources/harfbuzz.tar.gz",
+      "sourceMember": "harfbuzz-c7a7457b7385f33178e8cf87615ca077a810bbe7/COPYING"
+    },
+    {
+      "path": "LICENSE.harfbuzzjs",
+      "bytes": 1079,
+      "sha256": "5d09767b2cc476f08028b56d9384dc45061c5a3e90f9ad966e44addc8d26c8b1",
+      "sourceArchive": "sources/hbjs.tar.gz",
+      "sourceMember": "harfbuzzjs-79860e8f1343093469dace1546aad148e08b47de/LICENSE"
+    },
+    {
+      "path": "LICENSE.emscripten",
+      "bytes": 5093,
+      "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86",
+      "url": "https://raw.githubusercontent.com/emscripten-core/emscripten/2659582941bef14008476903f48941909db1b196/LICENSE"
+    }
+  ],
+  "limitations": [
+    "The original artifact command logs, toolchain-downloads.json and sources-before/sources-after manifests were not recovered.",
+    "The emsdk archive supplies the pinned installer sources, not the downloaded compiler SDK binaries or a complete compiler/runtime source archive.",
+    "No compilation, runtime regeneration, product font parity or release acceptance is established by this source recovery."
+  ]
+}

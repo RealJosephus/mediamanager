@@ -1,0 +1,61 @@
+{
+  "selectedSource": {
+    "file": "tiff-4.7.2.tar.xz",
+    "sha256": "4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88",
+    "url": "https://download.osgeo.org/libtiff/tiff-4.7.2.tar.xz",
+    "url2": "",
+    "packages": [
+      "tiff"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://download.osgeo.org/libtiff/tiff-4.7.2.tar.xz",
+    "responseUrl": "https://download.osgeo.org/libtiff/tiff-4.7.2.tar.xz",
+    "status": 200,
+    "headers": [
+      [
+        "Server",
+        "nginx/1.18.0 (Ubuntu)"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:10 GMT"
+      ],
+      [
+        "Content-Type",
+        "application/octet-stream"
+      ],
+      [
+        "Content-Length",
+        "2409652"
+      ],
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "Last-Modified",
+        "Fri, 03 Jul 2026 06:25:30 GMT"
+      ],
+      [
+        "ETag",
+        "\"6a4755da-24c4b4\""
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ],
+      [
+        "Front-End-Https",
+        "on"
+      ],
+      [
+        "X-Robots-Tag",
+        "noarchive"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:14.290112+00:00",
+    "bytes": 2409652,
+    "sha256": "4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88"
+  }
+}

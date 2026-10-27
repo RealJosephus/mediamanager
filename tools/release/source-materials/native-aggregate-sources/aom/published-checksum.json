@@ -1,0 +1,20 @@
+{
+  "kind": "storage#object",
+  "id": "aom-releases/libaom-3.15.0.tar.gz/1787695233059475",
+  "selfLink": "https://www.googleapis.com/storage/v1/b/aom-releases/o/libaom-3.15.0.tar.gz",
+  "mediaLink": "https://storage.googleapis.com/download/storage/v1/b/aom-releases/o/libaom-3.15.0.tar.gz?generation=1787695233059475&alt=media",
+  "name": "libaom-3.15.0.tar.gz",
+  "bucket": "aom-releases",
+  "generation": "1787695233059475",
+  "metageneration": "1",
+  "contentType": "application/x-tar",
+  "storageClass": "STANDARD",
+  "size": "6622801",
+  "md5Hash": "h0XlqY89IsjZGSc3WN5gkw==",
+  "crc32c": "880UIw==",
+  "etag": "CJOV1drjvJYDEAE=",
+  "timeCreated": "2026-08-25T22:00:33.133Z",
+  "updated": "2026-08-25T22:00:33.133Z",
+  "timeStorageClassUpdated": "2026-08-25T22:00:33.133Z",
+  "timeFinalized": "2026-08-25T22:00:33.133Z"
+}

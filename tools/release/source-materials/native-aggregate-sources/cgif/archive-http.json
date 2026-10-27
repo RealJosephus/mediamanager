@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://github.com/dloebl/cgif/archive/v0.5.3.tar.gz",
+  "responseUrl": "https://codeload.github.com/dloebl/cgif/tar.gz/refs/tags/v0.5.3",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=cgif-0.5.3.tar.gz"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"fcad3afbb50ccc72f902f68fba35bbec95f16dfdf26a3582f85fddf300ab5d9a\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:45 GMT"
+    ],
+    [
+      "Transfer-Encoding",
+      "chunked"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "D175:2547E:2ACFE5:2E72F3:6AE0A875"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:47.361068+00:00",
+  "bytes": 40021,
+  "sha256": "dcc7731e974ee77db75df26c99aca4d95f11ca2d267d870d42bce1e0d1e1e75f"
+}

@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://github.com/google/highway/archive/1.4.0.tar.gz",
+  "responseUrl": "https://codeload.github.com/google/highway/tar.gz/refs/tags/1.4.0",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=highway-1.4.0.tar.gz"
+    ],
+    [
+      "Content-Length",
+      "3691240"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"68394334b6287366f10a3c9b7ca8bd80584479d867e06bda63fa222089e08269\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:47 GMT"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "D180:3C6A6D:2D06C3:30A59F:6AE0A877"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:50.276269+00:00",
+  "bytes": 3691240,
+  "sha256": "e72241ac9524bb653ae52ced768b508045d4438726a303f10181a38f764a453c"
+}

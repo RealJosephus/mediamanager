@@ -1,0 +1,4178 @@
+[
+  {
+    "path": ".clang-format",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "732fa91e9f75b486d877f64c52b38298602ba684"
+  },
+  {
+    "path": ".git-blame-ignore-revs",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a907d5d8cf3872d3e24c44abb2f30f6f476ec0e9"
+  },
+  {
+    "path": ".gitattributes",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6b523b5911c298a3e099c380a79446ad207b21e"
+  },
+  {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65c1303ac7aa4b9079d4e4534b24a8063db7c6c5"
+  },
+  {
+    "path": ".gitlab-ci.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eaf0d3ee968f916f487397d2edeef6515c52d3bf"
+  },
+  {
+    "path": ".pre-commit-config.yaml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "44cb9994b1c69b4dba72f14c475f22a76e777d86"
+  },
+  {
+    "path": "CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fff94dc865144f0d34d82f96164f290d1eee117"
+  },
+  {
+    "path": "COMMITTERS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f684f4b7146ddf89994035344031d33e0792b2d"
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1291d61cf7ef45cee5b97330cfc0e39baf91b5b2"
+  },
+  {
+    "path": "ChangeLog",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e59290ae39a2ffa29fbec26f99b5d221c6948e5"
+  },
+  {
+    "path": "HOWTO-RELEASE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "02455e99e8e847f54751a0f7ae910a8de563929e"
+  },
+  {
+    "path": "HOWTO-SECURITY-RELEASE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad23977ae2b702c2217b2a4d5fc6497d2f77c54c"
+  },
+  {
+    "path": "LICENSE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12d5ef231021c5da19f3b5af44192fb6f4184542"
+  },
+  {
+    "path": "Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff7dc2e28ab303b4b82813a2d1e28c6fb5d87d73"
+  },
+  {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d83ba24d9db98103c0ff53056975d8c37df03ed"
+  },
+  {
+    "path": "RELEASE-DATE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4fff66f6b5dc19baf01eb5c70916146ccb70b784"
+  },
+  {
+    "path": "TODO",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea266aadf10e7f0ebef3719bebccf7e24c6f8456"
+  },
+  {
+    "path": "VERSION",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "af9764a59e12f3233d1453100d4000dd46be8e11"
+  },
+  {
+    "path": "archive",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "11f4b78d0961ce9dbe0f5ecd91c0eaf633d99fd8"
+  },
+  {
+    "path": "archive/html",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5c144bd7fc0cc50d013febfd68ddee06a454f833"
+  },
+  {
+    "path": "archive/html/man",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5b3b506fed3acea5336dedfc306f6c353de00fc2"
+  },
+  {
+    "path": "archive/html/man/bmp2tiff.1.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1104a49f0ee4afe9d452a49c27c2de7aff13e9b4"
+  },
+  {
+    "path": "archive/html/man/gif2tiff.1.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c50735377f0605cabe985b5bb38cd635a276f614"
+  },
+  {
+    "path": "archive/html/man/ras2tiff.1.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c652aba6da0471630155c6f394403ce14463dbc"
+  },
+  {
+    "path": "archive/html/man/sgi2tiff.1.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7665a6e42c49921aae7e95e66b3fb759718c5b2c"
+  },
+  {
+    "path": "archive/html/man/tiffsv.1.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9921a4841ba95aecc0d3a42b0f631a0757caddd"
+  },
+  {
+    "path": "archive/man",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ebb08c0008e39602493cf89a99cc704f9d7a0d34"
+  },
+  {
+    "path": "archive/man/bmp2tiff.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd0280eea030d38e746bec721e9fa3086ac09957"
+  },
+  {
+    "path": "archive/man/gif2tiff.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "27b222d5c2496ee552563d8ac38deabc50ae8490"
+  },
+  {
+    "path": "archive/man/ras2tiff.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c66288812962697567607688d2656a6ba769217"
+  },
+  {
+    "path": "archive/man/sgi2tiff.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "35616d062d6b91ecaa8d5cc5dbdd09e5d8f49409"
+  },
+  {
+    "path": "archive/man/tiffsv.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8061789839077f568adfb7d44f39da0c8be7f368"
+  },
+  {
+    "path": "archive/tools",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "49aef03e0be0d489c55f1fd4b1078c0aace774e3"
+  },
+  {
+    "path": "archive/tools/bmp2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "073ac678c21daa9101560a752345221a04b23e92"
+  },
+  {
+    "path": "archive/tools/gif2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d46fe05246aa4cc0545038e691e66a54de4e1a2"
+  },
+  {
+    "path": "archive/tools/ras2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "18f66abbc3eb5ff49fd92fb0e34cb92924775a10"
+  },
+  {
+    "path": "archive/tools/rasterfile.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9943d7ea272d17c1ad03860860d634654ad7204"
+  },
+  {
+    "path": "archive/tools/sgi2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14cb2bb8b68c7c2b61e49afd52de10e7d39151d3"
+  },
+  {
+    "path": "archive/tools/sgisv.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df99327e3dfd4c28e76e05059fa7b0b632238fce"
+  },
+  {
+    "path": "archive/tools/ycbcr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a05fef240e6969bdf33558125e75ae9ff7dda6f1"
+  },
+  {
+    "path": "autogen.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "32ab8ace818b2b5891682e42a08e25f890e1170d"
+  },
+  {
+    "path": "build",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f3028a044810342fbd539f23084070b91e442e2f"
+  },
+  {
+    "path": "build/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "756fb7164e9e69fcc2638a3222f6dcdf1bb80fd2"
+  },
+  {
+    "path": "build/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c912a422af35c164e9c346ea53956f9ceab83c55"
+  },
+  {
+    "path": "build/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f765efc85fde29e801e2982a59066712d40ad26f"
+  },
+  {
+    "path": "build/gitlab-ci",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76852880f6b6aedca352917c947b5bda3fb29396"
+  },
+  {
+    "path": "build/gitlab-ci-cygwin",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "582c03e9547d53e25a86150205ea998ee7fd59e7"
+  },
+  {
+    "path": "build/gitlab-ci-mingw",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d7858d0ddca3fe6f31fb8b106332201afae97ae"
+  },
+  {
+    "path": "build/gitlab-ci.ps1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a69357ddecb6a4be3721a40a79a6e6147c6f9846"
+  },
+  {
+    "path": "build/test_cmake",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "329fd81e6401877d12dd27f5559292991038d70a"
+  },
+  {
+    "path": "build/test_cmake/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d985ab2c88fbb69b9596e34281ff12fcd57e54e3"
+  },
+  {
+    "path": "build/test_cmake/test.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "011b53e11a424f1dacd969445737dce631d20429"
+  },
+  {
+    "path": "build/test_cmake_no_target",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a0e25a5ba720aad12fbff2729a263c1216dd2a5e"
+  },
+  {
+    "path": "build/test_cmake_no_target/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e899025f9e861b7f8b9b39557b4428848dc9586"
+  },
+  {
+    "path": "build/test_cmake_no_target/test.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "011b53e11a424f1dacd969445737dce631d20429"
+  },
+  {
+    "path": "cmake",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "af41c22ccc3f8a5d0a9d360fb44aaf184404db37"
+  },
+  {
+    "path": "cmake/AutotoolsCompat.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e89b0e2007f26cd58cc8a1e0fda126dd11b558e5"
+  },
+  {
+    "path": "cmake/AutotoolsVersion.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f93f5cf032b6cb7bd06546830ee7fb51d44cd8a8"
+  },
+  {
+    "path": "cmake/CXXLibrary.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3491c4c4e75854a0b676c7042e633f76f443a49a"
+  },
+  {
+    "path": "cmake/CompilerChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d647bb2f8ff3b2025a4c82772a3741339fece15"
+  },
+  {
+    "path": "cmake/DeflateCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76e5673e26925d3ee98281ab333232fa08fc18cf"
+  },
+  {
+    "path": "cmake/FindCMath.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "346106de2c0ee34e2678c5708f3810f8b9f5d5b5"
+  },
+  {
+    "path": "cmake/FindDeflate.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d606aa0ccbb6f31fd7a61cb27164a8fc2f343b2"
+  },
+  {
+    "path": "cmake/FindJBIG.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4d8e106e20888857de957162e91d6ca588efbc53"
+  },
+  {
+    "path": "cmake/FindJPEG.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "12d0844b4fcf5ba768bebc1d4fb6a01592e1c21c"
+  },
+  {
+    "path": "cmake/FindLERC.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aff7ea66d906323199624b5885c85f913afaf911"
+  },
+  {
+    "path": "cmake/FindWebP.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "675bf8c35649f4fdf83f5f1aa82099ace67b6ded"
+  },
+  {
+    "path": "cmake/FindZSTD.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e217f11ccb303e98dc183d024b981daabbf0625"
+  },
+  {
+    "path": "cmake/Findliblzma.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8dd5bc2ea74564dba55664343a5412352bc62953"
+  },
+  {
+    "path": "cmake/IncludeChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "08873598dcdc823a3582508e84d761235544b22a"
+  },
+  {
+    "path": "cmake/InternalCodecs.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97526e1e03cbdadd90a07e06cd9b6b6e2711f41c"
+  },
+  {
+    "path": "cmake/JBIGCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4350028100b6ba0e5f52fd629febed67e95ac96"
+  },
+  {
+    "path": "cmake/JPEGCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a26c43251ff89869df6d07b69504508996f1a76"
+  },
+  {
+    "path": "cmake/LERCCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c21dad3df23588467a64899f230feb8e6117fd6d"
+  },
+  {
+    "path": "cmake/LZMACodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c51afe828d263203c1bbb572a75db40a1e21dac6"
+  },
+  {
+    "path": "cmake/LargeFileSupport.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1819b9752ba7f11fde822c8e0eec5be595005f1"
+  },
+  {
+    "path": "cmake/LibraryFeatures.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "89635d64efd112e8c9d5b76d5dc3f64d624ae9ee"
+  },
+  {
+    "path": "cmake/LinkerChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2901a57413bd44e3a4c5543516f3e324994ea130"
+  },
+  {
+    "path": "cmake/OpenGLChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b11d70f5dd582fc6debdc362ec68bad2e2c58e9"
+  },
+  {
+    "path": "cmake/PixarLogCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "db363050dbd1d5df218d0351071a66c96838b911"
+  },
+  {
+    "path": "cmake/PkgConfig.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75dc28e89b912d95c04f68b62ab87d769268d088"
+  },
+  {
+    "path": "cmake/ProcessorChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0abb9187e034b79e2dd77f8a15ea23d4d7a3cea6"
+  },
+  {
+    "path": "cmake/Release.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6b754f9a5c81f01b177b220e56ccc35cdb701f5"
+  },
+  {
+    "path": "cmake/ReleaseScript.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90cfaf6523093e3555f55541b0bc47622b9fe90a"
+  },
+  {
+    "path": "cmake/Sphinx.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bef3bf553009d63ba3bab87344119d3302bf226c"
+  },
+  {
+    "path": "cmake/SphinxCheckInternalLinks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32c2566e79103308f0ded983a7fc628debe3dfa4"
+  },
+  {
+    "path": "cmake/SymbolChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "210748ed95e82c23d433f6a2becce591de5cca5d"
+  },
+  {
+    "path": "cmake/TypeSizeChecks.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de260ef75da800ce582026f293dec6a09bafabbf"
+  },
+  {
+    "path": "cmake/WebPCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d676a78a543fef0baecdfab545bf015c60f49c8"
+  },
+  {
+    "path": "cmake/WindowsSupport.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a60bba9b768e354b6e182f5dbba11954064280a7"
+  },
+  {
+    "path": "cmake/ZSTDCodec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3fac861aee2dd802190edeae7bd4dceaf5866b1f"
+  },
+  {
+    "path": "cmake/list-manpage-dependencies.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "67e79ad50acd9504f976098d396c2155bf9decd2"
+  },
+  {
+    "path": "cmake/list-manpages.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42bf0d83093253a59cc2a96c25436af93bc3baf6"
+  },
+  {
+    "path": "cmake/tiff-config.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "19d54a72a5316058ad6e78230c82d8caa0931d5c"
+  },
+  {
+    "path": "configure.ac",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "638f8b07e3912afc6d6391f7c335271989aa4058"
+  },
+  {
+    "path": "contrib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c746844def47d5b3637310d28ba66ab4f94dd5fa"
+  },
+  {
+    "path": "contrib/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c8310b6425f026c031fef8d6b57b933024914d2"
+  },
+  {
+    "path": "contrib/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99d0f3366896dd0fa173c79ad6a2d87c152d4200"
+  },
+  {
+    "path": "contrib/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "26b7c5f8c393199cfc63203958047dc58bfa6df0"
+  },
+  {
+    "path": "contrib/addtiffo",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "544c4ae55cb49c0fe89167f7bddceac65cbd3d1c"
+  },
+  {
+    "path": "contrib/addtiffo/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "25e62f74a91281c3f38b17ad2879d142eac02067"
+  },
+  {
+    "path": "contrib/addtiffo/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8f15fcd902087f3b132855c368ce43a94c0211b"
+  },
+  {
+    "path": "contrib/addtiffo/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a6ca45fba6c2ef397ea7b05160dbd8c575bc5526"
+  },
+  {
+    "path": "contrib/addtiffo/addtiffo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "815f02b2326725bc7430be3360ff75b286c11111"
+  },
+  {
+    "path": "contrib/addtiffo/tif_overview.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e821b42ca978948cffb8ff6412b9f58555e6307"
+  },
+  {
+    "path": "contrib/addtiffo/tif_ovrcache.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48cd6c486f30353cfffe5be5cb5bf5859c1a6bfd"
+  },
+  {
+    "path": "contrib/addtiffo/tif_ovrcache.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90d198a4af546ce5f1acc1c5670160e50fd75ce4"
+  },
+  {
+    "path": "contrib/dbs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "82593875eb6d171b81c7cf8bfebc70a5c179dc15"
+  },
+  {
+    "path": "contrib/dbs/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "869c726ed9167fbf84da1729fa90989def808010"
+  },
+  {
+    "path": "contrib/dbs/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "191d9346700b63663b07b5ff1dba216cdde3d8bf"
+  },
+  {
+    "path": "contrib/dbs/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e05d0a95688a7448b36016cc68823b3db0e070d2"
+  },
+  {
+    "path": "contrib/dbs/tiff-bi.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "89409eb6abcca609c45f7bff211d9805d784cf8d"
+  },
+  {
+    "path": "contrib/dbs/tiff-grayscale.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7f4ee814d293f0e02c072005d66468399157eff"
+  },
+  {
+    "path": "contrib/dbs/tiff-palette.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe682d537d2cae71191adf1a6ed104bf397f7c28"
+  },
+  {
+    "path": "contrib/dbs/tiff-rgb.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "79acd5966129fb850c245d4c16d98a202976ba5d"
+  },
+  {
+    "path": "contrib/dbs/xtiff",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1e0377ccd7b16a6c040998e1ccd5512a56f1cece"
+  },
+  {
+    "path": "contrib/dbs/xtiff/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd8104723d4caaab93e4af6fc33633a356795ca8"
+  },
+  {
+    "path": "contrib/dbs/xtiff/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa151476c3e2356bebb8fbfeb072d61be85e5245"
+  },
+  {
+    "path": "contrib/dbs/xtiff/patchlevel.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "935ec354b717b10af4bcd36ea15dfed3a1d64a01"
+  },
+  {
+    "path": "contrib/dbs/xtiff/xtiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0089cdf7441181e943dbe471a82b8b5b0869544"
+  },
+  {
+    "path": "contrib/dbs/xtiff/xtifficon.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ce5e99f7a03e9c8f4214c387e6bdd5179fcfa35"
+  },
+  {
+    "path": "contrib/iptcutil",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9c833522b3e7fb7950747f15c454002fff54912b"
+  },
+  {
+    "path": "contrib/iptcutil/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "165431ddfe50bcf829ab84576381b1f22d9633b9"
+  },
+  {
+    "path": "contrib/iptcutil/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca79306ad5aba8ef89c5fca729bc565d219ee9eb"
+  },
+  {
+    "path": "contrib/iptcutil/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1619ef4766ef71ca626ac367080f6f75ba672c0e"
+  },
+  {
+    "path": "contrib/iptcutil/iptcutil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f55bea8932f136990941a3b7cecbdb91eed6015"
+  },
+  {
+    "path": "contrib/iptcutil/test.iptc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2605622ecf1e8eb7906378b3f7ae7196244d538"
+  },
+  {
+    "path": "contrib/iptcutil/test.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d518100439c888c8d05cbd9e60389a3de30b1095"
+  },
+  {
+    "path": "contrib/mfs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5d89c02c5e608aa4c6b7cb6060f436681fe70936"
+  },
+  {
+    "path": "contrib/mfs/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62ae5d57d7525f858851926eda1ed775f2d602e9"
+  },
+  {
+    "path": "contrib/mfs/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f9befbcb2efbd831e101d8ca0cc947ce4632c9a"
+  },
+  {
+    "path": "contrib/mfs/mfs_file.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51336a0d42b655b8dff9a1f009770c869ae7536f"
+  },
+  {
+    "path": "contrib/oss-fuzz",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8c6f86888b9c98d522599fc2c0d028330dd2647a"
+  },
+  {
+    "path": "contrib/oss-fuzz/build.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "beddf2e9158ae41f3edbd425b1a883e85c53520f"
+  },
+  {
+    "path": "contrib/oss-fuzz/tiff_read_rgba_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6d4eef7c0ecb25cec2cb8a1b26cc35f03bc9fd4"
+  },
+  {
+    "path": "contrib/oss-fuzz/write_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "566c323f283bb0712d9e0c933e8517bf012838c3"
+  },
+  {
+    "path": "contrib/pds",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "eda812800681d9955c3ec49ac526125babbced8d"
+  },
+  {
+    "path": "contrib/pds/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c4e6bafe1ff7f299de7d8b6ebbae66ff6c118a2a"
+  },
+  {
+    "path": "contrib/pds/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a36b0549061ec4aed3bd5c8f70839d46f03d6dc7"
+  },
+  {
+    "path": "contrib/pds/tif_imageiter.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4af5a8345178c88a3b18d37c45832880257f8aff"
+  },
+  {
+    "path": "contrib/pds/tif_imageiter.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e79f1ebe3ec47d69d6e54eccde84ce5cdb21be2"
+  },
+  {
+    "path": "contrib/pds/tif_pdsdirread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e9b3fa44b7dfd677b0a692d07d4eaa45c2871c1"
+  },
+  {
+    "path": "contrib/pds/tif_pdsdirwrite.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "981936f657ea484b5f3d14223836d824e3f161d1"
+  },
+  {
+    "path": "contrib/ras",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f0efe47d76cc072a113f1835ae5747393c23a5bc"
+  },
+  {
+    "path": "contrib/ras/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92e124bf1d348560f67a2838f5068b5e8f1a548d"
+  },
+  {
+    "path": "contrib/ras/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f87bfde00c358fb387364fa88645617c9f162ab8"
+  },
+  {
+    "path": "contrib/ras/ras2tif.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a66c3bd8741551194416c9104b4a418f13375f19"
+  },
+  {
+    "path": "contrib/ras/tif2ras.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fbdbf686dcc7f3c407a96152c15a8eb283c3acb"
+  },
+  {
+    "path": "contrib/stream",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0af93d02f2e884290e5cc7dc08fe2b7a3da03a9d"
+  },
+  {
+    "path": "contrib/stream/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd882b321e7f1c87ab502b0d9a3f1fb3b35ed28e"
+  },
+  {
+    "path": "contrib/stream/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df9e43e5a175df313d767ccb3ccb4fc6df837334"
+  },
+  {
+    "path": "contrib/stream/tiffstream.cpp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d7af095e875ea3db38b0dd84f3e1a8e0646b545"
+  },
+  {
+    "path": "contrib/stream/tiffstream.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "63a4493419bf2f0b5a678c163c556671c4cbec8f"
+  },
+  {
+    "path": "contrib/tags",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d90066dd0e18f04d312dd9a6590c95cac129c5f9"
+  },
+  {
+    "path": "contrib/tags/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0bdec678c81fe208a83dac6adbd8e73d7272ba89"
+  },
+  {
+    "path": "contrib/tags/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d58a564179fbfe8f9935dd5c1e847cde3186c4af"
+  },
+  {
+    "path": "contrib/tags/listtif.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "576297003a71a895dc66e805faf7c1934d0f6132"
+  },
+  {
+    "path": "contrib/tags/maketif.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "345e72c36fa27334a59ee24cd78f512536e83086"
+  },
+  {
+    "path": "contrib/tags/xtif_dir.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e8398d04596724aabfbab6d7d069e295b7a47158"
+  },
+  {
+    "path": "contrib/tags/xtiffio.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "421b98b12a6c51e94efb03142699a67d07b4490f"
+  },
+  {
+    "path": "contrib/tags/xtiffiop.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1dd5824a7b2839df22fbc046b613d9aac4eab4b4"
+  },
+  {
+    "path": "contrib/win_dib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "99e557114e7860136b65132795793ce4e9a76f68"
+  },
+  {
+    "path": "contrib/win_dib/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "53ededb186b7db999e6228e63aa1c05a22b9df80"
+  },
+  {
+    "path": "contrib/win_dib/Makefile.w95",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f15e83296f35a4faff80a7f963f0d6d74f3ebac"
+  },
+  {
+    "path": "contrib/win_dib/README.Tiffile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8645f05c2cfb8bc96e27f200223d1836cc18faaa"
+  },
+  {
+    "path": "contrib/win_dib/README.tiff2dib",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75e1254bbd750b67e136d24dd35f6c99bc58fd20"
+  },
+  {
+    "path": "contrib/win_dib/Tiffile.cpp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2eca85cadd27aea7db2b7f92e53eb0f465a8313"
+  },
+  {
+    "path": "contrib/win_dib/tiff2dib.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "116d0012a6ca5e5d5e617894e354ad17e675ddef"
+  },
+  {
+    "path": "doc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fd573606c4c5b37feb5eee232067bafb202a156e"
+  },
+  {
+    "path": "doc/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "af5cab0e7dc4a3adcc5e9255aabd4a8efb4ac277"
+  },
+  {
+    "path": "doc/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8dbacab0caf8d94e8dba942cc1c121daaad4b46b"
+  },
+  {
+    "path": "doc/_static",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "82e3a754b6a0fcb238b03c0e47d05219fbf9cf89"
+  },
+  {
+    "path": "doc/_static/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "doc/addingtags.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c13e55276a02006862fad6d64a3728eb10cc432"
+  },
+  {
+    "path": "doc/build.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da7a884c1964b7881eb7a1ea70532bfca67750b0"
+  },
+  {
+    "path": "doc/conf.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2fd31cf02d82111420925088b5204011c17ef3db"
+  },
+  {
+    "path": "doc/contrib.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b94970aa903a3e677620bedd41b5ba288cbcf58"
+  },
+  {
+    "path": "doc/functions.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1716b8886483c4ee51e6bf35ad00d15ae364e25"
+  },
+  {
+    "path": "doc/functions",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3f3707f9097aa8f231143e5db3df651697813d24"
+  },
+  {
+    "path": "doc/functions/TIFFAccessTagMethods.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c9a53dc057396a8275b1fd8de69366c08dbb6ab8"
+  },
+  {
+    "path": "doc/functions/TIFFClientInfo.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7576d225ef319a06d6227a71956509ede43d410e"
+  },
+  {
+    "path": "doc/functions/TIFFClose.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3056e06ca031404db8eb075995cd46acba5a7959"
+  },
+  {
+    "path": "doc/functions/TIFFCreateDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f794d59b5a45847d5e2e5a47a460402a3e26bef"
+  },
+  {
+    "path": "doc/functions/TIFFCustomDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c61b69472b0e6f55981b42b3e54060185caaa418"
+  },
+  {
+    "path": "doc/functions/TIFFCustomTagList.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b18c7b0f88a7dea50d7aeaa5c6529a9335fa752"
+  },
+  {
+    "path": "doc/functions/TIFFDataWidth.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8adaef6ba063656b80340489ae3d26bce26e1fe7"
+  },
+  {
+    "path": "doc/functions/TIFFDeferStrileArrayWriting.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "705aebc2ba340cabcca305e9e8c28d2d1cb6e324"
+  },
+  {
+    "path": "doc/functions/TIFFError.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e770c3534e3dad0f887c1deaddef0928fbc4d005"
+  },
+  {
+    "path": "doc/functions/TIFFFieldDataType.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "837004e6f90465b2f700f4251b3ab7fff12c107f"
+  },
+  {
+    "path": "doc/functions/TIFFFieldName.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "67bedf75c7360d9fa45ec56b39cbd5a952f1417f"
+  },
+  {
+    "path": "doc/functions/TIFFFieldPassCount.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a630b99fd04127b437ed9fbaf76d886b593d9368"
+  },
+  {
+    "path": "doc/functions/TIFFFieldQuery.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e7a8188cda028f3fbcaca4ace37536334e45d16"
+  },
+  {
+    "path": "doc/functions/TIFFFieldReadCount.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9cd46dd928444c15ec7b6ab97bd5d6f1b5f6ed8d"
+  },
+  {
+    "path": "doc/functions/TIFFFieldTag.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d76a702ef1aad56f41c3b4b51306801daf7f6ef"
+  },
+  {
+    "path": "doc/functions/TIFFFieldWriteCount.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4459f8f71ec6c5376f6bd1a7f10c3beb62fc49c7"
+  },
+  {
+    "path": "doc/functions/TIFFFlush.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b56148ec29387667e486a509a60d894deeca71f"
+  },
+  {
+    "path": "doc/functions/TIFFGetField.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd658967a9f029728e7cfa7c5b50a55457598079"
+  },
+  {
+    "path": "doc/functions/TIFFGetMaxCompressionRatio.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "274788cd5cf967f98daf96b4851ad2c9bba03132"
+  },
+  {
+    "path": "doc/functions/TIFFMergeFieldInfo.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3ff551b31f7e7f9df48690159e8638bf20f6451"
+  },
+  {
+    "path": "doc/functions/TIFFOpen.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ab546fe964088ef35678741eed6e280d08eb699"
+  },
+  {
+    "path": "doc/functions/TIFFOpenOptions.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1768b37f47ba14284917447e6854904cc113f4f1"
+  },
+  {
+    "path": "doc/functions/TIFFPrintDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e84af5a9aa7d161bf9e43cd88c1fa5a7c997536d"
+  },
+  {
+    "path": "doc/functions/TIFFProcFunctions.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "73c77dd29e4582016fde9051a633f8da612aab9f"
+  },
+  {
+    "path": "doc/functions/TIFFRGBAImage.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f6771ed36cab965aa42a16073a5a024ed1c383b"
+  },
+  {
+    "path": "doc/functions/TIFFReadDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a1fc038228935c3483b52a553e972be7cba54be"
+  },
+  {
+    "path": "doc/functions/TIFFReadEncodedStrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd75ce393d788d0ec10d9572ceaf4e661cf95a61"
+  },
+  {
+    "path": "doc/functions/TIFFReadEncodedTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75a769330064b32af9dfc6a75634ee7c50e2e2fc"
+  },
+  {
+    "path": "doc/functions/TIFFReadFromUserBuffer.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "09807eca9839215e704be5b5773344567d28fb73"
+  },
+  {
+    "path": "doc/functions/TIFFReadRGBAImage.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1f3b06122452efcd755daed1998f5196bf3fdbe"
+  },
+  {
+    "path": "doc/functions/TIFFReadRGBAStrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75aed98877afd2fa88b11b795bc9108c1dcaedae"
+  },
+  {
+    "path": "doc/functions/TIFFReadRGBATile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4644f9b22c06e55c5fb8521d44773112de13a989"
+  },
+  {
+    "path": "doc/functions/TIFFReadRawStrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a2da52ef330ab1aad755aecae9682bcfd52c841"
+  },
+  {
+    "path": "doc/functions/TIFFReadRawTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a651a4fc2c04e0e25355f7c00092ec80dded8a7"
+  },
+  {
+    "path": "doc/functions/TIFFReadScanline.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29cb7c0cf6e97def7633f0ed4515fba64dba2ba5"
+  },
+  {
+    "path": "doc/functions/TIFFReadTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc1afa7eb73888427bf0956d3ca5a70c97f5f88b"
+  },
+  {
+    "path": "doc/functions/TIFFSetDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "00a9f1184278c65cf9a46c9f54dccdfc163b8e6f"
+  },
+  {
+    "path": "doc/functions/TIFFSetField.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "82935ea29c0db91830d5a258186e22ca9c64ec8e"
+  },
+  {
+    "path": "doc/functions/TIFFSetTagExtender.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea72cbbe5f7ef499495690679c2d1cb0bd13ae11"
+  },
+  {
+    "path": "doc/functions/TIFFStrileQuery.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a40bcf6a1d6e3f3aad7d00ee88df7ebf4286264"
+  },
+  {
+    "path": "doc/functions/TIFFWarning.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5645eb4fd3287e44da9dce78febd6bc99435da4"
+  },
+  {
+    "path": "doc/functions/TIFFWriteDirectory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a2cf0c837ca2285770524a5659fcd553b15657d"
+  },
+  {
+    "path": "doc/functions/TIFFWriteEncodedStrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ffb918425fbd62946397ff899f82de46c3a1e104"
+  },
+  {
+    "path": "doc/functions/TIFFWriteEncodedTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "352a97bbd081a012c8a9d983d6b0a2616276b139"
+  },
+  {
+    "path": "doc/functions/TIFFWriteRawStrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "054cac9eb8acf21b5351c7ac7be3757cc0e81473"
+  },
+  {
+    "path": "doc/functions/TIFFWriteRawTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5f4df505138486e81b223acd81be0dfb3e474a4f"
+  },
+  {
+    "path": "doc/functions/TIFFWriteScanline.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70988dfcfb96cba61710b9d4057d39ba6fa29293"
+  },
+  {
+    "path": "doc/functions/TIFFWriteTile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd9f30e884e2a9ec282055bd7a821b822f262146"
+  },
+  {
+    "path": "doc/functions/TIFFbuffer.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fd6e9aaa3bfae71383821142b41b86681202db42"
+  },
+  {
+    "path": "doc/functions/TIFFcodec.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9f658d7f404592adeb35af8d7fe19b5c1cc842a"
+  },
+  {
+    "path": "doc/functions/TIFFcolor.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf0c2372a5765b64a772b41ffd332607d7802daa"
+  },
+  {
+    "path": "doc/functions/TIFFmemory.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4aec01880a0f09d5e0449dc8f66e47cbc9bdcfe3"
+  },
+  {
+    "path": "doc/functions/TIFFquery.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e18dec80c95e312186c9a67aa89b2d9ab28f98aa"
+  },
+  {
+    "path": "doc/functions/TIFFsize.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3799ab51b20e894920447e10ff81df1cad473779"
+  },
+  {
+    "path": "doc/functions/TIFFstrip.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a02bbccb45cc9a96b0fcb1bb1ade50b0035c4d2a"
+  },
+  {
+    "path": "doc/functions/TIFFswab.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a61defa3a53341e251cefe8d231350f237d42f9"
+  },
+  {
+    "path": "doc/functions/TIFFtile.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fac326767667682963b8e0d8ef23bc958cedcf24"
+  },
+  {
+    "path": "doc/functions/_TIFFRewriteField.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f4575ba2e1dfbf1dc9ea0a554139b2526399baf"
+  },
+  {
+    "path": "doc/functions/_TIFFauxiliary.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "46f9a19f05b73e56a457e6ee4c1d617f45a17941"
+  },
+  {
+    "path": "doc/functions/libtiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fafb57c1d471fb79279604667537744e8b5b33e"
+  },
+  {
+    "path": "doc/images.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe34287bd6b54f37dde192fbefc6393d773cca78"
+  },
+  {
+    "path": "doc/images",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "06f6cae8be3cfcdf1347a304b91fdf3936796401"
+  },
+  {
+    "path": "doc/images/back.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11d0c35f4671f6086d992776c7521efef880e914"
+  },
+  {
+    "path": "doc/images/bali.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f5c146dd5ed78b6f0f227773214b78aecd57c81"
+  },
+  {
+    "path": "doc/images/cat.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5bd3fac1e21bcc0ca36a98cc2cb47af1178a7ffa"
+  },
+  {
+    "path": "doc/images/cover.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8698cfb064736d498501de801fcd727b8952bd3c"
+  },
+  {
+    "path": "doc/images/cramps.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9153f9ae280aad0f3318ef16316d6554889e09c3"
+  },
+  {
+    "path": "doc/images/dave.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c36d447772a630e171de8e8fad5e7ce2cc1cf98e"
+  },
+  {
+    "path": "doc/images/info.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "783d63153ec9268f7e17f3887a844c2a8741e3ce"
+  },
+  {
+    "path": "doc/images/jello.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df99e663ef3b35d30b6031435bb3e3d6d57faeab"
+  },
+  {
+    "path": "doc/images/jim.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a18a031fac72973e00b7fee7055774cbc6a43f9"
+  },
+  {
+    "path": "doc/images/note.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7177d68a19ff69dadbbc166fe9386fdff45bcba4"
+  },
+  {
+    "path": "doc/images/oxford.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd4b86e186300ebe37de1f2309eb6fab8c2ccc65"
+  },
+  {
+    "path": "doc/images/quad.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b7df170beb5da5b9be8b5d00efe19c9d9f4435c"
+  },
+  {
+    "path": "doc/images/ring.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2a614f4929e4cfbc14e656f576e320e1ee601e45"
+  },
+  {
+    "path": "doc/images/smallliz.jpg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8eb827f8ad56ff57e9324c5e2fcd07947aca0c49"
+  },
+  {
+    "path": "doc/images/strike.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0709d198674d4ed134e36ff7194cd2f9d617d9a3"
+  },
+  {
+    "path": "doc/images/warning.gif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f51eb4b1a7b7f392b183e183ec2d93aab7d3090b"
+  },
+  {
+    "path": "doc/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da00b99596e9618a7b49899e71f0c8f796406808"
+  },
+  {
+    "path": "doc/internals.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a49776c5e3502f64e4b3f152d01c50ff225ec83"
+  },
+  {
+    "path": "doc/libtiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "694c33d9ba92f8870c5781b1a3397d7b0467284b"
+  },
+  {
+    "path": "doc/multi_page.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a3b9001e255e453b21e6028fda663c403069eb24"
+  },
+  {
+    "path": "doc/project",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a45d06ed4729b5b0c81bc911c36dff8f9f8b1986"
+  },
+  {
+    "path": "doc/project/acknowledgements.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a3d9da968980032e212847cfeee13cdaefb0db43"
+  },
+  {
+    "path": "doc/project/bugs.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41cc209f2fcf66929e36cbe55a0d505eb9558ea5"
+  },
+  {
+    "path": "doc/project/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f6971c6d113a8ec178e93d770e76dc6584750ad"
+  },
+  {
+    "path": "doc/project/license.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c928bff63b0727a92555a97b46540dc95cf657d"
+  },
+  {
+    "path": "doc/project/mailinglist.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6490f1ae9b2d9441d1022aeb694251d1d41c5bf"
+  },
+  {
+    "path": "doc/project/psc.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b72f47b99b76b17949787bd97cfb2939eb6ffb9b"
+  },
+  {
+    "path": "doc/releases",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "2c448f57154f95562a7086d136ecbe9e9ad82e1a"
+  },
+  {
+    "path": "doc/releases/historical.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a72482a7460934f90ba61bbdcc82265bc97ed083"
+  },
+  {
+    "path": "doc/releases/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75ebd3bf929ee1cb3c9814c7855bb7bb6fe38311"
+  },
+  {
+    "path": "doc/releases/v3.4beta007.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c9cec9dc0de853059176a41eeff4ae29956d122"
+  },
+  {
+    "path": "doc/releases/v3.4beta016.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b4b0817e76ba8e5132d73748c061f1540be6d3d0"
+  },
+  {
+    "path": "doc/releases/v3.4beta018.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bffb023d2edfb6bbb61b8eb87accb4d9089961c1"
+  },
+  {
+    "path": "doc/releases/v3.4beta024.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1713dd3a445c0bd3fe6ddbfc199c5d5af325276e"
+  },
+  {
+    "path": "doc/releases/v3.4beta028.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77cd2fc1eff2f372ab1551621cd00e86412970ed"
+  },
+  {
+    "path": "doc/releases/v3.4beta029.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c9112aed45c89a7ff89a54015310f9bf7a637b37"
+  },
+  {
+    "path": "doc/releases/v3.4beta031.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "638495899d68b56367a37b0aa412d1839a2db558"
+  },
+  {
+    "path": "doc/releases/v3.4beta032.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54cd695e4b33ce21c1a981557b0b1246b38eebdf"
+  },
+  {
+    "path": "doc/releases/v3.4beta033.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2299b2bd48442697175fe845f8fbc2c7aa7d06a0"
+  },
+  {
+    "path": "doc/releases/v3.4beta034.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1189024ecd8a94706539034cb93868a519888ce1"
+  },
+  {
+    "path": "doc/releases/v3.4beta035.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc96db2f4cbf58604c01a269cf28c1c76ca4d75f"
+  },
+  {
+    "path": "doc/releases/v3.4beta036.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df3b6159a6b407e5fbc2d30b825416ec8cb8a396"
+  },
+  {
+    "path": "doc/releases/v3.5.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3333d0e152ac02928b9bc4cd07e8fddbc426d0ce"
+  },
+  {
+    "path": "doc/releases/v3.5.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3286f8dd06223f0a4097b1b1e22d8ca1c6223943"
+  },
+  {
+    "path": "doc/releases/v3.5.3.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "987568de2371a486a9431bc270ba47e030cf9642"
+  },
+  {
+    "path": "doc/releases/v3.5.4.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0d8349ea30c36b40ea0915716c03e3df9d9f80b"
+  },
+  {
+    "path": "doc/releases/v3.5.5.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c10d529fbf76df6060a5ce903b4b7eafc5d5a2b"
+  },
+  {
+    "path": "doc/releases/v3.5.6beta.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55d17bdc3635f8c02bca674596126d3e39dc6064"
+  },
+  {
+    "path": "doc/releases/v3.5.7.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97e9a289057700ec1e192314261dc01ac369d15f"
+  },
+  {
+    "path": "doc/releases/v3.6.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "345c5f188e37974aacd96e585e0837ea916bc0b6"
+  },
+  {
+    "path": "doc/releases/v3.6.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb7cbdf4365f48b48c7cd3d05a3de30b9c0b8af0"
+  },
+  {
+    "path": "doc/releases/v3.7.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b04ea491b55d266764a54afe6e2ab0d9acfca510"
+  },
+  {
+    "path": "doc/releases/v3.7.0alpha.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc254621fb08d2fb3ae56616af62fe38e47395e8"
+  },
+  {
+    "path": "doc/releases/v3.7.0beta.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8239faaeeb02dc3953eedf3740f3beaee66c0869"
+  },
+  {
+    "path": "doc/releases/v3.7.0beta2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "832123c35c53d4b29a715deb2ce2d3ba2538cc26"
+  },
+  {
+    "path": "doc/releases/v3.7.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf8bffe2c288eb2ba894c070f3359344c9268bf9"
+  },
+  {
+    "path": "doc/releases/v3.7.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7369cd72bd0614dcb5158e57b02c6891362030e"
+  },
+  {
+    "path": "doc/releases/v3.7.3.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c558e0d5c285649edfbd70e24758325ddfb8f7f4"
+  },
+  {
+    "path": "doc/releases/v3.7.4.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ee369aca616413600afd310ba9d393e7e527936"
+  },
+  {
+    "path": "doc/releases/v3.8.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ba2728721348f1d84d1194433e9b100ddaadfab"
+  },
+  {
+    "path": "doc/releases/v3.8.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6bd081cab32cc55c7a4f83287a83c105c147e34"
+  },
+  {
+    "path": "doc/releases/v3.8.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef33685e68ce5e7e52420024f441d09909412a8f"
+  },
+  {
+    "path": "doc/releases/v3.9.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e256199b11b20b91bfe896ace521e645605b2572"
+  },
+  {
+    "path": "doc/releases/v3.9.0beta.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "932097dc6fd28ac90a1ae80f461c91597282e335"
+  },
+  {
+    "path": "doc/releases/v3.9.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24a370920fb2828b6290b9c757b0842e664267bd"
+  },
+  {
+    "path": "doc/releases/v3.9.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "961a27aec1a95578264c3f8205e50218fdcad51a"
+  },
+  {
+    "path": "doc/releases/v3.9.3.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0712788952b197f88cde69cb234470342e90e100"
+  },
+  {
+    "path": "doc/releases/v3.9.4.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f95bb7ece25624534ac2d86d6e5ee9de7e045963"
+  },
+  {
+    "path": "doc/releases/v3.9.5.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1246debbaa499df64a9fc6ec193730cd240a01c3"
+  },
+  {
+    "path": "doc/releases/v4.0.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "21b0102fffa2b238c9dbd1d72367f1802bd5e4d2"
+  },
+  {
+    "path": "doc/releases/v4.0.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a618290a6ac04b320f100ac6ef257ce568da1316"
+  },
+  {
+    "path": "doc/releases/v4.0.10.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8be8d02b83200e6e0107d528df580f9233e7d66e"
+  },
+  {
+    "path": "doc/releases/v4.0.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "394f0523fc84c86e42a7b8b7397cc00198e0f458"
+  },
+  {
+    "path": "doc/releases/v4.0.3.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "868967e7ca22eed37e9cc318469aaf6b9222b1dd"
+  },
+  {
+    "path": "doc/releases/v4.0.4.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b211b76b2ebb31e9d257c96c40c628acadcd3a9c"
+  },
+  {
+    "path": "doc/releases/v4.0.4beta.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f281d6364bde2b60f849bb92cdfd530bebca9949"
+  },
+  {
+    "path": "doc/releases/v4.0.5.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56cd7f55b99943c7c1383cf54558b41f82588298"
+  },
+  {
+    "path": "doc/releases/v4.0.6.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4228f18e044e53d147229aff3a7a3f2cf1d8cb53"
+  },
+  {
+    "path": "doc/releases/v4.0.7.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38e9ac545e0b5b29a125b75efa04c770e8faf87d"
+  },
+  {
+    "path": "doc/releases/v4.0.8.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "576f55c84f61d5928fb43d831db1ff2f660632bf"
+  },
+  {
+    "path": "doc/releases/v4.0.9.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a5318da0ed5c17603d31e7378de9b393264c118"
+  },
+  {
+    "path": "doc/releases/v4.1.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "112346fb5d9727989a4816a292bef6845da6611d"
+  },
+  {
+    "path": "doc/releases/v4.2.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1e8d581257f314406e86fd2398cc341e3312db3"
+  },
+  {
+    "path": "doc/releases/v4.3.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "740efd6597e29e2126ef3a7f61019dda6c3bf308"
+  },
+  {
+    "path": "doc/releases/v4.4.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "af8cacd97cd7422dddecbd246dd07254871bcfa8"
+  },
+  {
+    "path": "doc/releases/v4.5.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a287b2153bd7e594dcd922fadfc4f9f4fafc374e"
+  },
+  {
+    "path": "doc/releases/v4.5.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5c34d67d45fcadbca4659abd9029c8b50eca6e1"
+  },
+  {
+    "path": "doc/releases/v4.6.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78b5c9e54aae8ab581533e10c0396a1b0d585e47"
+  },
+  {
+    "path": "doc/releases/v4.7.0.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cff2bf60fa36aa03a60bc56f6f46185a5b28e766"
+  },
+  {
+    "path": "doc/releases/v4.7.1.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2214487e25d2013c43a81e3dd73b4ca4afaec99b"
+  },
+  {
+    "path": "doc/releases/v4.7.2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64854d9dcc70463e5725c1e4f0779f8b4eee6b19"
+  },
+  {
+    "path": "doc/rfcs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b94c51634f0d50be8d4dee722cd57ac10e79946a"
+  },
+  {
+    "path": "doc/rfcs/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58e890ac456dca2e3df3540e36e8af034a706575"
+  },
+  {
+    "path": "doc/rfcs/rfc1_psc.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7aef7fe5ae37642693cdb3fea3a7406229949c9"
+  },
+  {
+    "path": "doc/rfcs/rfc2_restoring_needed_tools.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "432d568304e23b3ede999e9f4fc1f64631b2ef0b"
+  },
+  {
+    "path": "doc/specification",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fb94c7c27a0f1044380f57f488b7edaffb5c244f"
+  },
+  {
+    "path": "doc/specification/bigtiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a8a24f830ed9f409bcfcab661aad47b62696463d"
+  },
+  {
+    "path": "doc/specification/bigtiffpr_images",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "161391c8d5f35295f169e1a4ce0422ad8cf3b404"
+  },
+  {
+    "path": "doc/specification/bigtiffpr_images/esri.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dce6c97e366fd50930c887dc28bfef1efe8673f8"
+  },
+  {
+    "path": "doc/specification/bigtiffpr_images/leica.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "758cf665b64ad11751843d02cda2e92324713e55"
+  },
+  {
+    "path": "doc/specification/bigtiffpr_images/safe.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "50acc607f81090972672d81ecea71f9460e7de68"
+  },
+  {
+    "path": "doc/specification/bigtiffpr_images/weogeo.png",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2b7903e27a95b81e2f931cb2e32b350cb856ed5d"
+  },
+  {
+    "path": "doc/specification/coverage-bigtiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ecd4eb5d56fe26baf90ca0b4d3ccd1134585edc5"
+  },
+  {
+    "path": "doc/specification/coverage.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "524f78d3745f04167985446b6f68d57702d6d355"
+  },
+  {
+    "path": "doc/specification/index.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2966364cb80fc5b7fd458b8cd19cc188363cf982"
+  },
+  {
+    "path": "doc/specification/technote2.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a88eab7d5cba02f5e0b4554a9e527320899f7492"
+  },
+  {
+    "path": "doc/terms.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d4012a6f4031bd8fda384a0693e39390768d83a"
+  },
+  {
+    "path": "doc/tools.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df102f04e1ae4f49aaabe6ed2f213b650cc709d3"
+  },
+  {
+    "path": "doc/tools",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9191f25ef8c5805c40baab2b7a28416f5c23e5ef"
+  },
+  {
+    "path": "doc/tools/fax2ps.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48dbafd759e034247a6d793329e180b933a8d2ec"
+  },
+  {
+    "path": "doc/tools/fax2tiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fcf56e7cf2705744d9ff5f0149f86f83fc449be2"
+  },
+  {
+    "path": "doc/tools/pal2rgb.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f949ab042abbcb82474acd3bdd3b9eef5c3a469"
+  },
+  {
+    "path": "doc/tools/ppm2tiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c69f8ffdbe24166b35c23311022ff6e786bbcbbd"
+  },
+  {
+    "path": "doc/tools/raw2tiff.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9378dab04a2a4b208008b03c530de981e7ada27"
+  },
+  {
+    "path": "doc/tools/rgb2ycbcr.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70a92e02c5cd33a808102fd83573332fc4615b2f"
+  },
+  {
+    "path": "doc/tools/thumbnail.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "46f241dd2d629c792a9d026b441440f40656f71d"
+  },
+  {
+    "path": "doc/tools/tiff2bw.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ac324857323927428eb9682f88ed85c52e26e1d"
+  },
+  {
+    "path": "doc/tools/tiff2pdf.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "84c5314d0a666a5ff1ba923a629d18a73ed71b57"
+  },
+  {
+    "path": "doc/tools/tiff2ps.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc88b4d463d94f1766beb46f8e0c70bafcbd7ba3"
+  },
+  {
+    "path": "doc/tools/tiff2rgba.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c06780003c6346f618d2db74b750b01051e6d1e"
+  },
+  {
+    "path": "doc/tools/tiffcmp.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b22aa1b6959aa38cc170a05c120cbf33f495ba8"
+  },
+  {
+    "path": "doc/tools/tiffcp.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b38c69f43f44a00e45fde6ea8297a7adcb12c35a"
+  },
+  {
+    "path": "doc/tools/tiffcrop.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d7d89ca138065a6374d71c9d9d3c8c06a5960b9a"
+  },
+  {
+    "path": "doc/tools/tiffdither.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9183259b007b81b97a29fcb8869ede54bba0c4d7"
+  },
+  {
+    "path": "doc/tools/tiffdump.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "713f17dee0cb499a50ce64958544e0bfe7f6e9b5"
+  },
+  {
+    "path": "doc/tools/tiffgt.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad83f4348d7b40ef9463c495e8d17e4ef18ed1df"
+  },
+  {
+    "path": "doc/tools/tiffinfo.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60b4969cab162497f20b6f3a038ac406f1e987f7"
+  },
+  {
+    "path": "doc/tools/tiffmedian.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "db0f687c9313ff68f67f7cae1bfdb6d5b1b59d83"
+  },
+  {
+    "path": "doc/tools/tiffset.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d58cecdc4f377c494482ed9e5ea44aaacfebca3a"
+  },
+  {
+    "path": "doc/tools/tiffsplit.rst",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8bddb9898588839790197498d6d1480da5968fcc"
+  },
+  {
+    "path": "libtiff-4.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92305ac5f8f15abcf4c565ee02ad38161019e431"
+  },
+  {
+    "path": "libtiff",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b89464e02b4084982b0a837b852cf7d8ff1c6198"
+  },
+  {
+    "path": "libtiff/CMakeLists.txt",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "aa1895c04867dd8817fa95a67ec541bedfab1c7a"
+  },
+  {
+    "path": "libtiff/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2407c0f39b9b9f58f23967665669f7baec45245"
+  },
+  {
+    "path": "libtiff/README_for_libtiff_developpers.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f9b6e4a0bd4fcfa50f45c5a5aff52cee354894e"
+  },
+  {
+    "path": "libtiff/libtiff.def",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b1f65f9c3378813d0ee2d22a2bcdeef9c9ac9b8"
+  },
+  {
+    "path": "libtiff/libtiff.map",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8a37705eb69409ccd9755109580474ba643bcd4"
+  },
+  {
+    "path": "libtiff/libtiffxx.map",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e2f648f9eb9049a2f5280487e461928dbd020ce0"
+  },
+  {
+    "path": "libtiff/mkspans.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7689e307d1c8089e051e94c138789969a8bce7fa"
+  },
+  {
+    "path": "libtiff/t4.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f933d4a336c9abb829264ee5293b83dc589c3f3f"
+  },
+  {
+    "path": "libtiff/tif_aux.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b2db76867052439c0c05d5ff00cd3d03b25eae4"
+  },
+  {
+    "path": "libtiff/tif_close.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e60aba7113dd281b2c9924013350b7087bf385a3"
+  },
+  {
+    "path": "libtiff/tif_codec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d499b63a584f99d1d5923028f7d1a2fae8c8a457"
+  },
+  {
+    "path": "libtiff/tif_color.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a17914a44c5d0f5286f76c10efdef9ff289905b"
+  },
+  {
+    "path": "libtiff/tif_compress.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3002083f12e8a4512006e1679ee4f9e831e5aa4b"
+  },
+  {
+    "path": "libtiff/tif_config.h.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c326977bbb6376f561007654ea972932d3c1ad8"
+  },
+  {
+    "path": "libtiff/tif_config.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75e071967362a61877d03f905b23f2d17924910e"
+  },
+  {
+    "path": "libtiff/tif_dir.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "999a2452f333a90699f943c45e8eeb0d617c4519"
+  },
+  {
+    "path": "libtiff/tif_dir.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aed972222882aeb00fc9ea81eef60a5d0d0fc90c"
+  },
+  {
+    "path": "libtiff/tif_dirinfo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9218661b723289a10e19e237f6084a4909d60efc"
+  },
+  {
+    "path": "libtiff/tif_dirread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "806b56f12b14291e6ca97a1bac8c57ae18eab04f"
+  },
+  {
+    "path": "libtiff/tif_dirwrite.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5da087e29542717e82841844660ddfa829027bfd"
+  },
+  {
+    "path": "libtiff/tif_dumpmode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e3133f4192ba2f6aa0b2cc47c2d60150203461d"
+  },
+  {
+    "path": "libtiff/tif_error.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ac0b9c373a36c6309fef1285ca7e60d5af90bc9d"
+  },
+  {
+    "path": "libtiff/tif_extension.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a09e987a5ba375b4d9a84c61354550c231f3115"
+  },
+  {
+    "path": "libtiff/tif_fax3.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06b9508df58df086a979c75d45ec4e221f3618c4"
+  },
+  {
+    "path": "libtiff/tif_fax3.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60d709c7e5c6b3b131aaa9321d2e61ef3855090f"
+  },
+  {
+    "path": "libtiff/tif_fax3sm.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba2fc532e8014ba7842da95821e6ad95ead1f87d"
+  },
+  {
+    "path": "libtiff/tif_flush.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff9c1e247a3357602fca5d2076edb8043c04309f"
+  },
+  {
+    "path": "libtiff/tif_getimage.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a759a65482c5be43dc2b7f8ef697fc7dd050afd"
+  },
+  {
+    "path": "libtiff/tif_hash_set.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c27191ceb6274301960228ad0c12a141f9cf347"
+  },
+  {
+    "path": "libtiff/tif_hash_set.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f60e2c675e539eca7c3508ecafd139527975b2e5"
+  },
+  {
+    "path": "libtiff/tif_jbig.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "745956387bf2152e636c9a44c096a542b47910f3"
+  },
+  {
+    "path": "libtiff/tif_jpeg.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9a85cb18d972aa3e2810a475d2640e90152b68e"
+  },
+  {
+    "path": "libtiff/tif_jpeg_12.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "406e1cfc3158e1d29def1b8faa2af137fad429fb"
+  },
+  {
+    "path": "libtiff/tif_lerc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0466cab7f4d5e4b422e9f6f0bea507bedae65560"
+  },
+  {
+    "path": "libtiff/tif_luv.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9bc8fe31056a455dc655333b08ae49be22e9fbd"
+  },
+  {
+    "path": "libtiff/tif_lzma.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7763f61acd951cf23e428b6e5ebc9519f21585ed"
+  },
+  {
+    "path": "libtiff/tif_lzw.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9f56a427ba7bb44ab3c15b1e8a54733a05aa8b8"
+  },
+  {
+    "path": "libtiff/tif_next.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "04ae474b95bb5a37ac1bc581e2963531d6a7a839"
+  },
+  {
+    "path": "libtiff/tif_ojpeg.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e62ec9ea72c529da1fc3e8a4b118e6b27f6f3196"
+  },
+  {
+    "path": "libtiff/tif_open.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "43cb170286dbdbaac31bd4bb5e8d97c5f66841aa"
+  },
+  {
+    "path": "libtiff/tif_packbits.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "13d0f1d3908e4a35f3b92b96f2d4284af6633a3f"
+  },
+  {
+    "path": "libtiff/tif_pixarlog.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa267dfbff20a4f60f82b0e9e8ff5bbbb90a8e2b"
+  },
+  {
+    "path": "libtiff/tif_predict.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "18b90c211e13ac35bfcf6be999601214b1d41937"
+  },
+  {
+    "path": "libtiff/tif_predict.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de7732835209790bb91421d9b496f45abd408222"
+  },
+  {
+    "path": "libtiff/tif_print.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ea450db95bbdadac3515efcc312934cb4219ea8"
+  },
+  {
+    "path": "libtiff/tif_read.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d1a4e892168633523e9da2c88b43d8c68fa6ae0b"
+  },
+  {
+    "path": "libtiff/tif_stream.cxx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "13ad0e2b506e4c2334d58173000d31b1cb0fe7c5"
+  },
+  {
+    "path": "libtiff/tif_strip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b07bf9ff2110ea307ccb4080af310e9e2195e604"
+  },
+  {
+    "path": "libtiff/tif_swab.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "50fe635fbc01f15b124aa29c533bec0fb88251d4"
+  },
+  {
+    "path": "libtiff/tif_thunder.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c688db1ee44f04ee5f1d7ce6f738df42ce0b628"
+  },
+  {
+    "path": "libtiff/tif_tile.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f90760940096a0d244755364e53131afd147a3b3"
+  },
+  {
+    "path": "libtiff/tif_unix.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b02fe294eb3f67f90349321ca90c6a1fdf12e4d4"
+  },
+  {
+    "path": "libtiff/tif_version.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b6c9bc00a81a4774c0c34c4c2dda926d985dcf8"
+  },
+  {
+    "path": "libtiff/tif_warning.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5468de55f21a4aee6fae8de2cd648a7d9b5831d2"
+  },
+  {
+    "path": "libtiff/tif_webp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc8b680c52b6064e254e528479384fe4a89f02e5"
+  },
+  {
+    "path": "libtiff/tif_win32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b21ab7d482e50b0f61eade48547afcae67591cf"
+  },
+  {
+    "path": "libtiff/tif_win32_versioninfo.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "19188549834521da3ba1073634099212e8d09bfd"
+  },
+  {
+    "path": "libtiff/tif_write.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "614a8ea85a4c119e511eab6120300fb2619acbb1"
+  },
+  {
+    "path": "libtiff/tif_zip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4081e7f159ac3283dae62f1a5220adf24d439e7e"
+  },
+  {
+    "path": "libtiff/tif_zstd.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a0b969e31a0edd4e492f6020f352cbfb292a449"
+  },
+  {
+    "path": "libtiff/tiff.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "980e8e8f52bb1497f8c687f80d54899c0a99e8a8"
+  },
+  {
+    "path": "libtiff/tiffconf.h.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5789bbb0a52fcd1b18a65ca961e16bcf8a32edf"
+  },
+  {
+    "path": "libtiff/tiffconf.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dc471f690eff28df79df3b73e2e6a881140cc658"
+  },
+  {
+    "path": "libtiff/tiffio.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb8fbde248b6c9f4070d9394320c313badf94e84"
+  },
+  {
+    "path": "libtiff/tiffio.hxx",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6182449b1384610a4ff85d95740ec261811a316e"
+  },
+  {
+    "path": "libtiff/tiffiop.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4f4a29cfa5fe9c6b093bb07e5a72c6ea0a962bf1"
+  },
+  {
+    "path": "libtiff/tiffvers.h.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28984998072ca1b7e7c5f6df11d7c7ee11b1817b"
+  },
+  {
+    "path": "libtiff/tiffvers.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28984998072ca1b7e7c5f6df11d7c7ee11b1817b"
+  },
+  {
+    "path": "libtiff/uvcode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc877292449d3aa8d3ae57519cf343d4cd55d639"
+  },
+  {
+    "path": "m4",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "14b89288e44ff3bca0adf6043dffac6aab554af9"
+  },
+  {
+    "path": "m4/acinclude.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b54feb7061136ac0189d54145442f3f493ff4556"
+  },
+  {
+    "path": "m4/ice_find_athena.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "95df002e03401786cd4ee341c2067784b9121db8"
+  },
+  {
+    "path": "placeholder.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "508783063783621c52fb36ee26c48775a95a20db"
+  },
+  {
+    "path": "port",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d944397da385ed4a84f8755c57c6e031ae101d39"
+  },
+  {
+    "path": "port/CMakeLists.txt",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a828d1c5914a0ea44519f49e0e8a79cc8bac5777"
+  },
+  {
+    "path": "port/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "088a2f7b6aed8aed95bcab35d45da14c6a37bb12"
+  },
+  {
+    "path": "port/dummy.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "afc55bf342664a9ba1d60c2ddedcf98edd35eb3a"
+  },
+  {
+    "path": "port/getopt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8ee9e63f59708d12f27e60aceae36d2963d946d4"
+  },
+  {
+    "path": "port/libport.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a2ddd735fafd6a3eb8ebed7b1705e59a6bae302"
+  },
+  {
+    "path": "port/libport_config.h.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7446f8727a80c2c9c029069ef206d53b85e97a59"
+  },
+  {
+    "path": "port/libport_config.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b904f6194f85b31671bcaa470eb44e41cb531173"
+  },
+  {
+    "path": "port/libport_config.vc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6148032b98da853fde96021b05ce670d2f83ff53"
+  },
+  {
+    "path": "scripts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "59d0bb68f2fb4a756c7d1f932c773520172aa6ba"
+  },
+  {
+    "path": "scripts/fix_gdal_block_headers.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9d11ab43bd22d27643cbf63d2419f6a025aea4fb"
+  },
+  {
+    "path": "test",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c65547d6744d75eb4c5578efaf8f3eda4f9016a4"
+  },
+  {
+    "path": "test/CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "59ae985ae275271e7d94def7cc0ff9e7383aa357"
+  },
+  {
+    "path": "test/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca9d92b16a510918259e7207ff36a810b7761293"
+  },
+  {
+    "path": "test/TiffSplitTest.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf31f44266b910d99c514002be66a6aeb0943da6"
+  },
+  {
+    "path": "test/TiffTest.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "924eef26477a4fff5fb14338dd548ac5fd8a4774"
+  },
+  {
+    "path": "test/TiffTestCommon.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d3b0465184d8aff6a4e9eb698bf64d07675bed7"
+  },
+  {
+    "path": "test/ascii_tag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cabd25cb68931ee3387c3e5c416a3580412bc27d"
+  },
+  {
+    "path": "test/check_tag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c61c6b2a0b3f27351dc1563f2280aee1ed8aa28d"
+  },
+  {
+    "path": "test/check_tag.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "245d713caa53bde80660613a34b4373a2cfcfb77"
+  },
+  {
+    "path": "test/common.sh",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d8e65339456d1682b1ffa7661948fe912b1838e"
+  },
+  {
+    "path": "test/custom_dir.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f093b3b8524ab9f06c1040a7678efc31c4949a73"
+  },
+  {
+    "path": "test/custom_dir_EXIF_231.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8a80be5d1113737162a6e0bd6df2d3905359609"
+  },
+  {
+    "path": "test/defer_strile_loading.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c25baf457db550fed6bbb586740c01f6f5c2cd53"
+  },
+  {
+    "path": "test/defer_strile_writing.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5ca184766c9b253d1176ebfa968041f1f389e83"
+  },
+  {
+    "path": "test/fax2tiff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8806a64787b88247c24fc19760e23003179d578b"
+  },
+  {
+    "path": "test/images",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "63e81daf1bc761fc10cff72b4d3b37b774760660"
+  },
+  {
+    "path": "test/images/32bpp-None-jpeg.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1fdb3cf0db1916702752bf232f9b5e3021f052ea"
+  },
+  {
+    "path": "test/images/32bpp-None.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77f080fc0840497fe52be77bdc9afebf7d61dfb6"
+  },
+  {
+    "path": "test/images/README.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a7ad829792d6cf62267ecfe1196e4107ddde7c6"
+  },
+  {
+    "path": "test/images/custom_dir_EXIF_GPS.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e34e6dc4d7fe6e48e6980aa079f8b173ab606265"
+  },
+  {
+    "path": "test/images/deflate-last-strip-extra-data.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e3ee9dcc07ea506251fa083cfbb11159b672be46"
+  },
+  {
+    "path": "test/images/logluv-3c-16b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d43680f9ee954fca6bfbb7ce5d359e77047848ce"
+  },
+  {
+    "path": "test/images/lzw-single-strip.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ac27c6d82d2f45551fb1e1f1e547ba3210556f5"
+  },
+  {
+    "path": "test/images/minisblack-1c-16b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a8dbae7f27c29a3fc59c64d69fdc0f60eb5067bb"
+  },
+  {
+    "path": "test/images/minisblack-1c-8b.pgm",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0faca40f04121eb769510d9221033341fefee8fd"
+  },
+  {
+    "path": "test/images/minisblack-1c-8b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea0f9ac312a6459b25f4deaece5b8bb843422093"
+  },
+  {
+    "path": "test/images/minisblack-2c-8b-alpha.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5fe8f5835b119e7e41e1ac85867fba20169317bd"
+  },
+  {
+    "path": "test/images/miniswhite-1c-1b.g3",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f00ce16829f3ce51593b3b6c742b2b552363719"
+  },
+  {
+    "path": "test/images/miniswhite-1c-1b.pbm",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6cff9292bdbb67a5311e1823bead6ef123c82017"
+  },
+  {
+    "path": "test/images/miniswhite-1c-1b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bfc08381629b355749b245dd60d7c8073d90c5c1"
+  },
+  {
+    "path": "test/images/ojpeg_chewey_subsamp21_multi_strip.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b04d473dc590b36aad5be1b93e16a8c00170345"
+  },
+  {
+    "path": "test/images/ojpeg_single_strip_no_rowsperstrip.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "61611b9d0ebea16cc4fd9d7c476d81046ec34d3d"
+  },
+  {
+    "path": "test/images/ojpeg_zackthecat_subsamp22_single_strip.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15185b6881b2ed68aa2a9a979ca31fecb61288c2"
+  },
+  {
+    "path": "test/images/palette-1c-1b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "25a1a3244377b66bfe11de1d4e181cb5dc582a7d"
+  },
+  {
+    "path": "test/images/palette-1c-4b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38ba3253f08d390e9f3af28008afc23825e1cae0"
+  },
+  {
+    "path": "test/images/palette-1c-8b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b87685a1d5aefef4ff21a56502a661972b9162ca"
+  },
+  {
+    "path": "test/images/quad-lzw-compat.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ec614bf6fbc3e595fb2e6b55064716c5ae379e1a"
+  },
+  {
+    "path": "test/images/quad-tile.jpg.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99b0bc2e741153d305862a2ec45bfd53f1718849"
+  },
+  {
+    "path": "test/images/rgb-3c-16b.ppm",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1cd4b644c1b3fb834854ad5b60fb3243f833088"
+  },
+  {
+    "path": "test/images/rgb-3c-16b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1a0279a194860390e0d372705d8a366cb06048d"
+  },
+  {
+    "path": "test/images/rgb-3c-8b.ppm",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6eca0354c56bb7bdd07146994fa4d80c3b5c00e5"
+  },
+  {
+    "path": "test/images/rgb-3c-8b.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f64d4044b2cbd89e2f72b749028a82cf9863a6fb"
+  },
+  {
+    "path": "test/images/test_float64_predictor2_be_lzw.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7cbbae148974575b57d7055789ee62c01f585fcb"
+  },
+  {
+    "path": "test/images/test_float64_predictor2_le_lzw.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3dd57a5491ea51187543f801ecdff16b1c36b98c"
+  },
+  {
+    "path": "test/images/test_ifd_loop_subifd.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7294085e400a7f5ae3c1b9c14bc9cd2ab1f9464f"
+  },
+  {
+    "path": "test/images/test_ifd_loop_to_first.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "015c8d90d0d631c23792e8fc2c9e98af45f7809e"
+  },
+  {
+    "path": "test/images/test_ifd_loop_to_self.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "26b585e960dbc259506326396796dbf238393436"
+  },
+  {
+    "path": "test/images/test_two_ifds.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4334649ea787c9b71f36eb918f715af88b296e2e"
+  },
+  {
+    "path": "test/images/testfax3_bug54_1dnoEOL.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3b8df113cb2a0e53adc600a2195befbdaf6fc513"
+  },
+  {
+    "path": "test/images/testfax3_bug_513.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41544849bc750acdd966109aeb7f2bafacd54431"
+  },
+  {
+    "path": "test/images/testfax4.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7f2629ca11ed96e5d78b8e93e9823679dd0ac27"
+  },
+  {
+    "path": "test/images/tiff_with_subifd_chain.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7acbba1802e69abb27537cd1422b679d1b3935d7"
+  },
+  {
+    "path": "test/images/webp_lossless_rgba_alpha_fully_opaque.tif",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd22574dbe8e8c510b405623b1da8cb18891c548"
+  },
+  {
+    "path": "test/long_tag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3d9886204c8025ac8de4d051d31fe3e97bc1535"
+  },
+  {
+    "path": "test/ppm2tiff_pbm.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "fb6c3cf773961d7288aab4d6b5d54c26f414617f"
+  },
+  {
+    "path": "test/ppm2tiff_pgm.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6035234822eac0608913c96e15e34cf7a4d898e9"
+  },
+  {
+    "path": "test/ppm2tiff_ppm.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "576ab3e09b5bad3b6ec39d6d61adfcefb1168c42"
+  },
+  {
+    "path": "test/rational_precision2double.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf44724dfe4ee258541f74e33ed1e90aabb03848"
+  },
+  {
+    "path": "test/raw_decode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3683689eff2007075ba7896f7a93c1ca73c6c2b7"
+  },
+  {
+    "path": "test/refs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "879f55b4cc72b0381c39a7d3263fef20e6ebbde4"
+  },
+  {
+    "path": "test/refs/o-deflate-last-strip-extra-data.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d56fe54686914a9a92d6e0483d76247f1cdb233"
+  },
+  {
+    "path": "test/refs/o-testfax3_bug54_1dnoEOL.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0006c9c22fc4fb61378497f6f91405396a375332"
+  },
+  {
+    "path": "test/refs/o-testfax3_bug_513.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf3b8687941c65d7153e5e73d968bd2d2c525a60"
+  },
+  {
+    "path": "test/refs/o-testfax4.tiff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cad450456e019b455cdd4e54dbb1b184e4367462"
+  },
+  {
+    "path": "test/refs/o-tiff2ps-EPS1.ps",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d9da8a28fa50ac25e21d0229d2fae394894dbbd"
+  },
+  {
+    "path": "test/refs/o-tiff2ps-PS1.ps",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62c3e4bb6242be4d235a0cc568d8954c00d8af63"
+  },
+  {
+    "path": "test/refs/o-tiff2ps-PS2.ps",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7fe4339a59d78ab296d02af2c44d3043b6c249b"
+  },
+  {
+    "path": "test/refs/o-tiff2ps-PS3.ps",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ec22b9b947993b0547e8dc2ce5fdcbbfbfa0d52"
+  },
+  {
+    "path": "test/rewrite_tag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97ea9d13f06bd641d117415c354b2640ba6551e4"
+  },
+  {
+    "path": "test/short_tag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1ff226b367a7b9e10c904828d8f041724e7c98f"
+  },
+  {
+    "path": "test/strip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "686f7b7939910d1a349a82f97913bd635c31f9ff"
+  },
+  {
+    "path": "test/strip.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c0c7473a2f6c8bf0e1920f38dac73e417b0fe8e"
+  },
+  {
+    "path": "test/strip_rw.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cac3fd0eb809086e802f03778215dac55184ddb8"
+  },
+  {
+    "path": "test/test_IFD_enlargement.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "622bf06270b6402deebd77b71349ced898b2e0e9"
+  },
+  {
+    "path": "test/test_RGBAImage.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "589af97f367975668892ab95bee55d7ba4dd003e"
+  },
+  {
+    "path": "test/test_append_to_strip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc71930777a99d95a5177a8f0d869e923c6a450d"
+  },
+  {
+    "path": "test/test_arrays.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad1df7f039116eb7809c506ce47f35b9eef0bf97"
+  },
+  {
+    "path": "test/test_arrays.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2fa832d4fec95bdb82dcb5d6a0ccbba0a3bdb7b"
+  },
+  {
+    "path": "test/test_directory.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "774a7eab006936df715b1b7d6e9650a56102e975"
+  },
+  {
+    "path": "test/test_ifd_loop_detection.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "82af2c88960e808020a4e1481c0bd4cf4b7f02f0"
+  },
+  {
+    "path": "test/test_open_options.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6c7cdcfa21ba12f9e95a58955f719429b13092cd"
+  },
+  {
+    "path": "test/test_signed_tags.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7235138d44119bb9b0e6864364a907457f23eef"
+  },
+  {
+    "path": "test/test_transferfunction_write_read.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ce57e403ded83a956387ab153bce32b1bfcd358"
+  },
+  {
+    "path": "test/test_write_read_tags.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d566053cf109159ea75c154839fa32314ecf29ee"
+  },
+  {
+    "path": "test/testdeflatelaststripextradata.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "115eb226f42f7d9b79f8af20715ee1f30732477c"
+  },
+  {
+    "path": "test/testfax3_bug54_1dnoEOL.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b92580f30fb6234b7e589043d6478c33b5f13b32"
+  },
+  {
+    "path": "test/testfax3_bug_513.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "751db960d1c1ada9492be5b5507a26fde6475703"
+  },
+  {
+    "path": "test/testfax4.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6f465e8ff007c584e698187f6040e67751220bfc"
+  },
+  {
+    "path": "test/testtypes.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c3b78f687709b86d635a7d41fd0a4c2e58d54e91"
+  },
+  {
+    "path": "test/tiff2bw-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9a64a1af5f59bb7d1361627aaf23397fd5cb1cbc"
+  },
+  {
+    "path": "test/tiff2bw-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "def9209793769077f70f0710e8a4f786db03febb"
+  },
+  {
+    "path": "test/tiff2bw-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d0dee2c8941e843e8171108d24c94795fc765c52"
+  },
+  {
+    "path": "test/tiff2bw-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c3437b95917e86111f9be93e3a6b525c4238e10f"
+  },
+  {
+    "path": "test/tiff2bw-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "81f7b6d69625e2d95ea294d474674ecbca3b8eca"
+  },
+  {
+    "path": "test/tiff2bw-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e3043c1fe6839d2de70b7811fe8d40ec8335bfa6"
+  },
+  {
+    "path": "test/tiff2bw-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "61a2ccf5eb644f480063205189a6bfdb65732b5f"
+  },
+  {
+    "path": "test/tiff2bw-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7b09ded9217042e35d04497d9ebd94a713146a83"
+  },
+  {
+    "path": "test/tiff2bw-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3862614ef45a5b9d72247fb643d8bcc22be47962"
+  },
+  {
+    "path": "test/tiff2bw-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "21d8e90de512956778588da73db7759770e347ae"
+  },
+  {
+    "path": "test/tiff2bw-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "45fe63bdf342797a92ae148bffc7762985c2b713"
+  },
+  {
+    "path": "test/tiff2bw-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "bf5d5c9448fa3ef727719073c7726145e24311c6"
+  },
+  {
+    "path": "test/tiff2bw-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "29c2f40af05017bd2254bca7e6baefecb1014d0b"
+  },
+  {
+    "path": "test/tiff2bw-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "1c507b37bf04ac44b420425c8d3353e99c8b3f83"
+  },
+  {
+    "path": "test/tiff2bw-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0ba9efb1fbba7fb692c6cbe08d1cf265293a1899"
+  },
+  {
+    "path": "test/tiff2bw-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8379f5a79afe83d76f7d7d9648ea41d0004af4b6"
+  },
+  {
+    "path": "test/tiff2pdf.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "76699895c90c3f86a61b4b4828816f50a9841c8c"
+  },
+  {
+    "path": "test/tiff2ps-EPS1.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e4e48a3f690142a3609a2d4c93674f427eb93952"
+  },
+  {
+    "path": "test/tiff2ps-PS1.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e26963e926eba0ffd012c79ddfe8c67ee7ef2c6c"
+  },
+  {
+    "path": "test/tiff2ps-PS2.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0f4d1eb762e3d1222b78b40696bbb2d470c97e7a"
+  },
+  {
+    "path": "test/tiff2ps-PS3.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8bedea4d63a249c16decd6701d6d8ceff5dff345"
+  },
+  {
+    "path": "test/tiff2rgba-32bpp-None-jpeg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d435ccb9db22c1c8ecb532505b005ad7ac335587"
+  },
+  {
+    "path": "test/tiff2rgba-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "bc9b31181d2382cf5754571956e3213d213a9da1"
+  },
+  {
+    "path": "test/tiff2rgba-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "184a28d57a5650a812204bdf3438607cf1999973"
+  },
+  {
+    "path": "test/tiff2rgba-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5be7e65b611fd79951d170aa25f00804014dfa43"
+  },
+  {
+    "path": "test/tiff2rgba-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ce0507bcbb44e5f2b4fe15dcdf3c36c81ded6124"
+  },
+  {
+    "path": "test/tiff2rgba-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2cbe81d5ed5fd8095540cba982f44399774aa9b1"
+  },
+  {
+    "path": "test/tiff2rgba-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3601502812f4eb7a3ed19b281a20208005922e09"
+  },
+  {
+    "path": "test/tiff2rgba-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d1225c943676b8f6326dc4d3fd4f7037f682ebd4"
+  },
+  {
+    "path": "test/tiff2rgba-ojpeg_single_strip_no_rowsperstrip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d69c99dcc58522f83b890082be8afd266387aa7e"
+  },
+  {
+    "path": "test/tiff2rgba-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ca23a12d2f4a27d89d8cc2c6d36de19a27434e51"
+  },
+  {
+    "path": "test/tiff2rgba-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "091d7988348b0bf800074e7f21467773fb6ce34e"
+  },
+  {
+    "path": "test/tiff2rgba-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ee3898eb4ce5fa30410d409a0ad35161bcbe7630"
+  },
+  {
+    "path": "test/tiff2rgba-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b1db606f5f1ea7abd9a59736254a50753f66eabf"
+  },
+  {
+    "path": "test/tiff2rgba-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5ad808a544a5e74cde1b94a57e1ef4ca98f8c449"
+  },
+  {
+    "path": "test/tiff2rgba-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e921b973049ff72b310fea3c3647437d9cf3ee1b"
+  },
+  {
+    "path": "test/tiff2rgba-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9d553df6a5175fb880c2c2ee706419b4b9a4ce45"
+  },
+  {
+    "path": "test/tiff2rgba-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "954eb4fda27a7888a6260b466ef3c29d882f0e7a"
+  },
+  {
+    "path": "test/tiff2rgba-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "24f5cb03602f91d8bd8b44a0268196c2955494ca"
+  },
+  {
+    "path": "test/tiffcp-32bpp-None-jpeg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6c70b9dd45c616680315e432ad940b9d45c77086"
+  },
+  {
+    "path": "test/tiffcp-g3-1d-fill.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ee12498361012b11299fb9105be31c56a54643b6"
+  },
+  {
+    "path": "test/tiffcp-g3-1d.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c11ef97f056ebc9646f54054a00108ec53a52a4e"
+  },
+  {
+    "path": "test/tiffcp-g3-2d-fill.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c25825dabfb069ecc404c36efdc863cf2ded9bd4"
+  },
+  {
+    "path": "test/tiffcp-g3-2d.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5a59dd2b767c162a2b3334b4fc642251fb4e88e8"
+  },
+  {
+    "path": "test/tiffcp-g3.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d7a0107a89cc0f62a7171ee5b928f8a69aeb3e43"
+  },
+  {
+    "path": "test/tiffcp-g4.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "fb8967afbeb26852784d0831d6bd516490d7779a"
+  },
+  {
+    "path": "test/tiffcp-logluv.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3f62f57b67c54680e91df6e757071f71e60cee46"
+  },
+  {
+    "path": "test/tiffcp-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "bfc8d841e8539fe4dc84ca08a7162258b7ad84df"
+  },
+  {
+    "path": "test/tiffcp-lzw-scanline-decode.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "11654d194b55dc3857436f64adbca689b73afb92"
+  },
+  {
+    "path": "test/tiffcp-lzw-single-strip-jbig.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8b592296362fdcdfc5f76a17f71dd046e4560b8b"
+  },
+  {
+    "path": "test/tiffcp-split-join.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d1e407c92a336284c485623d6ad3cf80cb7b7c2d"
+  },
+  {
+    "path": "test/tiffcp-split.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a2f98e33ea24ae3719dd331d8d06edebd45cc970"
+  },
+  {
+    "path": "test/tiffcp-thumbnail.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "789cd802b63ee3223fd0b3daa182f0faade1d0f4"
+  },
+  {
+    "path": "test/tiffcrop-32bpp-None-jpeg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "4a47f6ed2dcdbc4aef0c60a0767c433bb0dc98d5"
+  },
+  {
+    "path": "test/tiffcrop-R90-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9ed219e32b297f29097b833d2a5fe6e719760992"
+  },
+  {
+    "path": "test/tiffcrop-R90-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7b4fdbf96de7f4bb4c89ccb015b9ffb007629491"
+  },
+  {
+    "path": "test/tiffcrop-R90-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "faee731e922c338bd785b20713306f8775a49f18"
+  },
+  {
+    "path": "test/tiffcrop-R90-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7acd5e79f4462ee71a557239d4a4ebb91b093c39"
+  },
+  {
+    "path": "test/tiffcrop-R90-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2ef903916c51c05ee362417c35a6665b379553d4"
+  },
+  {
+    "path": "test/tiffcrop-R90-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "cae85f2213355e02afbdfed3eec33a664dda337a"
+  },
+  {
+    "path": "test/tiffcrop-R90-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "41df587de73aab9320319f37cfe562003302857f"
+  },
+  {
+    "path": "test/tiffcrop-R90-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "61f8fc418ea9ee7d81f27b2ff607970258dedb47"
+  },
+  {
+    "path": "test/tiffcrop-R90-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ca68b88db3dc066fd6f4abbcb6bae05f4b1ca8fe"
+  },
+  {
+    "path": "test/tiffcrop-R90-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3cd96ebf199ef5d051a5c9bd136166ef1c028e09"
+  },
+  {
+    "path": "test/tiffcrop-R90-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "daccfd3f3a2c2545acb8113aa85783a6ad1837f5"
+  },
+  {
+    "path": "test/tiffcrop-R90-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "1a40412e5f5aa252bddae95138e91370ee3ecec2"
+  },
+  {
+    "path": "test/tiffcrop-R90-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e55a519f38f37a18932922f5022d0ad27afc79c5"
+  },
+  {
+    "path": "test/tiffcrop-R90-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0d2bf9733c28df86d1f4e22197a6ac426f481e62"
+  },
+  {
+    "path": "test/tiffcrop-R90-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b1dddc308e1ca1ea8e4aceff5db2b09dc16f59f1"
+  },
+  {
+    "path": "test/tiffcrop-R90-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0a502c8c8e3caa55c673c03c29bdfb4d77aa599c"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c1b19b992895f1433660e69b6cdc2805a0e3759a"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "15351247f9405336c1783a4cbd03c872b910bb3d"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "1e2c4c96bf6213b8478a896a1b4ff188e555b5bb"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "77798d92cf8790df19f8bff409ebce0578288d3a"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b5b9db684442caf82de87442224e092bdd47a134"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "07aab91f7345fbfe6a45a605ee9b1faa5259f18e"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3196ae1dbb31aff86101e7d3d09f33de33ad055d"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6ce71d4f6f125afdf6618b9af1d24278700b4cfa"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "581f7eb62a3d62f1017a58d55bc86f2232ea1d3d"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d09b2aa5e2f866c7c95f67fd85cd9264818e20ef"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "53a08aef70c47d9c89fe17a63a32c8ce7d88a299"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5c482a5ddb37918953803476c2e7b4102f39c69c"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "51cdaa24457b3ea93a01bf6e8c0f144b9fb96868"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2e097126d9d3ecbf69b94f59cd6d27d04d7cad01"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7165ad52d39e26505a76b98a4a064d62451d68ed"
+  },
+  {
+    "path": "test/tiffcrop-doubleflip-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6bfa06700936f545eacf8f065ba511b20db1fef9"
+  },
+  {
+    "path": "test/tiffcrop-extract-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "821694bd6212478479f8ccc4bc72545b13860c9e"
+  },
+  {
+    "path": "test/tiffcrop-extract-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "58041a238244e56c99380122151c907f765536e2"
+  },
+  {
+    "path": "test/tiffcrop-extract-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "603fc1ccd36cbad512d29708aa07ac5e8e4dff65"
+  },
+  {
+    "path": "test/tiffcrop-extract-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6e473c5c90d8106c4ddd1f65790c6999278a4814"
+  },
+  {
+    "path": "test/tiffcrop-extract-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "976e888e680ab4d69efdbbef1c736126c7f122d0"
+  },
+  {
+    "path": "test/tiffcrop-extract-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ca2b63cc7ed6729d0b4563ae4c19552cc80ef6fd"
+  },
+  {
+    "path": "test/tiffcrop-extract-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "bb30f9bd9eb7b767a0abe0900dae54e5b64b46dc"
+  },
+  {
+    "path": "test/tiffcrop-extract-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ce06a261d541cd5f1784fbbcd086a691fea99c6c"
+  },
+  {
+    "path": "test/tiffcrop-extract-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e4aca8e53afc4c77354a28ef9436d5a44ba264e4"
+  },
+  {
+    "path": "test/tiffcrop-extract-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "18884e45ebcac230cbdae39dfd50d1ed39b61c6a"
+  },
+  {
+    "path": "test/tiffcrop-extract-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "cd418e0ecef98c9b37fe1010e48962cb000ad8a3"
+  },
+  {
+    "path": "test/tiffcrop-extract-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "bade2456ed252f2a40ef3c4051ffd37cf7ef8dc0"
+  },
+  {
+    "path": "test/tiffcrop-extract-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "feb2841cc4bd85757452bced0391e069d89671de"
+  },
+  {
+    "path": "test/tiffcrop-extract-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "11834416f5a7fcfb599f8b3bfff6178a7ad7faf7"
+  },
+  {
+    "path": "test/tiffcrop-extract-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a3899d39859b64495ab95d9b6114680df803d404"
+  },
+  {
+    "path": "test/tiffcrop-extract-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c03b03755fdabe082d036d04947de14128ccd39b"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-logluv-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a617ad9d79cbf2772c5d10850ffb49965492fc69"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-lzw-single-strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "022ab76fd622c7ffb8c4674c71166acb90dac7b6"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-minisblack-1c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "320fd5ac20d07313e62a10c02a624ed61b565d7c"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-minisblack-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8df85783892fbc400ed70e4032ffb8d4a21d2a98"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-minisblack-2c-8b-alpha.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3e8ee157167ecd56791bdd2063f74ffb0ba779b9"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-miniswhite-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2cbffaad04d4ebec09199c618251d6087ca9845b"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-ojpeg_chewey_subsamp21_multi_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "81d662496538ee1dd300db69570174dfa46d3a97"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-ojpeg_zackthecat_subsamp22_single_strip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e6c3c5f3a82216caaefd84484187433ae23b847b"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-palette-1c-1b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e0b305f42f5d830dfde629f8beada24f23de9b7c"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-palette-1c-4b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "980b2bb370afacebb56b9a4bf2194b05adc80d8e"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-palette-1c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "af2e04ccc322ef7e6e06a2470ba7c2bef660b7b5"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-quad-lzw-compat.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3fe169c3615e32fbec1c1cf238e1fecab2fe96d6"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-quad-tile.jpg.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9823a7445f349a3fcf3ec27c1f1323c8de8c0b7e"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-quad-tile.jpg.t1iff.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "5d36e7da90a117dba39b6d44713091e6c63e4fe6"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-rgb-3c-16b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9bc76e35804691d3e9dde363e4ffb46172972ae6"
+  },
+  {
+    "path": "test/tiffcrop-extractz14-rgb-3c-8b.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "21f76b828413d92da554a33de950fb77713e1fcd"
+  },
+  {
+    "path": "test/tiffdump.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "3cd7c10b6c59f3d60c1dbbb7e05ef8b67ee72799"
+  },
+  {
+    "path": "test/tiffinfo.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "9764bd51b2e094c20af052b2aae5301581ce5136"
+  },
+  {
+    "path": "test/tifftest.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aac7e6d9046404ea9048bd26689cade46c166207"
+  },
+  {
+    "path": "tiff.spec",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a94ec9f5aecd9383e1bdeb398a0abfe297148550"
+  },
+  {
+    "path": "tools",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8cd99c2d2b7a98a82c174f4b7d2f3e11bbe259ac"
+  },
+  {
+    "path": "tools/CMakeLists.txt",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a3c8f04726548f6bd8129dbe6935fdf0a6c0e926"
+  },
+  {
+    "path": "tools/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c4b88e786ed5bbc508e81030ee6ae0e7fe050f7"
+  },
+  {
+    "path": "tools/fax2ps.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "276ca62d582f0c22cf700ec0823f4fd8b72e9a2f"
+  },
+  {
+    "path": "tools/fax2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7800244f34e41de84d0817e5b9a59da63486a049"
+  },
+  {
+    "path": "tools/mkg3states.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c468a70cdeab5520f667ad41c228fff05d8806b"
+  },
+  {
+    "path": "tools/pal2rgb.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65477bfbabc639c27a0473bc1c99c5cae14e0187"
+  },
+  {
+    "path": "tools/ppm2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2b611822c2cd454db6ea1f0a1c2b85f2d1775be"
+  },
+  {
+    "path": "tools/raw2tiff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32f67f4a664f9fba3a37fbd28d5d8c436536a320"
+  },
+  {
+    "path": "tools/rgb2ycbcr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d4f3a49066cf1f292bf21285f3996db0e07cd24d"
+  },
+  {
+    "path": "tools/thumbnail.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "438b1b49d906197998f79eb4cfdc2a69a8ab2e70"
+  },
+  {
+    "path": "tools/tif_tools_versioninfo.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "02f114a74e979bf0e38b5c590461bb123fc3d033"
+  },
+  {
+    "path": "tools/tiff2bw.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7682974736d1937039bef45fae78a4465427937b"
+  },
+  {
+    "path": "tools/tiff2pdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bc4a206c771b2138cd303986461b68f2cf2f323"
+  },
+  {
+    "path": "tools/tiff2ps.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be2f5a01307faae8761165f3a2d41e929469e7d3"
+  },
+  {
+    "path": "tools/tiff2rgba.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c8bbfa984536a8cbd3871b1157a39e4ca6b88d95"
+  },
+  {
+    "path": "tools/tiff_tools.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "760c052815bd8e521c8a230a7b3741ad90b2cde2"
+  },
+  {
+    "path": "tools/tiff_tools.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c0177f8d872821bf621bc50dba5c752b9c7ac5b"
+  },
+  {
+    "path": "tools/tiffcmp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f879d9ff100eada8fad91bea1937cdfeb0367ebf"
+  },
+  {
+    "path": "tools/tiffcp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "37eb1849b28e571edca9b3cd54f5d77c220a2447"
+  },
+  {
+    "path": "tools/tiffcrop.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "920027a09d3ffab4b420861c8555f2563fe6f8b5"
+  },
+  {
+    "path": "tools/tiffdither.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d0bf4ea0a4edb1864d4d3a2a9532b05d4f047b3"
+  },
+  {
+    "path": "tools/tiffdump.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2dbbd2b278ef3033b75a8b618b632fbb1f57e60c"
+  },
+  {
+    "path": "tools/tiffgt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d93eb8d7f43c84c6e28374ea3d4da9c5fb718327"
+  },
+  {
+    "path": "tools/tiffinfo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b85b8956381afd3556657365d6b1129bcd715ef"
+  },
+  {
+    "path": "tools/tiffmedian.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "975226108d3d7fa93581880b37fd4e39f15fb3d4"
+  },
+  {
+    "path": "tools/tiffset.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4734bbfd90b667ce5a7a7a33708d46d7ff3bbcc1"
+  },
+  {
+    "path": "tools/tiffsplit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "10a3fc368a00993c281ecfc0ccfc9d30e9c87047"
+  }
+]

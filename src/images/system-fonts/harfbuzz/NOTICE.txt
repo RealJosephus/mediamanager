@@ -1,8 +1,22 @@
 HarfBuzz 14.6.0 with the harfbuzzjs 1.6.3 JavaScript bridge.
 
-Source and build provenance: build.json.
+Source and build provenance: build.json and source-offer.json.
 Build recipe: tools/ci/build-harfbuzz.py and .github/workflows/build-harfbuzz.yml.
 Original artifact: https://github.com/RealJosephus/mediamanager/actions/runs/39175865595
+
+The four original upstream input archives are retained as sources/hbjs.tar.gz,
+sources/harfbuzz.tar.gz, sources/emsdk.tar.gz and sources/npm.tar.gz. Their sizes,
+SHA-256 identities and upstream URLs are recorded in source-offer.json and match
+the existing build.json. The patched Makefile is sources/Makefile.complete.
+
+On 2026-10-26 the original run API returned 404 and no harfbuzz-complete-1
+artifact was listed. The input archives were recovered from their pinned
+upstream URLs. Makefile.complete was recovered from the pinned hbjs archive by
+applying the recorded single-flag removal; its before and after identities match
+build.json. The existing build record and runtime files are retained unchanged.
+The original command logs and toolchain download/source manifests were not
+recovered. The emsdk archive contains installer sources, not the downloaded
+compiler SDK or a complete compiler/runtime source archive.
 
 The upstream Makefile is used with only -DHB_TINY removed, enabling the
 AAT tables needed by macOS system fonts and composed emoji. The JavaScript

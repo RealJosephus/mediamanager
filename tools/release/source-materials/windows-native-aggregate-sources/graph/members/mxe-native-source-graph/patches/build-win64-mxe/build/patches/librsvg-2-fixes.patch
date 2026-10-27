@@ -1,0 +1,201 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Thu, 28 Mar 2024 18:29:25 +0100
+Subject: [PATCH 1/4] Ignore any errors from native-static-libs query
+
+It will not properly work with `-Zbuild-std`.
+
+diff --git a/meson.build b/meson.build
+index 1111111..2222222 100644
+--- a/meson.build
++++ b/meson.build
+@@ -353,13 +353,9 @@ if host_system in ['windows', 'linux']
+   native_libs = run_command(
+     rustc_query_native_static_libs_args,
+     capture: true,
+-    check: true
++    check: false
+   )
+ 
+-  if native_libs.stderr() != ''
+-    error(native_libs.stderr())
+-  endif
+-
+   foreach i: native_libs.stdout().split()
+     if 'msvcrt' in i
+       if i.endswith('.lib') # pre Rust 1.83
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Fri, 7 Jul 2023 18:41:29 +0200
+Subject: [PATCH 2/4] Disable PDF/PostScript features in cairo-rs
+
+We build Cairo with `-Dzlib=disabled`, which implicitly disables
+these surface backends.
+
+diff --git a/librsvg-c/Cargo.toml b/librsvg-c/Cargo.toml
+index 1111111..2222222 100644
+--- a/librsvg-c/Cargo.toml
++++ b/librsvg-c/Cargo.toml
+@@ -10,7 +10,7 @@ edition.workspace = true
+ rust-version.workspace = true
+ 
+ [dependencies]
+-cairo-rs = { workspace = true, features = ["v1_16", "png", "pdf", "ps", "svg"] }
++cairo-rs = { workspace = true, features = ["v1_16", "png", "svg"] }
+ cast.workspace = true
+ float-cmp.workspace = true
+ gdk-pixbuf = { workspace = true, optional = true }
+diff --git a/rsvg/Cargo.toml b/rsvg/Cargo.toml
+index 1111111..2222222 100644
+--- a/rsvg/Cargo.toml
++++ b/rsvg/Cargo.toml
+@@ -48,7 +48,7 @@ name = "rsvg"
+ [dependencies]
+ # Keep these in sync with respect to the cairo-rs version:
+ #   src/lib.rs - toplevel example in the docs
+-cairo-rs = { workspace = true, features = ["v1_16", "png", "pdf", "ps", "svg"] }
++cairo-rs = { workspace = true, features = ["v1_16", "png", "svg"] }
+ cast.workspace = true
+ cssparser.workspace = true
+ cssparser-color.workspace = true
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Sun, 21 Apr 2024 12:01:02 +0200
+Subject: [PATCH 3/4] Disallow GIF and WebP embedded in SVG images
+
+Upstream-Status: Inappropriate [disable feature]
+This is specific to libvips' prebuilt binaries.
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 1111111..2222222 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -453,12 +453,6 @@ version = "1.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
+ 
+-[[package]]
+-name = "color_quant"
+-version = "1.1.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
+-
+ [[package]]
+ name = "colorchoice"
+ version = "1.0.5"
+@@ -967,16 +961,6 @@ dependencies = [
+  "rand_core 0.10.1",
+ ]
+ 
+-[[package]]
+-name = "gif"
+-version = "0.14.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ee8cfcc411d9adbbaba82fb72661cc1bcca13e8bba98b364e62b2dba8f960159"
+-dependencies = [
+- "color_quant",
+- "weezl 0.1.12",
+-]
+-
+ [[package]]
+ name = "gio"
+ version = "0.22.8"
+@@ -1311,10 +1295,7 @@ checksum = "85ab80394333c02fe689eaf900ab500fbd0c2213da414687ebf995a65d5a6104"
+ dependencies = [
+  "bytemuck",
+  "byteorder-lite",
+- "color_quant",
+  "dav1d",
+- "gif",
+- "image-webp",
+  "moxcms",
+  "mp4parse",
+  "num-traits",
+@@ -1323,16 +1304,6 @@ dependencies = [
+  "zune-jpeg",
+ ]
+ 
+-[[package]]
+-name = "image-webp"
+-version = "0.2.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "525e9ff3e1a4be2fbea1fdf0e98686a6d98b4d8f937e1bf7402245af1909e8c3"
+-dependencies = [
+- "byteorder-lite",
+- "quick-error 2.0.1",
+-]
+-
+ [[package]]
+ name = "indexmap"
+ version = "2.14.0"
+@@ -1656,7 +1627,7 @@ dependencies = [
+  "stringprep",
+  "thiserror",
+  "time",
+- "weezl 0.2.1",
++ "weezl",
+ ]
+ 
+ [[package]]
+@@ -3122,12 +3093,6 @@ dependencies = [
+  "string_cache_codegen",
+ ]
+ 
+-[[package]]
+-name = "weezl"
+-version = "0.1.12"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a28ac98ddc8b9274cb41bb4d9d4d5c425b6020c50c46f25559911905610b4a88"
+-
+ [[package]]
+ name = "weezl"
+ version = "0.2.1"
+diff --git a/rsvg/Cargo.toml b/rsvg/Cargo.toml
+index 1111111..2222222 100644
+--- a/rsvg/Cargo.toml
++++ b/rsvg/Cargo.toml
+@@ -57,7 +57,7 @@ encoding_rs.workspace = true
+ float-cmp.workspace = true
+ gio.workspace = true
+ glib.workspace = true
+-image = { workspace = true, features = ["jpeg", "png", "gif", "webp"] }
++image = { workspace = true, features = ["jpeg", "png"] }
+ itertools.workspace = true
+ language-tags.workspace = true
+ libc.workspace = true
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kleis Auke Wolthuizen <github@kleisauke.nl>
+Date: Fri, 17 Apr 2026 12:47:45 +0200
+Subject: [PATCH 4/4] Avoid linking with `--whole-archive`
+
+See: https://gitlab.gnome.org/GNOME/librsvg/-/issues/1210.
+
+diff --git a/rsvg/meson.build b/rsvg/meson.build
+index 1111111..2222222 100644
+--- a/rsvg/meson.build
++++ b/rsvg/meson.build
+@@ -234,7 +234,7 @@ if get_option('default_library') in ['shared', 'both']
+   librsvg_shared_lib = shared_library(
+     'rsvg-@0@'.format(librsvg_api_major),
+     rsvg_dummy,
+-    link_whole: librsvg_c_lib,
++    link_with: librsvg_c_lib,
+     link_args: link_args,
+     link_depends: librsvg_ver,
+     dependencies: library_dependencies,
+@@ -352,7 +352,7 @@ if build_gir.allowed()
+       librsvg_gir = shared_library(
+         'rsvg-gir',
+         rsvg_dummy,
+-        link_whole: librsvg_c_lib,
++        link_with: librsvg_c_lib,
+         dependencies: library_dependencies,
+         include_directories: [includeinc],
+       )

@@ -1,0 +1,57 @@
+{
+  "selectedSource": {
+    "file": "libpng-1.6.58.tar.xz",
+    "sha256": "28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775",
+    "url": "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.58/libpng-1.6.58.tar.xz",
+    "url2": "https://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.58.tar.xz",
+    "packages": [
+      "libpng"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://downloads.sourceforge.net/project/libpng/libpng16/1.6.58/libpng-1.6.58.tar.xz",
+    "responseUrl": "https://altushost-net.dl.sourceforge.net/project/libpng/libpng16/1.6.58/libpng-1.6.58.tar.xz?viasf=1&fid=bae8db21fc2deb75&e=1793197749&st=ZCkM98-xujV6VzQ_bCDgOQ",
+    "status": 200,
+    "headers": [
+      [
+        "Server",
+        "nginx"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:09 GMT"
+      ],
+      [
+        "Content-Type",
+        "application/octet-stream"
+      ],
+      [
+        "Content-Length",
+        "1070096"
+      ],
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "last-modified",
+        "Wed, 15 Apr 2026 17:23:26 GMT"
+      ],
+      [
+        "etag",
+        "\"69dfc98e-105410\""
+      ],
+      [
+        "X-Cache-Status",
+        "HIT"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:12.017137+00:00",
+    "bytes": 1070096,
+    "sha256": "28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775"
+  }
+}

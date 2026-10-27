@@ -1,0 +1,5175 @@
+use std::convert::TryFrom;
+use std::f32::consts::PI;
+use std::ffi::{CStr, CString, NulError, c_void};
+use std::fmt::{self, Display};
+use std::ops::{Deref, DerefMut};
+use std::os::raw::c_char;
+use std::ptr;
+use std::slice;
+use std::str::FromStr;
+use std::sync::OnceLock;
+
+use crate::error::SkError;
+use crate::font::{FontStretch, FontStyle};
+use crate::image::ImageData;
+
+#[allow(non_camel_case_types)]
+pub mod ffi {
+  use std::ffi::c_void;
+  use std::os::raw::c_char;
+
+  use super::SkiaString;
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_surface {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_w_memory_stream {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_svg_surface {
+    pub stream: *mut skiac_w_memory_stream,
+    pub surface: *mut skiac_surface,
+    pub canvas: *mut skiac_canvas,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_canvas {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_paint {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_path {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_matrix {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_shader {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_path_effect {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_mask_filter {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_image_filter {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_data {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_image {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_bitmap {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_bitmap_info {
+    pub bitmap: *mut skiac_bitmap,
+    pub width: i32,
+    pub height: i32,
+    pub is_canvas: bool,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_sk_string {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_rect {
+    pub left: f32,
+    pub top: f32,
+    pub right: f32,
+    pub bottom: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_transform {
+    pub a: f32,
+    pub b: f32,
+    pub c: f32,
+    pub d: f32,
+    pub e: f32,
+    pub f: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_point {
+    pub x: f32,
+    pub y: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_surface_data {
+    pub ptr: *mut u8,
+    pub size: usize,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_peek_pixels {
+    pub ptr: *const u8,
+    pub row_bytes: usize,
+    pub width: i32,
+    pub height: i32,
+    pub color_space: u8,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_sk_data {
+    pub ptr: *mut u8,
+    pub size: usize,
+    pub data: *mut skiac_data,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_typeface {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_typeface_font_provider {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Default, Debug)]
+  pub struct skiac_line_metrics {
+    pub ascent: f32,
+    pub descent: f32,
+    pub left: f32,
+    pub right: f32,
+    pub width: f32,
+    pub font_ascent: f32,
+    pub font_descent: f32,
+    pub alphabetic_baseline: f32,
+    pub em_height_ascent: f32,
+    pub em_height_descent: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_font_mgr {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_font_collection {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_mapped_point {
+    pub x: f32,
+    pub y: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_variable_font_axis {
+    pub tag: u32,
+    pub value: f32,
+    pub min: f32,
+    pub max: f32,
+    pub def: f32,
+    pub hidden: bool,
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_font_variation {
+    pub tag: u32,
+    pub value: f32,
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_picture_recorder {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_picture {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_drawable {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_document {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_pdf_document {
+    pub document: *mut skiac_document,
+    pub stream: *mut skiac_w_memory_stream,
+  }
+
+  #[repr(C)]
+  #[derive(Copy, Clone, Debug)]
+  pub struct skiac_skottie_animation {
+    _unused: [u8; 0],
+  }
+
+  #[repr(C)]
+  #[derive(Debug, Clone, Copy)]
+  pub struct skiac_pdf_metadata {
+    pub title: *const c_char,
+    pub author: *const c_char,
+    pub subject: *const c_char,
+    pub keywords: *const c_char,
+    pub creator: *const c_char,
+    pub producer: *const c_char,
+    pub raster_dpi: f32,
+    pub encoding_quality: i32,
+    pub pdfa: bool,
+    pub compression_level: i32,
+  }
+
+  pub type SkiacFontCollectionGetFamily =
+    Option<unsafe extern "C" fn(width: i32, weight: i32, slant: i32, raw_cb: *mut c_void)>;
+
+  pub type SkiacWStreamWriteCallback =
+    Option<unsafe extern "C" fn(data: *mut c_void, size: usize, context: *mut c_void)>;
+
+  #[allow(clippy::duplicated_attributes)]
+  // https://github.com/rust-lang/rust/issues/96192
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "svg", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(name = "svg", kind = "static", modifiers = "+bundle,+whole-archive")
+  )]
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "skottie", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(
+      name = "skottie",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive"
+    )
+  )]
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "skresources", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(
+      name = "skresources",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive"
+    )
+  )]
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "sksg", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(name = "sksg", kind = "static", modifiers = "+bundle,+whole-archive")
+  )]
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "jsonreader", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(
+      name = "jsonreader",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive"
+    )
+  )]
+  #[cfg_attr(
+    not(target_os = "windows"),
+    link(
+      name = "skparagraph",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive"
+    )
+  )]
+  #[cfg_attr(target_os = "windows", link(name = "skparagraph", kind = "static"))]
+  #[cfg_attr(
+    not(target_os = "windows"),
+    link(
+      name = "skunicode_core",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive",
+    )
+  )]
+  #[cfg_attr(target_os = "windows", link(name = "skunicode_core", kind = "static"))]
+  #[cfg_attr(
+    not(target_os = "windows"),
+    link(
+      name = "skunicode_icu",
+      kind = "static",
+      modifiers = "+bundle,+whole-archive"
+    )
+  )]
+  #[cfg_attr(target_os = "windows", link(name = "skunicode_icu", kind = "static"))]
+  #[cfg_attr(
+    any(
+      target_os = "windows",
+      not(all(target_os = "linux", target_env = "gnu"))
+    ),
+    link(name = "skia", kind = "static")
+  )]
+  #[cfg_attr(
+    all(target_os = "linux", target_env = "gnu"),
+    link(name = "skia", kind = "static", modifiers = "+bundle,+whole-archive")
+  )]
+  #[cfg_attr(
+    not(target_os = "windows"),
+    link(name = "skiac", kind = "static", modifiers = "+bundle,+whole-archive")
+  )]
+  #[cfg_attr(target_os = "windows", link(name = "skiac", kind = "static"))]
+  unsafe extern "C" {
+
+    pub fn skiac_clear_all_cache();
+
+    pub fn skiac_surface_create_rgba_premultiplied(
+      width: i32,
+      height: i32,
+      cs: u8,
+    ) -> *mut skiac_surface;
+
+    pub fn skiac_surface_create_svg(
+      c_surface: *mut skiac_svg_surface,
+      width: i32,
+      height: i32,
+      alphaType: i32,
+      flag: u32,
+      cs: u8,
+    );
+
+    pub fn skiac_surface_create_rgba(width: i32, height: i32, cs: u8) -> *mut skiac_surface;
+
+    pub fn skiac_surface_ref(surface: *mut skiac_surface);
+
+    pub fn skiac_surface_destroy(surface: *mut skiac_surface);
+
+    pub fn skiac_surface_copy_rgba(
+      surface: *mut skiac_surface,
+      x: u32,
+      y: u32,
+      width: u32,
+      height: u32,
+      cs: u8,
+    ) -> *mut skiac_surface;
+
+    pub fn skiac_surface_save(c_surface: *mut skiac_surface, path: *const c_char) -> bool;
+
+    pub fn skiac_surface_get_canvas(surface: *mut skiac_surface) -> *mut skiac_canvas;
+
+    pub fn skiac_surface_get_width(surface: *mut skiac_surface) -> i32;
+
+    pub fn skiac_surface_get_height(surface: *mut skiac_surface) -> i32;
+
+    pub fn skiac_surface_read_pixels(surface: *mut skiac_surface, data: *mut skiac_surface_data);
+
+    pub fn skiac_surface_read_pixels_rect(
+      surface: *mut skiac_surface,
+      data: *mut u8,
+      x: i32,
+      y: i32,
+      w: i32,
+      h: i32,
+      color_space: u8,
+    ) -> bool;
+
+    pub fn skiac_surface_peek_premul_rgba(
+      surface: *mut skiac_surface,
+      peek: *mut skiac_peek_pixels,
+    ) -> bool;
+
+    pub fn skiac_surface_png_data(surface: *mut skiac_surface, data: *mut skiac_sk_data);
+
+    pub fn skiac_surface_encode_data(
+      surface: *mut skiac_surface,
+      data: *mut skiac_sk_data,
+      format: i32,
+      quality: i32,
+    );
+
+    pub fn skiac_surface_encode_stream(
+      surface: *mut skiac_surface,
+      format: i32,
+      quality: i32,
+      write_callback: SkiacWStreamWriteCallback,
+      context: *mut c_void,
+    ) -> bool;
+
+    pub fn skiac_surface_get_alpha_type(surface: *mut skiac_surface) -> i32;
+
+    pub fn skiac_surface_draw_svg(
+      surface: *mut skiac_surface,
+      paint: *mut skiac_paint,
+      width: f32,
+      height: f32,
+      flag: u32,
+      sk_data: *mut skiac_sk_data,
+    );
+
+    pub fn skiac_surface_get_bitmap(surface: *mut skiac_surface, info: *mut skiac_bitmap_info);
+
+    // SkCanvas
+    pub fn skiac_canvas_clear(canvas: *mut skiac_canvas, color: u32);
+
+    pub fn skiac_canvas_set_transform(canvas: *mut skiac_canvas, ts: *mut skiac_matrix);
+
+    pub fn skiac_canvas_concat(canvas: *mut skiac_canvas, ts: *mut skiac_matrix);
+
+    pub fn skiac_canvas_scale(canvas: *mut skiac_canvas, sx: f32, sy: f32);
+
+    pub fn skiac_canvas_translate(canvas: *mut skiac_canvas, dx: f32, dy: f32);
+
+    pub fn skiac_canvas_rotate(canvas: *mut skiac_canvas, degrees: f32);
+
+    pub fn skiac_canvas_get_total_transform(canvas: *mut skiac_canvas) -> skiac_transform;
+
+    pub fn skiac_canvas_get_total_transform_matrix(canvas: *mut skiac_canvas) -> *mut skiac_matrix;
+
+    pub fn skiac_canvas_draw_color(canvas: *mut skiac_canvas, r: f32, g: f32, b: f32, a: f32);
+
+    pub fn skiac_canvas_draw_image(
+      canvas: *mut skiac_canvas,
+      bitmap: *mut skiac_bitmap,
+      is_image: bool,
+      sx: f32,
+      sy: f32,
+      s_width: f32,
+      s_height: f32,
+      dx: f32,
+      dy: f32,
+      d_width: f32,
+      d_height: f32,
+      enable_smoothing: bool,
+      filter_quality: i32,
+      paint: *mut skiac_paint,
+    );
+
+    pub fn skiac_canvas_draw_path(
+      canvas: *mut skiac_canvas,
+      path: *mut skiac_path,
+      paint: *mut skiac_paint,
+    );
+
+    pub fn skiac_canvas_draw_rect(
+      canvas: *mut skiac_canvas,
+      x: f32,
+      y: f32,
+      w: f32,
+      h: f32,
+      paint: *mut skiac_paint,
+    );
+
+    pub fn skiac_canvas_draw_surface(
+      canvas: *mut skiac_canvas,
+      surface: *mut skiac_surface,
+      left: f32,
+      top: f32,
+      alpha: u8,
+      blend_mode: i32,
+      filter_quality: i32,
+    );
+
+    pub fn skiac_canvas_draw_surface_rect(
+      canvas: *mut skiac_canvas,
+      surface: *mut skiac_surface,
+      sx: f32,
+      sy: f32,
+      sw: f32,
+      sh: f32,
+      dx: f32,
+      dy: f32,
+      dw: f32,
+      dh: f32,
+      filter_quality: i32,
+    );
+
+    pub fn skiac_canvas_get_line_metrics_or_draw_text(
+      text: *const c_char,
+      text_len: usize,
+      max_width: f32,
+      x: f32,
+      y: f32,
+      canvas_width: f32,
+      font_collection: *mut skiac_font_collection,
+      font_size: f32,
+      weight: i32,
+      width: i32,
+      stretch_width: f32,
+      slant: i32,
+      font_family: *const c_char,
+      baseline: i32,
+      align: i32,
+      direction: i32,
+      letter_spacing: f32,
+      word_spacing: f32,
+      paint: *mut skiac_paint,
+      canvas: *mut skiac_canvas,
+      line_metrics: *mut skiac_line_metrics,
+      variations: *const skiac_font_variation,
+      variations_count: i32,
+      kerning: i32,
+      variant_caps: i32,
+      lang: *const c_char,
+      text_rendering: i32,
+    );
+
+    pub fn skiac_canvas_reset_transform(canvas: *mut skiac_canvas);
+
+    pub fn skiac_canvas_clip_rect(canvas: *mut skiac_canvas, x: f32, y: f32, w: f32, h: f32);
+
+    pub fn skiac_canvas_clip_path(canvas: *mut skiac_canvas, path: *mut skiac_path);
+
+    pub fn skiac_canvas_save(canvas: *mut skiac_canvas);
+
+    pub fn skiac_canvas_save_layer(canvas: *mut skiac_canvas, paint: *mut skiac_paint);
+
+    pub fn skiac_canvas_restore(canvas: *mut skiac_canvas);
+
+    pub fn skiac_canvas_reset(canvas: *mut skiac_canvas);
+
+    pub fn skiac_canvas_write_pixels(
+      canvas: *mut skiac_canvas,
+      width: i32,
+      height: i32,
+      pixels: *const u8,
+      row_bytes: usize,
+      x: i32,
+      y: i32,
+    );
+
+    pub fn skiac_canvas_put_image_data(
+      canvas: *mut skiac_canvas,
+      width: i32,
+      height: i32,
+      pixels: *const u8,
+      row_bytes: usize,
+      length: usize,
+      x: f32,
+      y: f32,
+      dirty_x: f32,
+      dirty_y: f32,
+      dirty_width: f32,
+      dirty_height: f32,
+      color_space: u8,
+      snapshot: bool,
+    );
+
+    pub fn skiac_canvas_draw_picture(
+      canvas: *mut skiac_canvas,
+      picture: *mut skiac_picture,
+      matrix: *mut skiac_matrix,
+      paint: *mut skiac_paint,
+    );
+
+    // Optimized: combines save/clip/transform/draw/restore into single FFI call
+    pub fn skiac_canvas_draw_picture_rect(
+      canvas: *mut skiac_canvas,
+      picture: *mut skiac_picture,
+      sx: f32,
+      sy: f32,
+      sw: f32,
+      sh: f32,
+      dx: f32,
+      dy: f32,
+      dw: f32,
+      dh: f32,
+      paint: *mut skiac_paint,
+    );
+
+    pub fn skiac_canvas_destroy(canvas: *mut skiac_canvas);
+
+    pub fn skiac_paint_create() -> *mut skiac_paint;
+
+    pub fn skiac_paint_clone(source: *mut skiac_paint) -> *mut skiac_paint;
+
+    pub fn skiac_paint_destroy(paint: *mut skiac_paint);
+
+    pub fn skiac_paint_set_style(paint: *mut skiac_paint, style: i32);
+
+    pub fn skiac_paint_set_color(paint: *mut skiac_paint, r: u8, g: u8, b: u8, a: u8);
+
+    pub fn skiac_paint_set_alpha(paint: *mut skiac_paint, a: u8);
+
+    pub fn skiac_paint_get_alpha(paint: *mut skiac_paint) -> u8;
+
+    pub fn skiac_paint_set_anti_alias(paint: *mut skiac_paint, aa: bool);
+
+    pub fn skiac_paint_set_blend_mode(paint: *mut skiac_paint, blend_mode: i32);
+
+    pub fn skiac_paint_get_blend_mode(paint: *mut skiac_paint) -> i32;
+
+    pub fn skiac_paint_set_shader(paint: *mut skiac_paint, shader: *mut skiac_shader);
+
+    pub fn skiac_paint_set_stroke_width(paint: *mut skiac_paint, width: f32);
+
+    pub fn skiac_paint_get_stroke_width(paint: *mut skiac_paint) -> f32;
+
+    pub fn skiac_paint_set_stroke_cap(paint: *mut skiac_paint, cap: i32);
+
+    pub fn skiac_paint_get_stroke_cap(paint: *mut skiac_paint) -> i32;
+
+    pub fn skiac_paint_set_stroke_join(paint: *mut skiac_paint, join: u8);
+
+    pub fn skiac_paint_get_stroke_join(paint: *mut skiac_paint) -> u8;
+
+    pub fn skiac_paint_set_stroke_miter(paint: *mut skiac_paint, miter: f32);
+
+    pub fn skiac_paint_get_stroke_miter(paint: *mut skiac_paint) -> f32;
+
+    pub fn skiac_paint_set_path_effect(
+      paint: *mut skiac_paint,
+      path_effect: *mut skiac_path_effect,
+    );
+
+    pub fn skiac_paint_set_mask_filter(
+      paint: *mut skiac_paint,
+      mask_filter: *mut skiac_mask_filter,
+    );
+
+    pub fn skiac_paint_set_image_filter(
+      paint: *mut skiac_paint,
+      image_filter: *mut skiac_image_filter,
+    );
+
+    pub fn skiac_paint_set_src_in_color_filter(paint: *mut skiac_paint, r: u8, g: u8, b: u8, a: u8);
+
+    pub fn skiac_paint_get_color(paint: *mut skiac_paint) -> u32;
+
+    pub fn skiac_path_create() -> *mut skiac_path;
+
+    pub fn skiac_path_from_svg(svg_path: *mut std::os::raw::c_char) -> *mut skiac_path;
+
+    pub fn skiac_path_clone(path: *mut skiac_path) -> *mut skiac_path;
+
+    pub fn skiac_path_swap(path: *mut skiac_path, other: *mut skiac_path);
+
+    pub fn skiac_add_path(
+      c_path: *mut skiac_path,
+      other_path: *mut skiac_path,
+      c_matrix: *mut skiac_matrix,
+    );
+
+    pub fn skiac_path_op(c_path_one: *mut skiac_path, c_path_two: *mut skiac_path, op: i32)
+    -> bool;
+
+    pub fn skiac_path_to_svg_string(c_path: *mut skiac_path, skia_string: *mut SkiaString);
+
+    pub fn skiac_path_simplify(c_path: *mut skiac_path) -> bool;
+
+    pub fn skiac_path_stroke(
+      c_path: *mut skiac_path,
+      cap: i32,
+      join: u8,
+      width: f32,
+      miter_limit: f32,
+    ) -> bool;
+
+    pub fn skiac_path_get_bounds(path: *mut skiac_path, c_rect: *mut skiac_rect);
+
+    pub fn skiac_path_compute_tight_bounds(path: *mut skiac_path, c_rect: *mut skiac_rect);
+
+    pub fn skiac_path_trim(
+      path: *mut skiac_path,
+      start_t: f32,
+      stop_t: f32,
+      is_complement: bool,
+    ) -> bool;
+
+    pub fn skiac_path_dash(path: *mut skiac_path, on: f32, off: f32, phase: f32) -> bool;
+
+    pub fn skiac_path_round(path: *mut skiac_path, radius: f32) -> bool;
+
+    pub fn skiac_path_equals(path: *mut skiac_path, other: *mut skiac_path) -> bool;
+
+    pub fn skiac_path_destroy(path: *mut skiac_path);
+
+    pub fn skiac_path_set_fill_type(path: *mut skiac_path, kind: i32);
+
+    pub fn skiac_path_get_fill_type(path: *mut skiac_path) -> i32;
+
+    pub fn skiac_path_as_winding(path: *mut skiac_path) -> bool;
+
+    pub fn skiac_path_arc_to(
+      path: *mut skiac_path,
+      left: f32,
+      top: f32,
+      right: f32,
+      bottom: f32,
+      start_angle: f32,
+      sweep_angle: f32,
+      force_move_to: bool,
+    );
+
+    pub fn skiac_path_arc_to_tangent(
+      path: *mut skiac_path,
+      x1: f32,
+      y1: f32,
+      x2: f32,
+      y2: f32,
+      radius: f32,
+    );
+
+    pub fn skiac_path_move_to(path: *mut skiac_path, x: f32, y: f32);
+
+    pub fn skiac_path_line_to(path: *mut skiac_path, x: f32, y: f32);
+
+    pub fn skiac_path_cubic_to(
+      path: *mut skiac_path,
+      x1: f32,
+      y1: f32,
+      x2: f32,
+      y2: f32,
+      x3: f32,
+      y3: f32,
+    );
+
+    pub fn skiac_path_quad_to(path: *mut skiac_path, cpx: f32, cpy: f32, x: f32, y: f32);
+
+    pub fn skiac_path_close(path: *mut skiac_path);
+
+    pub fn skiac_path_add_rect(path: *mut skiac_path, l: f32, t: f32, r: f32, b: f32);
+
+    pub fn skiac_path_add_circle(path: *mut skiac_path, x: f32, y: f32, r: f32);
+
+    pub fn skiac_path_transform(
+      path: *mut skiac_path,
+      matrix: *mut skiac_matrix,
+    ) -> *mut skiac_path;
+
+    pub fn skiac_path_transform_self(path: *mut skiac_path, matrix: *mut skiac_matrix);
+
+    pub fn skiac_path_is_empty(path: *mut skiac_path) -> bool;
+
+    pub fn skiac_path_hit_test(path: *mut skiac_path, x: f32, y: f32, kind: i32) -> bool;
+
+    pub fn skiac_path_stroke_hit_test(path: *mut skiac_path, x: f32, y: f32, stroke_w: f32)
+    -> bool;
+
+    pub fn skiac_path_round_rect(
+      path: *mut skiac_path,
+      x: f32,
+      y: f32,
+      width: f32,
+      height: f32,
+      radii: *const f32,
+      clockwise: bool,
+    );
+
+    pub fn skiac_path_effect_make_dash_path(
+      intervals: *const f32,
+      count: i32,
+      phase: f32,
+    ) -> *mut skiac_path_effect;
+
+    pub fn skiac_path_effect_destroy(path_effect: *mut skiac_path_effect);
+
+    pub fn skiac_shader_make_linear_gradient(
+      points: *const skiac_point,
+      colors: *const super::Color,
+      positions: *const f32,
+      count: i32,
+      tile_mode: i32,
+      flags: u32,
+      ts: skiac_transform,
+    ) -> *mut skiac_shader;
+
+    pub fn skiac_shader_make_radial_gradient(
+      start_point: skiac_point,
+      start_radius: f32,
+      end_point: skiac_point,
+      end_radius: f32,
+      colors: *const super::Color,
+      positions: *const f32,
+      count: i32,
+      tile_mode: i32,
+      flags: u32,
+      ts: skiac_transform,
+    ) -> *mut skiac_shader;
+
+    pub fn skiac_shader_make_conic_gradient(
+      cx: f32,
+      cy: f32,
+      radius: f32,
+      colors: *const super::Color,
+      positions: *const f32,
+      count: i32,
+      tile_mode: i32,
+      flags: u32,
+      ts: skiac_transform,
+    ) -> *mut skiac_shader;
+
+    pub fn skiac_shader_make_from_surface_image(
+      surface: *mut skiac_surface,
+      ts: skiac_transform,
+      filter_quality: i32,
+    ) -> *mut skiac_shader;
+
+    pub fn skiac_shader_ref(shader: *mut skiac_shader);
+
+    pub fn skiac_shader_destroy(shader: *mut skiac_shader);
+
+    pub fn skiac_matrix_create() -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_new(a: f32, b: f32, c: f32, d: f32, e: f32, f: f32) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_from_ts(ts: *mut skiac_transform) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_concat(
+      ts: *mut skiac_matrix,
+      other: *mut skiac_matrix,
+    ) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_multiply(
+      ts: *mut skiac_matrix,
+      other: *mut skiac_matrix,
+    ) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_create_rotated(rotation: f32, x: f32, y: f32) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_create_translated(x: f32, y: f32) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_clone(matrix: *mut skiac_matrix) -> *mut skiac_matrix;
+
+    pub fn skiac_matrix_map_points_1(
+      c_matrix: *mut skiac_matrix,
+      x: f32,
+      y: f32,
+      mapped_point: *mut skiac_mapped_point,
+    );
+
+    pub fn skiac_matrix_pre_concat_transform(matrix: *mut skiac_matrix, ts: skiac_transform);
+
+    pub fn skiac_matrix_pre_translate(matrix: *mut skiac_matrix, dx: f32, dy: f32);
+
+    pub fn skiac_matrix_pre_concat(matrix: *mut skiac_matrix, other: *mut skiac_matrix);
+
+    pub fn skiac_matrix_pre_scale(matrix: *mut skiac_matrix, sx: f32, sy: f32);
+
+    pub fn skiac_matrix_pre_rotate(matrix: *mut skiac_matrix, degrees: f32);
+
+    pub fn skiac_matrix_pre_rotate_x_y(matrix: *mut skiac_matrix, degrees: f32, x: f32, y: f32);
+
+    pub fn skiac_matrix_invert(matrix: *mut skiac_matrix, inverse: *mut skiac_matrix) -> bool;
+
+    pub fn skiac_matrix_to_transform(matrix: *mut skiac_matrix) -> skiac_transform;
+
+    pub fn skiac_matrix_destroy(matrix: *mut skiac_matrix);
+
+    pub fn skiac_mask_filter_make_blur(radius: f32) -> *mut skiac_mask_filter;
+
+    pub fn skiac_mask_filter_destroy(mask_filter: *mut skiac_mask_filter);
+
+    pub fn skiac_image_filter_make_drop_shadow_only(
+      dx: f32,
+      dy: f32,
+      sigma_x: f32,
+      sigma_y: f32,
+      color: u32,
+      chained_filter: *mut skiac_image_filter,
+    ) -> *mut skiac_image_filter;
+
+    pub fn skiac_image_filter_make_drop_shadow(
+      dx: f32,
+      dy: f32,
+      sigma_x: f32,
+      sigma_y: f32,
+      color: u32,
+      chained_filter: *mut skiac_image_filter,
+    ) -> *mut skiac_image_filter;
+
+    pub fn skiac_image_filter_make_blur(
+      sigma_x: f32,
+      sigma_y: f32,
+      chained_filter: *mut skiac_image_filter,
+    ) -> *mut skiac_image_filter;
+
+    pub fn skiac_image_filter_color_filter(
+      m00: f32,
+      m01: f32,
+      m02: f32,
+      m10: f32,
+      m11: f32,
+      m12: f32,
+      m20: f32,
+      m21: f32,
+      m22: f32,
+      opacity: f32,
+      chained_filter: *mut skiac_image_filter,
+    ) -> *mut skiac_image_filter;
+
+    pub fn skiac_image_filter_from_argb(
+      table_a: *const u8,
+      table_r: *const u8,
+      table_g: *const u8,
+      table_b: *const u8,
+      c_image_filter: *mut skiac_image_filter,
+    ) -> *mut skiac_image_filter;
+
+    pub fn skiac_image_filter_is_a_color_filter(image_filter: *mut skiac_image_filter) -> bool;
+
+    pub fn skiac_image_filter_filter_color(
+      image_filter: *mut skiac_image_filter,
+      color: u32,
+    ) -> u32;
+
+    pub fn skiac_image_filter_ref(image_filter: *mut skiac_image_filter);
+
+    pub fn skiac_image_filter_destroy(image_filter: *mut skiac_image_filter);
+
+    // SkImage
+    pub fn skiac_surface_make_image_snapshot(surface: *mut skiac_surface) -> *mut skiac_image;
+
+    pub fn skiac_image_ref(image: *mut skiac_image);
+
+    pub fn skiac_image_destroy(image: *mut skiac_image);
+
+    pub fn skiac_image_get_width(image: *mut skiac_image) -> i32;
+
+    pub fn skiac_image_get_height(image: *mut skiac_image) -> i32;
+
+    pub fn skiac_image_encode_data(
+      image: *mut skiac_image,
+      data: *mut skiac_sk_data,
+      format: i32,
+      quality: i32,
+    );
+
+    pub fn skiac_image_read_pixels(
+      image: *mut skiac_image,
+      dst: *mut u8,
+      row_bytes: usize,
+      alpha_type: i32,
+    ) -> bool;
+
+    pub fn skiac_canvas_draw_sk_image(
+      canvas: *mut skiac_canvas,
+      image: *mut skiac_image,
+      left: f32,
+      top: f32,
+      filter_quality: i32,
+    );
+
+    pub fn skiac_sk_data_destroy(c_data: *mut skiac_data);
+
+    pub fn skiac_bitmap_make_from_buffer(
+      ptr: *mut u8,
+      size: usize,
+      info: *mut skiac_bitmap_info,
+    ) -> bool;
+
+    pub fn skiac_bitmap_make_from_svg(
+      data: *const u8,
+      size: usize,
+      width: f32,
+      height: f32,
+      info: *mut skiac_bitmap_info,
+      font_collection: *mut skiac_font_collection,
+      cs: u8,
+    ) -> bool;
+
+    pub fn skiac_bitmap_make_from_image_data(
+      ptr: *mut u8,
+      width: usize,
+      height: usize,
+      row_bytes: usize,
+      size: usize,
+      color_type: i32,
+      alpha_type: i32,
+    ) -> *mut skiac_bitmap;
+
+    pub fn skiac_bitmap_get_width(c_bitmap: *mut skiac_bitmap) -> usize;
+
+    pub fn skiac_bitmap_get_height(c_bitmap: *mut skiac_bitmap) -> usize;
+
+    pub fn skiac_bitmap_get_shader(
+      is_canvas: bool,
+      c_bitmap: *mut skiac_bitmap,
+      repeat_x: i32,
+      repeat_y: i32,
+      b: f32,
+      c: f32,
+      ts: skiac_transform,
+    ) -> *mut skiac_shader;
+
+    pub fn skiac_bitmap_destroy(c_bitmap: *mut skiac_bitmap);
+    pub fn skiac_picture_ref(c_picture: *mut skiac_picture);
+    pub fn skiac_picture_destroy(c_picture: *mut skiac_picture);
+    pub fn skiac_picture_playback(c_picture: *mut skiac_picture, c_canvas: *mut skiac_canvas);
+
+    // SkString
+    pub fn skiac_delete_sk_string(c_sk_string: *mut skiac_sk_string);
+
+    // FontCollection
+    pub fn skiac_font_collection_create() -> *mut skiac_font_collection;
+
+    pub fn skiac_font_collection_get_default_fonts_count(
+      c_font_collection: *mut skiac_font_collection,
+    ) -> u32;
+
+    pub fn skiac_font_collection_get_family(
+      c_font_collection: *mut skiac_font_collection,
+      i: u32,
+      skia_string: *mut SkiaString,
+      on_get_style_rust: *mut c_void,
+      on_get_style: SkiacFontCollectionGetFamily,
+    );
+
+    pub fn skiac_font_collection_register(
+      c_font_collection: *mut skiac_font_collection,
+      font: *const u8,
+      length: usize,
+      maybe_name_alias: *const c_char,
+    ) -> u32;
+
+    pub fn skiac_font_collection_register_from_path(
+      c_font_collection: *mut skiac_font_collection,
+      font_path: *const c_char,
+      maybe_name_alias: *const c_char,
+    ) -> u32;
+
+    pub fn skiac_font_collection_unregister(
+      c_font_collection: *mut skiac_font_collection,
+      typeface_id: u32,
+    ) -> usize;
+
+    pub fn skiac_font_collection_unregister_batch(
+      c_font_collection: *mut skiac_font_collection,
+      typeface_ids: *const u32,
+      count: usize,
+    ) -> usize;
+
+    pub fn skiac_font_collection_unregister_all(
+      c_font_collection: *mut skiac_font_collection,
+    ) -> usize;
+
+    pub fn skiac_font_collection_set_alias(
+      c_font_collection: *mut skiac_font_collection,
+      family: *const c_char,
+      alias: *const c_char,
+    ) -> bool;
+
+    pub fn skiac_font_collection_destroy(c_font_collection: *mut skiac_font_collection);
+
+    // Variable Fonts
+    pub fn skiac_typeface_get_variation_design_position(
+      c_font_collection: *mut skiac_font_collection,
+      family_name: *const c_char,
+      weight: i32,
+      width: i32,
+      slant: i32,
+      axes: *mut skiac_variable_font_axis,
+      max_axis_count: i32,
+    ) -> i32;
+
+    pub fn skiac_font_has_variations(
+      c_font_collection: *mut skiac_font_collection,
+      family_name: *const c_char,
+      weight: i32,
+      width: i32,
+      slant: i32,
+    ) -> bool;
+
+    // SkDynamicMemoryStream
+    pub fn skiac_sk_w_stream_get(
+      c_w_memory_stream: *mut skiac_w_memory_stream,
+      sk_data: *mut skiac_sk_data,
+      w: i32,
+      h: i32,
+    );
+
+    pub fn skiac_sk_w_stream_destroy(c_w_memory_stream: *mut skiac_w_memory_stream);
+
+    // SkSVG
+    pub fn skiac_svg_text_to_path(
+      data: *const u8,
+      length: usize,
+      font_collection: *mut skiac_font_collection,
+      output_data: *mut skiac_sk_data,
+    );
+
+    // SkPictureRecorder
+    pub fn skiac_picture_recorder_create() -> *mut skiac_picture_recorder;
+    pub fn skiac_picture_recorder_destroy(picture_recorder: *mut skiac_picture_recorder);
+
+    pub fn skiac_picture_recorder_begin_recording(
+      picture_recorder: *mut skiac_picture_recorder,
+      x: f32,
+      y: f32,
+      w: f32,
+      h: f32,
+      use_bbh: bool,
+    );
+
+    pub fn skiac_picture_recorder_get_recording_canvas(
+      picture_recorder: *mut skiac_picture_recorder,
+    ) -> *mut skiac_canvas;
+
+    pub fn skiac_picture_recorder_finish_recording_as_picture(
+      picture_recorder: *mut skiac_picture_recorder,
+    ) -> *mut skiac_picture;
+
+    pub fn skiac_picture_recorder_finish_recording_as_drawable(
+      picture_recorder: *mut skiac_picture_recorder,
+    ) -> *mut skiac_drawable;
+
+    // SkDrawable
+    pub fn skiac_canvas_draw_drawable(
+      canvas: *mut skiac_canvas,
+      drawable: *mut skiac_drawable,
+      matrix: *mut skiac_matrix,
+    );
+
+    pub fn skiac_drawable_destroy(drawable: *mut skiac_drawable);
+
+    // SkDocument
+    pub fn skiac_document_create(
+      c_document: *mut skiac_pdf_document,
+      metadata: *const skiac_pdf_metadata,
+    );
+
+    pub fn skiac_document_destroy(c_document: *mut skiac_pdf_document);
+
+    pub fn skiac_document_begin_page(
+      c_document: *mut skiac_pdf_document,
+      width: f32,
+      height: f32,
+      content: *mut skiac_rect,
+    ) -> *mut skiac_canvas;
+
+    pub fn skiac_document_end_page(c_document: *mut skiac_pdf_document);
+
+    pub fn skiac_document_close(
+      c_document: *mut skiac_pdf_document,
+      output_data: *mut skiac_sk_data,
+    );
+
+    // SkAnnotation
+    pub fn skiac_canvas_annotate_link_url(
+      c_canvas: *mut skiac_canvas,
+      rect: *const skiac_rect,
+      url: *const c_char,
+    );
+
+    pub fn skiac_canvas_annotate_named_destination(
+      c_canvas: *mut skiac_canvas,
+      x: f32,
+      y: f32,
+      name: *const c_char,
+    );
+
+    pub fn skiac_canvas_annotate_link_to_destination(
+      c_canvas: *mut skiac_canvas,
+      rect: *const skiac_rect,
+      name: *const c_char,
+    );
+
+    // Skottie (Lottie Animation)
+    pub fn skiac_skottie_animation_make(
+      data: *const c_char,
+      length: usize,
+      resource_path: *const c_char,
+    ) -> *mut skiac_skottie_animation;
+
+    pub fn skiac_skottie_animation_make_from_file(
+      path: *const c_char,
+    ) -> *mut skiac_skottie_animation;
+
+    pub fn skiac_skottie_animation_destroy(c_animation: *mut skiac_skottie_animation);
+
+    pub fn skiac_skottie_animation_get_duration(c_animation: *mut skiac_skottie_animation) -> f64;
+
+    pub fn skiac_skottie_animation_get_fps(c_animation: *mut skiac_skottie_animation) -> f64;
+
+    pub fn skiac_skottie_animation_get_in_point(c_animation: *mut skiac_skottie_animation) -> f64;
+
+    pub fn skiac_skottie_animation_get_out_point(c_animation: *mut skiac_skottie_animation) -> f64;
+
+    pub fn skiac_skottie_animation_get_size(
+      c_animation: *mut skiac_skottie_animation,
+      width: *mut f32,
+      height: *mut f32,
+    );
+
+    pub fn skiac_skottie_animation_get_version(
+      c_animation: *mut skiac_skottie_animation,
+      c_string: *mut SkiaString,
+    );
+
+    pub fn skiac_skottie_animation_seek(c_animation: *mut skiac_skottie_animation, t: f32);
+
+    pub fn skiac_skottie_animation_seek_frame(
+      c_animation: *mut skiac_skottie_animation,
+      frame: f64,
+    );
+
+    pub fn skiac_skottie_animation_seek_frame_time(
+      c_animation: *mut skiac_skottie_animation,
+      t: f64,
+    );
+
+    pub fn skiac_skottie_animation_render(
+      c_animation: *mut skiac_skottie_animation,
+      c_canvas: *mut skiac_canvas,
+      dst: *const skiac_rect,
+    );
+
+    pub fn skiac_skottie_animation_render_with_flags(
+      c_animation: *mut skiac_skottie_animation,
+      c_canvas: *mut skiac_canvas,
+      dst: *const skiac_rect,
+      flags: u32,
+    );
+  }
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+#[repr(i32)]
+pub enum ColorType {
+  Unknown,
+  /// uninitialized
+  Alpha8,
+  /// pixel with alpha in 8-bit byte
+  RGB565,
+  /// pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
+  ARGB4444,
+  /// pixel with 4 bits for alpha, red, green, blue; in 16-bit word
+  RGBA8888,
+  /// pixel with 8 bits for red, green, blue, alpha; in 32-bit word
+  RGB888x,
+  /// pixel with 8 bits each for red, green, blue; in 32-bit word
+  BGRA8888,
+  /// pixel with 8 bits for blue, green, red, alpha; in 32-bit word
+  RGBA1010102,
+  /// 10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
+  BGRA1010102,
+  /// 10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
+  RGB101010x,
+  /// pixel with 10 bits each for red, green, blue; in 32-bit word
+  BGR101010x,
+  /// pixel with 10 bits each for blue, green, red; in 32-bit word
+  Gray8,
+  /// pixel with grayscale level in 8-bit byte
+  RGBAF16Norm,
+  /// pixel with half floats in [0,1] for red, green, blue, alpha;
+  //   in 64-bit word
+  RGBAF16,
+  /// pixel with half floats for red, green, blue, alpha;
+  //   in 64-bit word
+  RGBAF32,
+  /// pixel using C float for red, green, blue, alpha; in 128-bit word
+  /// The following 6 colortypes are just for reading from - not for rendering to
+  ///
+  /// pixel with a uint8_t for red and green
+  R8G8Unorm,
+  // pixel with a half float for alpha
+  A16Float,
+  /// pixel with a half float for red and green
+  R16G16Float,
+
+  // pixel with a little endian uint16_t for alpha
+  A16Unorm,
+  // pixel with a little endian uint16_t for red and green
+  R16G16Unorm,
+  /// pixel with a little endian uint16_t for red, green, blue and alpha
+  R16G16B16A16Unorm,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+#[repr(u8)]
+#[derive(Default)]
+pub enum ColorSpace {
+  #[default]
+  Srgb,
+  DisplayP3,
+}
+
+impl FromStr for ColorSpace {
+  type Err = SkError;
+
+  fn from_str(value: &str) -> Result<Self, SkError> {
+    match value {
+      "srgb" => Ok(Self::Srgb),
+      "display-p3" | "p3" => Ok(Self::DisplayP3),
+      _ => Err(SkError::StringToColorSpaceError(value.to_owned())),
+    }
+  }
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum PaintStyle {
+  Fill = 0,
+  Stroke = 1,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum FillType {
+  Winding = 0,
+  EvenOdd = 1,
+  InverseWinding = 2,
+  InverseEvenOdd = 3,
+}
+
+impl From<u32> for FillType {
+  fn from(value: u32) -> Self {
+    match value {
+      0 => Self::Winding,
+      1 => Self::EvenOdd,
+      2 => Self::InverseWinding,
+      3 => Self::InverseEvenOdd,
+      _ => unreachable!(),
+    }
+  }
+}
+
+impl FromStr for FillType {
+  type Err = SkError;
+
+  fn from_str(value: &str) -> Result<Self, SkError> {
+    match value {
+      "nonzero" => Ok(FillType::Winding),
+      "evenodd" => Ok(FillType::EvenOdd),
+      _ => Err(SkError::StringToFillRuleError(value.to_owned())),
+    }
+  }
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum StrokeCap {
+  Butt = 0,
+  Round = 1,
+  Square = 2,
+}
+
+impl StrokeCap {
+  pub fn from_raw(cap: i32) -> Result<Self, SkError> {
+    match cap {
+      0 => Ok(Self::Butt),
+      1 => Ok(Self::Round),
+      2 => Ok(Self::Square),
+      _ => Err(SkError::Generic(format!(
+        "{cap} is not valid StrokeCap value"
+      ))),
+    }
+  }
+
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Butt => "butt",
+      Self::Round => "round",
+      Self::Square => "square",
+    }
+  }
+}
+
+impl FromStr for StrokeCap {
+  type Err = SkError;
+
+  fn from_str(value: &str) -> Result<StrokeCap, Self::Err> {
+    match value {
+      "butt" => Ok(Self::Butt),
+      "round" => Ok(Self::Round),
+      "square" => Ok(Self::Square),
+      _ => Err(SkError::StringToStrokeCapError(value.to_owned())),
+    }
+  }
+}
+
+#[repr(u8)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum StrokeJoin {
+  Miter,
+  Round,
+  Bevel,
+}
+
+impl StrokeJoin {
+  pub fn from_raw(join: u8) -> Result<Self, SkError> {
+    match join {
+      0 => Ok(Self::Miter),
+      1 => Ok(Self::Round),
+      2 => Ok(Self::Bevel),
+      _ => Err(SkError::Generic(format!(
+        "{join} is not a valid StrokeJoin value"
+      ))),
+    }
+  }
+
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Miter => "miter",
+      Self::Round => "round",
+      Self::Bevel => "bevel",
+    }
+  }
+}
+
+impl FromStr for StrokeJoin {
+  type Err = SkError;
+
+  fn from_str(value: &str) -> Result<StrokeJoin, Self::Err> {
+    match value {
+      "bevel" => Ok(Self::Bevel),
+      "round" => Ok(Self::Round),
+      "miter" => Ok(Self::Miter),
+      _ => Err(SkError::StringToStrokeJoinError(value.to_owned())),
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum TileMode {
+  Clamp = 0,
+  Repeat = 1,
+  Mirror = 2,
+  Decal = 3,
+}
+
+#[repr(u8)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug, Default)]
+pub enum BlendMode {
+  /// Replaces destination with zero: fully transparent.
+  Clear = 0,
+  /// Replaces destination.
+  Source,
+  /// Preserves destination.
+  Destination,
+  /// Source over destination.
+  #[default]
+  SourceOver,
+  /// Destination over source.
+  DestinationOver,
+  /// Source trimmed inside destination.
+  SourceIn,
+  /// Destination trimmed by source.
+  DestinationIn,
+  /// Source trimmed outside destination.
+  SourceOut,
+  /// Destination trimmed outside source.
+  DestinationOut,
+  /// Source inside destination blended with destination.
+  SourceATop,
+  /// Destination inside source blended with source.
+  DestinationATop,
+  /// Each of source and destination trimmed outside the other.
+  Xor,
+  /// Sum of colors.
+  Plus,
+  /// Product of premultiplied colors; darkens destination.
+  Modulate,
+  /// Multiply inverse of pixels, inverting result; brightens destination.
+  Screen,
+  /// Multiply or screen, depending on destination.
+  Overlay,
+  /// Darker of source and destination.
+  Darken,
+  /// Lighter of source and destination.
+  Lighten,
+  /// Brighten destination to reflect source.
+  ColorDodge,
+  /// Darken destination to reflect source.
+  ColorBurn,
+  /// Multiply or screen, depending on source.
+  HardLight,
+  /// Lighten or darken, depending on source.
+  SoftLight,
+  /// Subtract darker from lighter with higher contrast.
+  Difference,
+  /// Subtract darker from lighter with lower contrast.
+  Exclusion,
+  /// Multiply source with destination, darkening image.
+  Multiply,
+  /// Hue of source with saturation and luminosity of destination.
+  Hue,
+  /// Saturation of source with hue and luminosity of destination.
+  Saturation,
+  /// Hue and saturation of source with luminosity of destination.
+  Color,
+  /// Luminosity of source with hue and saturation of destination.
+  Luminosity,
+}
+
+impl BlendMode {
+  pub fn as_str(&self) -> &'static str {
+    match self {
+      BlendMode::Clear => "clear",
+      BlendMode::Color => "color",
+      BlendMode::ColorBurn => "color-burn",
+      BlendMode::ColorDodge => "color-dodge",
+      BlendMode::Darken => "darken",
+      BlendMode::Destination => "destination",
+      BlendMode::DestinationATop => "destination-atop",
+      BlendMode::DestinationIn => "destination-in",
+      BlendMode::DestinationOut => "destination-out",
+      BlendMode::DestinationOver => "destination-over",
+      BlendMode::Difference => "difference",
+      BlendMode::Exclusion => "exclusion",
+      BlendMode::HardLight => "hard-light",
+      BlendMode::Hue => "hue",
+      BlendMode::Lighten => "lighten",
+      BlendMode::Luminosity => "luminosity",
+      BlendMode::Modulate => "modulate",
+      BlendMode::Multiply => "multiply",
+      BlendMode::Overlay => "overlay",
+      BlendMode::Plus => "lighter",
+      BlendMode::Saturation => "saturation",
+      BlendMode::Screen => "screen",
+      BlendMode::SoftLight => "soft-light",
+      BlendMode::Source => "copy",
+      BlendMode::SourceATop => "source-atop",
+      BlendMode::SourceIn => "source-in",
+      BlendMode::SourceOut => "source-out",
+      BlendMode::SourceOver => "source-over",
+      BlendMode::Xor => "xor",
+    }
+  }
+}
+
+impl FromStr for BlendMode {
+  type Err = SkError;
+
+  fn from_str(value: &str) -> Result<BlendMode, Self::Err> {
+    match value {
+      "clear" => Ok(BlendMode::Clear),
+      "color" => Ok(BlendMode::Color),
+      "color-burn" => Ok(BlendMode::ColorBurn),
+      "color-dodge" => Ok(BlendMode::ColorDodge),
+      "darken" => Ok(BlendMode::Darken),
+      "destination" => Ok(BlendMode::Destination),
+      "destination-atop" => Ok(BlendMode::DestinationATop),
+      "destination-in" => Ok(BlendMode::DestinationIn),
+      "destination-out" => Ok(BlendMode::DestinationOut),
+      "destination-over" => Ok(BlendMode::DestinationOver),
+      "difference" => Ok(BlendMode::Difference),
+      "exclusion" => Ok(BlendMode::Exclusion),
+      "hard-light" => Ok(BlendMode::HardLight),
+      "hue" => Ok(BlendMode::Hue),
+      "lighten" => Ok(BlendMode::Lighten),
+      "luminosity" => Ok(BlendMode::Luminosity),
+      "modulate" => Ok(BlendMode::Modulate),
+      "multiply" => Ok(BlendMode::Multiply),
+      "overlay" => Ok(BlendMode::Overlay),
+      "lighter" => Ok(BlendMode::Plus),
+      "saturation" => Ok(BlendMode::Saturation),
+      "screen" => Ok(BlendMode::Screen),
+      "soft-light" => Ok(BlendMode::SoftLight),
+      "copy" => Ok(BlendMode::Source),
+      "source-atop" => Ok(BlendMode::SourceATop),
+      "source-in" => Ok(BlendMode::SourceIn),
+      "source-out" => Ok(BlendMode::SourceOut),
+      "source-over" => Ok(BlendMode::SourceOver),
+      "xor" => Ok(BlendMode::Xor),
+      _ => Err(SkError::StringToBlendError(value.to_owned())),
+    }
+  }
+}
+
+impl From<i32> for BlendMode {
+  fn from(value: i32) -> BlendMode {
+    match value {
+      0 => Self::Clear,
+      1 => Self::Source,
+      2 => Self::Destination,
+      3 => Self::SourceOver,
+      4 => Self::DestinationOver,
+      5 => Self::SourceIn,
+      6 => Self::DestinationIn,
+      7 => Self::SourceOut,
+      8 => Self::DestinationOut,
+      9 => Self::SourceATop,
+      10 => Self::DestinationATop,
+      11 => Self::Xor,
+      12 => Self::Plus,
+      13 => Self::Modulate,
+      14 => Self::Screen,
+      15 => Self::Overlay,
+      16 => Self::Darken,
+      17 => Self::Lighten,
+      18 => Self::ColorDodge,
+      19 => Self::ColorBurn,
+      20 => Self::HardLight,
+      21 => Self::SoftLight,
+      22 => Self::Difference,
+      23 => Self::Exclusion,
+      24 => Self::Multiply,
+      25 => Self::Hue,
+      26 => Self::Saturation,
+      27 => Self::Color,
+      28 => Self::Luminosity,
+      _ => unreachable!(),
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug, Default)]
+pub enum FilterQuality {
+  None = 0,
+  #[default]
+  Low = 1,
+  Medium = 2,
+  High = 3,
+}
+
+impl FilterQuality {
+  pub fn as_str(&self) -> &'static str {
+    match self {
+      Self::High => "high",
+      Self::Low => "low",
+      Self::Medium => "medium",
+      Self::None => "",
+    }
+  }
+}
+
+impl FromStr for FilterQuality {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<FilterQuality, SkError> {
+    match s {
+      "low" => Ok(Self::Low),
+      "medium" => Ok(Self::Medium),
+      "high" => Ok(Self::High),
+      _ => Err(SkError::StringToFilterQualityError(s.to_owned())),
+    }
+  }
+}
+
+/// Describes how to interpret the alpha component of a pixel.
+///
+/// A pixel may be opaque, or alpha, describing multiple levels of transparency.
+///
+/// In simple blending, alpha weights the draw color and the destination
+/// color to create a new color. If alpha describes a weight from zero to one:
+///
+/// new color = draw color * alpha + destination color * (1 - alpha)
+///
+/// In practice alpha is encoded in two or more bits, where 1.0 equals all bits set.
+///
+/// RGB may have alpha included in each component value; the stored
+/// value is the original RGB multiplied by alpha. Premultiplied color
+/// components improve performance.
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum AlphaType {
+  Unknown,
+  Opaque,
+  Premultiplied,
+  Unpremultiplied,
+}
+
+#[repr(i32)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
+pub enum PathOp {
+  Difference,        // subtract the op path from the first path
+  Intersect,         // intersect the two paths
+  Union,             // union (inclusive-or) the two paths
+  Xor,               // exclusive-or the two paths
+  ReverseDifference, // subtract the first path from the op path
+}
+
+impl From<i32> for PathOp {
+  fn from(value: i32) -> Self {
+    match value {
+      0 => Self::Difference,
+      1 => Self::Intersect,
+      2 => Self::Union,
+      3 => Self::Xor,
+      4 => Self::ReverseDifference,
+      _ => panic!("[{value}] is not valid path op"),
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default)]
+pub enum TextAlign {
+  Left,
+  Right,
+  Center,
+  Justify,
+  #[default]
+  Start,
+  End,
+}
+
+impl TextAlign {
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Start => "start",
+      Self::Center => "center",
+      Self::End => "end",
+      Self::Left => "left",
+      Self::Right => "right",
+      Self::Justify => "justify",
+    }
+  }
+}
+
+impl FromStr for TextAlign {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<TextAlign, SkError> {
+    match s {
+      "center" => Ok(TextAlign::Center),
+      "end" => Ok(TextAlign::End),
+      "left" => Ok(TextAlign::Left),
+      "right" => Ok(TextAlign::Right),
+      "start" => Ok(TextAlign::Start),
+      "justify" => Ok(TextAlign::Justify),
+      _ => Err(SkError::StringToTextAlignError(s.to_owned())),
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default)]
+pub enum TextBaseline {
+  Top,
+  Hanging,
+  Middle,
+  #[default]
+  Alphabetic,
+  Ideographic,
+  Bottom,
+}
+
+impl FromStr for TextBaseline {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<TextBaseline, SkError> {
+    match s {
+      "top" => Ok(Self::Top),
+      "hanging" => Ok(Self::Hanging),
+      "middle" => Ok(Self::Middle),
+      "alphabetic" => Ok(Self::Alphabetic),
+      "bottom" => Ok(Self::Bottom),
+      "ideographic" => Ok(Self::Ideographic),
+      _ => Err(SkError::StringToTextBaselineError(s.to_owned())),
+    }
+  }
+}
+
+impl TextBaseline {
+  pub fn as_str(&self) -> &'static str {
+    match self {
+      Self::Bottom => "bottom",
+      Self::Alphabetic => "alphabetic",
+      Self::Hanging => "hanging",
+      Self::Ideographic => "ideographic",
+      Self::Middle => "middle",
+      Self::Top => "top",
+    }
+  }
+}
+
+impl Display for TextBaseline {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self.as_str())
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default)]
+pub enum TextDirection {
+  #[default]
+  Inherit,
+  Ltr,
+  Rtl,
+}
+
+impl FromStr for TextDirection {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<TextDirection, SkError> {
+    match s {
+      "inherit" | "ltr" => Ok(Self::Ltr),
+      "rtl" => Ok(Self::Rtl),
+      _ => Err(SkError::StringToTextDirectionError(s.to_owned())),
+    }
+  }
+}
+
+impl TextDirection {
+  pub fn as_str(&self) -> &str {
+    match self {
+      &Self::Inherit | &Self::Ltr => "ltr",
+      &Self::Rtl => "rtl",
+    }
+  }
+
+  pub fn as_sk_direction(&self) -> i32 {
+    match self {
+      &Self::Inherit | &Self::Ltr => 1,
+      &Self::Rtl => 0,
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub enum FontKerning {
+  #[default]
+  Auto = 0,
+  None = 1,
+  Normal = 2,
+}
+
+impl FromStr for FontKerning {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<FontKerning, SkError> {
+    match s {
+      "auto" => Ok(Self::Auto),
+      "none" => Ok(Self::None),
+      "normal" => Ok(Self::Normal),
+      _ => Err(SkError::Generic(format!("Invalid font kerning: {}", s))),
+    }
+  }
+}
+
+impl FontKerning {
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Auto => "auto",
+      Self::None => "none",
+      Self::Normal => "normal",
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub enum FontVariantCaps {
+  #[default]
+  Normal = 0,
+  SmallCaps = 1,
+  AllSmallCaps = 2,
+  PetiteCaps = 3,
+  AllPetiteCaps = 4,
+  Unicase = 5,
+  TitlingCaps = 6,
+}
+
+impl FromStr for FontVariantCaps {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<FontVariantCaps, SkError> {
+    match s {
+      "normal" => Ok(Self::Normal),
+      "small-caps" => Ok(Self::SmallCaps),
+      "all-small-caps" => Ok(Self::AllSmallCaps),
+      "petite-caps" => Ok(Self::PetiteCaps),
+      "all-petite-caps" => Ok(Self::AllPetiteCaps),
+      "unicase" => Ok(Self::Unicase),
+      "titling-caps" => Ok(Self::TitlingCaps),
+      _ => Err(SkError::Generic(format!(
+        "Invalid font variant caps: {}",
+        s
+      ))),
+    }
+  }
+}
+
+impl FontVariantCaps {
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Normal => "normal",
+      Self::SmallCaps => "small-caps",
+      Self::AllSmallCaps => "all-small-caps",
+      Self::PetiteCaps => "petite-caps",
+      Self::AllPetiteCaps => "all-petite-caps",
+      Self::Unicase => "unicase",
+      Self::TitlingCaps => "titling-caps",
+    }
+  }
+}
+
+#[repr(i32)]
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub enum TextRendering {
+  #[default]
+  Auto = 0,
+  OptimizeSpeed = 1,
+  OptimizeLegibility = 2,
+  GeometricPrecision = 3,
+}
+
+impl FromStr for TextRendering {
+  type Err = SkError;
+
+  fn from_str(s: &str) -> Result<TextRendering, SkError> {
+    match s {
+      "auto" => Ok(Self::Auto),
+      "optimizeSpeed" => Ok(Self::OptimizeSpeed),
+      "optimizeLegibility" => Ok(Self::OptimizeLegibility),
+      "geometricPrecision" => Ok(Self::GeometricPrecision),
+      _ => Err(SkError::Generic(format!("Invalid text rendering: {}", s))),
+    }
+  }
+}
+
+impl TextRendering {
+  pub fn as_str(&self) -> &str {
+    match self {
+      Self::Auto => "auto",
+      Self::OptimizeSpeed => "optimizeSpeed",
+      Self::OptimizeLegibility => "optimizeLegibility",
+      Self::GeometricPrecision => "geometricPrecision",
+    }
+  }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(i32)]
+pub enum SkEncodedImageFormat {
+  Bmp,
+  Gif,
+  Ico,
+  Jpeg,
+  Png,
+  Wbmp,
+  Webp,
+  Pm,
+  Tx,
+  Astc,
+  Dng,
+  Heif,
+  Avif,
+}
+
+#[repr(u32)]
+pub enum SvgExportFlag {
+  ConvertTextToPaths = 0x01,
+  NoPrettyXML = 0x02,
+  RelativePathEncoding = 0x04,
+}
+
+impl TryFrom<u32> for SvgExportFlag {
+  type Error = SkError;
+
+  fn try_from(value: u32) -> Result<Self, Self::Error> {
+    match value {
+      0x01 => Ok(Self::ConvertTextToPaths),
+      0x02 => Ok(Self::NoPrettyXML),
+      0x04 => Ok(Self::RelativePathEncoding),
+      _ => Err(SkError::U32ToStrokeJoinError(value)),
+    }
+  }
+}
+
+pub struct Surface {
+  ptr: *mut ffi::skiac_surface,
+  pub(crate) canvas: Canvas,
+  is_svg: bool,
+}
+
+impl Surface {
+  pub fn new_rgba(width: u32, height: u32, color_space: ColorSpace) -> Option<Surface> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_surface_create_rgba(
+        width as i32,
+        height as i32,
+        color_space as u8,
+      ))
+    }
+  }
+
+  pub fn new_rgba_premultiplied(
+    width: u32,
+    height: u32,
+    color_space: ColorSpace,
+  ) -> Option<Surface> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_surface_create_rgba_premultiplied(
+        width as i32,
+        height as i32,
+        color_space as u8,
+      ))
+    }
+  }
+
+  pub fn new_svg(
+    width: u32,
+    height: u32,
+    alpha_type: AlphaType,
+    flag: SvgExportFlag,
+    color_space: ColorSpace,
+  ) -> Option<(Surface, SkWMemoryStream)> {
+    let mut svg_surface = ffi::skiac_svg_surface {
+      stream: ptr::null_mut(),
+      surface: ptr::null_mut(),
+      canvas: ptr::null_mut(),
+    };
+    unsafe {
+      ffi::skiac_surface_create_svg(
+        &mut svg_surface,
+        width as i32,
+        height as i32,
+        alpha_type as i32,
+        flag as u32,
+        color_space as u8,
+      );
+    };
+    if svg_surface.surface.is_null() {
+      return None;
+    }
+    Some((
+      Self {
+        ptr: svg_surface.surface,
+        canvas: Canvas(svg_surface.canvas),
+        is_svg: true,
+      },
+      SkWMemoryStream(svg_surface.stream),
+    ))
+  }
+
+  unsafe fn from_ptr(ptr: *mut ffi::skiac_surface) -> Option<Surface> {
+    if ptr.is_null() {
+      None
+    } else {
+      Some(Surface {
+        ptr,
+        canvas: Canvas(unsafe { ffi::skiac_surface_get_canvas(ptr) }),
+        is_svg: false,
+      })
+    }
+  }
+
+  // Create a Surface from a borrowed canvas (e.g., from PDFDocument)
+  // The canvas is not owned by this Surface and won't be freed
+  pub(crate) fn from_borrowed_canvas(canvas: Canvas) -> Surface {
+    Surface {
+      ptr: ptr::null_mut(), // null indicates we don't own the surface
+      canvas,
+      is_svg: false,
+    }
+  }
+
+  pub fn copy_rgba(
+    &self,
+    x: u32,
+    y: u32,
+    width: u32,
+    height: u32,
+    color_space: ColorSpace,
+  ) -> Option<Surface> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_surface_copy_rgba(
+        self.ptr,
+        x,
+        y,
+        width,
+        height,
+        color_space as u8,
+      ))
+    }
+  }
+
+  pub fn try_clone(&self, color_space: ColorSpace) -> Option<Surface> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_surface_copy_rgba(
+        self.ptr,
+        0,
+        0,
+        self.width(),
+        self.height(),
+        color_space as u8,
+      ))
+    }
+  }
+
+  pub fn save_png(&self, path: &str) -> bool {
+    let c_path = std::ffi::CString::new(path).unwrap();
+    unsafe { ffi::skiac_surface_save(self.ptr, c_path.as_ptr()) }
+  }
+
+  pub fn width(&self) -> u32 {
+    unsafe { ffi::skiac_surface_get_width(self.ptr) as u32 }
+  }
+
+  pub fn height(&self) -> u32 {
+    unsafe { ffi::skiac_surface_get_height(self.ptr) as u32 }
+  }
+
+  pub fn alpha_type(&self) -> AlphaType {
+    let kind = unsafe { ffi::skiac_surface_get_alpha_type(self.ptr) };
+    match kind {
+      0 => AlphaType::Unknown,
+      1 => AlphaType::Opaque,
+      2 => AlphaType::Premultiplied,
+      3 => AlphaType::Unpremultiplied,
+      _ => unreachable!(),
+    }
+  }
+
+  pub fn read_pixels(
+    &self,
+    x: i32,
+    y: i32,
+    width: u32,
+    height: u32,
+    color_space: ColorSpace,
+  ) -> Option<Vec<u8>> {
+    // Reject requests whose dimensions or byte length cannot be represented,
+    // instead of letting the length wrap (32-bit targets) and Skia write past
+    // the allocation.
+    let len = width as u64 * height as u64 * 4;
+    if width > i32::MAX as u32 || height > i32::MAX as u32 || len > isize::MAX as u64 {
+      return None;
+    }
+    let len = len as usize;
+
+    // Fast path: fused SIMD unpremultiply straight from the surface pixels,
+    // when the CPU has a supported SIMD implementation (runtime-detected) and
+    // the surface is premultiplied RGBA in the requested color space.
+    if let Some(row_fn) = crate::unpremul::row_fn() {
+      let mut peek = ffi::skiac_peek_pixels {
+        ptr: ptr::null(),
+        row_bytes: 0,
+        width: 0,
+        height: 0,
+        color_space: 0,
+      };
+      if unsafe { ffi::skiac_surface_peek_premul_rgba(self.ptr, &mut peek) }
+        && peek.color_space == color_space as u8
+      {
+        return self.read_pixels_simd(&peek, row_fn, x, y, width, height, len);
+      }
+    }
+
+    // Skia conversion path (color space conversion, non-premultiplied
+    // surfaces, or no supported SIMD on this CPU).
+    // Skia clips the read rect against the surface bounds and only writes the
+    // intersecting region; per the canvas spec, pixels outside the surface
+    // must read as transparent black. Only zero-initialize when the requested
+    // rect is not fully contained in the surface; otherwise every byte is
+    // written by readPixels and the zeroing pass is wasted work.
+    let fully_contained = x >= 0
+      && y >= 0
+      && (x as u32).saturating_add(width) <= self.width()
+      && (y as u32).saturating_add(height) <= self.height();
+    let mut result = if fully_contained {
+      Vec::with_capacity(len)
+    } else {
+      vec![0; len]
+    };
+    let status = unsafe {
+      ffi::skiac_surface_read_pixels_rect(
+        self.ptr,
+        result.as_mut_ptr(),
+        x,
+        y,
+        width as i32,
+        height as i32,
+        color_space as u8,
+      )
+    };
+    if status {
+      // SAFETY: for a fully-contained rect readPixels writes all `len` bytes;
+      // for the clipped case the buffer was zero-initialized above.
+      unsafe { result.set_len(len) };
+      Some(result)
+    } else {
+      None
+    }
+  }
+
+  /// Fused readback + unpremultiply from a peeked premultiplied RGBA surface.
+  /// `len` is the validated `width * height * 4` from [`Self::read_pixels`].
+  #[allow(clippy::too_many_arguments)]
+  fn read_pixels_simd(
+    &self,
+    peek: &ffi::skiac_peek_pixels,
+    row_fn: crate::unpremul::RowFn,
+    x: i32,
+    y: i32,
+    width: u32,
+    height: u32,
+    len: usize,
+  ) -> Option<Vec<u8>> {
+    // Clip the requested rect against the surface bounds, same semantics as
+    // SkReadPixelsRec::trim: out-of-surface regions must read as transparent
+    // black (the buffer is zero-initialized below in that case) and a rect
+    // with no intersection fails. 64-bit math because x/y can be i32::MIN.
+    let mut src_x = x as i64;
+    let mut src_y = y as i64;
+    let mut copy_w = width as i64;
+    let mut copy_h = height as i64;
+    let mut dst_off_x = 0i64;
+    let mut dst_off_y = 0i64;
+    if src_x < 0 {
+      dst_off_x = -src_x;
+      copy_w += src_x;
+      src_x = 0;
+    }
+    if src_y < 0 {
+      dst_off_y = -src_y;
+      copy_h += src_y;
+      src_y = 0;
+    }
+    copy_w = copy_w.min(peek.width as i64 - src_x);
+    copy_h = copy_h.min(peek.height as i64 - src_y);
+    if copy_w <= 0 || copy_h <= 0 {
+      return None;
+    }
+    // Only zero-initialize when clipping leaves out-of-surface regions that
+    // must read as transparent black; a fully-contained read writes every
+    // byte and the zeroing pass is wasted work.
+    let fully_contained =
+      dst_off_x == 0 && dst_off_y == 0 && copy_w == width as i64 && copy_h == height as i64;
+    let mut result = if fully_contained {
+      Vec::with_capacity(len)
+    } else {
+      vec![0; len]
+    };
+    let src_stride = peek.row_bytes / 4;
+    let src_base = unsafe {
+      peek
+        .ptr
+        .add(src_y as usize * peek.row_bytes + src_x as usize * 4)
+        .cast::<u32>()
+    };
+    let dst_off = (dst_off_y * width as i64 + dst_off_x) as usize;
+    let dst_base = unsafe { result.as_mut_ptr().cast::<u32>().add(dst_off) };
+    // Derive each row pointer from the base instead of advancing past the
+    // final row, so no out-of-bounds pointer is ever formed.
+    for row in 0..copy_h as usize {
+      let src_row = unsafe { src_base.add(row * src_stride) };
+      let dst_row = unsafe { dst_base.add(row * width as usize) };
+      // SAFETY: both rows point at `copy_w` valid pixels; the freshly
+      // allocated dst never aliases the surface's src.
+      unsafe { row_fn(dst_row, src_row, copy_w as usize) };
+    }
+    // SAFETY: same argument as the Skia path above.
+    unsafe { result.set_len(len) };
+    Some(result)
+  }
+
+  pub fn data<'env>(&'env self) -> Option<SurfaceData<'env>> {
+    unsafe {
+      let mut data = ffi::skiac_surface_data {
+        ptr: ptr::null_mut(),
+        size: 0,
+      };
+      ffi::skiac_surface_read_pixels(self.ptr, &mut data);
+
+      if data.ptr.is_null() {
+        None
+      } else {
+        Some(SurfaceData {
+          slice: slice::from_raw_parts(data.ptr, data.size),
+        })
+      }
+    }
+  }
+
+  pub fn svg(&self, width: f32, height: f32, flag: SvgExportFlag) -> Option<SkiaDataRef> {
+    let mut data = ffi::skiac_sk_data {
+      ptr: ptr::null_mut(),
+      size: 0,
+      data: ptr::null_mut(),
+    };
+    unsafe {
+      ffi::skiac_surface_draw_svg(
+        self.ptr,
+        ptr::null_mut(),
+        width,
+        height,
+        flag as u32,
+        &mut data,
+      );
+    };
+    if data.ptr.is_null() {
+      None
+    } else {
+      Some(SkiaDataRef(data))
+    }
+  }
+
+  pub fn data_mut<'env>(&'env mut self) -> Option<SurfaceDataMut<'env>> {
+    unsafe {
+      let mut data = ffi::skiac_surface_data {
+        ptr: ptr::null_mut(),
+        size: 0,
+      };
+      ffi::skiac_surface_read_pixels(self.ptr, &mut data);
+      if data.ptr.is_null() {
+        None
+      } else {
+        Some(SurfaceDataMut {
+          slice: slice::from_raw_parts_mut(data.ptr, data.size),
+        })
+      }
+    }
+  }
+
+  pub fn encode_stream(
+    &self,
+    format: SkEncodedImageFormat,
+    quality: u8,
+    write_callback: ffi::SkiacWStreamWriteCallback,
+    context: *mut c_void,
+  ) -> bool {
+    unsafe {
+      ffi::skiac_surface_encode_stream(
+        self.ptr,
+        format as i32,
+        quality as i32,
+        write_callback,
+        context,
+      )
+    }
+  }
+
+  pub(crate) fn reference(&self) -> SurfaceRef {
+    // Take a new refcounted reference; released when the SurfaceRef drops.
+    if !self.ptr.is_null() {
+      unsafe {
+        ffi::skiac_surface_ref(self.ptr);
+      }
+    }
+    SurfaceRef(self.ptr)
+  }
+
+  pub(crate) fn get_bitmap(&self) -> Bitmap {
+    let mut bitmap_info = ffi::skiac_bitmap_info {
+      bitmap: ptr::null_mut(),
+      width: 0,
+      height: 0,
+      is_canvas: true,
+    };
+    unsafe { ffi::skiac_surface_get_bitmap(self.ptr, &mut bitmap_info) };
+    Bitmap(bitmap_info)
+  }
+
+  // Get the surface pointer as a bitmap pointer for patterns
+  // This avoids creating Bitmap wrapper objects that can accumulate
+  pub(crate) fn get_bitmap_ptr(&self) -> *mut ffi::skiac_bitmap {
+    self.ptr as *mut ffi::skiac_bitmap
+  }
+
+  /// Create an immutable image snapshot of the surface for caching
+  pub fn make_image_snapshot(&self) -> Option<SkImage> {
+    let image_ptr = unsafe { ffi::skiac_surface_make_image_snapshot(self.ptr) };
+    if image_ptr.is_null() {
+      None
+    } else {
+      Some(SkImage(image_ptr))
+    }
+  }
+}
+
+impl std::ops::Deref for Surface {
+  type Target = Canvas;
+
+  fn deref(&self) -> &Self::Target {
+    &self.canvas
+  }
+}
+
+impl std::ops::DerefMut for Surface {
+  fn deref_mut(&mut self) -> &mut Self::Target {
+    &mut self.canvas
+  }
+}
+
+impl Drop for Surface {
+  fn drop(&mut self) {
+    // For SVG surfaces, the canvas was independently allocated via SkSVGCanvas::Make().release()
+    // and is NOT owned by the SkSurface, so we must destroy it separately.
+    if self.is_svg && !self.canvas.0.is_null() {
+      unsafe {
+        ffi::skiac_canvas_destroy(self.canvas.0);
+      }
+    }
+    // Only destroy if we own the surface (ptr is not null)
+    if !self.ptr.is_null() {
+      unsafe {
+        ffi::skiac_surface_destroy(self.ptr);
+      }
+    }
+  }
+}
+
+#[repr(transparent)]
+pub struct SurfaceRef(*mut ffi::skiac_surface);
+
+impl SurfaceRef {
+  pub fn png_data(&self) -> Option<SkiaDataRef> {
+    unsafe {
+      let mut data = ffi::skiac_sk_data {
+        ptr: ptr::null_mut(),
+        size: 0,
+        data: ptr::null_mut(),
+      };
+      ffi::skiac_surface_png_data(self.0, &mut data);
+
+      if data.ptr.is_null() {
+        None
+      } else {
+        Some(SkiaDataRef(data))
+      }
+    }
+  }
+
+  pub fn data(&self) -> Option<(*const u8, usize)> {
+    let mut data = ffi::skiac_surface_data {
+      ptr: ptr::null_mut(),
+      size: 0,
+    };
+    unsafe { ffi::skiac_surface_read_pixels(self.0, &mut data) };
+    if data.ptr.is_null() {
+      None
+    } else {
+      Some((data.ptr, data.size))
+    }
+  }
+
+  pub fn encode_data(&self, format: SkEncodedImageFormat, quality: u8) -> Option<SkiaDataRef> {
+    unsafe {
+      let mut data = ffi::skiac_sk_data {
+        ptr: ptr::null_mut(),
+        size: 0,
+        data: ptr::null_mut(),
+      };
+      ffi::skiac_surface_encode_data(self.0, &mut data, format as i32, quality as i32);
+
+      if data.ptr.is_null() {
+        None
+      } else {
+        Some(SkiaDataRef(data))
+      }
+    }
+  }
+
+  pub fn svg(&self, width: f32, height: f32, flag: SvgExportFlag) -> Option<SkiaDataRef> {
+    let mut data = ffi::skiac_sk_data {
+      ptr: ptr::null_mut(),
+      size: 0,
+      data: ptr::null_mut(),
+    };
+    unsafe {
+      ffi::skiac_surface_draw_svg(
+        self.0,
+        ptr::null_mut(),
+        width,
+        height,
+        flag as u32,
+        &mut data,
+      );
+    };
+    if data.ptr.is_null() {
+      None
+    } else {
+      Some(SkiaDataRef(data))
+    }
+  }
+
+  /// Create an immutable image snapshot of the surface for caching
+  pub fn make_image_snapshot(&self) -> Option<SkImage> {
+    let image_ptr = unsafe { ffi::skiac_surface_make_image_snapshot(self.0) };
+    if image_ptr.is_null() {
+      None
+    } else {
+      Some(SkImage(image_ptr))
+    }
+  }
+}
+
+unsafe impl Send for SurfaceRef {}
+unsafe impl Sync for SurfaceRef {}
+
+impl Clone for SurfaceRef {
+  fn clone(&self) -> Self {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_surface_ref(self.0);
+      }
+    }
+    SurfaceRef(self.0)
+  }
+}
+
+impl Drop for SurfaceRef {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_surface_destroy(self.0);
+      }
+    }
+  }
+}
+
+pub struct SurfaceData<'a> {
+  slice: &'a [u8],
+}
+
+impl Deref for SurfaceData<'_> {
+  type Target = [u8];
+
+  fn deref(&self) -> &[u8] {
+    self.slice
+  }
+}
+
+pub struct SurfaceDataMut<'a> {
+  slice: &'a mut [u8],
+}
+
+impl Deref for SurfaceDataMut<'_> {
+  type Target = [u8];
+
+  fn deref(&self) -> &[u8] {
+    self.slice
+  }
+}
+
+#[repr(transparent)]
+pub struct SkiaDataRef(pub(crate) ffi::skiac_sk_data);
+
+impl SkiaDataRef {
+  pub fn slice(&self) -> &'static [u8] {
+    unsafe { slice::from_raw_parts(self.0.ptr, self.0.size) }
+  }
+}
+
+impl Drop for SkiaDataRef {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_sk_data_destroy(self.0.data) }
+  }
+}
+
+unsafe impl Send for SkiaDataRef {}
+unsafe impl Sync for SkiaDataRef {}
+
+impl DerefMut for SurfaceDataMut<'_> {
+  fn deref_mut(&mut self) -> &mut [u8] {
+    self.slice
+  }
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash, PartialOrd, Ord)]
+pub struct Color(pub u32);
+
+impl fmt::Debug for Color {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    f.debug_struct("Color")
+      .field("R", &(((self.0) >> 16) & 0xFF))
+      .field("G", &(((self.0) >> 8) & 0xFF))
+      .field("B", &(self.0 & 0xFF))
+      .field("A", &(((self.0) >> 24) & 0xFF))
+      .finish()
+  }
+}
+
+impl Color {
+  pub fn from_rgba(r: u8, g: u8, b: u8, a: u8) -> Color {
+    Color(((a as u32) << 24) | ((r as u32) << 16) | ((g as u32) << 8) | (b as u32))
+  }
+}
+
+#[repr(transparent)]
+pub struct Canvas(pub(crate) *mut ffi::skiac_canvas);
+
+#[derive(Debug, Clone, Copy)]
+pub struct FontVariation {
+  pub tag: u32,
+  pub value: f32,
+}
+
+impl Canvas {
+  pub fn clear(&mut self) {
+    unsafe {
+      ffi::skiac_canvas_clear(self.0, 0);
+    }
+  }
+
+  pub fn fill(&mut self, r: u8, g: u8, b: u8, a: u8) {
+    unsafe {
+      ffi::skiac_canvas_clear(
+        self.0,
+        ((a as u32) << 24) | ((r as u32) << 16) | ((g as u32) << 8) | b as u32,
+      );
+    }
+  }
+
+  pub fn set_transform(&mut self, ts: &Matrix) {
+    unsafe {
+      ffi::skiac_canvas_set_transform(self.0, ts.0);
+    }
+  }
+
+  pub fn concat(&mut self, ts: &Matrix) {
+    unsafe {
+      ffi::skiac_canvas_concat(self.0, ts.0);
+    }
+  }
+
+  pub fn scale(&mut self, sx: f32, sy: f32) {
+    unsafe {
+      ffi::skiac_canvas_scale(self.0, sx, sy);
+    }
+  }
+
+  pub fn translate(&mut self, dx: f32, dy: f32) {
+    unsafe {
+      ffi::skiac_canvas_translate(self.0, dx, dy);
+    }
+  }
+
+  pub fn rotate(&mut self, degrees: f32) {
+    unsafe {
+      ffi::skiac_canvas_rotate(self.0, degrees);
+    }
+  }
+
+  pub fn get_transform(&self) -> Transform {
+    unsafe { ffi::skiac_canvas_get_total_transform(self.0).into() }
+  }
+
+  pub fn get_transform_matrix(&self) -> Matrix {
+    Matrix(unsafe { ffi::skiac_canvas_get_total_transform_matrix(self.0) })
+  }
+
+  pub fn reset_transform(&mut self) {
+    unsafe {
+      ffi::skiac_canvas_reset_transform(self.0);
+    }
+  }
+
+  pub fn draw_color(&mut self, r: f32, g: f32, b: f32, a: f32) {
+    unsafe {
+      ffi::skiac_canvas_draw_color(self.0, r, g, b, a);
+    }
+  }
+
+  pub fn draw_image(
+    &mut self,
+    image: &Bitmap,
+    sx: f32,
+    sy: f32,
+    s_width: f32,
+    s_height: f32,
+    dx: f32,
+    dy: f32,
+    d_width: f32,
+    d_height: f32,
+    enable_smoothing: bool,
+    quality: FilterQuality,
+    paint: &Paint,
+  ) {
+    unsafe {
+      ffi::skiac_canvas_draw_image(
+        self.0,
+        image.0.bitmap,
+        image.0.is_canvas,
+        sx,
+        sy,
+        s_width,
+        s_height,
+        dx,
+        dy,
+        d_width,
+        d_height,
+        enable_smoothing,
+        quality as i32,
+        paint.0,
+      );
+    }
+  }
+
+  pub fn draw_path(&mut self, path: &Path, paint: &Paint) {
+    unsafe {
+      ffi::skiac_canvas_draw_path(self.0, path.0, paint.0);
+    }
+  }
+
+  pub fn draw_rect(&mut self, x: f32, y: f32, w: f32, h: f32, paint: &Paint) {
+    unsafe {
+      ffi::skiac_canvas_draw_rect(self.0, x, y, w, h, paint.0);
+    }
+  }
+
+  pub fn draw_text(
+    &mut self,
+    text: &str,
+    x: f32,
+    y: f32,
+    max_width: f32,
+    canvas_width: f32,
+    weight: u32,
+    stretch: i32,
+    stretch_width: f32,
+    slant: FontStyle,
+    font_collection: &FontCollection,
+    font_size: f32,
+    font_family: &str,
+    baseline: TextBaseline,
+    align: TextAlign,
+    direction: TextDirection,
+    letter_spacing: f32,
+    word_spacing: f32,
+    paint: &Paint,
+    variations: &[FontVariation],
+    kerning: FontKerning,
+    variant_caps: FontVariantCaps,
+    lang: &str,
+    text_rendering: TextRendering,
+  ) -> Result<(), NulError> {
+    let c_text = std::ffi::CString::new(text)?;
+    let c_font_family = std::ffi::CString::new(font_family)?;
+    // Convert lang to C string, or null if empty/"inherit"
+    let c_lang = if lang.is_empty() || lang == "inherit" {
+      None
+    } else {
+      Some(std::ffi::CString::new(lang)?)
+    };
+
+    unsafe {
+      ffi::skiac_canvas_get_line_metrics_or_draw_text(
+        c_text.as_ptr(),
+        text.len(),
+        max_width,
+        x,
+        y,
+        canvas_width,
+        font_collection.0,
+        font_size,
+        weight as i32,
+        stretch,
+        stretch_width,
+        slant as i32,
+        c_font_family.as_ptr(),
+        baseline as i32,
+        align as i32,
+        direction.as_sk_direction(),
+        letter_spacing,
+        word_spacing,
+        paint.0,
+        self.0,
+        ptr::null_mut(),
+        variations.as_ptr() as *const ffi::skiac_font_variation,
+        variations.len() as i32,
+        kerning as i32,
+        variant_caps as i32,
+        c_lang.as_ref().map_or(ptr::null(), |s| s.as_ptr()),
+        text_rendering as i32,
+      );
+    };
+    Ok(())
+  }
+
+  pub fn get_line_metrics(
+    &self,
+    text: &str,
+    font_collection: &FontCollection,
+    font_size: f32,
+    weight: u32,
+    stretch: i32,
+    stretch_width: f32,
+    slant: FontStyle,
+    font_family: &str,
+    baseline: TextBaseline,
+    align: TextAlign,
+    direction: TextDirection,
+    letter_spacing: f32,
+    word_spacing: f32,
+    paint: &Paint,
+    variations: &[FontVariation],
+    kerning: FontKerning,
+    variant_caps: FontVariantCaps,
+    lang: &str,
+    text_rendering: TextRendering,
+  ) -> Result<ffi::skiac_line_metrics, NulError> {
+    let c_text = std::ffi::CString::new(text)?;
+    let c_font_family = std::ffi::CString::new(font_family)?;
+    // Convert lang to C string, or null if empty/"inherit"
+    let c_lang = if lang.is_empty() || lang == "inherit" {
+      None
+    } else {
+      Some(std::ffi::CString::new(lang)?)
+    };
+
+    let mut line_metrics = ffi::skiac_line_metrics::default();
+
+    unsafe {
+      ffi::skiac_canvas_get_line_metrics_or_draw_text(
+        c_text.as_ptr(),
+        text.len(),
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        font_collection.0,
+        font_size,
+        weight as i32,
+        stretch,
+        stretch_width,
+        slant as i32,
+        c_font_family.as_ptr(),
+        baseline as i32,
+        align as i32,
+        direction.as_sk_direction(),
+        letter_spacing,
+        word_spacing,
+        paint.0,
+        ptr::null_mut(),
+        &mut line_metrics,
+        variations.as_ptr() as *const ffi::skiac_font_variation,
+        variations.len() as i32,
+        kerning as i32,
+        variant_caps as i32,
+        c_lang.as_ref().map_or(ptr::null(), |s| s.as_ptr()),
+        text_rendering as i32,
+      );
+    }
+    Ok(line_metrics)
+  }
+
+  pub fn draw_surface(
+    &mut self,
+    surface: &Surface,
+    left: f32,
+    top: f32,
+    alpha: u8,
+    blend_mode: BlendMode,
+    filter_quality: FilterQuality,
+  ) {
+    unsafe {
+      ffi::skiac_canvas_draw_surface(
+        self.0,
+        surface.ptr,
+        left,
+        top,
+        alpha,
+        blend_mode as i32,
+        filter_quality as i32,
+      );
+    }
+  }
+
+  pub fn draw_surface_rect(
+    &mut self,
+    surface: &Surface,
+    sx: f32,
+    sy: f32,
+    sw: f32,
+    sh: f32,
+    dx: f32,
+    dy: f32,
+    dw: f32,
+    dh: f32,
+    filter_quality: FilterQuality,
+  ) {
+    unsafe {
+      ffi::skiac_canvas_draw_surface_rect(
+        self.0,
+        surface.ptr,
+        sx,
+        sy,
+        sw,
+        sh,
+        dx,
+        dy,
+        dw,
+        dh,
+        filter_quality as i32,
+      );
+    }
+  }
+
+  pub fn set_clip_rect(&mut self, x: f32, y: f32, w: f32, h: f32) {
+    unsafe {
+      ffi::skiac_canvas_clip_rect(self.0, x, y, w, h);
+    }
+  }
+
+  pub fn set_clip_path(&mut self, path: &Path) {
+    unsafe {
+      ffi::skiac_canvas_clip_path(self.0, path.0);
+    }
+  }
+
+  pub fn save(&mut self) {
+    unsafe {
+      ffi::skiac_canvas_save(self.0);
+    }
+  }
+
+  /// `SkCanvas::saveLayer(nullptr, paint)`, carrying only `paint`'s blend mode
+  /// and image filter. Owes one `restore()`. Only
+  /// `Context::composited_filter_layer` should call it.
+  pub fn save_layer(&mut self, paint: &Paint) {
+    unsafe {
+      ffi::skiac_canvas_save_layer(self.0, paint.0);
+    }
+  }
+
+  pub fn restore(&mut self) {
+    unsafe {
+      ffi::skiac_canvas_restore(self.0);
+    }
+  }
+
+  pub fn reset(&mut self) {
+    unsafe {
+      ffi::skiac_canvas_reset(self.0);
+    }
+  }
+
+  pub fn write_pixels(&mut self, image: &ImageData, x: i32, y: i32) {
+    unsafe {
+      ffi::skiac_canvas_write_pixels(
+        self.0,
+        image.width as i32,
+        image.height as i32,
+        image.data,
+        image.width * 4,
+        x,
+        y,
+      );
+    }
+  }
+
+  /// drawImageRect with kSrc blend mode for putImageData.
+  /// Replaces destination pixels per HTML spec.
+  /// Works on recording canvases (PictureRecorder).
+  /// When `snapshot` is true, the pixel data is copied so the resulting SkImage
+  /// is independent of the source buffer (required for deferred/recorded mode).
+  pub fn put_image_data(
+    &mut self,
+    image: &ImageData,
+    x: f32,
+    y: f32,
+    dirty_x: f32,
+    dirty_y: f32,
+    dirty_width: f32,
+    dirty_height: f32,
+    color_space: ColorSpace,
+    snapshot: bool,
+  ) {
+    unsafe {
+      ffi::skiac_canvas_put_image_data(
+        self.0,
+        image.width as i32,
+        image.height as i32,
+        image.data,
+        image.width * 4,
+        image.width * image.height * 4,
+        x,
+        y,
+        dirty_x,
+        dirty_y,
+        dirty_width,
+        dirty_height,
+        color_space as u8,
+        snapshot,
+      )
+    }
+  }
+
+  pub fn draw_picture(&self, picture: &SkPicture, matrix: &Matrix, paint: &Paint) {
+    unsafe {
+      ffi::skiac_canvas_draw_picture(self.0, picture.0, matrix.0, paint.0);
+    }
+  }
+
+  /// Optimized: draws picture with source/dest rects in a single FFI call
+  /// Combines save/clip/transform/draw/restore operations
+  #[inline]
+  pub fn draw_picture_rect(
+    &mut self,
+    picture: &SkPicture,
+    sx: f32,
+    sy: f32,
+    sw: f32,
+    sh: f32,
+    dx: f32,
+    dy: f32,
+    dw: f32,
+    dh: f32,
+    paint: &Paint,
+  ) {
+    unsafe {
+      ffi::skiac_canvas_draw_picture_rect(
+        self.0, picture.0, sx, sy, sw, sh, dx, dy, dw, dh, paint.0,
+      );
+    }
+  }
+
+  pub fn draw_drawable(&self, drawable: &SkDrawable, matrix: Option<&Matrix>) {
+    unsafe {
+      let matrix_ptr = matrix.map(|m| m.0).unwrap_or(std::ptr::null_mut());
+      ffi::skiac_canvas_draw_drawable(self.0, drawable.0, matrix_ptr);
+    }
+  }
+
+  pub fn annotate_link_url(&self, left: f32, top: f32, right: f32, bottom: f32, url: &str) {
+    let c_url = CString::new(url).expect("Failed to convert URL to CString");
+    let rect = ffi::skiac_rect {
+      left,
+      top,
+      right,
+      bottom,
+    };
+    unsafe {
+      ffi::skiac_canvas_annotate_link_url(self.0, &rect, c_url.as_ptr());
+    }
+  }
+
+  pub fn annotate_named_destination(&self, x: f32, y: f32, name: &str) {
+    let c_name = CString::new(name).expect("Failed to convert name to CString");
+    unsafe {
+      ffi::skiac_canvas_annotate_named_destination(self.0, x, y, c_name.as_ptr());
+    }
+  }
+
+  pub fn annotate_link_to_destination(
+    &self,
+    left: f32,
+    top: f32,
+    right: f32,
+    bottom: f32,
+    name: &str,
+  ) {
+    let c_name = CString::new(name).expect("Failed to convert name to CString");
+    let rect = ffi::skiac_rect {
+      left,
+      top,
+      right,
+      bottom,
+    };
+    unsafe {
+      ffi::skiac_canvas_annotate_link_to_destination(self.0, &rect, c_name.as_ptr());
+    }
+  }
+}
+
+#[derive(Debug)]
+pub struct Paint(*mut ffi::skiac_paint);
+
+impl Clone for Paint {
+  fn clone(&self) -> Self {
+    Paint(unsafe { ffi::skiac_paint_clone(self.0) })
+  }
+}
+
+impl Paint {
+  pub fn new() -> Paint {
+    unsafe { Paint(ffi::skiac_paint_create()) }
+  }
+
+  pub fn set_style(&mut self, style: PaintStyle) {
+    unsafe {
+      ffi::skiac_paint_set_style(self.0, style as i32);
+    }
+  }
+
+  pub fn set_color(&mut self, r: u8, g: u8, b: u8, a: u8) {
+    unsafe {
+      ffi::skiac_paint_set_color(self.0, r, g, b, a);
+    }
+  }
+
+  pub fn set_alpha(&mut self, a: u8) {
+    unsafe {
+      ffi::skiac_paint_set_alpha(self.0, a);
+    }
+  }
+
+  pub fn get_alpha(&self) -> u8 {
+    unsafe { ffi::skiac_paint_get_alpha(self.0) }
+  }
+
+  pub fn set_anti_alias(&mut self, aa: bool) {
+    unsafe {
+      ffi::skiac_paint_set_anti_alias(self.0, aa);
+    }
+  }
+
+  pub fn set_blend_mode(&mut self, blend_mode: BlendMode) {
+    unsafe {
+      ffi::skiac_paint_set_blend_mode(self.0, blend_mode as i32);
+    }
+  }
+
+  pub fn get_blend_mode(&self) -> BlendMode {
+    unsafe { ffi::skiac_paint_get_blend_mode(self.0).into() }
+  }
+
+  pub fn set_shader(&mut self, shader: &Shader) {
+    unsafe {
+      ffi::skiac_paint_set_shader(self.0, shader.0);
+    }
+  }
+
+  pub fn set_stroke_width(&mut self, width: f32) {
+    unsafe {
+      ffi::skiac_paint_set_stroke_width(self.0, width);
+    }
+  }
+
+  pub fn get_stroke_width(&self) -> f32 {
+    unsafe { ffi::skiac_paint_get_stroke_width(self.0) }
+  }
+
+  pub fn set_stroke_cap(&mut self, cap: StrokeCap) {
+    unsafe {
+      ffi::skiac_paint_set_stroke_cap(self.0, cap as i32);
+    }
+  }
+
+  pub fn get_stroke_cap(&self) -> StrokeCap {
+    StrokeCap::from_raw(unsafe { ffi::skiac_paint_get_stroke_cap(self.0) }).unwrap()
+  }
+
+  pub fn set_stroke_join(&mut self, join: StrokeJoin) {
+    unsafe {
+      ffi::skiac_paint_set_stroke_join(self.0, join as u8);
+    }
+  }
+
+  pub fn get_stroke_join(&self) -> StrokeJoin {
+    StrokeJoin::from_raw(unsafe { ffi::skiac_paint_get_stroke_join(self.0) }).unwrap()
+  }
+
+  pub fn set_stroke_miter(&mut self, miter: f32) {
+    unsafe {
+      ffi::skiac_paint_set_stroke_miter(self.0, miter);
+    }
+  }
+
+  pub fn get_stroke_miter(&self) -> f32 {
+    unsafe { ffi::skiac_paint_get_stroke_miter(self.0) }
+  }
+
+  pub fn set_path_effect(&mut self, path_effect: &PathEffect) {
+    unsafe {
+      ffi::skiac_paint_set_path_effect(self.0, path_effect.0);
+    }
+  }
+
+  // Unused: a canvas2d shadow carries exactly one Gaussian, inside
+  // `SkImageFilters::DropShadowOnly`. Kept as a general-purpose binding.
+  #[allow(dead_code)]
+  pub fn set_mask_filter(&mut self, mask_filter: &MaskFilter) {
+    unsafe {
+      ffi::skiac_paint_set_mask_filter(self.0, mask_filter.0);
+    }
+  }
+
+  pub fn set_image_filter(&mut self, image_filter: &ImageFilter) {
+    unsafe {
+      ffi::skiac_paint_set_image_filter(self.0, image_filter.0);
+    }
+  }
+
+  /// Installs `SkColorFilters::Blend(colour, kSrcIn)` -- Chromium's shadow
+  /// colouriser (cc/paint/draw_looper.cc:33-34). Replaces the source RGB, shader
+  /// included, without a layer, so vector devices can still express the draw.
+  pub fn set_src_in_color_filter(&mut self, r: u8, g: u8, b: u8, a: u8) {
+    unsafe {
+      ffi::skiac_paint_set_src_in_color_filter(self.0, r, g, b, a);
+    }
+  }
+
+  /// The paint's colour as an 8-bit sRGB ARGB word, alpha in the top byte.
+  /// Lossless here: `set_color` and `set_alpha` are both 8-bit setters.
+  pub fn get_color(&self) -> u32 {
+    unsafe { ffi::skiac_paint_get_color(self.0) }
+  }
+}
+
+impl Default for Paint {
+  fn default() -> Self {
+    let mut paint = Self::new();
+    paint.set_color(255, 255, 255, 255);
+    paint.set_stroke_miter(10.0);
+    paint.set_anti_alias(true);
+    paint.set_stroke_cap(StrokeCap::Butt);
+    paint.set_stroke_join(StrokeJoin::Miter);
+    paint.set_stroke_width(1.0);
+    paint.set_blend_mode(BlendMode::SourceOver);
+    paint.set_alpha(255);
+    paint
+  }
+}
+
+impl Drop for Paint {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_paint_destroy(self.0) }
+  }
+}
+
+unsafe impl Send for Paint {}
+unsafe impl Sync for Paint {}
+
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct Path(pub(crate) *mut ffi::skiac_path);
+
+impl Clone for Path {
+  fn clone(&self) -> Path {
+    Path(unsafe { ffi::skiac_path_clone(self.0) })
+  }
+}
+
+impl Path {
+  pub fn new() -> Path {
+    unsafe { Path(ffi::skiac_path_create()) }
+  }
+
+  pub fn swap(&mut self, other: &Path) {
+    unsafe { ffi::skiac_path_swap(self.0, other.0) }
+  }
+
+  pub fn from_svg_path(path: &str) -> Option<Path> {
+    let path_str = CString::new(path).ok()?;
+    let raw = path_str.into_raw();
+    let p = unsafe { ffi::skiac_path_from_svg(raw) };
+    unsafe {
+      drop(CString::from_raw(raw));
+    }
+    if p.is_null() { None } else { Some(Path(p)) }
+  }
+
+  pub fn add_path(&mut self, sub_path: &Path, transform: &Matrix) {
+    unsafe { ffi::skiac_add_path(self.0, sub_path.0, transform.0) };
+  }
+
+  pub fn op(&mut self, other: &Path, op: PathOp) -> bool {
+    unsafe { ffi::skiac_path_op(self.0, other.0, op as i32) }
+  }
+
+  pub fn set_fill_type(&mut self, kind: FillType) {
+    unsafe {
+      ffi::skiac_path_set_fill_type(self.0, kind as i32);
+    }
+  }
+
+  pub fn get_fill_type(&mut self) -> i32 {
+    unsafe { ffi::skiac_path_get_fill_type(self.0) }
+  }
+
+  pub fn ellipse(
+    &mut self,
+    x: f32,
+    y: f32,
+    radius_x: f32,
+    radius_y: f32,
+    rotation: f32,
+    start_angle: f32,
+    end_angle: f32,
+    ccw: bool,
+  ) {
+    // based off of CanonicalizeAngle in Chrome
+    let tau = 2.0 * PI;
+    let mut new_start_angle = start_angle % tau;
+    if new_start_angle < 0.0 {
+      new_start_angle += tau;
+    }
+    let delta = new_start_angle - start_angle;
+    let start_angle = new_start_angle;
+    let mut end_angle = end_angle + delta;
+
+    // Based off of AdjustEndAngle in Chrome.
+    if !ccw && (end_angle - start_angle) >= tau {
+      end_angle = start_angle + tau; // Draw complete ellipse
+    } else if ccw && (start_angle - end_angle) >= tau {
+      end_angle = start_angle - tau; // Draw complete ellipse
+    } else if !ccw && start_angle > end_angle {
+      end_angle = start_angle + (tau - (start_angle - end_angle) % tau);
+    } else if ccw && start_angle < end_angle {
+      end_angle = start_angle - (tau - (end_angle - start_angle) % tau);
+    }
+
+    // Based off of Chrome's implementation in
+    // https://cs.chromium.org/chromium/src/third_party/blink/renderer/platform/graphics/path.cc
+    // of note, can't use addArc or addOval because they close the arc, which
+    // the spec says not to do (unless the user explicitly calls closePath).
+    // This throws off points being in/out of the arc.
+    let left = x - radius_x;
+    let top = y - radius_y;
+    let right = x + radius_x;
+    let bottom = y + radius_y;
+    let mut rotated = Matrix::identity();
+    rotated.pre_translate(x, y);
+    rotated.pre_rotate(radians_to_degrees(rotation));
+    rotated.pre_translate(-x, -y);
+    let unrotated = rotated.invert().unwrap();
+
+    self.transform_self(&unrotated);
+
+    // draw in 2 180 degree segments because trying to draw all 360 degrees at once
+    // draws nothing.
+    let sweep_deg = radians_to_degrees(end_angle - start_angle);
+    let start_deg = radians_to_degrees(start_angle);
+    if almost_equal(sweep_deg.abs(), 360.0) {
+      let half_sweep = sweep_deg / 2.0;
+      self.arc_to(left, top, right, bottom, start_deg, half_sweep, false);
+      self.arc_to(
+        x - radius_x,
+        y - radius_y,
+        x + radius_x,
+        y + radius_y,
+        start_deg + half_sweep,
+        half_sweep,
+        false,
+      );
+    } else {
+      self.arc_to(left, top, right, bottom, start_deg, sweep_deg, false);
+    }
+
+    self.transform_self(&rotated);
+  }
+
+  pub fn scoot(&mut self, x: f32, y: f32) {
+    if self.is_empty() {
+      self.move_to(x, y);
+    }
+  }
+
+  pub fn arc(
+    &mut self,
+    center_x: f32,
+    center_y: f32,
+    radius: f32,
+    start_angle: f32,
+    end_angle: f32,
+    from_end: bool,
+  ) {
+    self.ellipse(
+      center_x,
+      center_y,
+      radius,
+      radius,
+      0.0,
+      start_angle,
+      end_angle,
+      from_end,
+    )
+  }
+
+  pub fn arc_to(
+    &mut self,
+    left: f32,
+    top: f32,
+    right: f32,
+    bottom: f32,
+    start_angle: f32,
+    sweep_angle: f32,
+    force_move_to: bool,
+  ) {
+    unsafe {
+      ffi::skiac_path_arc_to(
+        self.0,
+        left,
+        top,
+        right,
+        bottom,
+        start_angle,
+        sweep_angle,
+        force_move_to,
+      )
+    }
+  }
+
+  pub fn arc_to_tangent(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, radius: f32) {
+    self.scoot(x1, y1);
+    unsafe { ffi::skiac_path_arc_to_tangent(self.0, x1, y1, x2, y2, radius) }
+  }
+
+  pub fn move_to(&mut self, x: f32, y: f32) {
+    unsafe {
+      ffi::skiac_path_move_to(self.0, x, y);
+    }
+  }
+
+  pub fn line_to(&mut self, x: f32, y: f32) {
+    self.scoot(x, y);
+    unsafe {
+      ffi::skiac_path_line_to(self.0, x, y);
+    }
+  }
+
+  pub fn cubic_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x3: f32, y3: f32) {
+    self.scoot(x1, y1);
+    unsafe {
+      ffi::skiac_path_cubic_to(self.0, x1, y1, x2, y2, x3, y3);
+    }
+  }
+
+  pub fn quad_to(&mut self, cpx: f32, cpy: f32, x: f32, y: f32) {
+    self.scoot(cpx, cpy);
+    unsafe {
+      ffi::skiac_path_quad_to(self.0, cpx, cpy, x, y);
+    }
+  }
+
+  pub fn close(&mut self) {
+    unsafe {
+      ffi::skiac_path_close(self.0);
+    }
+  }
+
+  pub fn add_rect(&mut self, l: f32, t: f32, r: f32, b: f32) {
+    unsafe {
+      ffi::skiac_path_add_rect(self.0, l, t, r, b);
+    }
+  }
+
+  pub fn push_circle(&mut self, x: f32, y: f32, r: f32) {
+    unsafe {
+      ffi::skiac_path_add_circle(self.0, x, y, r);
+    }
+  }
+
+  pub fn transform(&self, transform: &Matrix) -> Self {
+    Self(unsafe { ffi::skiac_path_transform(self.0, transform.0) })
+  }
+
+  pub fn transform_self(&mut self, matrix: &Matrix) {
+    unsafe { ffi::skiac_path_transform_self(self.0, matrix.0) };
+  }
+
+  pub fn is_empty(&self) -> bool {
+    unsafe { ffi::skiac_path_is_empty(self.0) }
+  }
+
+  pub fn hit_test(&self, x: f32, y: f32, kind: FillType) -> bool {
+    unsafe { ffi::skiac_path_hit_test(self.0, x, y, kind as i32) }
+  }
+
+  pub fn stroke_hit_test(&self, x: f32, y: f32, stroke_w: f32) -> bool {
+    unsafe { ffi::skiac_path_stroke_hit_test(self.0, x, y, stroke_w) }
+  }
+
+  pub fn to_svg_string(&self) -> SkiaString {
+    let mut string = SkiaString {
+      ptr: ptr::null_mut(),
+      length: 0,
+      sk_string: ptr::null_mut(),
+    };
+    unsafe { ffi::skiac_path_to_svg_string(self.0, &mut string) };
+    string
+  }
+
+  pub fn simplify(&mut self) -> bool {
+    unsafe { ffi::skiac_path_simplify(self.0) }
+  }
+
+  pub fn as_winding(&mut self) -> bool {
+    unsafe { ffi::skiac_path_as_winding(self.0) }
+  }
+
+  pub fn stroke(&mut self, cap: StrokeCap, join: StrokeJoin, width: f32, miter_limit: f32) -> bool {
+    unsafe { ffi::skiac_path_stroke(self.0, cap as i32, join as u8, width, miter_limit) }
+  }
+
+  pub fn compute_tight_bounds(&self) -> (f32, f32, f32, f32) {
+    let mut rect = ffi::skiac_rect {
+      left: 0.0f32,
+      top: 0.0f32,
+      right: 0.0f32,
+      bottom: 0.0f32,
+    };
+    unsafe { ffi::skiac_path_compute_tight_bounds(self.0, &mut rect) };
+    (rect.left, rect.top, rect.right, rect.bottom)
+  }
+
+  pub fn get_bounds(&self) -> (f32, f32, f32, f32) {
+    let mut rect = ffi::skiac_rect {
+      left: 0.0f32,
+      top: 0.0f32,
+      right: 0.0f32,
+      bottom: 0.0f32,
+    };
+    unsafe { ffi::skiac_path_get_bounds(self.0, &mut rect) };
+    (rect.left, rect.top, rect.right, rect.bottom)
+  }
+
+  pub fn trim(&mut self, start: f32, end: f32, is_complement: bool) -> bool {
+    unsafe { ffi::skiac_path_trim(self.0, start, end, is_complement) }
+  }
+
+  pub fn dash(&mut self, on: f32, off: f32, phase: f32) -> bool {
+    unsafe { ffi::skiac_path_dash(self.0, on, off, phase) }
+  }
+
+  pub fn round(&mut self, radius: f32) -> bool {
+    unsafe { ffi::skiac_path_round(self.0, radius) }
+  }
+
+  pub fn round_rect(
+    &mut self,
+    mut x: f32,
+    mut y: f32,
+    mut width: f32,
+    mut height: f32,
+    mut radii: [f32; 4],
+  ) {
+    // https://github.com/chromium/chromium/blob/111.0.5520.1/third_party/blink/renderer/modules/canvas/canvas2d/canvas_path.cc#L601
+    let mut clockwise = true;
+    if width < 0f32 {
+      clockwise = false;
+      x += width;
+      width = -width;
+      radii.swap(0, 1);
+      radii.swap(2, 3);
+    }
+    if height < 0f32 {
+      clockwise = !clockwise;
+      y += height;
+      height = -height;
+      radii.swap(0, 2);
+      radii.swap(1, 3);
+    }
+    unsafe { ffi::skiac_path_round_rect(self.0, x, y, width, height, radii.as_ptr(), clockwise) };
+    unsafe { ffi::skiac_path_move_to(self.0, x, y) };
+  }
+
+  fn ellipse_helper(&mut self, x: f32, y: f32, rx: f32, ry: f32, start_angle: f32, end_angle: f32) {
+    let sweep_degrees = radians_to_degrees(end_angle - start_angle);
+    let start_degrees = radians_to_degrees(start_angle);
+    let left = x - rx;
+    let top = y - ry;
+    let right = x + rx;
+    let bottom = y + ry;
+    if almost_equal(sweep_degrees.abs(), 360.0) {
+      let half_sweep = sweep_degrees / 2.0;
+      self.arc_to(left, top, right, bottom, start_degrees, half_sweep, false);
+      self.arc_to(
+        left,
+        top,
+        right,
+        bottom,
+        start_degrees + half_sweep,
+        half_sweep,
+        false,
+      );
+    };
+    self.arc_to(
+      left,
+      top,
+      right,
+      bottom,
+      start_degrees,
+      sweep_degrees,
+      false,
+    );
+  }
+}
+
+impl PartialEq for Path {
+  fn eq(&self, other: &Path) -> bool {
+    unsafe { ffi::skiac_path_equals(self.0, other.0) }
+  }
+}
+
+impl Drop for Path {
+  fn drop(&mut self) {
+    unsafe {
+      ffi::skiac_path_destroy(self.0);
+    }
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct Gradient {
+  pub colors: Vec<Color>,
+  pub positions: Vec<f32>,
+  pub tile_mode: TileMode,
+  pub transform: Transform,
+}
+
+#[derive(Debug, Clone)]
+pub struct LinearGradient {
+  pub start_point: (f32, f32),
+  pub end_point: (f32, f32),
+  pub base: Gradient,
+}
+
+#[derive(Debug, Clone)]
+pub struct RadialGradient {
+  pub start: (f32, f32),
+  pub start_radius: f32,
+  pub end: (f32, f32),
+  pub end_radius: f32,
+  pub base: Gradient,
+}
+
+#[derive(Debug, Clone)]
+pub struct ConicGradient {
+  pub center: (f32, f32),
+  pub radius: f32,
+  pub base: Gradient,
+}
+
+#[derive(Debug)]
+pub struct Shader(*mut ffi::skiac_shader);
+
+impl Clone for Shader {
+  fn clone(&self) -> Self {
+    unsafe { ffi::skiac_shader_ref(self.0) };
+    Shader(self.0)
+  }
+}
+
+impl Shader {
+  pub fn new_linear_gradient(grad: &LinearGradient) -> Option<Shader> {
+    let points = [
+      ffi::skiac_point {
+        x: grad.start_point.0,
+        y: grad.start_point.1,
+      },
+      ffi::skiac_point {
+        x: grad.end_point.0,
+        y: grad.end_point.1,
+      },
+    ];
+
+    unsafe {
+      Self::from_ptr(ffi::skiac_shader_make_linear_gradient(
+        points.as_ptr(),
+        grad.base.colors.as_ptr(),
+        grad.base.positions.as_ptr(),
+        grad.base.colors.len() as i32,
+        grad.base.tile_mode as i32,
+        0_u32,
+        grad.base.transform.into(),
+      ))
+    }
+  }
+
+  pub fn new_radial_gradient(grad: &RadialGradient) -> Option<Shader> {
+    let start_point = ffi::skiac_point {
+      x: grad.start.0,
+      y: grad.start.1,
+    };
+    let end_point = ffi::skiac_point {
+      x: grad.end.0,
+      y: grad.end.1,
+    };
+
+    unsafe {
+      Self::from_ptr(ffi::skiac_shader_make_radial_gradient(
+        start_point,
+        grad.start_radius,
+        end_point,
+        grad.end_radius,
+        grad.base.colors.as_ptr(),
+        grad.base.positions.as_ptr(),
+        grad.base.colors.len() as i32,
+        grad.base.tile_mode as i32,
+        0_u32,
+        grad.base.transform.into(),
+      ))
+    }
+  }
+
+  pub fn new_conic_gradient(grad: &ConicGradient) -> Option<Shader> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_shader_make_conic_gradient(
+        grad.center.0,
+        grad.center.1,
+        grad.radius,
+        grad.base.colors.as_ptr(),
+        grad.base.positions.as_ptr(),
+        grad.base.colors.len() as i32,
+        grad.base.tile_mode as i32,
+        0_u32,
+        grad.base.transform.into(),
+      ))
+    }
+  }
+
+  pub fn new_from_surface_image(
+    surface: &Surface,
+    ts: Transform,
+    q: FilterQuality,
+  ) -> Option<Shader> {
+    unsafe {
+      Self::from_ptr(ffi::skiac_shader_make_from_surface_image(
+        surface.ptr,
+        ts.into(),
+        q as i32,
+      ))
+    }
+  }
+
+  pub fn from_bitmap(
+    is_canvas: bool,
+    bitmap: *mut ffi::skiac_bitmap,
+    repeat_x: TileMode,
+    repeat_y: TileMode,
+    b: f32,
+    c: f32,
+    ts: Transform,
+  ) -> Option<Shader> {
+    unsafe {
+      let shader_ptr = ffi::skiac_bitmap_get_shader(
+        is_canvas,
+        bitmap,
+        repeat_x as i32,
+        repeat_y as i32,
+        b,
+        c,
+        ts.into(),
+      );
+      Shader::from_ptr(shader_ptr)
+    }
+  }
+
+  unsafe fn from_ptr(ptr: *mut ffi::skiac_shader) -> Option<Shader> {
+    if ptr.is_null() {
+      None
+    } else {
+      Some(Shader(ptr))
+    }
+  }
+}
+
+impl Drop for Shader {
+  fn drop(&mut self) {
+    unsafe {
+      ffi::skiac_shader_destroy(self.0);
+    }
+  }
+}
+
+pub struct PathEffect(*mut ffi::skiac_path_effect);
+
+impl PathEffect {
+  pub fn new_dash_path(intervals: &[f32], phase: f32) -> Option<PathEffect> {
+    unsafe {
+      let ptr =
+        ffi::skiac_path_effect_make_dash_path(intervals.as_ptr(), intervals.len() as i32, phase);
+
+      if ptr.is_null() {
+        None
+      } else {
+        Some(PathEffect(ptr))
+      }
+    }
+  }
+}
+
+impl Drop for PathEffect {
+  fn drop(&mut self) {
+    unsafe {
+      ffi::skiac_path_effect_destroy(self.0);
+    }
+  }
+}
+
+#[repr(transparent)]
+pub struct Matrix(*mut ffi::skiac_matrix);
+
+impl Matrix {
+  pub fn identity() -> Self {
+    Matrix(unsafe { ffi::skiac_matrix_create() })
+  }
+
+  pub fn new(a: f32, b: f32, c: f32, d: f32, e: f32, f: f32) -> Self {
+    Self(unsafe { ffi::skiac_matrix_new(a, b, c, d, e, f) })
+  }
+
+  pub fn from_transform(ts: &Transform) -> Self {
+    let mut c_ts: ffi::skiac_transform = ts.into();
+    Matrix(unsafe { ffi::skiac_matrix_from_ts(&mut c_ts) })
+  }
+
+  pub fn rotated(radians: f32, x: f32, y: f32) -> Self {
+    Matrix(unsafe { ffi::skiac_matrix_create_rotated(radians, x, y) })
+  }
+
+  pub fn translated(x: f32, y: f32) -> Self {
+    Matrix(unsafe { ffi::skiac_matrix_create_translated(x, y) })
+  }
+
+  pub fn map_points(&self, x: f32, y: f32) -> (f32, f32) {
+    let mut mapped_point = ffi::skiac_mapped_point { x: 0.0, y: 0.0 };
+    unsafe { ffi::skiac_matrix_map_points_1(self.0, x, y, &mut mapped_point) };
+    (mapped_point.x, mapped_point.y)
+  }
+
+  pub fn pre_translate(&mut self, dx: f32, dy: f32) {
+    unsafe { ffi::skiac_matrix_pre_translate(self.0, dx, dy) };
+  }
+
+  pub fn concat(&self, other: &Matrix) -> Self {
+    Self(unsafe { ffi::skiac_matrix_concat(self.0, other.0) })
+  }
+
+  pub fn multiply(&self, other: &Matrix) -> Self {
+    Self(unsafe { ffi::skiac_matrix_multiply(self.0, other.0) })
+  }
+
+  pub fn pre_concat(&mut self, other: &Matrix) {
+    unsafe { ffi::skiac_matrix_pre_concat(self.0, other.0) };
+  }
+
+  pub fn pre_scale(&mut self, sx: f32, sy: f32) {
+    unsafe { ffi::skiac_matrix_pre_scale(self.0, sx, sy) };
+  }
+
+  pub fn pre_transform(&mut self, ts: &Transform) {
+    unsafe { ffi::skiac_matrix_pre_concat_transform(self.0, ts.into()) }
+  }
+
+  pub fn pre_rotate(&mut self, degrees: f32) {
+    unsafe { ffi::skiac_matrix_pre_rotate(self.0, degrees) };
+  }
+
+  pub fn pre_rotate_x_y(&mut self, degrees: f32, x: f32, y: f32) {
+    unsafe { ffi::skiac_matrix_pre_rotate_x_y(self.0, degrees, x, y) };
+  }
+
+  pub fn get_transform(&self) -> Transform {
+    unsafe { ffi::skiac_matrix_to_transform(self.0) }.into()
+  }
+
+  pub fn invert(&self) -> Option<Matrix> {
+    let m = Matrix::identity();
+    if unsafe { ffi::skiac_matrix_invert(self.0, m.0) } {
+      Some(m)
+    } else {
+      None
+    }
+  }
+}
+
+impl Default for Matrix {
+  fn default() -> Self {
+    Self::identity()
+  }
+}
+
+impl Clone for Matrix {
+  fn clone(&self) -> Self {
+    Matrix(unsafe { ffi::skiac_matrix_clone(self.0) })
+  }
+}
+
+impl fmt::Debug for Matrix {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    self.get_transform().fmt(f)
+  }
+}
+
+impl fmt::Display for Matrix {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    let ts = self.get_transform();
+    write!(
+      f,
+      "Matrix [{}, {}, {}, {}, {}, {}, 0, 0, 1]",
+      ts.a, ts.c, ts.e, ts.b, ts.d, ts.f
+    )
+  }
+}
+
+impl Drop for Matrix {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_matrix_destroy(self.0) };
+  }
+}
+
+#[derive(Copy, Clone, PartialEq, Debug)]
+/// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
+pub struct Transform {
+  /// (m11) Horizontal scaling. A value of `1` results in no scaling.
+  pub a: f32,
+  /// (m12) Vertical skewing.
+  pub b: f32,
+  /// (m21) Horizontal skewing.
+  pub c: f32,
+  /// (m22) Vertical scaling. A value of `1` results in no scaling.
+  pub d: f32,
+  /// (dx) Horizontal translation (moving).
+  pub e: f32,
+  /// (dy) Vertical translation (moving).
+  pub f: f32,
+}
+
+impl Transform {
+  pub fn new(a: f32, b: f32, c: f32, d: f32, e: f32, f: f32) -> Self {
+    Transform { a, b, c, d, e, f }
+  }
+
+  /// Check if this is an identity transform (no transformation applied)
+  pub fn is_identity(&self) -> bool {
+    self.a == 1.0
+      && self.b == 0.0
+      && self.c == 0.0
+      && self.d == 1.0
+      && self.e == 0.0
+      && self.f == 0.0
+  }
+
+  pub fn rotate(radians: f32) -> Self {
+    let sin_v = radians.sin();
+    let cos_v = radians.cos();
+
+    Self {
+      a: cos_v,
+      b: -sin_v,
+      c: 0f32,
+      d: sin_v,
+      e: cos_v,
+      f: 0f32,
+    }
+  }
+
+  /// | A C E |    | A/X C/X E/X |
+  /// | B D F | -> | B/X D/X F/X |   for X != 0
+  /// | 0 0 X |    |  0   0   1  |
+  /// [interface.js](skia/modules/canvaskit/interface.js)
+  pub fn map_points(&self, pt_arr: &mut [f32]) {
+    let mut i = 0usize;
+    while i < pt_arr.len() {
+      let x = pt_arr[i];
+      let y = pt_arr[i + 1];
+      // Gx+Hy+I
+      // let denom = 1f32;
+      // Ax+By+C
+      let x_trans = self.a * x + self.b * y + self.c;
+      // Dx+Ey+F
+      let y_trans = self.d * x + self.e * y + self.f;
+      pt_arr[i] = x_trans; // x_trans / denom
+      pt_arr[i + 1] = y_trans; // y_trans / denom
+      i += 2;
+    }
+  }
+
+  /// | A C E |
+  /// | B D F |
+  /// | 0 0 1 |
+  /// [interface.js](skia/modules/canvaskit/interface.js)
+  pub fn invert(&self) -> Option<Self> {
+    let m = [
+      self.a, self.c, self.e, self.b, self.d, self.f, 0f32, 0f32, 1f32,
+    ];
+    // Find the determinant by the sarrus rule. https://en.wikipedia.org/wiki/Rule_of_Sarrus
+    let det = m[0] * m[4] * m[8] + m[1] * m[5] * m[6] + m[2] * m[3] * m[7]
+      - m[2] * m[4] * m[6]
+      - m[1] * m[3] * m[8]
+      - m[0] * m[5] * m[7];
+    if det == 0f32 {
+      return None;
+    }
+    // Return the inverse by the formula adj(m)/det.
+    // adj (adjugate) of a 3x3 is the transpose of it's cofactor matrix.
+    // a cofactor matrix is a matrix where each term is +-det(N) where matrix N is the 2x2 formed
+    // by removing the row and column we're currently setting from the source.
+    // the sign alternates in a checkerboard pattern with a `+` at the top left.
+    // that's all been combined here into one expression.
+    Some(Transform {
+      a: (m[4] * m[8] - m[5] * m[7]) / det,
+      c: (m[2] * m[7] - m[1] * m[8]) / det,
+      e: (m[1] * m[5] - m[2] * m[4]) / det,
+      b: (m[5] * m[6] - m[3] * m[8]) / det,
+      d: (m[0] * m[8] - m[2] * m[6]) / det,
+      f: (m[2] * m[3] - m[0] * m[5]) / det,
+    })
+  }
+
+  #[inline]
+  pub fn scale_x(&self) -> f32 {
+    self.a
+  }
+
+  #[inline]
+  pub fn scale_y(&self) -> f32 {
+    self.d
+  }
+}
+
+impl Default for Transform {
+  fn default() -> Self {
+    Transform::new(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+  }
+}
+
+impl From<ffi::skiac_transform> for Transform {
+  fn from(ts: ffi::skiac_transform) -> Self {
+    Transform::new(ts.a, ts.b, ts.c, ts.d, ts.e, ts.f)
+  }
+}
+
+impl From<Transform> for ffi::skiac_transform {
+  fn from(ts: Transform) -> Self {
+    ffi::skiac_transform {
+      a: ts.a,
+      b: ts.b,
+      c: ts.c,
+      d: ts.d,
+      e: ts.e,
+      f: ts.f,
+    }
+  }
+}
+
+impl<'a> From<&'a Transform> for ffi::skiac_transform {
+  fn from(ts: &'a Transform) -> Self {
+    ffi::skiac_transform {
+      a: ts.a,
+      b: ts.b,
+      c: ts.c,
+      d: ts.d,
+      e: ts.e,
+      f: ts.f,
+    }
+  }
+}
+
+// Unused for the same reason as `Paint::set_mask_filter`; kept as a
+// general-purpose binding. `mod sk` is private, hence the allow.
+#[allow(dead_code)]
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct MaskFilter(*mut ffi::skiac_mask_filter);
+
+impl MaskFilter {
+  #[allow(dead_code)]
+  pub fn make_blur(radius: f32) -> Option<Self> {
+    let raw_ptr = unsafe { ffi::skiac_mask_filter_make_blur(radius) };
+    if raw_ptr.is_null() {
+      None
+    } else {
+      Some(MaskFilter(raw_ptr))
+    }
+  }
+}
+
+impl Drop for MaskFilter {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_mask_filter_destroy(self.0) };
+  }
+}
+
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct ImageFilter(pub(crate) *mut ffi::skiac_image_filter);
+
+impl Clone for ImageFilter {
+  fn clone(&self) -> Self {
+    unsafe {
+      ffi::skiac_image_filter_ref(self.0);
+    };
+    Self(self.0)
+  }
+}
+
+impl ImageFilter {
+  /// Does this filter have a spatial component, i.e. can the coordinate space it
+  /// is evaluated in change what it does? Only then is
+  /// `Context::composited_filter_layer`'s device-space layer worth anything.
+  pub fn needs_device_space_layer(&self) -> bool {
+    // An `ImageFilter` never holds null: every constructor null-checks what Skia
+    // returned, and "no filter" is spelled `None`.
+    debug_assert!(!self.0.is_null(), "ImageFilter must never hold null");
+    !unsafe { ffi::skiac_image_filter_is_a_color_filter(self.0) }
+  }
+
+  /// The colour this filter turns `color` into, both 8-bit sRGB ARGB. Only a
+  /// filter with `needs_device_space_layer() == false` has an answer; any other
+  /// hands `color` straight back.
+  pub fn filter_color(&self, color: u32) -> u32 {
+    debug_assert!(!self.0.is_null(), "ImageFilter must never hold null");
+    unsafe { ffi::skiac_image_filter_filter_color(self.0, color) }
+  }
+
+  pub fn make_drop_shadow_only(
+    dx: f32,
+    dy: f32,
+    sigma_x: f32,
+    sigma_y: f32,
+    color: u32,
+    chained_filter: Option<&ImageFilter>,
+  ) -> Option<Self> {
+    let raw_ptr = unsafe {
+      ffi::skiac_image_filter_make_drop_shadow_only(
+        dx,
+        dy,
+        sigma_x,
+        sigma_y,
+        color,
+        chained_filter.map(|c| c.0).unwrap_or(ptr::null_mut()),
+      )
+    };
+    if raw_ptr.is_null() {
+      None
+    } else {
+      Some(ImageFilter(raw_ptr))
+    }
+  }
+
+  pub fn make_drop_shadow(
+    dx: f32,
+    dy: f32,
+    sigma_x: f32,
+    sigma_y: f32,
+    color: u32,
+    chained_filter: Option<&ImageFilter>,
+  ) -> Option<Self> {
+    let raw_ptr = unsafe {
+      ffi::skiac_image_filter_make_drop_shadow(
+        dx,
+        dy,
+        sigma_x,
+        sigma_y,
+        color,
+        chained_filter.map(|c| c.0).unwrap_or(ptr::null_mut()),
+      )
+    };
+    if raw_ptr.is_null() {
+      None
+    } else {
+      Some(ImageFilter(raw_ptr))
+    }
+  }
+
+  pub fn make_blur(
+    sigma_x: f32,
+    sigma_y: f32,
+    chained_filter: Option<&ImageFilter>,
+  ) -> Option<Self> {
+    let raw_ptr = unsafe {
+      ffi::skiac_image_filter_make_blur(
+        sigma_x,
+        sigma_y,
+        chained_filter.map(|c| c.0).unwrap_or(ptr::null_mut()),
+      )
+    };
+    if raw_ptr.is_null() {
+      None
+    } else {
+      Some(ImageFilter(raw_ptr))
+    }
+  }
+
+  pub fn make_image_filter(
+    m00: f32,
+    m01: f32,
+    m02: f32,
+    m10: f32,
+    m11: f32,
+    m12: f32,
+    m20: f32,
+    m21: f32,
+    m22: f32,
+    opacity: f32,
+    chained_filter: Option<&ImageFilter>,
+  ) -> Option<Self> {
+    let raw_ptr = unsafe {
+      ffi::skiac_image_filter_color_filter(
+        m00,
+        m01,
+        m02,
+        m10,
+        m11,
+        m12,
+        m20,
+        m21,
+        m22,
+        opacity,
+        chained_filter.map(|c| c.0).unwrap_or(ptr::null_mut()),
+      )
+    };
+    if raw_ptr.is_null() {
+      None
+    } else {
+      Some(ImageFilter(raw_ptr))
+    }
+  }
+
+  pub fn from_argb(
+    a: Option<&[u8; 256]>,
+    r: Option<&[u8; 256]>,
+    g: Option<&[u8; 256]>,
+    b: Option<&[u8; 256]>,
+    chained_filter: Option<&ImageFilter>,
+  ) -> Option<Self> {
+    let raw_ptr = unsafe {
+      ffi::skiac_image_filter_from_argb(
+        a.map_or(ptr::null(), |t| t.as_ptr()),
+        r.map_or(ptr::null(), |t| t.as_ptr()),
+        g.map_or(ptr::null(), |t| t.as_ptr()),
+        b.map_or(ptr::null(), |t| t.as_ptr()),
+        chained_filter.map_or(ptr::null_mut(), |f| f.0),
+      )
+    };
+    if raw_ptr.is_null() {
+      return None;
+    }
+    Some(ImageFilter(raw_ptr))
+  }
+}
+
+impl Drop for ImageFilter {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe { ffi::skiac_image_filter_destroy(self.0) };
+    }
+  }
+}
+
+#[repr(transparent)]
+#[derive(Debug)]
+pub struct Bitmap(pub(crate) ffi::skiac_bitmap_info);
+
+unsafe impl Send for Bitmap {}
+unsafe impl Sync for Bitmap {}
+
+impl Bitmap {
+  pub fn from_buffer(ptr: *mut u8, size: usize) -> Option<Self> {
+    let mut bitmap_info = ffi::skiac_bitmap_info {
+      bitmap: ptr::null_mut(),
+      width: 0,
+      height: 0,
+      is_canvas: false,
+    };
+    unsafe {
+      if ffi::skiac_bitmap_make_from_buffer(ptr, size, &mut bitmap_info) {
+        Some(Bitmap(bitmap_info))
+      } else {
+        None
+      }
+    }
+  }
+
+  pub fn from_svg_data(
+    data: *const u8,
+    size: usize,
+    color_space: ColorSpace,
+    fc: &FontCollection,
+  ) -> Option<Result<Self, crate::error::SkError>> {
+    let mut bitmap_info = ffi::skiac_bitmap_info {
+      bitmap: ptr::null_mut(),
+      width: 0,
+      height: 0,
+      is_canvas: false,
+    };
+    unsafe {
+      let is_valid = ffi::skiac_bitmap_make_from_svg(
+        data,
+        size,
+        -1.0,
+        -1.0,
+        &mut bitmap_info,
+        fc.0,
+        color_space as u8,
+      );
+
+      if !is_valid {
+        return Some(Err(crate::error::SkError::InvalidSvg));
+      }
+
+      if bitmap_info.bitmap.is_null() {
+        return None;
+      }
+      Some(Ok(Bitmap(bitmap_info)))
+    }
+  }
+
+  pub fn from_svg_data_with_custom_size(
+    data: *const u8,
+    size: usize,
+    width: f32,
+    height: f32,
+    color_space: ColorSpace,
+    fc: &FontCollection,
+  ) -> Option<Self> {
+    let mut bitmap_info = ffi::skiac_bitmap_info {
+      bitmap: ptr::null_mut(),
+      width: 0,
+      height: 0,
+      is_canvas: false,
+    };
+    unsafe {
+      ffi::skiac_bitmap_make_from_svg(
+        data,
+        size,
+        width,
+        height,
+        &mut bitmap_info,
+        fc.0,
+        color_space as u8,
+      );
+
+      if bitmap_info.bitmap.is_null() {
+        return None;
+      }
+      Some(Bitmap(bitmap_info))
+    }
+  }
+
+  pub fn from_image_data(
+    ptr: *mut u8,
+    width: usize,
+    height: usize,
+    row_bytes: usize,
+    size: usize,
+    color_type: ColorType,
+    alpha_type: AlphaType,
+  ) -> Self {
+    let bitmap = unsafe {
+      ffi::skiac_bitmap_make_from_image_data(
+        ptr,
+        width,
+        height,
+        row_bytes,
+        size,
+        color_type as i32,
+        alpha_type as i32,
+      )
+    };
+    Bitmap(ffi::skiac_bitmap_info {
+      bitmap,
+      width: width as i32,
+      height: height as i32,
+      is_canvas: false,
+    })
+  }
+}
+
+impl Drop for Bitmap {
+  fn drop(&mut self) {
+    unsafe {
+      if !self.0.is_canvas {
+        ffi::skiac_bitmap_destroy(self.0.bitmap);
+      }
+    }
+  }
+}
+
+#[derive(Debug)]
+pub struct ImagePattern {
+  pub(crate) bitmap: *mut ffi::skiac_bitmap,
+  pub(crate) repeat_x: TileMode,
+  pub(crate) repeat_y: TileMode,
+  pub(crate) transform: Transform,
+  pub(crate) is_canvas: bool,
+  // Cache the shader to avoid creating new ones on every use
+  pub(crate) shader_cache: OnceLock<Option<Shader>>,
+}
+
+impl Clone for ImagePattern {
+  fn clone(&self) -> Self {
+    Self {
+      bitmap: self.bitmap,
+      repeat_x: self.repeat_x,
+      repeat_y: self.repeat_y,
+      transform: self.transform,
+      is_canvas: self.is_canvas,
+      shader_cache: OnceLock::new(), // New patterns start with empty cache
+    }
+  }
+}
+
+impl ImagePattern {
+  pub(crate) fn get_shader(&self) -> Option<Shader> {
+    // Use cached shader if available, otherwise create and cache it
+    self
+      .shader_cache
+      .get_or_init(|| {
+        Shader::from_bitmap(
+          self.is_canvas,
+          self.bitmap,
+          self.repeat_x,
+          self.repeat_y,
+          1.0 / 3.0,
+          1.0 / 3.0,
+          self.transform,
+        )
+      })
+      .clone()
+  }
+}
+
+#[repr(C)]
+#[derive(Clone, Debug)]
+pub struct SkiaString {
+  pub ptr: *const c_char,
+  pub length: usize,
+  sk_string: *mut ffi::skiac_sk_string,
+}
+
+impl Drop for SkiaString {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_delete_sk_string(self.sk_string) }
+  }
+}
+
+#[derive(Debug, Clone)]
+pub struct LineMetrics(pub ffi::skiac_line_metrics);
+
+#[derive(Debug)]
+pub struct FontCollection(pub *mut ffi::skiac_font_collection);
+
+unsafe impl Send for FontCollection {}
+unsafe impl Sync for FontCollection {}
+
+impl FontCollection {
+  pub fn new() -> FontCollection {
+    unsafe {
+      let c_font_collection = ffi::skiac_font_collection_create();
+      FontCollection(c_font_collection)
+    }
+  }
+
+  pub fn get_families(&self) -> Vec<FontStyleSet> {
+    let mut names = Vec::new();
+
+    unsafe {
+      let size = ffi::skiac_font_collection_get_default_fonts_count(self.0);
+      for i in 0..size {
+        let mut styles = Vec::with_capacity(4);
+        let on_get_style: Box<dyn FnMut(i32, i32, i32)> =
+          Box::new(|width: i32, weight: i32, slant: i32| {
+            styles.push((
+              FontStretch::from(width),
+              weight,
+              match slant {
+                0 => FontStyle::Normal,
+                1 => FontStyle::Italic,
+                2 => FontStyle::Oblique,
+                _ => unreachable!(),
+              },
+            ));
+          });
+        let mut name = SkiaString {
+          ptr: ptr::null_mut(),
+          length: 0,
+          sk_string: ptr::null_mut(),
+        };
+        let on_get_style_ptr: *mut dyn FnMut(i32, i32, i32) = Box::into_raw(Box::new(on_get_style));
+        ffi::skiac_font_collection_get_family(
+          self.0,
+          i,
+          &mut name,
+          on_get_style_ptr.cast(),
+          Some(skiac_on_get_style),
+        );
+        let c_str: &CStr = CStr::from_ptr(name.ptr);
+        drop(Box::from_raw(on_get_style_ptr));
+        names.push(FontStyleSet {
+          family: c_str.to_string_lossy().into_owned(),
+          styles: styles
+            .into_iter()
+            .map(|item| FontStyles {
+              width: item.0.as_str().to_owned(),
+              weight: item.1,
+              style: item.2.as_str().to_owned(),
+            })
+            .collect::<Vec<FontStyles>>(),
+        });
+      }
+    }
+    names
+  }
+
+  pub fn register<S: AsRef<str>>(&self, font: &[u8], maybe_name_alias: Option<S>) -> Option<u32> {
+    let name_alias_ptr = match maybe_name_alias {
+      Some(name_alias) => match CString::new(name_alias.as_ref()) {
+        Ok(cstring) => cstring.into_raw(),
+        Err(_) => ptr::null_mut(),
+      },
+      None => ptr::null_mut(),
+    };
+    let result = unsafe {
+      let typeface_id =
+        ffi::skiac_font_collection_register(self.0, font.as_ptr(), font.len(), name_alias_ptr);
+      if typeface_id > 0 {
+        Some(typeface_id)
+      } else {
+        None
+      }
+    };
+    // Reclaim the CString memory if we allocated it
+    if !name_alias_ptr.is_null() {
+      unsafe {
+        drop(CString::from_raw(name_alias_ptr));
+      }
+    }
+    result
+  }
+
+  pub fn register_from_path<S: AsRef<str>>(
+    &self,
+    font_path: &str,
+    maybe_name_alias: Option<S>,
+  ) -> Option<u32> {
+    if let Ok(fp) = CString::new(font_path) {
+      let name_alias_ptr = match maybe_name_alias {
+        Some(name) => match CString::new(name.as_ref()) {
+          Ok(cstring) => cstring.into_raw(),
+          Err(_) => ptr::null_mut(),
+        },
+        None => ptr::null_mut(),
+      };
+      let result = unsafe {
+        let typeface_id =
+          ffi::skiac_font_collection_register_from_path(self.0, fp.as_ptr(), name_alias_ptr);
+        if typeface_id > 0 {
+          Some(typeface_id)
+        } else {
+          None
+        }
+      };
+      // Reclaim the CString memory if we allocated it
+      if !name_alias_ptr.is_null() {
+        unsafe {
+          drop(CString::from_raw(name_alias_ptr));
+        }
+      }
+      result
+    } else {
+      None
+    }
+  }
+
+  pub fn unregister(&self, typeface_id: u32) -> bool {
+    unsafe { ffi::skiac_font_collection_unregister(self.0, typeface_id) > 0 }
+  }
+
+  pub fn unregister_batch(&self, typeface_ids: &[u32]) -> usize {
+    unsafe {
+      ffi::skiac_font_collection_unregister_batch(self.0, typeface_ids.as_ptr(), typeface_ids.len())
+    }
+  }
+
+  pub fn unregister_all(&self) -> usize {
+    unsafe { ffi::skiac_font_collection_unregister_all(self.0) }
+  }
+
+  pub fn set_alias(&self, family: &str, alias_name: &str) -> bool {
+    let family = CString::new(family).unwrap();
+    let alias_name = CString::new(alias_name).unwrap();
+    unsafe { ffi::skiac_font_collection_set_alias(self.0, family.as_ptr(), alias_name.as_ptr()) }
+  }
+
+  pub fn get_variation_axes(
+    &self,
+    family_name: &str,
+    weight: i32,
+    width: i32,
+    slant: i32,
+  ) -> Vec<ffi::skiac_variable_font_axis> {
+    let c_family_name = match CString::new(family_name) {
+      Ok(s) => s,
+      Err(_) => return Vec::new(),
+    };
+
+    // First, check if the font has variations
+    let has_variations = unsafe {
+      ffi::skiac_font_has_variations(self.0, c_family_name.as_ptr(), weight, width, slant)
+    };
+
+    if !has_variations {
+      return Vec::new();
+    }
+
+    // Allocate buffer for up to 16 axes (should be more than enough for any variable font)
+    let max_axes = 16;
+    let mut axes = vec![
+      ffi::skiac_variable_font_axis {
+        tag: 0,
+        value: 0.0,
+        min: 0.0,
+        max: 0.0,
+        def: 0.0,
+        hidden: false,
+      };
+      max_axes
+    ];
+
+    let axis_count = unsafe {
+      ffi::skiac_typeface_get_variation_design_position(
+        self.0,
+        c_family_name.as_ptr(),
+        weight,
+        width,
+        slant,
+        axes.as_mut_ptr(),
+        max_axes as i32,
+      )
+    };
+
+    if axis_count > 0 {
+      axes.truncate(axis_count as usize);
+      axes
+    } else {
+      Vec::new()
+    }
+  }
+
+  pub fn has_variations(&self, family_name: &str, weight: i32, width: i32, slant: i32) -> bool {
+    let c_family_name = match CString::new(family_name) {
+      Ok(s) => s,
+      Err(_) => return false,
+    };
+
+    unsafe { ffi::skiac_font_has_variations(self.0, c_family_name.as_ptr(), weight, width, slant) }
+  }
+}
+
+impl Drop for FontCollection {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_font_collection_destroy(self.0) }
+  }
+}
+
+#[derive(Debug, Serialize)]
+pub struct FontStyles {
+  weight: i32,
+  width: String,
+  style: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct FontStyleSet {
+  pub family: String,
+  pub styles: Vec<FontStyles>,
+}
+
+#[derive(Debug)]
+pub struct SkWMemoryStream(*mut ffi::skiac_w_memory_stream);
+
+impl SkWMemoryStream {
+  pub fn data(&self, w: u32, h: u32) -> SkiaDataRef {
+    let mut data = ffi::skiac_sk_data {
+      ptr: ptr::null_mut(),
+      size: 0,
+      data: ptr::null_mut(),
+    };
+    unsafe { ffi::skiac_sk_w_stream_get(self.0, &mut data, w as i32, h as i32) };
+    SkiaDataRef(data)
+  }
+}
+
+impl Drop for SkWMemoryStream {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_sk_w_stream_destroy(self.0) }
+  }
+}
+
+#[derive(Debug)]
+pub struct SkPicture(*mut ffi::skiac_picture);
+
+impl Drop for SkPicture {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_picture_destroy(self.0);
+      }
+    }
+  }
+}
+
+impl Clone for SkPicture {
+  fn clone(&self) -> Self {
+    if !self.0.is_null() {
+      unsafe {
+        // Increment the reference count on the underlying SkPicture
+        // SkPicture is reference-counted (inherits from SkRefCnt)
+        ffi::skiac_picture_ref(self.0);
+      }
+    }
+    SkPicture(self.0)
+  }
+}
+
+impl SkPicture {
+  /// Direct playback of picture commands to canvas.
+  /// This is faster than draw_picture() as it doesn't wrap in save/restore
+  /// or create temporary layers for matrix/paint.
+  #[inline]
+  pub fn playback(&self, canvas: &Canvas) {
+    unsafe {
+      ffi::skiac_picture_playback(self.0, canvas.0);
+    }
+  }
+}
+
+/// SkImage wrapper for cached bitmap snapshots.
+/// SkImage is reference-counted and immutable after creation.
+#[derive(Debug)]
+pub struct SkImage(pub(crate) *mut ffi::skiac_image);
+
+// Safety: SkImage is reference-counted and immutable, safe to send between threads
+unsafe impl Send for SkImage {}
+unsafe impl Sync for SkImage {}
+
+impl Drop for SkImage {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_image_destroy(self.0);
+      }
+    }
+  }
+}
+
+impl Clone for SkImage {
+  fn clone(&self) -> Self {
+    if !self.0.is_null() {
+      unsafe {
+        // Increment the reference count on the underlying SkImage
+        // SkImage is reference-counted (inherits from SkRefCnt)
+        ffi::skiac_image_ref(self.0);
+      }
+    }
+    SkImage(self.0)
+  }
+}
+
+impl SkImage {
+  /// Get the width of the image
+  #[inline]
+  pub fn width(&self) -> i32 {
+    unsafe { ffi::skiac_image_get_width(self.0) }
+  }
+
+  /// Get the height of the image
+  #[inline]
+  pub fn height(&self) -> i32 {
+    unsafe { ffi::skiac_image_get_height(self.0) }
+  }
+
+  /// Draw this image to a canvas at the specified position
+  #[inline]
+  pub fn draw(&self, canvas: &Canvas, left: f32, top: f32, filter_quality: FilterQuality) {
+    unsafe {
+      ffi::skiac_canvas_draw_sk_image(canvas.0, self.0, left, top, filter_quality as i32);
+    }
+  }
+
+  /// Encode the image into the given format (JPEG/PNG/WebP; quality is ignored for PNG)
+  pub fn encode_data(&self, format: SkEncodedImageFormat, quality: u8) -> Option<SkiaDataRef> {
+    unsafe {
+      let mut data = ffi::skiac_sk_data {
+        ptr: ptr::null_mut(),
+        size: 0,
+        data: ptr::null_mut(),
+      };
+      ffi::skiac_image_encode_data(self.0, &mut data, format as i32, quality as i32);
+
+      if data.ptr.is_null() {
+        None
+      } else {
+        Some(SkiaDataRef(data))
+      }
+    }
+  }
+
+  /// Read the whole image as RGBA_8888 pixels in the image's color space.
+  /// `alpha_type` must be [`AlphaType::Premultiplied`] or [`AlphaType::Unpremultiplied`];
+  /// Skia converts from the image's premultiplied storage when unpremultiplied is requested.
+  pub fn read_pixels(&self, alpha_type: AlphaType) -> Option<Vec<u8>> {
+    let sk_alpha_type = match alpha_type {
+      AlphaType::Premultiplied => 2,   // kPremul_SkAlphaType
+      AlphaType::Unpremultiplied => 3, // kUnpremul_SkAlphaType
+      _ => return None,
+    };
+    let width = self.width() as usize;
+    let height = self.height() as usize;
+    let row_bytes = width.checked_mul(4)?;
+    let size = row_bytes.checked_mul(height)?;
+    let mut pixels = vec![0u8; size];
+    let ok = unsafe {
+      ffi::skiac_image_read_pixels(self.0, pixels.as_mut_ptr(), row_bytes, sk_alpha_type)
+    };
+    if ok { Some(pixels) } else { None }
+  }
+}
+
+/// SkDrawable wrapper for content deduplication.
+/// Drawables are intermediate representations that can be converted to Pictures.
+/// Using finish_recording_as_drawable() before converting to Picture enables
+/// Skia's internal content deduplication for repeated drawing operations.
+#[derive(Debug)]
+pub struct SkDrawable(pub(crate) *mut ffi::skiac_drawable);
+
+impl Drop for SkDrawable {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_drawable_destroy(self.0);
+      }
+    }
+  }
+}
+
+#[derive(Debug)]
+pub struct SkPictureRecorder(pub(crate) *mut ffi::skiac_picture_recorder);
+
+impl Drop for SkPictureRecorder {
+  fn drop(&mut self) {
+    if !self.0.is_null() {
+      unsafe {
+        ffi::skiac_picture_recorder_destroy(self.0);
+      }
+    }
+  }
+}
+
+impl SkPictureRecorder {
+  pub fn new() -> SkPictureRecorder {
+    SkPictureRecorder(unsafe { ffi::skiac_picture_recorder_create() })
+  }
+
+  /// Begin recording with optional bounding box hierarchy (BBH) support.
+  /// BBH enables efficient culling during playback - recommended for pictures with many operations.
+  pub fn begin_recording(&self, x: f32, y: f32, w: f32, h: f32) {
+    self.begin_recording_with_bbh(x, y, w, h, true) // Enable BBH by default like skia-canvas
+  }
+
+  pub fn begin_recording_with_bbh(&self, x: f32, y: f32, w: f32, h: f32, use_bbh: bool) {
+    unsafe {
+      ffi::skiac_picture_recorder_begin_recording(self.0, x, y, w, h, use_bbh);
+    }
+  }
+
+  pub fn get_recording_canvas(&self) -> Option<Canvas> {
+    let canvas_ref = unsafe { ffi::skiac_picture_recorder_get_recording_canvas(self.0) };
+    if canvas_ref.is_null() {
+      return None;
+    }
+    Some(Canvas(canvas_ref))
+  }
+  pub fn finish_recording_as_picture(&self) -> Option<SkPicture> {
+    let picture_ref = unsafe { ffi::skiac_picture_recorder_finish_recording_as_picture(self.0) };
+
+    if picture_ref.is_null() {
+      return None;
+    }
+
+    Some(SkPicture(picture_ref))
+  }
+
+  /// Finish recording as a drawable for content deduplication.
+  /// This is useful when the recorded content will be drawn to multiple targets
+  /// or when the content contains repeated elements that can be deduplicated.
+  pub fn finish_recording_as_drawable(&self) -> Option<SkDrawable> {
+    let drawable_ref = unsafe { ffi::skiac_picture_recorder_finish_recording_as_drawable(self.0) };
+
+    if drawable_ref.is_null() {
+      return None;
+    }
+
+    Some(SkDrawable(drawable_ref))
+  }
+}
+
+/// Render flags for Skottie animation
+#[repr(u32)]
+#[derive(Debug, Clone, Copy, Default)]
+pub enum SkottieRenderFlag {
+  #[default]
+  None = 0,
+  /// Skip top-level isolation (for transparent buffer optimization)
+  SkipTopLevelIsolation = 0x01,
+  /// Disable top-level clipping (allow drawing outside bounds)
+  DisableTopLevelClipping = 0x02,
+}
+
+/// Skottie animation wrapper for Lottie files
+pub struct SkottieAnimation {
+  ptr: *mut ffi::skiac_skottie_animation,
+  width: f32,
+  height: f32,
+  version: String,
+}
+
+impl SkottieAnimation {
+  /// Load animation from JSON data
+  pub fn from_data(data: &[u8], resource_path: Option<&str>) -> Option<Self> {
+    let resource_path_cstr = resource_path.and_then(|p| CString::new(p).ok());
+    let resource_path_ptr = resource_path_cstr
+      .as_ref()
+      .map(|s| s.as_ptr())
+      .unwrap_or(ptr::null());
+
+    let ptr = unsafe {
+      ffi::skiac_skottie_animation_make(
+        data.as_ptr() as *const c_char,
+        data.len(),
+        resource_path_ptr,
+      )
+    };
+
+    if ptr.is_null() {
+      return None;
+    }
+
+    let mut width: f32 = 0.0;
+    let mut height: f32 = 0.0;
+    unsafe { ffi::skiac_skottie_animation_get_size(ptr, &mut width, &mut height) };
+
+    let mut version_str = SkiaString {
+      ptr: ptr::null(),
+      length: 0,
+      sk_string: ptr::null_mut(),
+    };
+    unsafe { ffi::skiac_skottie_animation_get_version(ptr, &mut version_str) };
+    let version = if !version_str.ptr.is_null() && version_str.length > 0 {
+      unsafe {
+        String::from_utf8_lossy(slice::from_raw_parts(
+          version_str.ptr as *const u8,
+          version_str.length,
+        ))
+        .to_string()
+      }
+    } else {
+      String::new()
+    };
+
+    Some(Self {
+      ptr,
+      width,
+      height,
+      version,
+    })
+  }
+
+  /// Load animation from file path
+  pub fn from_file(path: &str) -> Option<Self> {
+    let path_cstr = CString::new(path).ok()?;
+    let ptr = unsafe { ffi::skiac_skottie_animation_make_from_file(path_cstr.as_ptr()) };
+
+    if ptr.is_null() {
+      return None;
+    }
+
+    let mut width: f32 = 0.0;
+    let mut height: f32 = 0.0;
+    unsafe { ffi::skiac_skottie_animation_get_size(ptr, &mut width, &mut height) };
+
+    let mut version_str = SkiaString {
+      ptr: ptr::null(),
+      length: 0,
+      sk_string: ptr::null_mut(),
+    };
+    unsafe { ffi::skiac_skottie_animation_get_version(ptr, &mut version_str) };
+    let version = if !version_str.ptr.is_null() && version_str.length > 0 {
+      unsafe {
+        String::from_utf8_lossy(slice::from_raw_parts(
+          version_str.ptr as *const u8,
+          version_str.length,
+        ))
+        .to_string()
+      }
+    } else {
+      String::new()
+    };
+
+    Some(Self {
+      ptr,
+      width,
+      height,
+      version,
+    })
+  }
+
+  /// Get animation duration in seconds
+  pub fn duration(&self) -> f64 {
+    unsafe { ffi::skiac_skottie_animation_get_duration(self.ptr) }
+  }
+
+  /// Get animation frame rate (frames per second)
+  pub fn fps(&self) -> f64 {
+    unsafe { ffi::skiac_skottie_animation_get_fps(self.ptr) }
+  }
+
+  /// Get total frame count
+  pub fn frames(&self) -> f64 {
+    self.duration() * self.fps()
+  }
+
+  /// Get animation in-point (start frame)
+  pub fn in_point(&self) -> f64 {
+    unsafe { ffi::skiac_skottie_animation_get_in_point(self.ptr) }
+  }
+
+  /// Get animation out-point (end frame)
+  pub fn out_point(&self) -> f64 {
+    unsafe { ffi::skiac_skottie_animation_get_out_point(self.ptr) }
+  }
+
+  /// Get animation width
+  pub fn width(&self) -> f32 {
+    self.width
+  }
+
+  /// Get animation height
+  pub fn height(&self) -> f32 {
+    self.height
+  }
+
+  /// Get Lottie format version
+  pub fn version(&self) -> &str {
+    &self.version
+  }
+
+  /// Seek to normalized position [0..1]
+  pub fn seek(&self, t: f32) {
+    unsafe { ffi::skiac_skottie_animation_seek(self.ptr, t) }
+  }
+
+  /// Seek to specific frame index
+  pub fn seek_frame(&self, frame: f64) {
+    unsafe { ffi::skiac_skottie_animation_seek_frame(self.ptr, frame) }
+  }
+
+  /// Seek to specific time in seconds
+  pub fn seek_frame_time(&self, t: f64) {
+    unsafe { ffi::skiac_skottie_animation_seek_frame_time(self.ptr, t) }
+  }
+
+  /// Render current frame to canvas
+  pub fn render(&self, canvas: &Canvas, dst: Option<&ffi::skiac_rect>) {
+    let dst_ptr = dst.map(|r| r as *const _).unwrap_or(ptr::null());
+    unsafe { ffi::skiac_skottie_animation_render(self.ptr, canvas.0, dst_ptr) }
+  }
+
+  /// Render current frame to canvas with flags
+  pub fn render_with_flags(&self, canvas: &Canvas, dst: Option<&ffi::skiac_rect>, flags: u32) {
+    let dst_ptr = dst.map(|r| r as *const _).unwrap_or(ptr::null());
+    unsafe { ffi::skiac_skottie_animation_render_with_flags(self.ptr, canvas.0, dst_ptr, flags) }
+  }
+}
+
+impl Drop for SkottieAnimation {
+  fn drop(&mut self) {
+    unsafe { ffi::skiac_skottie_animation_destroy(self.ptr) }
+  }
+}
+
+// SkottieAnimation is not thread-safe (contains raw pointer)
+// but can be sent between threads
+unsafe impl Send for SkottieAnimation {}
+
+#[inline(always)]
+pub(crate) fn radians_to_degrees(rad: f32) -> f32 {
+  rad / PI * 180.0
+}
+
+#[inline(always)]
+pub(crate) fn degrees_to_radians(degrees: f32) -> f32 {
+  degrees / 180.0 * PI
+}
+
+#[inline(always)]
+fn almost_equal(floata: f32, floatb: f32) -> bool {
+  (floata - floatb).abs() < 0.00001
+}
+
+pub fn sk_svg_text_to_path(svg: &[u8], fc: &FontCollection) -> Option<SkiaDataRef> {
+  let mut output_data = ffi::skiac_sk_data {
+    ptr: ptr::null_mut(),
+    data: ptr::null_mut(),
+    size: 0,
+  };
+  unsafe {
+    ffi::skiac_svg_text_to_path(svg.as_ptr(), svg.len(), fc.0, &mut output_data);
+  };
+  if output_data.ptr.is_null() {
+    return None;
+  }
+  Some(SkiaDataRef(output_data))
+}
+
+unsafe extern "C" fn skiac_on_get_style(width: i32, weight: i32, slant: i32, raw_cb: *mut c_void) {
+  let cb = Box::leak(unsafe { Box::from_raw(raw_cb as *mut Box<dyn FnMut(i32, i32, i32)>) });
+  cb(width, weight, slant);
+}

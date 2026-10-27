@@ -1,0 +1,8 @@
+tree 606dd7ee4458921c9a7027fc95d12eb86e604f74
+parent 6083291c152159239dd5772f1fad1966699a281d
+author Jan Wassenberg <janwas@google.com> 1717169396 -0700
+committer Copybara-Service <copybara-worker@google.com> 1717169470 -0700
+
+remove HWY_HAS_INCLUDE - mishandled by clang
+
+PiperOrigin-RevId: 639043353

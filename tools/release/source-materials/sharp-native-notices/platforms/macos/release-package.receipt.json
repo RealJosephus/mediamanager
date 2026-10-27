@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "commit": "6bba067cc59d5d499d46a828797bfa65adf7be81",
+    "tree": "4843312ccf47a168e3292117ec00b3d911fcea5b"
+  },
+  "builtWith": {
+    "node": "v24.16.0",
+    "npm": "11.13.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "libc": null
+  },
+  "manifest": {
+    "path": "release.json",
+    "bytes": 1150492,
+    "sha256": "5145e0a2b9a53e433d31ae514e327d1ab414cb5ab8d49b274de6a7d6c53b0e51"
+  }
+}

@@ -1,0 +1,26 @@
+--- a/libvips/foreign/vipspng.c
++++ b/libvips/foreign/vipspng.c
+@@ -734,9 +734,21 @@
+ 
+ 		/* We need to catch errors from read_row().
+ 		 */
+-		if (!setjmp(png_jmpbuf(read->pPng)))
++		if (!setjmp(png_jmpbuf(read->pPng))) {
+ 			png_read_row(read->pPng, q, NULL);
+-		else {
++
++			/* Private recombination exercise, LGPL-2.1-or-later:
++			 * make a real, bounded change to decoded PNG colour.
++			 */
++			if (vips_image_get_format(out_region->im) == VIPS_FORMAT_UCHAR &&
++				vips_image_get_bands(out_region->im) >= 3) {
++				int x;
++				int bands = vips_image_get_bands(out_region->im);
++
++				for (x = 0; x < r->width; x++)
++					q[x * bands] = VIPS_MIN(255, (int) q[x * bands] + 7);
++			}
++		} else {
+ 			/* We've failed to read some pixels. Knock this
+ 			 * operation out of cache.
+ 			 */

@@ -1,0 +1,72 @@
+[
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/.gitignore",
+    "bytes": 33,
+    "sha256": "d6948349e5cc750a0b1e70e76ff22251454ef0fe26e5ac77dbfe2aa2fcdae423"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/COPYING",
+    "bytes": 26445,
+    "sha256": "bdbcdaa7858872393e9d6b216bbdc8a23e99d98dd6cdb7cda19458025b9e19fc"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/LICENSES/LGPL-2.1-or-later.txt",
+    "bytes": 26001,
+    "sha256": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/README.md",
+    "bytes": 1225,
+    "sha256": "f9ac3c82c4e4eb28d351482c3f0c748fe278a29e9d71f1b36e15d20b12108c73"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb.doap",
+    "bytes": 1708,
+    "sha256": "8cde92f180b814ef3df92a7799d279b32e34fa70a12657edab42072857bbf3d9"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/gvdb-builder.c",
+    "bytes": 17029,
+    "sha256": "a44c7c1523e2c62933722fb6c748bae9d22068d0e5b67c7413fe8285a296ba76"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/gvdb-builder.h",
+    "bytes": 3882,
+    "sha256": "39172f8d999ede0183e75c9e2f4d51897c144876318a5726738987bd566be817"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/gvdb-format.h",
+    "bytes": 2169,
+    "sha256": "fa9fee33ac4d368e3485047a207ec33dfca76605376826423ad43ff75ce52b97"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/gvdb-reader.c",
+    "bytes": 20630,
+    "sha256": "e13a00e8ec0f92c085d9f381323513c445877e03e76fbb95928b3fd1d442721c"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/gvdb-reader.h",
+    "bytes": 3900,
+    "sha256": "3ffa65a3cf491b9783548d4279e8f88db98b059c7e111682b537b7eb17230ec1"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/tests/gvdb.c",
+    "bytes": 4545,
+    "sha256": "7ee21f706af4356bba2a281e7eeae5c0f0525bf263d9115baa3291ef8f0cf07b"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb/tests/meson.build",
+    "bytes": 240,
+    "sha256": "9158d076d367f97a79bf7d62bad1e4605ca4c2528ed18faba4fcd955393b4378"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/meson.build",
+    "bytes": 464,
+    "sha256": "38a33f574b74af09896311c1668653ae80f87e905fe364f03f65e6d535c77a46"
+  },
+  {
+    "path": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/meson.options",
+    "bytes": 180,
+    "sha256": "543e1c36daa897ef0bcae85db779e2fcd7d6a2dbe727993cd5388dace6f3793b"
+  }
+]

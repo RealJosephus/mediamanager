@@ -1,0 +1,64 @@
+name: Linux modified native image consumer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recombine:
+    name: Build a modified libvips aggregate and load it in a private Node delivery
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Install current compatible Linux build prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .test-output/native-recombination-system
+          sudo apt-get update 2>&1 | tee .test-output/native-recombination-system/apt-update.txt
+          mapfile -t packages < <(node --input-type=module -e 'import fs from "node:fs"; console.log(JSON.parse(fs.readFileSync("tools/release/native-recombination-linux/profile.json", "utf8")).systemPackages.join("\n"))')
+          sudo apt-get install --yes --no-install-recommends "${packages[@]}" 2>&1 | tee .test-output/native-recombination-system/apt-install.txt
+      - name: Check source integrity and false consumer-success rejection
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test tests/release/native-recombination-linux.test.js 2>&1 | tee .test-output/native-recombination-system/source-and-consumer-tests.tap
+      - name: Compile, replace, and execute actual Sharp and application consumers
+        timeout-minutes: 100
+        run: node tools/release/native-recombination-linux/build.js .test-output/native-recombination-linux
+      - name: Preserve actual compilation, loaded libraries, and independent pixel evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-recombination-linux-${{ github.sha }}
+          path: |
+            .test-output/native-recombination-system
+            .test-output/native-recombination-linux/*.json
+            .test-output/native-recombination-linux/system-packages.tsv
+            .test-output/native-recombination-linux/commands
+            .test-output/native-recombination-linux/original-inputs
+            .test-output/native-recombination-linux/pristine
+            .test-output/native-recombination-linux/original-recipe-applied
+            .test-output/native-recombination-linux/private-modification
+            .test-output/native-recombination-linux/private-change
+            .test-output/native-recombination-linux/prefix
+            .test-output/native-recombination-linux/meson-logs
+            .test-output/native-recombination-linux/meson-info
+            .test-output/native-recombination-linux/build/meson-logs
+            .test-output/native-recombination-linux/build/meson-info
+            .test-output/native-recombination-linux/system-notices
+            .test-output/native-recombination-linux/common-licenses
+            .test-output/native-recombination-linux/images
+            .test-output/native-recombination-linux/stock-data
+            .test-output/native-recombination-linux/modified-data
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

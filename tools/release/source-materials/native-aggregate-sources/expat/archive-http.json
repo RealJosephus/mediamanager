@@ -1,0 +1,110 @@
+{
+  "requestedUrl": "https://github.com/libexpat/libexpat/releases/download/R_2_8_3/expat-2.8.3.tar.xz",
+  "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/80314213/09385347-282a-4fa8-a00b-1231532de319?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T14%3A08%3A26Z&rscd=attachment%3B+filename%3Dexpat-2.8.3.tar.xz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T13%3A08%3A04Z&ske=2026-10-27T14%3A08%3A26Z&sks=b&skv=2018-11-09&sig=u1Hlgwf6VTUzS%2Bsplv%2B9%2FdSCUpzBCL2r%2BKj3Q%2BZwL%2FE%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzEwODM4NSwibmJmIjoxNzkzMTA4MDg1LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.mWA73Cymk0OVCwuu-7OTbwrJOkh1w0m42v0wh_Yk5ic&response-content-disposition=attachment%3B%20filename%3Dexpat-2.8.3.tar.xz&response-content-type=application%2Foctet-stream",
+  "status": 200,
+  "headers": [
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "Content-Length",
+      "517264"
+    ],
+    [
+      "Last-Modified",
+      "Mon, 10 Aug 2026 22:08:11 GMT"
+    ],
+    [
+      "ETag",
+      "\"0x8DEF72BDE1D0A80\""
+    ],
+    [
+      "Server",
+      "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+    ],
+    [
+      "x-ms-request-id",
+      "ce4006ea-501e-0018-5fb6-363e32000000"
+    ],
+    [
+      "x-ms-version",
+      "2018-11-09"
+    ],
+    [
+      "x-ms-creation-time",
+      "Mon, 10 Aug 2026 22:08:11 GMT"
+    ],
+    [
+      "x-ms-blob-content-md5",
+      "F0f1pXsZHwNzuuta3IB4yg=="
+    ],
+    [
+      "x-ms-lease-status",
+      "unlocked"
+    ],
+    [
+      "x-ms-lease-state",
+      "available"
+    ],
+    [
+      "x-ms-blob-type",
+      "BlockBlob"
+    ],
+    [
+      "x-ms-server-encrypted",
+      "true"
+    ],
+    [
+      "x-ms-access-tier",
+      "Hot"
+    ],
+    [
+      "x-ms-access-tier-inferred",
+      "true"
+    ],
+    [
+      "Via",
+      "1.1 varnish, 1.1 varnish"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Age",
+      "0"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:46 GMT"
+    ],
+    [
+      "X-Served-By",
+      "cache-iad-kiad7000192-IAD, cache-muc13979-MUC"
+    ],
+    [
+      "X-Cache",
+      "HIT, MISS"
+    ],
+    [
+      "X-Cache-Hits",
+      "766, 0"
+    ],
+    [
+      "X-Timer",
+      "S1793108086.055455,VS0,VE94"
+    ],
+    [
+      "Content-Disposition",
+      "attachment; filename=expat-2.8.3.tar.xz"
+    ],
+    [
+      "Content-Type",
+      "application/octet-stream"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:48.346326+00:00",
+  "bytes": 517264,
+  "sha256": "f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85"
+}

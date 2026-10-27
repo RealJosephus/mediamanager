@@ -1,0 +1,13 @@
+{
+  "executable": "tar",
+  "args": [
+    "-xzf",
+    "/home/runner/work/mediamanager/mediamanager/tools/release/source-materials/windows-native-aggregate-sources/mxe/mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3.tar.gz",
+    "-C",
+    "/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/mxe"
+  ],
+  "code": 0,
+  "signal": null,
+  "overflow": false,
+  "expired": false
+}

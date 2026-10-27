@@ -1,0 +1,201 @@
+{
+  "retrievedOn": "2026-10-26",
+  "sources": [
+    {
+      "repository": "lovell/sharp",
+      "runId": 32952942913,
+      "jobId": 98128387524,
+      "candidate": {
+        "commit": "7f1a0a22cc285fe180766f4935d50b55af6e8432",
+        "tree": "e7c5d544a8358fd91ff1d60a67c678e0ee3967d0"
+      },
+      "runUrl": "https://github.com/lovell/sharp/actions/runs/32952942913",
+      "jobUrl": "https://github.com/lovell/sharp/actions/runs/32952942913/job/98128387524",
+      "logUrl": "https://api.github.com/repos/lovell/sharp/actions/jobs/98128387524/logs",
+      "runReceipt": {
+        "path": "run-32952942913.json",
+        "bytes": 11487,
+        "sha256": "d9fb6bcfeebfe8e71541abfce12adc72c7298110b5492cacb5c916185526d1ee"
+      },
+      "jobReceipt": {
+        "path": "job-98128387524.json",
+        "bytes": 3788,
+        "sha256": "be0de6c1518aa0e95c7626af121ecf432c83a9a7f8bc43f6e43e9afcb9893876"
+      },
+      "archive": {
+        "path": "sharp-linux-original.log.gz",
+        "bytes": 57690,
+        "sha256": "e67e064db741a1197b67bc7b32bfe81c63039ae5f7d4c48e24e7eba810e0968a"
+      },
+      "rawLog": {
+        "bytes": 282444,
+        "sha256": "d0f0b119c2200552df79e5f1430cfba58a772c1f1ef46d3df9ca27f7c1b57d6a"
+      }
+    },
+    {
+      "repository": "lovell/sharp-libvips",
+      "runId": 32944387969,
+      "jobId": 98102056983,
+      "candidate": {
+        "commit": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+        "tree": "29fde70ea48ef8d03254a378f8efb52c944b4169"
+      },
+      "runUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969",
+      "jobUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969/job/98102056983",
+      "logUrl": "https://api.github.com/repos/lovell/sharp-libvips/actions/jobs/98102056983/logs",
+      "runReceipt": {
+        "path": "run-32944387969.json",
+        "bytes": 12169,
+        "sha256": "f119966aebc1a25d8e62f0a708b0a5356b48fbd2c6e493895c563d160c4d23de"
+      },
+      "jobReceipt": {
+        "path": "job-98102056983.json",
+        "bytes": 1983,
+        "sha256": "dd372e9610e6b0b43a2c0593ffbb408ba7f9585ac45c472f8be5269c3c5f954d"
+      },
+      "archive": {
+        "path": "libvips-linux-original.log.gz",
+        "bytes": 224750,
+        "sha256": "4214b2e1ab7daa3265860c3dd69c9afc4eefe46638828e21e3054026073d46ec"
+      },
+      "rawLog": {
+        "bytes": 1430035,
+        "sha256": "446e20d750e68c82a136cff631b9b831714cef3bd68e5b79de3ae04bdf94144d"
+      }
+    },
+    {
+      "repository": "lovell/sharp-libvips",
+      "runId": 32944387969,
+      "jobId": 98102057009,
+      "candidate": {
+        "commit": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+        "tree": "29fde70ea48ef8d03254a378f8efb52c944b4169"
+      },
+      "runUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969",
+      "jobUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969/job/98102057009",
+      "logUrl": "https://api.github.com/repos/lovell/sharp-libvips/actions/jobs/98102057009/logs",
+      "runReceipt": {
+        "path": "run-32944387969.json",
+        "bytes": 12169,
+        "sha256": "f119966aebc1a25d8e62f0a708b0a5356b48fbd2c6e493895c563d160c4d23de"
+      },
+      "jobReceipt": {
+        "path": "job-98102057009.json",
+        "bytes": 1994,
+        "sha256": "176abceef8e145bfeedc9f26f5f0f16c399596c6adae639075bedf610948addb"
+      },
+      "archive": {
+        "path": "libvips-macos-original.log.gz",
+        "bytes": 169574,
+        "sha256": "407db03a3ffad035681431bc67ce2d464dcca1a29add8e3c090d50cbf874aa98"
+      },
+      "rawLog": {
+        "bytes": 1298996,
+        "sha256": "ab557d76a232c122ad995e62ee189bf387ae629a64c457d7031a410223a74aea"
+      }
+    },
+    {
+      "repository": "lovell/sharp-libvips",
+      "runId": 32944387969,
+      "jobId": 98102056990,
+      "candidate": {
+        "commit": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+        "tree": "29fde70ea48ef8d03254a378f8efb52c944b4169"
+      },
+      "runUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969",
+      "jobUrl": "https://github.com/lovell/sharp-libvips/actions/runs/32944387969/job/98102056990",
+      "logUrl": "https://api.github.com/repos/lovell/sharp-libvips/actions/jobs/98102056990/logs",
+      "runReceipt": {
+        "path": "run-32944387969.json",
+        "bytes": 12169,
+        "sha256": "f119966aebc1a25d8e62f0a708b0a5356b48fbd2c6e493895c563d160c4d23de"
+      },
+      "jobReceipt": {
+        "path": "job-98102056990.json",
+        "bytes": 1983,
+        "sha256": "deaaf447411871a6802f9cb7ef55548a740c8bc4460370cd10d8aef12e179a1d"
+      },
+      "archive": {
+        "path": "libvips-windows-original.log.gz",
+        "bytes": 14276,
+        "sha256": "514010d2dd0015b53f0bc832e4bc239c2673ede1703466ef3847f27dd4a5b11c"
+      },
+      "rawLog": {
+        "bytes": 81003,
+        "sha256": "2a66d2b375dca9796d3170271e01c0324cbc0a157bf8367467ae771ddead7f5e"
+      }
+    }
+  ],
+  "recipeFragments": {
+    "path": "recipe-fragments.json",
+    "bytes": 56435,
+    "sha256": "a752f42184cae3656214a6554b5d33bc089904812701843442f323cb88832b2e"
+  },
+  "limitations": [
+    "These are the original public job-log response bytes compressed locally without changing their decoded contents, together with original GitHub API run and job responses.",
+    "They document observed upstream builds. They do not contain the complete corresponding sources, resolved Cargo workspace lockfile, compiler binaries or package-manager closure.",
+    "The source download URLs and versions appearing in a log do not prove that the referenced bytes are held in this delivery.",
+    "The sharp-linux log covers the upstream Node.js 22 packaging job; the libvips logs cover Linux x64, macOS arm64 and Windows x64 jobs. Other architectures and unarchived job outputs are not claimed.",
+    "No binary rebuild, identical binary output, historical toolchain replay or licensing compatibility conclusion is established by these materials."
+  ],
+  "nativePackages": {
+    "path": "native-packages.json",
+    "bytes": 488139,
+    "sha256": "480203923d74941226466046b8d23e06abd11944008893fd08eb6d8515acd6e4"
+  },
+  "nativeFullSources": {
+    "path": "native-full-sources.json",
+    "bytes": 29612,
+    "sha256": "64d8c1d37c7a04f2dc50dc3992695501ede237a82fddab347f1bfe40e5978b9b"
+  },
+  "rsvgCargoSources": {
+    "path": "rsvg-cargo-sources.json",
+    "bytes": 1439680,
+    "sha256": "19ddf08305bf0d15c58941cddf0db7d6db044a3bc1b2a3f523c0b93a85c2dc80"
+  },
+  "skiaSources": {
+    "path": "skia-sources.json",
+    "bytes": 10842,
+    "sha256": "91c09d78b81e38c4c0de949095dc1ff512a54b44a5e96098a71c369d8d9cc997"
+  },
+  "skiaDependencySources": {
+    "path": "skia-dependency-sources.json",
+    "bytes": 36111,
+    "sha256": "915936761172d309be8cdcb2022aba7b63726acaa1b70348587b02aa844d538a"
+  },
+  "canvasCargoSources": {
+    "path": "canvas-cargo-sources.json",
+    "bytes": 1210475,
+    "sha256": "a98b26ccd529a67b0510a7f2f2fcbb7affec8ac84af6a7d5d52d94d2c4a833cc"
+  },
+  "rsvgWindowsSources": {
+    "path": "rsvg-windows-sources.json",
+    "bytes": 1611887,
+    "sha256": "02eee7722b197908ecbc7c3b6fcb4b998a61a34925fff74d9911fecc7dac6ceb"
+  },
+  "rsvgOriginalNotices": {
+    "path": "rsvg-original-notices.json",
+    "bytes": 31971,
+    "sha256": "8c249c60b269d72a092e75b7bc7d5a0cfec3c1d3cf580bb52cef0c061c85e7e4"
+  },
+  "canvasCurrentGraphs": {
+    "path": "canvas-current-graphs.json",
+    "bytes": 67597,
+    "sha256": "089a0f01246bab96e95811b80d696758818cab81e874ff7a4334406658b77e3d"
+  },
+  "nativeAggregateSources": {
+    "path": "native-aggregate-sources/catalog.json",
+    "bytes": 67662,
+    "sha256": "cc4c7ea77c269a134f20890434e7ea99f64281df4b9961564546ca69a00ea374"
+  },
+  "rsvgPosixSources": {
+    "path": "rsvg-posix-sources.json",
+    "bytes": 301444,
+    "sha256": "73da9de7038c295154d0cbfa58b94200f81172c3437b10801c72d87cb65dceb2"
+  },
+  "windowsNativeAggregateSources": {
+    "path": "windows-native-aggregate-sources/catalog.json",
+    "bytes": 80146,
+    "sha256": "ddd4145f9fb9cc3b3bbc1952f3f712c7a93d54f52694451669016458f9a5de7b"
+  }
+}

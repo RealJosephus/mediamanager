@@ -1,0 +1,879 @@
+$(info [overrides]   $(lastword $(MAKEFILE_LIST)))
+
+## Update dependencies
+
+# upstream version is 2.44.6
+# gdk-pixbuf is still used by gtk4
+gdk-pixbuf_VERSION  := 2.44.8
+gdk-pixbuf_CHECKSUM := 919f529512961a12e81cd4b4b466a48c3933469e7f9a310c6513cd4fb252ba3c
+gdk-pixbuf_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/gdk-pixbuf-[0-9]*.patch)))
+gdk-pixbuf_SUBDIR   := gdk-pixbuf-$(gdk-pixbuf_VERSION)
+gdk-pixbuf_FILE     := gdk-pixbuf-$(gdk-pixbuf_VERSION).tar.xz
+gdk-pixbuf_URL      := https://download.gnome.org/sources/gdk-pixbuf/$(call SHORT_PKG_VERSION,gdk-pixbuf)/$(gdk-pixbuf_FILE)
+
+# upstream version is 3.5.2
+libffi_VERSION  := 3.8.0
+libffi_CHECKSUM := 7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4
+libffi_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libffi-[0-9]*.patch)))
+libffi_SUBDIR   := libffi-$(libffi_VERSION)
+libffi_FILE     := libffi-$(libffi_VERSION).tar.gz
+libffi_URL      := https://github.com/libffi/libffi/releases/download/v$(libffi_VERSION)/$(libffi_FILE)
+
+# upstream version is 1.5.23
+# cannot use GH_CONF:
+# matio_GH_CONF  := tbeu/matio/releases,v
+matio_VERSION  := 1.6.0
+matio_CHECKSUM := 1481dc74e01d249e90f064333f969369fe3dd11d6cc6963e8635c581aa5d7711
+matio_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/matio-[0-9]*.patch)))
+matio_SUBDIR   := matio-$(matio_VERSION)
+matio_FILE     := matio-$(matio_VERSION).tar.gz
+matio_URL      := https://github.com/tbeu/matio/releases/download/v$(matio_VERSION)/$(matio_FILE)
+
+# upstream version is 3.4.0
+libarchive_VERSION  := 3.8.9
+libarchive_CHECKSUM := 888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde
+libarchive_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libarchive-[0-9]*.patch)))
+libarchive_SUBDIR   := libarchive-$(libarchive_VERSION)
+libarchive_FILE     := libarchive-$(libarchive_VERSION).tar.xz
+libarchive_URL      := https://github.com/libarchive/libarchive/releases/download/v$(libarchive_VERSION)/$(libarchive_FILE)
+
+# upstream version is 7.1.2-17
+imagemagick_VERSION  := 7.1.2-30
+imagemagick_CHECKSUM := 55100ca72b2332df6b2df4769bc153afcfcf588753dfc49b6fb8afa8ead59b23
+imagemagick_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/imagemagick-[0-9]*.patch)))
+imagemagick_SUBDIR   := ImageMagick-$(imagemagick_VERSION)
+imagemagick_FILE     := ImageMagick-$(imagemagick_VERSION).tar.xz
+imagemagick_GH_CONF  := ImageMagick/ImageMagick/releases,,,,,.tar.xz
+
+# upstream version is 2.40.21
+librsvg_VERSION  := 2.62.91
+librsvg_CHECKSUM := 6caeae129d40dd88f8ec49436fd89bfe4ada716a125187a7fa0def8fcaa0b250
+librsvg_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/librsvg-[0-9]*.patch)))
+librsvg_SUBDIR   := librsvg-$(librsvg_VERSION)
+librsvg_FILE     := librsvg-$(librsvg_VERSION).tar.xz
+librsvg_URL      := https://download.gnome.org/sources/librsvg/$(call SHORT_PKG_VERSION,librsvg)/$(librsvg_FILE)
+
+# upstream version is 1.57.1
+pango_VERSION  := 1.58.2
+pango_CHECKSUM := 342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a
+pango_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/pango-[0-9]*.patch)))
+pango_SUBDIR   := pango-$(pango_VERSION)
+pango_FILE     := pango-$(pango_VERSION).tar.xz
+pango_URL      := https://download.gnome.org/sources/pango/$(call SHORT_PKG_VERSION,pango)/$(pango_FILE)
+
+# upstream version is 1.0.13
+fribidi_VERSION  := 1.0.16
+fribidi_CHECKSUM := 1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c
+fribidi_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/fribidi-[0-9]*.patch)))
+fribidi_GH_CONF  := fribidi/fribidi/releases,v,,,,.tar.xz
+
+# upstream version is 2.89.0
+glib_VERSION  := 2.89.4
+glib_CHECKSUM := 1cdbb799f558832e6f14b8337b5fd599c6918ab144977b55e05e00a5e2e84a2c
+glib_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/glib-[0-9]*.patch)))
+glib_SUBDIR   := glib-$(glib_VERSION)
+glib_FILE     := glib-$(glib_VERSION).tar.xz
+glib_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,glib)/$(glib_FILE)
+
+# upstream version is 2.8.1
+expat_VERSION  := 2.8.3
+expat_CHECKSUM := f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85
+expat_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/expat-[0-9]*.patch)))
+expat_SUBDIR   := expat-$(expat_VERSION)
+expat_FILE     := expat-$(expat_VERSION).tar.xz
+expat_URL      := https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(expat_VERSION))/$(expat_FILE)
+
+# upstream version is 0.6.22
+libexif_VERSION  := 0.6.26
+libexif_CHECKSUM := 4a055ed6575e61ca46c3172be3c753cc16c9becd0f99ec71d58dd0e471476c0c
+libexif_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libexif-[0-9]*.patch)))
+libexif_GH_CONF  := libexif/libexif/releases,v,,,,.tar.xz
+
+# upstream version is 14.2.0
+harfbuzz_VERSION  := 14.3.1
+harfbuzz_CHECKSUM := 9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7
+harfbuzz_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/harfbuzz-[0-9]*.patch)))
+harfbuzz_GH_CONF  := harfbuzz/harfbuzz/releases,,,,,.tar.xz
+
+# upstream version is 4.6.3
+cfitsio_VERSION  := 4.7.0
+cfitsio_CHECKSUM := ce573bbea8e75b429f8c3d3e86498741ba3dc9628a1530d2f65268397ad059e8
+cfitsio_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/cfitsio-[0-9]*.patch)))
+cfitsio_SUBDIR   := cfitsio-$(cfitsio_VERSION)
+cfitsio_FILE     := cfitsio-$(cfitsio_VERSION).tar.gz
+cfitsio_URL      := https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/$(cfitsio_FILE)
+
+# upstream version is 4.7.1
+tiff_VERSION  := 4.7.2
+tiff_CHECKSUM := 4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88
+tiff_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/tiff-[0-9]*.patch)))
+tiff_SUBDIR   := tiff-$(tiff_VERSION)
+tiff_FILE     := tiff-$(tiff_VERSION).tar.xz
+tiff_URL      := https://download.osgeo.org/libtiff/$(tiff_FILE)
+
+# upstream version is 2.17.1
+fontconfig_VERSION  := 2.18.3
+fontconfig_CHECKSUM := 4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3
+fontconfig_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/fontconfig-[0-9]*.patch)))
+fontconfig_SUBDIR   := fontconfig-$(fontconfig_VERSION)
+fontconfig_FILE     := fontconfig-$(fontconfig_VERSION).tar.xz
+fontconfig_URL      := https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/$(fontconfig_VERSION)/$(fontconfig_FILE)
+
+# upstream version is 2.2.0
+# cannot use GH_CONF:
+# openexr_GH_CONF  := AcademySoftwareFoundation/openexr/releases,v
+# 3.2.0 requires libdeflate instead of zlib
+# 3.4.0 requires OpenJPH
+openexr_VERSION  := 3.1.13
+openexr_CHECKSUM := 466213c67b6f45ae2642de762b8c327e01c2f29e0aec56ff62215391e4e06440
+openexr_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/openexr-[0-9]*.patch)))
+openexr_SUBDIR   :=
+openexr_FILE     := openexr-v$(openexr_VERSION).tar.gz
+openexr_URL      := https://github.com/AcademySoftwareFoundation/openexr/releases/download/v$(openexr_VERSION)/$(openexr_FILE)
+
+# upstream version is 3.1.4.1
+libjpeg-turbo_VERSION  := 3.2.0
+libjpeg-turbo_CHECKSUM := 6f30092cef9fb839779646608f4ee14ae3cbac989c47fa05e841b0841f09878e
+libjpeg-turbo_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libjpeg-turbo-[0-9]*.patch)))
+libjpeg-turbo_GH_CONF  := libjpeg-turbo/libjpeg-turbo/releases,,,90
+
+# upstream version is 26.05.0
+poppler_VERSION  := 26.08.0
+poppler_CHECKSUM := dc906e68cea698109706ac6aa3d2c9d4512fcfcac42d90b8afcda486d1b9abd0
+poppler_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/poppler-[0-9]*.patch)))
+poppler_SUBDIR   := poppler-$(poppler_VERSION)
+poppler_FILE     := poppler-$(poppler_VERSION).tar.xz
+poppler_URL      := https://poppler.freedesktop.org/$(poppler_FILE)
+
+# upstream version is 0.21.1
+libraw_VERSION  := 0.22.2
+libraw_CHECKSUM := de86b035655accff8d4010f1a221fdf50d353cb7b1422ba26f14a0db92612cfa
+libraw_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libraw-[0-9]*.patch)))
+libraw_SUBDIR   := LibRaw-$(libraw_VERSION)
+libraw_FILE     := LibRaw-$(libraw_VERSION).tar.gz
+libraw_URL      := https://www.libraw.org/data/$(libraw_FILE)
+
+# upstream version is 3.3.10
+fftw_VERSION  := 3.3.11
+fftw_CHECKSUM := 5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1
+fftw_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/fftw-[0-9]*.patch)))
+fftw_SUBDIR   := fftw-$(fftw_VERSION)
+fftw_FILE     := fftw-$(fftw_VERSION).tar.gz
+fftw_URL      := http://www.fftw.org/$(fftw_FILE)
+
+# upstream version is 2.7.1
+# needed by nip4
+gsl_VERSION  := 2.8
+gsl_CHECKSUM := 6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190
+gsl_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/gsl-[0-9]*.patch)))
+gsl_SUBDIR   := gsl-$(gsl_VERSION)
+gsl_FILE     := gsl-$(gsl_VERSION).tar.gz
+gsl_URL      := https://ftp.gnu.org/gnu/gsl/$(gsl_FILE)
+gsl_URL_2    := https://ftp.snt.utwente.nl/pub/software/gnu/gsl/$(gsl_FILE)
+
+# upstream version is 3.36.1
+# needed by nip4 and vipsdisp
+adwaita-icon-theme_VERSION  := 50.0
+adwaita-icon-theme_CHECKSUM := fac6e0401fca714780561a081b8f7e27c3bc1db34ebda4da175081f26b24d460
+adwaita-icon-theme_PATCHES  := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/adwaita-icon-theme-[0-9]*.patch)))
+adwaita-icon-theme_SUBDIR   := adwaita-icon-theme-$(adwaita-icon-theme_VERSION)
+adwaita-icon-theme_FILE     := adwaita-icon-theme-$(adwaita-icon-theme_VERSION).tar.xz
+adwaita-icon-theme_URL      := https://download.gnome.org/sources/adwaita-icon-theme/$(firstword $(subst ., ,$(adwaita-icon-theme_VERSION)))/$(adwaita-icon-theme_FILE)
+
+## Patches that we override with our own
+
+cairo_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/cairo-[0-9]*.patch)))
+cfitsio_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/cfitsio-[0-9]*.patch)))
+fftw_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/fftw-[0-9]*.patch)))
+fontconfig_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/fontconfig-[0-9]*.patch)))
+freetype_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/freetype-[0-9]*.patch)))
+freetype-bootstrap_PATCHES := $(freetype_PATCHES)
+gdk-pixbuf_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/gdk-pixbuf-[0-9]*.patch)))
+glib_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/glib-[0-9]*.patch)))
+harfbuzz_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/harfbuzz-[0-9]*.patch)))
+imath_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/imath-[0-9]*.patch)))
+lcms_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/lcms-[0-9]*.patch)))
+libjpeg-turbo_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libjpeg-turbo-[0-9]*.patch)))
+libraw_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libraw-[0-9]*.patch)))
+libxml2_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/libxml2-[0-9]*.patch)))
+meson_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/meson-[0-9]*.patch)))
+mingw-w64_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/mingw-w64-[0-9]*.patch)))
+pixman_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/pixman-[0-9]*.patch)))
+poppler_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/poppler-[0-9]*.patch)))
+sqlite_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/sqlite-[0-9]*.patch)))
+tiff_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/tiff-[0-9]*.patch)))
+zlib_PATCHES := $(realpath $(sort $(wildcard $(dir $(lastword $(MAKEFILE_LIST)))/patches/zlib-[0-9]*.patch)))
+
+## Override sub-dependencies
+# adwaita-icon-theme:
+#  Added: meson-wrapper
+#  Removed: gettext
+# freetype:
+#  Added: meson-wrapper
+#  Removed: brotli, bzip2
+# freetype-bootstrap:
+#  Added: meson-wrapper
+#  Removed: bzip2
+# GLib:
+#  Removed: dbus, libiconv, pcre2
+# GDK-PixBuf:
+#  Removed: jasper, libiconv
+#  Replaced: jpeg with libjpeg-turbo
+# lcms:
+#  Added: meson-wrapper
+#  Removed: jpeg, tiff
+# libtiff:
+#  Replaced: jpeg with libjpeg-turbo
+#  Removed: xz, zstd
+# ImageMagick / GraphicsMagick:
+#  Added: libxml2, openjpeg
+#  Removed: bzip2, ffmpeg, fftw, freetype, jasper, liblqr-1, libltdl, libpng, libraw, openexr, pthreads, tiff, zlib
+#  Replaced: jpeg with libjpeg-turbo
+# OpenEXR:
+#  Removed: pthreads
+# Poppler:
+#  Added: libjpeg-turbo, lcms
+#  Removed: boost, curl, qt6-qtbase, libwebp
+# librsvg:
+#  Added: meson-wrapper, libxml2, rust, $(BUILD)~cargo-c
+#  Removed: gdk-pixbuf, libcroco, libgsf
+# Cairo:
+#  Removed: lzo
+# matio:
+#  Removed: hdf5
+# libjpeg-turbo:
+#  Replaced: yasm with $(BUILD)~nasm
+# libraw:
+#  Added: zlib
+#  Replaced: jpeg with libjpeg-turbo
+#  Removed: jasper
+# libxml2:
+#  Added: meson-wrapper
+#  Removed: libiconv, xz, zlib
+# Fontconfig:
+#  Added: meson-wrapper
+#  Removed: gettext
+# libexif:
+#  Removed: gettext
+# HarfBuzz:
+#  Removed: brotli, icu4c
+# libarchive:
+#  Removed: bzip2, libiconv, libxml2, nettle, openssl, xz
+# SQLite:
+#  Added: zlib
+#  Removed: dlfcn-win32
+
+adwaita-icon-theme_DEPS := $(subst gettext,meson-wrapper,$(adwaita-icon-theme_DEPS))
+freetype_DEPS           := $(subst brotli bzip2,meson-wrapper,$(freetype_DEPS))
+freetype-bootstrap_DEPS := $(subst brotli bzip2,meson-wrapper,$(freetype-bootstrap_DEPS))
+glib_DEPS               := cc meson-wrapper gettext libffi zlib
+gdk-pixbuf_DEPS         := cc meson-wrapper glib libjpeg-turbo libpng tiff
+lcms_DEPS               := $(subst jpeg tiff,meson-wrapper,$(lcms_DEPS))
+tiff_DEPS               := cc libjpeg-turbo libwebp zlib
+imagemagick_DEPS        := cc libxml2 openjpeg lcms libjpeg-turbo
+graphicsmagick_DEPS     := $(imagemagick_DEPS)
+openexr_DEPS            := cc imath zlib
+poppler_DEPS            := cc cairo libjpeg-turbo freetype glib openjpeg lcms libpng tiff zlib
+librsvg_DEPS            := cc meson-wrapper cairo glib pango libxml2 rust $(BUILD)~cargo-c
+cairo_DEPS              := $(filter-out lzo ,$(cairo_DEPS))
+matio_DEPS              := $(filter-out hdf5 ,$(matio_DEPS))
+libjpeg-turbo_DEPS      := $(subst yasm,$(BUILD)~nasm,$(libjpeg-turbo_DEPS))
+libraw_DEPS             := cc libjpeg-turbo lcms zlib
+libxml2_DEPS            := cc meson-wrapper
+fontconfig_DEPS         := cc meson-wrapper expat freetype-bootstrap
+libexif_DEPS            := $(filter-out  gettext,$(libexif_DEPS))
+harfbuzz_DEPS           := cc meson-wrapper cairo freetype-bootstrap glib
+libarchive_DEPS         := cc zlib
+sqlite_DEPS             := cc zlib
+
+## Override build scripts
+
+# build with the Meson build system
+define adwaita-icon-theme_BUILD
+    $(MXE_MESON_WRAPPER) '$(SOURCE_DIR)' '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# libasprintf isn't needed, so build with --disable-libasprintf
+# this definition is for reference purposes only, we use the
+# proxy-libintl plugin instead.
+define gettext_BUILD
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/gettext-runtime/configure' \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-java \
+        --disable-native-java \
+        --disable-csharp \
+        --enable-threads=win32 \
+        --without-libexpat-prefix \
+        --without-libxml2-prefix \
+        --disable-libasprintf \
+        --disable-nls \
+        CONFIG_SHELL=$(SHELL)
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)/intl' -j 1 $(INSTALL_STRIP_LIB)
+endef
+
+# disable version script on llvm-mingw
+# disable struct support and make the raw api unavailable when
+# building a statically linked binary
+define libffi_BUILD
+    # build and install the library
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-multi-os-directory \
+        $(if $(BUILD_STATIC), \
+            --disable-structs \
+            --disable-raw-api) \
+        --disable-symvers
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB)
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -std=c99 -pedantic \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-libffi.exe' \
+        `'$(TARGET)-pkg-config' libffi --cflags --libs`
+endef
+
+# disable programs
+# build with --disable-nls
+define libexif_BUILD
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-nls \
+        --without-libiconv-prefix \
+        --without-libintl-prefix
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB) $(MXE_DISABLE_PROGRAMS)
+endef
+
+# icu will pull in standard linux headers, which we don't want
+# skip building newly-added harfbuzz-vector and harfbuzz-raster libraries
+# skip building unused harfbuzz-subset and harfbuzz-gpu libraries
+# build with Meson
+define harfbuzz_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Dicu=disabled \
+        -Draster=disabled \
+        -Dvector=disabled \
+        -Dsubset=disabled \
+        -Dgpu=disabled \
+        -Dgpu_demo=disabled \
+        -Dtests=disabled \
+        -Dintrospection=disabled \
+        -Ddocs=disabled \
+        -Dbenchmark=disabled \
+        $(PKG_MESON_OPTS) \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# build with the Meson build system
+# build without bzip2 and brotli
+define freetype_BUILD_COMMON
+    $(MXE_MESON_WRAPPER) \
+        -Dharfbuzz=enabled \
+        -Dpng=enabled \
+        -Dzlib=enabled \
+        -Dbrotli=disabled \
+        -Dbzip2=disabled \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+define freetype_BUILD
+    $($(PKG)_BUILD_COMMON)
+endef
+
+define freetype-bootstrap_BUILD
+    $(subst harfbuzz=enabled,harfbuzz=disabled,$(freetype_BUILD_COMMON))
+endef
+
+# build with the Meson build system
+# needed by gtk4
+define gdk-pixbuf_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Dtiff=disabled \
+        -Dgif=disabled \
+        -Dothers=disabled \
+        -Dglycin=disabled \
+        -Dthumbnailer=disabled \
+        -Dintrospection=disabled \
+        -Dtests=false \
+        -Dinstalled_tests=false \
+        -Ddocumentation=false \
+        -Dman=false \
+        -Dbuiltin_loaders='png,jpeg' \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# build pixman with the Meson build system
+define pixman_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Dopenmp=disabled \
+        -Dgtk=disabled \
+        -Dtests=disabled \
+        -Ddemos=disabled \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# build fribidi with the Meson build system
+define fribidi_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Dtests=false \
+        -Ddocs=false \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# build with the Meson build system
+# exclude jpeg, tiff dependencies
+# build with -DCMS_RELY_ON_WINDOWS_STATIC_MUTEX_INIT to avoid a
+# horrible hack (we don't target pre-Windows XP, so it should be safe)
+define lcms_BUILD
+    $(eval export CFLAGS += -O3)
+
+    $(MXE_MESON_WRAPPER) \
+        -Dtests=disabled \
+        -Djpeg=disabled \
+        -Dtiff=disabled \
+        -Dc_args='$(CFLAGS) -DCMS_RELY_ON_WINDOWS_STATIC_MUTEX_INIT' \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# disable largefile support, we rely on vips for that and ImageMagick's
+# detection does not work when cross-compiling
+# build with jpeg-turbo and without lzma
+# disable POSIX threads with --without-threads, use Win32 threads instead
+# avoid linking against -lgdi32, see: https://github.com/kleisauke/net-vips/issues/61
+# exclude deprecated methods in MagickCore API
+# suppress stray terminal window in utils with -Wl,-subsystem,windows, see:
+# https://github.com/libvips/libvips/pull/4683#issuecomment-3339022812
+define imagemagick_BUILD
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --without-fftw \
+        --without-fontconfig \
+        --without-gdi32 \
+        --without-gvc \
+        --without-heic \
+        --without-jxl \
+        --without-lqr \
+        --without-lzma \
+        --without-magick-plus-plus \
+        --without-modules \
+        --without-openexr \
+        --without-pango \
+        --without-png \
+        --without-rsvg \
+        --without-tiff \
+        --without-webp \
+        --without-x \
+        --without-zlib \
+        --without-zstd \
+        --without-threads \
+        --disable-largefile \
+        --disable-opencl \
+        --disable-openmp \
+        --disable-deprecated \
+        $(PKG_CONFIGURE_OPTS)
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_DOCS) UTILITIES_LDFLAGS_EXTRA="-municode -Wl,-subsystem,windows"
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB) $(MXE_DISABLE_DOCS)
+endef
+
+# Alias GraphicsMagick build with ImageMagick
+define graphicsmagick_BUILD
+    $(imagemagick_BUILD)
+endef
+
+# WITH_TURBOJPEG=OFF turns off a library we don't use (we just use the
+# libjpeg API)
+# Switch to NASM because YASM has been unmaintained for a few years, while NASM is actively maintained.
+define libjpeg-turbo_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DWITH_TURBOJPEG=OFF \
+        -DPNG_SUPPORTED=OFF \
+        -DENABLE_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DENABLE_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DCMAKE_ASM_NASM_COMPILER='$(PREFIX)/$(BUILD)/bin/nasm' \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+# build without jasper, openmp and examples
+define libraw_BUILD
+    # autoreconf to get updated libtool files for clang
+    cd '$(SOURCE_DIR)' && autoreconf -fi
+
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-examples \
+        --disable-openmp \
+        --disable-jasper \
+        --enable-jpeg \
+        --enable-zlib \
+        --enable-lcms
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB)
+endef
+
+# build with the Meson build system
+# build with -Dnls=disabled
+define fontconfig_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Ddoc=disabled \
+        -Dnls=disabled \
+        -Dtests=disabled \
+        -Dtools=disabled \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# disable GObject introspection
+# build with the Meson build system
+# force FontConfig since the Win32 font backend within Cairo is disabled
+define pango_BUILD
+    # Disable utils and tools
+    $(SED) -i "/subdir('utils')/{N;d;}" '$(SOURCE_DIR)/meson.build'
+
+    $(MXE_MESON_WRAPPER) \
+        -Ddocumentation=false \
+        -Dbuild-testsuite=false \
+        -Dbuild-examples=false \
+        -Dintrospection=disabled \
+        -Dfontconfig=enabled \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# compile with the Rust toolchain
+define librsvg_BUILD
+    $(eval export CARGO_HOME := $(PREFIX)/$(TARGET)/.cargo)
+
+    # Enable networking while we build librsvg
+    $(eval export MXE_ENABLE_NETWORK := 1)
+
+    $(MXE_MESON_WRAPPER) \
+        --buildtype=plain \
+        -Dintrospection=disabled \
+        -Dpixbuf=disabled \
+        -Dpixbuf-loader=disabled \
+        -Drsvg-convert=disabled \
+        -Ddocs=disabled \
+        -Dvala=disabled \
+        -Dtests=false \
+        -Dtriplet='$(PROCESSOR)-pc-windows-gnullvm' \
+        -Dc_link_args='$(LDFLAGS) -lntdll -luserenv' \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+
+    # Add native libraries needed for static linking to .pc file.
+    # We cannot use rustc --print native-static-libs due to -Zbuild-std.
+    # See: https://gitlab.gnome.org/GNOME/librsvg/-/issues/968
+    $(SED) -i "/^Libs.private:/s/$$/ -lntdll -luserenv/" '$(PREFIX)/$(TARGET)/lib/pkgconfig/librsvg-2.0.pc'
+endef
+
+# compile with CMake
+define poppler_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DENABLE_LIBTIFF=ON \
+        -DENABLE_LIBPNG=ON \
+        -DENABLE_GLIB=ON \
+        -DENABLE_LCMS=ON \
+        -DENABLE_LIBOPENJPEG='openjpeg2' \
+        -DENABLE_DCTDECODER='libjpeg' \
+        -DFONT_CONFIGURATION=win32 \
+        -DENABLE_UNSTABLE_API_ABI_HEADERS=OFF \
+        -DENABLE_NSS3=OFF \
+        -DENABLE_GPGME=OFF \
+        -DENABLE_BOOST=OFF \
+        -DENABLE_CPP=OFF \
+        -DBUILD_GTK_TESTS=OFF \
+        -DENABLE_UTILS=OFF \
+        -DENABLE_QT5=OFF \
+        -DENABLE_QT6=OFF \
+        -DENABLE_LIBCURL=OFF \
+        -DBUILD_QT5_TESTS=OFF \
+        -DBUILD_QT6_TESTS=OFF \
+        -DBUILD_CPP_TESTS=OFF \
+        -DBUILD_MANUAL_TESTS=OFF \
+        -DENABLE_GTK_DOC=OFF \
+        '$(SOURCE_DIR)'
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+# the zlib configure is a bit basic, so we'll use cmake
+define zlib_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DZLIB_BUILD_TESTING=OFF \
+        -DZLIB_BUILD_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DZLIB_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \
+        '$(SOURCE_DIR)'
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+define zlib_BUILD_SHARED
+    $($(PKG)_BUILD)
+endef
+
+# build with CMake
+# avoid building unnecessary things
+# disable the C++ API for now, we don't use it anyway
+# build without lzma and zstd
+# disable old-style JPEG in TIFF images, see:
+# https://github.com/libvips/libvips/issues/1328#issuecomment-572020749
+define tiff_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -Dtiff-contrib=OFF \
+        -Dtiff-cxx=OFF \
+        -Dtiff-docs=OFF \
+        -Dtiff-tests=OFF \
+        -Dtiff-tools=OFF \
+        -Dmdi=OFF \
+        -Djbig=OFF \
+        -Dlerc=OFF \
+        -Dlibdeflate=OFF \
+        -Dlzma=OFF \
+        -Dold-jpeg=OFF \
+        -Dpixarlog=OFF \
+        -Dtiff-opengl=OFF \
+        -Dzstd=OFF \
+        $(PKG_CMAKE_OPTS) \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+# disable unneeded loaders
+define libwebp_BUILD
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --disable-gl \
+        --disable-sdl \
+        --disable-png \
+        --disable-jpeg \
+        --disable-tiff \
+        --disable-gif \
+        --enable-libwebpmux \
+        --enable-libwebpdemux
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_PROGRAMS)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB) $(MXE_DISABLE_PROGRAMS)
+endef
+
+# Disable the DWrite font backend to ensure compat with Windows Nano Server
+# node-canvas needs a Cairo with SVG support, so compile with -Dpng=enabled
+# ensure the FontConfig backend is enabled
+# build with -Dzlib=disabled to disable the script, PostScript and PDF surfaces
+define cairo_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Ddwrite=disabled \
+        -Dfontconfig=enabled \
+        -Dfreetype=enabled \
+        -Dpng=enabled \
+        -Dquartz=disabled \
+        -Dtee=disabled \
+        -Dxcb=disabled \
+        -Dxlib=disabled \
+        -Dxlib-xcb=disabled \
+        -Dzlib=disabled \
+        -Dtests=disabled \
+        -Dgtk2-utils=disabled \
+        -Dglib=enabled \
+        -Dspectre=disabled \
+        -Dsymbol-lookup=disabled \
+        -Dgtk_doc=false \
+        $(PKG_MESON_OPTS) \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+define matio_BUILD
+    # https://github.com/tbeu/matio/issues/78 for ac_cv_va_copy
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        ac_cv_va_copy=C99
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB) $(MXE_DISABLE_CRUFT)
+endef
+
+define matio_BUILD_SHARED
+    $($(PKG)_BUILD)
+endef
+
+# build with the Meson build system
+# build a minimal libxml2, see: https://github.com/lovell/sharp-libvips/pull/92
+define libxml2_BUILD
+    $(MXE_MESON_WRAPPER) \
+        -Dminimum=true \
+        $(PKG_MESON_OPTS) \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# Only build libarchive with zlib support
+define libarchive_BUILD
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        $(MXE_CONFIGURE_OPTS) \
+        --without-bz2lib \
+        --without-libb2 \
+        --without-iconv \
+        --without-lz4 \
+        --without-zstd \
+        --without-lzma \
+        --without-openssl \
+        --without-xml2 \
+        --without-expat \
+        --disable-acl \
+        --disable-xattr \
+        --disable-bsdtar \
+        --disable-bsdcat \
+        --disable-bsdcpio \
+        --disable-posix-regex-lib \
+        $(if $(BUILD_STATIC), CFLAGS='$(CFLAGS) -DLIBARCHIVE_STATIC')
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)' $(MXE_DISABLE_CRUFT)
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(INSTALL_STRIP_LIB) $(MXE_DISABLE_CRUFT)
+endef
+
+# build with the Meson build system
+# compile with the internal PCRE library
+define glib_BUILD
+    # Enable networking to allow gvdb to be downloaded from WrapDB
+    MXE_ENABLE_NETWORK=1 $(MXE_MESON_WRAPPER) \
+        --force-fallback-for=gvdb \
+        -Dsysprof=disabled \
+        -Dtests=false \
+        -Dnls=disabled \
+        -Dglib_debug=disabled \
+        -Dglib_assert=false \
+        -Dglib_checks=false \
+        $(PKG_MESON_OPTS) \
+        '$(SOURCE_DIR)' \
+        '$(BUILD_DIR)'
+
+    $(MXE_NINJA) -C '$(BUILD_DIR)' -j '$(JOBS)' install
+endef
+
+# build statically
+# disable tests
+define imath_BUILD
+    cd '$(BUILD_DIR)' && '$(TARGET)-cmake' \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DBUILD_TESTING=OFF \
+        '$(SOURCE_DIR)'
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+# build with CMake.
+define openexr_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DOPENEXR_INSTALL_PKG_CONFIG=ON \
+        -DOPENEXR_INSTALL_TOOLS=OFF \
+        -DOPENEXR_BUILD_TOOLS=OFF \
+        -DBUILD_TESTING=OFF \
+        -DCMAKE_C_FLAGS='$(CFLAGS) -Wno-error=incompatible-pointer-types' \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+define cfitsio_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DUSE_CURL=OFF \
+        -DTESTS=OFF \
+        -DUTILS=OFF \
+        '$(SOURCE_DIR)'
+
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+
+    '$(TARGET)-gcc' \
+        -W -Wall -Werror -ansi \
+        '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-cfitsio.exe' \
+        `'$(TARGET)-pkg-config' cfitsio --cflags --libs`
+endef
+
+# Disable tests and tools
+# Strip during install if needed
+define brotli_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DBROTLI_DISABLE_TESTS=ON \
+        -DBROTLI_BUILD_TOOLS=OFF \
+        '$(SOURCE_DIR)'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef
+
+# build with --disable-load-extension and --disable-rpath
+define sqlite_BUILD
+    cd '$(BUILD_DIR)' && $(SOURCE_DIR)/configure \
+        --host='$(TARGET)' \
+        --build='$(BUILD)' \
+        --prefix='$(PREFIX)/$(TARGET)' \
+        $(if $(BUILD_SHARED), \
+            --out-implib \
+            --enable-shared \
+            --disable-static \
+        $(else), \
+            --enable-static \
+            --disable-shared) \
+        --disable-load-extension \
+        --disable-readline \
+        --disable-rpath
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 install
+endef
+
+# build with -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_TESTING=OFF
+define zstd_BUILD
+    cd '$(BUILD_DIR)' && $(TARGET)-cmake \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DBUILD_TESTING=OFF \
+        -DZSTD_BUILD_STATIC=$(CMAKE_STATIC_BOOL) \
+        -DZSTD_BUILD_SHARED=$(CMAKE_SHARED_BOOL) \
+        -DZSTD_BUILD_PROGRAMS=OFF \
+        '$(SOURCE_DIR)/build/cmake'
+    $(MAKE) -C '$(BUILD_DIR)' -j '$(JOBS)'
+    $(MAKE) -C '$(BUILD_DIR)' -j 1 $(subst -,/,$(INSTALL_STRIP_LIB))
+endef

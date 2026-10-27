@@ -1,0 +1,11 @@
+tree 29e73de6223f5cd5df2e5ee96f83329e6b691526
+parent 54856061931817ec3437f6d86dd3480c0b721f4b
+parent 873d594405a82488b24d555c40fe64025c1a8a85
+author Emmanuele Bassi <ebassi@gmail.com> 1726152673 +0000
+committer Emmanuele Bassi <ebassi@gmail.com> 1726152673 +0000
+
+Merge branch 'wip/pwithnall/enable-tests' into 'main'
+
+build: Add -Dtests configure option
+
+See merge request GNOME/gvdb!25

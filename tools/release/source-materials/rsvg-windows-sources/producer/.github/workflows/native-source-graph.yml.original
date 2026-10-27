@@ -1,0 +1,37 @@
+name: Native source dependency graph
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rsvg-windows:
+    name: Resolve declared Windows librsvg source graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Select a currently available compatible Rust toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: Apply original Windows source changes and capture the default library dependency graph
+        run: node tools/release/capture-rsvg-windows-sources.js "$RUNNER_TEMP/mediamanager-windows-source-graph"
+      - name: Preserve actual source graph, effective lock, command output and newly acquired containers
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: windows-rsvg-source-graph-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mediamanager-windows-source-graph/receipt.json
+            ${{ runner.temp }}/mediamanager-windows-source-graph/pristine
+            ${{ runner.temp }}/mediamanager-windows-source-graph/effective
+            ${{ runner.temp }}/mediamanager-windows-source-graph/logs
+            ${{ runner.temp }}/mediamanager-windows-source-graph/new-crates
+          if-no-files-found: warn
+          retention-days: 30

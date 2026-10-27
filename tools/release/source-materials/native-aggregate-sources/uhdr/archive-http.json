@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://github.com/google/libultrahdr/archive/v2.0.2.tar.gz",
+  "responseUrl": "https://codeload.github.com/google/libultrahdr/tar.gz/refs/tags/v2.0.2",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=libultrahdr-2.0.2.tar.gz"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"85b48a7e8170f46911d3b6d0843ac723ed6111767fdba30ec6298df7eec8c2f9\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:51 GMT"
+    ],
+    [
+      "Transfer-Encoding",
+      "chunked"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "D18D:1C7F00:2B755C:2F163B:6AE0A87B"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:53.813979+00:00",
+  "bytes": 1518872,
+  "sha256": "aa8d193bb887c348c419780511dd03b374f4e07af8812b6d3f80c8537cf1ef2c"
+}

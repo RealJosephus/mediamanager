@@ -1,0 +1,11 @@
+tree 383ac4e604330018281e552e169d91a5f3ed25a1
+parent 30f1d87299e6fc4d06e0d4d49212956407689cee
+parent f236461edd26abd8ee62ff019bb72b4f4011a2b2
+author Even Rouault <even.rouault@spatialys.com> 1782568888 +0000
+committer Even Rouault <even.rouault@spatialys.com> 1782568888 +0000
+
+Merge branch '4_7_2_rc4' into 'master'
+
+Prepare for 4.7.2rc4
+
+See merge request libtiff/libtiff!916

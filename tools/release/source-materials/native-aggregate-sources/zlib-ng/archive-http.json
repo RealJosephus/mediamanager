@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://github.com/zlib-ng/zlib-ng/archive/2.3.3.tar.gz",
+  "responseUrl": "https://codeload.github.com/zlib-ng/zlib-ng/tar.gz/refs/tags/2.3.3",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=zlib-ng-2.3.3.tar.gz"
+    ],
+    [
+      "Content-Length",
+      "2447397"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"c283aff005bf6c561d1cbbb6a9d316eff196a3f88e73a960f7cb58e4de610af7\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:52 GMT"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "D18F:26375B:2BEE9F:2F94CC:6AE0A87C"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:54.592545+00:00",
+  "bytes": 2447397,
+  "sha256": "f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1"
+}

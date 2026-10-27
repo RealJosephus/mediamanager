@@ -1,0 +1,828 @@
+[
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/.gitattributes",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 77,
+    "sha256": "6c01bde0e623b54282a76dcd73e3d378d8385702e04c0a89d65a6fb8cbecee3b",
+    "gitBlob": "e86971a3040cf97a42c2c81d7272346ede33b8f8"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/.github/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/.github/workflows/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/.github/workflows/oci-publish.yml",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1788,
+    "sha256": "9cd74a28c7ec756df2fe129cf8984acef1ab488bab8297d28d503338e247f565",
+    "gitBlob": "8223fe9f7b505083cfac09d342f0f7edcf249e3b"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/.gitignore",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 72,
+    "sha256": "10d8c59e20a0b8c9399af7622d6d87291ebecfc508e956b8d20a130ccfeebd0e",
+    "gitBlob": "d23863d39e6f813706e0a16288fd4667a489282b"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/README.md",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 11708,
+    "sha256": "b8497d90d55fe7b053e7e290ca80aeafbb811fd347dee7c61b6b8b60fc6b67f9",
+    "gitBlob": "3eb83316a0abc25923e272943eccea6e1c6d9c00"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/TODO.md",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 285,
+    "sha256": "cc9c4f05d8a7794837e7aaaf09b35a300845892a048b15a6fcf56d9c294d9c2e",
+    "gitBlob": "d9d7ca5f1fc6a8c32edbf4ac26dd6c0a1e262687"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 7471,
+    "sha256": "21f8ae16447d9987493519ac33d91344ffc7783eb70dc64965eea926f7d64cfa",
+    "gitBlob": "b10ea5320d61fdddebadad48ff8c6d92ff8dabc8"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/aom.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1263,
+    "sha256": "f129aea9a60575d24cf80a82ccbe551c1f9aad496760c955cd29194b29992aa6",
+    "gitBlob": "3f93b6985e64e9ae4bc175c5ccb367d2dea3d70c"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/cgif.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 690,
+    "sha256": "f83f452c014880cdd01cbfdfc8bb18b1ad4b662919a1f8c7db75c8e50d3be6eb",
+    "gitBlob": "baa447f695a493205af1cf8f6a8a9a6ef11ef130"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/highway.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 881,
+    "sha256": "9b1a766fd12253cecee01f7c460dc9fd0178aa9182c65e2b9a0985b15f51e6c0",
+    "gitBlob": "96dba4ac8c69a69d913e72a83fd97c639dfd8b9a"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libdicom.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 808,
+    "sha256": "28571a33ddb8414873ea08fd8b4016bf2661b02e0e039f9b44d27b318546569d",
+    "gitBlob": "49d27b41dca007e31e757d8cc2a0e4c89cb6c1ba"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libheif.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1052,
+    "sha256": "cbfb6cdfbab51f13978a9a5d4290ddcd909ca5f2aca1f08412be8eb7fc663ebe",
+    "gitBlob": "62e39d8035d8573c2b1b6bb9a0c2855d720a5885"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libimagequant.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 652,
+    "sha256": "effe30fe26814beb688a8cb7877515e7051995c806c4fa09726f5c21b6c6013c",
+    "gitBlob": "b2fdc6b6667760bd87dbe8f660c5a6f7cddd5316"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libjxl.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1221,
+    "sha256": "9c440807d06a96bd90ef659c49002119052298db15574cda956a2309b156b19b",
+    "gitBlob": "2e8ccc365c6be695894f2ee37c6f0a819cfa8c4e"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/nifticlib.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1029,
+    "sha256": "7dd1bb5d868f1262776d187a43ac0bedbddcbfeefb9fc0ba00eb7a2d4a2a2675",
+    "gitBlob": "820e83d957674ff11232ddae94b1eaf7b8a6ff22"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/nip4.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1482,
+    "sha256": "15af7de7acf0f395aba3e475304576dceeaa4b4167ec56292e71e6062fc0e8e8",
+    "gitBlob": "f963002bb60f0a33fcf3e610f39a4fd17c62650d"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/openslide.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 744,
+    "sha256": "0500e58a4aace3fd75180e8e734caa6fe5d754eec6e54050a89c636d0d47a8cf",
+    "gitBlob": "b2538ead056be9bb1dc0214bb169c1b410de0205"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 33438,
+    "sha256": "b8703578a653b609eacd91f1bc88bf6449acf3cc7ed553b0c75dda13d25eb51b",
+    "gitBlob": "050bb2e261603e79922996075d3ac8f576891065"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/aom-3-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1522,
+    "sha256": "c4f15c4be72f9df33c7af874486227961e7e7263b03d0f6e2907d753fa9f31aa",
+    "gitBlob": "3c1727dccde3a251548596cb9a19c0d333707473"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/cairo-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 19182,
+    "sha256": "e9fa4176252f278e8d53ca110959797ac7f636da9f8dfb0d8d5b4c2db69b3b08",
+    "gitBlob": "9b2644b1b866fcd81953c9948cf6daffab5537bd"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/cairo-1-nanoserver-compat.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1325,
+    "sha256": "96eca5ad103861c380c202054401d02e13b14643fe71c665a2fb00b51ffe8db1",
+    "gitBlob": "16943c9420ff2d29a662a5ef353941792b89e16e"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/fontconfig-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2312,
+    "sha256": "452d8b94ea7a17f3b0abbe858d799fd774fe0097e21f639f412b3b00662c3a73",
+    "gitBlob": "097056e3c17b09a4c481046610fec83e7cdbabb8"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/gdk-pixbuf-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3162,
+    "sha256": "482901be8e32a92e9dca5cd0f555ae9ce961300a4b98a62f6e3bf8ce0aa64451",
+    "gitBlob": "db65c0b8dcbb8794ec564ce9cad8ee7a5d665575"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-dllexport-static.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1193,
+    "sha256": "65fd140acf960794197b0b38cbc234c5c08f211d8ab679b1695df456250b8a76",
+    "gitBlob": "38082c754bc21ba56c0c9091ca46fcfd4c4d9580"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2146,
+    "sha256": "9778d07b7cb8bdcedd474f345f85ae844542cb34fb38ec6c72cf3615a12b03c5",
+    "gitBlob": "a02495f59795240fbd37098adc9db5e9a59b5732"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-without-gregex.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 7759,
+    "sha256": "81013d38fc18da12522bc3c58d8988d2ac9ee9ca5a55bd4e68486044aa55191f",
+    "gitBlob": "11c8a38ccefb3bda9d845e477035f5a30866dda6"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-without-win32appinfo.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1146,
+    "sha256": "66dbbd92404b11316d7bc896889c531697328d645af989e5a0c11aab76fbbca4",
+    "gitBlob": "aa2efde0116dc94816a5f7119101b0ff758e6fc7"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/imagemagick-7-disable-network.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 7317,
+    "sha256": "493f256e08407d479a76e62622069025d3ac290263864761688dbf74cb568fcf",
+    "gitBlob": "567bdeee78680639561bd36278a27b7ada37c099"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/imath-3-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 840,
+    "sha256": "785b884d4963a3e522e5d831ebda4a5e0ea9ee281a9e0df6affa13b0e7711f47",
+    "gitBlob": "2e30bb65763855f59fc08b23982872a434d5e001"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libheif-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1289,
+    "sha256": "846ad069dca01304f6fcbe92ff29636b4183d8eef3d275349dc91cedc8a313c7",
+    "gitBlob": "d4580ec108a7d8b3230c0ce73522f3beaefc50aa"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libjpeg-turbo-3-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1807,
+    "sha256": "159b0704488ea123f6d57febbd908507868c5875bc8a7837ca8eca80d1541b29",
+    "gitBlob": "100b6cc71fe44d47191a132496e8eedab2701d18"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libraw-0.22-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1270,
+    "sha256": "169e92a78762d44751e78c7c8a1305d0f19d8614aff759d3d06d47c4979eb2c1",
+    "gitBlob": "1e912efd1e94d06a554ddc94c9405b1efc62fb8b"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/librsvg-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 5972,
+    "sha256": "4806547a27937b4ad0f7bae4e17d34e12c959e5fef91756951726ec71e8a0910",
+    "gitBlob": "b7657c90ae02bbeab49550964472082cb537d298"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libtool-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2487,
+    "sha256": "66912b00a1da59a5f58d71a95def05e1b48cd8b49bbd01cffff49d4e8daff030",
+    "gitBlob": "cab9230a0195fef2a2349aa14e6841d64433a49d"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libxml2-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 994,
+    "sha256": "ec36b3e3d5aa05a86ce0ca743c0504e6cfb2d5539b7a45b6c78c8e7b52018f6f",
+    "gitBlob": "3e06c7718fbda34eeac6ab276b5a575d5277991a"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/matio-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 819,
+    "sha256": "9bc50605ac2a95fa066e0e095d625ba363f379ac7fe00f4a7d9418a84ab13e36",
+    "gitBlob": "d267ac9c6a749b14294d900f5c6829a1d70ef4b5"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/nifticlib-3-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 8286,
+    "sha256": "bc6f13605ea0d46ada65385c9148c0c90ce213841c61b827d07c6b526cfe5bbf",
+    "gitBlob": "2340f7d635b21c1814902db7b1f843da12712c27"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/openexr-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3030,
+    "sha256": "cd60a6b627c484fbf0e6864912ca7e431277ff2586fefb81d24b7a868fade5fe",
+    "gitBlob": "7287249e4564b569f0dbada90b0cd3d8ff4b6f94"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/openslide-4-without-gregex.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3540,
+    "sha256": "cd643e3d034e313e13c14ae2da8af2ebd2ce10f9dee5f53319e214d0ff678747",
+    "gitBlob": "f4b0c1cc58ec627eccc242264c1871cde9d9c00d"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/poppler-26-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 748,
+    "sha256": "ddc21cb75272d3269fd39a517bc48ba2533bf95125cafe17d346ccb4251b358e",
+    "gitBlob": "b0168bb5eb6e6e12704c1549b02ff2f913ad9b6c"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/sqlite-3-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1243,
+    "sha256": "3f84717c76922434368b1b8bf54b6dad649ca35ee79f00028fa5a4db1b3a9e9a",
+    "gitBlob": "26be97d0185d111a6cc3a4722f7474cea935ae50"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/uhdr-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 6224,
+    "sha256": "c308dd7c65a2bee0fea7471a71916dea1a5f48d698ebedeff41904b38074484b",
+    "gitBlob": "6c1b14f35f63631aa7d2d312f1e96c6bbfd639fc"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/zlib-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1596,
+    "sha256": "203e1df29951bd860c72384c4da06cb3d3935a35e7367f720136da6d35b357d3",
+    "gitBlob": "d83809bfe97a18405d34af4f1249a446ef94a859"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 795,
+    "sha256": "102ef4514d25e2dd1f56ebd03ee9647b5ed1fc633b3048145b0adcbd5e3036b5",
+    "gitBlob": "5784b9f3ecd1bc2805f155a2a51a16ea234a9740"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/patches/vips-8-dlldir-as-libdir.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2852,
+    "sha256": "fe5bcc0e041324873cd8917aa0e06832d5d231046433bf7a6a45cc429f5fc3e8",
+    "gitBlob": "73beef9c30ed146b73f87b9c4f8ac2d1323f5aed"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/vips-all.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3902,
+    "sha256": "8fb8c4992977f16cecbc8782fd4a495411130d344dbd39b5ed28f1eda454f591",
+    "gitBlob": "38b3bf42ffa67d7cea0bd55a8746aa899bfd2a0c"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 395,
+    "sha256": "948558c83718acbe5726ccc547c2b6295da23dc51245cb15c2040cf49f0431f5",
+    "gitBlob": "bb6fe6bb7ab4572a9e87798ada9468711d224b5d"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/patches/glib-2-static.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2198,
+    "sha256": "a1b3cb835461cc0091854b9c3ad63f5960f3671be80f89f45bf981ef2a669578",
+    "gitBlob": "df4af564a86d9a5816a95aec403a7e0083e1d1bb"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/directx-headers.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 704,
+    "sha256": "0466b8492a4b8be908c3dd03c8388d07692e8f39bf343b229d7a7cfa41c5ff60",
+    "gitBlob": "0175a38400350d5d14409c231e665aec7153fd47"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/graphene.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 896,
+    "sha256": "f8b1744c233d680740d1d8bfa2ecbda7cc512e382cd47ecf8e155de466603027",
+    "gitBlob": "904b59437236de56801895a89afc6c0298e0eef3"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/gtk4.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1100,
+    "sha256": "92e18f85c76d2da7136c7fccd766e486f542e1dbb67235b3522f4138f3382ef5",
+    "gitBlob": "f0529249fd76de7606e022b08ac75ea6864f0c61"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1246,
+    "sha256": "8d40f9b28b0b6313f056c5b3bde37df02af5b40a34c7f319c641bb27cff4601c",
+    "gitBlob": "7201ba6736851286e13458592b919fe6fc1ff8a7"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/patches/gtk-4-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1780,
+    "sha256": "b686c13fea2486f5ccee6c73fb0ce66690849b97686f84e7e55592a16b155f39",
+    "gitBlob": "44b025a6984e6a13c84171560cff0fb548bada46"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/libde265.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 774,
+    "sha256": "40096e7ba74599c4e9a12266a00703335d523522100f98e6a66f27eb2c8ab23b",
+    "gitBlob": "fdb2b9ed198e321f252c7f95a6363493baf576f7"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3006,
+    "sha256": "22f31ead3b8f6473c758fab69973d87281c60aa2d7ed03f9653a30372dd2a1a3",
+    "gitBlob": "acade8b2be7fd18d92aabf2e2e6d76042e801b25"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/patches/x265-4-fixes-crlf.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1036,
+    "sha256": "834953e5467184f892d6d78da8d2cc93512fda606b2e3560b56993a3208b35d4",
+    "gitBlob": "8f00b72ebf4ab7577d7b0ae0895b161c50b64378"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/jpegli.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1281,
+    "sha256": "b974096fa7f8067d2f4edca960ed58e3b0cbb298cb1f187b6df20238b545a655",
+    "gitBlob": "86c84175a8c39f657658b51e5ae6b5257b21e2ae"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 695,
+    "sha256": "9780b2411f98d0dfbf611e08e967cd73135379e25d2a9d7dd766cfa19fcac690",
+    "gitBlob": "32e0253dc2c935a3b634f94262a0399934fbc012"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/patches/jpegli-0.12-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 19103,
+    "sha256": "29a0504361cf47eaa20717ae6bfdc533715f9df5b0c705b399637a6d6ca49037",
+    "gitBlob": "620f02823e18a2b4f12fabcdc1b44d8859769794"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/mozjpeg.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1064,
+    "sha256": "d5e7af68bce6e54b2fd7b50a5f70fa14aea43eff6ab044c7ac9256e1f672641f",
+    "gitBlob": "a73d0dc268f4d6ee6d89adcc5183e78ca706b400"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 883,
+    "sha256": "e0c1de0e84ed7d46318452cdaead6111862bcd9b7ef37fa3b37f0b208cb9f7b4",
+    "gitBlob": "7b0d77418d9f98eaa92fa85930555b5fbe11c248"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2420,
+    "sha256": "7952f72840a29a815740bbcdbf986903a800a97af3685d2654f0d020641e89c1",
+    "gitBlob": "a468c42be922c95cd6512f5e031ceda485812ec1"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 7615,
+    "sha256": "3ddb71285d43dde5c75a0080cc62cbc158d32359af132b8314e76b85b9205764",
+    "gitBlob": "aca5f7f2f6c691db1369fc86c01d01022e07b8ba"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/nightly/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/nightly/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 215,
+    "sha256": "44c54d98c92f9290aa232f95e0399a4b79cf5cebb47e765f4c92fb9dc161f19d",
+    "gitBlob": "a9dee13e353d785299efdac4bee2c9df71e0a181"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 283,
+    "sha256": "7743f7bb299ef280d5f5718341de423a2be5c8553fb88b79cfd0d066a0e899fc",
+    "gitBlob": "7d92a2200e57e33d74d0466b11331a29e9b3adc8"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 782,
+    "sha256": "a8386926e1023d3183a48a3f69687ab13ec5639ad07496cdf5f045f0993fb0fd",
+    "gitBlob": "fac0c5b1dd83bcdfbbb866d4a1b04a89193eda3b"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/proxy-libintl.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 675,
+    "sha256": "3322209995d2a56e84998007c6ef8aa7e3d87200490bff1c032e5c6caae04836",
+    "gitBlob": "d1104817084bb3094a0da4160da0e6cd3d901be1"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 462,
+    "sha256": "73175da2b6562abdead5ad66544858d83e6ce74cec62ee49a8619a93805388bb",
+    "gitBlob": "e1894ca3e792e01b52e469412c4177dd42421dcd"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/vips-web.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 2664,
+    "sha256": "faffedbbb6d83ac063c48378656efffdf3445c7f2797281cefd0ca1860b21477",
+    "gitBlob": "d99478a7068bdffec782722c321caa1166952290"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/overrides.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1385,
+    "sha256": "ac2b54ad1429cca7486c1848f7709759adb6248df9ea3739e979fd58ee87dfb0",
+    "gitBlob": "a883ba5cb1e1b8e305e4fa40590d40f098741320"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1031,
+    "sha256": "22f110cc8b1566db3726d0d448ab04cd11297f062368bdd77971adf9455b852b",
+    "gitBlob": "d3fe8107dbf81dd82b36d96517d4633e046e9b43"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/zlib-ng.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 772,
+    "sha256": "6a5b902348cd00b68adfc436f2a349bcd0b44ed9a7b7289a21cf8c07e8c9a647",
+    "gitBlob": "3608ee29d2862480834ee52b9a2178bccbb04a2a"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/settings/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/settings/debug.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1179,
+    "sha256": "5adf14e1c147437d3f234f53f8a723c27a7e68e3daeb854759a621685939ea21",
+    "gitBlob": "8c40839af32af2e31d594d91073cd54a5090011a"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/settings/release.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1319,
+    "sha256": "39a2f1d06a7d6d2cc0c0756af7b646234e681ce752907f815d1c1f5075c3c2d6",
+    "gitBlob": "3d34bead4b492ac2e811aca9781465424096e63c"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/uhdr.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1023,
+    "sha256": "c7098df2dc28bcdcba9f89d1ec911a2811ab9234249c4c2b613130e44b6080cd",
+    "gitBlob": "195836b633802e176ad57fd14ed28ccc4469966b"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/vips.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1189,
+    "sha256": "8097e70cea300e6cac2e228b61eebd94d5a5c54981d5dcccbfe87934663be91c",
+    "gitBlob": "085d8ebe01b16c0bc09fa1c492f8d52eb62b4ccd"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/vipsdisp.mk",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1269,
+    "sha256": "65cfe210e36f4198be2a524c92a408e555d75637f555e35a7f23436851178812",
+    "gitBlob": "7aef6a8277229b9ed10cbd17d8d3d76a71ec587a"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/container/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/container/Dockerfile",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 925,
+    "sha256": "0817cff4f940ccf477997f93b6833f839e9ddaa9a0a865cdf64a96df510de747",
+    "gitBlob": "f43bec7e043a04136195f29e3ab4bafc7c00a765"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/container/base.Dockerfile",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 854,
+    "sha256": "3a10f483c1965bb885bf2618423b491179b5886523cdeb35df3339aa7fd1d726",
+    "gitBlob": "d7d90626ff0b669059b7a7abf37b6a2f62e45d66"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/gendeflibs.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 1300,
+    "sha256": "2ecff5d96ee7eecbb98bd1209456dbe1e5875ea796780d2ba5c0efd29cb6c6ee",
+    "gitBlob": "5f5b758c0253189c43098f33528df04c5bde055e"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/package-gtk.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 4737,
+    "sha256": "9c2bac9519249d48c29bb15102abfe1c82059815468f9cba4c249c0784ffcc41",
+    "gitBlob": "adfacbf294c0d515c2c482b8472c5b1940cb45bc"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/package-vips.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 4923,
+    "sha256": "bd10062a2a507134ae4d610077a020c0a05348f7262e0e6d809ab75ba56fa389",
+    "gitBlob": "41d74b41b07def298b95905f448f521af600ceaf"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/package.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 613,
+    "sha256": "0e3d0c08f9ca6f1e41997a58d38b766db368021edc4ca27201adc4494ed22f27",
+    "gitBlob": "c26deefbfdffa7992df923f55e60916cae1c6a0d"
+  },
+  {
+    "path": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/variables.sh",
+    "kind": "file",
+    "mode": 509,
+    "bytes": 1057,
+    "sha256": "8054b721966778edbacc76fbcecac6d9061583fbb7c5d3ffefe6ae4c2aca8057",
+    "gitBlob": "32e0391c6dc19a9fedc6230e21cf8f6e088f535b"
+  }
+]

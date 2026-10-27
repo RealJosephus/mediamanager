@@ -1,0 +1,109 @@
+{
+  "retrievedOn": "2026-10-26",
+  "documents": [
+    {
+      "path": "entities-LICENSE",
+      "bytes": 1064,
+      "sha256": "750cb3fb6362804957ef52caaf9b5c824015be44d494637330d7cd8834d31d40",
+      "source": "https://raw.githubusercontent.com/nodable/val-parsers/d2070d76a8ba07e6c7fa142caeb51ffd756e47eb/LICENSE"
+    },
+    {
+      "path": "GPL-3.0.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "source": "https://www.gnu.org/licenses/gpl-3.0.txt"
+    },
+    {
+      "path": "img-sharp-libvips-darwin-arm64-metadata.json",
+      "bytes": 2192,
+      "sha256": "c6cd948f1f4b23308f560e68d360e19867b4f0241a71c2629f565a154b234579",
+      "source": "https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/1.3.3"
+    },
+    {
+      "path": "img-sharp-libvips-darwin-x64-metadata.json",
+      "bytes": 2168,
+      "sha256": "bd06e0818a88f3968aeb6cf384e2819049cba8b499e4a5eee702ce18799ad1bf",
+      "source": "https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/1.3.3"
+    },
+    {
+      "path": "img-sharp-libvips-linux-x64-metadata.json",
+      "bytes": 2210,
+      "sha256": "776f6cf928e96a1ab537914741d9eb67fcc6087832589a23506065e873466666",
+      "source": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/1.3.3"
+    },
+    {
+      "path": "LGPL-3.0.txt",
+      "bytes": 7652,
+      "sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+      "source": "https://www.gnu.org/licenses/lgpl-3.0.txt"
+    },
+    {
+      "path": "nodable-entities-metadata.json",
+      "bytes": 2033,
+      "sha256": "aebf2940a5d66662c8afed6875a3b35adee126228dc1102f3d02f835b2b6a786",
+      "source": "https://registry.npmjs.org/@nodable/entities/3.0.0"
+    },
+    {
+      "path": "sharp-libvips-THIRD-PARTY-NOTICES.md",
+      "bytes": 4230,
+      "sha256": "25ffcfa69e28b1913ced27ec778b90f24911a1bb3021253577e8b0af55db0d49",
+      "source": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/THIRD-PARTY-NOTICES.md"
+    }
+  ],
+  "packages": [
+    {
+      "name": "@img/sharp-libvips-darwin-arm64",
+      "version": "1.3.3",
+      "license": "LGPL-3.0-or-later",
+      "integrity": "sha512-suTBPTDGrI9WodccaDdwZItTSaBYASlBk1NSfElSHrUfzu3szG6lvIF58+WiFvnfzuK8ZBFS5zE00PxqxnRiPg==",
+      "metadata": "img-sharp-libvips-darwin-arm64-metadata.json",
+      "gitHead": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+      "licenseTexts": [
+        "GPL-3.0.txt",
+        "LGPL-3.0.txt"
+      ],
+      "notices": ["sharp-libvips-THIRD-PARTY-NOTICES.md"]
+    },
+    {
+      "name": "@img/sharp-libvips-darwin-x64",
+      "version": "1.3.3",
+      "license": "LGPL-3.0-or-later",
+      "integrity": "sha512-FVJZ5mITMobmXIz/hPDTw0EintTW5H3WfrxwLqEqjiIihlu+hVRyGrFQ60xl0Lxn7Bt3zdpevPaQi0HEzqz9fw==",
+      "metadata": "img-sharp-libvips-darwin-x64-metadata.json",
+      "gitHead": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+      "licenseTexts": [
+        "GPL-3.0.txt",
+        "LGPL-3.0.txt"
+      ],
+      "notices": ["sharp-libvips-THIRD-PARTY-NOTICES.md"]
+    },
+    {
+      "name": "@img/sharp-libvips-linux-x64",
+      "version": "1.3.3",
+      "license": "LGPL-3.0-or-later",
+      "integrity": "sha512-4vKmvAst9nrowcqquKFAyZJUDolUaIp8uRiN0mWFguJ1IplC9/pitXtlnnlU4aa/eJw3J7i67V+pwUL+wZGdsA==",
+      "metadata": "img-sharp-libvips-linux-x64-metadata.json",
+      "gitHead": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+      "licenseTexts": [
+        "GPL-3.0.txt",
+        "LGPL-3.0.txt"
+      ],
+      "notices": ["sharp-libvips-THIRD-PARTY-NOTICES.md"]
+    },
+    {
+      "name": "@nodable/entities",
+      "version": "3.0.0",
+      "license": "MIT",
+      "integrity": "sha512-8L9xFeTYKhm49xfIypoe2W5wV1m/3Z58kT+7kR9A8OyFxcPduI4VmxaUMQyKYrRjUoLLSXv6EKKID5Tvj9cUVw==",
+      "metadata": "nodable-entities-metadata.json",
+      "gitHead": "d2070d76a8ba07e6c7fa142caeb51ffd756e47eb",
+      "licenseTexts": ["entities-LICENSE"],
+      "notices": []
+    }
+  ],
+  "limitations": [
+    "These documents supply declared package license texts and an upstream notice table. They do not establish complete constituent licensing, corresponding upstream source or a reproducible native toolchain.",
+    "The sharp-libvips notice table is the original file at the npm gitHead; its external links are preserved and do not assert that linked current content was used by the published binary.",
+    "The entities npm gitHead is recorded as published; the upstream package version at that commit predates its registry version. The original license is supplied without claiming source reproduction."
+  ]
+}

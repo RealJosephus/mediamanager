@@ -1,0 +1,33 @@
+name: Windows native source preparation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    name: Apply actual Windows native source patches
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Check actual current graph and complete source-container behavior
+        run: node --test tests/release/windows-native-build-inputs.test.js tests/release/windows-native-aggregate-sources.test.js
+      - name: Apply original prepare-pkg-source rules to all selected native sources
+        run: node tools/release/prepare-windows-native-sources.js .test-output/windows-native-source-preparation
+      - name: Preserve actual source preparation and diagnostics
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-native-source-preparation-${{ github.sha }}
+          path: .test-output/windows-native-source-preparation
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

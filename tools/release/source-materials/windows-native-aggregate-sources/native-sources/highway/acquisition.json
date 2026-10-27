@@ -1,0 +1,121 @@
+{
+  "selectedSource": {
+    "file": "highway-1.4.0.tar.gz",
+    "sha256": "36f672ab48ddb3c8555e9e89e16fe400cd7d16c6eb455a1a3d0c146a63ababdc",
+    "url": "https://github.com/google/highway/releases/download/1.4.0/highway-1.4.0.tar.gz",
+    "url2": "https://github.com/google/highway/archive/1.4.0.tar.gz",
+    "packages": [
+      "highway"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://github.com/google/highway/releases/download/1.4.0/highway-1.4.0.tar.gz",
+    "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/206791328/dc0c3558-7357-4b88-97de-161be965d3c1?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T15%3A26%3A55Z&rscd=attachment%3B+filename%3Dhighway-1.4.0.tar.gz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T14%3A26%3A16Z&ske=2026-10-27T15%3A26%3A55Z&sks=b&skv=2018-11-09&sig=RoX1BjSFFU5b9pHFliMNm2hdTcZ9h2ayJwY8matZLa8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzExMTY0OCwibmJmIjoxNzkzMTExMzQ4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Hs1FiEQKD7IrDAWK2Bn38pwvWM0zpMYcBGSm3vFtYVA&response-content-disposition=attachment%3B%20filename%3Dhighway-1.4.0.tar.gz&response-content-type=application%2Foctet-stream",
+    "status": 200,
+    "headers": [
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "Content-Length",
+        "3691557"
+      ],
+      [
+        "Last-Modified",
+        "Thu, 23 Apr 2026 16:51:18 GMT"
+      ],
+      [
+        "ETag",
+        "\"0x8DEA1588A523191\""
+      ],
+      [
+        "Server",
+        "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+      ],
+      [
+        "x-ms-request-id",
+        "0f16e252-601e-0071-48d4-53077e000000"
+      ],
+      [
+        "x-ms-version",
+        "2018-11-09"
+      ],
+      [
+        "x-ms-creation-time",
+        "Thu, 23 Apr 2026 16:51:18 GMT"
+      ],
+      [
+        "x-ms-blob-content-md5",
+        "EJnaS3chMVuI4Wx0gn1voQ=="
+      ],
+      [
+        "x-ms-lease-status",
+        "unlocked"
+      ],
+      [
+        "x-ms-lease-state",
+        "available"
+      ],
+      [
+        "x-ms-blob-type",
+        "BlockBlob"
+      ],
+      [
+        "x-ms-server-encrypted",
+        "true"
+      ],
+      [
+        "x-ms-access-tier",
+        "Hot"
+      ],
+      [
+        "x-ms-access-tier-inferred",
+        "true"
+      ],
+      [
+        "Via",
+        "1.1 varnish, 1.1 varnish"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ],
+      [
+        "Age",
+        "0"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:08 GMT"
+      ],
+      [
+        "X-Served-By",
+        "cache-iad-kcgs7200060-IAD, cache-muc13964-MUC"
+      ],
+      [
+        "X-Cache",
+        "HIT, MISS"
+      ],
+      [
+        "X-Cache-Hits",
+        "6929, 0"
+      ],
+      [
+        "X-Timer",
+        "S1793111348.370091,VS0,VE95"
+      ],
+      [
+        "Content-Disposition",
+        "attachment; filename=highway-1.4.0.tar.gz"
+      ],
+      [
+        "Content-Type",
+        "application/octet-stream"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:10.812548+00:00",
+    "bytes": 3691557,
+    "sha256": "36f672ab48ddb3c8555e9e89e16fe400cd7d16c6eb455a1a3d0c146a63ababdc"
+  }
+}

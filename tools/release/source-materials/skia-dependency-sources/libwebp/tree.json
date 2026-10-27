@@ -1,0 +1,2501 @@
+[
+  {
+    "path": ".cmake-format.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "71043af1eb687b9d75329fd4c3cee18e56cc23c3",
+    "bytes": 8413
+  },
+  {
+    "path": ".gitattributes",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa5a76cf9728a2bfd83cc37828c6520326cef436",
+    "bytes": 133
+  },
+  {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d6f03c42c2d57f57b4ad0ff88b4ad634a8f1460",
+    "bytes": 837
+  },
+  {
+    "path": ".mailmap",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf26f1df6d33611182146502da4ae1ac89d3af0c",
+    "bytes": 781
+  },
+  {
+    "path": ".pylintrc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4658b844b806ea7d155ae8530c31a6a2a952fed4",
+    "bytes": 14563
+  },
+  {
+    "path": ".style.yapf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0be981a4867039beebe75a1a5b21afa1e31d2cf3",
+    "bytes": 29
+  },
+  {
+    "path": "AUTHORS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4cbe9766082eae2ebb251aae2dfbd6d19b5f820f",
+    "bytes": 3048
+  },
+  {
+    "path": "Android.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1e9ad803047167acf9a8c8402e8e6689eb9916f",
+    "bytes": 7557
+  },
+  {
+    "path": "CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b785a8e60d9d2740a0a482180843ae20e6d131dc",
+    "bytes": 32240
+  },
+  {
+    "path": "CONTRIBUTING.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9540f34f75ce10d5801ec17e633d1ce807abe27b",
+    "bytes": 2650
+  },
+  {
+    "path": "COPYING",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a6f99547d4d6b4c5e6d5321acfaeba313e08de3",
+    "bytes": 1496
+  },
+  {
+    "path": "ChangeLog",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0d920efae30d63f84a87099c87c76b475a4f7ec",
+    "bytes": 255529
+  },
+  {
+    "path": "Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1c1dd4046314bf6aca335e16133c64cb52ad429",
+    "bytes": 155
+  },
+  {
+    "path": "Makefile.vc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "84e9a5dd0b78a0eed75c3a24c619e309aef2a7c2",
+    "bytes": 18891
+  },
+  {
+    "path": "NEWS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e40d8ead0e02c6500a6ed30ee6f132eb1eb89ee",
+    "bytes": 14301
+  },
+  {
+    "path": "PATENTS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "caedf607e95ae4c3dc84d057fddcc301cd0e4863",
+    "bytes": 1436
+  },
+  {
+    "path": "PRESUBMIT.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "91ad12e151afc6d8e0c01869b23bf627f9d3f2e8",
+    "bytes": 9043
+  },
+  {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ffffa538a8628883b2b9e994183fc5c3f05a77bb",
+    "bytes": 1586
+  },
+  {
+    "path": "autogen.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "8ef9babbae6f795050dfa8157c4478042b9e0746",
+    "bytes": 34
+  },
+  {
+    "path": "build.gradle",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14ceebf78c752c573c0d0fc827261bc02a8db50a",
+    "bytes": 11643
+  },
+  {
+    "path": "cmake",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6f28f90cc78351aa1f7dcc834fe141ff46bd678b",
+    "bytes": null
+  },
+  {
+    "path": "cmake/WebPConfig.cmake.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0d721f3f478d3411083c73be18c3d9fcaa018e1",
+    "bytes": 528
+  },
+  {
+    "path": "cmake/config.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe1c53ad9a957a06e6ae455684dba438d3acedbd",
+    "bytes": 3337
+  },
+  {
+    "path": "cmake/cpu.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "040c5247195a32bba834b7579fc7768e031dfa86",
+    "bytes": 6331
+  },
+  {
+    "path": "cmake/deps.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0760ba927b20c223005d598651b401eac303b05a",
+    "bytes": 5169
+  },
+  {
+    "path": "codereview.settings",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ccba2eeed2467cde06dbdb8aea39f499bdc105cb",
+    "bytes": 170
+  },
+  {
+    "path": "configure.ac",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "af7ac0eabdb9afed3f94e2117a2480300b71e49e",
+    "bytes": 29139
+  },
+  {
+    "path": "doc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3bb2fff5790d73f14c891290aafddd232185b678",
+    "bytes": null
+  },
+  {
+    "path": "doc/TODO",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b0a9382d856758093cefa6fa3c167439fe4198a4",
+    "bytes": 501
+  },
+  {
+    "path": "doc/api.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5d83dbbdb05202a5642ca8932fe9fec1bf74c4b",
+    "bytes": 13455
+  },
+  {
+    "path": "doc/building.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d870e34e22b32e28a882f8c17f1382869eee1f5a",
+    "bytes": 5921
+  },
+  {
+    "path": "doc/specs_generation.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0380d6646e7f2c2e76abacafbd7323dde4b1696c",
+    "bytes": 983
+  },
+  {
+    "path": "doc/template.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5dbc2894ab6f59159d67813deccfd54c76362970",
+    "bytes": 1929
+  },
+  {
+    "path": "doc/tools.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf492746fe4a31691eb63088288055cd6e59fa0f",
+    "bytes": 18095
+  },
+  {
+    "path": "doc/webp-container-spec.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c64bfd40908099b56f96e9e37fc225ad00c66f80",
+    "bytes": 33213
+  },
+  {
+    "path": "doc/webp-lossless-bitstream-spec.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f4db09a73246cdf774ae9aae148e8d2beb921636",
+    "bytes": 46768
+  },
+  {
+    "path": "examples",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c85fe4cc35aac04310fc21eb8fb92e67c77ece83",
+    "bytes": null
+  },
+  {
+    "path": "examples/Android.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ae0f5b42841a44e617c60924ca2715abef6d4012",
+    "bytes": 2123
+  },
+  {
+    "path": "examples/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbf0bac95ece5c41ca43c3e60066948e27473e60",
+    "bytes": 3635
+  },
+  {
+    "path": "examples/anim_diff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7ffabc8fd4a16f32ed0d920d12b7eba4611942ae",
+    "bytes": 11193
+  },
+  {
+    "path": "examples/anim_dump.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "269cbaba591db36326d5399b602c7bdafb2f960b",
+    "bytes": 4442
+  },
+  {
+    "path": "examples/anim_util.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf7da4c0c08e092a8d409c447bddcc406f68876d",
+    "bytes": 26672
+  },
+  {
+    "path": "examples/anim_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "574e032d9e0398c66d4d786437c91de98b03f40f",
+    "bytes": 2334
+  },
+  {
+    "path": "examples/cwebp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cab70054e5e5d07b3366fe9acfd1b8b6a764c85a",
+    "bytes": 48902
+  },
+  {
+    "path": "examples/dwebp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "652de6a6ee75dddf91df41a11fd6e072ff380756",
+    "bytes": 15418
+  },
+  {
+    "path": "examples/example_util.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa38d3c2a53ad04f995bd7a5eaa93020ebeb3212",
+    "bytes": 4204
+  },
+  {
+    "path": "examples/example_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe762a4d06f38674ebbcab1761c1736f26805f1a",
+    "bytes": 2757
+  },
+  {
+    "path": "examples/gif2webp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc9b25d98921a4e1d52ae75119b7063ce72a0004",
+    "bytes": 20560
+  },
+  {
+    "path": "examples/gifdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b9a69472cc4306fb6b8a0674ce5221338a2b418",
+    "bytes": 13623
+  },
+  {
+    "path": "examples/gifdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5eba9dd39ec16b8d2e080e77325d5fa9dc2ac8ee",
+    "bytes": 4007
+  },
+  {
+    "path": "examples/img2webp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3735030c1501357bed32cbf2257e259a873f4b1a",
+    "bytes": 11398
+  },
+  {
+    "path": "examples/stopwatch.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1b0faca02062820901183ff2e42cea1e7c3a05c",
+    "bytes": 1846
+  },
+  {
+    "path": "examples/test.webp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3e4bca1d8500ec465177ebac7c30d6cfde656c10",
+    "bytes": 4880
+  },
+  {
+    "path": "examples/test_ref.ppm",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97719f01f0e94bbf9a5b1aafe8a6d0ae7ff0e33d",
+    "bytes": 49167
+  },
+  {
+    "path": "examples/unicode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0831e23cbc7e003e4121b18c8ce5dfeed493c3b6",
+    "bytes": 4500
+  },
+  {
+    "path": "examples/unicode_gif.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "626c6e72654bc78aca4f4e721a05d15e73e65111",
+    "bytes": 1936
+  },
+  {
+    "path": "examples/vwebp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa5fadb1d8efee464c19d84db4bf917edc6ab124",
+    "bytes": 21578
+  },
+  {
+    "path": "examples/webpinfo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d2278ee17dcc7455ac592ba5c4f9e3c8e96ffa3",
+    "bytes": 40811
+  },
+  {
+    "path": "examples/webpmux.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bf451039f40bfaeb04bcfc4705ddf88fd2d3f15",
+    "bytes": 43441
+  },
+  {
+    "path": "extras",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7440b3fbfbfaa5b24d08f2af807f5390cf442309",
+    "bytes": null
+  },
+  {
+    "path": "extras/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5a9af49a6bb1cc94d6caac926a1aa8994c875a3",
+    "bytes": 1399
+  },
+  {
+    "path": "extras/extras.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a3d254e630b092a2089d08668b19e9974e949be",
+    "bytes": 10980
+  },
+  {
+    "path": "extras/extras.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3cc9d700735f920252dfcfbf86725ed7889158db",
+    "bytes": 5192
+  },
+  {
+    "path": "extras/get_disto.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3aa345bbbc6cc373476d14fa89fda764a26bd4fb",
+    "bytes": 12273
+  },
+  {
+    "path": "extras/quality_estimate.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "17e98d96265cd8df8feb37fa2b8d68a4a83f2ca0",
+    "bytes": 3839
+  },
+  {
+    "path": "extras/sharpyuv_risk_table.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab3e7fddb0527811238383410f48d091f059c3db",
+    "bytes": 493692
+  },
+  {
+    "path": "extras/sharpyuv_risk_table.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32f276e3b4d303a4f27d1ba35a69db54a040bdb9",
+    "bytes": 1179
+  },
+  {
+    "path": "extras/vwebp_sdl.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "acf489098499685250cdc7ce4888b9cd99ee6941",
+    "bytes": 2444
+  },
+  {
+    "path": "extras/webp_quality.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a3b25f18e97873511c286c2d3414192ad9f8b51",
+    "bytes": 1582
+  },
+  {
+    "path": "extras/webp_to_sdl.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "971ffc8874d0a96d9570ae3453384307d209d3b1",
+    "bytes": 2819
+  },
+  {
+    "path": "extras/webp_to_sdl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1534f2b429f574f3c20641b78664a62a65a7475a",
+    "bytes": 890
+  },
+  {
+    "path": "gradle.properties",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28d39f5dfece48c7a0c3a77d77c565e9a45651bd",
+    "bytes": 451
+  },
+  {
+    "path": "gradle",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "67805990a6ef9278e5f84edd716a19fae2d909a2",
+    "bytes": null
+  },
+  {
+    "path": "gradle/wrapper",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "36769e0c99a64bcf2c30fb0d51f0be84693d3607",
+    "bytes": null
+  },
+  {
+    "path": "gradle/wrapper/gradle-wrapper.jar",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3d88b1c2faf2fc91d853cd5d4242b5547257070",
+    "bytes": 58695
+  },
+  {
+    "path": "gradle/wrapper/gradle-wrapper.properties",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b16c34a71cf212ed0cfb883d14d1b8511903eb2",
+    "bytes": 202
+  },
+  {
+    "path": "gradlew",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2fe81a7d95e4f9ad2c9b2a046707d36ceb3980b3",
+    "bytes": 5764
+  },
+  {
+    "path": "gradlew.bat",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9618d8d9607cd91a0efb866bcac4810064ba6fac",
+    "bytes": 2842
+  },
+  {
+    "path": "imageio",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "695a7cfafc5523d8daa80e0a23c963d0e2299aca",
+    "bytes": null
+  },
+  {
+    "path": "imageio/Android.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c8b83677ef744f3eb3241d0fd595a0615df70d1",
+    "bytes": 1161
+  },
+  {
+    "path": "imageio/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "500ec7e325eceb19c422e15eb31089749d8b6234",
+    "bytes": 1162
+  },
+  {
+    "path": "imageio/image_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e003fab60deb291c305a9c71b8515a6c3aac0bd",
+    "bytes": 2717
+  },
+  {
+    "path": "imageio/image_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f09f564b6c728ee499da18928d2a8b833aa15e11",
+    "bytes": 2289
+  },
+  {
+    "path": "imageio/image_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d58477f37605745fcc44b35bc71d6a7039b3cfe3",
+    "bytes": 22091
+  },
+  {
+    "path": "imageio/image_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d31e4bd3d2c2e8dc161ba5a0b844ffa2637a58df",
+    "bytes": 3021
+  },
+  {
+    "path": "imageio/imageio_util.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df37137e82c05f148f71c5112c6db97f270b6f59",
+    "bytes": 4931
+  },
+  {
+    "path": "imageio/imageio_util.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f135f56625f96999464cf9ad70132c3d139340b9",
+    "bytes": 2533
+  },
+  {
+    "path": "imageio/jpegdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "74a4c09ccd16e6759da48f8b869098efe72e582e",
+    "bytes": 11611
+  },
+  {
+    "path": "imageio/jpegdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "effc14f8c27adf9a0504224a58c924d0a1c3ed56",
+    "bytes": 1154
+  },
+  {
+    "path": "imageio/metadata.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "936f2f4e7e8ea2278cf5112d00f75678e4ba30ba",
+    "bytes": 1540
+  },
+  {
+    "path": "imageio/metadata.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d5be91a985718f1390b68b920a7cadee0defcb6",
+    "bytes": 1300
+  },
+  {
+    "path": "imageio/pngdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cdd99883996ef2deba23dc362851c1f5adf51bf7",
+    "bytes": 11569
+  },
+  {
+    "path": "imageio/pngdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0a6122d9db69ed6a1b2f132ad686e2e265ad925",
+    "bytes": 1198
+  },
+  {
+    "path": "imageio/pnmdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d592c3297089f0ef80ae6bcdcec116b4f38bd9b",
+    "bytes": 9746
+  },
+  {
+    "path": "imageio/pnmdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c4d5823e7c5468547c6eae73f35da96ea2ae63e9",
+    "bytes": 1174
+  },
+  {
+    "path": "imageio/tiffdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d711fa4bd24b36f0da6dd289aeb0fde0f3679590",
+    "bytes": 9300
+  },
+  {
+    "path": "imageio/tiffdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c8beccd328ae1c78000b6e9dcbef34b19dd069c",
+    "bytes": 1207
+  },
+  {
+    "path": "imageio/webpdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aed60e14b5da5f52a08acf45f80b2d2be94b7945",
+    "bytes": 7973
+  },
+  {
+    "path": "imageio/webpdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d329d41f3bddac0d8d3f10710593616bb76649db",
+    "bytes": 2553
+  },
+  {
+    "path": "imageio/wicdec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42001c6e1ad296b32a901ab1e5c2a7ca262b963e",
+    "bytes": 15633
+  },
+  {
+    "path": "imageio/wicdec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9eeca8297bfc68aa414e2e65c13ebbb3e277705",
+    "bytes": 1160
+  },
+  {
+    "path": "infra",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "50083fc857f1a126baaffc701b118bf734803c6e",
+    "bytes": null
+  },
+  {
+    "path": "infra/common.sh",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b4892d5479c2a6697c0f1085340bdcefcba629a8",
+    "bytes": 3617
+  },
+  {
+    "path": "infra/compile.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "18e9ebeeb07ed1332ee143f4bf35162e96fa3e9e",
+    "bytes": 11774
+  },
+  {
+    "path": "infra/compile_android.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "013b97cdaf6c74027cfd14d0d1ec5dfa2c080116",
+    "bytes": 6357
+  },
+  {
+    "path": "infra/compile_js.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6a13fe6a2edc5b0c2a100efe2cb384eac7a1fb53",
+    "bytes": 2679
+  },
+  {
+    "path": "infra/run_static_analysis.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "fa8445caa6ba5fcf0069425c4a188aee47625316",
+    "bytes": 3126
+  },
+  {
+    "path": "iosbuild.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d0fb55722f061800b644db50ff0d53fb7a40da21",
+    "bytes": 5790
+  },
+  {
+    "path": "m4",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "13b472af068b5f95ec137ab7ee98978b78d21c68",
+    "bytes": null
+  },
+  {
+    "path": "m4/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64d9bbcdd5ce91dc0a4fa9556c8e0e533d703e98",
+    "bytes": 20
+  },
+  {
+    "path": "m4/ax_pthread.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d383ad5c6d6a5061370800bb1dc89b7a334c0638",
+    "bytes": 13758
+  },
+  {
+    "path": "makefile.unix",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70f97ff20757c9707580efc726a4438cb1a6575e",
+    "bytes": 17339
+  },
+  {
+    "path": "man",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "318cd595758db47ec591569ad21b82f394ac7ea7",
+    "bytes": null
+  },
+  {
+    "path": "man/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "57e2483f51ad33226cbd03541be3004e5dd9e6b9",
+    "bytes": 285
+  },
+  {
+    "path": "man/cwebp.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8d8814335caa5613366c712991b1c45950f83d5",
+    "bytes": 13438
+  },
+  {
+    "path": "man/dwebp.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e718aba720777dc9dd554ccda53e67a0cdfd830d",
+    "bytes": 4824
+  },
+  {
+    "path": "man/gif2webp.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3bf43bcc501057fabbe1e33fc9c96cf35dfc2db3",
+    "bytes": 5564
+  },
+  {
+    "path": "man/img2webp.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc493e1239f9789c981348be7820a383095db8ac",
+    "bytes": 3983
+  },
+  {
+    "path": "man/vwebp.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa48db6d7807cfd1f5a80360a5f9522aa0749ca2",
+    "bytes": 2550
+  },
+  {
+    "path": "man/webpinfo.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "35d6d92f283bea940dc800c3261b12e63875754c",
+    "bytes": 1825
+  },
+  {
+    "path": "man/webpmux.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "07e8738952a706662d7dae0488e9e1b8641e544b",
+    "bytes": 6599
+  },
+  {
+    "path": "sharpyuv",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "545748c24c9c994e0d55ec6a4076138ee6a2d74e",
+    "bytes": null
+  },
+  {
+    "path": "sharpyuv/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a94d467e015f47aff854ffa3d344fd419b4c7fa",
+    "bytes": 1476
+  },
+  {
+    "path": "sharpyuv/libsharpyuv.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0fb565a61e1f8c69bbca7a1a43a49c5a3555a3a6",
+    "bytes": 310
+  },
+  {
+    "path": "sharpyuv/libsharpyuv.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0027aa458faf549f37c549f4df6dabcfd626e80",
+    "bytes": 1032
+  },
+  {
+    "path": "sharpyuv/sharpyuv.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7cbf668fbbb5a307ac75c6035bd57404a8742841",
+    "bytes": 21762
+  },
+  {
+    "path": "sharpyuv/sharpyuv.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe95891599ebd6d7861c6bf59f748f95c1132070",
+    "bytes": 7227
+  },
+  {
+    "path": "sharpyuv/sharpyuv_cpu.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29425a0c491884d7318f0cf17e6bd39ba30a2747",
+    "bytes": 652
+  },
+  {
+    "path": "sharpyuv/sharpyuv_cpu.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "176ca3eb1682335ed95ef94425460ee7a6b78a97",
+    "bytes": 855
+  },
+  {
+    "path": "sharpyuv/sharpyuv_csp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ad22be9458c3767a96de8ba61f8ec25039c3fe7",
+    "bytes": 3841
+  },
+  {
+    "path": "sharpyuv/sharpyuv_csp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3214e3ac607521760f3fff7cf89b26aa5aa41b17",
+    "bytes": 1812
+  },
+  {
+    "path": "sharpyuv/sharpyuv_dsp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "94a40ec6864568daf9b46460fd33d232d6c043ac",
+    "bytes": 3393
+  },
+  {
+    "path": "sharpyuv/sharpyuv_dsp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "805fbadbf6578158dc14cbf37e7423bbb77230c8",
+    "bytes": 1200
+  },
+  {
+    "path": "sharpyuv/sharpyuv_gamma.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "09028428acedcf39ccddfdb360f40d14dc5250ab",
+    "bytes": 13590
+  },
+  {
+    "path": "sharpyuv/sharpyuv_gamma.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8ba7e98705edfee75b3f596f66fe2d5cc2a71a4",
+    "bytes": 1343
+  },
+  {
+    "path": "sharpyuv/sharpyuv_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5840914865e06b8e47d17322d4048e28a5141f6e",
+    "bytes": 7333
+  },
+  {
+    "path": "sharpyuv/sharpyuv_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9744d1bb6cfeca6f1b7eb45c0daf68f0b5fc90d6",
+    "bytes": 8710
+  },
+  {
+    "path": "src",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7c8b4b018b26c81d4b5b7d25760ac0efa5643a2b",
+    "bytes": null
+  },
+  {
+    "path": "src/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1dafadd181583d1eb962a0733fbf686ecea5de0b",
+    "bytes": 1601
+  },
+  {
+    "path": "src/dec",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9b7b7ac4e07fade08272d70ca4d70bb8ac76eebb",
+    "bytes": null
+  },
+  {
+    "path": "src/dec/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8c6398d994b4c78fca5ac4f10929846eb686656",
+    "bytes": 1026
+  },
+  {
+    "path": "src/dec/alpha_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6c874fb84dcda2bd17771aff645f8cecf5ea6ee",
+    "bytes": 8280
+  },
+  {
+    "path": "src/dec/alphai_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a64104abeb33d0a62f2bd3159fe8950bd5026136",
+    "bytes": 1664
+  },
+  {
+    "path": "src/dec/buffer_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11ce76f19e2b4b4ebbea778dab0012436c56ab21",
+    "bytes": 10704
+  },
+  {
+    "path": "src/dec/common_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b158550a80b7eaa006a09bcace097b9296830897",
+    "bytes": 1684
+  },
+  {
+    "path": "src/dec/frame_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "91ca1f8609a911b2e1a51c1fcfd9ec1ee1d6642b",
+    "bytes": 28258
+  },
+  {
+    "path": "src/dec/idec_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad042a1ffcbea1cbc3600472bc43ae5ec1f1c306",
+    "bytes": 31763
+  },
+  {
+    "path": "src/dec/io_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ef6298886eb978f3655e59fec4fe00bce313b71",
+    "bytes": 23945
+  },
+  {
+    "path": "src/dec/quant_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0ac018b0f5448d29df8d25091f7dc7d4888323c",
+    "bytes": 4061
+  },
+  {
+    "path": "src/dec/tree_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2434605953295187dc1191201d5b39e073025fc2",
+    "bytes": 23519
+  },
+  {
+    "path": "src/dec/vp8_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ee89006059901fe182f0dc20670f0132cc9daf8",
+    "bytes": 22621
+  },
+  {
+    "path": "src/dec/vp8_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "91fe10409312d6747527b9829224cade60521b25",
+    "bytes": 7082
+  },
+  {
+    "path": "src/dec/vp8i_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cb21d475ae039d446ae97a7bda6cda4cc650effc",
+    "bytes": 11828
+  },
+  {
+    "path": "src/dec/vp8l_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "11c00ea964a9e0e1b830584b8114a8eac3855638",
+    "bytes": 62363
+  },
+  {
+    "path": "src/dec/vp8li_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a13bcc98d2567d85c2c611f72759cada8adb811",
+    "bytes": 5551
+  },
+  {
+    "path": "src/dec/webp_dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "49ef205c8b60f089e774db628e5ed19e45d14b3a",
+    "bytes": 31136
+  },
+  {
+    "path": "src/dec/webpi_dec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77bf5264b7790a083b79c84e2ae3cbe06ed0b2fb",
+    "bytes": 6406
+  },
+  {
+    "path": "src/demux",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c10479ca37b5532771bfb3a4f6d130cd48485de9",
+    "bytes": null
+  },
+  {
+    "path": "src/demux/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9ecff1464c442357d391f75a7aa7f194db6f3dfb",
+    "bytes": 623
+  },
+  {
+    "path": "src/demux/anim_decode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "27f0e2b0bb3d4cb452489bd9a6e3fd852ad60488",
+    "bytes": 17511
+  },
+  {
+    "path": "src/demux/demux.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d01c6a7464567f1c2e21244adc5e9cf8b0d570a9",
+    "bytes": 32131
+  },
+  {
+    "path": "src/demux/libwebpdemux.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4da2e40adc705e1c4eed7bdcd1dd7bbe19fbfa54",
+    "bytes": 307
+  },
+  {
+    "path": "src/demux/libwebpdemux.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bc57c4089b9945e0faa7a92f534c6ecf21e9e667",
+    "bytes": 1037
+  },
+  {
+    "path": "src/dsp",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ac083eb42ccd9c2d29eb5d67ba33cd2f67322432",
+    "bytes": null
+  },
+  {
+    "path": "src/dsp/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7db4ef0f0731e038e2b1cc76ca5a946a13e6c502",
+    "bytes": 7620
+  },
+  {
+    "path": "src/dsp/alpha_processing.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d152f24dada3919f39376575dee951316df6dc5",
+    "bytes": 19458
+  },
+  {
+    "path": "src/dsp/alpha_processing_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0090e87cd1f603c381dd771732a51df71f3aa913",
+    "bytes": 10249
+  },
+  {
+    "path": "src/dsp/alpha_processing_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6716fb77f0d875c4e477292929ac0e796df1ec68",
+    "bytes": 7261
+  },
+  {
+    "path": "src/dsp/alpha_processing_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aa0cc2848ae997c7c9c6f2473a9ee67520b610d0",
+    "bytes": 16982
+  },
+  {
+    "path": "src/dsp/alpha_processing_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1156ac3417b2656d7fbcc6fb6917deb3eba851ef",
+    "bytes": 3745
+  },
+  {
+    "path": "src/dsp/common_sse2.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e9f1ebff44f912d587e0866da312b184c3433dbd",
+    "bytes": 8040
+  },
+  {
+    "path": "src/dsp/common_sse41.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f173c024a9c0f066b3cf247f083a0978a147d1a",
+    "bytes": 4658
+  },
+  {
+    "path": "src/dsp/cost.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "73d2140177cb1198c92a655a5293f3f4de4d627f",
+    "bytes": 18288
+  },
+  {
+    "path": "src/dsp/cost_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0500f88c13233bdb705da20129e2a6915a640144",
+    "bytes": 7165
+  },
+  {
+    "path": "src/dsp/cost_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51248de7a135fef56fef464aca044b966fe521b5",
+    "bytes": 4824
+  },
+  {
+    "path": "src/dsp/cost_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6582669cb3f961135001d1136a94e695469f25c8",
+    "bytes": 4304
+  },
+  {
+    "path": "src/dsp/cost_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "487a079921cbd57af1929435e525daa0be57aff7",
+    "bytes": 4469
+  },
+  {
+    "path": "src/dsp/cpu.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8ba8f683357b0afd430b8246713b9d7175aca358",
+    "bytes": 7603
+  },
+  {
+    "path": "src/dsp/cpu.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c86540f28013d3f0b4dd59f978c8384407e8f57b",
+    "bytes": 8835
+  },
+  {
+    "path": "src/dsp/dec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "451d649d58e4238320b890cb3d26b0a886613d27",
+    "bytes": 27510
+  },
+  {
+    "path": "src/dsp/dec_clip_tables.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "427b74f776c3031716424b33ccd2671eaf9557e3",
+    "bytes": 23956
+  },
+  {
+    "path": "src/dsp/dec_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f0e7de4ac4fc2bacc72036a7a4b72674c1ff5452",
+    "bytes": 26707
+  },
+  {
+    "path": "src/dsp/dec_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ba706a2ef82ed39725364d034565634e7a490d2",
+    "bytes": 50766
+  },
+  {
+    "path": "src/dsp/dec_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58d173019218126fc87ae92e37678d56885a4965",
+    "bytes": 40736
+  },
+  {
+    "path": "src/dsp/dec_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "83b3a1f970a3f9ee135f1315e47f33690a7c8722",
+    "bytes": 69134
+  },
+  {
+    "path": "src/dsp/dec_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff3a28555b4522ae801097afae3c40760d52f20f",
+    "bytes": 47618
+  },
+  {
+    "path": "src/dsp/dec_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "08a36302722677e894806ce26e556af5a0f6edd1",
+    "bytes": 1344
+  },
+  {
+    "path": "src/dsp/dsp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23bc296514520399d7d05bd95f1e0c9ce15f954e",
+    "bytes": 21923
+  },
+  {
+    "path": "src/dsp/enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "395ad05b0bcb0e8772ae5383d2c3d7423df6b0ac",
+    "bytes": 24729
+  },
+  {
+    "path": "src/dsp/enc_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "50518a5f1aed3d0458a67015da812cdb1d4f5413",
+    "bytes": 35018
+  },
+  {
+    "path": "src/dsp/enc_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e1431f3bef2cd819a08b40e240cc6f3d2b379c77",
+    "bytes": 82191
+  },
+  {
+    "path": "src/dsp/enc_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f85add4bbd96372b69db24bd7197d86405cfd76",
+    "bytes": 32625
+  },
+  {
+    "path": "src/dsp/enc_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f641c9a76183312b9a0426ee7b8fc89084ce327",
+    "bytes": 37290
+  },
+  {
+    "path": "src/dsp/enc_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "010624a2f7124bae5275afe6c9df824f58057fc3",
+    "bytes": 59508
+  },
+  {
+    "path": "src/dsp/enc_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "924035a64457758a73abbab5b3a60c783cb8893b",
+    "bytes": 13162
+  },
+  {
+    "path": "src/dsp/filters.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c9232ff16a6e6e7aaa76037ecbb0f8bfb034a888",
+    "bytes": 9805
+  },
+  {
+    "path": "src/dsp/filters_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eca866f57894b2dda3b17cbabb8b34bf75c76d24",
+    "bytes": 21427
+  },
+  {
+    "path": "src/dsp/filters_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "33a1b20b70d65415568d01ffecce6cc79b152db2",
+    "bytes": 5828
+  },
+  {
+    "path": "src/dsp/filters_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b49e515af1f034ec06334e6539115038f20c8c7d",
+    "bytes": 11715
+  },
+  {
+    "path": "src/dsp/filters_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb4b5d587483572c7473e04a892bd5530a2815bd",
+    "bytes": 13109
+  },
+  {
+    "path": "src/dsp/lossless.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f81209453976465cb670d7516f16f23088738a6",
+    "bytes": 25652
+  },
+  {
+    "path": "src/dsp/lossless.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0bf10a1a3dabd631806d4bd624546a96bc220a12",
+    "bytes": 11950
+  },
+  {
+    "path": "src/dsp/lossless_common.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6139b2b577db6b08a31b5aa757491cbc9d751f8",
+    "bytes": 7390
+  },
+  {
+    "path": "src/dsp/lossless_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "997d56c2ad303844181cd032b4de4c5cf19a7ebd",
+    "bytes": 39325
+  },
+  {
+    "path": "src/dsp/lossless_enc_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e10f12da9d5803909aef234edf73b77d74d7c2ae",
+    "bytes": 14672
+  },
+  {
+    "path": "src/dsp/lossless_enc_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5855e6ae1562efa0bb58fe0eb08e1f458f1b9583",
+    "bytes": 14071
+  },
+  {
+    "path": "src/dsp/lossless_enc_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "600dddfb5925d72639784a276ff2f273e655fde9",
+    "bytes": 5730
+  },
+  {
+    "path": "src/dsp/lossless_enc_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e32c7961a239df8e9e54b9936583cd06044ba7d0",
+    "bytes": 5188
+  },
+  {
+    "path": "src/dsp/lossless_enc_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66cbaab7720a9ad71d633ee96f6cc3e2af475c3a",
+    "bytes": 29190
+  },
+  {
+    "path": "src/dsp/lossless_enc_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7ab83c2604b4c3f47babc66fd24a33ef0f10d6eb",
+    "bytes": 7787
+  },
+  {
+    "path": "src/dsp/lossless_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bfe5ea6b3865c6debbd45d13f1f58de482af7237",
+    "bytes": 39184
+  },
+  {
+    "path": "src/dsp/lossless_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f5472078d9ebda48e749ee8e11b7a8e3e3bafa6",
+    "bytes": 13034
+  },
+  {
+    "path": "src/dsp/lossless_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e9960db38a79547db530f20994a67eb6bae8d50d",
+    "bytes": 26366
+  },
+  {
+    "path": "src/dsp/lossless_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b6a532c239ccfd13da2c1325e362506653f5dac",
+    "bytes": 31008
+  },
+  {
+    "path": "src/dsp/lossless_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb7ce7611fa9c10f7ec32003b5efda7d8ed3c6f8",
+    "bytes": 5327
+  },
+  {
+    "path": "src/dsp/mips_macro.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e810d3d382445cf51905b3b3e4b90b91f20387d9",
+    "bytes": 12476
+  },
+  {
+    "path": "src/dsp/msa_macro.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90adbbc3197ec64d099c5fa6def08b749449aeac",
+    "bytes": 64181
+  },
+  {
+    "path": "src/dsp/neon.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14acb4044ba6309871a75ef38788a4180d67d705",
+    "bytes": 4031
+  },
+  {
+    "path": "src/dsp/quant.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dcbc11c77c59758a8e0ffb0993376aaf0b9f2e55",
+    "bytes": 2631
+  },
+  {
+    "path": "src/dsp/rescaler.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "325d8be1808b0ed43b0659a9fef2d659f8e56433",
+    "bytes": 8120
+  },
+  {
+    "path": "src/dsp/rescaler_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "61f63c616cf1c8d77f1c5f7059abb442142321dd",
+    "bytes": 13418
+  },
+  {
+    "path": "src/dsp/rescaler_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "419b741fa514fde1dd5d4ec4ccdf5fad4d73a843",
+    "bytes": 16016
+  },
+  {
+    "path": "src/dsp/rescaler_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "256dbdd437573238d9aaa7b24d4a5a76ff325230",
+    "bytes": 17363
+  },
+  {
+    "path": "src/dsp/rescaler_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "957a92dbc9fc220106fcc976c3ad8d9641cf9b87",
+    "bytes": 7425
+  },
+  {
+    "path": "src/dsp/rescaler_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f18e94e9359294ca1d7b68d159ca19000d86074",
+    "bytes": 14667
+  },
+  {
+    "path": "src/dsp/ssim.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a1341ed95859b187ec66d8dcc7212c051f50f77",
+    "bytes": 5356
+  },
+  {
+    "path": "src/dsp/ssim_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1dcb0eb0ec21f2b26d1cce2088a849031c89d4c6",
+    "bytes": 5789
+  },
+  {
+    "path": "src/dsp/upsampling.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "983b9c42d36c1c82a557180557caaf6666c90099",
+    "bytes": 14789
+  },
+  {
+    "path": "src/dsp/upsampling_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "10d499d7712a0896bcf96b4f8e92837aa788c6eb",
+    "bytes": 13308
+  },
+  {
+    "path": "src/dsp/upsampling_msa.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f2e03e85e9dd574c346eb4bb9718cd60c684f68e",
+    "bytes": 28540
+  },
+  {
+    "path": "src/dsp/upsampling_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbc000ca2d38f777588706f4fb55c19a755105b9",
+    "bytes": 15665
+  },
+  {
+    "path": "src/dsp/upsampling_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77b4f7221ebd27a677e75a27da689f647169ac1c",
+    "bytes": 14872
+  },
+  {
+    "path": "src/dsp/upsampling_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e38c88d5e670f854e0158b8e0bfc4f8c4a51bf39",
+    "bytes": 13073
+  },
+  {
+    "path": "src/dsp/yuv.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a04b85d82dd0a3ff5608ff1257fb2c4b3152fa0",
+    "bytes": 8833
+  },
+  {
+    "path": "src/dsp/yuv.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66a397d117b4891eab4c9ae789b8c84614b9459a",
+    "bytes": 7452
+  },
+  {
+    "path": "src/dsp/yuv_mips32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d0a887824b0b97e193927d4db1fc0f82ae1fb8c",
+    "bytes": 5918
+  },
+  {
+    "path": "src/dsp/yuv_mips_dsp_r2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc8afcc756273c4722dcf78c7338583e51704e25",
+    "bytes": 8064
+  },
+  {
+    "path": "src/dsp/yuv_neon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff77b009801d3a086fd2bd5aadc4cda98f7e6535",
+    "bytes": 7004
+  },
+  {
+    "path": "src/dsp/yuv_sse2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "01a48f9af2c69c268f0c6783a0ca19bd83da2dbc",
+    "bytes": 28714
+  },
+  {
+    "path": "src/dsp/yuv_sse41.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f79b802e4712a224ca5342ad63c569db32c16d65",
+    "bytes": 23723
+  },
+  {
+    "path": "src/enc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b0cd0541eada3c54800849705663f2eb4b01b1e6",
+    "bytes": null
+  },
+  {
+    "path": "src/enc/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2fec804cb7b07063541899beda238dc85305fb17",
+    "bytes": 1705
+  },
+  {
+    "path": "src/enc/alpha_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c11a261c8a4df7f32d06a77683b02dadf462e9c4",
+    "bytes": 15912
+  },
+  {
+    "path": "src/enc/analysis_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "962eaa998f87a7de5a3b2df12de04af009c96324",
+    "bytes": 16377
+  },
+  {
+    "path": "src/enc/backward_references_cost_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6968ef3c9f3e50b7ab247d65a2bea95a4fe35802",
+    "bytes": 29567
+  },
+  {
+    "path": "src/enc/backward_references_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dc98bf171943a051d6354768e8f4f9683a6aecec",
+    "bytes": 38937
+  },
+  {
+    "path": "src/enc/backward_references_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4dff1c27b57c8c356f2962c71cfd0889fe215128",
+    "bytes": 8820
+  },
+  {
+    "path": "src/enc/config_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3518b41403d8ecff957cdc02ec8a5fb6fd439052",
+    "bytes": 5774
+  },
+  {
+    "path": "src/enc/cost_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48fd9bc347590da34ea58ef667ae50976939e3ec",
+    "bytes": 15239
+  },
+  {
+    "path": "src/enc/cost_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4b177b34231ec5bbd4bf10225dc7e3974a9a1e6",
+    "bytes": 2545
+  },
+  {
+    "path": "src/enc/filter_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "580800bfb8729e65051f0ed0dca4c68500218d7a",
+    "bytes": 8906
+  },
+  {
+    "path": "src/enc/frame_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "01860ca757e608c92fd26dc85047ecdd665cec1a",
+    "bytes": 29471
+  },
+  {
+    "path": "src/enc/histogram_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ca67b3ad09b4d652b02f19bc46f7db0eb49eaf8",
+    "bytes": 47530
+  },
+  {
+    "path": "src/enc/histogram_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c0bb97464deb5d07c76d63d0473d45e3cdc0ec4",
+    "bytes": 5242
+  },
+  {
+    "path": "src/enc/iterator_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29f91d8315bf1aae483bcff105a5d184b9025320",
+    "bytes": 14740
+  },
+  {
+    "path": "src/enc/near_lossless_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5517a7e2711c4f48f32156a5dfb9f2d446a993b5",
+    "bytes": 5319
+  },
+  {
+    "path": "src/enc/picture_csp_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9280e6c3050464cab59073a08bd10accba213c8",
+    "bytes": 31287
+  },
+  {
+    "path": "src/enc/picture_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a2703541f2d3505d737afb6ec986ed96a1a995f",
+    "bytes": 9326
+  },
+  {
+    "path": "src/enc/picture_psnr_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a2f0bef3e42bde707a2e832e3d79c4d6c4f9d52",
+    "bytes": 8564
+  },
+  {
+    "path": "src/enc/picture_rescale_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea90d825484ef62c2daf79c31572733b327deb21",
+    "bytes": 10435
+  },
+  {
+    "path": "src/enc/picture_tools_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "147cc18608c4b5a62d530bcdaae63a2d5781d2d6",
+    "bytes": 8844
+  },
+  {
+    "path": "src/enc/predictor_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b3d44b59d506838bce0921fcbc282adad2cc115b",
+    "bytes": 32392
+  },
+  {
+    "path": "src/enc/quant_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d8202d2771488825d61a541b67e528698ae236a",
+    "bytes": 50530
+  },
+  {
+    "path": "src/enc/syntax_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b8f524d698168ea192e6500254b1ce1b8177b5a",
+    "bytes": 12687
+  },
+  {
+    "path": "src/enc/token_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a2192acac23df9c71219ec8a350c37247afbb13",
+    "bytes": 8398
+  },
+  {
+    "path": "src/enc/tree_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64ed28360b2952414be7a9a2666962862d980b30",
+    "bytes": 22006
+  },
+  {
+    "path": "src/enc/vp8i_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "00ff1be795153e28f36dff81607e608d49a8d47e",
+    "bytes": 22031
+  },
+  {
+    "path": "src/enc/vp8l_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "40eafa41698febcdc3c17609c85cab119522c8c8",
+    "bytes": 69810
+  },
+  {
+    "path": "src/enc/vp8li_enc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5b60dcb394de2c6086e01d87f423fa0a63570d8",
+    "bytes": 4655
+  },
+  {
+    "path": "src/enc/webp_enc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "583fe6a8bbd6a4dd90ea2f9f6c8f7cd29a919479",
+    "bytes": 14275
+  },
+  {
+    "path": "src/libwebp.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "783090ef668ee3f34a0cd96e1663e638484b98d6",
+    "bytes": 324
+  },
+  {
+    "path": "src/libwebp.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d51536f5b613f7735898260e0d4823c7c857ef69",
+    "bytes": 1020
+  },
+  {
+    "path": "src/libwebpdecoder.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "134de0e7cc0d350c7bbd830964e9953c9d27a612",
+    "bytes": 322
+  },
+  {
+    "path": "src/libwebpdecoder.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3891488cfc41738ee920866317d0874511dd7b54",
+    "bytes": 1043
+  },
+  {
+    "path": "src/mux",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9fa02c0f81aea646d783236f54f352dcbd4afa92",
+    "bytes": null
+  },
+  {
+    "path": "src/mux/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "18bc90e940e04c595c49068f6c88f6b5a3225f84",
+    "bytes": 720
+  },
+  {
+    "path": "src/mux/anim_encode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31bd0457bf7da691542f9a16e0124ea42ae88f7f",
+    "bytes": 59438
+  },
+  {
+    "path": "src/mux/animi.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34c45ba4da668aed42fff35b30942dde0c9b6e12",
+    "bytes": 1585
+  },
+  {
+    "path": "src/mux/libwebpmux.pc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c770daafc6d2b18b28b6d09f7e95a863ad07d0f1",
+    "bytes": 326
+  },
+  {
+    "path": "src/mux/libwebpmux.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b20fac1aa9a39521621febf7cac4d17891795ca",
+    "bytes": 1029
+  },
+  {
+    "path": "src/mux/muxedit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48c6834a4dd6aa786847d828cfa4b4f3c4faa346",
+    "bytes": 21974
+  },
+  {
+    "path": "src/mux/muxi.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "74ae3fac12bba7b5090b02fddcc3a9f3585dc374",
+    "bytes": 7745
+  },
+  {
+    "path": "src/mux/muxinternal.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75b6b416b993cf3324f8ccccee2a8e107db975bf",
+    "bytes": 17876
+  },
+  {
+    "path": "src/mux/muxread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "afd3542e12412ffb104464d2ac8dd611adacb96d",
+    "bytes": 19555
+  },
+  {
+    "path": "src/utils",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ce20646c55c3b65aab4a52e7f02e520ff6480e1d",
+    "bytes": null
+  },
+  {
+    "path": "src/utils/Makefile.am",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0b7fe35e00612c4e68d63e4e6dea67d0b8b708e",
+    "bytes": 1575
+  },
+  {
+    "path": "src/utils/bit_reader_inl_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24f3af7b5454f245d2ac0fdad399a345a8b977b8",
+    "bytes": 5894
+  },
+  {
+    "path": "src/utils/bit_reader_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a26557aa49f9148f394c8fc73e4f18cd9e224c6e",
+    "bytes": 8997
+  },
+  {
+    "path": "src/utils/bit_reader_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "25ff31e5d97a86e526ac9eb5c68b0ffeda52ceba",
+    "bytes": 7639
+  },
+  {
+    "path": "src/utils/bit_writer_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f408508f1144331ee22c89432c9b8a3dc03d65c",
+    "bytes": 11097
+  },
+  {
+    "path": "src/utils/bit_writer_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9d5102a5a04871bbbfebbe8c61d71bc547c96c7",
+    "bytes": 5953
+  },
+  {
+    "path": "src/utils/color_cache_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b5222b6e554d0b95e667ddeb373e315240ab41d",
+    "bytes": 1685
+  },
+  {
+    "path": "src/utils/color_cache_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b45d47c2d5c93ce2273c820b8bb49268dcc890d5",
+    "bytes": 2903
+  },
+  {
+    "path": "src/utils/endian_inl_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3630a293bfc4a3f59e1993dc81c1c95144fe214e",
+    "bytes": 2851
+  },
+  {
+    "path": "src/utils/filters_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bbc2c34d93ab3251006e0d8fa56e820f725c384a",
+    "bytes": 2534
+  },
+  {
+    "path": "src/utils/filters_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "61da66e2125766b70276d0df37a21c4ece83068c",
+    "bytes": 986
+  },
+  {
+    "path": "src/utils/huffman_encode_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "585db91951841660ec5ab69a3ad1a32d0286844d",
+    "bytes": 13521
+  },
+  {
+    "path": "src/utils/huffman_encode_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f7f1d8074c28507191a1493d8ada76b8499b8b7",
+    "bytes": 2148
+  },
+  {
+    "path": "src/utils/huffman_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16f9faaa9a07790e62111854298a86138b5ca51c",
+    "bytes": 10595
+  },
+  {
+    "path": "src/utils/huffman_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d511dc052c4324382fc55a1bbd943f6ecc8f3a9b",
+    "bytes": 4536
+  },
+  {
+    "path": "src/utils/palette.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "515da2101950e29f76d6fa92dda0e538b7dbbeeb",
+    "bytes": 13803
+  },
+  {
+    "path": "src/utils/palette.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34479e463fe38ef097ea9a2133896d24a1a98ad6",
+    "bytes": 2538
+  },
+  {
+    "path": "src/utils/quant_levels_dec_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97e78937043edf143c6c9cdacb265d6135046677",
+    "bytes": 9140
+  },
+  {
+    "path": "src/utils/quant_levels_dec_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "327f19f3365e249894976e3ce78acf6e5737f0b1",
+    "bytes": 1254
+  },
+  {
+    "path": "src/utils/quant_levels_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d65ad3c29db2a9970ca882eb829e6013d635de8d",
+    "bytes": 4067
+  },
+  {
+    "path": "src/utils/quant_levels_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9ee3ea0075c660b8b57ee83545a1bacba705ff11",
+    "bytes": 1203
+  },
+  {
+    "path": "src/utils/random_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7edb3fefbb85b7c274e455ed34db2135651a0748",
+    "bytes": 1842
+  },
+  {
+    "path": "src/utils/random_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5006f84f7a2acb024b404188d6b9f4f2412b119",
+    "bytes": 2125
+  },
+  {
+    "path": "src/utils/rescaler_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0581a14b1a832cb9075e04b976ca72b984f67d5",
+    "bytes": 5916
+  },
+  {
+    "path": "src/utils/rescaler_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef201ef86c19966439e9e5982f58c33c0eec7fee",
+    "bytes": 4111
+  },
+  {
+    "path": "src/utils/thread_utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e470e17ac18d39070043512809cc6b41f934aef",
+    "bytes": 11211
+  },
+  {
+    "path": "src/utils/thread_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29ad49f74b5aa6741a6b66a191fe409c368092a6",
+    "bytes": 3690
+  },
+  {
+    "path": "src/utils/utils.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "408ce88f67f689da446d7bae2f0af845be8bea46",
+    "bytes": 8856
+  },
+  {
+    "path": "src/utils/utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2241fbf9bf76114c3550db76ebbf9b24985e282",
+    "bytes": 7152
+  },
+  {
+    "path": "src/webp",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4a1ae1968d747576b91a64a2890322d35316ced2",
+    "bytes": null
+  },
+  {
+    "path": "src/webp/decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6895f5c55503d95cd8f429baa6e9bfbb13d8430",
+    "bytes": 23960
+  },
+  {
+    "path": "src/webp/demux.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d246550ca6e9e1653bf4c2ddc416d4a6b805918",
+    "bytes": 15998
+  },
+  {
+    "path": "src/webp/encode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3d59297c8c5df23123dc51625393f13a404c356",
+    "bytes": 28427
+  },
+  {
+    "path": "src/webp/format_constants.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "999035c5d2657edcfc0a3f3da29d59d269a5d480",
+    "bytes": 3860
+  },
+  {
+    "path": "src/webp/mux.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8fb067e4354555ed4acd3139db54cc4c97cb2b12",
+    "bytes": 25966
+  },
+  {
+    "path": "src/webp/mux_types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c585d2082f707c04a702848db2da3938ae29c38e",
+    "bytes": 3259
+  },
+  {
+    "path": "src/webp/types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c17edec45dbdad6b5c55d54982246ec561643a8",
+    "bytes": 3113
+  },
+  {
+    "path": "swig",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f2f97bcf563d50dd7662addb415801f8c6915dcb",
+    "bytes": null
+  },
+  {
+    "path": "swig/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7fa1c388e212ad4e9d24fd05d4dfcb13217ed730",
+    "bytes": 1416
+  },
+  {
+    "path": "swig/libwebp.go",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df205aa38393530640dfad793b8cfb108662ff4c",
+    "bytes": 1235
+  },
+  {
+    "path": "swig/libwebp.jar",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2fc502b972101270fc1ecfb8c8c3948e0a2e45a6",
+    "bytes": 2150
+  },
+  {
+    "path": "swig/libwebp.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2d126b5dcc4ff0c09837484232d82021c985abdb",
+    "bytes": 8209
+  },
+  {
+    "path": "swig/libwebp.swig",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca38298197950f3ab77e4d5a967f51f5a66de38a",
+    "bytes": 14345
+  },
+  {
+    "path": "swig/libwebp_gc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "308b7f835fafae69897a55894f42635805f61c0a",
+    "bytes": 1468
+  },
+  {
+    "path": "swig/libwebp_go_wrap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "351d523f265a93d34c9f7140dc2e8476ab8cb965",
+    "bytes": 6518
+  },
+  {
+    "path": "swig/libwebp_java_wrap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c8d4b1331293d6333e012d753b9962e85ebec760",
+    "bytes": 53665
+  },
+  {
+    "path": "swig/libwebp_python_wrap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3aa27285e8346daf9c83e7afe1637a5ed6f4d557",
+    "bytes": 173583
+  },
+  {
+    "path": "swig/setup.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a3bfe190fae6bac689163a970b5ccf0ae6a685c",
+    "bytes": 1200
+  },
+  {
+    "path": "tests",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "48981818532e03db0b5a7667850dab6769df679e",
+    "bytes": null
+  },
+  {
+    "path": "tests/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "91daba26d6b9274ca0f5bd6c949444ab0ff9306e",
+    "bytes": 510
+  },
+  {
+    "path": "tests/fuzzer",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "696cdc3d2e987018a06bbf34249f618e901078b6",
+    "bytes": null
+  },
+  {
+    "path": "tests/fuzzer/advanced_api_fuzzer.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "22c689bb4656b16f943666ae91014a401ddc0219",
+    "bytes": 5675
+  },
+  {
+    "path": "tests/fuzzer/animation_api_fuzzer.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "187ed24e7c5f2ff602f8d28633f6c9417524eab2",
+    "bytes": 2564
+  },
+  {
+    "path": "tests/fuzzer/animdecoder_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c3ea4758f08a7a0b58fcba123497e64311cdcd6c",
+    "bytes": 2224
+  },
+  {
+    "path": "tests/fuzzer/animencoder_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ef6ec1e49491383c4f0a7bc679c8253517386c13",
+    "bytes": 6484
+  },
+  {
+    "path": "tests/fuzzer/enc_dec_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5d46ae0ed9beb7d96f1d07b63275345abcf86c5",
+    "bytes": 5329
+  },
+  {
+    "path": "tests/fuzzer/fuzz.dict",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "627c72e75ccd31a33c1bc038b118b60605bd6aec",
+    "bytes": 182
+  },
+  {
+    "path": "tests/fuzzer/fuzz_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c3fc366da49acd0a355196f6de55c4eaf6a540c5",
+    "bytes": 8612
+  },
+  {
+    "path": "tests/fuzzer/huffman_fuzzer.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "03e1fdc441ee50f209592a0e831d5b54a65606f7",
+    "bytes": 2430
+  },
+  {
+    "path": "tests/fuzzer/img_alpha.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fac63feb53ceae18a941a8c7ac3b2f37deaa55e7",
+    "bytes": 26996
+  },
+  {
+    "path": "tests/fuzzer/img_grid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f269bbd6090d2970d4d89577a82f4d5c7521695c",
+    "bytes": 7534
+  },
+  {
+    "path": "tests/fuzzer/img_peak.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d17ba1edb20e8b028458bc4af1330ce5c1bf4001",
+    "bytes": 416240
+  },
+  {
+    "path": "tests/fuzzer/makefile.unix",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a3aff0ab1abfbca3e9aa42d121b963a88e7dd84",
+    "bytes": 1002
+  },
+  {
+    "path": "tests/fuzzer/mux_demux_api_fuzzer.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f5983e8d3c1b7e87c7abfafd3e7654106868de11",
+    "bytes": 2874
+  },
+  {
+    "path": "tests/fuzzer/simple_api_fuzzer.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a4288a485893fdf944d8083ad8005859acd84f0",
+    "bytes": 3238
+  },
+  {
+    "path": "webp_js",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b0554be5329280870ae38cd0128c384f526bc35d",
+    "bytes": null
+  },
+  {
+    "path": "webp_js/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ae9ce8f0207e7fb441724caa5a6f6b09e70aa698",
+    "bytes": 1984
+  },
+  {
+    "path": "webp_js/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7c3b652f4cba38e0d9698274692fb5b52e002d6",
+    "bytes": 2181
+  },
+  {
+    "path": "webp_js/index_wasm.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29933abaad2ec662d94e5567281be796fbef923c",
+    "bytes": 2297
+  },
+  {
+    "path": "webp_js/test_webp_js.webp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f798f5563e4fa21e8784067ed1a0cd5d81239c3b",
+    "bytes": 1321542
+  },
+  {
+    "path": "webp_js/test_webp_wasm.webp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f798f5563e4fa21e8784067ed1a0cd5d81239c3b",
+    "bytes": 1321542
+  },
+  {
+    "path": "xcframeworkbuild.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "14b987d46be9876f4ef717eff75ca3ae27ff3d9d",
+    "bytes": 9754
+  }
+]

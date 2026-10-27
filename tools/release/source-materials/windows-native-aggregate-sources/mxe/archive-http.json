@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://codeload.github.com/kleisauke/mxe/tar.gz/d973945bb92c7783d5afa41bb2b8d2e1a04eaba3",
+  "responseUrl": "https://codeload.github.com/kleisauke/mxe/tar.gz/d973945bb92c7783d5afa41bb2b8d2e1a04eaba3",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3.tar.gz"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"d0064bbccf409031b26d4024b246ec4a3806b0ce291e891959cf770f5f6bb87e\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 14:00:58 GMT"
+    ],
+    [
+      "Transfer-Encoding",
+      "chunked"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "E313:3591F3:1346F:14757:6AE0AE9A"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T14:01:01.210286+00:00",
+  "bytes": 2645560,
+  "sha256": "1ac248d1411407b1bbef0a91297c620a1486bdda67cd5913505290d72495338d"
+}

@@ -1,0 +1,126 @@
+{
+  "requestedUrl": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.18.3/fontconfig-2.18.3.tar.gz",
+  "responseUrl": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.18.3/fontconfig-2.18.3.tar.gz",
+  "status": 200,
+  "headers": [
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "date",
+      "Tue, 27 Oct 2026 13:34:46 GMT"
+    ],
+    [
+      "content-type",
+      "application/octet-stream"
+    ],
+    [
+      "x-cache-hits",
+      "0"
+    ],
+    [
+      "x-cache",
+      "MISS"
+    ],
+    [
+      "cache-control",
+      "max-age=60, public, must-revalidate, stale-while-revalidate=60, stale-if-error=300, s-maxage=60"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=\"fontconfig-2.18.3.tar.gz\""
+    ],
+    [
+      "content-security-policy",
+      ""
+    ],
+    [
+      "content-transfer-encoding",
+      "binary"
+    ],
+    [
+      "etag",
+      "\"419e437ac0af684c61855e905343bcf7\""
+    ],
+    [
+      "nel",
+      "{\"max_age\": 0}"
+    ],
+    [
+      "permissions-policy",
+      "interest-cohort=()"
+    ],
+    [
+      "ratelimit-limit",
+      "167"
+    ],
+    [
+      "ratelimit-name",
+      "throttle_unauthenticated_web"
+    ],
+    [
+      "ratelimit-observed",
+      "1"
+    ],
+    [
+      "ratelimit-remaining",
+      "9999"
+    ],
+    [
+      "ratelimit-reset",
+      "1793109600"
+    ],
+    [
+      "referrer-policy",
+      "strict-origin-when-cross-origin"
+    ],
+    [
+      "x-content-type-options",
+      "nosniff"
+    ],
+    [
+      "x-frame-options",
+      "SAMEORIGIN"
+    ],
+    [
+      "x-gitlab-meta",
+      "{\"correlation_id\":\"01M5YS43T34TVNQ9R9ZNT46Y5H\",\"version\":\"1\"}"
+    ],
+    [
+      "x-permitted-cross-domain-policies",
+      "none"
+    ],
+    [
+      "x-request-id",
+      "01M5YS43T34TVNQ9R9ZNT46Y5H"
+    ],
+    [
+      "x-runtime",
+      "0.157691"
+    ],
+    [
+      "x-ua-compatible",
+      "IE=edge"
+    ],
+    [
+      "x-xss-protection",
+      "1; mode=block"
+    ],
+    [
+      "strict-transport-security",
+      "max-age=31536000; includeSubDomains"
+    ],
+    [
+      "x-served-by",
+      "cache-muc13971-MUC"
+    ],
+    [
+      "transfer-encoding",
+      "chunked"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:48.835666+00:00",
+  "bytes": 666753,
+  "sha256": "9ae01e1d53acdef56010c5451cd34aa41d325b2faccd8606448d8fa01b2496b3"
+}

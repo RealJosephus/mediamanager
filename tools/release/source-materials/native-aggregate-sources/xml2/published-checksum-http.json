@@ -1,0 +1,86 @@
+{
+  "requestedUrl": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.sha256sum",
+  "responseUrl": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.sha256sum",
+  "status": 200,
+  "headers": [
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:37:35 GMT"
+    ],
+    [
+      "Content-Type",
+      "text/plain; charset=utf-8"
+    ],
+    [
+      "Content-Length",
+      "174"
+    ],
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "last-modified",
+      "Thu, 16 Apr 2026 08:07:14 GMT"
+    ],
+    [
+      "etag",
+      "\"69e098b2-ae\""
+    ],
+    [
+      "expires",
+      "Wed, 26 May 2027 10:10:38 GMT"
+    ],
+    [
+      "cache-control",
+      "max-age=31536000"
+    ],
+    [
+      "cache-control",
+      "public"
+    ],
+    [
+      "X-77-NZT",
+      "kshKY7dLXoGtxR5h/738TD/n1MygspsFj0mcYJfrr+M3OC4Evg"
+    ],
+    [
+      "X-77-NZT-Ray",
+      "25b02131f4ac398644a9e06a82a9d110"
+    ],
+    [
+      "Age",
+      "13318017"
+    ],
+    [
+      "X-77-Cache",
+      "HIT"
+    ],
+    [
+      "X-77-Age",
+      "13318017"
+    ],
+    [
+      "Vary",
+      "Accept-Encoding"
+    ],
+    [
+      "Server",
+      "CDN77-Turbo"
+    ],
+    [
+      "Alt-Svc",
+      "h3=\":443\"; ma=86400"
+    ],
+    [
+      "X-77-POP",
+      "frankfurtDE"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:37:37.169492+00:00",
+  "bytes": 174,
+  "sha256": "23a0184100e4bb7fc729d8d58f07b8eef532bd837c7b7bf1fef222773ae2ddf0"
+}

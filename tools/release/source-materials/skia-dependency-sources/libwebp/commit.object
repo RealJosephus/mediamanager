@@ -1,0 +1,9 @@
+tree fe5f48f90e42bdce3aba8143e23822f191b93917
+parent 8a6a55bba8f4ba00b2b92336446c609444c0d140
+author James Zern <jzern@google.com> 1712954928 -0700
+committer James Zern <jzern@google.com> 1712954928 -0700
+
+update ChangeLog
+
+Bug: webp:627
+Change-Id: I67a011b62087a8ad64df3b5eb0a1c051adeea60f

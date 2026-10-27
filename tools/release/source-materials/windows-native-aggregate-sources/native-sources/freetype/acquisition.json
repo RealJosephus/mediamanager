@@ -1,0 +1,58 @@
+{
+  "selectedSource": {
+    "file": "freetype-2.14.3.tar.xz",
+    "sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f",
+    "url": "https://downloads.sourceforge.net/project/freetype/freetype2/2.14.3/freetype-2.14.3.tar.xz",
+    "url2": "",
+    "packages": [
+      "freetype",
+      "freetype-bootstrap"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://downloads.sourceforge.net/project/freetype/freetype2/2.14.3/freetype-2.14.3.tar.xz",
+    "responseUrl": "https://altushost-swe.dl.sourceforge.net/project/freetype/freetype2/2.14.3/freetype-2.14.3.tar.xz?viasf=1&fid=22b6099f58b4da6e&e=1793197747&st=Zwttj8viLnqmxhQ3A5iyRw",
+    "status": 200,
+    "headers": [
+      [
+        "Server",
+        "nginx"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:07 GMT"
+      ],
+      [
+        "Content-Type",
+        "application/octet-stream"
+      ],
+      [
+        "Content-Length",
+        "2670220"
+      ],
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "last-modified",
+        "Sun, 22 Mar 2026 15:11:00 GMT"
+      ],
+      [
+        "etag",
+        "\"69c00684-28be8c\""
+      ],
+      [
+        "X-Cache-Status",
+        "HIT"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:11.706867+00:00",
+    "bytes": 2670220,
+    "sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f"
+  }
+}

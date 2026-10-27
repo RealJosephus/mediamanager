@@ -1,4 +1,6 @@
 # Native JSON fixtures are sealed by raw SHA-256; keep checkout bytes intact.
+tools/release/license-materials/* -text
+tools/release/source-materials/** -text
 tests/sessions/fixtures/syncplay/recording-source/* -text
 # The runtime-date seals also bind these original LF source bytes.
 /tests/sessions/user-data-binding-cases.js text eol=lf
@@ -447,3 +449,5 @@ src/metadata/resources/comic-culture-language.json -text
 /tests/library/native-static-audio-source-evidence.js -text
 /tests/storage/fixtures/rar-entry-current/** -text
 /tests/metadata/fixtures/photo-current/** -text
+/tests/http/startup-current-observations.js text eol=lf
+/tests/http/password-reset-current-observations.js text eol=lf

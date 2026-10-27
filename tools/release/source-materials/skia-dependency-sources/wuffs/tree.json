@@ -1,0 +1,114 @@
+[
+  {
+    "path": ".github",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a8dcf8853602eedfa8b260ea5d3846cc945f3a8b",
+    "bytes": null
+  },
+  {
+    "path": ".github/ISSUE_TEMPLATE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c52212facc102820d5934bbc3a99837569657e7",
+    "bytes": 130
+  },
+  {
+    "path": ".github/PULL_REQUEST_TEMPLATE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0787bd9431fab38acdcf2aa95f048aeb87a0b586",
+    "bytes": 163
+  },
+  {
+    "path": "LICENSE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+    "bytes": 11358
+  },
+  {
+    "path": "README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "500d32c40a19d52747b176187d09da96d6a3130d",
+    "bytes": 1316
+  },
+  {
+    "path": "docs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fd855e0e3d8cb4a23a8855c0a5982d84382f109b",
+    "bytes": null
+  },
+  {
+    "path": "docs/code-of-conduct.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dc079b4d66eb2fd4a799ce16e2b2913d00a7ec2f",
+    "bytes": 4503
+  },
+  {
+    "path": "docs/contributing.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6272489dae31495b5936919ce0e8a8937f191620",
+    "bytes": 1097
+  },
+  {
+    "path": "release",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4f539f8e4d2e0a0594011e3f27895772a3e43109",
+    "bytes": null
+  },
+  {
+    "path": "release/c",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3b9dfdeaa00e4dac7c556b6dd63a8d89bd71afa5",
+    "bytes": null
+  },
+  {
+    "path": "release/c/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b45a9c822cc40a1eaede7663bed15a6195859fc",
+    "bytes": 1508
+  },
+  {
+    "path": "release/c/wuffs-v0.2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f26262a07d3eec937cb8b1c98e2649e2eeb0db73",
+    "bytes": 431885
+  },
+  {
+    "path": "release/c/wuffs-v0.3.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "71d5c7cc32aa0f1815edb468d2aab189d3e9c83f",
+    "bytes": 1825556
+  },
+  {
+    "path": "script",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "034de84f376fa22fceeb444219d038892041b8ec",
+    "bytes": null
+  },
+  {
+    "path": "script/sync.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0be4314624699043d883e6be4cb99a7b367a936c",
+    "bytes": 1617
+  },
+  {
+    "path": "sync.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6dbb5708be133b0c5fbb82e686a196d0457a62ba",
+    "bytes": 543
+  }
+]

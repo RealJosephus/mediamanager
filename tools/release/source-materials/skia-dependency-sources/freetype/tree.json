@@ -1,0 +1,5721 @@
+[
+  {
+    "path": ".clang-format",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fbd04c11cbf2056a445add4914d0e5693c67b82f",
+    "bytes": 453
+  },
+  {
+    "path": ".gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e4f1510bf9fa53e42ff14b918c79c185c4dba38a",
+    "bytes": 94
+  },
+  {
+    "path": ".gitlab-ci.yml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b09fd7f324c0fa11af361e7e950b89deb2d5062f",
+    "bytes": 7540
+  },
+  {
+    "path": ".gitmodules",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b452dffb93b18b41c75a50de9c08e4b07962ee6e",
+    "bytes": 84
+  },
+  {
+    "path": ".mailmap",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31d2a47663c122720e4cbad12b5ef874080b1d53",
+    "bytes": 1791
+  },
+  {
+    "path": "CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be98e68ed05f34443e9dbb49221f2d0c5f6e06d1",
+    "bytes": 22514
+  },
+  {
+    "path": "LICENSE.TXT",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f9df2177a47a3e463e45d295afdcc783766836e",
+    "bytes": 2149
+  },
+  {
+    "path": "MSBuild.rsp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8401e60309f18cf8e4007c99e6b208fd497e8833",
+    "bytes": 147
+  },
+  {
+    "path": "MSBuild.sln",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba56ae2ef89cdc090d39a6ea4b62d68daecccd37",
+    "bytes": 3600
+  },
+  {
+    "path": "Makefile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "03c0429837c77cff9a8092991547ae63448af97b",
+    "bytes": 846
+  },
+  {
+    "path": "README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "209d41bcd43df5967a8ee6b91f43ef45ae537b12",
+    "bytes": 3093
+  },
+  {
+    "path": "README.git",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16cf434dbf970d1830d0d9fd1881527172b092fc",
+    "bytes": 3154
+  },
+  {
+    "path": "autogen.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e6f1ebf234af119332b9850b5dda0d78af796f7f",
+    "bytes": 4760
+  },
+  {
+    "path": "builds",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "82c8f7be6b128d6ff1dd5ec86a53111fd2bf316f",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "084434d4782e8c37bcd22751b312fd3403d25938",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "afb06c370809cd161b2c01b1fae9e757779265a8",
+    "bytes": 4682
+  },
+  {
+    "path": "builds/amiga/include",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7d94299efb61ba2d5267b32b3f5e97db144722b9",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga/include/config",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "11496087642e60ffa67304a6d55cd711c4fca3a8",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga/include/config/ftconfig.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90ad5c853ab46f134704fb72bc7c8dc0a228f44f",
+    "bytes": 2197
+  },
+  {
+    "path": "builds/amiga/include/config/ftmodule.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f76b17a01b3194abba0d61554eb96cc866658b3",
+    "bytes": 4399
+  },
+  {
+    "path": "builds/amiga/makefile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b5a5c0b99a431f9f7b4c426813521c68ecaf996",
+    "bytes": 7292
+  },
+  {
+    "path": "builds/amiga/makefile.os4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88fe16f19554092f1005f49ee61cee17d1597c9f",
+    "bytes": 8141
+  },
+  {
+    "path": "builds/amiga/smakefile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5edf4bec042367704f18ecab9834b97fa8d7b891",
+    "bytes": 7396
+  },
+  {
+    "path": "builds/amiga/src",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d01145da1dba20e96ac9e4fa362b84a35875e379",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga/src/base",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "83a37e6965fc2845a84e2304e5a8373d6aba5725",
+    "bytes": null
+  },
+  {
+    "path": "builds/amiga/src/base/ftdebug.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a458bbad1a503a6bf86a1c61046841701b720e53",
+    "bytes": 7219
+  },
+  {
+    "path": "builds/amiga/src/base/ftsystem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "201ef0bde3bb01b049de86e7779a90fd7e1b8742",
+    "bytes": 20250
+  },
+  {
+    "path": "builds/ansi",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "94a14ea7e51f0ac4503b1d2c663d7ea70ed6b7d1",
+    "bytes": null
+  },
+  {
+    "path": "builds/ansi/ansi-def.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b4564a667320d6e0e37bb0515d7ea705412c4a5",
+    "bytes": 1727
+  },
+  {
+    "path": "builds/ansi/ansi.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31a60469d811c9e863507a41dbfea48ebb18ca03",
+    "bytes": 600
+  },
+  {
+    "path": "builds/atari",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "43090d486b04398d242533f52cb9ab10f32d8f92",
+    "bytes": null
+  },
+  {
+    "path": "builds/atari/ATARI.H",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ddd2eb2ebaa1a97a461a1d821677acc6196b045",
+    "bytes": 412
+  },
+  {
+    "path": "builds/atari/FNames.SIC",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3657179d919530820462ad3ade981da4b356349",
+    "bytes": 709
+  },
+  {
+    "path": "builds/atari/FREETYPE.PRJ",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4776a5bc690aadd82efb537fa4ce8eb349845a43",
+    "bytes": 579
+  },
+  {
+    "path": "builds/atari/README.TXT",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1300817b2617f1b1f0c6ea4349d94d32dc6c84ea",
+    "bytes": 1443
+  },
+  {
+    "path": "builds/atari/deflinejoiner.awk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16d9e6dd9333e05e73a5b2b699c72ab7966d11a9",
+    "bytes": 3962
+  },
+  {
+    "path": "builds/atari/gen-purec-patch.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "1ec050c11fa3cbbba26c610dfa32787f5a995795",
+    "bytes": 1014
+  },
+  {
+    "path": "builds/beos",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ba2fcfa364c439a1225f84e98cf277558e02a799",
+    "bytes": null
+  },
+  {
+    "path": "builds/beos/beos-def.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55e61eb88cdb61137824eef72e0179805366494b",
+    "bytes": 1795
+  },
+  {
+    "path": "builds/beos/beos.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7579b187d7cef1ab9c909566b1239f38169cd3fb",
+    "bytes": 573
+  },
+  {
+    "path": "builds/beos/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a045e5ffe0a60b6fc05c2f922228a046c391bfee",
+    "bytes": 800
+  },
+  {
+    "path": "builds/cmake",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "2514a8d54aaa15819c5644aca634eec3d4f57162",
+    "bytes": null
+  },
+  {
+    "path": "builds/cmake/FindBrotliDec.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97efb8867c09365d4b8f83f91952ae92d89156ae",
+    "bytes": 1333
+  },
+  {
+    "path": "builds/cmake/FindHarfBuzz.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f0e33a1a1feb654f78473d48416315e16f896cb",
+    "bytes": 7351
+  },
+  {
+    "path": "builds/cmake/iOS.cmake",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f82d61d34bfb0a69bb64a30a5df8a0a02744ae8",
+    "bytes": 9228
+  },
+  {
+    "path": "builds/cmake/testbuild.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "6d1661386bf6363ac043c39ff00b40d93e63cc31",
+    "bytes": 3430
+  },
+  {
+    "path": "builds/compiler",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "26c6c7c00dc6c2e7eaf084f70077e4a50117c8d9",
+    "bytes": null
+  },
+  {
+    "path": "builds/compiler/ansi-cc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fd5b0eb2aa58e697041f6ef5307795bc3a686ab",
+    "bytes": 1780
+  },
+  {
+    "path": "builds/compiler/bcc-dev.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f03d16c7799a2a6bca6e95044c8bf92099ad3b1c",
+    "bytes": 2008
+  },
+  {
+    "path": "builds/compiler/bcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24d56e0267703cd770a14c214c268bed1bff5f22",
+    "bytes": 1979
+  },
+  {
+    "path": "builds/compiler/emx.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e5c3fdc70dbc73a8269fe0ea788cdad6c7215f4c",
+    "bytes": 1764
+  },
+  {
+    "path": "builds/compiler/gcc-dev.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "691bceb29ed972aa26b9d9c3f219c8e6093f3833",
+    "bytes": 2244
+  },
+  {
+    "path": "builds/compiler/gcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab8c55ffabfe2cf10edf5e87ed3a572e0c7bc2fc",
+    "bytes": 1723
+  },
+  {
+    "path": "builds/compiler/intelc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1fd53c2d88eb6abceab3eec875c017be6e990e51",
+    "bytes": 2055
+  },
+  {
+    "path": "builds/compiler/unix-lcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8b1fbc063ed2388aa15b7a2bb4c8523e010b4d4",
+    "bytes": 1779
+  },
+  {
+    "path": "builds/compiler/visualage.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c1dcdb65c9be8f5c1689c5ff8085e33c2de4972",
+    "bytes": 1625
+  },
+  {
+    "path": "builds/compiler/visualc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4754c0e97c812363cdecc94776f8d4e6e56b6c2e",
+    "bytes": 1772
+  },
+  {
+    "path": "builds/compiler/watcom.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6d24a49f1c3ac3f252c7d4941f24c7588b3980e",
+    "bytes": 1849
+  },
+  {
+    "path": "builds/compiler/win-lcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06b1644a66534cebbd491d10dd04046102666745",
+    "bytes": 1716
+  },
+  {
+    "path": "builds/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c5b97389b1309963211e3f7418155d77e735e27",
+    "bytes": 4091
+  },
+  {
+    "path": "builds/dos",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5a768c1546d14d493b92becca2547e1f55344298",
+    "bytes": null
+  },
+  {
+    "path": "builds/dos/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d181240aa92f9bd62e336b7284d43fc98e62588",
+    "bytes": 3660
+  },
+  {
+    "path": "builds/dos/dos-def.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88f70167fcdd895dfaadfa4979515d302b2136d7",
+    "bytes": 1111
+  },
+  {
+    "path": "builds/dos/dos-emx.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1bc35954cc3f577d9fab04b014b3f2b6545c717",
+    "bytes": 576
+  },
+  {
+    "path": "builds/dos/dos-gcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f7bc5551e3a459d7524224cf4f637bce782ee080",
+    "bytes": 574
+  },
+  {
+    "path": "builds/dos/dos-wat.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e096e6493502352ec31ad386edcc326a230d7b4",
+    "bytes": 583
+  },
+  {
+    "path": "builds/exports.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1df4010d28d9021adf932b642bc305aba427c4a8",
+    "bytes": 2363
+  },
+  {
+    "path": "builds/freetype.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6ff865b74710df92c5e2fff2b7c3d35c16ee896",
+    "bytes": 11639
+  },
+  {
+    "path": "builds/link_dos.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "923639d489d83816f9e4a3cff881e5fd35117a59",
+    "bytes": 1052
+  },
+  {
+    "path": "builds/link_std.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "008de5170c81a79181d771d1585f6a3fec6a4caf",
+    "bytes": 1033
+  },
+  {
+    "path": "builds/mac",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1decb26d6c5d84cb79a8e5854627d4b0c543b7e1",
+    "bytes": null
+  },
+  {
+    "path": "builds/mac/FreeType.m68k_cfm.make.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b74565f10796908a89d67644a5405f4cbe6856e9",
+    "bytes": 6172
+  },
+  {
+    "path": "builds/mac/FreeType.m68k_far.make.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d880ddbb7c6c54749f8862d0f815575f455a7ef7",
+    "bytes": 6164
+  },
+  {
+    "path": "builds/mac/FreeType.ppc_carbon.make.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1fa8c307608e7d8f96b598db3c171cea7f2a132a",
+    "bytes": 6298
+  },
+  {
+    "path": "builds/mac/FreeType.ppc_classic.make.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2550190cbf4ad90ebca1799b541e1038a0c25a66",
+    "bytes": 6366
+  },
+  {
+    "path": "builds/mac/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06e3d51da86ae6f5aab2eeccd8c40866a6f22218",
+    "bytes": 14200
+  },
+  {
+    "path": "builds/mac/ascii2mpw.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ad32b219772550f2efecb6029ace370cce08aa0c",
+    "bytes": 1033
+  },
+  {
+    "path": "builds/mac/freetype-Info.plist",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "344e5ac0b3a683edefc7191ac79dca1c5208b623",
+    "bytes": 795
+  },
+  {
+    "path": "builds/mac/ftlib.prj.xml",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cbbc45ee55c5c18fe936f5ce3c1fe6fa5970e101",
+    "bytes": 73504
+  },
+  {
+    "path": "builds/mac/ftmac.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77eb874389dd952d7515cf0c4617bcb0f3ffce41",
+    "bytes": 43736
+  },
+  {
+    "path": "builds/meson",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8cb8eb5ffd748f5de76e697a9acb2f156fd715cc",
+    "bytes": null
+  },
+  {
+    "path": "builds/meson/extract_freetype_version.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23889620390892d50b09f6f370026e7f34324cd5",
+    "bytes": 3019
+  },
+  {
+    "path": "builds/meson/extract_libtool_version.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ffdb1a0b61110983b768b624d80397364f7005b",
+    "bytes": 2906
+  },
+  {
+    "path": "builds/meson/generate_reference_docs.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3022e0758c7288b23ab647ca2055d477e840a9e6",
+    "bytes": 2317
+  },
+  {
+    "path": "builds/meson/parse_modules_cfg.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "40d30323ba9cbe6d7bc0cb0ebe980af19edbc35d",
+    "bytes": 4596
+  },
+  {
+    "path": "builds/meson/process_ftoption_h.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d5a217268f7de613a39be8687a0747d3d9cabc4d",
+    "bytes": 3403
+  },
+  {
+    "path": "builds/modules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bcc61f09f9a093bddb7b2af8aa0bc207cbe9ed98",
+    "bytes": 2019
+  },
+  {
+    "path": "builds/os2",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7a9a7cfcf675494420f3b6321b33df44f229da74",
+    "bytes": null
+  },
+  {
+    "path": "builds/os2/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dfd15344561572639100e14651ed47287fb87f64",
+    "bytes": 1593
+  },
+  {
+    "path": "builds/os2/os2-def.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8f7b7d49d941c491c6d697fee722f03fe1a79b93",
+    "bytes": 1113
+  },
+  {
+    "path": "builds/os2/os2-dev.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de5d4c906770f0425df2dd3183e4f246946c88be",
+    "bytes": 754
+  },
+  {
+    "path": "builds/os2/os2-gcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "db681adbfe25ea9fd45af824dd348f700135a8c4",
+    "bytes": 674
+  },
+  {
+    "path": "builds/symbian",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7c8908c95b9e4ef7fe7d13a55e3996e509df90ed",
+    "bytes": null
+  },
+  {
+    "path": "builds/symbian/bld.inf",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f28097e4c4401a4ce1c75e488938c803852a89f",
+    "bytes": 2878
+  },
+  {
+    "path": "builds/symbian/freetype.mmp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "03490acada538c3b006c0d29f4be51f3392f16f9",
+    "bytes": 2477
+  },
+  {
+    "path": "builds/toplevel.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aaace59206a201e042b4284abbadb1079f68f560",
+    "bytes": 9049
+  },
+  {
+    "path": "builds/unix",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6931f31d2ee183fee0837fe570633a70b05746c3",
+    "bytes": null
+  },
+  {
+    "path": "builds/unix/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f89b226b81a99c2602b5ba08fc69b0121b93a02e",
+    "bytes": 214
+  },
+  {
+    "path": "builds/unix/ax_compare_version.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ffb4997e8b146e1e40f5da58fee4f4150290f4a4",
+    "bytes": 6571
+  },
+  {
+    "path": "builds/unix/ax_prog_python_version.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dbc3dbf1da69eb1bd164b4992bc17c5b3ae3820a",
+    "bytes": 2102
+  },
+  {
+    "path": "builds/unix/ax_pthread.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e5858e50c3c45d2444fbd252df5c24496d96d6f1",
+    "bytes": 22566
+  },
+  {
+    "path": "builds/unix/configure.raw",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b4673cf24dc3bda674ce51268d27c7ed35e69b82",
+    "bytes": 35408
+  },
+  {
+    "path": "builds/unix/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2facdf7581c0bd704de7eb5d2fb7032a0a845683",
+    "bytes": 2512
+  },
+  {
+    "path": "builds/unix/freetype-config.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e69a06725cdac205f5a968e0cc1c8d2f2f6a76a",
+    "bytes": 5099
+  },
+  {
+    "path": "builds/unix/freetype2.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe389f4b6fef51f82dc7b938c02e136dbc84318d",
+    "bytes": 383
+  },
+  {
+    "path": "builds/unix/freetype2.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c08ef9eac870c7b8ad30805c91504573dcc2adef",
+    "bytes": 6331
+  },
+  {
+    "path": "builds/unix/ft-munmap.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f4df34c5b75a2a49f51841de0576cf9f991e67c6",
+    "bytes": 869
+  },
+  {
+    "path": "builds/unix/ftconfig.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1fc1e28fb5283f38d7c37811c819bfb1e01e6d3c",
+    "bytes": 1597
+  },
+  {
+    "path": "builds/unix/ftsystem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7575da328b89ee9328991c0945185b587a5a2535",
+    "bytes": 10581
+  },
+  {
+    "path": "builds/unix/install.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1bfdd1daca7c69b61735e2d89cb107a7bcaf065e",
+    "bytes": 3970
+  },
+  {
+    "path": "builds/unix/pkg.m4",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "260e1fb9221c08bff990281913a81d0389d8c350",
+    "bytes": 7322
+  },
+  {
+    "path": "builds/unix/unix-cc.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15767cb29898f8692833e242585cdae9bff6719b",
+    "bytes": 3626
+  },
+  {
+    "path": "builds/unix/unix-def.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bf2e2b57235b81e38bfb4a8eb5199f24f0efe2b",
+    "bytes": 5586
+  },
+  {
+    "path": "builds/unix/unix-dev.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "347c922f6af6cf6be9324e512c2f73027e4a5b8a",
+    "bytes": 686
+  },
+  {
+    "path": "builds/unix/unix-lcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c0c1978c88eee0946bf4f359e9337a77f2a8947f",
+    "bytes": 656
+  },
+  {
+    "path": "builds/unix/unix.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97b29473bcf936b304ef8827316b12a3e9f9af62",
+    "bytes": 1633
+  },
+  {
+    "path": "builds/unix/unixddef.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "223593bae73a03d8309efe084f573ed97cf8084e",
+    "bytes": 973
+  },
+  {
+    "path": "builds/vms",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f161aaf04c3ab7d303f90cf3f2af0c3d76082ec4",
+    "bytes": null
+  },
+  {
+    "path": "builds/vms/apinames_vms.bash",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1928d21ae7376184ccc45d20897ccea4da153ca8",
+    "bytes": 111
+  },
+  {
+    "path": "builds/vms/ftconfig.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da4799e3aa63756542538571db1f85b1c0c4ef47",
+    "bytes": 1702
+  },
+  {
+    "path": "builds/vms/ftsystem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e325e9c6ed785de85bc4d0b6c8c6b3d0644f8147",
+    "bytes": 11893
+  },
+  {
+    "path": "builds/vms/patch_ftcalc.sed",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "79174183e48986b4c175bab15cc27f1a7283d562",
+    "bytes": 99
+  },
+  {
+    "path": "builds/wince",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c3d7a7af81ae92d59f56916be921e3bb196d06d1",
+    "bytes": null
+  },
+  {
+    "path": "builds/wince/ftdebug.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "221d7c882e872dad8aa7603ff448c078f8d146b2",
+    "bytes": 7493
+  },
+  {
+    "path": "builds/wince/vc2005-ce",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "e52dd1fb4ffc80e6150d6e4b470c03d6e10dc34c",
+    "bytes": null
+  },
+  {
+    "path": "builds/wince/vc2005-ce/freetype.sln",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62c6a657bc0112a1e4a5dd736256239389ae4b85",
+    "bytes": 22193
+  },
+  {
+    "path": "builds/wince/vc2005-ce/freetype.vcproj",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "efdb587021ca03a2d5b2121e3590d4888dbd5c3a",
+    "bytes": 80200
+  },
+  {
+    "path": "builds/wince/vc2005-ce/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf4a7c0fc8d61d6366d4efe87ade9ff86d329016",
+    "bytes": 1464
+  },
+  {
+    "path": "builds/wince/vc2008-ce",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3da5e39cb1d598def543dbb59d862dece6d17366",
+    "bytes": null
+  },
+  {
+    "path": "builds/wince/vc2008-ce/freetype.sln",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23914323c9cf194b8a923219cd66059440cb898a",
+    "bytes": 22194
+  },
+  {
+    "path": "builds/wince/vc2008-ce/freetype.vcproj",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d01c5b59f13bfac194c0dd973152d19efeeb02b8",
+    "bytes": 89907
+  },
+  {
+    "path": "builds/wince/vc2008-ce/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56b983ee19504c706d474b2bd5f4c9926b5b5ec7",
+    "bytes": 1461
+  },
+  {
+    "path": "builds/windows",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d4bccbbbb5db5a4b615aa1013da5c00fe0e30e12",
+    "bytes": null
+  },
+  {
+    "path": "builds/windows/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41456a48a13bb13f9831f169d6c29c56f74e31f9",
+    "bytes": 66
+  },
+  {
+    "path": "builds/windows/detect.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ca3ca1ac58b37e4db06805bf39bde5e4fe975ab",
+    "bytes": 5270
+  },
+  {
+    "path": "builds/windows/ftdebug.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96bb0688a1b90a37e87533aad5f438083b20fd43",
+    "bytes": 15423
+  },
+  {
+    "path": "builds/windows/ftsystem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d20566a72ba6b69633659bfd4e4dae0984ada6a",
+    "bytes": 13398
+  },
+  {
+    "path": "builds/windows/vc2010",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4aad52ea9f6d411e00f83d4ebea2f1e95f9cecad",
+    "bytes": null
+  },
+  {
+    "path": "builds/windows/vc2010/freetype.user.props",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "234dd5d7959d01d731fa769d35fa46278b4bd6f4",
+    "bytes": 2377
+  },
+  {
+    "path": "builds/windows/vc2010/freetype.vcxproj",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "671d124502f6fc606c4917cffe7392a1b4a7cebb",
+    "bytes": 30290
+  },
+  {
+    "path": "builds/windows/vc2010/freetype.vcxproj.filters",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4085f6c4d9b9c2106af39bcaa535126febd5801c",
+    "bytes": 5631
+  },
+  {
+    "path": "builds/windows/vc2010/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e50110bee4a40ddc3fcc04d7d0e7b6ad13abf23a",
+    "bytes": 1459
+  },
+  {
+    "path": "builds/windows/visualc",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7e681b8da17686c7381a1650ced5aed8e0960482",
+    "bytes": null
+  },
+  {
+    "path": "builds/windows/visualc/freetype.dsp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "540f5b9adee1224ecf551b83546765b61cbba5c2",
+    "bytes": 10021
+  },
+  {
+    "path": "builds/windows/visualc/freetype.dsw",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b149e769b5a7a40d9761039b962befded439af22",
+    "bytes": 539
+  },
+  {
+    "path": "builds/windows/visualc/freetype.sln",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9054d0abe03ff94d8af5e8edd065564eb9b8ffa3",
+    "bytes": 1339
+  },
+  {
+    "path": "builds/windows/visualc/freetype.vcproj",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a16782c2306f7a86ea6297adf45e918f7a4eae32",
+    "bytes": 12579
+  },
+  {
+    "path": "builds/windows/visualc/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0387a979aaaac5a5e35319e2d2d6dc673fc70293",
+    "bytes": 1378
+  },
+  {
+    "path": "builds/windows/visualce",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ce433eb4d7cb6768cb6195b6ca1e4c588934ad88",
+    "bytes": null
+  },
+  {
+    "path": "builds/windows/visualce/freetype.dsp",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "714c422574383f357ed32fd4fb8f8836ac861dc1",
+    "bytes": 11800
+  },
+  {
+    "path": "builds/windows/visualce/freetype.dsw",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b149e769b5a7a40d9761039b962befded439af22",
+    "bytes": 539
+  },
+  {
+    "path": "builds/windows/visualce/freetype.vcproj",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e271462bd89626d001e021d9bcb48fde6cf62daa",
+    "bytes": 94801
+  },
+  {
+    "path": "builds/windows/visualce/index.html",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "50e336f0f6818f765ae85fc1b0acb5acef3392fa",
+    "bytes": 1501
+  },
+  {
+    "path": "builds/windows/w32-bcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2532479f6e4b9548dff38d6b20761cd99439af06",
+    "bytes": 757
+  },
+  {
+    "path": "builds/windows/w32-bccd.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d63717033679ab942b52ae7b56d8419ef96fb6e5",
+    "bytes": 638
+  },
+  {
+    "path": "builds/windows/w32-dev.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "905779f68f28a53e667c08446b2a50e4eaa26f63",
+    "bytes": 800
+  },
+  {
+    "path": "builds/windows/w32-gcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32c2051a065795a668e1a4d9715dd10295bb084d",
+    "bytes": 839
+  },
+  {
+    "path": "builds/windows/w32-icc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fa1c6ccacc60ecb76867ca31fa84204cbea45105",
+    "bytes": 792
+  },
+  {
+    "path": "builds/windows/w32-intl.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d049412be308116cc2f8fc819806f840121d3d7",
+    "bytes": 783
+  },
+  {
+    "path": "builds/windows/w32-lcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "994612b5397a0ed99d95630e88c541cf40b45798",
+    "bytes": 618
+  },
+  {
+    "path": "builds/windows/w32-mingw32.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d2d8a9e4e29100fa1317290e1cee5b149766cf16",
+    "bytes": 861
+  },
+  {
+    "path": "builds/windows/w32-vcc.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bf4b3735f37c7c57afbbf325218789c1eb3b492a",
+    "bytes": 751
+  },
+  {
+    "path": "builds/windows/w32-wat.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe287682f6a335ecfa72dce32d3d9b1509d656f8",
+    "bytes": 774
+  },
+  {
+    "path": "builds/windows/win32-def.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "741422ca782d8c21a88db60e7458e7ccaf91ce76",
+    "bytes": 1153
+  },
+  {
+    "path": "configure",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "672bd44e4c69b16ef36c98134022342e511685da",
+    "bytes": 4029
+  },
+  {
+    "path": "devel",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a6a745e8c5271e9c558a8cb46bd851ae42d3a88d",
+    "bytes": null
+  },
+  {
+    "path": "devel/ft2build.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e94e6c52b70f44af880d0a7eab2bcf87dc918b42",
+    "bytes": 1177
+  },
+  {
+    "path": "devel/ftoption.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c409bd458a5b4f7edec1b84a5e0ab5bc5342e2ca",
+    "bytes": 41624
+  },
+  {
+    "path": "docs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b502573df92e38a2dead14ea636fbc0e8e5de68c",
+    "bytes": null
+  },
+  {
+    "path": "docs/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8d05d11a52f543f5fdbd336f9c3cdc3a751f593",
+    "bytes": 130
+  },
+  {
+    "path": "docs/CHANGES",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a58230df152ffc01d20d9673d0b973287909b4fe",
+    "bytes": 224192
+  },
+  {
+    "path": "docs/CMAKE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31237ae15164709f4bc88ed1a8a63d1436d959eb",
+    "bytes": 114
+  },
+  {
+    "path": "docs/CUSTOMIZE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "890c8abdd293b99bbea67beaf24d7aeeee299924",
+    "bytes": 5301
+  },
+  {
+    "path": "docs/DEBUG",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "408b52fbc26a671c9ec915e77994741941d6461f",
+    "bytes": 11299
+  },
+  {
+    "path": "docs/DOCGUIDE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d031185267d31a8c09e767f4e91a6a47058b2f16",
+    "bytes": 8604
+  },
+  {
+    "path": "docs/FTL.TXT",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9e8cbd66ffff526113350953f4a2f4252a92f49",
+    "bytes": 6743
+  },
+  {
+    "path": "docs/GPLv2.TXT",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2fe7b6af3535ebc1e018dd2fe6c993330c031fa",
+    "bytes": 17994
+  },
+  {
+    "path": "docs/INSTALL",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f576efec85437687be2c5fc4f93aca31bc450e01",
+    "bytes": 4168
+  },
+  {
+    "path": "docs/INSTALL.ANY",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d92b27cb504cad034ece99eca1ef73b52e4669e1",
+    "bytes": 5943
+  },
+  {
+    "path": "docs/INSTALL.CROSS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d417fbd12f0711faa788ce5e6032082738e70dd7",
+    "bytes": 6687
+  },
+  {
+    "path": "docs/INSTALL.GNU",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "766f6f8a1cccf0650fbd989f9e203cdc4d663347",
+    "bytes": 6588
+  },
+  {
+    "path": "docs/INSTALL.MAC",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2587e24a65c94473492873e6f113a3676440600f",
+    "bytes": 1466
+  },
+  {
+    "path": "docs/INSTALL.UNIX",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "acbd11e6edba0302a3a10711ac20cc5e2b257771",
+    "bytes": 4933
+  },
+  {
+    "path": "docs/INSTALL.VMS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c9a97de0b2a363954686896d6a81eed04d176d8",
+    "bytes": 2242
+  },
+  {
+    "path": "docs/MAKEPP",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4450e4770069e8bcafa180c0458258265d29e7f6",
+    "bytes": 256
+  },
+  {
+    "path": "docs/PROBLEMS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "40bdc35a67629030515b4d7aaa803b5844a4b6a0",
+    "bytes": 2714
+  },
+  {
+    "path": "docs/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2b5af865011d6802e44f2406098bdc9c8f79e43",
+    "bytes": 1250
+  },
+  {
+    "path": "docs/TODO",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c7987d1dc500e5ab52cacf69d43bf37915a2a64",
+    "bytes": 1364
+  },
+  {
+    "path": "docs/VERSIONS.TXT",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b1c5d7602fcbdbaf527302ca1a9f3b138f50840",
+    "bytes": 4446
+  },
+  {
+    "path": "docs/formats.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "13b3eb2a297b837ccb0b7630d1e3767811bf78e3",
+    "bytes": 10017
+  },
+  {
+    "path": "docs/freetype-config.1",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9ade610bb0538c80ebce68fb992079837b4577f",
+    "bytes": 2887
+  },
+  {
+    "path": "docs/freetype-web.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c9140c50b383e2f2d601e25302bb695aff08558",
+    "bytes": 1274
+  },
+  {
+    "path": "docs/markdown",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "64866d3f1565773f06b201fc88ad13dc332f4498",
+    "bytes": null
+  },
+  {
+    "path": "docs/markdown/images",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "dee24b677e2352e798c95db8aed03bed14a30f2a",
+    "bytes": null
+  },
+  {
+    "path": "docs/markdown/images/favico.ico",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8464e77ad3587b21e6b2dfa38491cc17bd5d6743",
+    "bytes": 5430
+  },
+  {
+    "path": "docs/markdown/javascripts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "35651085bd19800955be39e7f754af789580dbd8",
+    "bytes": null
+  },
+  {
+    "path": "docs/markdown/javascripts/extra.js",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1ce774fac4076e78d0ba1eb122481ea5fcc6b0e",
+    "bytes": 1600
+  },
+  {
+    "path": "docs/markdown/stylesheets",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "33fc7418a98c5dd534256da049c5228634e4651a",
+    "bytes": null
+  },
+  {
+    "path": "docs/markdown/stylesheets/extra.css",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d999ed5d2015b8196b0f3007943b648146d3569",
+    "bytes": 3407
+  },
+  {
+    "path": "docs/oldlogs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5db0c390cd0153659dd0307e747a6dc5edec87c6",
+    "bytes": null
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.20",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52142ccb218a4985a0f60133a05055089fce4a1a",
+    "bytes": 91563
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.21",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f2c18777392097e640f63d37e299ab40746a19bc",
+    "bytes": 329142
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.210",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df163d0f7873f450799085484457509e966b7256",
+    "bytes": 247077
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.22",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a5598a00b1c810c3937532e80af8bbc7f11ef6d",
+    "bytes": 99819
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.23",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a5006ea9a3b062b6a60eff79ad9a38b919238b4",
+    "bytes": 272330
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.24",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ba684fc26479c566376dc71cb8ac53643da2a909",
+    "bytes": 207336
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.25",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "01d61fced5207a0f453fb369680c34bf7167471c",
+    "bytes": 162296
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.26",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "02b3f9a680061264ef3781e92fee897c86209663",
+    "bytes": 176364
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.27",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f58f84bc5274bb6aba616604ce66bc8148141740",
+    "bytes": 63133
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.28",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e3310fb4dea2d888e3b74add0838a331e2b22aa4",
+    "bytes": 96385
+  },
+  {
+    "path": "docs/oldlogs/ChangeLog.29",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6629a48ac13b78ca882278874bd4e79e3c0d943",
+    "bytes": 72091
+  },
+  {
+    "path": "docs/raster.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ba8154fcb79ed87c2e3c359480511c3d76800ab",
+    "bytes": 24019
+  },
+  {
+    "path": "docs/release",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "459f54e9e92eb76deec9164939f0ec9c8365d1a8",
+    "bytes": 7250
+  },
+  {
+    "path": "include",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6ada5c54a35bf00d830d125ca4292a45b13c054e",
+    "bytes": null
+  },
+  {
+    "path": "include/freetype",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f3e3a5893ea96b03283f7cca2d0b9d9b40063031",
+    "bytes": null
+  },
+  {
+    "path": "include/freetype/config",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "24d3113d0ef4e45e261e28da76eb04b3d7049d41",
+    "bytes": null
+  },
+  {
+    "path": "include/freetype/config/ftconfig.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9800e99adf950bb887e2fba4e851540856c58f3d",
+    "bytes": 1614
+  },
+  {
+    "path": "include/freetype/config/ftheader.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24a9161e2f113e3eb78afb6ca12719f696da5605",
+    "bytes": 23919
+  },
+  {
+    "path": "include/freetype/config/ftmodule.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b315baba8ae406c1c78914449c5e6764038aa099",
+    "bytes": 1443
+  },
+  {
+    "path": "include/freetype/config/ftoption.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b857e0ebbd9a5fed2b088c28ce409d9fbdbfd64e",
+    "bytes": 41690
+  },
+  {
+    "path": "include/freetype/config/ftstdlib.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c63e8d654c1c0aa2828ed78f8cb6735cd5688c9",
+    "bytes": 4576
+  },
+  {
+    "path": "include/freetype/config/integer-types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ab4c0c78bd34e3eacc66bb0ac27aa5b9cbc889d",
+    "bytes": 7450
+  },
+  {
+    "path": "include/freetype/config/mac-support.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ac48995320fe9b9e4bd5dad905b2012d0e515ae9",
+    "bytes": 1645
+  },
+  {
+    "path": "include/freetype/config/public-macros.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c76509a99f7f784390e7895683779b78d3c3fbb4",
+    "bytes": 4240
+  },
+  {
+    "path": "include/freetype/freetype.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2960cba634112d1a02e17daf8880be559ca178c6",
+    "bytes": 177129
+  },
+  {
+    "path": "include/freetype/ftadvanc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "876a8a55cb9fc233b0807aff69e1a62acee3cc1a",
+    "bytes": 5470
+  },
+  {
+    "path": "include/freetype/ftbbox.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0107d94986bcc137709c27dfc7acb315750b04dc",
+    "bytes": 2638
+  },
+  {
+    "path": "include/freetype/ftbdf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb1f318648612c4eba7c08e697b8442882d5457a",
+    "bytes": 5654
+  },
+  {
+    "path": "include/freetype/ftbitmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1df5f29aca1ab769611b4d4c30a64022015a5dcc",
+    "bytes": 9051
+  },
+  {
+    "path": "include/freetype/ftbzip2.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "732931d22714141f32b559bb6d4da7f7373b5555",
+    "bytes": 2786
+  },
+  {
+    "path": "include/freetype/ftcache.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97223e36ec6b3fe99f3d0e77cb305b9d17c46b98",
+    "bytes": 34179
+  },
+  {
+    "path": "include/freetype/ftchapters.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7566fbd10f83de079bea84947b1f7d56fba720f0",
+    "bytes": 2933
+  },
+  {
+    "path": "include/freetype/ftcid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9744716d986da9f510777e3ca2ed116b475205b",
+    "bytes": 4022
+  },
+  {
+    "path": "include/freetype/ftcolor.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1cce747115731210c0f866cc037ad812d70a8961",
+    "bytes": 50791
+  },
+  {
+    "path": "include/freetype/ftdriver.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "39635f86c3ecce552d76141d9af12a2acd72b155",
+    "bytes": 50570
+  },
+  {
+    "path": "include/freetype/fterrdef.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ce3817e55df3ac42a72fcb5b5662830294fda97f",
+    "bytes": 12559
+  },
+  {
+    "path": "include/freetype/fterrors.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "218c4610e21800220ef5d7588768eb1d3691e22d",
+    "bytes": 9301
+  },
+  {
+    "path": "include/freetype/ftfntfmt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ea0c5f4d708a2cde24fe3d81f969cd10c04c6da",
+    "bytes": 2213
+  },
+  {
+    "path": "include/freetype/ftgasp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "632b536b471a25d84e26f4f816a200b269e0182d",
+    "bytes": 4138
+  },
+  {
+    "path": "include/freetype/ftglyph.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e967110e81eb7e0c0d1046536611df0dc84b6ce4",
+    "bytes": 20912
+  },
+  {
+    "path": "include/freetype/ftgxval.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "546a4818b6cd641b81a15a92b60dcc9d64e50650",
+    "bytes": 10625
+  },
+  {
+    "path": "include/freetype/ftgzip.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f0c1550f61d36112612183e6a49912a5f57112c8",
+    "bytes": 4211
+  },
+  {
+    "path": "include/freetype/ftimage.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1fff76b20d9172c9aca351705754add55800345a",
+    "bytes": 42337
+  },
+  {
+    "path": "include/freetype/ftincrem.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "32637fe5af02e2ae1b1e5c41124ef72e4fe81baa",
+    "bytes": 10696
+  },
+  {
+    "path": "include/freetype/ftlcdfil.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "72dbe2acccbb5df2ee78c51668d70d19f4ee4896",
+    "bytes": 11257
+  },
+  {
+    "path": "include/freetype/ftlist.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "74b3ffaee9f14b122a5361bfccf81ffded054995",
+    "bytes": 7100
+  },
+  {
+    "path": "include/freetype/ftlogging.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1670b12caf51a2d0f8f7c2954c7b240a68a2492d",
+    "bytes": 4130
+  },
+  {
+    "path": "include/freetype/ftlzw.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab2a9b7d5a853a19c2ecb349bc0c118c15db7a48",
+    "bytes": 2768
+  },
+  {
+    "path": "include/freetype/ftmac.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a3ed7fba6f735a477816f04f235278b978e43617",
+    "bytes": 7771
+  },
+  {
+    "path": "include/freetype/ftmm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb239bda1223a48bae5f4cf8aa982b426df97adc",
+    "bytes": 27783
+  },
+  {
+    "path": "include/freetype/ftmodapi.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7af33e33afee787703a7462b6921a9f4bae608ef",
+    "bytes": 22544
+  },
+  {
+    "path": "include/freetype/ftmoderr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c1b1fd3c040ba8d1b8fbd78085dac8209ff63ad",
+    "bytes": 6675
+  },
+  {
+    "path": "include/freetype/ftotval.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "66ac5871dcc832b164756e8b9b15097fd0e461c3",
+    "bytes": 5346
+  },
+  {
+    "path": "include/freetype/ftoutln.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "68cf65bae15973c543756f342567d8b2e7d60ec4",
+    "bytes": 17403
+  },
+  {
+    "path": "include/freetype/ftparams.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f6af8681f3b64cd9f552f3c63017905bc0445b5",
+    "bytes": 5847
+  },
+  {
+    "path": "include/freetype/ftpfr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "abcd3880087350bf05ec23bebd70793dd63318c9",
+    "bytes": 4908
+  },
+  {
+    "path": "include/freetype/ftrender.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "292c797cce587776c5c54b1a3dd1cfc9977765b2",
+    "bytes": 6625
+  },
+  {
+    "path": "include/freetype/ftsizes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f609eb2d76a705329d6ab1356f227a8766ae8536",
+    "bytes": 4288
+  },
+  {
+    "path": "include/freetype/ftsnames.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f5511495f048cdb089bd9f5934e4d40754e4c6e8",
+    "bytes": 7730
+  },
+  {
+    "path": "include/freetype/ftstroke.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7f1d4643f04a2de62869e0061e02ea374f5045e",
+    "bytes": 21773
+  },
+  {
+    "path": "include/freetype/ftsynth.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90b4b19c25f88ba673eb6b6c739fb5b64e2adc72",
+    "bytes": 4483
+  },
+  {
+    "path": "include/freetype/ftsystem.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ad3d7286dc776518cbd617fdba8fd3800dd6a6e",
+    "bytes": 8502
+  },
+  {
+    "path": "include/freetype/fttrigon.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ebedc3a8d1ebb13c9377716104750727d4e17227",
+    "bytes": 7411
+  },
+  {
+    "path": "include/freetype/fttypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "97ddcde65aa61660303138952ac60deaf37a07b5",
+    "bytes": 14735
+  },
+  {
+    "path": "include/freetype/ftwinfnt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b95cad0a42209bf8de551e560f01a0ee11080dc1",
+    "bytes": 7949
+  },
+  {
+    "path": "include/freetype/internal",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "97ab8616e01305824a14d3f32894dbf7a8c3cbe0",
+    "bytes": null
+  },
+  {
+    "path": "include/freetype/internal/autohint.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a22d8af7cd98b61d9aad6f59e08250b3dc3f35d5",
+    "bytes": 7498
+  },
+  {
+    "path": "include/freetype/internal/cffotypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8d6acbce7acbdb7911fa6bba086e061b0df9c220",
+    "bytes": 2354
+  },
+  {
+    "path": "include/freetype/internal/cfftypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d474dcf40ea75cc8453e994a050e76af80961c91",
+    "bytes": 11866
+  },
+  {
+    "path": "include/freetype/internal/compiler-macros.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4863d6de75e89722595ce1ef35234f4788846332",
+    "bytes": 11532
+  },
+  {
+    "path": "include/freetype/internal/ftcalc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c4943164a381ae4852ed0b0fa6bd800a2bf02ef",
+    "bytes": 12767
+  },
+  {
+    "path": "include/freetype/internal/ftdebug.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62b9ec2f79c7308f65e0a547d0065ec17410da9b",
+    "bytes": 13332
+  },
+  {
+    "path": "include/freetype/internal/ftdrv.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d52fc84f0fd926df3771388c1030dc9fe6c5d795",
+    "bytes": 9214
+  },
+  {
+    "path": "include/freetype/internal/ftgloadr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "902135e460cde79b973bbd3e3ff967b35dc6ebdd",
+    "bytes": 4504
+  },
+  {
+    "path": "include/freetype/internal/fthash.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "642d21e21c6afb73b0d1bdd50c8a78c98af9810b",
+    "bytes": 4055
+  },
+  {
+    "path": "include/freetype/internal/ftmemory.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca840cb510be169caab470f94586e768cb653e34",
+    "bytes": 16123
+  },
+  {
+    "path": "include/freetype/internal/ftmmtypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4db9c487b75f323b5585187a52fa60531cee64c",
+    "bytes": 3003
+  },
+  {
+    "path": "include/freetype/internal/ftobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4fa4991dd88c4bf7121b2c7308a3218728cb8510",
+    "bytes": 41951
+  },
+  {
+    "path": "include/freetype/internal/ftpsprop.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5967199a3bc9026967ec675b098311878c664e0b",
+    "bytes": 1130
+  },
+  {
+    "path": "include/freetype/internal/ftrfork.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0bb6b5bb0022019b5e8d21426363e4ec2acd886",
+    "bytes": 7651
+  },
+  {
+    "path": "include/freetype/internal/ftserv.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c6406c82d8a642495046b62d2f535a564455e56",
+    "bytes": 24053
+  },
+  {
+    "path": "include/freetype/internal/ftstream.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d60cd481c893fe7d3ff7c2b6fa5bf73b2e4f0a77",
+    "bytes": 23230
+  },
+  {
+    "path": "include/freetype/internal/fttrace.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "798896cd0c82aca6d5c923cc83a8605e54ecee54",
+    "bytes": 6012
+  },
+  {
+    "path": "include/freetype/internal/ftvalid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fbcf2c63efafe8d7de217d86bc517bd226a61446",
+    "bytes": 5762
+  },
+  {
+    "path": "include/freetype/internal/psaux.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee574fef11b1ad9fba14ae561c97f7f8a7fe9dd4",
+    "bytes": 43936
+  },
+  {
+    "path": "include/freetype/internal/pshints.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7adcd380587d5139c6d8fd0c599b7380f959766",
+    "bytes": 20852
+  },
+  {
+    "path": "include/freetype/internal/services",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5e6fee2f0a70b3d970ec26c4dcd11d98627dfca5",
+    "bytes": null
+  },
+  {
+    "path": "include/freetype/internal/services/svbdf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52212cc7a2b8d7bee9241ceb42ce07e0bd1a5a2d",
+    "bytes": 1731
+  },
+  {
+    "path": "include/freetype/internal/services/svcfftl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab29dede537e9d8833609baa25efd478e7722e53",
+    "bytes": 2832
+  },
+  {
+    "path": "include/freetype/internal/services/svcid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9063211ee01773fc57a0103575627d9d4e389030",
+    "bytes": 2124
+  },
+  {
+    "path": "include/freetype/internal/services/svfntfmt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "770381da67a1e93e53b1289fd257809f9205326c",
+    "bytes": 1348
+  },
+  {
+    "path": "include/freetype/internal/services/svgldict.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6020f9f78a6eb52d563b166e8bc9af4c2252f7de",
+    "bytes": 1865
+  },
+  {
+    "path": "include/freetype/internal/services/svgxval.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "056114e6f8cc6f43448d0ff79ca07d85583e4b8f",
+    "bytes": 1730
+  },
+  {
+    "path": "include/freetype/internal/services/svkern.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a06a01e8f019cc3a4fe2b0f97fa9605de9d3373",
+    "bytes": 1080
+  },
+  {
+    "path": "include/freetype/internal/services/svmetric.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6559d2b1ad33b2bbb368a65c3659791360aec0d",
+    "bytes": 3992
+  },
+  {
+    "path": "include/freetype/internal/services/svmm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fd851dba120f7c965bd06c7875d2d47b016de65c",
+    "bytes": 8962
+  },
+  {
+    "path": "include/freetype/internal/services/svotval.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "487dca3f04353242a3fb5f8c204c6847621eba4b",
+    "bytes": 1253
+  },
+  {
+    "path": "include/freetype/internal/services/svpfr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "94cd695eb00f328004b124a31c014cf195663dba",
+    "bytes": 1570
+  },
+  {
+    "path": "include/freetype/internal/services/svpostnm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d99f4f681ef43085d5227aaee75a288638766435",
+    "bytes": 1571
+  },
+  {
+    "path": "include/freetype/internal/services/svprop.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6cba4c7f42bbf163d5969cf7b75bd54a17928e0",
+    "bytes": 1677
+  },
+  {
+    "path": "include/freetype/internal/services/svpscmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "310eb53f33301ce15ebc5b5931ece4a9842c8e82",
+    "bytes": 4272
+  },
+  {
+    "path": "include/freetype/internal/services/svpsinfo.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78725a48fa5dab363e5d3daea2b84de821f6795b",
+    "bytes": 2469
+  },
+  {
+    "path": "include/freetype/internal/services/svsfnt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ce5aca13761a221386b0b2065440e425213c78c",
+    "bytes": 2079
+  },
+  {
+    "path": "include/freetype/internal/services/svttcmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14921304ebfc4aa57c1e8f320c9991d5023089cb",
+    "bytes": 2397
+  },
+  {
+    "path": "include/freetype/internal/services/svtteng.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d4a9bab6ded8f429a3b893d029a5b3546304e9c9",
+    "bytes": 1007
+  },
+  {
+    "path": "include/freetype/internal/services/svttglyf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "528238024baa71292ce162ca4b3a5eb5db509038",
+    "bytes": 1251
+  },
+  {
+    "path": "include/freetype/internal/services/svwinfnt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e5a3a6649b6fbbb684ba3d503bd6d26112f3fdf5",
+    "bytes": 1017
+  },
+  {
+    "path": "include/freetype/internal/sfnt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc1ac7a6e4cf23561b8546f9efcd691eb770b924",
+    "bytes": 32700
+  },
+  {
+    "path": "include/freetype/internal/svginterface.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a4ca314ddb2ea061e337b46f1ab9eb5657ffdd3",
+    "bytes": 1041
+  },
+  {
+    "path": "include/freetype/internal/t1types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e39076f19563198b060ff9a3f10fe0f91046f29e",
+    "bytes": 9563
+  },
+  {
+    "path": "include/freetype/internal/tttypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65341a3a259ec42e967b688f419f39106c83af8e",
+    "bytes": 51663
+  },
+  {
+    "path": "include/freetype/internal/wofftypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8ef95e27aada7a0295f73e688fca736f0a3a05b",
+    "bytes": 8010
+  },
+  {
+    "path": "include/freetype/otsvg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "42330a703b0285aad808f4121a7b321fc6092fe1",
+    "bytes": 10457
+  },
+  {
+    "path": "include/freetype/t1tables.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "badfdf40762dfafa1d9e86d5515498788cd5d550",
+    "bytes": 21529
+  },
+  {
+    "path": "include/freetype/ttnameid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d813ddc0be13641a7c01946650dd912967f17a0",
+    "bytes": 58815
+  },
+  {
+    "path": "include/freetype/tttables.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2ec304483a509926e28192e74bcd77856139b17",
+    "bytes": 25422
+  },
+  {
+    "path": "include/freetype/tttags.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3be3e2ff9055b638ae5e1eb46d034e7af81fc20d",
+    "bytes": 5145
+  },
+  {
+    "path": "include/ft2build.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ffbf4a1e6ad1549b783c4351e42ca8d5ef014bb8",
+    "bytes": 990
+  },
+  {
+    "path": "meson.build",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d51630cbb28b63f1b1ea089499c8c42f126947b4",
+    "bytes": 14544
+  },
+  {
+    "path": "meson_options.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7d44a9991a750e8db4695194906361bf356068b4",
+    "bytes": 1698
+  },
+  {
+    "path": "modules.cfg",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f94fc50d34ccbb61155e977d098370611898a9c",
+    "bytes": 6490
+  },
+  {
+    "path": "objs",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6910ea6a565ce3483359567510bf25cddcaa5795",
+    "bytes": null
+  },
+  {
+    "path": "objs/.gitignore",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f8476208f65968980ca4799e7cdfc074f7d36f1c",
+    "bytes": 22
+  },
+  {
+    "path": "objs/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "befb63e049201f146e061849628e43c54f3eb21a",
+    "bytes": 80
+  },
+  {
+    "path": "src",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "30de49c3e2c742a8d6a4150bf4d36650f6176932",
+    "bytes": null
+  },
+  {
+    "path": "src/autofit",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f95c6e81c25aef0005bb7570f5bb23d318951c78",
+    "bytes": null
+  },
+  {
+    "path": "src/autofit/afadjust.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6940baf68cc3152c2f0a9f1cae66ea016b194b4c",
+    "bytes": 59138
+  },
+  {
+    "path": "src/autofit/afadjust.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85dbfaad29e0222792235c0f950853c09e73ce4d",
+    "bytes": 5078
+  },
+  {
+    "path": "src/autofit/afblue.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "77c8389ec7fe60835777db2a7ba5d1990930c314",
+    "bytes": 77328
+  },
+  {
+    "path": "src/autofit/afblue.cin",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70b7e025214d4956f5ba3f8a5771b555c0b3c521",
+    "bytes": 830
+  },
+  {
+    "path": "src/autofit/afblue.dat",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e62754fc7e06db9ae97a03e01232579649e22595",
+    "bytes": 48975
+  },
+  {
+    "path": "src/autofit/afblue.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f124eedee4d171f8ae10932e5b4c31f60ccdd3b4",
+    "bytes": 17056
+  },
+  {
+    "path": "src/autofit/afblue.hin",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "931c5010606cf3233e5fe7ee91bfdd7c12a08049",
+    "bytes": 5369
+  },
+  {
+    "path": "src/autofit/afcjk.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a1cc32c9d46d7e1d8734698f04815ca2b67f2c2",
+    "bytes": 66588
+  },
+  {
+    "path": "src/autofit/afcjk.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "98681868a85e6f0c3bc97bd5ae30c7b4f60b6c2f",
+    "bytes": 4215
+  },
+  {
+    "path": "src/autofit/afcover.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d60e0050bece2aa73b5fcfe7308a660029c1dcc5",
+    "bytes": 3159
+  },
+  {
+    "path": "src/autofit/afdummy.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9d1dd38dba42aae0a39414b9731bdf218ca7476",
+    "bytes": 2160
+  },
+  {
+    "path": "src/autofit/afdummy.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14546b1e50e2775593f959e20d4fe436833014f2",
+    "bytes": 877
+  },
+  {
+    "path": "src/autofit/aferrors.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d7538ba2d885381560279c205e0d25771df4d90",
+    "bytes": 984
+  },
+  {
+    "path": "src/autofit/afglobal.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff6903cc174aa7fe271d7f04bfbc9066613c8576",
+    "bytes": 14304
+  },
+  {
+    "path": "src/autofit/afglobal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c4dd93358398a0474dde9500f6844e891b73fa60",
+    "bytes": 5520
+  },
+  {
+    "path": "src/autofit/afgsub.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "af7b0f679824932cda46efc8e9fcebf1f18a38a5",
+    "bytes": 15970
+  },
+  {
+    "path": "src/autofit/afgsub.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "10884f9236e09f72a4051200d7e4c46d3d567f7b",
+    "bytes": 901
+  },
+  {
+    "path": "src/autofit/afhints.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "376912a5d1217e288190b1f9291375a095d805ce",
+    "bytes": 47927
+  },
+  {
+    "path": "src/autofit/afhints.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "84244d6f5c70be9349ab99bd3984df4becbdf2da",
+    "bytes": 16428
+  },
+  {
+    "path": "src/autofit/afindic.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29b6d22ed650ab8aaaf82797c7ffc3f622442340",
+    "bytes": 4719
+  },
+  {
+    "path": "src/autofit/afindic.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df4892a9f1ce28759d4fba36d947152403c6c168",
+    "bytes": 840
+  },
+  {
+    "path": "src/autofit/aflatin.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "73addf28eb4286c54fd0ac81b0ee7c2101f2c174",
+    "bytes": 160703
+  },
+  {
+    "path": "src/autofit/aflatin.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b6bdc5177f7f987b6fb4ba816cae4eb8a318add5",
+    "bytes": 7408
+  },
+  {
+    "path": "src/autofit/afloader.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8ac7b53856bcfef47fcf0985ca88cc70b3caf6ef",
+    "bytes": 24174
+  },
+  {
+    "path": "src/autofit/afloader.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8efd0fd57e9976cb0397ed6c686e867212d06b5b",
+    "bytes": 2269
+  },
+  {
+    "path": "src/autofit/afmodule.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "57d5d47dfbda2ed2b999ac65c8a803e3c2d2f8f2",
+    "bytes": 14279
+  },
+  {
+    "path": "src/autofit/afmodule.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f8a68122d3bcf121713a1398cb2060fb6eb7c4e",
+    "bytes": 1349
+  },
+  {
+    "path": "src/autofit/afranges.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4d0755decb202857794c3c13c98994bdf059d984",
+    "bytes": 37170
+  },
+  {
+    "path": "src/autofit/afranges.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f29369451286be69ad51d9cdaaa7f4bccc3a1a45",
+    "bytes": 1083
+  },
+  {
+    "path": "src/autofit/afscript.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d071ed68b7e5a0f603e7fed288a92fee4ece7f48",
+    "bytes": 11464
+  },
+  {
+    "path": "src/autofit/afshaper.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5c9e5376ad054256249c4f873549e40341d8e901",
+    "bytes": 23309
+  },
+  {
+    "path": "src/autofit/afshaper.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6e73b9fb2ebdfa81d3a27cc5345c8a18127498a4",
+    "bytes": 1677
+  },
+  {
+    "path": "src/autofit/afstyles.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7a7fe531baac95f8c3c14b9215d47ffa92076f0",
+    "bytes": 15087
+  },
+  {
+    "path": "src/autofit/aftypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a3a881eedeb0227391ad62a58025736ee6cde42b",
+    "bytes": 18694
+  },
+  {
+    "path": "src/autofit/afws-decl.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ddebdcd1e785dcb799e54240429befa4dc205779",
+    "bytes": 872
+  },
+  {
+    "path": "src/autofit/afws-iter.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "720c2dc50c907529cf97b231821fef75baa9cd09",
+    "bytes": 966
+  },
+  {
+    "path": "src/autofit/autofit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cd973bf147f28e452556645ffe7086d91693248",
+    "bytes": 896
+  },
+  {
+    "path": "src/autofit/ft-hb-decls.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "032d4d37a5ebea9aad52de7d014313fe61572188",
+    "bytes": 5350
+  },
+  {
+    "path": "src/autofit/ft-hb-ft.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05a66ad32f6790f7a5bc80a734df6452f599ef88",
+    "bytes": 3315
+  },
+  {
+    "path": "src/autofit/ft-hb-ft.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f4f1d6291ff35d5dedc92a6163332ba77db77fae",
+    "bytes": 1371
+  },
+  {
+    "path": "src/autofit/ft-hb-types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6176622f7caa58672a72737dc633366042cdd6c3",
+    "bytes": 4139
+  },
+  {
+    "path": "src/autofit/ft-hb.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ed438da6afe62f7867e35cd3887d0df5e9a4d132",
+    "bytes": 4492
+  },
+  {
+    "path": "src/autofit/ft-hb.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d2cc0482eb6b25c5b1ceb3592e118c0205a30770",
+    "bytes": 1800
+  },
+  {
+    "path": "src/autofit/hb-script-list.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "88e270d3479f13e67eb91b4dffd706a787de12ea",
+    "bytes": 19854
+  },
+  {
+    "path": "src/autofit/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a82bedb9f2bd672bb3d864b8ab24784d0f7b2ec3",
+    "bytes": 662
+  },
+  {
+    "path": "src/autofit/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e39db33c90cc91aec7ec9a63463efe32022e3a6",
+    "bytes": 2691
+  },
+  {
+    "path": "src/base",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "aa68abbf142191924f0da8c04e79453cedacdacc",
+    "bytes": null
+  },
+  {
+    "path": "src/base/ftadvanc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6485834666624bac9dd9fc2e3085f21440ed19e6",
+    "bytes": 5496
+  },
+  {
+    "path": "src/base/ftbase.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a5c8515982a1a39784f2c114a2abe6d183e309b",
+    "bytes": 1033
+  },
+  {
+    "path": "src/base/ftbase.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "952ac51d503aac844a883898b2ec67749f185ccb",
+    "bytes": 2651
+  },
+  {
+    "path": "src/base/ftbbox.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4641ce27e829fe0b57e094bd871c96829e16f782",
+    "bytes": 14346
+  },
+  {
+    "path": "src/base/ftbdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7ce76d3c48446f67d00f0c996b4c7c437e9f45e2",
+    "bytes": 2177
+  },
+  {
+    "path": "src/base/ftbitmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f88cbc11e6361a257e6108910f8f6b424815a10c",
+    "bytes": 27804
+  },
+  {
+    "path": "src/base/ftcalc.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d233dba3d6bf972835f3ad62cee4f047c1c50750",
+    "bytes": 26846
+  },
+  {
+    "path": "src/base/ftcid.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "878c666e12982584db1caabd901f49bd8c910ff0",
+    "bytes": 2540
+  },
+  {
+    "path": "src/base/ftcolor.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ed6b5f0599fc08c85f155dc952a46fc4242a2ce8",
+    "bytes": 3460
+  },
+  {
+    "path": "src/base/ftdbgmem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0335f142562a31eb662b5e333e7c2b7d482232b4",
+    "bytes": 23899
+  },
+  {
+    "path": "src/base/ftdebug.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "27091a557984d45dd16b7fdba05af843601934e3",
+    "bytes": 14105
+  },
+  {
+    "path": "src/base/fterrors.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a140dab860174bd46455715ac35992b36d796d44",
+    "bytes": 1267
+  },
+  {
+    "path": "src/base/ftfntfmt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99e8c2b17dfe880f115c8411c34d8061a347e9eb",
+    "bytes": 1203
+  },
+  {
+    "path": "src/base/ftfstype.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58d5144a9e02a2893f72f91645ab468c147e11a9",
+    "bytes": 1551
+  },
+  {
+    "path": "src/base/ftgasp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c13456802e6823eceba9382b1ff009b9d9b3d54",
+    "bytes": 1355
+  },
+  {
+    "path": "src/base/ftgloadr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bd66e61d1c285fa1b68780d5dcacc005950e1b6e",
+    "bytes": 11115
+  },
+  {
+    "path": "src/base/ftglyph.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "096f4d965e87268e614a0e505b45958fc3d1defa",
+    "bytes": 23990
+  },
+  {
+    "path": "src/base/ftgxval.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e48f582c712a12f5b6dc3812507143e43e051cbd",
+    "bytes": 3125
+  },
+  {
+    "path": "src/base/fthash.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab248ace8bd01b3680767fb5b49d7e2ed46afbb4",
+    "bytes": 8406
+  },
+  {
+    "path": "src/base/ftinit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b20289316dc2ff3b6fb1a7f7e1def6e1d6392494",
+    "bytes": 6339
+  },
+  {
+    "path": "src/base/ftlcdfil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9adbf7518f6060163c864f1bfac9b8909dd183e8",
+    "bytes": 4861
+  },
+  {
+    "path": "src/base/ftmac.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7251a4cb9621a74355425707195bcf7311360fdc",
+    "bytes": 31624
+  },
+  {
+    "path": "src/base/ftmm.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d3bf3b77d847a2d1cab105a509ff2a3f402c50a",
+    "bytes": 18518
+  },
+  {
+    "path": "src/base/ftobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9f64c40fec3118263cf409af8efc3c407c90863",
+    "bytes": 161665
+  },
+  {
+    "path": "src/base/ftotval.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ae14113612f6ab3d57918f6caaccf6018e4ecb6c",
+    "bytes": 2216
+  },
+  {
+    "path": "src/base/ftoutln.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0a1549adaaaa67112eff528b258c793d040caef",
+    "bytes": 28721
+  },
+  {
+    "path": "src/base/ftpatent.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f149eb607fd52e3205d1d32350e5abec5294cd0",
+    "bytes": 1245
+  },
+  {
+    "path": "src/base/ftpfr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f95808201ab886b0de628d0fd1500e32d5b34a73",
+    "bytes": 3730
+  },
+  {
+    "path": "src/base/ftpsprop.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "13f6c5102ccddfe7b22169925fc67517b74d5fad",
+    "bytes": 7500
+  },
+  {
+    "path": "src/base/ftrfork.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fbb8ace7173a0fdbd61ff7221b6eae50633518b5",
+    "bytes": 29390
+  },
+  {
+    "path": "src/base/ftsnames.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8274cccd4063353a64e93d9af8f9b1808ec3c5d",
+    "bytes": 4580
+  },
+  {
+    "path": "src/base/ftstream.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b08a1a9b6580545e66334423c4c6f226eec2bb47",
+    "bytes": 19478
+  },
+  {
+    "path": "src/base/ftstroke.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e599ecaf46f5f6deb072cb582b90cd8c30a4b5c5",
+    "bytes": 64875
+  },
+  {
+    "path": "src/base/ftsynth.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "23960eda3a96a1ebf524690160118fa9af896a01",
+    "bytes": 5374
+  },
+  {
+    "path": "src/base/ftsystem.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be9159f6141ddb4e53efd019e5730f32da0c1dee",
+    "bytes": 8149
+  },
+  {
+    "path": "src/base/fttrigon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "baa47eba08414b597e7ee5750b0b3f3f970c303d",
+    "bytes": 10565
+  },
+  {
+    "path": "src/base/fttype1.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9a46801f3ce30ae2139b9fe811fb74cd447237f",
+    "bytes": 3047
+  },
+  {
+    "path": "src/base/ftutil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d8fc7b9bf37f238c8cc461863040bf9bab8179c",
+    "bytes": 10139
+  },
+  {
+    "path": "src/base/ftver.rc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4100dc3b6ba263551979f817c0540ae0ac22702d",
+    "bytes": 2539
+  },
+  {
+    "path": "src/base/ftwinfnt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "038451ae0954bf5de202844912a6526e5fae46bf",
+    "bytes": 1306
+  },
+  {
+    "path": "src/base/md5.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b235e17a56832cec9e3a7fccdf8c40149bc5aad8",
+    "bytes": 8743
+  },
+  {
+    "path": "src/base/md5.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2da44bf355a3a00b5abd283792e53efad339b1f3",
+    "bytes": 1410
+  },
+  {
+    "path": "src/base/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e806066485f9df01e826e78cc7433622d9253945",
+    "bytes": 3222
+  },
+  {
+    "path": "src/bdf",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a0860fa6046ff9ef4efe886c7c7fc8c4072aa3e4",
+    "bytes": null
+  },
+  {
+    "path": "src/bdf/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d7cb8c14ef6d969fed46151803382c6ea9da7dd9",
+    "bytes": 5972
+  },
+  {
+    "path": "src/bdf/bdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "249012e5907ed3d3cb9da2a8a081a54ed9aa119f",
+    "bytes": 1234
+  },
+  {
+    "path": "src/bdf/bdf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "85a9e4f2ec148e27d0fd396e11571126ae012b95",
+    "bytes": 7127
+  },
+  {
+    "path": "src/bdf/bdfdrivr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "94549b69224866e6c316c5f4d44bec67b609ad18",
+    "bytes": 29433
+  },
+  {
+    "path": "src/bdf/bdfdrivr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54aaa3353cebcd1299213c65816dca48f368b6b0",
+    "bytes": 1772
+  },
+  {
+    "path": "src/bdf/bdferror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c1b54448714069d5ee4fb61a0caa963f69419c14",
+    "bytes": 1584
+  },
+  {
+    "path": "src/bdf/bdflib.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab6f6a9bf23c4ef771037fddc54932c8b560d884",
+    "bytes": 49632
+  },
+  {
+    "path": "src/bdf/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fe06ae8e0647446b8817a4f1d9ac6bd69a5b1fa0",
+    "bytes": 1372
+  },
+  {
+    "path": "src/bdf/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d1dd76b1c3d8fcb77dd7d5b2f4d578875dd1f05a",
+    "bytes": 2432
+  },
+  {
+    "path": "src/bzip2",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4b60a2bc32ffaea7b76028c4a04c58e2b134d735",
+    "bytes": null
+  },
+  {
+    "path": "src/bzip2/ftbzip2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6326c71ac112bba1c574cca3002ffd8aff613087",
+    "bytes": 12870
+  },
+  {
+    "path": "src/bzip2/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3adf30653339ee27ca836cf476ece87b200682ae",
+    "bytes": 1492
+  },
+  {
+    "path": "src/cache",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b6e08ed1e932b711b5a8794b1973f672600c8302",
+    "bytes": null
+  },
+  {
+    "path": "src/cache/ftcache.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "95f784370d1477492fd281e8c828f50e7e613e69",
+    "bytes": 771
+  },
+  {
+    "path": "src/cache/ftcbasic.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "81c5ded4737230502755fc3734739f3abe51279c",
+    "bytes": 16761
+  },
+  {
+    "path": "src/cache/ftccache.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "28f3f3e7a0147b50f64bd8be00f4897b138f8f55",
+    "bytes": 13683
+  },
+  {
+    "path": "src/cache/ftccache.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55ecf5e70cb75202822fabbeaae8df2a182f31c7",
+    "bytes": 15587
+  },
+  {
+    "path": "src/cache/ftccback.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f013833e66433dccc6159fbebe9a3abb469d6892",
+    "bytes": 2031
+  },
+  {
+    "path": "src/cache/ftccmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "758468fb45939d1d37ba5c35a62d37c7a07dbd87",
+    "bytes": 9723
+  },
+  {
+    "path": "src/cache/ftcerror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "41491c2f46a08f15858e262a12c53e90987ce4b9",
+    "bytes": 999
+  },
+  {
+    "path": "src/cache/ftcglyph.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c291ce50fb8fa93b54fd7178d8df5ca69a588ca",
+    "bytes": 4979
+  },
+  {
+    "path": "src/cache/ftcglyph.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1777a17e53f83f201aadc98ba78ab5b52bea15c9",
+    "bytes": 11080
+  },
+  {
+    "path": "src/cache/ftcimage.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b028bf8e45746e977fe662aaa286dc7ea9fa2aad",
+    "bytes": 3584
+  },
+  {
+    "path": "src/cache/ftcimage.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d48c54c51b88f1996274cbaf6053f7bf0fc0929f",
+    "bytes": 2675
+  },
+  {
+    "path": "src/cache/ftcmanag.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c1d85ab1f0f4ff9819092b560886b67ea726250",
+    "bytes": 16615
+  },
+  {
+    "path": "src/cache/ftcmanag.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "22d56d7eb8477fe168bba27f2559a2b36757eb3d",
+    "bytes": 5734
+  },
+  {
+    "path": "src/cache/ftcmru.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e8dc9052daa7b4ff5ff639a8743a215319f406c1",
+    "bytes": 6615
+  },
+  {
+    "path": "src/cache/ftcmru.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "962d0886875d3ba5deaf8cdf0b4177eeec440fce",
+    "bytes": 8322
+  },
+  {
+    "path": "src/cache/ftcsbits.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f6a9b1b4ed6db131c5d9429668011f21c252560",
+    "bytes": 11911
+  },
+  {
+    "path": "src/cache/ftcsbits.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "669e77cb309c4adf47c8878275f7e61d90bc4264",
+    "bytes": 2191
+  },
+  {
+    "path": "src/cache/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f56da94208c5434313bd77193976e7a014341bd",
+    "bytes": 2308
+  },
+  {
+    "path": "src/cff",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "692c6b2d8ba6512b07fae7fe39246c1ff3666fe4",
+    "bytes": null
+  },
+  {
+    "path": "src/cff/cff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8125c104d1f2089ad41eee62276e0bc6f16af7d8",
+    "bytes": 725
+  },
+  {
+    "path": "src/cff/cffcmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75e2420d99e9ddedf41be113ff97c4d2425a1821",
+    "bytes": 7312
+  },
+  {
+    "path": "src/cff/cffcmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e812e7a89e51d414318c28c48ad8da72140ce839",
+    "bytes": 2181
+  },
+  {
+    "path": "src/cff/cffdrivr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "18c7b879048bb1104f02fab34f01c723674439cd",
+    "bytes": 38024
+  },
+  {
+    "path": "src/cff/cffdrivr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f3c58b67d77424823edc590334d40b8717a0682",
+    "bytes": 752
+  },
+  {
+    "path": "src/cff/cfferrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ca1158c0dfdc8aa927a46b136fb14ecbe04156db",
+    "bytes": 959
+  },
+  {
+    "path": "src/cff/cffgload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0c986930cee660335fe9ac27eeccaabb95455314",
+    "bytes": 25855
+  },
+  {
+    "path": "src/cff/cffgload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eb4b5f30b5ea12caa838813820209427246a62ed",
+    "bytes": 1523
+  },
+  {
+    "path": "src/cff/cffload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d067cfeeb83b657fc187fc1d12f6ce2a95d54a0",
+    "bytes": 75222
+  },
+  {
+    "path": "src/cff/cffload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab02ca2d7f640a0a7bfe33256c32f027e513c478",
+    "bytes": 3298
+  },
+  {
+    "path": "src/cff/cffobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6ba35e27344c96af0646961260b5fabd44652aa",
+    "bytes": 34967
+  },
+  {
+    "path": "src/cff/cffobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c6ab805c5be98f2244ad5a36f41eb659e23a236e",
+    "bytes": 1938
+  },
+  {
+    "path": "src/cff/cffparse.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fadc3258c9605216faadcb98a53dacc4c7b57fe6",
+    "bytes": 41481
+  },
+  {
+    "path": "src/cff/cffparse.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1daf548cbccabfe86bc7dee181b22dca5a4b235b",
+    "bytes": 3451
+  },
+  {
+    "path": "src/cff/cfftoken.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0eadc7118fb1bcfac1edf2c0fe5216b1d16b3416",
+    "bytes": 6808
+  },
+  {
+    "path": "src/cff/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14dda50d6669652de04a22bbca962bb21a2a2e37",
+    "bytes": 656
+  },
+  {
+    "path": "src/cff/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f3a729db5ddccedb73d958ffa21803afbec5f900",
+    "bytes": 1864
+  },
+  {
+    "path": "src/cid",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0838df0178296d067226dcaffba63e28dceb4ecd",
+    "bytes": null
+  },
+  {
+    "path": "src/cid/ciderrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "00497b796b385ae47355dff9956621647ee7d199",
+    "bytes": 958
+  },
+  {
+    "path": "src/cid/cidgload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc68b4a96009ec533abb47172999407ee9db96fc",
+    "bytes": 21536
+  },
+  {
+    "path": "src/cid/cidgload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51b16c75944b04dfddb619fa7cdc8f9adb1faa50",
+    "bytes": 1456
+  },
+  {
+    "path": "src/cid/cidload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1a0e6b1561e05922251e41ff4ec58ef46c16f127",
+    "bytes": 25095
+  },
+  {
+    "path": "src/cid/cidload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cef7d1c9a6a184896188aa14ff0d912a9153e88f",
+    "bytes": 1115
+  },
+  {
+    "path": "src/cid/cidobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2d11609598b8f167c5c647d7df788ebf45f97189",
+    "bytes": 13996
+  },
+  {
+    "path": "src/cid/cidobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "406646231278bd5d70e5a304cfb5a6f96bc241e8",
+    "bytes": 3412
+  },
+  {
+    "path": "src/cid/cidparse.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb936bd48d9a946e821259c43ebc7d512f9a9924",
+    "bytes": 9681
+  },
+  {
+    "path": "src/cid/cidparse.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "555245230b92bdffe87b3d2a6eac3379622bf403",
+    "bytes": 3518
+  },
+  {
+    "path": "src/cid/cidriver.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ab188776e2fd8a499b9d326817b6502042d53349",
+    "bytes": 7489
+  },
+  {
+    "path": "src/cid/cidriver.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4ddccec8082b7a108a0fb36c599f05029568038",
+    "bytes": 772
+  },
+  {
+    "path": "src/cid/cidtoken.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "22136310cdf7482b1e096b6244e6e062d55e5088",
+    "bytes": 4387
+  },
+  {
+    "path": "src/cid/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2994e4777c15841743878d59788ae39eff138ac1",
+    "bytes": 679
+  },
+  {
+    "path": "src/cid/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5569c7c5ebc97001529f701d25296425da48cca0",
+    "bytes": 1818
+  },
+  {
+    "path": "src/cid/type1cid.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fbcce4f70bb271a364c8cdaa70623ec6c75f1b17",
+    "bytes": 710
+  },
+  {
+    "path": "src/dlg",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0ff6e05bbe9aa669ff2268d4a4bbd273e05c34a5",
+    "bytes": null
+  },
+  {
+    "path": "src/dlg/dlgwrap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "159af2d6751f2b51d7a8dc4a95c47834a62bf9f4",
+    "bytes": 762
+  },
+  {
+    "path": "src/dlg/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f575a8bd1e2d0a0c92dc7cc88058df26d110c7fa",
+    "bytes": 1670
+  },
+  {
+    "path": "src/gxvalid",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "f65a4bf681426df414e6d0e67382ee0ba44e2cd9",
+    "bytes": null
+  },
+  {
+    "path": "src/gxvalid/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1bde33300e59a02dd7fe52c2b1a99164afe646e2",
+    "bytes": 23347
+  },
+  {
+    "path": "src/gxvalid/gxvalid.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "93c10f127d6adac08f67f182480e1698fcea5767",
+    "bytes": 1133
+  },
+  {
+    "path": "src/gxvalid/gxvalid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee76946147cee6f4e48ac935281b2b772fdb88e6",
+    "bytes": 2869
+  },
+  {
+    "path": "src/gxvalid/gxvbsln.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b9c10b9805f6e026b398193b619b6f769c2376f",
+    "bytes": 9637
+  },
+  {
+    "path": "src/gxvalid/gxvcommn.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "111db5c693de6353f2c36f08dc671df69d39e69e",
+    "bytes": 54281
+  },
+  {
+    "path": "src/gxvalid/gxvcommn.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc95c4cece1077b5133dd5790c3645fccaf92447",
+    "bytes": 22837
+  },
+  {
+    "path": "src/gxvalid/gxverror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90a6eda03ece81d952f0aa688c8a822b09c6c494",
+    "bytes": 1333
+  },
+  {
+    "path": "src/gxvalid/gxvfeat.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "826f3eedf5cbb435d814b253b8b32a92b58406cf",
+    "bytes": 9949
+  },
+  {
+    "path": "src/gxvalid/gxvfeat.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d34b701a29512e683d3db573e1d0f4cfa6dcde1",
+    "bytes": 6054
+  },
+  {
+    "path": "src/gxvalid/gxvfgen.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d0c53ca5261c252a41832fbdc744bfd33814a456",
+    "bytes": 13319
+  },
+  {
+    "path": "src/gxvalid/gxvjust.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c5177522e3855e46d13cab9565f9c309ce69c772",
+    "bytes": 20583
+  },
+  {
+    "path": "src/gxvalid/gxvkern.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1f8ce7cd36515d7b64a52c6798f3ab4f3e0d555",
+    "bytes": 27203
+  },
+  {
+    "path": "src/gxvalid/gxvlcar.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b90d43a7b3d50cafea766c0198c6bc28fd206cf",
+    "bytes": 7139
+  },
+  {
+    "path": "src/gxvalid/gxvmod.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "89e142be5dcbd861b92555797ac2dd8608b9f537",
+    "bytes": 8348
+  },
+  {
+    "path": "src/gxvalid/gxvmod.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "51e339e00be4205950de5b46548a4befd182a762",
+    "bytes": 1093
+  },
+  {
+    "path": "src/gxvalid/gxvmort.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "de03f2e3888518e56de6c8cdf727c3dd7ad978b9",
+    "bytes": 8297
+  },
+  {
+    "path": "src/gxvalid/gxvmort.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3db0d2a61e015062d3aac5bc5289435cc541bb43",
+    "bytes": 2971
+  },
+  {
+    "path": "src/gxvalid/gxvmort0.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78b042d5dedec1682ab6e5dfd2b2a72bc571861f",
+    "bytes": 4329
+  },
+  {
+    "path": "src/gxvalid/gxvmort1.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "57ee197d4895c1bc847e3bef367fd487c90fb40b",
+    "bytes": 8122
+  },
+  {
+    "path": "src/gxvalid/gxvmort2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e982a67bf520e11af5a358c76c66b2ce23e56d73",
+    "bytes": 10023
+  },
+  {
+    "path": "src/gxvalid/gxvmort4.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2ad0632fa502085feb24bec1f1f549e19765e61d",
+    "bytes": 3760
+  },
+  {
+    "path": "src/gxvalid/gxvmort5.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "613debd453750215f11d9e9fdc4b9c623dad51cd",
+    "bytes": 8009
+  },
+  {
+    "path": "src/gxvalid/gxvmorx.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9efe182038df1eeb55a89139e03d07a615e18f09",
+    "bytes": 5208
+  },
+  {
+    "path": "src/gxvalid/gxvmorx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60b084a8d0b69ce42b6ec7c2c95d1950a482cd56",
+    "bytes": 2076
+  },
+  {
+    "path": "src/gxvalid/gxvmorx0.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54cded1f6465a1e86d8889a320b9342291b486e2",
+    "bytes": 3126
+  },
+  {
+    "path": "src/gxvalid/gxvmorx1.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56a64c257cf825b684ec03647ab6b81c0b7b9fe6",
+    "bytes": 8464
+  },
+  {
+    "path": "src/gxvalid/gxvmorx2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be333e0424bcaa83856a95a1db030ddbe9e0f746",
+    "bytes": 10356
+  },
+  {
+    "path": "src/gxvalid/gxvmorx4.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9af41f4bf505240f652f15e67432d11d9d712538",
+    "bytes": 1674
+  },
+  {
+    "path": "src/gxvalid/gxvmorx5.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "edc3f3bc01905f21bb5337ab0b9e69c554b6e323",
+    "bytes": 7285
+  },
+  {
+    "path": "src/gxvalid/gxvopbd.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "265ad39a2ca2177eb76ab9e40291c34e3ca6de07",
+    "bytes": 7216
+  },
+  {
+    "path": "src/gxvalid/gxvprop.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f27ce103c48be0af285996a67b50432b90f36243",
+    "bytes": 10208
+  },
+  {
+    "path": "src/gxvalid/gxvtrak.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "06300beff342fc3fe19315d44311cd9fcb25cb68",
+    "bytes": 9553
+  },
+  {
+    "path": "src/gxvalid/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6b58ee922e15aebaece85e9d65dad084b255294",
+    "bytes": 710
+  },
+  {
+    "path": "src/gxvalid/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "552f64dcc38afb98b8554a24ca25954e963bb356",
+    "bytes": 2759
+  },
+  {
+    "path": "src/gzip",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "780ab92b94ab14881189730f5bfa52f694761ee0",
+    "bytes": null
+  },
+  {
+    "path": "src/gzip/README.freetype",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "29304308fdcb1606335bd43d679691a10d730216",
+    "bytes": 792
+  },
+  {
+    "path": "src/gzip/adler32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "260185b672f75eb6722fb633e29eadafbb750027",
+    "bytes": 5011
+  },
+  {
+    "path": "src/gzip/crc32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "27487dcc259645a2e5ad81eaf5f0232f25aad4ab",
+    "bytes": 31747
+  },
+  {
+    "path": "src/gzip/crc32.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "137df68d616c5ed38913579ba37b4e4c533fa903",
+    "bytes": 591749
+  },
+  {
+    "path": "src/gzip/ftgzip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a5ec87297402602e5f7dda10771726bd71eb688",
+    "bytes": 20073
+  },
+  {
+    "path": "src/gzip/ftzconf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "62adc8d8431f2f9149ae0b1583915e21a28dd8b5",
+    "bytes": 16500
+  },
+  {
+    "path": "src/gzip/gzguts.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d7d733bda71b46c204930b73eebcec23ccf97476",
+    "bytes": 6676
+  },
+  {
+    "path": "src/gzip/inffast.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9354676e786ee7a6a31668adf9d25c712d57e657",
+    "bytes": 12924
+  },
+  {
+    "path": "src/gzip/inffast.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a38c5be450ac4ca71891aa9fc3e062d7d332fba4",
+    "bytes": 429
+  },
+  {
+    "path": "src/gzip/inffixed.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6283277694802ce7938f537f12990d6eead4924",
+    "bytes": 6332
+  },
+  {
+    "path": "src/gzip/inflate.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c8125680b0c9440b6c639e54c96ec039515a3a2d",
+    "bytes": 55613
+  },
+  {
+    "path": "src/gzip/inflate.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a0e437aea39470f66cd3afd07ac80060d05a23f",
+    "bytes": 6746
+  },
+  {
+    "path": "src/gzip/inftrees.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "468eea8790a257c073771df5df572b1a4f301ff3",
+    "bytes": 13031
+  },
+  {
+    "path": "src/gzip/inftrees.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d735b0a5145f3ba283754f50f352bd9732d754e3",
+    "bytes": 2993
+  },
+  {
+    "path": "src/gzip/patches",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d0b545a79ab902149ee7df336fba071bcda5c6a4",
+    "bytes": null
+  },
+  {
+    "path": "src/gzip/patches/freetype-zlib.diff",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c7e549c6e86e748110d9024e629c09079b9d219",
+    "bytes": 15072
+  },
+  {
+    "path": "src/gzip/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "baefc0b9bad85027ceb5341b447c145b47070497",
+    "bytes": 2203
+  },
+  {
+    "path": "src/gzip/zlib.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8c3c42a32320b678ee696cd90d8d5ab266af5bff",
+    "bytes": 97499
+  },
+  {
+    "path": "src/gzip/zutil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f76def425c7f701f6ac239923f2b39c89dfb4514",
+    "bytes": 7271
+  },
+  {
+    "path": "src/gzip/zutil.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c96797e3ae73ff2c5a7809780ff891e021a7371",
+    "bytes": 6759
+  },
+  {
+    "path": "src/lzw",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1a2406f9d488599f8f3f92b7f07bd29e8ebf0b60",
+    "bytes": null
+  },
+  {
+    "path": "src/lzw/ftlzw.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ce5070d75fa4ae6329f33b055a20e1d5eaf1dcbf",
+    "bytes": 9899
+  },
+  {
+    "path": "src/lzw/ftzopen.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a42824902f425d04527e381ff814bef48b97413",
+    "bytes": 10565
+  },
+  {
+    "path": "src/lzw/ftzopen.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c06b367d86a87d0925ed0a649eb2a1fa81ba72e",
+    "bytes": 5099
+  },
+  {
+    "path": "src/lzw/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ec996bb918a262a2d17a68d308044803060d84ba",
+    "bytes": 1634
+  },
+  {
+    "path": "src/otvalid",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "d45a4d54a113fd4cdd560e536c362a78cbe37330",
+    "bytes": null
+  },
+  {
+    "path": "src/otvalid/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dadc349f3a74b5dfb85db9f7a4c75d0376832069",
+    "bytes": 656
+  },
+  {
+    "path": "src/otvalid/otvalid.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e68a0823fe7cca2b808e63e04f945a0443026593",
+    "bytes": 773
+  },
+  {
+    "path": "src/otvalid/otvalid.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6ab7c65cb42475b79d09536b4c41c652c645111a",
+    "bytes": 2127
+  },
+  {
+    "path": "src/otvalid/otvbase.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cea1319395ef6d94477196ab51773a3d7552222",
+    "bytes": 7882
+  },
+  {
+    "path": "src/otvalid/otvcommn.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a6771c782658cf1a6b321d8d40bdd516733d8c96",
+    "bytes": 27543
+  },
+  {
+    "path": "src/otvalid/otvcommn.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4648e70dee2bbdc86586fcf01f7252dac430d380",
+    "bytes": 19343
+  },
+  {
+    "path": "src/otvalid/otverror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d1c2c4b56cf2d65fb87cab30680236aac287eb98",
+    "bytes": 1017
+  },
+  {
+    "path": "src/otvalid/otvgdef.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "08d0a68d684b448d5a613d24835d2db6468c9b7e",
+    "bytes": 8884
+  },
+  {
+    "path": "src/otvalid/otvgpos.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b9e36bd833b5ca97c75d086a9e1993ede27fcab1",
+    "bytes": 29671
+  },
+  {
+    "path": "src/otvalid/otvgpos.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8539801fd9388fbab90edfd47c2112615b67e662",
+    "bytes": 786
+  },
+  {
+    "path": "src/otvalid/otvgsub.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2669be37c9fdbb97390481eea300cbbc79d690d2",
+    "bytes": 18463
+  },
+  {
+    "path": "src/otvalid/otvjstf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6706e1a7f886486da8f94cd863a14525f03c3e6e",
+    "bytes": 7126
+  },
+  {
+    "path": "src/otvalid/otvmath.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "80d78890bee5ab03fab5f399287cd3649addc1b1",
+    "bytes": 13656
+  },
+  {
+    "path": "src/otvalid/otvmod.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "946c81902fd25bdedd256ab3074c58b58a0b6bf5",
+    "bytes": 7207
+  },
+  {
+    "path": "src/otvalid/otvmod.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f00f98f12509507822be1c41bd1df1574d5f6535",
+    "bytes": 778
+  },
+  {
+    "path": "src/otvalid/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "83c426829d657b07f3d9b50b922cb296cfc6c43d",
+    "bytes": 2083
+  },
+  {
+    "path": "src/pcf",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6033507c4f41efdbbd18844b18368030fc990951",
+    "bytes": null
+  },
+  {
+    "path": "src/pcf/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "09ea970edadb5247e7209e5e0a3d3d30c2a7210a",
+    "bytes": 3311
+  },
+  {
+    "path": "src/pcf/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df383ff0fbecd8f6b518f4c72fef9a7ee95b0450",
+    "bytes": 1366
+  },
+  {
+    "path": "src/pcf/pcf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b30fb249a709a0fe5d7cbba59bbd132f8f53983",
+    "bytes": 1253
+  },
+  {
+    "path": "src/pcf/pcf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3134cc355b355e97e649ce39921aa653c860e19b",
+    "bytes": 6373
+  },
+  {
+    "path": "src/pcf/pcfdrivr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d65c6909e8ebcee0cb6008ff804e933265af9e9",
+    "bytes": 21825
+  },
+  {
+    "path": "src/pcf/pcfdrivr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d4653937434bb896cfa350d3b2cbb4dd2e35c617",
+    "bytes": 1358
+  },
+  {
+    "path": "src/pcf/pcferror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8b9e9902a36a1e823393c335053a9a5454b3cb5d",
+    "bytes": 959
+  },
+  {
+    "path": "src/pcf/pcfread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c250c84649b4a97749c0813c2ccf6dbb586d837",
+    "bytes": 50270
+  },
+  {
+    "path": "src/pcf/pcfread.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a54648fbf98e097908fb094c9367dacbce158264",
+    "bytes": 1361
+  },
+  {
+    "path": "src/pcf/pcfutil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cd26c77cadf2a00e4855c974eae84a41a96e99b2",
+    "bytes": 3382
+  },
+  {
+    "path": "src/pcf/pcfutil.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a197c1559514a40cb278f2e9e2e981ba0e2813b9",
+    "bytes": 1649
+  },
+  {
+    "path": "src/pcf/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b55daf4f43b245892a4f6c848e9292de6e6d063",
+    "bytes": 2476
+  },
+  {
+    "path": "src/pfr",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4ea58167125be2dc470aed1e79b43c9444f5b988",
+    "bytes": null
+  },
+  {
+    "path": "src/pfr/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9d57e36bb5d8ae0ae0de7fb7510e4903b6c36141",
+    "bytes": 664
+  },
+  {
+    "path": "src/pfr/pfr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "260c2703cef7b67de64dcd5cdb481b9bfde94955",
+    "bytes": 708
+  },
+  {
+    "path": "src/pfr/pfrcmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "786aaa1163e59eca40f705591542d941c1ed8641",
+    "bytes": 4519
+  },
+  {
+    "path": "src/pfr/pfrcmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9ebb3f23daf01e00ac026c32c3f86baa44d69e2d",
+    "bytes": 920
+  },
+  {
+    "path": "src/pfr/pfrdrivr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31f3509bb7dbeaa10e2edcd1c81b5456457430bd",
+    "bytes": 5618
+  },
+  {
+    "path": "src/pfr/pfrdrivr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c75a14d78981e2660b0c4aae9f0053be7f61ad2",
+    "bytes": 773
+  },
+  {
+    "path": "src/pfr/pfrerror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "78cbac32f88c83f0a3ee9d9ddcf1398c2f508c77",
+    "bytes": 962
+  },
+  {
+    "path": "src/pfr/pfrgload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "68849b4a11315c204dd0b5f2c0d19e766705e083",
+    "bytes": 21886
+  },
+  {
+    "path": "src/pfr/pfrgload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "81a05327835832367eb99e96f0056744f68dcd43",
+    "bytes": 1059
+  },
+  {
+    "path": "src/pfr/pfrload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1105ba4812bb5e43fc733c351f4133627d699705",
+    "bytes": 28988
+  },
+  {
+    "path": "src/pfr/pfrload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2f3bcc3df92758c79d2a9c79890d3583c12a594",
+    "bytes": 3425
+  },
+  {
+    "path": "src/pfr/pfrobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fdd84a86d9bd42eeaa748a738af9cddace1c319",
+    "bytes": 17339
+  },
+  {
+    "path": "src/pfr/pfrobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3ad74e97d37b7d0beec0e05c5783f66ed1561a22",
+    "bytes": 2135
+  },
+  {
+    "path": "src/pfr/pfrsbit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "515089a65b6345315314903ae46018b052e09633",
+    "bytes": 21295
+  },
+  {
+    "path": "src/pfr/pfrsbit.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "639f8c8182aee840927013e43c257975b12bd449",
+    "bytes": 878
+  },
+  {
+    "path": "src/pfr/pfrtypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "54cc09ca39560ce2e8ef7dc3a5bc464976558c6d",
+    "bytes": 8090
+  },
+  {
+    "path": "src/pfr/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "842d88eac6066d792b1cf318eaf213091157b0f0",
+    "bytes": 1885
+  },
+  {
+    "path": "src/psaux",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "9d0853a3bc8e79efa2b58424cb107822648c77be",
+    "bytes": null
+  },
+  {
+    "path": "src/psaux/afmparse.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1cc8ab29d46a04b309ad71ff314e4cf253e8bfe1",
+    "bytes": 25277
+  },
+  {
+    "path": "src/psaux/afmparse.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "02a9617b8dc4881b24ed328e5631e81409474922",
+    "bytes": 1825
+  },
+  {
+    "path": "src/psaux/cffdecode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "908a81126153418c61faecfd56a528f7daee8957",
+    "bytes": 68442
+  },
+  {
+    "path": "src/psaux/cffdecode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0836a642b2ff2a67e6687c93b97e4b98b5934ecc",
+    "bytes": 1825
+  },
+  {
+    "path": "src/psaux/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2c6ddacb96770c1b520c7aa3678d1b2d98f6fde0",
+    "bytes": 666
+  },
+  {
+    "path": "src/psaux/psarrst.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70313d283a455ad7e9ec8667f9966c7934bfcbef",
+    "bytes": 6515
+  },
+  {
+    "path": "src/psaux/psarrst.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31e5330cc3808be6a5cc92f52a93cac2fb942035",
+    "bytes": 3476
+  },
+  {
+    "path": "src/psaux/psaux.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f0c3c2ef97b5afa537e5930ffcbf167762e2b6ef",
+    "bytes": 945
+  },
+  {
+    "path": "src/psaux/psauxerr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5766482d1b708a7b0dc76518112f6673e20cea87",
+    "bytes": 1003
+  },
+  {
+    "path": "src/psaux/psauxmod.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f9eb87484cb7f20431a945e795bbaf3f94aeec6",
+    "bytes": 4847
+  },
+  {
+    "path": "src/psaux/psauxmod.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e7fa15c34b7979baa0f2011ac6edd36bce84eca4",
+    "bytes": 1183
+  },
+  {
+    "path": "src/psaux/psblues.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "213b943b46576ddcca6b471cd5d3d0cf4d68acb0",
+    "bytes": 19403
+  },
+  {
+    "path": "src/psaux/psblues.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55fb88ecddfa1dc8a184a9e3d232b90ccfd16a91",
+    "bytes": 5995
+  },
+  {
+    "path": "src/psaux/psconv.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a054cbbf6d885e8371f1d2a8966fc232d351bab",
+    "bytes": 11649
+  },
+  {
+    "path": "src/psaux/psconv.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc123faea4d775cdac45d675d6c4c51efb3e6a46",
+    "bytes": 1700
+  },
+  {
+    "path": "src/psaux/pserror.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "98cebcf74d99ece4a36065894e6ace54cc8c9ead",
+    "bytes": 2089
+  },
+  {
+    "path": "src/psaux/pserror.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5738853face775a7944ebbf9c3e02958a93bd3a4",
+    "bytes": 4024
+  },
+  {
+    "path": "src/psaux/psfixed.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "299d076370504844152c984f9c562a753139638a",
+    "bytes": 3743
+  },
+  {
+    "path": "src/psaux/psfont.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0db1f0c5bc460f5040e62c09295efd81cee08aca",
+    "bytes": 19883
+  },
+  {
+    "path": "src/psaux/psfont.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "836fce4e4d32f6bca4cb695de49163ea8d4eb204",
+    "bytes": 5402
+  },
+  {
+    "path": "src/psaux/psft.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fd0abe17154c71250566365ddce401c994288d5a",
+    "bytes": 25628
+  },
+  {
+    "path": "src/psaux/psft.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9082f3a2be120bd80edfaba983112a19324d91d",
+    "bytes": 5394
+  },
+  {
+    "path": "src/psaux/psglue.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "63085d71cf50881c277808ea0980a31b19f0b0c2",
+    "bytes": 4501
+  },
+  {
+    "path": "src/psaux/pshints.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7bd08a9c9bf86af8d710c5566b305d6a0439847a",
+    "bytes": 66109
+  },
+  {
+    "path": "src/psaux/pshints.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31a8230364c3493199e3ca8fcf9cbaf6b14c4e86",
+    "bytes": 9869
+  },
+  {
+    "path": "src/psaux/psintrp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7e3475e6f589232e66564cd20b4d9c98b0e4be69",
+    "bytes": 105457
+  },
+  {
+    "path": "src/psaux/psintrp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8b9342ecb61fd326b5f5e7d82fea5b3004cb321",
+    "bytes": 3074
+  },
+  {
+    "path": "src/psaux/psobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5019f9925c1eb9644af70afe8165fb46fec781b5",
+    "bytes": 66497
+  },
+  {
+    "path": "src/psaux/psobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "04205f891b17194e2faac5ac76ded4da7571bb57",
+    "bytes": 10283
+  },
+  {
+    "path": "src/psaux/psread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f657f2cdc02da4bca7d02bf0aec05e9dab6830b",
+    "bytes": 3522
+  },
+  {
+    "path": "src/psaux/psread.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9e55fe044703042b55ef3371494cb204584adc12",
+    "bytes": 2299
+  },
+  {
+    "path": "src/psaux/psstack.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "797486588a34f7b0abe0af5ca5b995d2c96af83c",
+    "bytes": 9233
+  },
+  {
+    "path": "src/psaux/psstack.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "907b42400074ca510a37aa3230384d9e1659313b",
+    "bytes": 3695
+  },
+  {
+    "path": "src/psaux/pstypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "435ef7e1fecff79263eabef658d215c193ee3f70",
+    "bytes": 2674
+  },
+  {
+    "path": "src/psaux/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ace45afb4670a98e840091f22064d37393c6810e",
+    "bytes": 2520
+  },
+  {
+    "path": "src/psaux/t1cmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "686ca7abdfa39210308797e279b83f3747fc1756",
+    "bytes": 11948
+  },
+  {
+    "path": "src/psaux/t1cmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "be66a0c7f6f4c31af8931867177793f36abd74f5",
+    "bytes": 3282
+  },
+  {
+    "path": "src/psaux/t1decode.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f22b32debc79634a12e67c92a46d0d865b5b4a79",
+    "bytes": 60726
+  },
+  {
+    "path": "src/psaux/t1decode.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b5d5205a865413e134136cd4e51b05d1130e0bd",
+    "bytes": 2024
+  },
+  {
+    "path": "src/pshinter",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "1718baea1d88526800132f74b523fc974fc09d88",
+    "bytes": null
+  },
+  {
+    "path": "src/pshinter/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96aa535228a3dd3d6bb170ea6d86886cc1a9ec91",
+    "bytes": 662
+  },
+  {
+    "path": "src/pshinter/pshalgo.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f169fc3459df53ec5cda2c6f1e7d0f3c2833df3e",
+    "bytes": 54783
+  },
+  {
+    "path": "src/pshinter/pshalgo.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "95d41b49aaf0ce857c426085dc47a8739ce18e71",
+    "bytes": 6616
+  },
+  {
+    "path": "src/pshinter/pshglob.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e4efea068cec06553942064149229160db1ae7f",
+    "bytes": 21834
+  },
+  {
+    "path": "src/pshinter/pshglob.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0158b92ab9deba9e220354706b8af03e3df39f4a",
+    "bytes": 4860
+  },
+  {
+    "path": "src/pshinter/pshinter.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f22de34bd4a126db749e26d36bd7074626faafbc",
+    "bytes": 671
+  },
+  {
+    "path": "src/pshinter/pshmod.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f6b2e2df94c0e44d2c5ce1e7c22ea3c9e08430fd",
+    "bytes": 3002
+  },
+  {
+    "path": "src/pshinter/pshmod.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d68ef9a87369f7c23ed5e09987ecae209a6b0ee9",
+    "bytes": 741
+  },
+  {
+    "path": "src/pshinter/pshnterr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96bc3a31756f2af57021740100692c94008a9b53",
+    "bytes": 978
+  },
+  {
+    "path": "src/pshinter/pshrec.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f14c9c7cbda1ba5891f19a86b3784ce22ae8bcbd",
+    "bytes": 31754
+  },
+  {
+    "path": "src/pshinter/pshrec.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b644f5b964488124923235c953b1d6560fe2463",
+    "bytes": 4103
+  },
+  {
+    "path": "src/pshinter/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a3b8f5e33b817c2f5ea41f93610bc10aaf402d4",
+    "bytes": 2041
+  },
+  {
+    "path": "src/psnames",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "59166ea754f3922330be3306b5ee81a728492319",
+    "bytes": null
+  },
+  {
+    "path": "src/psnames/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bcda0067c820d7b42d32e125799a3a7f9a5990b5",
+    "bytes": 674
+  },
+  {
+    "path": "src/psnames/psmodule.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5409c61fafab4845ede55fc2995d8db4a10d058d",
+    "bytes": 16268
+  },
+  {
+    "path": "src/psnames/psmodule.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7a619d83fb39b1614363da7d478f17fac9509fe3",
+    "bytes": 748
+  },
+  {
+    "path": "src/psnames/psnamerr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bef9e797c8067446cf3e5db5ef9d56c40f6642bd",
+    "bytes": 999
+  },
+  {
+    "path": "src/psnames/psnames.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b0ade9874da6d9e5db3fa60c1a7f6b69298a4232",
+    "bytes": 622
+  },
+  {
+    "path": "src/psnames/pstables.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a32aac325f29aa765a39b53125689c8d07c6bb5",
+    "bytes": 268144
+  },
+  {
+    "path": "src/psnames/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7b0f1d6b47f42e7ceb1c4b3c59d0bbc33371fb1e",
+    "bytes": 1900
+  },
+  {
+    "path": "src/raster",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3cfd2f7db264c0b9c8869d22cefe35c7c6985d5f",
+    "bytes": null
+  },
+  {
+    "path": "src/raster/ftmisc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf96cd09ed5f1149ab5bc609a50f3ab8154f813d",
+    "bytes": 2571
+  },
+  {
+    "path": "src/raster/ftraster.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4165800a1aac060878093cc7dd419eab02121147",
+    "bytes": 71742
+  },
+  {
+    "path": "src/raster/ftraster.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e20184ddc8eaf4c72ce4b1e33372fdeb1c728b3d",
+    "bytes": 1092
+  },
+  {
+    "path": "src/raster/ftrend1.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6b28cb0bf8d8f4d12a3015859e1decd34ca86b6e",
+    "bytes": 5549
+  },
+  {
+    "path": "src/raster/ftrend1.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92249a0cb9f6c212f45f9b407f9a67a88a99076c",
+    "bytes": 755
+  },
+  {
+    "path": "src/raster/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7f7567c07ea0809714cb495bc498bf86a92490b0",
+    "bytes": 666
+  },
+  {
+    "path": "src/raster/raster.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df2ec38d42e890e8fb29d406be56f4614448ab1e",
+    "bytes": 654
+  },
+  {
+    "path": "src/raster/rasterrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "744d179cd8c2cec94be60496eb37162caaeb50bf",
+    "bytes": 1005
+  },
+  {
+    "path": "src/raster/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90af6d1852a8d4b6fa91b341221a68a88d77b0bb",
+    "bytes": 1848
+  },
+  {
+    "path": "src/sdf",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "fdb7abd79ef3805915f95682416f494a1cfab252",
+    "bytes": null
+  },
+  {
+    "path": "src/sdf/ftbsdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d70ebbf1732ac95f4f2fc95c7f466d931c9bf4c3",
+    "bytes": 38813
+  },
+  {
+    "path": "src/sdf/ftsdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cdeaa5b53927da0841d5f6dfb5f98ffe62efa890",
+    "bytes": 111941
+  },
+  {
+    "path": "src/sdf/ftsdf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bf17d1d9116b0b3b7c612221520ae74877d4eb4",
+    "bytes": 2914
+  },
+  {
+    "path": "src/sdf/ftsdfcommon.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ffbf7a46a4a300467afb2de82f80947c1620c631",
+    "bytes": 3485
+  },
+  {
+    "path": "src/sdf/ftsdfcommon.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d62e00fa393cf311c50b1143ab652b6d0b981339",
+    "bytes": 4021
+  },
+  {
+    "path": "src/sdf/ftsdferrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5bb8f05bbe2ac3b3eef1e40560b8ce2b35eef9c4",
+    "bytes": 848
+  },
+  {
+    "path": "src/sdf/ftsdfrend.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f50ec447a27728fcd719978e3f57fa7aa07c676",
+    "bytes": 16209
+  },
+  {
+    "path": "src/sdf/ftsdfrend.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "bb362949af670f58d2541256dd64c386187222fc",
+    "bytes": 3386
+  },
+  {
+    "path": "src/sdf/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d8d0d49f6f998c440dba8d0292a0c2516c068624",
+    "bytes": 924
+  },
+  {
+    "path": "src/sdf/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92ed750664f0499bf9519a054a313243d8b4a1b3",
+    "bytes": 1901
+  },
+  {
+    "path": "src/sdf/sdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "21dfe6650b42afa466704893d688185096002a60",
+    "bytes": 735
+  },
+  {
+    "path": "src/sfnt",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "6be21c649570cc36492ba677f3a1d14faaaca4bd",
+    "bytes": null
+  },
+  {
+    "path": "src/sfnt/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ed9ce0aa84c80a0a6487f2c5fe90b81f85bea2d",
+    "bytes": 667
+  },
+  {
+    "path": "src/sfnt/pngshim.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e588e6b380b449d5acd513a61a99bdcbde4eef54",
+    "bytes": 13123
+  },
+  {
+    "path": "src/sfnt/pngshim.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f187b639a113431d8d4f602bde2479f7fba6d047",
+    "bytes": 1184
+  },
+  {
+    "path": "src/sfnt/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "791d329a0941a55f6ce45bd7c45d86eb5480c138",
+    "bytes": 2392
+  },
+  {
+    "path": "src/sfnt/sfdriver.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4046b1a0cdbca7e32d4fbd1540d0c8858a73f8a2",
+    "bytes": 36784
+  },
+  {
+    "path": "src/sfnt/sfdriver.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e9eed184b7fd52f7599bfbd3a55aeb6963fac33e",
+    "bytes": 740
+  },
+  {
+    "path": "src/sfnt/sferrors.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05b259c1bfcb87397289867fc554de054b689714",
+    "bytes": 966
+  },
+  {
+    "path": "src/sfnt/sfnt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2eab87f2fd3a8c078dc3c2bf434ae40cdeb7a251",
+    "bytes": 928
+  },
+  {
+    "path": "src/sfnt/sfobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fc855cbb6b957047907cb63052ba9c420b76dd07",
+    "bytes": 49470
+  },
+  {
+    "path": "src/sfnt/sfobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a27ad7064acc5507cd696780db8a37cb034ce721",
+    "bytes": 1417
+  },
+  {
+    "path": "src/sfnt/sfwoff.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8a3030d9cb03e0544902ba79e6b8760db51ae9f",
+    "bytes": 12289
+  },
+  {
+    "path": "src/sfnt/sfwoff.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a563fcc682aee14df26681191724c7ecb22e2b40",
+    "bytes": 865
+  },
+  {
+    "path": "src/sfnt/sfwoff2.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "013e30fc520baeb748f91f78bbc57ce5c144541f",
+    "bytes": 66531
+  },
+  {
+    "path": "src/sfnt/sfwoff2.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e0296d82603e15afcf444368ab9e9001a26f0a5c",
+    "bytes": 2124
+  },
+  {
+    "path": "src/sfnt/ttbdf.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9fa12c099f06b55a75bddeee3f854272a0d0cfa5",
+    "bytes": 6439
+  },
+  {
+    "path": "src/sfnt/ttbdf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87d210e52f795093a85ae5ae311809f65b8d7a47",
+    "bytes": 1029
+  },
+  {
+    "path": "src/sfnt/ttcmap.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f5837e65e86d04ddcb2bfac82dbe80e1a9eb81d5",
+    "bytes": 111810
+  },
+  {
+    "path": "src/sfnt/ttcmap.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fdb34f525e3cd93e3731076cce6e132b04527de1",
+    "bytes": 3727
+  },
+  {
+    "path": "src/sfnt/ttcmapc.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c17ac5bba15d0cd42406baae63d229973e40b61e",
+    "bytes": 1227
+  },
+  {
+    "path": "src/sfnt/ttcolr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2dcab31e6bb4164e34784fdaf60fce05fe313070",
+    "bytes": 62172
+  },
+  {
+    "path": "src/sfnt/ttcolr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c7bf1f2a4a78bbf9855158e19ceeb65b7a94fd92",
+    "bytes": 2526
+  },
+  {
+    "path": "src/sfnt/ttcpal.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "04e2db1eab587195729a25254006fe024a6faa6c",
+    "bytes": 7964
+  },
+  {
+    "path": "src/sfnt/ttcpal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5c2e660e13dc0099d19c87963e2d62b7408cf991",
+    "bytes": 1036
+  },
+  {
+    "path": "src/sfnt/ttgpos.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6f9bddf34ad2fddf4d7f765c2bf7e14a16096758",
+    "bytes": 24363
+  },
+  {
+    "path": "src/sfnt/ttgpos.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c227445baca2a983376ec40c5e028abf6c6baf8",
+    "bytes": 1152
+  },
+  {
+    "path": "src/sfnt/ttkern.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "65b249ff4cdb72e23c1d8d7c06b8f9f6293f86e6",
+    "bytes": 7183
+  },
+  {
+    "path": "src/sfnt/ttkern.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8cc912a79e53acf03c88a0175eecdb6aabce52f8",
+    "bytes": 1093
+  },
+  {
+    "path": "src/sfnt/ttload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e17d07a971ce46bf685336338805935583b9b231",
+    "bytes": 41323
+  },
+  {
+    "path": "src/sfnt/ttload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a0aab24ce6c0848d5ff39aca451ac37c683a79e",
+    "bytes": 2507
+  },
+  {
+    "path": "src/sfnt/ttmtx.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "60dce87d841a14ffd408ca473e85dedb3b7fa496",
+    "bytes": 8571
+  },
+  {
+    "path": "src/sfnt/ttmtx.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "618e04ffd29d8ac820d6b22370b333efa96f856d",
+    "bytes": 1289
+  },
+  {
+    "path": "src/sfnt/ttpost.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "98603e115eab7843c3ba9bd2d41104f7b982eea4",
+    "bytes": 13262
+  },
+  {
+    "path": "src/sfnt/ttpost.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "896118015e1351d00eae462e2583180d3c9c022f",
+    "bytes": 1002
+  },
+  {
+    "path": "src/sfnt/ttsbit.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1655e40b6814884c91bce3a822f5d373dbebc476",
+    "bytes": 48979
+  },
+  {
+    "path": "src/sfnt/ttsbit.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8fd45223264057600ce2c83fedc4f326476f630d",
+    "bytes": 1672
+  },
+  {
+    "path": "src/sfnt/ttsvg.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "79cf531d054aee43fb42172f286b50e858470cb5",
+    "bytes": 10932
+  },
+  {
+    "path": "src/sfnt/ttsvg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6253ed1d499494959515719a4f42c89b4016f6e9",
+    "bytes": 1014
+  },
+  {
+    "path": "src/sfnt/woff2tags.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c3779d9f34cf1b4afc7c91e388f0bc273b1f47b",
+    "bytes": 4350
+  },
+  {
+    "path": "src/sfnt/woff2tags.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "200262d38639f30f4bc5930a3ffacd9ef5967487",
+    "bytes": 867
+  },
+  {
+    "path": "src/smooth",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "408c440833b7121352c0cfe0f2c454ae5c3b2389",
+    "bytes": null
+  },
+  {
+    "path": "src/smooth/ftgrays.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f7b63937d708f63190d5209c71c05279a6cce24",
+    "bytes": 60249
+  },
+  {
+    "path": "src/smooth/ftgrays.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99c7383e76e82b400991d563dafe71f225ee34a4",
+    "bytes": 1216
+  },
+  {
+    "path": "src/smooth/ftsmerrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2f2276bd58c8e37a189b65dc5243a77a7c8e6794",
+    "bytes": 997
+  },
+  {
+    "path": "src/smooth/ftsmooth.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7378e6adc46dd1ae73c33d4bb49a2e51f6e41c9c",
+    "bytes": 20007
+  },
+  {
+    "path": "src/smooth/ftsmooth.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "56c7ac70b5c90f9391108ee3b08155fde1dbcff5",
+    "bytes": 751
+  },
+  {
+    "path": "src/smooth/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f09f29423c85c469891275fe1890daf498105fbf",
+    "bytes": 678
+  },
+  {
+    "path": "src/smooth/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1cdda6d8397682db7bccf116a04fdd8ec763e48d",
+    "bytes": 1856
+  },
+  {
+    "path": "src/smooth/smooth.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ecd3ccdb9cf45b17c42abe43556716f5f60d302",
+    "bytes": 657
+  },
+  {
+    "path": "src/svg",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "dad3e38205f9917c09f1d6889c9720a5485fff3b",
+    "bytes": null
+  },
+  {
+    "path": "src/svg/ftsvg.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c98d7f7db90dd99fc8a6f2fa28f00e6b34dd92ef",
+    "bytes": 8893
+  },
+  {
+    "path": "src/svg/ftsvg.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6254485c5a50f4337725d203b2d8652f1fe6295c",
+    "bytes": 810
+  },
+  {
+    "path": "src/svg/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5a93e174367c9e2d50d7e5a36ff8fe3ee76ec775",
+    "bytes": 677
+  },
+  {
+    "path": "src/svg/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "53f4629f8cbf3bc5ba48dcea59c407e4295de478",
+    "bytes": 1707
+  },
+  {
+    "path": "src/svg/svg.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fff03ee59e8a39083a641ae78bae24f776c6d938",
+    "bytes": 656
+  },
+  {
+    "path": "src/svg/svgtypes.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f731bdf111267511938ee0b27ac915388f005ffc",
+    "bytes": 1195
+  },
+  {
+    "path": "src/tools",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "3e8b0ff36ff9b3d8ddf69b3fb991bc69f34d04a5",
+    "bytes": null
+  },
+  {
+    "path": "src/tools/afblue.pl",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24d01cd1ff5b9bbe4fc66193054c37c171096934",
+    "bytes": 13048
+  },
+  {
+    "path": "src/tools/apinames.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2aa4b9a215b161a332f5ce3be56c7edcc350a273",
+    "bytes": 11798
+  },
+  {
+    "path": "src/tools/chktrcmp.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "d072a87866cba70028fa37a018b2085ecf10ae39",
+    "bytes": 4216
+  },
+  {
+    "path": "src/tools/cordic.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6511429889744ab0ad823ef480c27a723b4ff25b",
+    "bytes": 770
+  },
+  {
+    "path": "src/tools/ftrandom",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c2a8c023c1c83f491f98a094bd4a722d1d7537c7",
+    "bytes": null
+  },
+  {
+    "path": "src/tools/ftrandom/Makefile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "24dc49c563961522b068c37a31bbb81bcf70eac1",
+    "bytes": 961
+  },
+  {
+    "path": "src/tools/ftrandom/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c610864b6adbf630677227bca5f5eb13214e6d0",
+    "bytes": 2688
+  },
+  {
+    "path": "src/tools/ftrandom/ftrandom.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0ee765e528face9ecd75c70944874f517c7def8f",
+    "bytes": 17277
+  },
+  {
+    "path": "src/tools/glnames.py",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9dc28dbc86154bb35f45c6f28134d0e20f463ba6",
+    "bytes": 107236
+  },
+  {
+    "path": "src/tools/make_distribution_archives.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f29eb128c7a3585bf3846901a9cc6570a0508683",
+    "bytes": 6188
+  },
+  {
+    "path": "src/tools/no-copyright",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e171b76f3a79d29d12b3d49c12d75cceb2179759",
+    "bytes": 1282
+  },
+  {
+    "path": "src/tools/test_afm.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a4b2268984ece21c56a1a909b202024af5493655",
+    "bytes": 3969
+  },
+  {
+    "path": "src/tools/test_bbox.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9fd932993d152fcba10e3b615b1c66a2947ec6c",
+    "bytes": 4191
+  },
+  {
+    "path": "src/tools/test_trig.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4f3410ab388400e82a284bf02021a2d8115cdc2d",
+    "bytes": 4826
+  },
+  {
+    "path": "src/tools/update-copyright",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "674823ceb21a2923fad5aa157a7b7f2de058eddd",
+    "bytes": 383
+  },
+  {
+    "path": "src/tools/update-copyright-year",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "2b19d01fa1fb5c97c7121c45998c5dc60206bef3",
+    "bytes": 4272
+  },
+  {
+    "path": "src/tools/vms_shorten_symbol.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "81f2a71877fdeef7a0c7d3c1f8efbd314706f0b9",
+    "bytes": 9927
+  },
+  {
+    "path": "src/truetype",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "0914c569480822ca64b0367956856f70ca4c45f9",
+    "bytes": null
+  },
+  {
+    "path": "src/truetype/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e4627b669111e31c7e0cf6991fa0f8a3d08147c0",
+    "bytes": 687
+  },
+  {
+    "path": "src/truetype/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "052f2fef21c13cc554bf363cfb9282a742dec675",
+    "bytes": 1850
+  },
+  {
+    "path": "src/truetype/truetype.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "accec4597d7f23d09e72e85e52229bc16d93e5ea",
+    "bytes": 874
+  },
+  {
+    "path": "src/truetype/ttdriver.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "90d6e81057876fef971558c3ce28081a195f6519",
+    "bytes": 22120
+  },
+  {
+    "path": "src/truetype/ttdriver.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c00bba066e30f8d84e24ffdef6761125a341793e",
+    "bytes": 748
+  },
+  {
+    "path": "src/truetype/tterrors.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ae4b087ac8ecbc5645f76242698a98018a13932",
+    "bytes": 981
+  },
+  {
+    "path": "src/truetype/ttgload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1f61471d0549adfbd6d0598ef9cfe0bfd4c53a40",
+    "bytes": 81139
+  },
+  {
+    "path": "src/truetype/ttgload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3d6a762d1f7fe29564b8cb8a1c5fc61ae50bd672",
+    "bytes": 1358
+  },
+  {
+    "path": "src/truetype/ttgxvar.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ab6e17119c12c668384bd838b2b1c70e095e250",
+    "bytes": 135920
+  },
+  {
+    "path": "src/truetype/ttgxvar.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8a59c0cd6e60565e5cc2bbe01af17ed176e32964",
+    "bytes": 13859
+  },
+  {
+    "path": "src/truetype/ttinterp.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f850bc418e7b7d7a4953bb43aced88101341d901",
+    "bytes": 184650
+  },
+  {
+    "path": "src/truetype/ttinterp.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "05ac831dfd13c9e966bad9065f8edc382e4481d4",
+    "bytes": 18264
+  },
+  {
+    "path": "src/truetype/ttobjs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dc897688584a7464a206658665210c8289ab6f6a",
+    "bytes": 40600
+  },
+  {
+    "path": "src/truetype/ttobjs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b2f412ac475cd559e8f8350c007afb297c1f343",
+    "bytes": 9468
+  },
+  {
+    "path": "src/truetype/ttpload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5b0a3944d6a70c9e714fa0a929b0693744f8601c",
+    "bytes": 16553
+  },
+  {
+    "path": "src/truetype/ttpload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ad0a9eb7a6d5dc440e1274cd7a4eaf266ca39511",
+    "bytes": 1661
+  },
+  {
+    "path": "src/type1",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a450ac4581e5f65a57a9bb69c2b770a66bf85335",
+    "bytes": null
+  },
+  {
+    "path": "src/type1/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a0aeada3ebb29693ac3edac7e99bf0c0c2a4a03e",
+    "bytes": 677
+  },
+  {
+    "path": "src/type1/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5d9c2e7e4f3460eb155bffe024daafb3ccf2cb67",
+    "bytes": 1861
+  },
+  {
+    "path": "src/type1/t1afm.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cc94a0d4a4567f3e73bb95740fe03fa2eaa278cd",
+    "bytes": 10667
+  },
+  {
+    "path": "src/type1/t1afm.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f31c9d100f0acb1e44e5fc1550ebfb35d74bbc2b",
+    "bytes": 1285
+  },
+  {
+    "path": "src/type1/t1driver.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d7a342708dd78983a7ca1d67c84d5a9de2bcb95",
+    "bytes": 23752
+  },
+  {
+    "path": "src/type1/t1driver.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2869adab6e747e371177ade81a7c92b5618fbe61",
+    "bytes": 769
+  },
+  {
+    "path": "src/type1/t1errors.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "efe53be1f4cdb4ccb8c705c03ce47d0d522d04be",
+    "bytes": 969
+  },
+  {
+    "path": "src/type1/t1gload.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd9b6cd80fc2e2f6634dad71760a43f518ad8522",
+    "bytes": 20377
+  },
+  {
+    "path": "src/type1/t1gload.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b3de427a2f3d283b094c6d44b63e9c450beec448",
+    "bytes": 1193
+  },
+  {
+    "path": "src/type1/t1load.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1d095f8ac1f80b3293ca497bf85cf0a9df54d9cc",
+    "bytes": 81827
+  },
+  {
+    "path": "src/type1/t1load.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "39d4b94e9dc8ac8eede58a5a50e8ab47d05333ee",
+    "bytes": 3285
+  },
+  {
+    "path": "src/type1/t1objs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4ee0a591096b6c79f65ff502e78121a4af147574",
+    "bytes": 17541
+  },
+  {
+    "path": "src/type1/t1objs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f152f630a86ec773cfb305d2505f9d92af10b249",
+    "bytes": 3452
+  },
+  {
+    "path": "src/type1/t1parse.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a9b8d18a6ff6e4021afb67388fabdf668a8eadff",
+    "bytes": 14896
+  },
+  {
+    "path": "src/type1/t1parse.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ebd7c3fb34047e7322bcc400cb4b292f9b408f54",
+    "bytes": 3735
+  },
+  {
+    "path": "src/type1/t1tokens.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "745351a34c9540900be09df00e9fada02474d7bc",
+    "bytes": 5083
+  },
+  {
+    "path": "src/type1/type1.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b8e88e6eac5ee1e3ac9f2e78a7c101d27d794fe6",
+    "bytes": 720
+  },
+  {
+    "path": "src/type42",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "40c8bf8e40ecf6e9adae798c0f43d3c82a3a308c",
+    "bytes": null
+  },
+  {
+    "path": "src/type42/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d87f3a404e5d7bbb1d055198308b834a0e5270a5",
+    "bytes": 672
+  },
+  {
+    "path": "src/type42/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3c796cee85f04e3ef757376f0d114568319d34ca",
+    "bytes": 1785
+  },
+  {
+    "path": "src/type42/t42drivr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a45d13ebd189f979a2e435d93863b9896b3f5b5c",
+    "bytes": 6579
+  },
+  {
+    "path": "src/type42/t42drivr.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1c2bb2029afe3d724da13b0ee945c4ddceda9016",
+    "bytes": 739
+  },
+  {
+    "path": "src/type42/t42error.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9c386d8c48f8de240d3f3c95eafca1b8c55b3303",
+    "bytes": 973
+  },
+  {
+    "path": "src/type42/t42objs.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a01c3129d07b2fcc977c7323de578f624a193469",
+    "bytes": 19239
+  },
+  {
+    "path": "src/type42/t42objs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15767f871634c2eb75010ef2f1005fcd347c758a",
+    "bytes": 2452
+  },
+  {
+    "path": "src/type42/t42parse.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d645be2a01467142fdac8336d20e16e4801111db",
+    "bytes": 39687
+  },
+  {
+    "path": "src/type42/t42parse.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4e61169a8710868782cb565404c0e2d7e8d37051",
+    "bytes": 2029
+  },
+  {
+    "path": "src/type42/t42types.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b0bf9e8ecfed4eeeb7d146fef858ad8a73fd000c",
+    "bytes": 1181
+  },
+  {
+    "path": "src/type42/type42.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "da1e6214d32bdbde951bee10e381c9f42c75c698",
+    "bytes": 652
+  },
+  {
+    "path": "src/winfonts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8270cfaf8180175c3e0abb01dc9f153a0f17eb86",
+    "bytes": null
+  },
+  {
+    "path": "src/winfonts/fnterrs.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b2644edbf3a35c99115724b8b6515660ffe5ab53",
+    "bytes": 988
+  },
+  {
+    "path": "src/winfonts/module.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d49dc9d3b2ab93cdc3941dbb2cae466cdd76f8c5",
+    "bytes": 694
+  },
+  {
+    "path": "src/winfonts/rules.mk",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b65bb4c41af9ccd4a25e538a693c9e23c80aef49",
+    "bytes": 1664
+  },
+  {
+    "path": "src/winfonts/winfnt.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "264185058ab8c5ab094a0e3d078932b88f0c5eb7",
+    "bytes": 35776
+  },
+  {
+    "path": "src/winfonts/winfnt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "420e11e3c6709418c7a582bf59c423b29f888b7f",
+    "bytes": 3104
+  },
+  {
+    "path": "subprojects",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "c74c590f727064f7547a91d432e92b0534ac7e35",
+    "bytes": null
+  },
+  {
+    "path": "subprojects/dlg",
+    "mode": "160000",
+    "type": "commit",
+    "sha": "395ccad2c1e0daae535c4d20bb0a3f2424648e17",
+    "bytes": null
+  },
+  {
+    "path": "subprojects/harfbuzz.wrap",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b01133aa5338a07a36b36ab2c0a3de52c03e763",
+    "bytes": 495
+  },
+  {
+    "path": "subprojects/libpng.wrap",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7bc11fc0fa9abf5fcbc6317b18bf18b888b14f3f",
+    "bytes": 703
+  },
+  {
+    "path": "subprojects/zlib.wrap",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0626401ac2559b541b45ac90eb184ad0c2c6b10e",
+    "bytes": 653
+  },
+  {
+    "path": "tests",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "60b2b06ca9575f65b0458c572f37822103964152",
+    "bytes": null
+  },
+  {
+    "path": "tests/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "13d1e6cb8fb840c0420fcd744fb77373ec54fab7",
+    "bytes": 489
+  },
+  {
+    "path": "tests/issue-1063",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "aa8581eff73e473ce109c107d4b83dc6eb1f2c52",
+    "bytes": null
+  },
+  {
+    "path": "tests/issue-1063/main.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fd5404ebbbd701a54017284d23c40cbbffb04103",
+    "bytes": 1074
+  },
+  {
+    "path": "tests/meson.build",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "527998ffa46fb350457757c815354e0732945b1b",
+    "bytes": 297
+  },
+  {
+    "path": "tests/scripts",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "704e2890cb21cdeb88c83e585c774efbea5ff898",
+    "bytes": null
+  },
+  {
+    "path": "tests/scripts/download-test-fonts.py",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "52b742e22ca616899adc32ddc3308906cb5a8c4d",
+    "bytes": 8869
+  },
+  {
+    "path": "vms_make.com",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "75bcbd7abf51f95b15c96b55a4ca392d9aa8a2bc",
+    "bytes": 69818
+  }
+]

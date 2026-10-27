@@ -1,0 +1,221 @@
+{
+  "canvas": {
+    "catalog": "native-packages.json",
+    "repository": "Brooooooklyn/canvas",
+    "commit": "b2723ffae4e74e8c9df752902b137ec4061530e9",
+    "gitlink": "skia"
+  },
+  "source": {
+    "repository": "google/skia",
+    "candidate": {
+      "commit": "a9c42c9fce77cd748805df0ec67ef5718800b1e9",
+      "tree": "b746b12f2a77544f4458945bcff3f44233e6a3c1"
+    },
+    "archive": {
+      "path": "skia-sources/skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9.tar.gz",
+      "bytes": 79689406,
+      "sha256": "70a57fda737ea04d1d469421f911508e58fbc5f6ed89b1c44c3935ba031fcf97",
+      "url": "https://codeload.github.com/google/skia/tar.gz/a9c42c9fce77cd748805df0ec67ef5718800b1e9"
+    },
+    "root": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/",
+    "members": {
+      "path": "skia-sources/members.json",
+      "bytes": 5143865,
+      "sha256": "7db10a5ea75128b4c044b8bc7300986be0e9be7da4d9e59718e2479a188fc63b"
+    },
+    "tree": {
+      "path": "skia-sources/tree.json",
+      "bytes": 3159038,
+      "sha256": "80c4ca332d2e7c2bb14caa71830e984f13a83e7298b2ae0d3d075e199989924f",
+      "url": "https://api.github.com/repos/google/skia/git/trees/b746b12f2a77544f4458945bcff3f44233e6a3c1?recursive=1"
+    },
+    "notices": [
+      {
+        "path": "skia-sources/notices/AUTHORS",
+        "bytes": 5227,
+        "sha256": "9c7ee6d52ae15a6211b2ab72e961937554c9f38675e44f1af6260a2307796f6e",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/AUTHORS"
+      },
+      {
+        "path": "skia-sources/notices/LICENSE",
+        "bytes": 1507,
+        "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/bazel/rbe/gce_linux/LICENSE",
+        "bytes": 11340,
+        "sha256": "fd112c80352fc42a60f051012c6b9adef055123e395dece30fa8f44880f39e96",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/bazel/rbe/gce_linux/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/include/third_party/vulkan/LICENSE",
+        "bytes": 1635,
+        "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/include/third_party/vulkan/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/modules/canvaskit/npm_build/LICENSE",
+        "bytes": 1635,
+        "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/modules/canvaskit/npm_build/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/modules/skcms/LICENSE",
+        "bytes": 1635,
+        "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/modules/skcms/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/third_party/etc1/LICENSE",
+        "bytes": 9233,
+        "sha256": "5366e97b4478f15a1e2fd7e6094337426597df28de50cd9fed3f2e7e87f1229e",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/etc1/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/third_party/expat/LICENSE",
+        "bytes": 1635,
+        "sha256": "cca48bacd6e7ed63f00b42a346bcc8549a460b41efe75d93db350fc882f54dca",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/expat/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/third_party/harfbuzz/LICENSE",
+        "bytes": 1635,
+        "sha256": "cca48bacd6e7ed63f00b42a346bcc8549a460b41efe75d93db350fc882f54dca",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/harfbuzz/LICENSE"
+      },
+      {
+        "path": "skia-sources/notices/third_party/wuffs/LICENSE",
+        "bytes": 1635,
+        "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/wuffs/LICENSE"
+      }
+    ],
+    "buildFiles": [
+      {
+        "path": "skia-sources/build-files/BUILD.gn",
+        "bytes": 117343,
+        "sha256": "c786fb8efa1959a521796f50cc3db3a37c0a9b490d3922a42e3658bdb4261e28",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/DEPS",
+        "bytes": 10719,
+        "sha256": "ebb0e737f98dab08499afcf0f0ed87f9de0c6e8c25a31fc4fb5283baab42a9d6",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/DEPS"
+      },
+      {
+        "path": "skia-sources/build-files/gn/is_clang.py",
+        "bytes": 415,
+        "sha256": "6f85aaec496dca29991474a00a0dfaf85319a355b0fff0b3a7206ac486683311",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/gn/is_clang.py"
+      },
+      {
+        "path": "skia-sources/build-files/gn/skia.gni",
+        "bytes": 10493,
+        "sha256": "f29ccbe7b4f6268e29068a1d6bd9a317c1f185fdd15ad016706f1a75a32c8357",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/gn/skia.gni"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/brotli/BUILD.gn",
+        "bytes": 810,
+        "sha256": "e1d8dd0a07aa7361ee23a34f938c8af8773b42100cc11f3f49fd19f9dbf7f91d",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/brotli/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/dng_sdk/BUILD.gn",
+        "bytes": 8096,
+        "sha256": "f668b3973b6bfdfbd819a7568c1bcf2fab43eef10250c89613525f2570052a33",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/dng_sdk/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/expat/BUILD.gn",
+        "bytes": 1374,
+        "sha256": "0b1fe75a6ffd91611ff9ac12674789acd6feb44c3784b2dcb0bf4028d8a6fef1",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/expat/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/freetype2/BUILD.gn",
+        "bytes": 3626,
+        "sha256": "cfa21c0467ee264bd3177262cc476562fb8d26079a698aaa9fc003cace2b1645",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/freetype2/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/harfbuzz/BUILD.gn",
+        "bytes": 17804,
+        "sha256": "cb22474a32a1254284c1c03039495bfa92c3b2db91e0d85c3f77e011455b5a59",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/harfbuzz/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/highway/BUILD.gn",
+        "bytes": 356,
+        "sha256": "e18ac8fa4991b38116549e09efb1d2d3c3080ac8e21a6cd369bdff6aeb6230f6",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/highway/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/icu/BUILD.gn",
+        "bytes": 3405,
+        "sha256": "4ca7d596b0878561eb7564117a89334a74ee7b057305b1e5edff66a8063a56aa",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/icu/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/icu/SkLoadICU.cpp",
+        "bytes": 3536,
+        "sha256": "bfec401a297591306cf67601276debf4208c4b5386c1ce9ecb4dd8bb11012889",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/icu/SkLoadICU.cpp"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/libjpeg-turbo/BUILD.gn",
+        "bytes": 7512,
+        "sha256": "290672c8b233294affac75bee1405fb446031f12614ed875845a09dcfd8bffd3",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/libjpeg-turbo/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/libjxl/BUILD.gn",
+        "bytes": 1187,
+        "sha256": "bb0a1002963437c48419c54eeabb3648e8a7feb1c6abd39ef788a9e6a55e9334",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/libjxl/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/libpng/BUILD.gn",
+        "bytes": 1849,
+        "sha256": "679e8ed77b88bafa087f90e2735748077ac8f845209962fe2fcac822621e9d35",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/libpng/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/libwebp/BUILD.gn",
+        "bytes": 7999,
+        "sha256": "10ade0a4ea86ad8a2b2543e3751f14de195e039aa10ad1d80b1b703e36ddda66",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/libwebp/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/wuffs/BUILD.gn",
+        "bytes": 1639,
+        "sha256": "45b1ac75fe1d40d97c71c756ffc5c8aba18043aa091fb52e90717b071fd12915",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/wuffs/BUILD.gn"
+      },
+      {
+        "path": "skia-sources/build-files/third_party/zlib/BUILD.gn",
+        "bytes": 7953,
+        "sha256": "7f8accc36d1f560553ad4eb0d0383816ee3b317830ff455c42d85ffe3f7e82b6",
+        "member": "skia-a9c42c9fce77cd748805df0ec67ef5718800b1e9/third_party/zlib/BUILD.gn"
+      }
+    ],
+    "acquisition": {
+      "kind": "current-exact-commit-source-read",
+      "retrievedOn": "2026-10-27",
+      "scope": "Original GitHub codeload gzip/TAR and original complete recursive Git tree response at the precise Canvas Skia gitlink. No source repacking, historical asset-producer reconstruction or binary reproduction is claimed."
+    }
+  },
+  "instructions": {
+    "path": "skia-sources/SOURCE-ACCESS.md",
+    "bytes": 9083,
+    "sha256": "6e78c331da68f30d18d22eb0e0cca58757acd0bad194905fc3023b5029d87668"
+  },
+  "limitations": [
+    "This is the complete original Skia Git source archive, including its original source/build files, notices and single symlink. Auxiliary and disabled source remains included without claiming that every directory links into the delivered Canvas binding.",
+    "Canvas producer source changes and its ten static Skia-library boundary are described separately from pristine Skia source. The source is not a recovered historical Skia release asset, original producer job or successful modified-library build.",
+    "The precise external dependencies declared by the selected GN build remain separately scoped. The Skia DEPS list contains disabled, test, development, tool and target-specific inputs; its full list is not automatically a corresponding-source or release requirement.",
+    "The remaining applicable dependency sources/notices and final aggregate modification/recombination arrangement are not established by the own-source archive alone. No historical compiler, historical binary byte matching or license compatibility conclusion is required or claimed by this acquisition."
+  ]
+}

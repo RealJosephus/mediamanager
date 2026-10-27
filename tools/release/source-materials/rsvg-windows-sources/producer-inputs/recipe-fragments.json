@@ -1,0 +1,1004 @@
+{
+  "retrievedOn": "2026-10-26",
+  "sources": [
+    {
+      "id": "sharp",
+      "repository": "lovell/sharp",
+      "candidate": {
+        "commit": "7f1a0a22cc285fe180766f4935d50b55af6e8432",
+        "tree": "e7c5d544a8358fd91ff1d60a67c678e0ee3967d0"
+      },
+      "commitReceipt": {
+        "path": "recipes/sharp/commit.json",
+        "bytes": 1549,
+        "sha256": "68441eb3780efdfcf57ca521703fe885097d09641164512caaecac8d05d89899"
+      },
+      "treeReceipt": {
+        "path": "recipes/sharp/tree.json",
+        "bytes": 202709,
+        "sha256": "c23334ac4ab14ba51d8ed1ac9df6f0d332b307b8e154930b17ef283f2f5ca771"
+      },
+      "evidence": {
+        "kind": "observed-checkout",
+        "logAnchors": [
+          {
+            "jobId": 98128387524,
+            "text": "7f1a0a22cc285fe180766f4935d50b55af6e8432"
+          },
+          {
+            "jobId": 98128387524,
+            "text": "##[group]Run npm run build:dist"
+          },
+          {
+            "jobId": 98128387524,
+            "text": "> node scripts/build.mjs"
+          },
+          {
+            "jobId": 98128387524,
+            "text": "##[group]Run npm run build"
+          },
+          {
+            "jobId": 98128387524,
+            "text": "gyp info spawn args 'binding.gyp'"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "recipes/sharp/.github/workflows/ci.yml",
+          "bytes": 14522,
+          "sha256": "aa5768e2eaa2239b42954eca0d0601008d785af0b477dae842d5b245703491f3",
+          "upstreamPath": ".github/workflows/ci.yml",
+          "gitBlob": "6545774eac865258f67f9eabc3d9f40444309e11",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/.github/workflows/ci.yml"
+        },
+        {
+          "path": "recipes/sharp/LICENSE",
+          "bytes": 10273,
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68",
+          "upstreamPath": "LICENSE",
+          "gitBlob": "37ec93a14fdcd0d6e525d97c0cfa6b314eaa98d8",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/LICENSE"
+        },
+        {
+          "path": "recipes/sharp/install/build.js",
+          "bytes": 860,
+          "sha256": "fea92e0d55cce8692413c479021173aa1512304e1b849039949cbee9d6ceb1de",
+          "upstreamPath": "install/build.js",
+          "gitBlob": "8eaa0f5a7014918e1c152f17ef7b9bf97e99d25f",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/install/build.js"
+        },
+        {
+          "path": "recipes/sharp/lib/libvips.mjs",
+          "bytes": 5828,
+          "sha256": "d9984601b0aafe44c393b29ce4b0712b1c40890c3d740d4fda49842a4ea5873d",
+          "upstreamPath": "lib/libvips.mjs",
+          "gitBlob": "35608ac33d4ff19930bba48b20abf453d11a09dc",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/lib/libvips.mjs"
+        },
+        {
+          "path": "recipes/sharp/package.json",
+          "bytes": 8115,
+          "sha256": "27b5a6c6e1e1f27c527b09a963c932979403837d0f5f013ab5bdfb4a0ef2269a",
+          "upstreamPath": "package.json",
+          "gitBlob": "c8159aefda3128c8491bf40c1174b75d4273a9b6",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/package.json"
+        },
+        {
+          "path": "recipes/sharp/scripts/build.mjs",
+          "bytes": 5118,
+          "sha256": "7f2d97a0cc59300e36c69c1b5be923ee6b0937aac0dad934666112c7c0c78a09",
+          "upstreamPath": "scripts/build.mjs",
+          "gitBlob": "b74b66369ca4e6d8663b6c8aaad54eb8c0e64fb8",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/scripts/build.mjs"
+        },
+        {
+          "path": "recipes/sharp/src/binding.gyp",
+          "bytes": 10805,
+          "sha256": "9d0a43b5db5db4e6a4a662ff059d8bf30e57ea403d2e207fc408a8c6aa0ab8c8",
+          "upstreamPath": "src/binding.gyp",
+          "gitBlob": "639943404b84f125e45179e87bef0c7215b2084c",
+          "url": "https://raw.githubusercontent.com/lovell/sharp/7f1a0a22cc285fe180766f4935d50b55af6e8432/src/binding.gyp"
+        }
+      ]
+    },
+    {
+      "id": "sharp-libvips",
+      "repository": "lovell/sharp-libvips",
+      "candidate": {
+        "commit": "6e5971d333377743163edc3ad9e5d0b897abcbc9",
+        "tree": "29fde70ea48ef8d03254a378f8efb52c944b4169"
+      },
+      "commitReceipt": {
+        "path": "recipes/sharp-libvips/commit.json",
+        "bytes": 1587,
+        "sha256": "bad37ca0b6d5a22d2fbf71aaea9a75ba0acb18648357a0f364e7ddd9ac39cd8f"
+      },
+      "treeReceipt": {
+        "path": "recipes/sharp-libvips/tree.json",
+        "bytes": 21786,
+        "sha256": "7bbf5be182d90f8dfa33638204aeed7abecba2611186c6aafc391d8b0b395307"
+      },
+      "evidence": {
+        "kind": "observed-checkout",
+        "logAnchors": [
+          {
+            "jobId": 98102056983,
+            "text": "6e5971d333377743163edc3ad9e5d0b897abcbc9"
+          },
+          {
+            "jobId": 98102056983,
+            "text": "##[group]Run ./build.sh linux-x64"
+          },
+          {
+            "jobId": 98102057009,
+            "text": "6e5971d333377743163edc3ad9e5d0b897abcbc9"
+          },
+          {
+            "jobId": 98102057009,
+            "text": "##[group]Run ./build.sh darwin-arm64v8"
+          },
+          {
+            "jobId": 98102056990,
+            "text": "6e5971d333377743163edc3ad9e5d0b897abcbc9"
+          },
+          {
+            "jobId": 98102056990,
+            "text": "##[group]Run ./build.sh win32-x64"
+          }
+        ]
+      },
+      "files": [
+        {
+          "path": "recipes/sharp-libvips/.github/workflows/ci.yml",
+          "bytes": 3543,
+          "sha256": "f8beaaedffc84dabec55f85f26c5bca29703c23949111a415b6e16aa5db4cb97",
+          "upstreamPath": ".github/workflows/ci.yml",
+          "gitBlob": "24b2a6b03589ddcb6895748f28844c4f3fffc50a",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/.github/workflows/ci.yml"
+        },
+        {
+          "path": "recipes/sharp-libvips/LICENSE",
+          "bytes": 11357,
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+          "upstreamPath": "LICENSE",
+          "gitBlob": "8dada3edaf50dbc082c9a125058f25def75e625a",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/LICENSE"
+        },
+        {
+          "path": "recipes/sharp-libvips/build.sh",
+          "bytes": 2804,
+          "sha256": "f32e344b1355b6bcf3836e7f25e2c2de7f25eefeb8c96d02711ad3fcea487488",
+          "upstreamPath": "build.sh",
+          "gitBlob": "eca5b7f015d8234e1ffd8c5c769cca937ae0b41a",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/build.sh"
+        },
+        {
+          "path": "recipes/sharp-libvips/build/posix.sh",
+          "bytes": 23597,
+          "sha256": "230a0b344ba78116c8dd230383141b1d3498fceeb8f5320c0b573ebf67a61267",
+          "upstreamPath": "build/posix.sh",
+          "gitBlob": "5088515e57f3954a49e4932d6f79ac73c2d9e893",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/build/posix.sh"
+        },
+        {
+          "path": "recipes/sharp-libvips/build/win.sh",
+          "bytes": 1262,
+          "sha256": "52f2d9d76b07d4b4ad1720659b1e9bbc76121b85f21d9d084a85af28014473f3",
+          "upstreamPath": "build/win.sh",
+          "gitBlob": "a92043f73d342c76722065378a9f800b1769414f",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/build/win.sh"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/darwin-arm64v8/Toolchain.cmake",
+          "bytes": 390,
+          "sha256": "752c37ab0b1b9401ec9cad4ef0d6588511b6a1011fe8789acba4066f65cccf99",
+          "upstreamPath": "platforms/darwin-arm64v8/Toolchain.cmake",
+          "gitBlob": "cd1cf457eded79f2338559efd7d70aae24ca0195",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/darwin-arm64v8/Toolchain.cmake"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/darwin-arm64v8/meson.ini",
+          "bytes": 210,
+          "sha256": "d9143811fe878743bc874d92de848a87a2c9a334b0d39e34d49b56c0a025a5ee",
+          "upstreamPath": "platforms/darwin-arm64v8/meson.ini",
+          "gitBlob": "527b07056f43f1d94aef6e5d5ce5f8d282ae045a",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/darwin-arm64v8/meson.ini"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/linux-x64/Dockerfile",
+          "bytes": 1429,
+          "sha256": "1e8bc3981c8f1718cd99ea4fcd6d2e511afb9969f2fe3e0d2dc1ebf5a338a6e3",
+          "upstreamPath": "platforms/linux-x64/Dockerfile",
+          "gitBlob": "4e09ca1f5574fda4e63c53cff7dacb64f5c33bc2",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/linux-x64/Dockerfile"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/linux-x64/Toolchain.cmake",
+          "bytes": 224,
+          "sha256": "eaf601b65260c4ff1991063f248346d51fe6751e84f7dc83b7fcd3fd4658cad6",
+          "upstreamPath": "platforms/linux-x64/Toolchain.cmake",
+          "gitBlob": "96ed50278cfc9712102560e6f271b7d177c513be",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/linux-x64/Toolchain.cmake"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/linux-x64/meson.ini",
+          "bytes": 185,
+          "sha256": "0d85749d3921b1877e3d68615265a7f158856bf615ab56d6beb75d71a7fd0a41",
+          "upstreamPath": "platforms/linux-x64/meson.ini",
+          "gitBlob": "2f9d2ad0e4fd0c1f24f587ce8274f91f135fe0f9",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/linux-x64/meson.ini"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/linux-x64/x86_64-linux-gnu-pkgconf",
+          "bytes": 212,
+          "sha256": "c256bf8fcad1bcee36872c22c007d41980ace7cfe74072af130d336ddd92f61e",
+          "upstreamPath": "platforms/linux-x64/x86_64-linux-gnu-pkgconf",
+          "gitBlob": "84b5ae9bcc21704aa98d1cdd01727815802144ee",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/linux-x64/x86_64-linux-gnu-pkgconf"
+        },
+        {
+          "path": "recipes/sharp-libvips/platforms/win32/Dockerfile",
+          "bytes": 286,
+          "sha256": "df5597d18b29e900e4c87f77fe1781f4632ac548fa5057873f506c9007a1e499",
+          "upstreamPath": "platforms/win32/Dockerfile",
+          "gitBlob": "bfbd44c88d75ada6b3d203119f79ceb50648428b",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/platforms/win32/Dockerfile"
+        },
+        {
+          "path": "recipes/sharp-libvips/versions.properties",
+          "bytes": 595,
+          "sha256": "02253a2d39a6b1cfd2c1deacb0947f7d2a3398a522236f7efc4d57e82cbfe980",
+          "upstreamPath": "versions.properties",
+          "gitBlob": "7599d3a89fb9f231addeebc7c88621dd59176e02",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/versions.properties"
+        },
+        {
+          "path": "recipes/sharp-libvips/THIRD-PARTY-NOTICES.md",
+          "bytes": 4230,
+          "sha256": "25ffcfa69e28b1913ced27ec778b90f24911a1bb3021253577e8b0af55db0d49",
+          "upstreamPath": "THIRD-PARTY-NOTICES.md",
+          "gitBlob": "fcb7b9425c03ad926e4e23f20946351f4c8c2e5e",
+          "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/6e5971d333377743163edc3ad9e5d0b897abcbc9/THIRD-PARTY-NOTICES.md"
+        }
+      ]
+    },
+    {
+      "id": "libvips-win64-mxe",
+      "repository": "libvips/build-win64-mxe",
+      "candidate": {
+        "commit": "09cfccf20b91b441fbe97fa7a7ed8a597e55e830",
+        "tree": "0e57a7f2db394d5252c65251d3282cc10cd82e1b"
+      },
+      "commitReceipt": {
+        "path": "recipes/libvips-win64-mxe/commit.json",
+        "bytes": 1143,
+        "sha256": "65a980c035978f4bd31301a11430a1e4833c2aadba69596ba59a71f64f8400b1"
+      },
+      "treeReceipt": {
+        "path": "recipes/libvips-win64-mxe/tree.json",
+        "bytes": 26437,
+        "sha256": "063d084bfd9a47f1b2ea17fec82c9866b66f03a6500ad7efec92d69854448651"
+      },
+      "evidence": {
+        "kind": "downloaded-release-tag-source",
+        "tag": "v8.18.6",
+        "downloadUrl": "https://github.com/libvips/build-win64-mxe/releases/download/v8.18.6/vips-dev-x64-web-8.18.6-static.zip",
+        "logAnchors": [
+          {
+            "jobId": 98102056990,
+            "text": "Downloading https://github.com/libvips/build-win64-mxe/releases/download/v8.18.6/vips-dev-x64-web-8.18.6-static.zip"
+          }
+        ],
+        "tagReceipt": {
+          "path": "recipes/libvips-win64-mxe/tag.json",
+          "bytes": 357,
+          "sha256": "0db041122414d4593371ee23f2f701bd6b38d99946ddc800ae9334c6c359df6f"
+        },
+        "releaseReceipt": {
+          "path": "recipes/libvips-win64-mxe/release.json",
+          "bytes": 20364,
+          "sha256": "5777b78c0a41847f02631674d990c24e3e53c3518c5aa02285f81310faeb291d"
+        },
+        "asset": {
+          "id": 529570208,
+          "name": "vips-dev-x64-web-8.18.6-static.zip",
+          "size": 9322134,
+          "digest": "sha256:42ceea0c2f53d1244f3cb54c059881487b37452ee46c1c98c0d4b47480b20588",
+          "created_at": "2026-08-25T17:53:54Z",
+          "updated_at": "2026-08-25T17:53:55Z",
+          "browser_download_url": "https://github.com/libvips/build-win64-mxe/releases/download/v8.18.6/vips-dev-x64-web-8.18.6-static.zip"
+        }
+      },
+      "files": [
+        {
+          "path": "recipes/libvips-win64-mxe/README.md",
+          "bytes": 11708,
+          "sha256": "b8497d90d55fe7b053e7e290ca80aeafbb811fd347dee7c61b6b8b60fc6b67f9",
+          "upstreamPath": "README.md",
+          "gitBlob": "3eb83316a0abc25923e272943eccea6e1c6d9c00",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/README.md"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build.sh",
+          "bytes": 7471,
+          "sha256": "21f8ae16447d9987493519ac33d91344ffc7783eb70dc64965eea926f7d64cfa",
+          "upstreamPath": "build.sh",
+          "gitBlob": "b10ea5320d61fdddebadad48ff8c6d92ff8dabc8",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build.sh"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/aom.mk",
+          "bytes": 1263,
+          "sha256": "f129aea9a60575d24cf80a82ccbe551c1f9aad496760c955cd29194b29992aa6",
+          "upstreamPath": "build/aom.mk",
+          "gitBlob": "3f93b6985e64e9ae4bc175c5ccb367d2dea3d70c",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/aom.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/cgif.mk",
+          "bytes": 690,
+          "sha256": "f83f452c014880cdd01cbfdfc8bb18b1ad4b662919a1f8c7db75c8e50d3be6eb",
+          "upstreamPath": "build/cgif.mk",
+          "gitBlob": "baa447f695a493205af1cf8f6a8a9a6ef11ef130",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/cgif.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/highway.mk",
+          "bytes": 881,
+          "sha256": "9b1a766fd12253cecee01f7c460dc9fd0178aa9182c65e2b9a0985b15f51e6c0",
+          "upstreamPath": "build/highway.mk",
+          "gitBlob": "96dba4ac8c69a69d913e72a83fd97c639dfd8b9a",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/highway.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/libdicom.mk",
+          "bytes": 808,
+          "sha256": "28571a33ddb8414873ea08fd8b4016bf2661b02e0e039f9b44d27b318546569d",
+          "upstreamPath": "build/libdicom.mk",
+          "gitBlob": "49d27b41dca007e31e757d8cc2a0e4c89cb6c1ba",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libdicom.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/libheif.mk",
+          "bytes": 1052,
+          "sha256": "cbfb6cdfbab51f13978a9a5d4290ddcd909ca5f2aca1f08412be8eb7fc663ebe",
+          "upstreamPath": "build/libheif.mk",
+          "gitBlob": "62e39d8035d8573c2b1b6bb9a0c2855d720a5885",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libheif.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/libimagequant.mk",
+          "bytes": 652,
+          "sha256": "effe30fe26814beb688a8cb7877515e7051995c806c4fa09726f5c21b6c6013c",
+          "upstreamPath": "build/libimagequant.mk",
+          "gitBlob": "b2fdc6b6667760bd87dbe8f660c5a6f7cddd5316",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libimagequant.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/libjxl.mk",
+          "bytes": 1221,
+          "sha256": "9c440807d06a96bd90ef659c49002119052298db15574cda956a2309b156b19b",
+          "upstreamPath": "build/libjxl.mk",
+          "gitBlob": "2e8ccc365c6be695894f2ee37c6f0a819cfa8c4e",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/libjxl.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/nifticlib.mk",
+          "bytes": 1029,
+          "sha256": "7dd1bb5d868f1262776d187a43ac0bedbddcbfeefb9fc0ba00eb7a2d4a2a2675",
+          "upstreamPath": "build/nifticlib.mk",
+          "gitBlob": "820e83d957674ff11232ddae94b1eaf7b8a6ff22",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/nifticlib.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/nip4.mk",
+          "bytes": 1482,
+          "sha256": "15af7de7acf0f395aba3e475304576dceeaa4b4167ec56292e71e6062fc0e8e8",
+          "upstreamPath": "build/nip4.mk",
+          "gitBlob": "f963002bb60f0a33fcf3e610f39a4fd17c62650d",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/nip4.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/openslide.mk",
+          "bytes": 744,
+          "sha256": "0500e58a4aace3fd75180e8e734caa6fe5d754eec6e54050a89c636d0d47a8cf",
+          "upstreamPath": "build/openslide.mk",
+          "gitBlob": "b2538ead056be9bb1dc0214bb169c1b410de0205",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/openslide.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/overrides.mk",
+          "bytes": 33438,
+          "sha256": "b8703578a653b609eacd91f1bc88bf6449acf3cc7ed553b0c75dda13d25eb51b",
+          "upstreamPath": "build/overrides.mk",
+          "gitBlob": "050bb2e261603e79922996075d3ac8f576891065",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/aom-3-fixes.patch",
+          "bytes": 1522,
+          "sha256": "c4f15c4be72f9df33c7af874486227961e7e7263b03d0f6e2907d753fa9f31aa",
+          "upstreamPath": "build/patches/aom-3-fixes.patch",
+          "gitBlob": "3c1727dccde3a251548596cb9a19c0d333707473",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/aom-3-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/cairo-1-fixes.patch",
+          "bytes": 19182,
+          "sha256": "e9fa4176252f278e8d53ca110959797ac7f636da9f8dfb0d8d5b4c2db69b3b08",
+          "upstreamPath": "build/patches/cairo-1-fixes.patch",
+          "gitBlob": "9b2644b1b866fcd81953c9948cf6daffab5537bd",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/cairo-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/cairo-1-nanoserver-compat.patch",
+          "bytes": 1325,
+          "sha256": "96eca5ad103861c380c202054401d02e13b14643fe71c665a2fb00b51ffe8db1",
+          "upstreamPath": "build/patches/cairo-1-nanoserver-compat.patch",
+          "gitBlob": "16943c9420ff2d29a662a5ef353941792b89e16e",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/cairo-1-nanoserver-compat.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/fontconfig-2-fixes.patch",
+          "bytes": 2312,
+          "sha256": "452d8b94ea7a17f3b0abbe858d799fd774fe0097e21f639f412b3b00662c3a73",
+          "upstreamPath": "build/patches/fontconfig-2-fixes.patch",
+          "gitBlob": "097056e3c17b09a4c481046610fec83e7cdbabb8",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/fontconfig-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/gdk-pixbuf-2-fixes.patch",
+          "bytes": 3162,
+          "sha256": "482901be8e32a92e9dca5cd0f555ae9ce961300a4b98a62f6e3bf8ce0aa64451",
+          "upstreamPath": "build/patches/gdk-pixbuf-2-fixes.patch",
+          "gitBlob": "db65c0b8dcbb8794ec564ce9cad8ee7a5d665575",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/gdk-pixbuf-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/glib-2-dllexport-static.patch",
+          "bytes": 1193,
+          "sha256": "65fd140acf960794197b0b38cbc234c5c08f211d8ab679b1695df456250b8a76",
+          "upstreamPath": "build/patches/glib-2-dllexport-static.patch",
+          "gitBlob": "38082c754bc21ba56c0c9091ca46fcfd4c4d9580",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-dllexport-static.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/glib-2-fixes.patch",
+          "bytes": 2146,
+          "sha256": "9778d07b7cb8bdcedd474f345f85ae844542cb34fb38ec6c72cf3615a12b03c5",
+          "upstreamPath": "build/patches/glib-2-fixes.patch",
+          "gitBlob": "a02495f59795240fbd37098adc9db5e9a59b5732",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/glib-2-without-gregex.patch",
+          "bytes": 7759,
+          "sha256": "81013d38fc18da12522bc3c58d8988d2ac9ee9ca5a55bd4e68486044aa55191f",
+          "upstreamPath": "build/patches/glib-2-without-gregex.patch",
+          "gitBlob": "11c8a38ccefb3bda9d845e477035f5a30866dda6",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-without-gregex.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/glib-2-without-win32appinfo.patch",
+          "bytes": 1146,
+          "sha256": "66dbbd92404b11316d7bc896889c531697328d645af989e5a0c11aab76fbbca4",
+          "upstreamPath": "build/patches/glib-2-without-win32appinfo.patch",
+          "gitBlob": "aa2efde0116dc94816a5f7119101b0ff758e6fc7",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/glib-2-without-win32appinfo.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/imagemagick-7-disable-network.patch",
+          "bytes": 7317,
+          "sha256": "493f256e08407d479a76e62622069025d3ac290263864761688dbf74cb568fcf",
+          "upstreamPath": "build/patches/imagemagick-7-disable-network.patch",
+          "gitBlob": "567bdeee78680639561bd36278a27b7ada37c099",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/imagemagick-7-disable-network.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/imath-3-fixes.patch",
+          "bytes": 840,
+          "sha256": "785b884d4963a3e522e5d831ebda4a5e0ea9ee281a9e0df6affa13b0e7711f47",
+          "upstreamPath": "build/patches/imath-3-fixes.patch",
+          "gitBlob": "2e30bb65763855f59fc08b23982872a434d5e001",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/imath-3-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/libheif-1-fixes.patch",
+          "bytes": 1289,
+          "sha256": "846ad069dca01304f6fcbe92ff29636b4183d8eef3d275349dc91cedc8a313c7",
+          "upstreamPath": "build/patches/libheif-1-fixes.patch",
+          "gitBlob": "d4580ec108a7d8b3230c0ce73522f3beaefc50aa",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libheif-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/libjpeg-turbo-3-fixes.patch",
+          "bytes": 1807,
+          "sha256": "159b0704488ea123f6d57febbd908507868c5875bc8a7837ca8eca80d1541b29",
+          "upstreamPath": "build/patches/libjpeg-turbo-3-fixes.patch",
+          "gitBlob": "100b6cc71fe44d47191a132496e8eedab2701d18",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libjpeg-turbo-3-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/libraw-0.22-fixes.patch",
+          "bytes": 1270,
+          "sha256": "169e92a78762d44751e78c7c8a1305d0f19d8614aff759d3d06d47c4979eb2c1",
+          "upstreamPath": "build/patches/libraw-0.22-fixes.patch",
+          "gitBlob": "1e912efd1e94d06a554ddc94c9405b1efc62fb8b",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libraw-0.22-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/librsvg-2-fixes.patch",
+          "bytes": 5972,
+          "sha256": "4806547a27937b4ad0f7bae4e17d34e12c959e5fef91756951726ec71e8a0910",
+          "upstreamPath": "build/patches/librsvg-2-fixes.patch",
+          "gitBlob": "b7657c90ae02bbeab49550964472082cb537d298",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/librsvg-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/libtool-2-fixes.patch",
+          "bytes": 2487,
+          "sha256": "66912b00a1da59a5f58d71a95def05e1b48cd8b49bbd01cffff49d4e8daff030",
+          "upstreamPath": "build/patches/libtool-2-fixes.patch",
+          "gitBlob": "cab9230a0195fef2a2349aa14e6841d64433a49d",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libtool-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/libxml2-2-fixes.patch",
+          "bytes": 994,
+          "sha256": "ec36b3e3d5aa05a86ce0ca743c0504e6cfb2d5539b7a45b6c78c8e7b52018f6f",
+          "upstreamPath": "build/patches/libxml2-2-fixes.patch",
+          "gitBlob": "3e06c7718fbda34eeac6ab276b5a575d5277991a",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/libxml2-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/matio-1-fixes.patch",
+          "bytes": 819,
+          "sha256": "9bc50605ac2a95fa066e0e095d625ba363f379ac7fe00f4a7d9418a84ab13e36",
+          "upstreamPath": "build/patches/matio-1-fixes.patch",
+          "gitBlob": "d267ac9c6a749b14294d900f5c6829a1d70ef4b5",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/matio-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/nifticlib-3-fixes.patch",
+          "bytes": 8286,
+          "sha256": "bc6f13605ea0d46ada65385c9148c0c90ce213841c61b827d07c6b526cfe5bbf",
+          "upstreamPath": "build/patches/nifticlib-3-fixes.patch",
+          "gitBlob": "2340f7d635b21c1814902db7b1f843da12712c27",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/nifticlib-3-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/openexr-2-fixes.patch",
+          "bytes": 3030,
+          "sha256": "cd60a6b627c484fbf0e6864912ca7e431277ff2586fefb81d24b7a868fade5fe",
+          "upstreamPath": "build/patches/openexr-2-fixes.patch",
+          "gitBlob": "7287249e4564b569f0dbada90b0cd3d8ff4b6f94",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/openexr-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/openslide-4-without-gregex.patch",
+          "bytes": 3540,
+          "sha256": "cd643e3d034e313e13c14ae2da8af2ebd2ce10f9dee5f53319e214d0ff678747",
+          "upstreamPath": "build/patches/openslide-4-without-gregex.patch",
+          "gitBlob": "f4b0c1cc58ec627eccc242264c1871cde9d9c00d",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/openslide-4-without-gregex.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/poppler-26-fixes.patch",
+          "bytes": 748,
+          "sha256": "ddc21cb75272d3269fd39a517bc48ba2533bf95125cafe17d346ccb4251b358e",
+          "upstreamPath": "build/patches/poppler-26-fixes.patch",
+          "gitBlob": "b0168bb5eb6e6e12704c1549b02ff2f913ad9b6c",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/poppler-26-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/sqlite-3-fixes.patch",
+          "bytes": 1243,
+          "sha256": "3f84717c76922434368b1b8bf54b6dad649ca35ee79f00028fa5a4db1b3a9e9a",
+          "upstreamPath": "build/patches/sqlite-3-fixes.patch",
+          "gitBlob": "26be97d0185d111a6cc3a4722f7474cea935ae50",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/sqlite-3-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/uhdr-1-fixes.patch",
+          "bytes": 6224,
+          "sha256": "c308dd7c65a2bee0fea7471a71916dea1a5f48d698ebedeff41904b38074484b",
+          "upstreamPath": "build/patches/uhdr-1-fixes.patch",
+          "gitBlob": "6c1b14f35f63631aa7d2d312f1e96c6bbfd639fc",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/uhdr-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/patches/zlib-1-fixes.patch",
+          "bytes": 1596,
+          "sha256": "203e1df29951bd860c72384c4da06cb3d3935a35e7367f720136da6d35b357d3",
+          "upstreamPath": "build/patches/zlib-1-fixes.patch",
+          "gitBlob": "d83809bfe97a18405d34af4f1249a446ef94a859",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/patches/zlib-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/all-deps/overrides.mk",
+          "bytes": 795,
+          "sha256": "102ef4514d25e2dd1f56ebd03ee9647b5ed1fc633b3048145b0adcbd5e3036b5",
+          "upstreamPath": "build/plugins/all-deps/overrides.mk",
+          "gitBlob": "5784b9f3ecd1bc2805f155a2a51a16ea234a9740",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/all-deps/patches/vips-8-dlldir-as-libdir.patch",
+          "bytes": 2852,
+          "sha256": "fe5bcc0e041324873cd8917aa0e06832d5d231046433bf7a6a45cc429f5fc3e8",
+          "upstreamPath": "build/plugins/all-deps/patches/vips-8-dlldir-as-libdir.patch",
+          "gitBlob": "73beef9c30ed146b73f87b9c4f8ac2d1323f5aed",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/patches/vips-8-dlldir-as-libdir.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/all-deps/vips-all.mk",
+          "bytes": 3902,
+          "sha256": "8fb8c4992977f16cecbc8782fd4a495411130d344dbd39b5ed28f1eda454f591",
+          "upstreamPath": "build/plugins/all-deps/vips-all.mk",
+          "gitBlob": "38b3bf42ffa67d7cea0bd55a8746aa899bfd2a0c",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/all-deps/vips-all.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/ffi-compat/overrides.mk",
+          "bytes": 395,
+          "sha256": "948558c83718acbe5726ccc547c2b6295da23dc51245cb15c2040cf49f0431f5",
+          "upstreamPath": "build/plugins/ffi-compat/overrides.mk",
+          "gitBlob": "bb6fe6bb7ab4572a9e87798ada9468711d224b5d",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/ffi-compat/patches/glib-2-static.patch",
+          "bytes": 2198,
+          "sha256": "a1b3cb835461cc0091854b9c3ad63f5960f3671be80f89f45bf981ef2a669578",
+          "upstreamPath": "build/plugins/ffi-compat/patches/glib-2-static.patch",
+          "gitBlob": "df4af564a86d9a5816a95aec403a7e0083e1d1bb",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/ffi-compat/patches/glib-2-static.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/gtk4/directx-headers.mk",
+          "bytes": 704,
+          "sha256": "0466b8492a4b8be908c3dd03c8388d07692e8f39bf343b229d7a7cfa41c5ff60",
+          "upstreamPath": "build/plugins/gtk4/directx-headers.mk",
+          "gitBlob": "0175a38400350d5d14409c231e665aec7153fd47",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/directx-headers.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/gtk4/graphene.mk",
+          "bytes": 896,
+          "sha256": "f8b1744c233d680740d1d8bfa2ecbda7cc512e382cd47ecf8e155de466603027",
+          "upstreamPath": "build/plugins/gtk4/graphene.mk",
+          "gitBlob": "904b59437236de56801895a89afc6c0298e0eef3",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/graphene.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/gtk4/gtk4.mk",
+          "bytes": 1100,
+          "sha256": "92e18f85c76d2da7136c7fccd766e486f542e1dbb67235b3522f4138f3382ef5",
+          "upstreamPath": "build/plugins/gtk4/gtk4.mk",
+          "gitBlob": "f0529249fd76de7606e022b08ac75ea6864f0c61",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/gtk4.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/gtk4/overrides.mk",
+          "bytes": 1246,
+          "sha256": "8d40f9b28b0b6313f056c5b3bde37df02af5b40a34c7f319c641bb27cff4601c",
+          "upstreamPath": "build/plugins/gtk4/overrides.mk",
+          "gitBlob": "7201ba6736851286e13458592b919fe6fc1ff8a7",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/gtk4/patches/gtk-4-fixes.patch",
+          "bytes": 1780,
+          "sha256": "b686c13fea2486f5ccee6c73fb0ce66690849b97686f84e7e55592a16b155f39",
+          "upstreamPath": "build/plugins/gtk4/patches/gtk-4-fixes.patch",
+          "gitBlob": "44b025a6984e6a13c84171560cff0fb548bada46",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/gtk4/patches/gtk-4-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/hevc-deps/libde265.mk",
+          "bytes": 774,
+          "sha256": "40096e7ba74599c4e9a12266a00703335d523522100f98e6a66f27eb2c8ab23b",
+          "upstreamPath": "build/plugins/hevc-deps/libde265.mk",
+          "gitBlob": "fdb2b9ed198e321f252c7f95a6363493baf576f7",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/libde265.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/hevc-deps/overrides.mk",
+          "bytes": 3006,
+          "sha256": "22f31ead3b8f6473c758fab69973d87281c60aa2d7ed03f9653a30372dd2a1a3",
+          "upstreamPath": "build/plugins/hevc-deps/overrides.mk",
+          "gitBlob": "acade8b2be7fd18d92aabf2e2e6d76042e801b25",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/hevc-deps/patches/x265-4-fixes-crlf.patch",
+          "bytes": 1036,
+          "sha256": "834953e5467184f892d6d78da8d2cc93512fda606b2e3560b56993a3208b35d4",
+          "upstreamPath": "build/plugins/hevc-deps/patches/x265-4-fixes-crlf.patch",
+          "gitBlob": "8f00b72ebf4ab7577d7b0ae0895b161c50b64378",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/hevc-deps/patches/x265-4-fixes-crlf.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/jpegli/jpegli.mk",
+          "bytes": 1281,
+          "sha256": "b974096fa7f8067d2f4edca960ed58e3b0cbb298cb1f187b6df20238b545a655",
+          "upstreamPath": "build/plugins/jpegli/jpegli.mk",
+          "gitBlob": "86c84175a8c39f657658b51e5ae6b5257b21e2ae",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/jpegli.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/jpegli/overrides.mk",
+          "bytes": 695,
+          "sha256": "9780b2411f98d0dfbf611e08e967cd73135379e25d2a9d7dd766cfa19fcac690",
+          "upstreamPath": "build/plugins/jpegli/overrides.mk",
+          "gitBlob": "32e0253dc2c935a3b634f94262a0399934fbc012",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/jpegli/patches/jpegli-0.12-fixes.patch",
+          "bytes": 19103,
+          "sha256": "29a0504361cf47eaa20717ae6bfdc533715f9df5b0c705b399637a6d6ca49037",
+          "upstreamPath": "build/plugins/jpegli/patches/jpegli-0.12-fixes.patch",
+          "gitBlob": "620f02823e18a2b4f12fabcdc1b44d8859769794",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/jpegli/patches/jpegli-0.12-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/mozjpeg/mozjpeg.mk",
+          "bytes": 1064,
+          "sha256": "d5e7af68bce6e54b2fd7b50a5f70fa14aea43eff6ab044c7ac9256e1f672641f",
+          "upstreamPath": "build/plugins/mozjpeg/mozjpeg.mk",
+          "gitBlob": "a73d0dc268f4d6ee6d89adcc5183e78ca706b400",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/mozjpeg.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/mozjpeg/overrides.mk",
+          "bytes": 883,
+          "sha256": "e0c1de0e84ed7d46318452cdaead6111862bcd9b7ef37fa3b37f0b208cb9f7b4",
+          "upstreamPath": "build/plugins/mozjpeg/overrides.mk",
+          "gitBlob": "7b0d77418d9f98eaa92fa85930555b5fbe11c248",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch",
+          "bytes": 2420,
+          "sha256": "7952f72840a29a815740bbcdbf986903a800a97af3685d2654f0d020641e89c1",
+          "upstreamPath": "build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch",
+          "gitBlob": "a468c42be922c95cd6512f5e031ceda485812ec1",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch",
+          "bytes": 7615,
+          "sha256": "3ddb71285d43dde5c75a0080cc62cbc158d32359af132b8314e76b85b9205764",
+          "upstreamPath": "build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch",
+          "gitBlob": "aca5f7f2f6c691db1369fc86c01d01022e07b8ba",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/nightly/overrides.mk",
+          "bytes": 215,
+          "sha256": "44c54d98c92f9290aa232f95e0399a4b79cf5cebb47e765f4c92fb9dc161f19d",
+          "upstreamPath": "build/plugins/nightly/overrides.mk",
+          "gitBlob": "a9dee13e353d785299efdac4bee2c9df71e0a181",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/nightly/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/proxy-libintl/overrides.mk",
+          "bytes": 283,
+          "sha256": "7743f7bb299ef280d5f5718341de423a2be5c8553fb88b79cfd0d066a0e899fc",
+          "upstreamPath": "build/plugins/proxy-libintl/overrides.mk",
+          "gitBlob": "7d92a2200e57e33d74d0466b11331a29e9b3adc8",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch",
+          "bytes": 782,
+          "sha256": "a8386926e1023d3183a48a3f69687ab13ec5639ad07496cdf5f045f0993fb0fd",
+          "upstreamPath": "build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch",
+          "gitBlob": "fac0c5b1dd83bcdfbbb866d4a1b04a89193eda3b",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/proxy-libintl/proxy-libintl.mk",
+          "bytes": 675,
+          "sha256": "3322209995d2a56e84998007c6ef8aa7e3d87200490bff1c032e5c6caae04836",
+          "upstreamPath": "build/plugins/proxy-libintl/proxy-libintl.mk",
+          "gitBlob": "d1104817084bb3094a0da4160da0e6cd3d901be1",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/proxy-libintl.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/web-deps/overrides.mk",
+          "bytes": 462,
+          "sha256": "73175da2b6562abdead5ad66544858d83e6ce74cec62ee49a8619a93805388bb",
+          "upstreamPath": "build/plugins/web-deps/overrides.mk",
+          "gitBlob": "e1894ca3e792e01b52e469412c4177dd42421dcd",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/web-deps/vips-web.mk",
+          "bytes": 2664,
+          "sha256": "faffedbbb6d83ac063c48378656efffdf3445c7f2797281cefd0ca1860b21477",
+          "upstreamPath": "build/plugins/web-deps/vips-web.mk",
+          "gitBlob": "d99478a7068bdffec782722c321caa1166952290",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/vips-web.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/zlib-ng/overrides.mk",
+          "bytes": 1385,
+          "sha256": "ac2b54ad1429cca7486c1848f7709759adb6248df9ea3739e979fd58ee87dfb0",
+          "upstreamPath": "build/plugins/zlib-ng/overrides.mk",
+          "gitBlob": "a883ba5cb1e1b8e305e4fa40590d40f098741320",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/overrides.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch",
+          "bytes": 1031,
+          "sha256": "22f110cc8b1566db3726d0d448ab04cd11297f062368bdd77971adf9455b852b",
+          "upstreamPath": "build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch",
+          "gitBlob": "d3fe8107dbf81dd82b36d96517d4633e046e9b43",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/plugins/zlib-ng/zlib-ng.mk",
+          "bytes": 772,
+          "sha256": "6a5b902348cd00b68adfc436f2a349bcd0b44ed9a7b7289a21cf8c07e8c9a647",
+          "upstreamPath": "build/plugins/zlib-ng/zlib-ng.mk",
+          "gitBlob": "3608ee29d2862480834ee52b9a2178bccbb04a2a",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/zlib-ng.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/settings/debug.mk",
+          "bytes": 1179,
+          "sha256": "5adf14e1c147437d3f234f53f8a723c27a7e68e3daeb854759a621685939ea21",
+          "upstreamPath": "build/settings/debug.mk",
+          "gitBlob": "8c40839af32af2e31d594d91073cd54a5090011a",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/settings/debug.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/settings/release.mk",
+          "bytes": 1319,
+          "sha256": "39a2f1d06a7d6d2cc0c0756af7b646234e681ce752907f815d1c1f5075c3c2d6",
+          "upstreamPath": "build/settings/release.mk",
+          "gitBlob": "3d34bead4b492ac2e811aca9781465424096e63c",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/settings/release.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/uhdr.mk",
+          "bytes": 1023,
+          "sha256": "c7098df2dc28bcdcba9f89d1ec911a2811ab9234249c4c2b613130e44b6080cd",
+          "upstreamPath": "build/uhdr.mk",
+          "gitBlob": "195836b633802e176ad57fd14ed28ccc4469966b",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/uhdr.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/vips.mk",
+          "bytes": 1189,
+          "sha256": "8097e70cea300e6cac2e228b61eebd94d5a5c54981d5dcccbfe87934663be91c",
+          "upstreamPath": "build/vips.mk",
+          "gitBlob": "085d8ebe01b16c0bc09fa1c492f8d52eb62b4ccd",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/vips.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/build/vipsdisp.mk",
+          "bytes": 1269,
+          "sha256": "65cfe210e36f4198be2a524c92a408e555d75637f555e35a7f23436851178812",
+          "upstreamPath": "build/vipsdisp.mk",
+          "gitBlob": "7aef6a8277229b9ed10cbd17d8d3d76a71ec587a",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/vipsdisp.mk"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/container/Dockerfile",
+          "bytes": 925,
+          "sha256": "0817cff4f940ccf477997f93b6833f839e9ddaa9a0a865cdf64a96df510de747",
+          "upstreamPath": "container/Dockerfile",
+          "gitBlob": "f43bec7e043a04136195f29e3ab4bafc7c00a765",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/container/Dockerfile"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/container/base.Dockerfile",
+          "bytes": 854,
+          "sha256": "3a10f483c1965bb885bf2618423b491179b5886523cdeb35df3339aa7fd1d726",
+          "upstreamPath": "container/base.Dockerfile",
+          "gitBlob": "d7d90626ff0b669059b7a7abf37b6a2f62e45d66",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/container/base.Dockerfile"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/packaging/gendeflibs.sh",
+          "bytes": 1300,
+          "sha256": "2ecff5d96ee7eecbb98bd1209456dbe1e5875ea796780d2ba5c0efd29cb6c6ee",
+          "upstreamPath": "packaging/gendeflibs.sh",
+          "gitBlob": "5f5b758c0253189c43098f33528df04c5bde055e",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/gendeflibs.sh"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/packaging/package-vips.sh",
+          "bytes": 4923,
+          "sha256": "bd10062a2a507134ae4d610077a020c0a05348f7262e0e6d809ab75ba56fa389",
+          "upstreamPath": "packaging/package-vips.sh",
+          "gitBlob": "41d74b41b07def298b95905f448f521af600ceaf",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/package-vips.sh"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/packaging/package.sh",
+          "bytes": 613,
+          "sha256": "0e3d0c08f9ca6f1e41997a58d38b766db368021edc4ca27201adc4494ed22f27",
+          "upstreamPath": "packaging/package.sh",
+          "gitBlob": "c26deefbfdffa7992df923f55e60916cae1c6a0d",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/package.sh"
+        },
+        {
+          "path": "recipes/libvips-win64-mxe/packaging/variables.sh",
+          "bytes": 1057,
+          "sha256": "8054b721966778edbacc76fbcecac6d9061583fbb7c5d3ffefe6ae4c2aca8057",
+          "upstreamPath": "packaging/variables.sh",
+          "gitBlob": "32e0391c6dc19a9fedc6230e21cf8f6e088f535b",
+          "url": "https://raw.githubusercontent.com/libvips/build-win64-mxe/09cfccf20b91b441fbe97fa7a7ed8a597e55e830/packaging/variables.sh"
+        }
+      ]
+    }
+  ],
+  "patches": [
+    {
+      "path": "recipes/patches/glib-without-gregex.patch",
+      "bytes": 7759,
+      "sha256": "b1f2930a11292e529de137c7eb723850e0cc0969b1a2b0358196389312acd272",
+      "url": "https://gist.github.com/kleisauke/284d685efa00908da99ea6afbaaf39ae/raw/bdad5489a61c217850631571caf57f5db6ea8b2c/glib-without-gregex.patch",
+      "revision": "bdad5489a61c217850631571caf57f5db6ea8b2c",
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh"
+    },
+    {
+      "path": "recipes/patches/mozjpeg-simd-fdct.patch",
+      "bytes": 8103,
+      "sha256": "a65f87cadf3a6052e44d6314c906f6e2891352f82646b8a6f0b8fcf2c1891e7c",
+      "url": "https://github.com/mozilla/mozjpeg/commit/f90668e0e4fb79c81e1f24a0ccc0e2090af761bf.patch",
+      "revision": "f90668e0e4fb79c81e1f24a0ccc0e2090af761bf",
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh"
+    },
+    {
+      "path": "recipes/patches/libvips-cpp-soversion.patch",
+      "bytes": 514,
+      "sha256": "256b7d6f8c973bb53b20cff5171c7117d6b35d3aa4e72d22cb906f4fe1e2c890",
+      "url": "https://gist.githubusercontent.com/lovell/313a6901e9db1bf285f2a1f1180499e4/raw/3988223c7dfa4d22745d9392034b0117abef1446/libvips-cpp-soversion.patch",
+      "revision": "3988223c7dfa4d22745d9392034b0117abef1446",
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh"
+    }
+  ],
+  "unavailableInputs": [
+    {
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh",
+      "url": "https://patch-diff.githubusercontent.com/raw/google/libultrahdr/pull/383.patch",
+      "reason": "The recipe uses a mutable pull-request patch URL; the original response/revision was not archived."
+    },
+    {
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh",
+      "url": "https://raw.githubusercontent.com/lovell/sharp-libvips/main/THIRD-PARTY-NOTICES.md",
+      "reason": "The original main-branch download is not identified by a receipt. The existing notice at the npm gitHead is supplied separately without claiming the historical response."
+    },
+    {
+      "source": "sharp-libvips",
+      "upstreamPath": "build/posix.sh",
+      "url": "https://sh.rustup.rs",
+      "reason": "The bootstrap response and resolved nightly/cargo-c/compiler and Cargo workspace/vendor inputs are not held."
+    },
+    {
+      "source": "libvips-win64-mxe",
+      "upstreamPath": "container/Dockerfile",
+      "reference": "ghcr.io/libvips/build-win64-mxe:latest",
+      "reason": "The source tag names a floating default base image. This acquisition does not establish the original producer image digest or its contents."
+    }
+  ],
+  "limitations": [
+    "These files are source fragments and associated API responses, not a complete corresponding native-source or toolchain closure.",
+    "Observed-checkout groups are bound to the preserved upstream job logs. The MXE group identifies the current source tag of the release URL downloaded by the Windows packaging job; its original producer job and original ZIP response were not recovered.",
+    "Git source bytes are checked against their recorded Git blob IDs. External fixed-revision patches are the response bytes acquired on retrievedOn; their historical download response bytes were not archived.",
+    "Floating URLs and unresolved Cargo workspace/vendor inputs remain unavailable. Recipe version strings and log URLs do not prove possession of dependency archives or compiler binaries.",
+    "Original file notices and available repository license files are retained. The fragments do not establish all constituent licensing or any license-compatibility conclusion.",
+    "No compilation, binary replacement, identical historical binary output, historical toolchain replay, or release acceptance is established by this acquisition."
+  ]
+}

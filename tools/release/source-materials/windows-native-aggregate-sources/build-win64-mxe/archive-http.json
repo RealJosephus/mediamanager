@@ -1,0 +1,74 @@
+{
+  "requestedUrl": "https://codeload.github.com/libvips/build-win64-mxe/tar.gz/09cfccf20b91b441fbe97fa7a7ed8a597e55e830",
+  "responseUrl": "https://codeload.github.com/libvips/build-win64-mxe/tar.gz/09cfccf20b91b441fbe97fa7a7ed8a597e55e830",
+  "status": 200,
+  "headers": [
+    [
+      "Access-Control-Allow-Origin",
+      "https://render.githubusercontent.com"
+    ],
+    [
+      "content-disposition",
+      "attachment; filename=build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830.tar.gz"
+    ],
+    [
+      "Content-Security-Policy",
+      "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    ],
+    [
+      "Content-Type",
+      "application/x-gzip"
+    ],
+    [
+      "cross-origin-resource-policy",
+      "cross-origin"
+    ],
+    [
+      "ETag",
+      "\"e5a934ad54dab09c9034139d68a36948fdec755e2d88a244f409de336708b150\""
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Authorization,Accept-Encoding"
+    ],
+    [
+      "X-Content-Type-Options",
+      "nosniff"
+    ],
+    [
+      "X-Frame-Options",
+      "deny"
+    ],
+    [
+      "X-XSS-Protection",
+      "1; mode=block"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 14:00:58 GMT"
+    ],
+    [
+      "Transfer-Encoding",
+      "chunked"
+    ],
+    [
+      "X-GitHub-Request-Id",
+      "E312:1F08E5:13943:14C7D:6AE0AE9A"
+    ],
+    [
+      "x-github-edge-region",
+      "fra"
+    ],
+    [
+      "connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T14:01:00.646189+00:00",
+  "bytes": 64592,
+  "sha256": "4a12e22fe03198300a5b55fe66cc0123b4b05fed968aa2059cfc37747a8ae3b5"
+}

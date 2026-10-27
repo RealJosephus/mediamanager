@@ -1,0 +1,264 @@
+[
+  {
+    "path": "libimagequant-2.4.1/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "libimagequant-2.4.1/.github/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "libimagequant-2.4.1/.github/workflows/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "libimagequant-2.4.1/.github/workflows/ci.yml",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 973,
+    "sha256": "6e6e6a8c61e548244d93465c01beb74d54a0f8f4bb08f3b1fa7656aec990d55d",
+    "gitBlob": "43308b4414902e6fd2e0b0056e38e7ad36a35fc2"
+  },
+  {
+    "path": "libimagequant-2.4.1/.gitignore",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 6,
+    "sha256": "6e2710a423570bf474586343dc3cc5c936a80624a6cb9428bc1b19f08b0fd56f",
+    "gitBlob": "9c5f57827018f6a0435036d9515314e34604b9fe"
+  },
+  {
+    "path": "libimagequant-2.4.1/CHANGELOG",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 4599,
+    "sha256": "2561b4d7f0547efd6baaf7eea9e82114a8e86978764db6ccfe28bc58918464c8",
+    "gitBlob": "e096348c9f2a4d73b33ed5f52eefcceb33da1634"
+  },
+  {
+    "path": "libimagequant-2.4.1/COPYRIGHT",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1851,
+    "sha256": "7391bfbcde4404cefb9849553362c3ab436f929f5cc1abb57071ec045590ee99",
+    "gitBlob": "98de36b4d2678a2d9ae426033b14b8a012960c28"
+  },
+  {
+    "path": "libimagequant-2.4.1/README.md",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 572,
+    "sha256": "08a36b3647614bc649a1eb69a896b33f04a01637ba8c1348ce3b6aa33533c8ec",
+    "gitBlob": "a6a69871daaf754913563d03daa2908619f5dabb"
+  },
+  {
+    "path": "libimagequant-2.4.1/README.orig",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 22726,
+    "sha256": "71eadf363cad60493ff6e19156bc4b2c1d6f914a895248d6702f6b21d2622342",
+    "gitBlob": "79d95666683569a56a3a450bb020b44f37df6f8d"
+  },
+  {
+    "path": "libimagequant-2.4.1/blur.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3459,
+    "sha256": "970f8d9db8525f646ddf6fd54a2136ed37974782820c7a878f7aac17c1adf334",
+    "gitBlob": "9158ad49bc6a7298e369c3aa2023953f734ac1e0"
+  },
+  {
+    "path": "libimagequant-2.4.1/blur.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 364,
+    "sha256": "b36a2eacce2d809615a710b44a6be5f7a6eeea1aa23ef0fd88b87195a8aceb56",
+    "gitBlob": "06ae8cb49d8a733af054aab97697464ff307ff39"
+  },
+  {
+    "path": "libimagequant-2.4.1/libimagequant.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 62523,
+    "sha256": "bb8b96e83d5c9c0eb3841ca48d71e2d36ba08a3a2969646a0c043c6d8fb0ecda",
+    "gitBlob": "c1c9836671859db675ae964bec57931dcd3274b2"
+  },
+  {
+    "path": "libimagequant-2.4.1/libimagequant.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 4202,
+    "sha256": "22d7a9cda806fcd58d8cc6a0c4a248036050e5d26bba512c14ef3491156c22b7",
+    "gitBlob": "977a41185b7ed30c2083c9e1f06a42f984ea7256"
+  },
+  {
+    "path": "libimagequant-2.4.1/mediancut.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 17640,
+    "sha256": "daa497d412b17030e48bde23816ea946bb81437907f76f59ad6ff82c88494f05",
+    "gitBlob": "ad5da5622df09f5a9623059a047e5d1c6c3e70e0"
+  },
+  {
+    "path": "libimagequant-2.4.1/mediancut.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 196,
+    "sha256": "c007700b633925f4063ad61856e0c3d5b712b7aff2dfdc01191df4d61e8c5b5d",
+    "gitBlob": "e615c8dc9745bd9e7b7e2095137459dc360ecd8a"
+  },
+  {
+    "path": "libimagequant-2.4.1/mempool.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1949,
+    "sha256": "a322bfc5f3d306aae9787c6b0a6a79eb06fab250cb0c3e74290bb1e25cf39e07",
+    "gitBlob": "032d80ab27dc8bca5b7a03f15db78d2b049de972"
+  },
+  {
+    "path": "libimagequant-2.4.1/mempool.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 388,
+    "sha256": "a5231379432be7fa1f7246deadff7c84d3b6739a6c6b180c400fb1d8aa33ca64",
+    "gitBlob": "e61b8dd08082af5fc7903e1d50a38aec4f78f2b7"
+  },
+  {
+    "path": "libimagequant-2.4.1/meson.build",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1076,
+    "sha256": "f2874f9fe1bca5f28c2d8f89273e5fc24e29042bd5f3685e60d383300750c043",
+    "gitBlob": "f66ad9df6ea6438630e5b474e4c1db628a1cc77b"
+  },
+  {
+    "path": "libimagequant-2.4.1/nearest.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 7329,
+    "sha256": "ba75249959c4e5189d67decaf864333d8e1b41d057d28c8c36cedc2126064d19",
+    "gitBlob": "22366f98e064d9772dde147bbc4795a46ffc2a3c"
+  },
+  {
+    "path": "libimagequant-2.4.1/nearest.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 355,
+    "sha256": "89f771402dfd87661a678041e48758e7b5a9c8f4f6e02759cf9c29af0c0fe0f1",
+    "gitBlob": "9745d9592c113e54b2265ce8284bfe53ff77eaea"
+  },
+  {
+    "path": "libimagequant-2.4.1/pam.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 11197,
+    "sha256": "c65b45148ff83e1837b4e8a558dd7e3170a95782c6907f1d96d0b7b83dacc728",
+    "gitBlob": "0c7fb28b792f39373097812f5630e9c8dac3c4d1"
+  },
+  {
+    "path": "libimagequant-2.4.1/pam.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 10140,
+    "sha256": "18271401105d0b3aff18b65739cdacebcfc8f8ebc43bf1474c5b8fd7cf7286cf",
+    "gitBlob": "21bf64e478d005610c4e9ebd658b847bc4530bd9"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/arm64-neon.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1385,
+    "sha256": "f3bcc1078cc49e6ff1e5cf8c8444a80b110e7fcb212fc891c1659a44a9f3bcd4",
+    "gitBlob": "d8f77f9a41aac0ba4046fe438aa8d3504ae9f5aa"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/colordifference-float.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1720,
+    "sha256": "1650978fe6a59124aa3677a62d55a40c57c2ffb0069440b8a271b77dff11ccfb",
+    "gitBlob": "9d11e6f8c037b45a1bad7bc820b4057b39361cc5"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/de-recurse.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3263,
+    "sha256": "cf167d40d9db371fe5f52456bb8e6a70ce35f4909ca79e8c68f22f22022fdeaf",
+    "gitBlob": "42f3f6aad98c25bd8532b178517cc1f561e80ab0"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/remap-heap-1.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 630,
+    "sha256": "e64755ce9d2c37c03fbb47a735d7ae33b8000e4fd55b65d51f208af3beb28e4d",
+    "gitBlob": "88afd04a0c349d2960e4914d3e3722e97f328561"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/remap-heap-2.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 719,
+    "sha256": "939915a0d64a6246f7586b412ebacdc52d1d7568ef5b5b80523c61cf85416733",
+    "gitBlob": "e45d8a290f9121444d705c3d6b5a5cbe4a542dff"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/sse41-dot-product.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 1086,
+    "sha256": "b734dbbba28fdfab8c7fdbec0338cf596232616eb4254aa24fce07c437d3b1af",
+    "gitBlob": "21bad172934a4ff4e91b138527728126ff0bf755"
+  },
+  {
+    "path": "libimagequant-2.4.1/patches/wasm-simd.patch",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 707,
+    "sha256": "54da98a2f166cc22740825398a8addb4128098099962e255ffc91d1fdaf0879b",
+    "gitBlob": "fca09b9e7ed7af57157551a08e6e596c3372495f"
+  },
+  {
+    "path": "libimagequant-2.4.1/test/",
+    "kind": "directory",
+    "mode": 509,
+    "bytes": 0
+  },
+  {
+    "path": "libimagequant-2.4.1/test/test.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3608,
+    "sha256": "7c2d8879dd7f2701e2609477873b9844d3e503b14091bbf87fa0f21d366f8e10",
+    "gitBlob": "6469f1ae2cc186ee522c4adad7d26020cbfedd8a"
+  },
+  {
+    "path": "libimagequant-2.4.1/viter.c",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 3350,
+    "sha256": "8deb7cf3852ae99e47d2c833026db3ee327ec1439e63ba287980d7007c396f8d",
+    "gitBlob": "9d01ca9601afc48defd002e447593d54e5641ba6"
+  },
+  {
+    "path": "libimagequant-2.4.1/viter.h",
+    "kind": "file",
+    "mode": 436,
+    "bytes": 933,
+    "sha256": "7e6b853c67523c85a3ff8b64de26b19e50b14f980261a4965b30ad3926546d9c",
+    "gitBlob": "c1a5b391a5c19d177ada58cebefc6301bc025773"
+  }
+]

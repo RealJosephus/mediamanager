@@ -1,0 +1,6 @@
+tree e60c1fed37ccb3b35d15d3feaa0abcf09a6695a0
+parent 7a332a0d6effbe6367f41cecfc0e4e105cfe3501
+author Evgenii Kliuchnikov <eustas@google.com> 1770669522 +0000
+committer Eugene Kliuchnikov <eustas@google.com> 1770731602 +0100
+
+Bump version to 0.11.2

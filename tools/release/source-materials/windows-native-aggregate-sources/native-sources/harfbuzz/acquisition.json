@@ -1,0 +1,117 @@
+{
+  "selectedSource": {
+    "file": "harfbuzz-14.3.1.tar.xz",
+    "sha256": "9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7",
+    "url": "https://github.com/harfbuzz/harfbuzz/releases/download/14.3.1/harfbuzz-14.3.1.tar.xz",
+    "url2": "https://github.com/harfbuzz/harfbuzz/archive/14.3.1.tar.gz",
+    "packages": [
+      "harfbuzz"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://github.com/harfbuzz/harfbuzz/releases/download/14.3.1/harfbuzz-14.3.1.tar.xz",
+    "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/5050525/8dc9f48d-57d0-4828-a6c8-ddf02f9fd9c1?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T15%3A28%3A41Z&rscd=attachment%3B+filename%3Dharfbuzz-14.3.1.tar.xz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T14%3A28%3A14Z&ske=2026-10-27T15%3A28%3A41Z&sks=b&skv=2018-11-09&sig=NutSv36YzxkJHIIJr6A6SkPYEHz1nXYcLsMdLuwbGMk%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzExMzE0OCwibmJmIjoxNzkzMTExMzQ4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.0UEUIa932qq6IhEHXOViTzG6W2H-RKcg92kguncjJ_Q&response-content-disposition=attachment%3B%20filename%3Dharfbuzz-14.3.1.tar.xz&response-content-type=application%2Foctet-stream",
+    "status": 200,
+    "headers": [
+      [
+        "Connection",
+        "close"
+      ],
+      [
+        "Content-Length",
+        "19826476"
+      ],
+      [
+        "Last-Modified",
+        "Wed, 12 Aug 2026 22:53:44 GMT"
+      ],
+      [
+        "ETag",
+        "\"0x8DEF8C48FF45EA9\""
+      ],
+      [
+        "Server",
+        "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+      ],
+      [
+        "x-ms-request-id",
+        "8e6f5bcf-401e-0014-21d0-64a93a000000"
+      ],
+      [
+        "x-ms-version",
+        "2018-11-09"
+      ],
+      [
+        "x-ms-creation-time",
+        "Wed, 12 Aug 2026 22:53:44 GMT"
+      ],
+      [
+        "x-ms-lease-status",
+        "unlocked"
+      ],
+      [
+        "x-ms-lease-state",
+        "available"
+      ],
+      [
+        "x-ms-blob-type",
+        "BlockBlob"
+      ],
+      [
+        "x-ms-server-encrypted",
+        "true"
+      ],
+      [
+        "x-ms-access-tier",
+        "Hot"
+      ],
+      [
+        "x-ms-access-tier-inferred",
+        "true"
+      ],
+      [
+        "Via",
+        "1.1 varnish, 1.1 varnish"
+      ],
+      [
+        "Accept-Ranges",
+        "bytes"
+      ],
+      [
+        "Age",
+        "0"
+      ],
+      [
+        "Date",
+        "Tue, 27 Oct 2026 14:29:08 GMT"
+      ],
+      [
+        "X-Served-By",
+        "cache-iad-kiad7000154-IAD, cache-muc13955-MUC"
+      ],
+      [
+        "X-Cache",
+        "HIT, MISS"
+      ],
+      [
+        "X-Cache-Hits",
+        "52, 0"
+      ],
+      [
+        "X-Timer",
+        "S1793111348.377645,VS0,VE101"
+      ],
+      [
+        "Content-Disposition",
+        "attachment; filename=harfbuzz-14.3.1.tar.xz"
+      ],
+      [
+        "Content-Type",
+        "application/octet-stream"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:12.245902+00:00",
+    "bytes": 19826476,
+    "sha256": "9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7"
+  }
+}

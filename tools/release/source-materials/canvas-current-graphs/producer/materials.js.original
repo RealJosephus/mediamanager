@@ -1,0 +1,724 @@
+import { createHash } from 'node:crypto';
+import { createReadStream } from 'node:fs';
+import { copyFile, lstat, mkdir, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { isDeepStrictEqual } from 'node:util';
+import { gunzipSync } from 'node:zlib';
+import { completeMitText, resolveDependencyLicenseTexts } from './license-texts.js';
+
+const slash = value => value.split(path.sep).join('/');
+export const json = async filename => JSON.parse(await readFile(filename, 'utf8'));
+export const writeJson = (filename, value) => writeFile(filename, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+
+export function inside(root, filename) {
+  const relative = path.relative(path.resolve(root), path.resolve(filename));
+  if (!relative || relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) {
+    throw new Error('Expected a path strictly inside the release directory.');
+  }
+  return slash(relative);
+}
+
+export async function createReleaseDirectory(root, output) {
+  root = await realpath(root); output = path.resolve(output);
+  const parent = path.join(root, '.test-output'); await mkdir(parent, { recursive: true });
+  if (await realpath(parent) !== parent) throw new Error('Release output parent is redirected.');
+  if (path.dirname(output) !== parent) throw new Error('Release output must be a new direct child of .test-output.');
+  inside(parent, output); await mkdir(output, { recursive: false });
+  return parent;
+}
+
+export async function fileIdentity(filename) {
+  const hash = createHash('sha256');
+  let bytes = 0;
+  for await (const chunk of createReadStream(filename)) { hash.update(chunk); bytes += chunk.length; }
+  return { bytes, sha256: hash.digest('hex') };
+}
+
+export async function tree(root, prefix = '', skip = () => false) {
+  const entries = [];
+  async function visit(relative) {
+    if (skip(slash(relative))) return;
+    const filename = path.join(root, relative), info = await lstat(filename);
+    inside(root, filename);
+    if (info.isSymbolicLink()) {
+      const target = await realpath(filename); inside(root, target);
+      entries.push({ path: slash(relative), kind: 'link', target: slash(path.relative(path.dirname(filename), target)) });
+    } else if (info.isDirectory()) {
+      for (const name of (await readdir(filename)).sort()) await visit(path.join(relative, name));
+    } else if (info.isFile()) entries.push({ path: slash(relative), ...await fileIdentity(filename) });
+    else throw new Error('Unsupported release member: ' + relative);
+  }
+  if (prefix) await visit(prefix);
+  else for (const name of (await readdir(root)).sort()) await visit(name);
+  return entries;
+}
+
+export async function verifyFiles(root, expected, { prefix = '', skip } = {}) {
+  const actual = await tree(root, prefix, skip);
+  const byPath = (a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0;
+  if (!isDeepStrictEqual(actual.toSorted(byPath), expected.toSorted(byPath))) throw new Error('Release file membership or bytes changed.');
+}
+
+export async function copyRegular(root, destination, names) {
+  for (const name of names) {
+    const source = path.join(root, name), target = path.join(destination, name);
+    inside(root, source); inside(destination, target);
+    if (!(await lstat(source)).isFile() || await realpath(source) !== path.resolve(source)) {
+      throw new Error('Expected an ordinary release source file: ' + name);
+    }
+    await mkdir(path.dirname(target), { recursive: true }); await copyFile(source, target);
+  }
+}
+
+export async function removeOwned(root, filename) {
+  inside(await realpath(root), path.resolve(filename));
+  await rm(filename, { recursive: true, force: true });
+}
+
+function collect(child) {
+  return new Promise((resolve, reject) => {
+    child.stdout.setEncoding('utf8'); child.stderr.setEncoding('utf8');
+    let stdout = '', stderr = '', stdoutBytes = 0, overflow = false;
+    child.stdout.on('data', chunk => {
+      stdout += chunk;
+      stdoutBytes += Buffer.byteLength(chunk);
+      if (stdoutBytes > 16 * 1024 * 1024) { overflow = true; child.kill(); }
+    });
+    child.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-1024 * 1024); });
+    child.once('error', reject);
+    child.once('close', (code, signal) => overflow ? reject(new Error('Command output exceeds the complete-output limit.'))
+      : code === 0 && !signal ? resolve(stdout)
+      : reject(new Error(`${path.basename(child.spawnfile)} failed (${signal ?? code}): ${stderr || stdout}`)));
+  });
+}
+
+export function nodeCommand(args, { cwd, env = process.env } = {}) {
+  return collect(spawn(process.execPath, args, { cwd, env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] }));
+}
+
+export function gitCommand(args, { cwd } = {}) {
+  return collect(spawn('git', args, { cwd, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] }));
+}
+
+export async function npmCli() {
+  for (const filename of [process.env.npm_execpath,
+    path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js'),
+    path.resolve(path.dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js')].filter(Boolean)) {
+    try { if ((await lstat(filename)).isFile()) return filename; } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  }
+  throw new Error('Node.js with its npm CLI is required.');
+}
+
+export async function install(root, cache, work, offline = false) {
+  await mkdir(work, { recursive: true });
+  const config = path.join(work, 'npmrc'), globalConfig = path.join(work, 'global-npmrc');
+  await writeFile(config, '', { flag: 'wx' }); await writeFile(globalConfig, '', { flag: 'wx' });
+  const cli = await npmCli();
+  await nodeCommand([cli, 'ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund',
+    '--cache', cache, '--userconfig', config, '--globalconfig', globalConfig, ...(offline ? ['--offline'] : [])], { cwd: root });
+  return (await nodeCommand([cli, '--version', '--cache', cache,
+    '--userconfig', config, '--globalconfig', globalConfig], { cwd: root })).trim();
+}
+
+export const dependencySkip = name => name === 'node_modules/.package-lock.json' || name === 'node_modules/.bin'
+  || name.includes('/node_modules/.bin');
+export const deliverySkip = name => name === 'release.json' || name === 'node_modules' || name === '.test-output';
+
+export async function dependencyMaterials(root, lock, cacheFiles) {
+  const packages = [], manifests = new Map();
+  const integrities = new Map();
+  for (const entry of cacheFiles) {
+    const hash = createHash('sha512');
+    for await (const chunk of createReadStream(path.join(root, entry.path))) hash.update(chunk);
+    integrities.set('sha512-' + hash.digest('base64'), entry.path);
+  }
+  for (const [name, locked] of Object.entries(lock.packages)) {
+    if (!name.startsWith('node_modules/')) continue;
+    const directory = path.join(root, name);
+    let manifest;
+    try { manifest = await json(path.join(directory, 'package.json')); }
+    catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+    inside(root, await realpath(directory));
+    if (!locked.link && manifest.version !== locked.version) throw new Error('Installed package differs from lock: ' + name);
+    manifests.set(name, manifest);
+    const licenses = [], licenseTexts = [], componentVersions = [];
+    if (locked.link) { licenses.push('LICENSE'); licenseTexts.push('LICENSE'); }
+    else {
+      const files = await tree(directory, '', value => value === 'node_modules');
+      for (const file of files) {
+        if (!file.kind && path.basename(file.path).toLowerCase() === 'versions.json') {
+          const relative = path.posix.join(name, file.path);
+          try { componentVersions.push({ path: relative, values: await json(path.join(root, relative)) }); }
+          catch (error) { componentVersions.push({ path: relative, error: error.message }); }
+        }
+        const namedLicense = /(?:^|[._-])(?:licen[cs]e|copying|notices?|copyright|authors)(?:[._-]|$)/iu.test(path.basename(file.path));
+        const readme = /^readme(?:[._-].*)?$/iu.test(path.basename(file.path));
+        if (file.kind || !namedLicense && !readme) continue;
+        const target = path.posix.join('third-party-licenses', name, file.path);
+        await mkdir(path.dirname(path.join(root, target)), { recursive: true });
+        await copyFile(path.join(directory, file.path), path.join(root, target)); licenses.push(target);
+        if (/(?:^|[._-])(?:licen[cs]e|copying)(?:[._-]|$)/iu.test(path.basename(file.path))
+          || manifest.license === 'MIT' && completeMitText(await readFile(path.join(directory, file.path), 'utf8'))) {
+          licenseTexts.push(target);
+        }
+      }
+    }
+    const distribution = locked.link ? { workspace: locked.resolved }
+      : { url: locked.resolved, integrity: locked.integrity, archive: integrities.get(locked.integrity) };
+    if (!locked.link && !distribution.archive) throw new Error('Locked npm distribution is absent from the supplied cache: ' + name);
+    packages.push({ path: name, name: manifest.name, version: manifest.version, license: manifest.license,
+      licenses, licenseTexts, distribution, repository: manifest.repository,
+      ...(componentVersions.length ? { componentVersions } : {}) });
+  }
+  return { packages, unavailableLicenseTexts: await resolveDependencyLicenseTexts(root, packages, manifests) };
+}
+
+function requirePinnedMember(entries, relative, pin = {}) {
+  const actual = entries.get(relative);
+  if (!actual || actual.kind || pin.bytes !== undefined && actual.bytes !== pin.bytes
+    || pin.sha256 !== undefined && actual.sha256 !== pin.sha256) throw new Error('Source material is missing or changed: ' + relative);
+}
+
+async function recipeFragmentMaterials(root, directory, entries, pin, logs) {
+  if (!pin?.path) throw new Error('Recipe source catalog is missing.');
+  requirePinnedMember(entries, path.posix.join(directory, pin.path), pin);
+  const catalog = await json(path.join(root, directory, pin.path));
+  const sources = new Map();
+  const readReceipt = async receipt => {
+    requirePinnedMember(entries, path.posix.join(directory, receipt.path), receipt);
+    return await json(path.join(root, directory, receipt.path));
+  };
+  for (const source of catalog.sources) {
+    if (sources.has(source.id)) throw new Error('Recipe source identity is duplicated: ' + source.id);
+    const commit = await readReceipt(source.commitReceipt), tree = await readReceipt(source.treeReceipt);
+    const api = 'https://api.github.com/repos/' + source.repository;
+    if (commit.sha !== source.candidate.commit || commit.tree.sha !== source.candidate.tree
+      || commit.url !== `${api}/git/commits/${source.candidate.commit}`
+      || tree.sha !== source.candidate.tree || tree.url !== `${api}/git/trees/${source.candidate.tree}` || tree.truncated) {
+      throw new Error('Recipe Git source identity changed: ' + source.id);
+    }
+    const evidence = source.evidence;
+    if (!evidence.logAnchors.length) throw new Error('Recipe source has no observed build evidence: ' + source.id);
+    for (const anchor of evidence.logAnchors) {
+      const observed = logs.get(anchor.jobId);
+      if (!observed || !observed.text.includes(anchor.text)) throw new Error('Recipe build-log observation changed: ' + source.id);
+      if (evidence.kind === 'observed-checkout' && (observed.source.repository !== source.repository
+        || !isDeepStrictEqual(observed.source.candidate, source.candidate))) {
+        throw new Error('Recipe checkout differs from its observed build: ' + source.id);
+      }
+    }
+    if (evidence.kind === 'downloaded-release-tag-source') {
+      const tag = await readReceipt(evidence.tagReceipt), release = await readReceipt(evidence.releaseReceipt);
+      const assets = release.assets.filter(asset => asset.browser_download_url === evidence.downloadUrl);
+      if (tag.ref !== 'refs/tags/' + evidence.tag || tag.object.type !== 'commit' || tag.object.sha !== source.candidate.commit
+        || tag.url !== `${api}/git/refs/tags/${evidence.tag}` || release.tag_name !== evidence.tag
+        || release.html_url !== `https://github.com/${source.repository}/releases/tag/${evidence.tag}`
+        || assets.length !== 1 || Object.keys(evidence.asset).some(key => assets[0][key] !== evidence.asset[key])
+        || !evidence.logAnchors.some(anchor => anchor.text.includes(evidence.downloadUrl))) {
+        throw new Error('Recipe release-tag association changed: ' + source.id);
+      }
+    } else if (evidence.kind !== 'observed-checkout') throw new Error('Unknown recipe source evidence: ' + source.id);
+    const upstreamFiles = new Map(tree.tree.map(member => [member.path, member])), files = new Map();
+    for (const file of source.files) {
+      requirePinnedMember(entries, path.posix.join(directory, file.path), file);
+      const member = upstreamFiles.get(file.upstreamPath), bytes = await readFile(path.join(root, directory, file.path));
+      const gitBlob = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+      if (!member || member.type !== 'blob' || !['100644', '100755'].includes(member.mode)
+        || member.sha !== file.gitBlob || member.size !== bytes.length || gitBlob !== file.gitBlob
+        || file.url !== `https://raw.githubusercontent.com/${source.repository}/${source.candidate.commit}/${file.upstreamPath}`
+        || files.has(file.upstreamPath)) throw new Error('Recipe Git blob changed: ' + file.upstreamPath);
+      files.set(file.upstreamPath, bytes);
+    }
+    sources.set(source.id, files);
+  }
+  for (const patch of catalog.patches) {
+    requirePinnedMember(entries, path.posix.join(directory, patch.path), patch);
+    if (!/^[a-f0-9]{40}$/u.test(patch.revision) || !patch.url.includes('/' + patch.revision)
+      || !sources.get(patch.source)?.get(patch.upstreamPath)?.toString('utf8').includes(patch.url)) {
+      throw new Error('Patch source differs from its recorded recipe: ' + patch.path);
+    }
+  }
+  return catalog;
+}
+
+export function sourceArchiveMembers(archive, expected) {
+  const limit = expected.reduce((bytes, member) => bytes + Math.ceil(member.bytes / 512) * 512
+    + 1536 + Buffer.byteLength(member.path), 10240);
+  const raw = gunzipSync(archive, { maxOutputLength: limit }), members = new Map();
+  const text = value => value.toString('utf8').split('\0')[0];
+  let offset = 0, longName;
+  while (offset + 512 <= raw.length) {
+    const header = raw.subarray(offset, offset + 512);
+    if (header.every(value => value === 0)) break;
+    const prefix = text(header.subarray(345, 500)), name = text(header.subarray(0, 100));
+    const filename = longName ?? (prefix ? prefix + '/' + name : name), size = text(header.subarray(124, 136)).trim();
+    const bytes = Number.parseInt(size, 8), start = offset + 512;
+    if (!/^[0-7]+$/u.test(size) || !Number.isSafeInteger(bytes) || start + bytes > raw.length) {
+      throw new Error('Unsupported published source member: ' + filename);
+    }
+    // The locked libavif-sys crate uses GNU long-name headers for nineteen paths.
+    if (header[156] === 76 && longName === undefined) {
+      longName = text(raw.subarray(start, start + bytes));
+      offset = start + Math.ceil(bytes / 512) * 512;
+      continue;
+    }
+    // The original Git source archive has a global PAX comment and an explicit root directory.
+    if (header[156] === 103 || header[156] === 53 && bytes === 0) {
+      if (longName !== undefined) throw new Error('Unsupported published source member: ' + filename);
+      offset = start + Math.ceil(bytes / 512) * 512;
+      continue;
+    }
+    if (![0, 48].includes(header[156]) || members.has(filename)) throw new Error('Unsupported published source member: ' + filename);
+    members.set(filename, raw.subarray(start, start + bytes));
+    longName = undefined;
+    offset = start + Math.ceil(bytes / 512) * 512;
+  }
+  if (longName !== undefined || offset + 1024 > raw.length || raw.subarray(offset).some(value => value !== 0)) throw new Error('Published source archive is incomplete.');
+  const actual = [...members].map(([path, bytes]) => ({ path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') }));
+  const byPath = (a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0;
+  if (!isDeepStrictEqual(actual.toSorted(byPath), expected.toSorted(byPath))) throw new Error('Published source catalog differs from the locked archive.');
+  return members;
+}
+
+export function cargoString(block, key) {
+  for (const line of block?.split(/\r?\n/u) ?? []) {
+    const field = /^\s*([a-z][a-z0-9_-]*)\s*=\s*("(?:[^"\\]|\\.)*")\s*$/u.exec(line);
+    if (field?.[1] === key) return JSON.parse(field[2]);
+  }
+}
+
+async function cargoSourceMaterials(root, directory, entries, cargo, ownerFiles) {
+  const lock = ownerFiles.get(cargo.lockFile);
+  if (cargo.lockFile !== 'Cargo.lock' || !lock) throw new Error('Native Cargo source lock is not held by its original Canvas source.');
+  const packages = lock.toString('utf8').split(/^\[\[package\]\]\r?$/mu).slice(1);
+  for (const source of cargo.crates) {
+    const locked = packages.filter(block => cargoString(block, 'name') === source.name && cargoString(block, 'version') === source.version);
+    requirePinnedMember(entries, path.posix.join(directory, source.registry.receipt.path), source.registry.receipt);
+    const response = await json(path.join(root, directory, source.registry.receipt.path)), metadata = response.version;
+    if (locked.length !== 1 || cargoString(locked[0], 'source') !== source.source
+      || source.source !== 'registry+https://github.com/rust-lang/crates.io-index'
+      || metadata.crate !== source.name || metadata.num !== source.version || metadata.checksum !== cargoString(locked[0], 'checksum')
+      || source.registry.url !== `https://crates.io/api/v1/crates/${source.name}/${encodeURIComponent(source.version)}`
+      || metadata.dl_path !== `/api/v1/crates/${source.name}/${source.version}/download`
+      || source.archive.url !== `https://static.crates.io/crates/${source.name}/${source.name}-${source.version}.crate`) {
+      throw new Error('Published Cargo source registry differs from the original Canvas lock: ' + source.name);
+    }
+    requirePinnedMember(entries, path.posix.join(directory, source.archive.path), source.archive);
+    const archive = await readFile(path.join(root, directory, source.archive.path));
+    if (archive.length !== metadata.crate_size || createHash('sha256').update(archive).digest('hex') !== cargoString(locked[0], 'checksum')) {
+      throw new Error('Published Cargo source archive differs from its original Cargo.lock checksum: ' + source.name);
+    }
+    const members = sourceArchiveMembers(archive, source.members), prefix = source.name + '-' + source.version + '/';
+    const manifest = members.get(prefix + 'Cargo.toml')?.toString('utf8').split(/^\[package\]\r?$/mu)[1]?.split(/^\[/mu)[0];
+    if (cargoString(manifest, 'name') !== source.name || cargoString(manifest, 'version') !== source.version
+      || source.vcs.member !== prefix + '.cargo_vcs_info.json'
+      || !isDeepStrictEqual(JSON.parse(members.get(source.vcs.member)?.toString('utf8') ?? 'null'), source.vcs.value)) {
+      throw new Error('Published Cargo package or VCS identity changed: ' + source.name);
+    }
+    for (const notice of source.notices) {
+      requirePinnedMember(entries, path.posix.join(directory, notice.path), notice);
+      if (!members.get(notice.member)?.equals(await readFile(path.join(root, directory, notice.path)))) {
+        throw new Error('Published Cargo notice differs from its archive member: ' + notice.member);
+      }
+    }
+    if (source.repositoryNotice) {
+      const related = source.repositoryNotice;
+      if (related.candidate.commit !== source.vcs.value.git.sha1 || cargoString(manifest, 'repository') !== `https://github.com/${related.repository}`) {
+        throw new Error('Cargo repository notice differs from its published VCS base: ' + source.name);
+      }
+      await gitSourceMaterials(root, directory, entries, related);
+    }
+  }
+}
+
+async function gitSourceMaterials(root, directory, entries, source) {
+  const readReceipt = async receipt => {
+    requirePinnedMember(entries, path.posix.join(directory, receipt.path), receipt);
+    return await json(path.join(root, directory, receipt.path));
+  };
+  const api = 'https://api.github.com/repos/' + source.repository;
+  const commit = await readReceipt(source.commitReceipt), trees = new Map();
+  for (const tree of source.trees) {
+    const receipt = await readReceipt(tree.receipt);
+    if (receipt.truncated || receipt.url !== `${api}/git/trees/${receipt.sha}` || trees.has(tree.prefix)) throw new Error('Native recipe Git tree changed.');
+    trees.set(tree.prefix, receipt);
+  }
+  const rootTree = trees.get('');
+  if (commit.sha !== source.candidate.commit || commit.tree.sha !== source.candidate.tree
+    || commit.url !== `${api}/git/commits/${source.candidate.commit}` || rootTree?.sha !== source.candidate.tree) {
+    throw new Error('Native recipe Git source identity changed.');
+  }
+  for (const [prefix, receipt] of trees) {
+    if (prefix && !rootTree.tree.some(member => member.path === prefix && member.type === 'tree' && member.sha === receipt.sha)) {
+      throw new Error('Native recipe Git subtree differs from its source commit: ' + prefix);
+    }
+  }
+  const files = new Map();
+  for (const file of source.files) {
+    requirePinnedMember(entries, path.posix.join(directory, file.path), file);
+    const bytes = await readFile(path.join(root, directory, file.path));
+    const tree = [...trees].toSorted((a, b) => b[0].length - a[0].length)
+      .find(([prefix]) => !prefix || file.upstreamPath.startsWith(prefix + '/'));
+    const relative = tree[0] ? file.upstreamPath.slice(tree[0].length + 1) : file.upstreamPath;
+    const member = tree[1].tree.find(member => member.path === relative);
+    const gitBlob = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+    if (!member || member.type !== 'blob' || !['100644', '100755'].includes(member.mode) || member.size !== bytes.length
+      || member.sha !== file.gitBlob || gitBlob !== file.gitBlob || files.has(file.upstreamPath)
+      || file.url !== `https://raw.githubusercontent.com/${source.repository}/${source.candidate.commit}/${file.upstreamPath}`) {
+      throw new Error('Native recipe Git blob changed: ' + file.upstreamPath);
+    }
+    files.set(file.upstreamPath, bytes);
+  }
+  for (const prefix of source.completeDirectories) {
+    const tree = trees.get(prefix), held = [...files.keys()].filter(name => !prefix || name.startsWith(prefix + '/'))
+      .map(name => prefix ? name.slice(prefix.length + 1) : name);
+    if (!tree || tree.tree.some(member => member.type !== 'blob')
+      || !isDeepStrictEqual(held.toSorted(), tree.tree.map(member => member.path).toSorted())) {
+      throw new Error('Native source directory is incomplete: ' + (prefix || '.'));
+    }
+  }
+  return { rootTree, files };
+}
+
+async function gitlabSourceMaterials(root, directory, entries, source) {
+  const read = async pin => {
+    requirePinnedMember(entries, path.posix.join(directory, pin.path), pin);
+    return await readFile(path.join(root, directory, pin.path));
+  };
+  const repository = new URL(source.repository);
+  const api = repository.origin + '/api/v4/projects/' + encodeURIComponent(repository.pathname.slice(1));
+  const tag = JSON.parse(await read(source.tagReceipt)), tagObject = await read(source.tagObject), commit = await read(source.commitObject);
+  const identity = (kind, bytes) => createHash('sha1').update(`${kind} ${bytes.length}\0`).update(bytes).digest('hex');
+  const tagHeader = new Map(tagObject.toString('utf8').split('\n\n')[0].split('\n').map(line => {
+    const space = line.indexOf(' '); return [line.slice(0, space), line.slice(space + 1)];
+  }));
+  if (source.tagReceipt.url !== `${api}/repository/tags/${encodeURIComponent(source.versionRef)}`
+    || tag.name !== source.versionRef || tag.commit.id !== source.candidate.commit
+    || tag.commit.web_url !== `${source.repository}/-/commit/${source.candidate.commit}`
+    || identity('tag', tagObject) !== tag.target || tagHeader.get('tag') !== source.versionRef
+    || tagHeader.get('type') !== 'commit' || tagHeader.get('object') !== source.candidate.commit
+    || identity('commit', commit) !== source.candidate.commit || !commit.toString('utf8').startsWith(`tree ${source.candidate.tree}\n`)) {
+    throw new Error('Native GitLab release source identity changed.');
+  }
+  const members = [];
+  for (const receipt of source.rootTreeReceipts) {
+    const url = new URL(receipt.url);
+    if (url.origin + url.pathname !== `${api}/repository/tree` || url.searchParams.get('ref') !== source.candidate.commit) {
+      throw new Error('Native GitLab root tree source changed.');
+    }
+    members.push(...JSON.parse(await read(receipt)));
+  }
+  const treeName = member => Buffer.from(member.name + (member.type === 'tree' ? '/' : ''));
+  const tree = Buffer.concat(members.toSorted((a, b) => Buffer.compare(treeName(a), treeName(b))).map(member => Buffer.concat([
+    Buffer.from(member.mode.replace(/^0+/u, '') + ' ' + member.name + '\0'), Buffer.from(member.id, 'hex'),
+  ])));
+  if (identity('tree', tree) !== source.candidate.tree) throw new Error('Native GitLab root tree identity changed.');
+  for (const file of source.files) {
+    const raw = await read(file), metadata = JSON.parse(await read(file.metadata));
+    const member = members.find(member => member.path === file.upstreamPath);
+    if (!member || member.type !== 'blob' || member.mode !== '100644' || member.id !== file.gitBlob
+      || identity('blob', raw) !== file.gitBlob || metadata.blob_id !== file.gitBlob || metadata.file_path !== file.upstreamPath
+      || metadata.ref !== source.candidate.commit || metadata.commit_id !== source.candidate.commit || metadata.size !== raw.length
+      || metadata.content_sha256 !== createHash('sha256').update(raw).digest('hex') || metadata.encoding !== 'base64'
+      || !Buffer.from(metadata.content, 'base64').equals(raw)
+      || file.metadata.url !== `${api}/repository/files/${encodeURIComponent(file.upstreamPath)}?ref=${source.candidate.commit}`
+      || file.url !== `${source.repository}/-/raw/${source.candidate.commit}/${file.upstreamPath}`) {
+      throw new Error('Native GitLab original source blob changed: ' + file.upstreamPath);
+    }
+  }
+}
+
+async function sharpNativeNoticeMaterials(root, directory, entries, group, lock, recipes) {
+  const readReceipt = async receipt => {
+    requirePinnedMember(entries, path.posix.join(directory, receipt.path), receipt);
+    return await json(path.join(root, directory, receipt.path));
+  };
+  const recipe = recipes.sources.find(source => source.id === group.recipe.sourceId);
+  const recipeFile = name => recipe?.files.find(file => file.upstreamPath === name);
+  const versionsFile = recipeFile(group.recipe.versionFile), buildFile = recipeFile(group.recipe.buildFile);
+  if (!versionsFile || !buildFile) throw new Error('Sharp notice recipe source is missing.');
+  const versionsText = await readFile(path.join(root, directory, versionsFile.path), 'utf8');
+  const build = await readFile(path.join(root, directory, buildFile.path), 'utf8');
+  const versions = new Map([...versionsText.matchAll(/^(VERSION_[A-Z0-9_]+)=([^\r\n]+)\r?$/gmu)].map(match => [match[1], match[2]]));
+  const expand = template => template.replace(/\$\{(VERSION_[A-Z0-9_]+)(?:\/\/\.\/([_-]))?\}/gu, (match, name, separator) => {
+    const version = versions.get(name);
+    return version === undefined ? match : separator ? version.replaceAll('.', separator) : version;
+  });
+  const checkRecipe = component => {
+    const download = expand(component.downloadTemplate);
+    if (versions.get(component.versionVariable) !== component.version || !build.includes(component.downloadTemplate)
+      || !component.downloadTemplate.includes(component.refTemplate) || expand(component.refTemplate) !== component.source.versionRef
+      || download.includes('${')) {
+      throw new Error('Sharp constituent notice differs from the original version recipe: ' + component.name);
+    }
+    return download;
+  };
+  for (const component of group.components) {
+    const source = component.source, api = 'https://api.github.com/repos/' + source.repository;
+    const download = checkRecipe(component);
+    if (!download.startsWith(`https://github.com/${source.repository}/`)) throw new Error('Sharp constituent recipe repository changed: ' + component.name);
+    const reference = await readReceipt(source.refReceipt);
+    if (reference.ref !== 'refs/tags/' + source.versionRef || reference.url !== `${api}/git/refs/tags/${source.versionRef}`) {
+      throw new Error('Sharp constituent notice release ref changed: ' + component.name);
+    }
+    let target = reference.object;
+    for (const receipt of source.tagReceipts) {
+      const tag = await readReceipt(receipt);
+      if (target.type !== 'tag' || target.sha !== tag.sha || target.url !== tag.url || tag.url !== `${api}/git/tags/${tag.sha}`) {
+        throw new Error('Sharp constituent notice annotated tag changed: ' + component.name);
+      }
+      target = tag.object;
+    }
+    if (target.type !== 'commit' || target.sha !== source.candidate.commit || target.url !== `${api}/git/commits/${source.candidate.commit}`) {
+      throw new Error('Sharp constituent notice release commit changed: ' + component.name);
+    }
+    const { files } = await gitSourceMaterials(root, directory, entries, source);
+    if (component.archive) {
+      const checksumRecipe = recipes.sources.find(source => source.id === component.recipeChecksum.sourceId)
+        ?.files.find(file => file.upstreamPath === component.recipeChecksum.upstreamPath);
+      if (!checksumRecipe) throw new Error('Sharp source archive checksum recipe is missing.');
+      const checksumText = await readFile(path.join(root, directory, checksumRecipe.path), 'utf8');
+      requirePinnedMember(entries, path.posix.join(directory, component.archive.path), component.archive);
+      const archive = await readFile(path.join(root, directory, component.archive.path));
+      if (component.archive.url !== download
+        || checksumText.match(/^\$\(PKG\)_VERSION\s*:=\s*(\S+)\s*$/mu)?.[1] !== component.version
+        || checksumText.match(/^\$\(PKG\)_GH_CONF\s*:=\s*(\S+)\s*$/mu)?.[1] !== source.repository + '/tags'
+        || checksumText.match(/^\$\(PKG\)_CHECKSUM\s*:=\s*([a-f0-9]{64})\s*$/mu)?.[1] !== createHash('sha256').update(archive).digest('hex')) {
+        throw new Error('Sharp constituent source archive differs from its original recipe: ' + component.name);
+      }
+      const members = sourceArchiveMembers(archive, component.archive.members);
+      for (const file of source.files) {
+        if (!members.get(component.archive.root + file.upstreamPath)?.equals(files.get(file.upstreamPath))) {
+          throw new Error('Sharp constituent source differs from its original archive member: ' + file.upstreamPath);
+        }
+      }
+    }
+  }
+  const cairo = group.cairo;
+  if (checkRecipe(cairo) !== cairo.sourceDownload.url) throw new Error('Cairo source download differs from its original recipe.');
+  const publisherFile = recipeFile(cairo.publisherNotice.upstreamPath);
+  if (!publisherFile) throw new Error('Cairo original publisher notice is missing.');
+  const publisher = await readFile(path.join(root, directory, publisherFile.path), 'utf8');
+  const publisherTerm = publisher.split(/\r?\n/u).map(line => line.split('|').map(value => value.trim()))
+    .find(cells => cells[1] === cairo.name)?.[2];
+  if (publisherTerm !== cairo.publisherNotice.term || cairo.publisherLicenseText.license !== cairo.publisherLicense) {
+    throw new Error('Cairo original publisher declaration changed.');
+  }
+  await gitlabSourceMaterials(root, directory, entries, cairo.source);
+  requirePinnedMember(entries, path.posix.join(directory, cairo.publisherLicenseText.path), cairo.publisherLicenseText);
+  const components = [...group.components, cairo];
+  for (const source of group.platforms) {
+    const locked = lock.packages[source.lockPath];
+    if (source.lockPath !== 'node_modules/' + source.name || !locked || locked.link || locked.version !== source.version
+      || locked.resolved !== source.distribution.url || locked.integrity !== source.distribution.integrity
+      || !locked.os?.includes(source.platform) || !locked.cpu?.includes(source.architecture)
+      || source.versions.member !== source.lockPath + '/versions.json') {
+      throw new Error('Sharp notice platform differs from the locked distribution: ' + source.name);
+    }
+    // These are archived origins of the small version members, not a replay of the old delivery.
+    for (const pin of [source.observation.manifestArchive, source.observation.receipt]) {
+      requirePinnedMember(entries, path.posix.join(directory, pin.path), pin);
+    }
+    const declared = await readReceipt(source.versions);
+    for (const component of components) {
+      if (declared[component.name] !== component.version) throw new Error('Sharp notice version declaration changed: ' + component.name);
+    }
+    if (source.platform === process.platform && source.architecture === process.arch) {
+      const installed = await json(path.join(root, source.lockPath, 'package.json'));
+      const actual = await json(path.join(root, source.versions.member));
+      if (installed.name !== source.name || installed.version !== locked.version) throw new Error('Installed Sharp notice package differs from the lock: ' + source.name);
+      for (const component of components) {
+        if (actual[component.name] !== declared[component.name]) throw new Error('Installed Sharp constituent notice version changed: ' + component.name);
+      }
+    }
+  }
+}
+
+async function nativePackageMaterials(root, directory, entries, pin, recipes) {
+  if (!pin?.path) throw new Error('Native npm source catalog is missing.');
+  const readReceipt = async receipt => {
+    requirePinnedMember(entries, path.posix.join(directory, receipt.path), receipt);
+    return await json(path.join(root, directory, receipt.path));
+  };
+  const catalog = await readReceipt(pin), lock = await json(path.join(root, 'package-lock.json'));
+  await sharpNativeNoticeMaterials(root, directory, entries, catalog.sharpNativeNotices, lock, recipes);
+  const registry = async source => {
+    const metadata = await readReceipt(source.registry.receipt), locked = lock.packages[source.lockPath];
+    if (source.lockPath !== 'node_modules/' + source.name || !locked || locked.link
+      || metadata.name !== source.name || metadata.version !== source.version || locked.version !== source.version
+      || metadata.dist.integrity !== locked.integrity || metadata.dist.tarball !== locked.resolved
+      || source.registry.url !== `https://registry.npmjs.org/${source.name.replace('/', '%2F')}/${source.version}`) {
+      throw new Error('Native npm registry differs from the locked distribution: ' + source.name);
+    }
+    return { metadata, locked };
+  };
+  const koffi = catalog.koffi, main = await registry(koffi);
+  requirePinnedMember(entries, path.posix.join(directory, koffi.archive.path), koffi.archive);
+  const archive = await readFile(path.join(root, directory, koffi.archive.path));
+  if ('sha512-' + createHash('sha512').update(archive).digest('base64') !== main.locked.integrity) {
+    throw new Error('Published npm source archive differs from the lock: ' + koffi.name);
+  }
+  const members = sourceArchiveMembers(archive, koffi.members);
+  const manifest = JSON.parse(members.get('package/package.json').toString('utf8'));
+  if (manifest.name !== koffi.name || manifest.version !== koffi.version) throw new Error('Published npm source package identity changed.');
+  for (const license of koffi.licenses) {
+    requirePinnedMember(entries, path.posix.join(directory, license.path), license);
+    if (!members.get(license.member)?.equals(await readFile(path.join(root, directory, license.path)))) {
+      throw new Error('Published npm source notice differs from its archive member: ' + license.member);
+    }
+  }
+  for (const source of koffi.optionalDistributions) {
+    await registry(source);
+    if (manifest.optionalDependencies[source.name] !== source.version || main.metadata.optionalDependencies[source.name] !== source.version) {
+      throw new Error('Published npm source optional relationship changed: ' + source.name);
+    }
+  }
+
+  const canvas = catalog.canvas, { rootTree, files } = await gitSourceMaterials(root, directory, entries, canvas);
+  for (const link of canvas.gitlinks) {
+    if (!rootTree.tree.some(member => member.path === link.path && member.type === 'commit' && member.mode === '160000' && member.sha === link.commit)) {
+      throw new Error('Native recipe Gitlink identity changed: ' + link.path);
+    }
+  }
+  const modules = files.get('.gitmodules').toString('utf8').split(/(?=^\[submodule )/mu).map(block => ({
+    path: block.match(/^\s*path\s*=\s*(.+)$/mu)?.[1].trim(),
+    url: block.match(/^\s*url\s*=\s*(.+)$/mu)?.[1].trim(),
+  }));
+  for (const source of catalog.relatedSources) {
+    const link = canvas.gitlinks.find(link => link.path === source.gitlink), module = modules.find(module => module.path === source.gitlink);
+    if (!link || link.commit !== source.candidate.commit || module?.url !== `https://github.com/${source.repository}.git`) {
+      throw new Error('Native related source differs from its declared Gitlink: ' + source.id);
+    }
+    await gitSourceMaterials(root, directory, entries, source);
+  }
+  const run = await readReceipt(canvas.runReceipt), jobs = await readReceipt(canvas.jobsReceipt);
+  if (run.id !== canvas.runId || run.run_attempt !== canvas.runAttempt || run.repository.full_name !== canvas.repository
+    || run.head_sha !== canvas.candidate.commit || run.head_commit.tree_id !== canvas.candidate.tree
+    || run.status !== 'completed' || run.conclusion !== 'success') throw new Error('Native npm publication run identity changed.');
+  for (const observed of canvas.observedJobs) {
+    const job = jobs.jobs.find(job => job.id === observed.jobId);
+    if (!job || job.name !== observed.name || job.run_id !== canvas.runId || job.head_sha !== canvas.candidate.commit
+      || job.status !== 'completed' || job.conclusion !== 'success') throw new Error('Native npm publication job identity changed: ' + observed.jobId);
+  }
+  const owner = await registry(canvas.distributions.find(source => source.name === '@napi-rs/canvas'));
+  if (owner.metadata.gitHead !== canvas.candidate.commit) throw new Error('Native npm registry Git source identity changed.');
+  for (const source of canvas.distributions) {
+    const { metadata, locked } = await registry(source), response = await readReceipt(source.attestations);
+    const attestation = response.attestations.find(value => value.predicateType === 'https://slsa.dev/provenance/v1');
+    const envelope = attestation?.bundle.dsseEnvelope;
+    const statement = envelope && JSON.parse(Buffer.from(envelope.payload, 'base64').toString('utf8'));
+    const definition = statement?.predicate?.buildDefinition, workflow = definition?.externalParameters?.workflow;
+    const subject = `pkg:npm/${source.name.replace('@', '%40')}@${source.version}`;
+    const digest = locked.integrity.startsWith('sha512-') ? Buffer.from(locked.integrity.slice(7), 'base64').toString('hex') : null;
+    if (source.attestations.url !== metadata.dist.attestations.url || envelope?.payloadType !== 'application/vnd.in-toto+json'
+      || statement?._type !== 'https://in-toto.io/Statement/v1' || statement.predicateType !== attestation.predicateType
+      || !statement.subject.some(value => value.name === subject && value.digest.sha512 === digest)
+      || workflow.repository !== `https://github.com/${canvas.repository}` || workflow.ref !== 'refs/heads/main'
+      || !files.has(workflow.path) || !definition.resolvedDependencies.some(value => value.uri === `git+https://github.com/${canvas.repository}@refs/heads/main`
+        && value.digest.gitCommit === canvas.candidate.commit)
+      || statement.predicate.runDetails.metadata.invocationId !== `https://github.com/${canvas.repository}/actions/runs/${canvas.runId}/attempts/${canvas.runAttempt}`
+      || source.name !== owner.metadata.name && owner.metadata.optionalDependencies[source.name] !== source.version) {
+      throw new Error('Native npm provenance subject or source association changed: ' + source.name);
+    }
+  }
+  await cargoSourceMaterials(root, directory, entries, canvas.cargo, files);
+  return catalog;
+}
+
+export async function buildLogMaterials(root, files) {
+  const filename = 'tools/release/source-materials/source-offer.json';
+  const directory = path.posix.dirname(filename), entries = new Map(files.map(file => [file.path, file]));
+  requirePinnedMember(entries, filename);
+  const offer = await json(path.join(root, filename));
+  const logs = new Map();
+  for (const source of offer.sources) {
+    for (const pin of [source.runReceipt, source.jobReceipt, source.archive]) {
+      requirePinnedMember(entries, path.posix.join(directory, pin.path), pin);
+    }
+    const run = await json(path.join(root, directory, source.runReceipt.path));
+    const job = await json(path.join(root, directory, source.jobReceipt.path));
+    if (run.id !== source.runId || run.repository.full_name !== source.repository || run.head_sha !== source.candidate.commit
+      || run.head_commit.tree_id !== source.candidate.tree || run.status !== 'completed' || run.conclusion !== 'success'
+      || job.id !== source.jobId || job.run_id !== source.runId || job.head_sha !== source.candidate.commit
+      || job.status !== 'completed' || job.conclusion !== 'success') throw new Error('Build log source identity changed: ' + source.archive.path);
+    const raw = gunzipSync(await readFile(path.join(root, directory, source.archive.path)), { maxOutputLength: source.rawLog.bytes + 1 });
+    if (raw.length !== source.rawLog.bytes || createHash('sha256').update(raw).digest('hex') !== source.rawLog.sha256) {
+      throw new Error('Build log raw bytes changed: ' + source.archive.path);
+    }
+    logs.set(source.jobId, { source, text: raw.toString('utf8') });
+  }
+  const recipes = await recipeFragmentMaterials(root, directory, entries, offer.recipeFragments, logs);
+  const packages = await nativePackageMaterials(root, directory, entries, offer.nativePackages, recipes);
+  return { path: filename, limitations: [...offer.limitations, ...recipes.limitations, ...packages.limitations] };
+}
+
+export async function sourceMaterials(root, files) {
+  const entries = new Map(files.map(file => [file.path, file]));
+  const offers = [
+    'src/images/system-fonts/harfbuzz/source-offer.json',
+    'src/images/jpeg-codec/source-offer.json',
+    'src/images/jpeg-codec/runtime-source-offer.json',
+    'tests/storage/fixtures/archive-codec-current/source-offer.json',
+    'tests/fixtures/recorded-native/jellyfin-source-package.json',
+  ];
+  const requireFile = (relative, pin) => requirePinnedMember(entries, relative, pin);
+  const limitations = [];
+  for (const filename of offers) {
+    requireFile(filename);
+    const offer = await json(path.join(root, filename)), directory = path.posix.dirname(filename);
+    const pins = filename.endsWith('jellyfin-source-package.json')
+      ? [offer.archive, offer.sourceManifest, offer.localModifications, offer.license]
+      : filename.endsWith('runtime-source-offer.json') ? [offer.runtimeSourceArchive, offer.buildReceipt,
+        offer.buildSourceOffer, ...offer.runtime, ...offer.licenses]
+        : [...(offer.archives ?? []), ...(offer.licenses ?? []), ...(offer.patch ? [offer.patch.after] : []),
+          ...(offer.buildRecord ? [offer.buildRecord] : [])];
+    for (const pin of pins) requireFile(path.posix.join(directory, pin.path ?? pin.filename), pin);
+    if (offer.buildRecord) {
+      const build = await json(path.join(root, directory, offer.buildRecord.path));
+      for (const pin of build.runtime) requireFile(path.posix.join(directory, pin.path), pin);
+    }
+    if (offer.limitations) limitations.push({ path: filename, limitations: offer.limitations });
+  }
+  for (const filename of ['LICENSE', 'tests/http/fixtures/mime-types-current/source-offer/mimetypes.2.5.2.nupkg',
+    'tests/metadata/fixtures/photo-current/taglib-source/COPYING',
+    'src/storage/resources/archive-codec-notice.txt', 'src/storage/resources/archive-codec-licenses.txt']) requireFile(filename);
+  limitations.push({ path: 'tests/storage/fixtures/archive-codec-current/source-offer.json',
+    limitations: ['Its Emscripten source acquisition does not establish the unknown original toolchain commit or replay the historical binary.'] });
+  limitations.push({ path: 'dependency-cache', limitations: [
+    'The locked published npm distributions are supplied. Separate upstream source offers remain at their tracked candidate paths; this packager does not acquire missing upstream source archives.',
+  ] });
+  const licenseCatalogPath = 'tools/release/license-materials/index.json';
+  requireFile(licenseCatalogPath);
+  const licenseCatalog = await json(path.join(root, licenseCatalogPath));
+  for (const document of licenseCatalog.documents) requireFile(path.posix.join(path.posix.dirname(licenseCatalogPath), document.path), document);
+  offers.push(licenseCatalogPath);
+  limitations.push({ path: licenseCatalogPath, limitations: licenseCatalog.limitations });
+  const { nativeFullSourceMaterials } = await import('./native-full-sources.js');
+  const fullSources = await nativeFullSourceMaterials(root, files), buildLogs = fullSources.buildLogs;
+  offers.push(buildLogs.path);
+  limitations.push(buildLogs);
+  offers.push(fullSources.path);
+  limitations.push({ path: fullSources.path, limitations: fullSources.limitations });
+  const { rsvgCargoSourceMaterials } = await import('./rsvg-cargo-sources.js');
+  const rsvgCargo = await rsvgCargoSourceMaterials(root, files);
+  offers.push(rsvgCargo.path);
+  limitations.push(rsvgCargo);
+  const { skiaSourceMaterials } = await import('./skia-sources.js');
+  const skia = await skiaSourceMaterials(root, files);
+  offers.push(skia.path);
+  limitations.push(skia);
+  const { skiaDependencySourceMaterials } = await import('./skia-dependency-sources.js');
+  const skiaDependencies = await skiaDependencySourceMaterials(root, files);
+  offers.push(skiaDependencies.path);
+  limitations.push(skiaDependencies);
+  const { canvasCargoSourceMaterials } = await import('./canvas-cargo-sources.js');
+  const canvasCargo = await canvasCargoSourceMaterials(root, files);
+  offers.push(canvasCargo.path);
+  limitations.push(canvasCargo);
+  const { rsvgWindowsSourceMaterials } = await import('./rsvg-windows-sources.js');
+  const rsvgWindows = await rsvgWindowsSourceMaterials(root, files);
+  offers.push(rsvgWindows.path);
+  limitations.push(rsvgWindows);
+  return { offers, limitations };
+}

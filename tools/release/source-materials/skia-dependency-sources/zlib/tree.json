@@ -1,0 +1,1143 @@
+[
+  {
+    "path": "BUILD.gn",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7fff5762e81b6ac939395d473ae966063f333af7",
+    "bytes": 11903
+  },
+  {
+    "path": "CMakeLists.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5541985f474c64e293a9e27a906535ba6ef1d703",
+    "bytes": 11649
+  },
+  {
+    "path": "DIR_METADATA",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d366dc732137cdca16a20b8a94856f679af3ab3a",
+    "bytes": 39
+  },
+  {
+    "path": "LICENSE",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8aca25d8c7a1336c991a2bc84bc2aa341a920885",
+    "bytes": 910
+  },
+  {
+    "path": "OWNERS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3a821578a748b3d76efb79ef612929035ec3082f",
+    "bytes": 81
+  },
+  {
+    "path": "README.chromium",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31b9d55860f9e5d850fd603d64232ffc66e04284",
+    "bytes": 1289
+  },
+  {
+    "path": "adler32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "99a294496f7eb5cadb6647893c914530ddf133f6",
+    "bytes": 5926
+  },
+  {
+    "path": "adler32_simd.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "58966eecf0b8009fcd3a84239ebfd8f614f31cf4",
+    "bytes": 10649
+  },
+  {
+    "path": "adler32_simd.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0b2361a5174f7af327d52889771f94c0634184fa",
+    "bytes": 363
+  },
+  {
+    "path": "chromeconf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5b91c86442105afc1d3f8929ab315881b49f6a82",
+    "bytes": 7130
+  },
+  {
+    "path": "compress.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0f11a27c28a691a1f25c1b0e3858eeaa07bf8cf9",
+    "bytes": 3219
+  },
+  {
+    "path": "contrib",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "8b33b3978e450bfa9a907c7bb105af4ffbe40479",
+    "bytes": null
+  },
+  {
+    "path": "contrib/bench",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "b434e4f8bc283043ce62d4debaf5b5c2191e9f77",
+    "bytes": null
+  },
+  {
+    "path": "contrib/bench/check.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e6934605a4d4f51a2006b586208f8116d1f7d9a6",
+    "bytes": 1074
+  },
+  {
+    "path": "contrib/bench/zlib_bench.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b65f9291bff5002e4946e501e8c7a3e407f70504",
+    "bytes": 13475
+  },
+  {
+    "path": "contrib/minizip",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "7c749091bc0f5c05516835d7f1074f350626cd25",
+    "bytes": null
+  },
+  {
+    "path": "contrib/minizip/ChangeLogUnzip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e62af147dce682747739e7061cd4bf8aa0f19c3a",
+    "bytes": 2122
+  },
+  {
+    "path": "contrib/minizip/Makefile",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aac76e07f6b999c8e8a6d39508cfb4c9356a5140",
+    "bytes": 562
+  },
+  {
+    "path": "contrib/minizip/README.chromium",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b5895f2a5181b010bef5c797fd5f7b1392ad9858",
+    "bytes": 1031
+  },
+  {
+    "path": "contrib/minizip/crypt.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f4b93b78dc31cc28b6bd1ee3cc90f9af4b6ef2a2",
+    "bytes": 4801
+  },
+  {
+    "path": "contrib/minizip/ioapi.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a38881dca90a23c2e9cd149aa639cd1b40a45937",
+    "bytes": 7764
+  },
+  {
+    "path": "contrib/minizip/ioapi.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a2d2e6e60d9250b048d50320a60dccc9d99e0264",
+    "bytes": 7100
+  },
+  {
+    "path": "contrib/minizip/iowin32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3f6867fd7e40b5d47565f9403e9fb6898af17f8e",
+    "bytes": 13614
+  },
+  {
+    "path": "contrib/minizip/iowin32.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a23a65d4331d93c37096f8c85e8a3a9643b81042",
+    "bytes": 831
+  },
+  {
+    "path": "contrib/minizip/miniunz.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5b4312e5647cd200962f310ffaceec3e2e3ed260",
+    "bytes": 17862
+  },
+  {
+    "path": "contrib/minizip/minizip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9eb3956a55e00f87e120ae93baabd2326b8fdc5b",
+    "bytes": 15222
+  },
+  {
+    "path": "contrib/minizip/minizip.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9f15dd23dec279c6f83f7243b8dbd2d8173d1630",
+    "bytes": 313
+  },
+  {
+    "path": "contrib/minizip/mztools.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c8d23756155731a9005f7a16fd6dab6c1afbf9da",
+    "bytes": 8091
+  },
+  {
+    "path": "contrib/minizip/mztools.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a49a426ec2fcb279995806adbfd2ed48e781f616",
+    "bytes": 708
+  },
+  {
+    "path": "contrib/minizip/unzip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3576a8504dde0cfe3bc76509924ee8d211fccb18",
+    "bytes": 70147
+  },
+  {
+    "path": "contrib/minizip/unzip.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "14105840f6d247b6dcef99c5ce28640181b92cf6",
+    "bytes": 16448
+  },
+  {
+    "path": "contrib/minizip/zip.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e2e9da07c5f30781e81fffd13619eb384945ac0c",
+    "bytes": 65420
+  },
+  {
+    "path": "contrib/minizip/zip.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3e230d3405f603fba197929a9bf0c6c6291d8a7a",
+    "bytes": 15517
+  },
+  {
+    "path": "contrib/optimizations",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "02435f638c0840305721b6097f6f12248b1951c8",
+    "bytes": null
+  },
+  {
+    "path": "contrib/optimizations/chunkcopy.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f40546d54dbe770c9e4625881317efadceaf0b5b",
+    "bytes": 15089
+  },
+  {
+    "path": "contrib/optimizations/inffast_chunk.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1db452c2e7232f1d57258379232dd55d8045a1a",
+    "bytes": 15832
+  },
+  {
+    "path": "contrib/optimizations/inffast_chunk.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e75ee5e915e13646ba9c3a66dce8aba147c8e3af",
+    "bytes": 1720
+  },
+  {
+    "path": "contrib/optimizations/inflate.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c535c5af0c89ee52fbb6925e0f37191c6fced75a",
+    "bytes": 57482
+  },
+  {
+    "path": "contrib/optimizations/insert_string.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "260b8268029a8c0bc03055ba2ac2dcb19c277c9d",
+    "bytes": 2834
+  },
+  {
+    "path": "contrib/tests",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "a5e04b35821b1e2fe6b13676e828cf77ae237094",
+    "bytes": null
+  },
+  {
+    "path": "contrib/tests/DEPS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "67973613c74138d22aa3721324ad4f09595ce2a9",
+    "bytes": 96
+  },
+  {
+    "path": "contrib/tests/OWNERS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aa6a2d1bb3c041723898ddd3ed66c8ce0940a877",
+    "bytes": 45
+  },
+  {
+    "path": "contrib/tests/fuzzers",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5b77e6e4a84659fc1c881fc5bce789034d989650",
+    "bytes": null
+  },
+  {
+    "path": "contrib/tests/fuzzers/BUILD.gn",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "16e918a720ece92dbc0989f760713da136de8d56",
+    "bytes": 1034
+  },
+  {
+    "path": "contrib/tests/fuzzers/OWNERS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ff3256199006fd158192df59655ec9f0a9f90fd3",
+    "bytes": 38
+  },
+  {
+    "path": "contrib/tests/fuzzers/deflate_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64892bc5539e3b3414d533c5a3f35560733413c6",
+    "bytes": 2866
+  },
+  {
+    "path": "contrib/tests/fuzzers/deflate_set_dictionary_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "96778209f7f91cc5b4b7fa961b775e95ddc675c0",
+    "bytes": 1118
+  },
+  {
+    "path": "contrib/tests/fuzzers/inflate_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d9d62026e429565dd4f4b7288729b37b439d6bb0",
+    "bytes": 992
+  },
+  {
+    "path": "contrib/tests/fuzzers/inflate_with_header_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dfb5b39a7a32cf22e9c7f7d001dc694cad8215d7",
+    "bytes": 3424
+  },
+  {
+    "path": "contrib/tests/fuzzers/streaming_inflate_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dac170a0fc541e0666431316b169695d87e75f92",
+    "bytes": 2459
+  },
+  {
+    "path": "contrib/tests/fuzzers/uncompress_fuzzer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e63a8c0582dfc15e12df5d459c6a2863a356a1b9",
+    "bytes": 552
+  },
+  {
+    "path": "contrib/tests/infcover.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4c55d5d7d5f5e04790afd522b790514af9cdcb62",
+    "bytes": 27677
+  },
+  {
+    "path": "contrib/tests/infcover.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dbf67d7b4dd31c27451d3c95f762c53d0d2a08f2",
+    "bytes": 235
+  },
+  {
+    "path": "contrib/tests/run_all_unittests.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4b6115b074f7f77b866214dd426b7e81545f5288",
+    "bytes": 469
+  },
+  {
+    "path": "contrib/tests/standalone_test_runner.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1ec9c30bacba029cafe5ff78a891daa415fc8ea5",
+    "bytes": 300
+  },
+  {
+    "path": "contrib/tests/utils_unittest.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a8027717920f6c70d255d7c06876d0744eb3c76",
+    "bytes": 67935
+  },
+  {
+    "path": "cpu_features.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "64e0428cd2fc2d965cf18c2af9212df68d2ea8c8",
+    "bytes": 6653
+  },
+  {
+    "path": "cpu_features.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "aed3e834c5ac8910eebf0796b3cb69f65f6d432b",
+    "bytes": 543
+  },
+  {
+    "path": "crc32.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "cf8579f30aa70768c9a2c7c269da0ff69182cd40",
+    "bytes": 36155
+  },
+  {
+    "path": "crc32.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "137df68d616c5ed38913579ba37b4e4c533fa903",
+    "bytes": 591749
+  },
+  {
+    "path": "crc32_simd.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7428270920a03e06da4a037434de0255e486058b",
+    "bytes": 18193
+  },
+  {
+    "path": "crc32_simd.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "84624647bcd21624e8611ad638426643dd98294a",
+    "bytes": 1853
+  },
+  {
+    "path": "crc_folding.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1b4f4e1d193871bd02d91d048e9f9ba268ec1ffb",
+    "bytes": 16251
+  },
+  {
+    "path": "deflate.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4920e7007af88784ce9a73ff428a6bf011749612",
+    "bytes": 84108
+  },
+  {
+    "path": "deflate.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "eb7f0724015cc764ecb31bbc463ad004289f790c",
+    "bytes": 14524
+  },
+  {
+    "path": "google",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5c7d93823c4c62a1bc0bc6ea3043c96301dc0c12",
+    "bytes": null
+  },
+  {
+    "path": "google/BUILD.gn",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "122cef573d5bd53aeb482daec7d133e703d9e88c",
+    "bytes": 1286
+  },
+  {
+    "path": "google/DEPS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7ec5343ee23953e3ba6b5a3e1aa80e2f2edad7e5",
+    "bytes": 129
+  },
+  {
+    "path": "google/OWNERS",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "868af3cc66285271e5ebaef730a29648d50a2886",
+    "bytes": 113
+  },
+  {
+    "path": "google/compression_utils.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c2b17e4ced6f22da821f317c55bfc4f810e85e72",
+    "bytes": 4890
+  },
+  {
+    "path": "google/compression_utils.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea399816f60351d847bec475807e0b9e27ee08d5",
+    "bytes": 2870
+  },
+  {
+    "path": "google/compression_utils_portable.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "49d6bfe9ea6ed4e42788087e8f35c2bfe1e52acc",
+    "bytes": 7217
+  },
+  {
+    "path": "google/compression_utils_portable.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "92b033e889f7f8afabeafe7108a1341a610ed832",
+    "bytes": 1858
+  },
+  {
+    "path": "google/compression_utils_unittest.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8e24387ee341da0170c43671fb03f3a9ef065ecc",
+    "bytes": 3370
+  },
+  {
+    "path": "google/redact.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "df6bcafc2af8dd6cd1bc70a11e429bfab41ebced",
+    "bytes": 784
+  },
+  {
+    "path": "google/test",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "4759137812fbb9aa009d1bf201389c129b0c2cc8",
+    "bytes": null
+  },
+  {
+    "path": "google/test/data",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5718d2858d69fececcabe51e432ab4f5f3536f2e",
+    "bytes": null
+  },
+  {
+    "path": "google/test/data/Different Encryptions.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "858e7c74b61ee656a677a0661105b561959379db",
+    "bytes": 1083
+  },
+  {
+    "path": "google/test/data/Empty Dir Same Name As File.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e26c42d158ccc295a62a8c740fccf6be0ad27666",
+    "bytes": 218
+  },
+  {
+    "path": "google/test/data/Mixed Paths.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "881f498599744758d61c396ba943c940d7bc8f43",
+    "bytes": 12814
+  },
+  {
+    "path": "google/test/data/Parent Dir Same Name As File.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76cfd906edcf69420bd0890af86cc65b4b9645f6",
+    "bytes": 241
+  },
+  {
+    "path": "google/test/data/README.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "c76648fb08a4ef3b0efc3b2cf9c094f330ecca72",
+    "bytes": 300
+  },
+  {
+    "path": "google/test/data/Repeated Dir Name.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2375bc7697cb35d6884e0102a9b7f38c492302fe",
+    "bytes": 210
+  },
+  {
+    "path": "google/test/data/Repeated File Name With Different Cases.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9eb44e1a507eb9762373b179f622840a7583a664",
+    "bytes": 313
+  },
+  {
+    "path": "google/test/data/Repeated File Name.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4a3e7b13c66a4a97893bcfa86f683f8cb833c19a",
+    "bytes": 227
+  },
+  {
+    "path": "google/test/data/SJIS Bug 846195.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "078300284e634ae6cc639ef7ab4f6942bd0d2e30",
+    "bytes": 479
+  },
+  {
+    "path": "google/test/data/Windows Special Names.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4fac907fa754b07364376c9a9e1eb894331fa789",
+    "bytes": 3985
+  },
+  {
+    "path": "google/test/data/Wrong CRC.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ee9a1ef05431f98929214db4fcdca68724dc121d",
+    "bytes": 231
+  },
+  {
+    "path": "google/test/data/create_test_zip.sh",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "620e8f6d6d4c0c292e56a72a1f5a9eaa8299c535",
+    "bytes": 439
+  },
+  {
+    "path": "google/test/data/empty.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "15cb0ecb3e219d1701294bfdf0fe3f5cb5d208e7",
+    "bytes": 22
+  },
+  {
+    "path": "google/test/data/evil.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "8fb908a96abdf0be7d5a20cd94b59a5782cbfca2",
+    "bytes": 241
+  },
+  {
+    "path": "google/test/data/evil_via_absolute_file_name.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2415f81b63751bc9bee461d57e0c3af9d646b77f",
+    "bytes": 172
+  },
+  {
+    "path": "google/test/data/evil_via_invalid_utf8.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "94b633e0aa5c2c49c34e7b451ef88e8da99eb866",
+    "bytes": 4585
+  },
+  {
+    "path": "google/test/data/test.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "4bafe30898eb9cc7b33b547967ea620ea6f72b34",
+    "bytes": 5065
+  },
+  {
+    "path": "google/test/data/test",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "5ee14934482ab463bb6b404bbadd3f87fbec13ad",
+    "bytes": null
+  },
+  {
+    "path": "google/test/data/test/foo.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "257cc5642cb1a054f08cc83f2d943e56fd3ebe99",
+    "bytes": 4
+  },
+  {
+    "path": "google/test/data/test/foo",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "829bffcc1ff2faedef97f93c3fabfcf3dfbaa2e4",
+    "bytes": null
+  },
+  {
+    "path": "google/test/data/test/foo/bar.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5716ca5987cbf97d6bb54920bea6adde242d87e6",
+    "bytes": 4
+  },
+  {
+    "path": "google/test/data/test/foo/bar",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "ffac4b69fc2c41bd5ed1aa831df499c02ad873f1",
+    "bytes": null
+  },
+  {
+    "path": "google/test/data/test/foo/bar/.hidden",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "136c05e0d0290e2dc7eb89bceaa27b5f011e780a",
+    "bytes": 7
+  },
+  {
+    "path": "google/test/data/test/foo/bar/baz.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76018072e09c5d31c8c6e3113b8aa0fe625195ca",
+    "bytes": 4
+  },
+  {
+    "path": "google/test/data/test/foo/bar/quux.txt",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "479787951d98bf534e2d46099650ac5e489f7e8c",
+    "bytes": 13527
+  },
+  {
+    "path": "google/test/data/test_encrypted.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e2a75759a19148515c4a0850f66cc58ffb16be8",
+    "bytes": 5325
+  },
+  {
+    "path": "google/test/data/test_mismatch_size.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b83c66fe79125cf3c6a74c1a15d7000526ccb634",
+    "bytes": 886
+  },
+  {
+    "path": "google/test/data/test_nocompress.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "25d66c287e2c75af4b8c9c6a542f8d9f4242a527",
+    "bytes": 14252
+  },
+  {
+    "path": "google/test/data/test_posix_permissions.zip",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a058ba17445c37a6a55f8d2b99cf8ef0aad4e036",
+    "bytes": 574
+  },
+  {
+    "path": "google/test_data.filelist",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0a9d20bcea605a36d7f57179f9dba2cc65c3ceb7",
+    "bytes": 1162
+  },
+  {
+    "path": "google/test_data.globlist",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "117a1e507df406b035cbff81533eed466df4b0d9",
+    "bytes": 313
+  },
+  {
+    "path": "google/zip.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "87065b9188785a0e4c85178e556050d36446429d",
+    "bytes": 8923
+  },
+  {
+    "path": "google/zip.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "ea8778681da00a54e73bb92a47886b2cd4ef9a7c",
+    "bytes": 7735
+  },
+  {
+    "path": "google/zip_internal.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9b20b421e24765d7e3145985ad7f12f753492385",
+    "bytes": 15385
+  },
+  {
+    "path": "google/zip_internal.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f107d7fe8835414c197e486936e13d1f8b540204",
+    "bytes": 2872
+  },
+  {
+    "path": "google/zip_reader.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "34a815e5f52e9f705196b3c1bc5c4777615662e2",
+    "bytes": 21251
+  },
+  {
+    "path": "google/zip_reader.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b7680cc839386a100b8b919956c209adb404d2bb",
+    "bytes": 14942
+  },
+  {
+    "path": "google/zip_reader_unittest.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e6f89d7e4faaaa483ebea97d3ec3deec492f028c",
+    "bytes": 33525
+  },
+  {
+    "path": "google/zip_unittest.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "922d38303ce84588f6544db943024893eac7169c",
+    "bytes": 52340
+  },
+  {
+    "path": "google/zip_writer.cc",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "31161ae86c3b7aff2496b0b6560020fb10ce320d",
+    "bytes": 8258
+  },
+  {
+    "path": "google/zip_writer.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "dd109293da0a4f20d700486d237d18f1a506c50c",
+    "bytes": 5034
+  },
+  {
+    "path": "gzclose.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "48d6a86f04b6ea57f7158c19694023a9948438da",
+    "bytes": 668
+  },
+  {
+    "path": "gzguts.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f9375047e8c58f3c7e1907ed781a0388cacc9335",
+    "bytes": 6778
+  },
+  {
+    "path": "gzlib.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0d3ebf8d297e57cf21efcab4f992032ece3aa4a0",
+    "bytes": 16318
+  },
+  {
+    "path": "gzread.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a9f7847ce4cc6b5de02938fd496cd9bf21225d8",
+    "bytes": 19813
+  },
+  {
+    "path": "gzwrite.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "435b4621b5349f2a98b92cff5fe7d9f6cd7ced59",
+    "bytes": 19237
+  },
+  {
+    "path": "infback.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9bfc30fe555f57813a319f0252cf352ecd00a855",
+    "bytes": 22728
+  },
+  {
+    "path": "inffast.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "52ed8ca2df612e3d25b3aa3ed166ce883ea811cd",
+    "bytes": 13249
+  },
+  {
+    "path": "inffast.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9ff6ce3b6a96e5a4d2ae6be296f2524d6fcdf323",
+    "bytes": 1114
+  },
+  {
+    "path": "inffixed.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d6283277694802ce7938f537f12990d6eead4924",
+    "bytes": 6332
+  },
+  {
+    "path": "inflate.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0990ae7bf9a8d2a93b3146a23d7933d7f265c19d",
+    "bytes": 55659
+  },
+  {
+    "path": "inflate.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f127b6b1fa5f7d0266e3b502701948dfd3c6abc8",
+    "bytes": 6683
+  },
+  {
+    "path": "inftrees.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "73d5a776987ce1444f961ce6acfbb20045f132e6",
+    "bytes": 13026
+  },
+  {
+    "path": "inftrees.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f11f29c0761c157f12cdbbf7eb3298218ec86137",
+    "bytes": 2933
+  },
+  {
+    "path": "patches",
+    "mode": "040000",
+    "type": "tree",
+    "sha": "aedeb9525823092094b4805c6abd03695dbe934a",
+    "bytes": null
+  },
+  {
+    "path": "patches/0000-build.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1861194dd50cd3ed9be1dd812edbae9fd0245267",
+    "bytes": 4827
+  },
+  {
+    "path": "patches/0001-simd.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9434ca0cc4a68ca8f62057db2b5fe1f547065260",
+    "bytes": 39766
+  },
+  {
+    "path": "patches/0002-uninitializedcheck.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7c497839d30b870ae72f5323b04ad94190062e27",
+    "bytes": 1111
+  },
+  {
+    "path": "patches/0003-uninitializedjump.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "7aae3238a5011aac6a3d6a64eaf915e8cc4c80ca",
+    "bytes": 764
+  },
+  {
+    "path": "patches/0004-fix-uwp.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "edef10a2025678628d641028caf8b3702527133d",
+    "bytes": 942
+  },
+  {
+    "path": "patches/0005-infcover-gtest.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f5443bd7d88e1cdbce393dcaba3f71ec873df4e1",
+    "bytes": 15065
+  },
+  {
+    "path": "patches/0006-fix-check_match.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b21c363b1ec1e7220ed59c19191513ac609f8fde",
+    "bytes": 1674
+  },
+  {
+    "path": "patches/0007-zero-init-deflate-window.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9dbbf53a8c6b6e8a3134836c5fe2ee9d32ac13d6",
+    "bytes": 1692
+  },
+  {
+    "path": "patches/0008-minizip-zip-unzip-tools.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "273a8c98011bed4f8c9347fbdfef2bddc5063857",
+    "bytes": 3796
+  },
+  {
+    "path": "patches/0009-infcover-oob.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "648360f332d49cadeed21fa531f2569deee25a50",
+    "bytes": 856
+  },
+  {
+    "path": "patches/0010-cmake-enable-simd.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "3893101b7c6a7e6f74b8102984cc9036210f5e8d",
+    "bytes": 3970
+  },
+  {
+    "path": "patches/0011-avx512.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "6d409b77383d53ea400650477951cf74e2e5292d",
+    "bytes": 11893
+  },
+  {
+    "path": "patches/0012-lfs-open64.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "70e7b687a729415c7169cedfcfd98bcda2f6ffaa",
+    "bytes": 1119
+  },
+  {
+    "path": "patches/0013-cpu-feature-detection-for-arm.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "0547851fe5d99dbe0164ba2f5f08ed9469b5c6a3",
+    "bytes": 1183
+  },
+  {
+    "path": "patches/0014-minizip-unzip-with-incorrect-size.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5ede561e3c20dd36ed1632e72fb0fd15591985f0",
+    "bytes": 1557
+  },
+  {
+    "path": "patches/0015-minizip-unzip-enable-decryption.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "966e83c7dc5d76656afd19f8acde9bc09326eec8",
+    "bytes": 1335
+  },
+  {
+    "path": "patches/0016-minizip-parse-unicode-path-extra-field.patch",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "9a99a8ae027dfc217ce8461e619dd763ac4c2630",
+    "bytes": 4461
+  },
+  {
+    "path": "patches/README",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b21d309ff91984564172bf7842f2c78bf0523594",
+    "bytes": 1749
+  },
+  {
+    "path": "slide_hash_simd.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "1000b774ccb60a601e42d9a30a18e0aa00357ae1",
+    "bytes": 3685
+  },
+  {
+    "path": "trees.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "38135273c9c3bc74e6cffb746b4d519e7e9a06ba",
+    "bytes": 40960
+  },
+  {
+    "path": "trees.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "d35639d82a27807e49ea35c334f8bbcf64720f82",
+    "bytes": 8472
+  },
+  {
+    "path": "uncompr.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "5e256663b4511cdbfa52487f8f54e3c8de013119",
+    "bytes": 2911
+  },
+  {
+    "path": "zconf.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "55fe101da648341ede6279dbf86531dfb07b406c",
+    "bytes": 17175
+  },
+  {
+    "path": "zconf.h.cmakein",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "310c43928a299f84b997d6ed1d579d5c0bb0ed98",
+    "bytes": 16733
+  },
+  {
+    "path": "zconf.h.in",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "fb76ffe312ae45cf5d5d5e448f81e06fa79ab874",
+    "bytes": 16682
+  },
+  {
+    "path": "zlib.3",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "adc5b7f03e8c9529f4bfb7169d3a7d89a60cf322",
+    "bytes": 4480
+  },
+  {
+    "path": "zlib.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f1b149b93e43466ae57d72e10dda35b9f357e9ca",
+    "bytes": 97418
+  },
+  {
+    "path": "zlib.map",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b330b606febbea810ec17c0a9657b59e1ccf0804",
+    "bytes": 1553
+  },
+  {
+    "path": "zlib.pc.cmakein",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "a5e642938c69851ea57d0a4e1dcd94ea1381edfa",
+    "bytes": 294
+  },
+  {
+    "path": "zutil.c",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "b1c5d2d3c6daf5a4b7a337dafe3e862ca177b41c",
+    "bytes": 7179
+  },
+  {
+    "path": "zutil.h",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "2e2f57665bba81636d27f6fcc7797f424382d1bf",
+    "bytes": 7235
+  }
+]

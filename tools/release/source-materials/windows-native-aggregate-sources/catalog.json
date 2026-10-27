@@ -1,0 +1,1827 @@
+{
+  "retrievedOn": "2026-10-27",
+  "buildInputs": {
+    "path": "windows-native-aggregate-sources/build-inputs.json",
+    "bytes": 5790,
+    "sha256": "191602e5c49622cc53f0374cb93c6fac0282df798d8dddcff783c1f1044d61c0"
+  },
+  "graph": {
+    "runId": 40520403482,
+    "jobId": 122245632129,
+    "artifactId": 12740997468,
+    "runReceipt": {
+      "path": "windows-native-aggregate-sources/graph/run.json",
+      "bytes": 12810,
+      "sha256": "63b48f83780071d39ff0ec0710c46ec6dd4382fc96f41395eb5e10f7c2e5b0ef"
+    },
+    "jobsReceipt": {
+      "path": "windows-native-aggregate-sources/graph/jobs.json",
+      "bytes": 2763,
+      "sha256": "a192ffd361b87ef50834ef5db59411a97b4643c6a84c814b924bdb5bf776c707"
+    },
+    "artifactsReceipt": {
+      "path": "windows-native-aggregate-sources/graph/artifacts.json",
+      "bytes": 777,
+      "sha256": "049959c9c7a98abb266317a13593001d79f6dc93fa53f6882dd1f71004697580"
+    },
+    "archive": {
+      "path": "windows-native-aggregate-sources/graph/original-artifact.zip",
+      "bytes": 59210,
+      "sha256": "e5f37164586e2560728eb8054ff83694f2b4d767828885e32acf6e0cfe8f203b"
+    },
+    "members": [
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/capture.mk",
+        "bytes": 1011,
+        "sha256": "99c4a0db2a4af3073d005d1cc23def75a8ac8792c1925089fb7adcaae8e95f71",
+        "member": "mxe-native-source-graph/capture.mk",
+        "crc32": 3701739243
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/edges.tsv",
+        "bytes": 297132,
+        "sha256": "6511fcb6d0f3c9e681b1c57fd66eaff5b5107b47fc4c7d7a6069b803b0324796",
+        "member": "mxe-native-source-graph/edges.tsv",
+        "crc32": 2916495173
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-build-win64-mxe.command.json",
+        "bytes": 434,
+        "sha256": "fa201aa716b8d06a1f6d0668f5bd4e297a4d11d3f972a1d74cc91520a39a2850",
+        "member": "mxe-native-source-graph/extract-build-win64-mxe.command.json",
+        "crc32": 3038162316
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-build-win64-mxe.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/extract-build-win64-mxe.stderr.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-build-win64-mxe.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/extract-build-win64-mxe.stdout.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-mxe.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/extract-mxe.stderr.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-mxe.command.json",
+        "bytes": 398,
+        "sha256": "8c67c1e462bab7e858682fbbd39c8ec083b92bdfc31c48e56261fc5d4d8dab3d",
+        "member": "mxe-native-source-graph/extract-mxe.command.json",
+        "crc32": 3150309403
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/extract-mxe.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/extract-mxe.stdout.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-edges.command.json",
+        "bytes": 1603,
+        "sha256": "da09a0ff7fe5c0aa080c93266444aabbbcbd3e9a49c79e36ee7810422e1911fa",
+        "member": "mxe-native-source-graph/make-edges.command.json",
+        "crc32": 2424995499
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-edges.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/make-edges.stderr.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-edges.stdout.txt",
+        "bytes": 1116,
+        "sha256": "e74799575eb80f6ed8adf400fcdaf179a6ea0a348e2f0300e51f82d249fbb100",
+        "member": "mxe-native-source-graph/make-edges.stdout.txt",
+        "crc32": 1434063279
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-sources.command.json",
+        "bytes": 2614,
+        "sha256": "b1c27ab4ad5b74d5c096645b0d0875d2404a3447ed4a221891f70c21ef24093f",
+        "member": "mxe-native-source-graph/make-sources.command.json",
+        "crc32": 1231386897
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-sources.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/make-sources.stderr.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-sources.stdout.txt",
+        "bytes": 1116,
+        "sha256": "e74799575eb80f6ed8adf400fcdaf179a6ea0a348e2f0300e51f82d249fbb100",
+        "member": "mxe-native-source-graph/make-sources.stdout.txt",
+        "crc32": 1434063279
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-version.command.json",
+        "bytes": 132,
+        "sha256": "4a9d31a64cfe63d94ed94fc4b87cd2ee805782c2ac7b682ba5bf3204cdfa8b73",
+        "member": "mxe-native-source-graph/make-version.command.json",
+        "crc32": 3946984036
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-version.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "member": "mxe-native-source-graph/make-version.stderr.txt",
+        "crc32": 0
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/make-version.stdout.txt",
+        "bytes": 297,
+        "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+        "member": "mxe-native-source-graph/make-version.stdout.txt",
+        "crc32": 1942273511
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/aom-3-fixes.patch",
+        "bytes": 1522,
+        "sha256": "c4f15c4be72f9df33c7af874486227961e7e7263b03d0f6e2907d753fa9f31aa",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/aom-3-fixes.patch",
+        "crc32": 203161439
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/cairo-1-fixes.patch",
+        "bytes": 19182,
+        "sha256": "e9fa4176252f278e8d53ca110959797ac7f636da9f8dfb0d8d5b4c2db69b3b08",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/cairo-1-fixes.patch",
+        "crc32": 2272010914
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/cairo-1-nanoserver-compat.patch",
+        "bytes": 1325,
+        "sha256": "96eca5ad103861c380c202054401d02e13b14643fe71c665a2fb00b51ffe8db1",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/cairo-1-nanoserver-compat.patch",
+        "crc32": 2870721494
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/fontconfig-2-fixes.patch",
+        "bytes": 2312,
+        "sha256": "452d8b94ea7a17f3b0abbe858d799fd774fe0097e21f639f412b3b00662c3a73",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/fontconfig-2-fixes.patch",
+        "crc32": 3498732949
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-dllexport-static.patch",
+        "bytes": 1193,
+        "sha256": "65fd140acf960794197b0b38cbc234c5c08f211d8ab679b1695df456250b8a76",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-dllexport-static.patch",
+        "crc32": 3020965395
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-fixes.patch",
+        "bytes": 2146,
+        "sha256": "9778d07b7cb8bdcedd474f345f85ae844542cb34fb38ec6c72cf3615a12b03c5",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-fixes.patch",
+        "crc32": 4130726192
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-without-gregex.patch",
+        "bytes": 7759,
+        "sha256": "81013d38fc18da12522bc3c58d8988d2ac9ee9ca5a55bd4e68486044aa55191f",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-without-gregex.patch",
+        "crc32": 59108658
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-without-win32appinfo.patch",
+        "bytes": 1146,
+        "sha256": "66dbbd92404b11316d7bc896889c531697328d645af989e5a0c11aab76fbbca4",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/glib-2-without-win32appinfo.patch",
+        "crc32": 3438033608
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/libheif-1-fixes.patch",
+        "bytes": 1289,
+        "sha256": "846ad069dca01304f6fcbe92ff29636b4183d8eef3d275349dc91cedc8a313c7",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/libheif-1-fixes.patch",
+        "crc32": 1484415637
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/librsvg-2-fixes.patch",
+        "bytes": 5972,
+        "sha256": "4806547a27937b4ad0f7bae4e17d34e12c959e5fef91756951726ec71e8a0910",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/librsvg-2-fixes.patch",
+        "crc32": 533506186
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/libxml2-2-fixes.patch",
+        "bytes": 994,
+        "sha256": "ec36b3e3d5aa05a86ce0ca743c0504e6cfb2d5539b7a45b6c78c8e7b52018f6f",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/libxml2-2-fixes.patch",
+        "crc32": 1582229601
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/patches/uhdr-1-fixes.patch",
+        "bytes": 6224,
+        "sha256": "c308dd7c65a2bee0fea7471a71916dea1a5f48d698ebedeff41904b38074484b",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/patches/uhdr-1-fixes.patch",
+        "crc32": 2882904924
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch",
+        "bytes": 2420,
+        "sha256": "7952f72840a29a815740bbcdbf986903a800a97af3685d2654f0d020641e89c1",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-fixes.patch",
+        "crc32": 3739087366
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch",
+        "bytes": 7615,
+        "sha256": "3ddb71285d43dde5c75a0080cc62cbc158d32359af132b8314e76b85b9205764",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/plugins/mozjpeg/patches/mozjpeg-4-pr-453.patch",
+        "crc32": 2168831590
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch",
+        "bytes": 782,
+        "sha256": "a8386926e1023d3183a48a3f69687ab13ec5639ad07496cdf5f045f0993fb0fd",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/plugins/proxy-libintl/patches/proxy-libintl-1-fixes.patch",
+        "crc32": 1825905551
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/patches/build-win64-mxe/build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch",
+        "bytes": 1031,
+        "sha256": "22f110cc8b1566db3726d0d448ab04cd11297f062368bdd77971adf9455b852b",
+        "member": "mxe-native-source-graph/patches/build-win64-mxe/build/plugins/zlib-ng/patches/zlib-ng-2-fixes.patch",
+        "crc32": 4250486957
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/receipt.json",
+        "bytes": 55951,
+        "sha256": "2b0f157771076fc4d7aab9b3ccd48bbc01dabe088eeaa6195dd85cc5f80d4d8b",
+        "member": "mxe-native-source-graph/receipt.json",
+        "crc32": 3977851161
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/members/mxe-native-source-graph/sources.tsv",
+        "bytes": 23669,
+        "sha256": "9ae23240ebb7958a82b629f96d68ecdd567ab32bb15471cdf39e24b679dd78ac",
+        "member": "mxe-native-source-graph/sources.tsv",
+        "crc32": 1868766203
+      }
+    ],
+    "producer": [
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/.github/workflows/windows-native-source-graph.yml.original",
+        "bytes": 1328,
+        "sha256": "65088880b4c914f78e2b90236736f7717d8f000bdfa1ab26ac3a7d010498808c",
+        "upstreamPath": ".github/workflows/windows-native-source-graph.yml",
+        "gitBlob": "03c85a86c9c4e865e6b9fe8b75107dcdf7d11274"
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/tools/release/capture-windows-native-source-graph.js.original",
+        "bytes": 13667,
+        "sha256": "301383e31b00fdba44138cacad3e7156048caeaa1ced313fcfcefb4378e93ca5",
+        "upstreamPath": "tools/release/capture-windows-native-source-graph.js",
+        "gitBlob": "15fcd6edf318ff46f5cb384ed47cedcd511a48b6"
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/tools/release/windows-native-build-inputs.js.original",
+        "bytes": 9009,
+        "sha256": "26658466c57fb5d88de9077fabf0542d05b81c30cd76202543e89af04278b07b",
+        "upstreamPath": "tools/release/windows-native-build-inputs.js",
+        "gitBlob": "157b2337803eb739cdb9b6c49d99b70ac5a6f298"
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/tools/release/source-archive-stream.js.original",
+        "bytes": 7102,
+        "sha256": "39cdf3387699797aa91742ba7d0899dfde60131dda72fe8a3b71fdeafdd14f12",
+        "upstreamPath": "tools/release/source-archive-stream.js",
+        "gitBlob": "413d50ede37b33576e7df74581205ba0f29f89e3"
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/tools/release/materials.js.original",
+        "bytes": 47746,
+        "sha256": "f431888666933c94d2504251ee083c8ec3a7a867abd923033cd86c3c8dd760ef",
+        "upstreamPath": "tools/release/materials.js",
+        "gitBlob": "90ca0a503684c29e836d17ceb59f901aeb7f421e"
+      },
+      {
+        "path": "windows-native-aggregate-sources/graph/producer/tests/release/windows-native-build-inputs.test.js.original",
+        "bytes": 4637,
+        "sha256": "0a4051195818df0eb44e85c35674d4705acfa5036e226de43b47245d7ea94e77",
+        "upstreamPath": "tests/release/windows-native-build-inputs.test.js",
+        "gitBlob": "aa61eebcdbd4ef93feaba20a1a3d76f202827e6c"
+      }
+    ],
+    "producerTrees": [
+      {
+        "prefix": "",
+        "gitTree": "d1050cdaff035aec36ae95bcfc3641282cab9a98",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/root.object",
+          "bytes": 397,
+          "sha256": "2df2033a0475089acace3a9fdff81f21ac649caf21ef4b1c0ce7d5a6501e0a33"
+        }
+      },
+      {
+        "prefix": ".github",
+        "gitTree": "59286eaa57db9a77047e67310052e285a50a0cb0",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/.github.object",
+          "bytes": 36,
+          "sha256": "e7fced1bc0e2fe5d5fc21d639b5ed37678fb55d5db8ce33e983801ef5ed70e40"
+        }
+      },
+      {
+        "prefix": ".github/workflows",
+        "gitTree": "a834a20ece50aa1f30955fe9e5da1ee01f325933",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/.github-workflows.object",
+          "bytes": 689,
+          "sha256": "b04f6de3ce28ecf8bf1d00545a3d8c8a2ee59c509c7404a94894793f73aa90d4"
+        }
+      },
+      {
+        "prefix": "tests",
+        "gitTree": "9cd64d68ad291344833b9f3f22c5b2f57b71fa68",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/tests.object",
+          "bytes": 857,
+          "sha256": "ddc9839e7328fdebe86251aa9b0ec96f2fd39b9594a97f27c5ff38c0f648cf95"
+        }
+      },
+      {
+        "prefix": "tests/release",
+        "gitTree": "2a44828e2d13ede8b95ceaf2753077ccece4e12d",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/tests-release.object",
+          "bytes": 669,
+          "sha256": "ef251aecb49cb8751137acd6c556ec2571caf51b54d5bbdff4587a6a3b699bb2"
+        }
+      },
+      {
+        "prefix": "tools",
+        "gitTree": "42daf50e6799480ca146e87d7cf9f32d83516f88",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/tools.object",
+          "bytes": 803,
+          "sha256": "20e1a7a94ea1de652c3e66e80fa5730ff187f6de7790d97c08451557dd77121a"
+        }
+      },
+      {
+        "prefix": "tools/release",
+        "gitTree": "23ef02380b84bb0fb408038292329620b21eb9cf",
+        "object": {
+          "path": "windows-native-aggregate-sources/graph/producer-trees/tools-release.object",
+          "bytes": 1256,
+          "sha256": "fbfea9ac78c74dc2d4820d731ac35b19a28b06ed3efab8a38513dd71d7577295"
+        }
+      }
+    ]
+  },
+  "sources": [
+    {
+      "file": "libaom-3.14.1.tar.gz",
+      "packages": [
+        "aom"
+      ],
+      "sha256": "44bf90dbd23e734d50e70a8c41c285193922938bd0d3bc2ee56764d181d55ef5",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/aom/libaom-3.14.1.tar.gz",
+        "bytes": 6368868,
+        "sha256": "44bf90dbd23e734d50e70a8c41c285193922938bd0d3bc2ee56764d181d55ef5"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/aom/acquisition.json",
+        "bytes": 2130,
+        "sha256": "dcefc9bdf1c4df90dcbbfa5b120cb3cacbe36cf403aac919d131c0fef8a2cd24"
+      },
+      "root": "libaom-3.14.1/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/aom/members.json",
+        "bytes": 392485,
+        "sha256": "4bb306e07fb667ffd9adaecda12bc7b3d1373a49a30d01b4f7ccd019785ff80c"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/AUTHORS",
+          "bytes": 13105,
+          "sha256": "1bf4faf64255fc1ffe1428e56f58f36050eeaac47a6401e532ca15823d21e9ac",
+          "member": "libaom-3.14.1/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/LICENSE",
+          "bytes": 1316,
+          "sha256": "4764a286d8b2faeaf42f4418e7d7a28d58fc8fd4d00a3d0a7f44b0a4099de7f2",
+          "member": "libaom-3.14.1/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/PATENTS",
+          "bytes": 5701,
+          "sha256": "661fb8e504744e95587b556b94a58343448300606a41bea8c7a9b97125696e61",
+          "member": "libaom-3.14.1/PATENTS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/fastfeat/LICENSE",
+          "bytes": 1504,
+          "sha256": "499041ddee5227b6f29ca06c17803e5fe24d60f243c69635cd76b7ba08d0ddd5",
+          "member": "libaom-3.14.1/third_party/fastfeat/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/googletest/src/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+          "member": "libaom-3.14.1/third_party/googletest/src/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/highway/LICENSE-BSD3",
+          "bytes": 1515,
+          "sha256": "d25e82e26acd42ca3ccc9993622631163425b869b9e16284226d534cff6470f2",
+          "member": "libaom-3.14.1/third_party/highway/LICENSE-BSD3"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/libwebm/AUTHORS.TXT",
+          "bytes": 137,
+          "sha256": "3edb5f5496bfff3d6d4a62fa75fe996b814920d0d6e348c2e65c589e7ac5d177",
+          "member": "libaom-3.14.1/third_party/libwebm/AUTHORS.TXT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/libwebm/LICENSE.TXT",
+          "bytes": 1496,
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+          "member": "libaom-3.14.1/third_party/libwebm/LICENSE.TXT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/libwebm/PATENTS.TXT",
+          "bytes": 1436,
+          "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+          "member": "libaom-3.14.1/third_party/libwebm/PATENTS.TXT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/libyuv/LICENSE",
+          "bytes": 1506,
+          "sha256": "2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f",
+          "member": "libaom-3.14.1/third_party/libyuv/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/vector/LICENSE",
+          "bytes": 1084,
+          "sha256": "ff6c857ce2708e87701323078aef115c1872a1f80a9649f86dc899b48083bc60",
+          "member": "libaom-3.14.1/third_party/vector/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/third_party/x86inc/LICENSE",
+          "bytes": 936,
+          "sha256": "719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8",
+          "member": "libaom-3.14.1/third_party/x86inc/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/aom/notices/tools/gen_authors.sh",
+          "bytes": 249,
+          "sha256": "45c9424801e8f2e7b6476b34013c9430eff58c642a588c747dcc3d7636424500",
+          "member": "libaom-3.14.1/tools/gen_authors.sh"
+        }
+      ]
+    },
+    {
+      "file": "cairo-1.18.4.tar.xz",
+      "packages": [
+        "cairo"
+      ],
+      "sha256": "445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "cairo"
+      },
+      "archive": {
+        "path": "native-full-sources/cairo/cairo-1.18.4.tar.xz",
+        "bytes": 32578804,
+        "sha256": "445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb",
+        "url": "https://cairographics.org/releases/cairo-1.18.4.tar.xz"
+      },
+      "root": "cairo-1.18.4/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/cairo/members.json",
+        "bytes": 1369523,
+        "sha256": "6b237a7d1c1942bddd1633235d469f6d6e5d95844984bf642bb65083d328b76d"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/AUTHORS",
+          "bytes": 8148,
+          "sha256": "7118b55c2d911781622ecb281d9e11fd7eeb5f46c8925e6d740f96f89e79a8fe",
+          "member": "cairo-1.18.4/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/COPYING",
+          "bytes": 1576,
+          "sha256": "67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf",
+          "member": "cairo-1.18.4/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/COPYING-LGPL-2.1",
+          "bytes": 26533,
+          "sha256": "9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d",
+          "member": "cairo-1.18.4/COPYING-LGPL-2.1"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/COPYING-MPL-1.1",
+          "bytes": 25755,
+          "sha256": "53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f",
+          "member": "cairo-1.18.4/COPYING-MPL-1.1"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/perf/COPYING",
+          "bytes": 229,
+          "sha256": "6f93b45ea874706058ae35bc02df79c3f9daf00948672eea8394cc25d1327d49",
+          "member": "cairo-1.18.4/perf/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/test/COPYING",
+          "bytes": 1026,
+          "sha256": "a37812e0e27a211272d4c27fa45028c3653e78bb708acccb77c94128dc72b98e",
+          "member": "cairo-1.18.4/test/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/util/COPYING",
+          "bytes": 138,
+          "sha256": "008e976b6e5e7155ee24322073f42cab7cd6daf90bc2322f1d5c3aacab94111c",
+          "member": "cairo-1.18.4/util/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/util/cairo-script/COPYING",
+          "bytes": 656,
+          "sha256": "25f4d4ce651b1ee6aff713ff986275d6c190a8537e36437886f8bf1497b0a174",
+          "member": "cairo-1.18.4/util/cairo-script/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/util/cairo-trace/COPYING",
+          "bytes": 179,
+          "sha256": "421158645572270264a980b8b130dd988138e4dae20144e22455446e0ef90902",
+          "member": "cairo-1.18.4/util/cairo-trace/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cairo/notices/util/cairo-trace/COPYING-GPL-3",
+          "bytes": 35147,
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+          "member": "cairo-1.18.4/util/cairo-trace/COPYING-GPL-3"
+        }
+      ]
+    },
+    {
+      "file": "cgif-0.5.3.tar.gz",
+      "packages": [
+        "cgif"
+      ],
+      "sha256": "dcc7731e974ee77db75df26c99aca4d95f11ca2d267d870d42bce1e0d1e1e75f",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "cgif"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/cgif/v0.5.3.tar.gz",
+        "bytes": 40021,
+        "sha256": "dcc7731e974ee77db75df26c99aca4d95f11ca2d267d870d42bce1e0d1e1e75f",
+        "url": "https://github.com/dloebl/cgif/archive/v0.5.3.tar.gz"
+      },
+      "root": "cgif-0.5.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/cgif/members.json",
+        "bytes": 19753,
+        "sha256": "6c9e3fd28d5461f66127c8e2a7ab557f486546eace52fec4198753302853dee0"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cgif/notices/AUTHORS",
+          "bytes": 193,
+          "sha256": "76ed8a61cb7e254cab424641ebbb4069d08bf820dfe00f6f7ab5485057ca003d",
+          "member": "cgif-0.5.3/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/cgif/notices/LICENSE",
+          "bytes": 1099,
+          "sha256": "7264dede477abab4ac3fe8236beb8153845c04ccd33b18f281085087e219fc6d",
+          "member": "cgif-0.5.3/LICENSE"
+        }
+      ]
+    },
+    {
+      "file": "expat-2.8.3.tar.xz",
+      "packages": [
+        "expat"
+      ],
+      "sha256": "f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "expat"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/expat/expat-2.8.3.tar.xz",
+        "bytes": 517264,
+        "sha256": "f6256df90c906773d344da084402b7d3e4f22ed41b1a59c989098a83d3ea0c85",
+        "url": "https://github.com/libexpat/libexpat/releases/download/R_2_8_3/expat-2.8.3.tar.xz"
+      },
+      "root": "expat-2.8.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/expat/members.json",
+        "bytes": 44271,
+        "sha256": "3637ea73a4ff3dcc6e09c54e593ae15ab22aa46152c4e5b61ec66de10dac2d5a"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/expat/notices/COPYING",
+          "bytes": 1144,
+          "sha256": "31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87",
+          "member": "expat-2.8.3/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/expat/notices/AUTHORS",
+          "bytes": 142,
+          "sha256": "59f14371c6b75912cfebb46e6247ee5146766e803a0365b124e5d3011e7d0877",
+          "member": "expat-2.8.3/AUTHORS"
+        }
+      ]
+    },
+    {
+      "file": "fontconfig-2.18.3.tar.xz",
+      "packages": [
+        "fontconfig"
+      ],
+      "sha256": "4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/fontconfig/fontconfig-2.18.3.tar.xz",
+        "bytes": 1172016,
+        "sha256": "4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/fontconfig/acquisition.json",
+        "bytes": 2249,
+        "sha256": "191c07e5e4f505f4a6f275a9c91e3d4ec25f706e63088a4014a5f573face4f7d"
+      },
+      "root": "fontconfig-2.18.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/fontconfig/members.json",
+        "bytes": 277000,
+        "sha256": "f25638a715e47d620dd28d6d3c4e20cd7d13aaa0e354223351cd07d59b90812e"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/fontconfig/notices/AUTHORS",
+          "bytes": 62,
+          "sha256": "db6d73a160bb2de10268f88ef60aae91771fefdeee4992b791c76ce6592a4a4b",
+          "member": "fontconfig-2.18.3/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/fontconfig/notices/COPYING",
+          "bytes": 8616,
+          "sha256": "51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067",
+          "member": "fontconfig-2.18.3/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "freetype-2.14.3.tar.xz",
+      "packages": [
+        "freetype",
+        "freetype-bootstrap"
+      ],
+      "sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/freetype/freetype-2.14.3.tar.xz",
+        "bytes": 2670220,
+        "sha256": "36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/freetype/acquisition.json",
+        "bytes": 1435,
+        "sha256": "813a2e1f6ca9d9062c7cdd215e153c4f63cc3be05c5a3be5f5607e204de9472d"
+      },
+      "root": "freetype-2.14.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/freetype/members.json",
+        "bytes": 233516,
+        "sha256": "a79e73d229675d3a2e982a568c0b009c788d5b1ef58737d9209b729d7357b744"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/docs/GPLv2.TXT",
+          "bytes": 17994,
+          "sha256": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18",
+          "member": "freetype-2.14.3/docs/GPLv2.TXT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/docs/FTL.TXT",
+          "bytes": 6743,
+          "sha256": "5a5ee54c5001bbad1cdc1a57cc3dd4c42199b2da09d39c7ee41fab002d02967f",
+          "member": "freetype-2.14.3/docs/FTL.TXT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/src/tools/update-copyright-year",
+          "bytes": 4272,
+          "sha256": "f3e4b6f122dce96b6ba85c3d600fd19a766ab5e0fd0cbdeee785d0d88f111d3a",
+          "member": "freetype-2.14.3/src/tools/update-copyright-year"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/src/tools/no-copyright",
+          "bytes": 1282,
+          "sha256": "3e2c8db4e09e12e9a138ba7ba8c0b762eff36802c6c1273d73ac049d4949a298",
+          "member": "freetype-2.14.3/src/tools/no-copyright"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/src/tools/update-copyright",
+          "bytes": 383,
+          "sha256": "ae5b05f1d3f5235eb91ce41518be95022443f68bce5d200b6e1cc1fb57a5017e",
+          "member": "freetype-2.14.3/src/tools/update-copyright"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/freetype/notices/LICENSE.TXT",
+          "bytes": 2149,
+          "sha256": "bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b",
+          "member": "freetype-2.14.3/LICENSE.TXT"
+        }
+      ]
+    },
+    {
+      "file": "fribidi-1.0.16.tar.xz",
+      "packages": [
+        "fribidi"
+      ],
+      "sha256": "1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "fribidi"
+      },
+      "archive": {
+        "path": "native-full-sources/fribidi/fribidi-1.0.16.tar.xz",
+        "bytes": 1098260,
+        "sha256": "1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c",
+        "url": "https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz"
+      },
+      "root": "fribidi-1.0.16/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/fribidi/members.json",
+        "bytes": 49260,
+        "sha256": "f9c9b173bcc3883994560633eb8ef2236418911fdb2f2607f1a4ac13f90b6fa3"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/fribidi/notices/AUTHORS",
+          "bytes": 1640,
+          "sha256": "cb173f55c9514c8f38f4647ac3fedd5f8611358d331e65ab955da931e826861c",
+          "member": "fribidi-1.0.16/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/fribidi/notices/COPYING",
+          "bytes": 26440,
+          "sha256": "32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b",
+          "member": "fribidi-1.0.16/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "glib-2.89.4.tar.xz",
+      "packages": [
+        "glib"
+      ],
+      "sha256": "1cdbb799f558832e6f14b8337b5fd599c6918ab144977b55e05e00a5e2e84a2c",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "glib"
+      },
+      "archive": {
+        "path": "native-full-sources/glib/glib-2.89.4.tar.xz",
+        "bytes": 5830980,
+        "sha256": "1cdbb799f558832e6f14b8337b5fd599c6918ab144977b55e05e00a5e2e84a2c",
+        "url": "https://download.gnome.org/sources/glib/2.89/glib-2.89.4.tar.xz"
+      },
+      "root": "glib-2.89.4/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/glib/members.json",
+        "bytes": 632858,
+        "sha256": "56053e0d680f0f0db4c5c284f8c5b9f535c5b46cf2009d1ebcf4a6bf2879a295"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/AFL-2.0.txt",
+          "bytes": 8987,
+          "sha256": "7ecc7db84298adb05d2cf10339c63a5315a1c5c270a68d97d7d40a53b508ccde",
+          "member": "glib-2.89.4/LICENSES/AFL-2.0.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/Apache-2.0.txt",
+          "bytes": 10280,
+          "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+          "member": "glib-2.89.4/LICENSES/Apache-2.0.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/CC-BY-SA-3.0.txt",
+          "bytes": 22240,
+          "sha256": "3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f",
+          "member": "glib-2.89.4/LICENSES/CC-BY-SA-3.0.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/CC0-1.0.txt",
+          "bytes": 7048,
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "member": "glib-2.89.4/LICENSES/CC0-1.0.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/GPL-2.0-or-later.txt",
+          "bytes": 17337,
+          "sha256": "aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3",
+          "member": "glib-2.89.4/LICENSES/GPL-2.0-or-later.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/LGPL-2.1-only.txt",
+          "bytes": 25967,
+          "sha256": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+          "member": "glib-2.89.4/LICENSES/LGPL-2.1-only.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/LGPL-2.1-or-later.txt",
+          "bytes": 25967,
+          "sha256": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+          "member": "glib-2.89.4/LICENSES/LGPL-2.1-or-later.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/LLVM-exception.txt",
+          "bytes": 919,
+          "sha256": "e34c58338bd89d43e709e226610d8f32b3e3c47f4ad9a99a8dc1d4ac7842488e",
+          "member": "glib-2.89.4/LICENSES/LLVM-exception.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/LicenseRef-old-glib-tests.txt",
+          "bytes": 841,
+          "sha256": "fb261b2d5dbe76c4850f90da763210bc385e52428df6bbfd7b06295ac8a32914",
+          "member": "glib-2.89.4/LICENSES/LicenseRef-old-glib-tests.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/MIT.txt",
+          "bytes": 1078,
+          "sha256": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+          "member": "glib-2.89.4/LICENSES/MIT.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/LICENSES/MPL-1.1.txt",
+          "bytes": 23669,
+          "sha256": "6214f8b1300bb9f37b16ebc146f8f61af0187e0025042ff95c8b3030744a8795",
+          "member": "glib-2.89.4/LICENSES/MPL-1.1.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/docs/reference/AUTHORS",
+          "bytes": 122,
+          "sha256": "b4f60a02b2b1f82764f8295b2eafbfcd4c33f596d70abcf5cb3c3623b1cfbc6d",
+          "member": "glib-2.89.4/docs/reference/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/docs/reference/COPYING",
+          "bytes": 1698,
+          "sha256": "b1ec1d0e5947f81e815d8771f7d4d90671a94bb10a42dc687fb566de461a57aa",
+          "member": "glib-2.89.4/docs/reference/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/gmodule/AUTHORS",
+          "bytes": 25,
+          "sha256": "28073c8c65c072387b778ba00b6c24a2ff1b573ca4415e151aa91fab5a6454be",
+          "member": "glib-2.89.4/gmodule/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/subprojects/gvdb/COPYING",
+          "bytes": 26445,
+          "sha256": "bdbcdaa7858872393e9d6b216bbdc8a23e99d98dd6cdb7cda19458025b9e19fc",
+          "member": "glib-2.89.4/subprojects/gvdb/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/glib/notices/subprojects/gvdb/LICENSES/LGPL-2.1-or-later.txt",
+          "bytes": 26001,
+          "sha256": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2",
+          "member": "glib-2.89.4/subprojects/gvdb/LICENSES/LGPL-2.1-or-later.txt"
+        }
+      ]
+    },
+    {
+      "file": "harfbuzz-14.3.1.tar.xz",
+      "packages": [
+        "harfbuzz"
+      ],
+      "sha256": "9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/harfbuzz/harfbuzz-14.3.1.tar.xz",
+        "bytes": 19826476,
+        "sha256": "9dae9538aae2ffdf70cec31f2c27bf68e2aaeeae3112688467697d5faf6194f7"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/harfbuzz/acquisition.json",
+        "bytes": 3317,
+        "sha256": "bac1151b4f00d55d337060a45fefb32a4d93ce362da3d743ebf4787bbb24e277"
+      },
+      "root": "harfbuzz-14.3.1/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/harfbuzz/members.json",
+        "bytes": 1148848,
+        "sha256": "60f13d6be5389d4e70524356e94ad53f23830504472d1fe8b211e87321b543d2"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/AUTHORS",
+          "bytes": 201,
+          "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+          "member": "harfbuzz-14.3.1/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/COPYING",
+          "bytes": 1971,
+          "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+          "member": "harfbuzz-14.3.1/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/src/ms-use/COPYING",
+          "bytes": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "member": "harfbuzz-14.3.1/src/ms-use/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/test/COPYING",
+          "bytes": 4370,
+          "sha256": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7",
+          "member": "harfbuzz-14.3.1/test/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/test/shape/data/aots/COPYING",
+          "bytes": 593,
+          "sha256": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb",
+          "member": "harfbuzz-14.3.1/test/shape/data/aots/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/harfbuzz/notices/test/shape/data/text-rendering-tests/COPYING",
+          "bytes": 584,
+          "sha256": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f",
+          "member": "harfbuzz-14.3.1/test/shape/data/text-rendering-tests/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "highway-1.4.0.tar.gz",
+      "packages": [
+        "highway"
+      ],
+      "sha256": "36f672ab48ddb3c8555e9e89e16fe400cd7d16c6eb455a1a3d0c146a63ababdc",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/highway/highway-1.4.0.tar.gz",
+        "bytes": 3691557,
+        "sha256": "36f672ab48ddb3c8555e9e89e16fe400cd7d16c6eb455a1a3d0c146a63ababdc"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/highway/acquisition.json",
+        "bytes": 3378,
+        "sha256": "948447ec2749ddad00d137aa1d4d8a62228a1ec734efbfdddaca0a3f6c5825ef"
+      },
+      "root": "highway-1.4.0/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/highway/members.json",
+        "bytes": 75740,
+        "sha256": "3d7e50d675a4aa359109bcc1acd250006f561e5f40e75154583c1b524a2cb8d5"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/highway/notices/LICENSE",
+          "bytes": 20785,
+          "sha256": "e340270d4f64384569a91d546acb5b094d69ce47f0c015db77abb74dc6f815af",
+          "member": "highway-1.4.0/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/highway/notices/debian/copyright",
+          "bytes": 825,
+          "sha256": "6e4ecf1cae052b678ea3178dd4b3652d581ee66a82d58db8800dd7d80dd6de76",
+          "member": "highway-1.4.0/debian/copyright"
+        }
+      ]
+    },
+    {
+      "file": "lcms2-2.19.1.tar.gz",
+      "packages": [
+        "lcms"
+      ],
+      "sha256": "bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "lcms"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/lcms/lcms2-2.19.1.tar.gz",
+        "bytes": 5728743,
+        "sha256": "bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8",
+        "url": "https://github.com/mm2/Little-CMS/releases/download/lcms2.19.1/lcms2-2.19.1.tar.gz"
+      },
+      "root": "lcms2-2.19.1/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/lcms/members.json",
+        "bytes": 102608,
+        "sha256": "286c43e3bd8a7f6c4d09b6aa0534ef2f0052aa7f76afd10834c26f9938af8f9b"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/lcms/notices/LICENSE",
+          "bytes": 1080,
+          "sha256": "6dbd60437f8ef91d8de1f08ad75882547fd4931bfcc3566a0735f28db1484d31",
+          "member": "lcms2-2.19.1/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/lcms/notices/plugins/fast_float/COPYING.GPL3",
+          "bytes": 35146,
+          "sha256": "c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271",
+          "member": "lcms2-2.19.1/plugins/fast_float/COPYING.GPL3"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/lcms/notices/plugins/threaded/COPYING.GPL3",
+          "bytes": 35146,
+          "sha256": "c53a65c2fd561c87eaabf1072ef5dcab8653042bc15308465f52413585eb6271",
+          "member": "lcms2-2.19.1/plugins/threaded/COPYING.GPL3"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/lcms/notices/utils/jpgicc/LICENSE_iccjpeg",
+          "bytes": 3234,
+          "sha256": "8baac37d14eed89b82ffcb041677dd701164eb5cc0f26e165fe47eb11afa0dca",
+          "member": "lcms2-2.19.1/utils/jpgicc/LICENSE_iccjpeg"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/lcms/notices/AUTHORS",
+          "bytes": 1010,
+          "sha256": "4847d97cd41e980794939b1d2694bd8f67b92856ec80e95c2fcfc34066f0df93",
+          "member": "lcms2-2.19.1/AUTHORS"
+        }
+      ]
+    },
+    {
+      "file": "libarchive-3.8.9.tar.xz",
+      "packages": [
+        "libarchive"
+      ],
+      "sha256": "888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "archive"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/archive/libarchive-3.8.9.tar.xz",
+        "bytes": 6617696,
+        "sha256": "888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde",
+        "url": "https://github.com/libarchive/libarchive/releases/download/v3.8.9/libarchive-3.8.9.tar.xz"
+      },
+      "root": "libarchive-3.8.9/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libarchive/members.json",
+        "bytes": 472460,
+        "sha256": "270ccf0732877f2db8f82d8bd10ba7b331cc5fce7e9bd7cb1270e5e9389900ae"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libarchive/notices/COPYING",
+          "bytes": 3089,
+          "sha256": "30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229",
+          "member": "libarchive-3.8.9/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "libexif-0.6.26.tar.xz",
+      "packages": [
+        "libexif"
+      ],
+      "sha256": "4a055ed6575e61ca46c3172be3c753cc16c9becd0f99ec71d58dd0e471476c0c",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "exif"
+      },
+      "archive": {
+        "path": "native-full-sources/exif/libexif-0.6.26.tar.xz",
+        "bytes": 1335488,
+        "sha256": "4a055ed6575e61ca46c3172be3c753cc16c9becd0f99ec71d58dd0e471476c0c",
+        "url": "https://github.com/libexif/libexif/releases/download/v0.6.26/libexif-0.6.26.tar.xz"
+      },
+      "root": "libexif-0.6.26/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libexif/members.json",
+        "bytes": 66908,
+        "sha256": "ecb308f632f6a05d9e7dacf5968faf7fcf4e4e5f3f5f0629c6599fcc8c758ce1"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libexif/notices/AUTHORS",
+          "bytes": 240,
+          "sha256": "a19ef6f43014fc57829658087d0c2bf59d97482e015cf553d7a68124603cbc44",
+          "member": "libexif-0.6.26/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libexif/notices/COPYING",
+          "bytes": 26434,
+          "sha256": "36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89",
+          "member": "libexif-0.6.26/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "libffi-3.8.0.tar.gz",
+      "packages": [
+        "libffi"
+      ],
+      "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "ffi"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/ffi/libffi-3.8.0.tar.gz",
+        "bytes": 1581626,
+        "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4",
+        "url": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz"
+      },
+      "root": "libffi-3.8.0/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libffi/members.json",
+        "bytes": 132306,
+        "sha256": "20e52a09681f4ea0023586a4abf39352d826118cafd6b3958a6a72c38db7dba3"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libffi/notices/LICENSE-BUILDTOOLS",
+          "bytes": 18698,
+          "sha256": "e67978cd18816c0cb7d29aaaacde7b7447402c2fb321a051698890a8eaedda94",
+          "member": "libffi-3.8.0/LICENSE-BUILDTOOLS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libffi/notices/LICENSE",
+          "bytes": 1132,
+          "sha256": "17b64dc60f3b6897a60f971e288b973f655c2edcdf08b25f3c3dd5549857881c",
+          "member": "libffi-3.8.0/LICENSE"
+        }
+      ]
+    },
+    {
+      "file": "libheif-1.23.2.tar.gz",
+      "packages": [
+        "libheif"
+      ],
+      "sha256": "8bd5d41d19dc84536d118b04774709f244df6104ef66d623dad5fa4650143405",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "heif"
+      },
+      "archive": {
+        "path": "native-full-sources/heif/libheif-1.23.2.tar.gz",
+        "bytes": 2111195,
+        "sha256": "8bd5d41d19dc84536d118b04774709f244df6104ef66d623dad5fa4650143405",
+        "url": "https://github.com/strukturag/libheif/releases/download/v1.23.2/libheif-1.23.2.tar.gz"
+      },
+      "root": "libheif-1.23.2/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libheif/members.json",
+        "bytes": 196851,
+        "sha256": "325cd7cd958d71e78a5ebf7f1f779a53ff388a21a21931a8ee875e79dde051ee"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libheif/notices/COPYING",
+          "bytes": 44366,
+          "sha256": "fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596",
+          "member": "libheif-1.23.2/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libheif/notices/examples/COPYING",
+          "bytes": 1066,
+          "sha256": "278ee9bbb13ecb080a131c68927bd589a6a56fd5449ce25e8e594c858864830d",
+          "member": "libheif-1.23.2/examples/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "libimagequant-2.4.1.tar.gz",
+      "packages": [
+        "libimagequant"
+      ],
+      "sha256": "47d2a84b7b1052975c9d50a3d4e3cacbf57b43d84a4c3131210848ead9964dfb",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "imagequant"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/imagequant/v2.4.1.tar.gz",
+        "bytes": 45792,
+        "sha256": "47d2a84b7b1052975c9d50a3d4e3cacbf57b43d84a4c3131210848ead9964dfb",
+        "url": "https://github.com/lovell/libimagequant/archive/v2.4.1.tar.gz"
+      },
+      "root": "libimagequant-2.4.1/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libimagequant/members.json",
+        "bytes": 7940,
+        "sha256": "78bb34f1155a934be5050b9c8be2145d3611cb2775b08c0c6a89f522b3886702"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libimagequant/notices/COPYRIGHT",
+          "bytes": 1851,
+          "sha256": "7391bfbcde4404cefb9849553362c3ab436f929f5cc1abb57071ec045590ee99",
+          "member": "libimagequant-2.4.1/COPYRIGHT"
+        }
+      ]
+    },
+    {
+      "file": "libpng-1.6.58.tar.xz",
+      "packages": [
+        "libpng"
+      ],
+      "sha256": "28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/libpng/libpng-1.6.58.tar.xz",
+        "bytes": 1070096,
+        "sha256": "28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/libpng/acquisition.json",
+        "bytes": 1459,
+        "sha256": "09d12f39aacbadb6151a17a6e0aae7fd0d9f41f89eff7b37b86769e89d45100f"
+      },
+      "root": "libpng-1.6.58/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libpng/members.json",
+        "bytes": 167381,
+        "sha256": "bbc2204c1c8672708e394f9808704e35aed803df31083bc39cbf0fe169c8b9a3"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/AUTHORS",
+          "bytes": 1773,
+          "sha256": "0c777e9f2a67bd4058ab91050eb7a56106c92ed038ba8fe5f54c83344f2d93ca",
+          "member": "libpng-1.6.58/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/LICENSE",
+          "bytes": 5345,
+          "sha256": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526",
+          "member": "libpng-1.6.58/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/ci/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "libpng-1.6.58/ci/LICENSE_MIT.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/contrib/gregbook/COPYING",
+          "bytes": 18097,
+          "sha256": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572",
+          "member": "libpng-1.6.58/contrib/gregbook/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/contrib/gregbook/LICENSE",
+          "bytes": 2373,
+          "sha256": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438",
+          "member": "libpng-1.6.58/contrib/gregbook/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/contrib/pngexif/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "libpng-1.6.58/contrib/pngexif/LICENSE_MIT.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/contrib/pngminus/LICENSE.txt",
+          "bytes": 1164,
+          "sha256": "1806f1f10d393e9e377b3a8d1b968452b54f1a90378f14eeef45426946ace330",
+          "member": "libpng-1.6.58/contrib/pngminus/LICENSE.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libpng/notices/scripts/cmake/AUTHORS.md",
+          "bytes": 862,
+          "sha256": "50633b976f0133862c921aa67d56de2c0b42eb344c8ca3853686efb092a447db",
+          "member": "libpng-1.6.58/scripts/cmake/AUTHORS.md"
+        }
+      ]
+    },
+    {
+      "file": "librsvg-2.62.91.tar.xz",
+      "packages": [
+        "librsvg"
+      ],
+      "sha256": "6caeae129d40dd88f8ec49436fd89bfe4ada716a125187a7fa0def8fcaa0b250",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "rsvg"
+      },
+      "archive": {
+        "path": "native-full-sources/rsvg/librsvg-2.62.91.tar.xz",
+        "bytes": 6766696,
+        "sha256": "6caeae129d40dd88f8ec49436fd89bfe4ada716a125187a7fa0def8fcaa0b250",
+        "url": "https://download.gnome.org/sources/librsvg/2.62/librsvg-2.62.91.tar.xz"
+      },
+      "root": "librsvg-2.62.91/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/librsvg/members.json",
+        "bytes": 639215,
+        "sha256": "35149aa0b7b40053d1eaceca91886761e1d3c6ffe4e339253fe658bf02fc72b7"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/librsvg/notices/AUTHORS",
+          "bytes": 1798,
+          "sha256": "14e765b9c1097d93f4b842a6ad23172b530cc00dfe7a5aae1b9afefdca54531b",
+          "member": "librsvg-2.62.91/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/librsvg/notices/COPYING.LIB",
+          "bytes": 26530,
+          "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+          "member": "librsvg-2.62.91/COPYING.LIB"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/librsvg/notices/librsvg-rebind/LICENSE",
+          "bytes": 1023,
+          "sha256": "f9c4c77baa3828004ee54b8a4f2db2e88ed44a6237a493965bf551fac0fcb62d",
+          "member": "librsvg-2.62.91/librsvg-rebind/LICENSE"
+        }
+      ]
+    },
+    {
+      "file": "libwebp-1.6.0.tar.gz",
+      "packages": [
+        "libwebp"
+      ],
+      "sha256": "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "webp"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/webp/libwebp-1.6.0.tar.gz",
+        "bytes": 4296070,
+        "sha256": "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564",
+        "url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz"
+      },
+      "root": "libwebp-1.6.0/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libwebp/members.json",
+        "bytes": 96412,
+        "sha256": "9440db04407e8287b37b989cbd822934fb7d0510082a9a4ea0cbd26e1125fcc9"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libwebp/notices/PATENTS",
+          "bytes": 1436,
+          "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+          "member": "libwebp-1.6.0/PATENTS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libwebp/notices/COPYING",
+          "bytes": 1496,
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+          "member": "libwebp-1.6.0/COPYING"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libwebp/notices/AUTHORS",
+          "bytes": 3279,
+          "sha256": "f251be89fd442bd9d701360730aea163cc8e2076ff03528f59267dc2c4f8b60a",
+          "member": "libwebp-1.6.0/AUTHORS"
+        }
+      ]
+    },
+    {
+      "file": "libxml2-2.15.3.tar.xz",
+      "packages": [
+        "libxml2"
+      ],
+      "sha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "xml2"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/xml2/libxml2-2.15.3.tar.xz",
+        "bytes": 3152452,
+        "sha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+        "url": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.tar.xz"
+      },
+      "root": "libxml2-2.15.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/libxml2/members.json",
+        "bytes": 1172902,
+        "sha256": "969f95960b395e1ddbcfcf36d3973da39ddb37d742e50e5b61e4753be4eaa2d9"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libxml2/notices/Copyright",
+          "bytes": 1314,
+          "sha256": "5d4873884a890122a4b9b20ad56ac6f7da1d796a5bfcf04a427970ac96217626",
+          "member": "libxml2-2.15.3/Copyright"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libxml2/notices/test/html-tokenizer/NOTICE",
+          "bytes": 1270,
+          "sha256": "d6a2cb265a0a249a234b89eeffa7f316ebe5bff546672a0a2b1a861dd2238460",
+          "member": "libxml2-2.15.3/test/html-tokenizer/NOTICE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/libxml2/notices/result/html-tokenizer/NOTICE",
+          "bytes": 1270,
+          "sha256": "d6a2cb265a0a249a234b89eeffa7f316ebe5bff546672a0a2b1a861dd2238460",
+          "member": "libxml2-2.15.3/result/html-tokenizer/NOTICE"
+        }
+      ]
+    },
+    {
+      "file": "mozjpeg-0826579.tar.gz",
+      "packages": [
+        "mozjpeg"
+      ],
+      "sha256": "375d19302f09dfa267651dcfd3ddb62862ab3a488862b6168ce755bb1a925860",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/mozjpeg/mozjpeg-0826579.tar.gz",
+        "bytes": 2442626,
+        "sha256": "375d19302f09dfa267651dcfd3ddb62862ab3a488862b6168ce755bb1a925860"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/mozjpeg/acquisition.json",
+        "bytes": 2040,
+        "sha256": "6647a75503d9310e3d72286188496f50375b3bf1cecadd1bcf4eab40ebbc5010"
+      },
+      "root": "mozilla-mozjpeg-0826579/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/mozjpeg/members.json",
+        "bytes": 151742,
+        "sha256": "2abbd25e7e5f84d66c5ab9805125a06d1558e8f14956a83d80d5675927c685f0"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/mozjpeg/notices/LICENSE.md",
+          "bytes": 5620,
+          "sha256": "96f5b328adbb78eeaaec6980d73fd558cb1e4d62560ed615646bc3cf5e532430",
+          "member": "mozilla-mozjpeg-0826579/LICENSE.md"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/mozjpeg/notices/README.ijg",
+          "bytes": 12715,
+          "sha256": "f4a85f8677ca4e41b185c0a9f7c31a30ddb9ce43c561483ee92ef12db37c2a10",
+          "member": "mozilla-mozjpeg-0826579/README.ijg"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/mozjpeg/notices/java/doc/legal/ADDITIONAL_LICENSE_INFO",
+          "bytes": 2114,
+          "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916",
+          "member": "mozilla-mozjpeg-0826579/java/doc/legal/ADDITIONAL_LICENSE_INFO"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/mozjpeg/notices/java/doc/legal/LICENSE",
+          "bytes": 19274,
+          "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+          "member": "mozilla-mozjpeg-0826579/java/doc/legal/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/mozjpeg/notices/release/License.rtf",
+          "bytes": 2172,
+          "sha256": "933e1427ec78050c76396182fd9819a23fef58c17e997b67581852167be971db",
+          "member": "mozilla-mozjpeg-0826579/release/License.rtf"
+        }
+      ]
+    },
+    {
+      "file": "pango-1.58.2.tar.xz",
+      "packages": [
+        "pango"
+      ],
+      "sha256": "342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "pango"
+      },
+      "archive": {
+        "path": "native-full-sources/pango/pango-1.58.2.tar.xz",
+        "bytes": 1918112,
+        "sha256": "342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a",
+        "url": "https://download.gnome.org/sources/pango/1.58/pango-1.58.2.tar.xz"
+      },
+      "root": "pango-1.58.2/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/pango/members.json",
+        "bytes": 152778,
+        "sha256": "d54b881f48d0c4690ccbb40773a3df93fa9ef53e9c6736dfce1b34a41f1a61f9"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/pango/notices/COPYING",
+          "bytes": 25292,
+          "sha256": "d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5",
+          "member": "pango-1.58.2/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "pixman-0.46.4.tar.gz",
+      "packages": [
+        "pixman"
+      ],
+      "sha256": "d09c44ebc3bd5bee7021c79f922fe8fb2fb57f7320f55e97ff9914d2346a591c",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "pixman"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/pixman/pixman-0.46.4.tar.gz",
+        "bytes": 827198,
+        "sha256": "d09c44ebc3bd5bee7021c79f922fe8fb2fb57f7320f55e97ff9914d2346a591c",
+        "url": "https://cairographics.org/releases/pixman-0.46.4.tar.gz"
+      },
+      "root": "pixman-0.46.4/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/pixman/members.json",
+        "bytes": 58225,
+        "sha256": "7294284c97228d40471e75d54d4260032ab7a795d7fb3a94486ed878acf02bc4"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/pixman/notices/AUTHORS",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "pixman-0.46.4/AUTHORS"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/pixman/notices/COPYING",
+          "bytes": 2087,
+          "sha256": "fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793",
+          "member": "pixman-0.46.4/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "proxy-libintl-0.5.tar.gz",
+      "packages": [
+        "proxy-libintl"
+      ],
+      "sha256": "f7a1cbd7579baaf575c66f9d99fb6295e9b0684a28b095967cfda17857595303",
+      "origin": {
+        "catalog": "native-packages.json",
+        "name": "proxy-libintl"
+      },
+      "archive": {
+        "path": "sharp-native-components/proxy-libintl/proxy-libintl-0.5.tar.gz",
+        "bytes": 13056,
+        "sha256": "f7a1cbd7579baaf575c66f9d99fb6295e9b0684a28b095967cfda17857595303",
+        "url": "https://github.com/frida/proxy-libintl/archive/0.5.tar.gz",
+        "root": "proxy-libintl-0.5/",
+        "members": [
+          {
+            "path": "proxy-libintl-0.5/COPYING",
+            "bytes": 25292,
+            "sha256": "d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5"
+          },
+          {
+            "path": "proxy-libintl-0.5/README.md",
+            "bytes": 2039,
+            "sha256": "a0cea22d295c8e9d020f6a8b32936443233b685d314e5ded96296cd92bd421cd"
+          },
+          {
+            "path": "proxy-libintl-0.5/libintl.c",
+            "bytes": 7326,
+            "sha256": "ffdca4ee882e133ecee5b996f3c38e08e94f7c8075d6ce1ad392e37d3eb28f62"
+          },
+          {
+            "path": "proxy-libintl-0.5/libintl.h",
+            "bytes": 3852,
+            "sha256": "36c160ad164e51a56113b1d4a94df95e7bcf04df837b3db08aea03550ae93e5f"
+          },
+          {
+            "path": "proxy-libintl-0.5/meson.build",
+            "bytes": 735,
+            "sha256": "8126a9bc4955fd3b1c2defeb41f1eef4cf2cebf37e20bee5e00a76aeea54a62f"
+          }
+        ]
+      },
+      "root": "proxy-libintl-0.5/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/proxy-libintl/members.json",
+        "bytes": 1343,
+        "sha256": "87a3afa3699a80e1c5b068e2502cc7a47d3143b16d4d231981746ef68fed3d05"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/proxy-libintl/notices/COPYING",
+          "bytes": 25292,
+          "sha256": "d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5",
+          "member": "proxy-libintl-0.5/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "tiff-4.7.2.tar.xz",
+      "packages": [
+        "tiff"
+      ],
+      "sha256": "4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88",
+      "archive": {
+        "path": "windows-native-aggregate-sources/native-sources/tiff/tiff-4.7.2.tar.xz",
+        "bytes": 2409652,
+        "sha256": "4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88"
+      },
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/native-sources/tiff/acquisition.json",
+        "bytes": 1286,
+        "sha256": "5d8c7dc98a12cc14365c4a10d07e871cff04b94cc54457ee08d03da8038b0065"
+      },
+      "root": "tiff-4.7.2/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/tiff/members.json",
+        "bytes": 286261,
+        "sha256": "958d305e41223fed29c5a9af1724e5b98cd7a0a0a0cd33fb7a4798108ddf3659"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/tiff/notices/doc/html-prebuilt/_sources/project/license.rst.txt",
+          "bytes": 1181,
+          "sha256": "02e86af3b805e0f2075ebb5ac512831f6ab2a97ddeb186de076c418956418ba1",
+          "member": "tiff-4.7.2/doc/html-prebuilt/_sources/project/license.rst.txt"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/tiff/notices/doc/html-prebuilt/project/license.html",
+          "bytes": 5663,
+          "sha256": "6c9436f8e9f58a79e044949e360291b9c910715fad31cdaed66bc61b0dcf33e6",
+          "member": "tiff-4.7.2/doc/html-prebuilt/project/license.html"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/tiff/notices/doc/project/license.rst",
+          "bytes": 1181,
+          "sha256": "02e86af3b805e0f2075ebb5ac512831f6ab2a97ddeb186de076c418956418ba1",
+          "member": "tiff-4.7.2/doc/project/license.rst"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/tiff/notices/LICENSE.md",
+          "bytes": 2416,
+          "sha256": "0e27c2382d7b8147972bbb746e04059a1152c8d0fda9d03ef1399d1a433c4ade",
+          "member": "tiff-4.7.2/LICENSE.md"
+        }
+      ]
+    },
+    {
+      "file": "uhdr-2.0.2.tar.gz",
+      "packages": [
+        "uhdr"
+      ],
+      "sha256": "aa8d193bb887c348c419780511dd03b374f4e07af8812b6d3f80c8537cf1ef2c",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "uhdr"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/uhdr/v2.0.2.tar.gz",
+        "bytes": 1518872,
+        "sha256": "aa8d193bb887c348c419780511dd03b374f4e07af8812b6d3f80c8537cf1ef2c",
+        "url": "https://github.com/google/libultrahdr/archive/v2.0.2.tar.gz"
+      },
+      "root": "libultrahdr-2.0.2/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/uhdr/members.json",
+        "bytes": 70550,
+        "sha256": "428a5c25332f6b43284f267f948883faf164e99e9f3186c176c5aa721472c44d"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/LICENSE",
+          "bytes": 12566,
+          "sha256": "c9247b5cb07866938643cc238292434e6f2af8642e1fce10771c0e4cc7909316",
+          "member": "libultrahdr-2.0.2/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/LICENSE-APACHE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "member": "libultrahdr-2.0.2/LICENSE-APACHE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/LICENSE-MIT",
+          "bytes": 1088,
+          "sha256": "029624bf1488ed7b8c92727d267c95f588c9c12fa6932c207884c2641a7e9d37",
+          "member": "libultrahdr-2.0.2/LICENSE-MIT"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/adobe-hdr-gain-map-license/NOTICE",
+          "bytes": 66,
+          "sha256": "746d8c9c414b335bb7c9615918a15a6489a4dcc1c5c3aac2bda410d1072c332a",
+          "member": "libultrahdr-2.0.2/adobe-hdr-gain-map-license/NOTICE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/tests/data/LICENSE",
+          "bytes": 19354,
+          "sha256": "c4b2cd68902b8c4a82c9b5ddebe15538acbce7f70a88fcc751e1e921bde89f7f",
+          "member": "libultrahdr-2.0.2/tests/data/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/third_party/image_io/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "member": "libultrahdr-2.0.2/third_party/image_io/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/third_party/image_io/MODULE_LICENSE_APACHE2",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "libultrahdr-2.0.2/third_party/image_io/MODULE_LICENSE_APACHE2"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/third_party/image_io/src/modp_b64/LICENSE",
+          "bytes": 1721,
+          "sha256": "d47e8390fb0d7ad4a18f26aedd6283c7ab6b5b4fabab536ccb4db7f9f6d90c08",
+          "member": "libultrahdr-2.0.2/third_party/image_io/src/modp_b64/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/uhdr/notices/third_party/image_io/src/modp_b64/MODULE_LICENSE_BSD",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "member": "libultrahdr-2.0.2/third_party/image_io/src/modp_b64/MODULE_LICENSE_BSD"
+        }
+      ]
+    },
+    {
+      "file": "vips-8.18.6.tar.xz",
+      "packages": [
+        "vips-web"
+      ],
+      "sha256": "3c41e1d5458081bfa4a5bc54e116c46259c75c6760a18027764555632b9dda3e",
+      "origin": {
+        "catalog": "native-full-sources.json",
+        "name": "vips"
+      },
+      "archive": {
+        "path": "native-full-sources/vips/vips-8.18.6.tar.xz",
+        "bytes": 25431000,
+        "sha256": "3c41e1d5458081bfa4a5bc54e116c46259c75c6760a18027764555632b9dda3e",
+        "url": "https://github.com/libvips/libvips/releases/download/v8.18.6/vips-8.18.6.tar.xz"
+      },
+      "root": "vips-8.18.6/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/vips-web/members.json",
+        "bytes": 225030,
+        "sha256": "1255a3f0f332102e69ab9bf848f061efb372a1fa14f8ae87b483970cce0a333d"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/vips-web/notices/LICENSE",
+          "bytes": 26530,
+          "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+          "member": "vips-8.18.6/LICENSE"
+        },
+        {
+          "path": "windows-native-aggregate-sources/native-sources/vips-web/notices/libvips/foreign/libnsgif/COPYING",
+          "bytes": 1133,
+          "sha256": "1469b759cf18e43c6e1b4ff892307d3962cbbb337ac497620d6690a219fad10c",
+          "member": "vips-8.18.6/libvips/foreign/libnsgif/COPYING"
+        }
+      ]
+    },
+    {
+      "file": "zlib-ng-2.3.3.tar.gz",
+      "packages": [
+        "zlib-ng"
+      ],
+      "sha256": "f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1",
+      "origin": {
+        "catalog": "native-aggregate-sources/catalog.json",
+        "name": "zlib-ng"
+      },
+      "archive": {
+        "path": "native-aggregate-sources/zlib-ng/2.3.3.tar.gz",
+        "bytes": 2447397,
+        "sha256": "f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1",
+        "url": "https://github.com/zlib-ng/zlib-ng/archive/2.3.3.tar.gz"
+      },
+      "root": "zlib-ng-2.3.3/",
+      "members": {
+        "path": "windows-native-aggregate-sources/native-sources/zlib-ng/members.json",
+        "bytes": 96665,
+        "sha256": "f3cde2942d938f944c22a429603001c3d53afc0359d4209bf0b7958aa6e431c8"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/native-sources/zlib-ng/notices/LICENSE.md",
+          "bytes": 867,
+          "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+          "member": "zlib-ng-2.3.3/LICENSE.md"
+        }
+      ]
+    }
+  ],
+  "instructions": {
+    "path": "windows-native-aggregate-sources/SOURCE-ACCESS.md",
+    "bytes": 9890,
+    "sha256": "2b211a80bda854d9e94ea12a3203f5a2070f954d61b5302b7a0aa949e06d44d2"
+  },
+  "limitations": [
+    "Current effective Linux-host GNU Make metadata for the actual x86_64-w64-mingw32.static/vips-web Sharp variant selects twenty-nine native nodes, twenty-eight source containers and sixteen original source patches. It is not a recovered historical builder/link map.",
+    "Twenty original containers are reused by exact SHA-256 from existing source groups. Eight Windows inputs are additionally supplied as complete original response containers, including AOM 3.14.1. Equal version strings alone are not source/archive identity.",
+    "Original complete containers retain development/test sources and notices without claiming those optional inputs were linked. Build-host and available-compatible-tool boundaries do not require historical compiler binaries or byte-identical old output.",
+    "This source-material consumer proves original graph/containers/notices and modification inputs. Actual modified native compilation, relinking and runtime replacement require separate functional evidence."
+  ]
+}

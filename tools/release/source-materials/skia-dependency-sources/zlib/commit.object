@@ -1,0 +1,21 @@
+tree 15d5d748ce2060ea03b9e9b60d9d0ee512274520
+parent 63c0cec0344e6ba70f22bd690187088299baaa94
+author Hans Wennborg <hans@chromium.org> 1706534306 +0000
+committer Copybara-Service <copybara-worker@google.com> 1706534678 -0800
+
+[zlib][build] Remove fdopen #defines in zutil.h.
+
+The latest version of Clang changed what macros it predefines on Apple
+targets, causing errors about predefined macros in zlib.
+
+See:
+https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9
+
+Bug: 1519899
+Change-Id: Ie75ef4078f2c86d89ba6c036ddd13e768a40ccbb
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/5237020
+Reviewed-by: Adenilson Cavalcanti <cavalcantii@chromium.org>
+Commit-Queue: Hans Wennborg <hans@chromium.org>
+Cr-Commit-Position: refs/heads/main@{#1253252}
+NOKEYCHECK=True
+GitOrigin-RevId: 2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9

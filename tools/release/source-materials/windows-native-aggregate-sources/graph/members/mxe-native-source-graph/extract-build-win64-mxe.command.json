@@ -1,0 +1,13 @@
+{
+  "executable": "tar",
+  "args": [
+    "-xzf",
+    "/home/runner/work/mediamanager/mediamanager/tools/release/source-materials/windows-native-aggregate-sources/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830.tar.gz",
+    "-C",
+    "/home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe"
+  ],
+  "code": 0,
+  "signal": null,
+  "overflow": false,
+  "expired": false
+}

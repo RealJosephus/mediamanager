@@ -1,0 +1,14 @@
+$(PLUGIN_HEADER)
+
+IS_JPEGLI := $(true)
+
+# Override sub-dependencies
+gdk-pixbuf_DEPS     := $(subst libjpeg-turbo,jpegli,$(gdk-pixbuf_DEPS))
+imagemagick_DEPS    := $(subst libjpeg-turbo,jpegli,$(imagemagick_DEPS))
+graphicsmagick_DEPS := $(subst libjpeg-turbo,jpegli,$(graphicsmagick_DEPS))
+libraw_DEPS         := $(subst libjpeg-turbo,jpegli,$(libraw_DEPS))
+openslide_DEPS      := $(subst libjpeg-turbo,jpegli,$(openslide_DEPS))
+poppler_DEPS        := $(subst libjpeg-turbo,jpegli,$(poppler_DEPS))
+tiff_DEPS           := $(subst libjpeg-turbo,jpegli,$(tiff_DEPS))
+uhdr_DEPS           := $(subst libjpeg-turbo,jpegli,$(uhdr_DEPS))
+vips_DEPS           := $(subst libjpeg-turbo,jpegli,$(vips_DEPS))

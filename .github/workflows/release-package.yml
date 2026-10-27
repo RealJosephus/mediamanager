@@ -1,0 +1,75 @@
+name: Release package materials
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/release/**', 'tests/release/**', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
+  pull_request:
+    paths: ['tools/release/**', 'tests/release/**', 'package.json', 'package-lock.json', '.github/workflows/release-package.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  # Preserve independent manual evidence while newer automatic candidates
+  # supersede obsolete package builds on the same ref.
+  group: release-materials-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'automatic' }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Package and install / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    env:
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.test-output/npm
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Check delivery integrity behavior
+        run: node --test tests/release/package.test.js tests/release/rsvg-cargo-sources.test.js tests/release/native-fallback-sources.test.js tests/release/source-archive-stream.test.js tests/release/skia-sources.test.js tests/release/skia-dependency-sources.test.js tests/release/canvas-cargo-sources.test.js tests/release/rsvg-windows-sources.test.js tests/release/rsvg-original-notices.test.js tests/release/canvas-current-graphs.test.js tests/release/native-aggregate-sources.test.js tests/release/rsvg-posix-sources.test.js tests/release/windows-native-build-inputs.test.js tests/release/windows-native-aggregate-sources.test.js tests/release/native-recombination-linux.test.js
+      - name: Assemble this candidate with locked production distributions
+        run: node tools/release/package.js .test-output/release-package
+      - name: Archive and relocate the actual delivery
+        shell: pwsh
+        run: |
+          tar -czf .test-output/mediamanager.tar.gz -C .test-output release-package
+          if ($LASTEXITCODE -ne 0) { throw 'Release archive creation failed.' }
+          New-Item -ItemType Directory -Path .test-output/relocated | Out-Null
+          tar -xzf .test-output/mediamanager.tar.gz -C .test-output/relocated
+          if ($LASTEXITCODE -ne 0) { throw 'Release archive extraction failed.' }
+          $archive = Get-Item -LiteralPath .test-output/mediamanager.tar.gz
+          @{ path = $archive.Name; bytes = $archive.Length; sha256 = (Get-FileHash -LiteralPath $archive.FullName -Algorithm SHA256).Hash.ToLowerInvariant() } |
+            ConvertTo-Json | Set-Content -LiteralPath .test-output/delivery.json -Encoding utf8
+      - name: Install offline and load the relocated runtime closure
+        run: node .test-output/relocated/release-package/tools/release/prepare.js .test-output/relocated/release-package/.test-output/install-receipt.json
+      - name: Preserve independently inspectable material receipts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-materials-${{ matrix.os }}-${{ github.sha }}
+          path: |
+            .test-output/release-package.receipt.json
+            .test-output/release-package/release.json
+            .test-output/delivery.json
+            .test-output/relocated/release-package/.test-output/install-receipt.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Preserve the verified delivery archive
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mediamanager-${{ matrix.os }}-${{ github.sha }}
+          path: .test-output/mediamanager.tar.gz
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30

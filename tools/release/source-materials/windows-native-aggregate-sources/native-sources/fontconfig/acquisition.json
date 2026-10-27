@@ -1,0 +1,65 @@
+{
+  "selectedSource": {
+    "file": "fontconfig-2.18.3.tar.xz",
+    "sha256": "4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3",
+    "url": "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.18.3/fontconfig-2.18.3.tar.xz",
+    "url2": "",
+    "packages": [
+      "fontconfig"
+    ]
+  },
+  "http": {
+    "requestedUrl": "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.18.3/fontconfig-2.18.3.tar.xz",
+    "responseUrl": "https://fsn1.your-objectstorage.com/fdo-gitlab-packages/e6/f0/e6f095e985e6762f1538b47ff1abda58dbe8ce088b16d8a5744fc179e9a2fc16/%40final/32/15/cb3a9549c5509ccaaa3a35452a33b3d1055dea84d2a520c9ae9972dc618e?response-content-disposition=attachment%3B%20filename%3D%22fontconfig-2.18.3.tar.xz%22%3B%20filename%2A%3DUTF-8%27%27fontconfig-2.18.3.tar.xz&response-content-type=application%2Fx-xz&X-Amz-Expires=600&X-Amz-Date=20261027T142907Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=HUZAP6VQ6FOSXT1W3SLF%2F20261027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=2f91bd84e5ab8b0d32e817ffe82fa22eab3a0d233429f0707761204b31a23953",
+    "status": 200,
+    "headers": [
+      [
+        "content-length",
+        "1172016"
+      ],
+      [
+        "accept-ranges",
+        "bytes"
+      ],
+      [
+        "last-modified",
+        "Thu, 06 Aug 2026 07:09:10 GMT"
+      ],
+      [
+        "x-rgw-object-type",
+        "Normal"
+      ],
+      [
+        "etag",
+        "\"ce819e229ca6fb7d1be47a192d6681a3\""
+      ],
+      [
+        "content-disposition",
+        "attachment; filename=\"fontconfig-2.18.3.tar.xz\"; filename*=UTF-8''fontconfig-2.18.3.tar.xz"
+      ],
+      [
+        "x-amz-request-id",
+        "tx00000b827e70aa6c63444-006ae0b533-8483735c-fsn1-prod1-ceph3"
+      ],
+      [
+        "content-type",
+        "application/x-xz"
+      ],
+      [
+        "date",
+        "Tue, 27 Oct 2026 14:29:07 GMT"
+      ],
+      [
+        "strict-transport-security",
+        "max-age=63072000"
+      ],
+      [
+        "connection",
+        "close"
+      ]
+    ],
+    "retrievedAt": "2026-10-27T14:29:09.854643+00:00",
+    "bytes": 1172016,
+    "sha256": "4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3"
+  }
+}

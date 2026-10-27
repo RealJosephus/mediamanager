@@ -1,0 +1,110 @@
+{
+  "requestedUrl": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz",
+  "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/321154/f687b05e-5780-4828-b7c6-c9c243e5cd9f?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T14%3A30%3A07Z&rscd=attachment%3B+filename%3Dlibffi-3.8.0.tar.gz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T13%3A30%3A03Z&ske=2026-10-27T14%3A30%3A07Z&sks=b&skv=2018-11-09&sig=g%2B3uhXa8faT03T6zKa7LtlQy2XFoGVtlrOorvbkI%2FL4%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzEwODM4NiwibmJmIjoxNzkzMTA4MDg2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.vdMhMPcfMSu665MSj_djhYbiFQC5sUmRjE1hXjt5tXU&response-content-disposition=attachment%3B%20filename%3Dlibffi-3.8.0.tar.gz&response-content-type=application%2Foctet-stream",
+  "status": 200,
+  "headers": [
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "Content-Length",
+      "1581626"
+    ],
+    [
+      "Last-Modified",
+      "Sat, 08 Aug 2026 22:12:47 GMT"
+    ],
+    [
+      "ETag",
+      "\"0x8DEF59A2D9E8ACF\""
+    ],
+    [
+      "Server",
+      "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+    ],
+    [
+      "x-ms-request-id",
+      "dbd57ba9-f01e-0011-1384-277be1000000"
+    ],
+    [
+      "x-ms-version",
+      "2018-11-09"
+    ],
+    [
+      "x-ms-creation-time",
+      "Sat, 08 Aug 2026 22:12:47 GMT"
+    ],
+    [
+      "x-ms-blob-content-md5",
+      "lv5G8qe7glWbNaJoosAAug=="
+    ],
+    [
+      "x-ms-lease-status",
+      "unlocked"
+    ],
+    [
+      "x-ms-lease-state",
+      "available"
+    ],
+    [
+      "x-ms-blob-type",
+      "BlockBlob"
+    ],
+    [
+      "x-ms-server-encrypted",
+      "true"
+    ],
+    [
+      "x-ms-access-tier",
+      "Hot"
+    ],
+    [
+      "x-ms-access-tier-inferred",
+      "true"
+    ],
+    [
+      "Via",
+      "1.1 varnish, 1.1 varnish"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Age",
+      "2566"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:46 GMT"
+    ],
+    [
+      "X-Served-By",
+      "cache-iad-kcgs7200154-IAD, cache-muc13978-MUC"
+    ],
+    [
+      "X-Cache",
+      "HIT, HIT"
+    ],
+    [
+      "X-Cache-Hits",
+      "819, 0"
+    ],
+    [
+      "X-Timer",
+      "S1793108086.442373,VS0,VE1"
+    ],
+    [
+      "Content-Disposition",
+      "attachment; filename=libffi-3.8.0.tar.gz"
+    ],
+    [
+      "Content-Type",
+      "application/octet-stream"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:48.605868+00:00",
+  "bytes": 1581626,
+  "sha256": "7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4"
+}

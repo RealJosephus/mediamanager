@@ -1,0 +1,86 @@
+{
+  "requestedUrl": "https://storage.googleapis.com/aom-releases/libaom-3.15.0.tar.gz",
+  "responseUrl": "https://storage.googleapis.com/aom-releases/libaom-3.15.0.tar.gz",
+  "status": 200,
+  "headers": [
+    [
+      "Content-Type",
+      "application/x-tar"
+    ],
+    [
+      "X-GUploader-UploadID",
+      "AP6rU83DLY5V0KITHOQlJoNLgRyKXL_6hE7zTK5p82Xo6S16jq4Oq0cnLYRsWun8oBIfK3Eduyjk9-0"
+    ],
+    [
+      "Expires",
+      "Tue, 27 Oct 2026 14:34:44 GMT"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:44 GMT"
+    ],
+    [
+      "Cache-Control",
+      "public, max-age=3600"
+    ],
+    [
+      "Last-Modified",
+      "Tue, 25 Aug 2026 22:00:33 GMT"
+    ],
+    [
+      "ETag",
+      "\"8745e5a98f3d22c8d919273758de6093\""
+    ],
+    [
+      "x-goog-generation",
+      "1787695233059475"
+    ],
+    [
+      "x-goog-metageneration",
+      "1"
+    ],
+    [
+      "x-goog-stored-content-encoding",
+      "identity"
+    ],
+    [
+      "x-goog-stored-content-length",
+      "6622801"
+    ],
+    [
+      "x-goog-hash",
+      "crc32c=880UIw=="
+    ],
+    [
+      "x-goog-hash",
+      "md5=h0XlqY89IsjZGSc3WN5gkw=="
+    ],
+    [
+      "x-goog-storage-class",
+      "STANDARD"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Content-Length",
+      "6622801"
+    ],
+    [
+      "Server",
+      "UploadServer"
+    ],
+    [
+      "Alt-Svc",
+      "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+    ],
+    [
+      "Connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:47.863803+00:00",
+  "bytes": 6622801,
+  "sha256": "ea08c38ecc078bc85bb1b691020e52b06250f1a81fe7ca5b624629225081af96"
+}

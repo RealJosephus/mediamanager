@@ -1,0 +1,6 @@
+[plugin]      /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/mxe/mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3/plugins/llvm-mingw/
+[overrides]   /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/overrides.mk
+[plugin]      /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/mozjpeg/
+[plugin]      /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/zlib-ng/
+[plugin]      /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/web-deps/
+[plugin]      /home/runner/work/mediamanager/mediamanager/.test-output/mxe-native-work-DSzulZ/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/build/plugins/proxy-libintl/

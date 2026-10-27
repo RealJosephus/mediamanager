@@ -1,0 +1,110 @@
+{
+  "requestedUrl": "https://github.com/libarchive/libarchive/releases/download/v3.8.9/libarchive-3.8.9.tar.xz",
+  "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/3219804/82a1ba6d-4c35-4926-9d87-d49fa1827c76?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T14%3A22%3A07Z&rscd=attachment%3B+filename%3Dlibarchive-3.8.9.tar.xz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T13%3A22%3A04Z&ske=2026-10-27T14%3A22%3A07Z&sks=b&skv=2018-11-09&sig=TTgrGp9e%2BKPCzFi2B473J1aM0jZnudlKr45ddddDWvQ%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzEwODM4NCwibmJmIjoxNzkzMTA4MDg0LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.PkGdhwrErAuZLz0HBLzDCFDiEqUxMr89lkl318_iWtA&response-content-disposition=attachment%3B%20filename%3Dlibarchive-3.8.9.tar.xz&response-content-type=application%2Foctet-stream",
+  "status": 200,
+  "headers": [
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "Content-Length",
+      "6617696"
+    ],
+    [
+      "Last-Modified",
+      "Tue, 28 Jul 2026 10:13:05 GMT"
+    ],
+    [
+      "ETag",
+      "\"0x8DEEC90D0C692FC\""
+    ],
+    [
+      "Server",
+      "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+    ],
+    [
+      "x-ms-request-id",
+      "2da83371-001e-0015-4d78-3ef6e6000000"
+    ],
+    [
+      "x-ms-version",
+      "2018-11-09"
+    ],
+    [
+      "x-ms-creation-time",
+      "Tue, 28 Jul 2026 10:13:05 GMT"
+    ],
+    [
+      "x-ms-blob-content-md5",
+      "U146/sX2HUk/Cxuei891OQ=="
+    ],
+    [
+      "x-ms-lease-status",
+      "unlocked"
+    ],
+    [
+      "x-ms-lease-state",
+      "available"
+    ],
+    [
+      "x-ms-blob-type",
+      "BlockBlob"
+    ],
+    [
+      "x-ms-server-encrypted",
+      "true"
+    ],
+    [
+      "x-ms-access-tier",
+      "Hot"
+    ],
+    [
+      "x-ms-access-tier-inferred",
+      "true"
+    ],
+    [
+      "Via",
+      "1.1 varnish, 1.1 varnish"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Age",
+      "0"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:45 GMT"
+    ],
+    [
+      "X-Served-By",
+      "cache-iad-kiad7000189-IAD, cache-muc13937-MUC"
+    ],
+    [
+      "X-Cache",
+      "HIT, MISS"
+    ],
+    [
+      "X-Cache-Hits",
+      "1827, 0"
+    ],
+    [
+      "X-Timer",
+      "S1793108085.142713,VS0,VE96"
+    ],
+    [
+      "Content-Disposition",
+      "attachment; filename=libarchive-3.8.9.tar.xz"
+    ],
+    [
+      "Content-Type",
+      "application/octet-stream"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:48.116345+00:00",
+  "bytes": 6617696,
+  "sha256": "888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde"
+}

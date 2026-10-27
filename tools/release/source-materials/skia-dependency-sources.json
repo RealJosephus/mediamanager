@@ -1,0 +1,797 @@
+{
+  "skiaCatalog": "skia-sources.json",
+  "canvasCatalog": "native-packages.json",
+  "targets": [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc",
+    "aarch64-apple-darwin"
+  ],
+  "components": [
+    {
+      "name": "brotli",
+      "externalPath": "third_party/externals/brotli",
+      "repository": "https://skia.googlesource.com/external/github.com/google/brotli.git",
+      "candidate": {
+        "commit": "6d03dfbedda1615c4cba1211f8d81735575209c8",
+        "tree": "aa8c71a20c8144165e0e4288c23b8a53c4922cbf"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/brotli/commit.object",
+        "bytes": 830,
+        "sha256": "a6f98ddaba8bd0ce8e43fc42880a40fc7bf985db22a16c99b836f58633172bc1"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/brotli/tree.json",
+        "bytes": 65269,
+        "sha256": "f852811e94bec50b8e4941d96acbefa4b76e479e45c525e9dcbcb24461780c50"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/brotli/brotli-6d03dfbedda1615c4cba1211f8d81735575209c8.tar.gz",
+        "bytes": 30702372,
+        "sha256": "40fdb4287176def2a5e34530c9eac3de168fb767ee17b1218c623aa820993e70",
+        "url": "https://skia.googlesource.com/external/github.com/google/brotli.git/+archive/6d03dfbedda1615c4cba1211f8d81735575209c8.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/brotli/members.json",
+        "bytes": 127798,
+        "sha256": "e5587c89242c2339a2db2797389a34606ad02e7ef0431724d91dade7d4708b52"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/brotli/notices/LICENSE",
+          "bytes": 1084,
+          "sha256": "3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94",
+          "member": "LICENSE"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "expat",
+      "externalPath": "third_party/externals/expat",
+      "repository": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
+      "candidate": {
+        "commit": "6154446fccefbf3ca644894f598969113b0c7bcd",
+        "tree": "3ee679127df994917b069ff28f4374c9207a5b62"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/expat/commit.object",
+        "bytes": 1220,
+        "sha256": "617519a7ab60f698f9c036b45a080927e00aa2bcdffea256e946bdbe4de0d4aa"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/expat/tree.json",
+        "bytes": 39514,
+        "sha256": "3a7e591e848e9b886e15618a15780bf05e7fcfbc2ecbd0a52ac645e832b86efd"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/expat/expat-6154446fccefbf3ca644894f598969113b0c7bcd.tar.gz",
+        "bytes": 8442021,
+        "sha256": "43313b16f6f819ddb7df7c5b8a1dc5a02c11e5e872177254a5f0c86675ea5491",
+        "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git/+archive/6154446fccefbf3ca644894f598969113b0c7bcd.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/expat/members.json",
+        "bytes": 77844,
+        "sha256": "fb301bca9735fc6ca527ebdfd61442ed3af938ce6aa690f9f76f3a71c4cb3aa0"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/expat/notices/COPYING",
+          "bytes": 1144,
+          "sha256": "31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87",
+          "member": "COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/expat/notices/expat/AUTHORS",
+          "bytes": 142,
+          "sha256": "59f14371c6b75912cfebb46e6247ee5146766e803a0365b124e5d3011e7d0877",
+          "member": "expat/AUTHORS"
+        },
+        {
+          "path": "skia-dependency-sources/expat/notices/expat/COPYING",
+          "bytes": 1144,
+          "sha256": "31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87",
+          "member": "expat/COPYING"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "freetype",
+      "externalPath": "third_party/externals/freetype",
+      "repository": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git",
+      "candidate": {
+        "commit": "264b5fbf5b912b39f98d038bf75d39be0a73f21b",
+        "tree": "99de7e508fedc1dffba70d9f64554912940c5832"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/freetype/commit.object",
+        "bytes": 232,
+        "sha256": "6151fb94cff7354359d14133f639d1e5f9012acbfe77f3f178556719f8301c97"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/freetype/tree.json",
+        "bytes": 131868,
+        "sha256": "072706cebc5308e85694a06ce2dc40fe7159d16d81e741ff4094d79b93279651"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/freetype/freetype-264b5fbf5b912b39f98d038bf75d39be0a73f21b.tar.gz",
+        "bytes": 2550856,
+        "sha256": "d6c6317403a37722f5824cbb1e63e603a9c389d4337fe387255164fc6cf09464",
+        "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git/+archive/264b5fbf5b912b39f98d038bf75d39be0a73f21b.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/freetype/members.json",
+        "bytes": 263002,
+        "sha256": "026700857c5c7cb5743b154d3e814e218fe05cc275885017b4454f66143008d3"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/freetype/notices/LICENSE.TXT",
+          "bytes": 2149,
+          "sha256": "bd36c8b474855fa294c2ec5c184544478ef3720aad37d65a6296a4f264fd2d3b",
+          "member": "LICENSE.TXT"
+        },
+        {
+          "path": "skia-dependency-sources/freetype/notices/src/tools/no-copyright",
+          "bytes": 1282,
+          "sha256": "3e2c8db4e09e12e9a138ba7ba8c0b762eff36802c6c1273d73ac049d4949a298",
+          "member": "src/tools/no-copyright"
+        },
+        {
+          "path": "skia-dependency-sources/freetype/notices/src/tools/update-copyright",
+          "bytes": 383,
+          "sha256": "ae5b05f1d3f5235eb91ce41518be95022443f68bce5d200b6e1cc1fb57a5017e",
+          "member": "src/tools/update-copyright"
+        },
+        {
+          "path": "skia-dependency-sources/freetype/notices/src/tools/update-copyright-year",
+          "bytes": 4272,
+          "sha256": "f3e4b6f122dce96b6ba85c3d600fd19a766ab5e0fd0cbdeee785d0d88f111d3a",
+          "member": "src/tools/update-copyright-year"
+        }
+      ],
+      "gitlinks": [
+        {
+          "path": "subprojects/dlg",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "395ccad2c1e0daae535c4d20bb0a3f2424648e17",
+          "bytes": null
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "harfbuzz",
+      "externalPath": "third_party/externals/harfbuzz",
+      "repository": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
+      "candidate": {
+        "commit": "9cb1fee51069b206effb4736e443b038d230789d",
+        "tree": "240735f4b549d13fbe8bbb4bc143549e0cd8d3f1"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/harfbuzz/commit.object",
+        "bytes": 237,
+        "sha256": "7a52869bbdbf5fc80fe22a4bb1b13a5e1a99839df54958560235542133f26a12"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/harfbuzz/tree.json",
+        "bytes": 751189,
+        "sha256": "2cf4a6a8be08525293b01df1bba31cd2f5916383f0162b5a2821d359cd2f7c75"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/harfbuzz/harfbuzz-9cb1fee51069b206effb4736e443b038d230789d.tar.gz",
+        "bytes": 37302870,
+        "sha256": "8dfdada726770762367b52b25b0e688e785b10d5be6929423fbe07ab8cff3b4c",
+        "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git/+archive/9cb1fee51069b206effb4736e443b038d230789d.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/harfbuzz/members.json",
+        "bytes": 1379467,
+        "sha256": "9fb961a9f8edf45892205f3b3aa344d7ac6af3cb87d585b08099317ca94a299f"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/AUTHORS",
+          "bytes": 201,
+          "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+          "member": "AUTHORS"
+        },
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/COPYING",
+          "bytes": 1971,
+          "sha256": "ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64",
+          "member": "COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/src/ms-use/COPYING",
+          "bytes": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+          "member": "src/ms-use/COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/test/COPYING",
+          "bytes": 4370,
+          "sha256": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7",
+          "member": "test/COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/test/shape/data/aots/COPYING",
+          "bytes": 593,
+          "sha256": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb",
+          "member": "test/shape/data/aots/COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/harfbuzz/notices/test/shape/data/text-rendering-tests/COPYING",
+          "bytes": 584,
+          "sha256": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f",
+          "member": "test/shape/data/text-rendering-tests/COPYING"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "highway",
+      "externalPath": "third_party/externals/highway",
+      "repository": "https://chromium.googlesource.com/external/github.com/google/highway.git",
+      "candidate": {
+        "commit": "457c891775a7397bdb0376bb1031e6e027af1c48",
+        "tree": "606dd7ee4458921c9a7027fc95d12eb86e604f74"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/highway/commit.object",
+        "bytes": 302,
+        "sha256": "18cd79458ad2644d5f7e9dc7bfe6666a974d0dbc9c0e22b16be612e440e6a5f2"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/highway/tree.json",
+        "bytes": 42683,
+        "sha256": "f53df7e94cf50110544ed8b0cbcbf7033be4a18ce2565c512d596398486d8f28"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/highway/highway-457c891775a7397bdb0376bb1031e6e027af1c48.tar.gz",
+        "bytes": 2244630,
+        "sha256": "cab61c5105733fb3e2049d5d0e1e117f4fe71fa55269cad322a5649228c9f0de",
+        "url": "https://chromium.googlesource.com/external/github.com/google/highway.git/+archive/457c891775a7397bdb0376bb1031e6e027af1c48.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/highway/members.json",
+        "bytes": 83788,
+        "sha256": "6d1d28e5a6f819506ef134a5840a2a5d7e8de3a39116224e9f29bab2b7baf3b3"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/highway/notices/LICENSE",
+          "bytes": 11356,
+          "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+          "member": "LICENSE"
+        },
+        {
+          "path": "skia-dependency-sources/highway/notices/LICENSE-BSD3",
+          "bytes": 1515,
+          "sha256": "d25e82e26acd42ca3ccc9993622631163425b869b9e16284226d534cff6470f2",
+          "member": "LICENSE-BSD3"
+        },
+        {
+          "path": "skia-dependency-sources/highway/notices/debian/copyright",
+          "bytes": 825,
+          "sha256": "6e4ecf1cae052b678ea3178dd4b3652d581ee66a82d58db8800dd7d80dd6de76",
+          "member": "debian/copyright"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "icu",
+      "externalPath": "third_party/externals/icu",
+      "repository": "https://chromium.googlesource.com/chromium/deps/icu.git",
+      "candidate": {
+        "commit": "d578f2e8b7bd5938e21cfb6bf15c079e0aa5b738",
+        "tree": "1a597ddb83a0d67c5138b9ef1554a45d5d152ec7"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/icu/commit.object",
+        "bytes": 697,
+        "sha256": "affb708eda38c422ddd7ba27b1cd9589d0199b1543fd49328fde6137dbe31f4c"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/icu/tree.json",
+        "bytes": 1228981,
+        "sha256": "140c7614bbf174cb43bbb7000cd190cb25a91748d1cdcf0ece3e64cf5fee130f"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/icu/icu-d578f2e8b7bd5938e21cfb6bf15c079e0aa5b738.tar.gz",
+        "bytes": 55878070,
+        "sha256": "3539cf824b0627b692bf85d6379f777139c9e93895d90ec232e3843ec70fe00c",
+        "url": "https://chromium.googlesource.com/chromium/deps/icu.git/+archive/d578f2e8b7bd5938e21cfb6bf15c079e0aa5b738.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/icu/members.json",
+        "bytes": 2464481,
+        "sha256": "c0b016212c67ad86323d4b949d1b366d562c88abd3aff48be3d82123bdf1fdcd"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/icu/notices/LICENSE",
+          "bytes": 27718,
+          "sha256": "e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af",
+          "member": "LICENSE"
+        },
+        {
+          "path": "skia-dependency-sources/icu/notices/license.html",
+          "bytes": 622,
+          "sha256": "c62d7697c03979f5056d28b338fafc7a1152820f7b379adf4a9d88cd37160f96",
+          "member": "license.html"
+        },
+        {
+          "path": "skia-dependency-sources/icu/notices/scripts/LICENSE",
+          "bytes": 1559,
+          "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308",
+          "member": "scripts/LICENSE"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "libjpeg-turbo",
+      "externalPath": "third_party/externals/libjpeg-turbo",
+      "repository": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
+      "candidate": {
+        "commit": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+        "tree": "6b2c91d1eb3a0e6354a940339a667414952c7eaa"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/libjpeg-turbo/commit.object",
+        "bytes": 734,
+        "sha256": "d0ebf685a81e4413d9d7e194979891823132a75184f4a2dcef640f5a420eebec"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/libjpeg-turbo/tree.json",
+        "bytes": 51044,
+        "sha256": "e6306ee315cdb873987326dd451ff37d448ca8a3e262e3651bce644ae33c96bd"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/libjpeg-turbo/libjpeg-turbo-e14cbfaa85529d47f9f55b0f104a579c1061f9ad.tar.gz",
+        "bytes": 2623868,
+        "sha256": "152b00c604c3f8a4f9611ecce3126633e58ddd32c070448b56e8ece41ecd9ddc",
+        "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git/+archive/e14cbfaa85529d47f9f55b0f104a579c1061f9ad.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/libjpeg-turbo/members.json",
+        "bytes": 104497,
+        "sha256": "33a5eba86e36c897181d94e7fa12e68a4ab4b154d67d3f84da1c2dc4d4e9cdf1"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/libjpeg-turbo/notices/LICENSE.md",
+          "bytes": 5620,
+          "sha256": "96f5b328adbb78eeaaec6980d73fd558cb1e4d62560ed615646bc3cf5e532430",
+          "member": "LICENSE.md"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "libjxl",
+      "externalPath": "third_party/externals/libjxl",
+      "repository": "https://chromium.googlesource.com/external/gitlab.com/wg1/jpeg-xl.git",
+      "candidate": {
+        "commit": "332feb17d17311c748445f7ee75c4fb55cc38530",
+        "tree": "e60c1fed37ccb3b35d15d3feaa0abcf09a6695a0"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/libjxl/commit.object",
+        "bytes": 248,
+        "sha256": "04fd194d205817d2059b4a86dcd19303e299ca0dd65c880e0f1b275d4039ee66"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/libjxl/tree.json",
+        "bytes": 169891,
+        "sha256": "ca0caa44b5416216611f47befed6aaffc3eb491da533b323229805c4312d2370"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/libjxl/libjxl-332feb17d17311c748445f7ee75c4fb55cc38530.tar.gz",
+        "bytes": 1928508,
+        "sha256": "8aaf69d9cceedbfcb7f4a2da8dc7d63f62a88d8c12c7505ab911c9dd3f7b1f66",
+        "url": "https://chromium.googlesource.com/external/gitlab.com/wg1/jpeg-xl.git/+archive/332feb17d17311c748445f7ee75c4fb55cc38530.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/libjxl/members.json",
+        "bytes": 336776,
+        "sha256": "fb4c182f5cc1ce8261131fa21c0ba3a8e66e9859fe4d91790eb351bc4dbfb54b"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/libjxl/notices/AUTHORS",
+          "bytes": 3381,
+          "sha256": "00be88a8e3275f8f52a147ecede84c11900fd3180f88478d7cc9f55acabf3a35",
+          "member": "AUTHORS"
+        },
+        {
+          "path": "skia-dependency-sources/libjxl/notices/LICENSE",
+          "bytes": 1508,
+          "sha256": "8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede",
+          "member": "LICENSE"
+        },
+        {
+          "path": "skia-dependency-sources/libjxl/notices/PATENTS",
+          "bytes": 1333,
+          "sha256": "91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575",
+          "member": "PATENTS"
+        },
+        {
+          "path": "skia-dependency-sources/libjxl/notices/debian/copyright",
+          "bytes": 10405,
+          "sha256": "ec6f5bc1043fba8ffa648157b5beee8915865a54f25c5f3201b0e910cd09ebde",
+          "member": "debian/copyright"
+        },
+        {
+          "path": "skia-dependency-sources/libjxl/notices/lib/extras/LICENSE.apngdis",
+          "bytes": 1017,
+          "sha256": "4319c422c3bf10168877a83cd9ff848684b9e53dce9a68de0a3f454a825933f6",
+          "member": "lib/extras/LICENSE.apngdis"
+        },
+        {
+          "path": "skia-dependency-sources/libjxl/notices/third_party/HEVCSoftware/cfg/LICENSE",
+          "bytes": 1744,
+          "sha256": "44a2c5f2ce34d00a30554a44d3e51377852f84bc183dc1b9fb2b48ece976ebef",
+          "member": "third_party/HEVCSoftware/cfg/LICENSE"
+        }
+      ],
+      "gitlinks": [
+        {
+          "path": "testdata",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "ff8d743aaba05b3014f17e5475e576242fa979fc",
+          "bytes": null
+        },
+        {
+          "path": "third_party/brotli",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "36533a866ed1ca4b75cf049f4521e4ec5fe24727",
+          "bytes": null
+        },
+        {
+          "path": "third_party/googletest",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "6910c9d9165801d8827d628cb72eb7ea9dd538c5",
+          "bytes": null
+        },
+        {
+          "path": "third_party/highway",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "457c891775a7397bdb0376bb1031e6e027af1c48",
+          "bytes": null
+        },
+        {
+          "path": "third_party/lcms",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "5176347635785e53ee5cee92328f76fda766ecc6",
+          "bytes": null
+        },
+        {
+          "path": "third_party/libjpeg-turbo",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "8ecba3647edb6dd940463fedf38ca33a8e2a73d1",
+          "bytes": null
+        },
+        {
+          "path": "third_party/libpng",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "872555f4ba910252783af1507f9e7fe1653be252",
+          "bytes": null
+        },
+        {
+          "path": "third_party/sjpeg",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "94e0df6d0f8b44228de5be0ff35efb9f946a13c9",
+          "bytes": null
+        },
+        {
+          "path": "third_party/skcms",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "b2e692629c1fb19342517d7fb61f1cf83d075492",
+          "bytes": null
+        },
+        {
+          "path": "third_party/zlib",
+          "mode": "160000",
+          "type": "commit",
+          "sha": "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
+          "bytes": null
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "libpng",
+      "externalPath": "third_party/externals/libpng",
+      "repository": "https://skia.googlesource.com/third_party/libpng.git",
+      "candidate": {
+        "commit": "d5515b5b8be3901aac04e5bd8bd5c89f287bcd33",
+        "tree": "a28bb962645843af84063c77f574f6d88da79f76"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/libpng/commit.object",
+        "bytes": 240,
+        "sha256": "14ffb7dccc801dbd29815d05e78cf729779456d4e8c59924c74387361d0a461c"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/libpng/tree.json",
+        "bytes": 111507,
+        "sha256": "3231e93290b46e27d14d8bbaf7925418a3865e40ce83eb1a8ec2888630cd4022"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/libpng/libpng-d5515b5b8be3901aac04e5bd8bd5c89f287bcd33.tar.gz",
+        "bytes": 1612853,
+        "sha256": "3ff3fbd2955007b11d064d159b240a3573aa41f3c037cfda8d1ffc1d4bddc49e",
+        "url": "https://skia.googlesource.com/third_party/libpng.git/+archive/d5515b5b8be3901aac04e5bd8bd5c89f287bcd33.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/libpng/members.json",
+        "bytes": 218619,
+        "sha256": "a2bb3e4c275e5c9fde8929ae66f1a2f78e296910febbb59db36b9bee7b790f9a"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/libpng/notices/AUTHORS",
+          "bytes": 1756,
+          "sha256": "0de66f4a30324ff320b82bc0a19364c90063ed8849c8ab7aac06095870591893",
+          "member": "AUTHORS"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/LICENSE",
+          "bytes": 5345,
+          "sha256": "bdb0a645ea18c60507d0368379b1ac5474b92255fcc2d115e07486a7672ba526",
+          "member": "LICENSE"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/ci/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "ci/LICENSE_MIT.txt"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/contrib/gregbook/COPYING",
+          "bytes": 18097,
+          "sha256": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572",
+          "member": "contrib/gregbook/COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/contrib/gregbook/LICENSE",
+          "bytes": 2373,
+          "sha256": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438",
+          "member": "contrib/gregbook/LICENSE"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/contrib/pngexif/LICENSE_MIT.txt",
+          "bytes": 1036,
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "member": "contrib/pngexif/LICENSE_MIT.txt"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/contrib/pngminus/LICENSE.txt",
+          "bytes": 1164,
+          "sha256": "1806f1f10d393e9e377b3a8d1b968452b54f1a90378f14eeef45426946ace330",
+          "member": "contrib/pngminus/LICENSE.txt"
+        },
+        {
+          "path": "skia-dependency-sources/libpng/notices/scripts/cmake/AUTHORS.md",
+          "bytes": 862,
+          "sha256": "50633b976f0133862c921aa67d56de2c0b42eb344c8ca3853686efb092a447db",
+          "member": "scripts/cmake/AUTHORS.md"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "libwebp",
+      "externalPath": "third_party/externals/libwebp",
+      "repository": "https://chromium.googlesource.com/webm/libwebp.git",
+      "candidate": {
+        "commit": "845d5476a866141ba35ac133f856fa62f0b7445f",
+        "tree": "fe5f48f90e42bdce3aba8143e23822f191b93917"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/libwebp/commit.object",
+        "bytes": 291,
+        "sha256": "ac32c23ad12bc58082fdbd906942c8b6361d02367f8fb1018d721667b35d3d09"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/libwebp/tree.json",
+        "bytes": 57059,
+        "sha256": "9766750c19faf30dea436235564ff61df48bf80e95a12531eeda4959d1aa42b4"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/libwebp/libwebp-845d5476a866141ba35ac133f856fa62f0b7445f.tar.gz",
+        "bytes": 3813319,
+        "sha256": "35f644e087945932100d05ce2795689dce2aa46005e9b71f84a05e4575caf583",
+        "url": "https://chromium.googlesource.com/webm/libwebp.git/+archive/845d5476a866141ba35ac133f856fa62f0b7445f.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/libwebp/members.json",
+        "bytes": 115588,
+        "sha256": "c9800327eb8e5a6b99e53ea0f03c428bbf36ecffbf53b6a552ab73e771f9b17e"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/libwebp/notices/AUTHORS",
+          "bytes": 3048,
+          "sha256": "f9681940f35ab74858ac2717a511fa6237b67f65e99f457c21223e60a851c85a",
+          "member": "AUTHORS"
+        },
+        {
+          "path": "skia-dependency-sources/libwebp/notices/COPYING",
+          "bytes": 1496,
+          "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf",
+          "member": "COPYING"
+        },
+        {
+          "path": "skia-dependency-sources/libwebp/notices/PATENTS",
+          "bytes": 1436,
+          "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c",
+          "member": "PATENTS"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "wuffs",
+      "externalPath": "third_party/externals/wuffs",
+      "repository": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+      "candidate": {
+        "commit": "e3f919ccfe3ef542cfc983a82146070258fb57f8",
+        "tree": "4ed0549dc65a512c370b80db658a1093facf732e"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/wuffs/commit.object",
+        "bytes": 250,
+        "sha256": "a1a211e11860f47f6d578aac55ce714ea6d72334341a7436ce52fccdd69cffc5"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/wuffs/tree.json",
+        "bytes": 2480,
+        "sha256": "639fb873265702193a91538af4adc591d884149e9f805152cfeafed632b0c7f2"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/wuffs/wuffs-e3f919ccfe3ef542cfc983a82146070258fb57f8.tar.gz",
+        "bytes": 327720,
+        "sha256": "5ebd3c901a203f7521ea9c5f349826ffdd6b0e7c663c9ef8eebdb9237afdeb98",
+        "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git/+archive/e3f919ccfe3ef542cfc983a82146070258fb57f8.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/wuffs/members.json",
+        "bytes": 4553,
+        "sha256": "0ce6f29fd8fa9ba6afe77bb8976f089b82762d714a36543bdd751f7cb1d218c5"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/wuffs/notices/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "member": "LICENSE"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    },
+    {
+      "name": "zlib",
+      "externalPath": "third_party/externals/zlib",
+      "repository": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+      "candidate": {
+        "commit": "646b7f569718921d7d4b5b8e22572ff6c76f2596",
+        "tree": "15d5d748ce2060ea03b9e9b60d9d0ee512274520"
+      },
+      "commitObject": {
+        "path": "skia-dependency-sources/zlib/commit.object",
+        "bytes": 865,
+        "sha256": "dd4e5b2f14baaf888b280bd31b2e204480e2127cc682e6bb059f1b78ca391e4f"
+      },
+      "tree": {
+        "path": "skia-dependency-sources/zlib/tree.json",
+        "bytes": 26707,
+        "sha256": "90fc630506b020d9f5a58c6522cf59780e9f89845ad2488faf20f249c64d13fc"
+      },
+      "archive": {
+        "path": "skia-dependency-sources/zlib/zlib-646b7f569718921d7d4b5b8e22572ff6c76f2596.tar.gz",
+        "bytes": 587333,
+        "sha256": "f4b12d693794f3fc70750596d3fd06a7603a266bd806e2b316bcacd08f65c0b7",
+        "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib/+archive/646b7f569718921d7d4b5b8e22572ff6c76f2596.tar.gz"
+      },
+      "members": {
+        "path": "skia-dependency-sources/zlib/members.json",
+        "bytes": 53076,
+        "sha256": "37438304bdfd403b31dfcf7cdca896862c9fc05547bbb6c5446291fbb8ffe1b0"
+      },
+      "notices": [
+        {
+          "path": "skia-dependency-sources/zlib/notices/LICENSE",
+          "bytes": 910,
+          "sha256": "e1cfcc55c325b3f78cf55df9664abaa066e2271dffe8213347d9fccdfbac8f2c",
+          "member": "LICENSE"
+        }
+      ],
+      "gitlinks": [],
+      "acquisition": {
+        "kind": "current-exact-commit-source-read",
+        "retrievedOn": "2026-10-27",
+        "scope": "Original Gitiles gzip/TAR at the exact Skia DEPS revision. Raw Git commit object and complete Git tree listing were acquired independently from that declared repository; generated member/tree catalogues describe those original inputs. Nested gitlinks are identities and empty archive directories, not supplied nested sources or selected runtime dependencies."
+      }
+    }
+  ],
+  "instructions": {
+    "path": "skia-dependency-sources/SOURCE-ACCESS.md",
+    "bytes": 6446,
+    "sha256": "89f188df5a0e93b4e5c6296ae1e4723c279b376af65c8ef61f8f9dacfc9426e6"
+  },
+  "limitations": [
+    "These twelve complete original Gitiles own-source containers cover the named codec/text dependencies selected by the held Canvas GN configuration and the supplied Skia GN source files. They are not a recovered historical external asset-producer compile/link map.",
+    "All original source and notices in these containers are preserved, including disabled, auxiliary and test content. Their nested Gitlinks remain original identities/empty directories rather than possession or selection of every nested repository.",
+    "The selected externals use the precise root Skia DEPS revisions; a different nested copy or another native package does not identify them. Complete legacy build-tool distributions, every DEPS entry and byte-identical historical compiler/binary output are not added as requirements.",
+    "Source acquisition and modification/recombination instructions do not establish a successful aggregate rebuild or a licensing compatibility conclusion. Other native/Rust inputs and actual modified-binding validation remain separately scoped."
+  ]
+}

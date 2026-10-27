@@ -1,0 +1,560 @@
+{
+  "recipe": {
+    "sourceId": "sharp-libvips",
+    "versionFile": "versions.properties",
+    "buildFile": "build/posix.sh"
+  },
+  "sources": [
+    {
+      "name": "fribidi",
+      "version": "1.0.16",
+      "versionVariable": "VERSION_FRIBIDI",
+      "downloadTemplate": "https://github.com/fribidi/fribidi/releases/download/v${VERSION_FRIBIDI}/fribidi-${VERSION_FRIBIDI}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/fribidi/fribidi-1.0.16.tar.xz",
+        "bytes": 1098260,
+        "sha256": "1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c",
+        "url": "https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/fribidi/members.json",
+        "bytes": 58442,
+        "sha256": "1293cad3fd6d2ce19468a8a9a9f6d0b16027afe6265fdaa8b0535b1d96120571"
+      },
+      "root": "fribidi-1.0.16/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "variablePrefix": "fribidi"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/fribidi/notices/AUTHORS",
+          "bytes": 1640,
+          "sha256": "cb173f55c9514c8f38f4647ac3fedd5f8611358d331e65ab955da931e826861c",
+          "member": "fribidi-1.0.16/AUTHORS"
+        },
+        {
+          "path": "native-full-sources/fribidi/notices/COPYING",
+          "bytes": 26440,
+          "sha256": "32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b",
+          "member": "fribidi-1.0.16/COPYING"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/fribidi\n$CURL https://github.com/fribidi/fribidi/releases/download/v${VERSION_FRIBIDI}/fribidi-${VERSION_FRIBIDI}.tar.xz | tar xJC ${DEPS}/fribidi --strip-components=1\ncd ${DEPS}/fribidi\nmeson setup _build --default-library=static --buildtype=release --strip --prefix=${TARGET} ${MESON} \\\n  -Ddocs=false -Dbin=false -Dtests=false\nmeson install -C _build --tag devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": []
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "glib",
+      "version": "2.89.4",
+      "versionVariable": "VERSION_GLIB",
+      "downloadTemplate": "https://download.gnome.org/sources/glib/$(without_patch $VERSION_GLIB)/glib-${VERSION_GLIB}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/glib/glib-2.89.4.tar.xz",
+        "bytes": 5830980,
+        "sha256": "1cdbb799f558832e6f14b8337b5fd599c6918ab144977b55e05e00a5e2e84a2c",
+        "url": "https://download.gnome.org/sources/glib/2.89/glib-2.89.4.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/glib/members.json",
+        "bytes": 776624,
+        "sha256": "9e1009d188466cfbdce72ed63839f0f0753faa235c4ae18c569806c9352fd7e9"
+      },
+      "root": "glib-2.89.4/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "variablePrefix": "glib"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/glib/notices/LICENSES/LGPL-2.1-or-later.txt",
+          "bytes": 25967,
+          "sha256": "fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb",
+          "member": "glib-2.89.4/LICENSES/LGPL-2.1-or-later.txt"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [
+            {
+              "path": "recipes/patches/glib-without-gregex.patch",
+              "url": "https://gist.github.com/kleisauke/284d685efa00908da99ea6afbaaf39ae/raw/bdad5489a61c217850631571caf57f5db6ea8b2c/glib-without-gregex.patch"
+            }
+          ],
+          "originalRegion": "mkdir ${DEPS}/glib\n$CURL https://download.gnome.org/sources/glib/$(without_patch $VERSION_GLIB)/glib-${VERSION_GLIB}.tar.xz | tar xJC ${DEPS}/glib --strip-components=1\ncd ${DEPS}/glib\n$CURL https://gist.github.com/kleisauke/284d685efa00908da99ea6afbaaf39ae/raw/bdad5489a61c217850631571caf57f5db6ea8b2c/glib-without-gregex.patch | patch -p1\nmeson setup _build --default-library=static --buildtype=release --strip --prefix=${TARGET} --datadir=${TARGET}/share ${MESON} \\\n  --force-fallback-for=gvdb -Dintrospection=disabled -Dnls=disabled -Dlibmount=disabled -Dsysprof=disabled -Dlibelf=disabled \\\n  -Dtests=false -Dglib_assert=false -Dglib_checks=false -Dglib_debug=disabled ${DARWIN:+-Dbsymbolic_functions=false}\n# bin-devel is needed for glib-mkenums\nmeson install -C _build --tag bin-devel,devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": [
+            {
+              "upstreamPath": "build/patches/glib-2-dllexport-static.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/glib-2-dllexport-static.patch"
+            },
+            {
+              "upstreamPath": "build/patches/glib-2-fixes.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/glib-2-fixes.patch"
+            },
+            {
+              "upstreamPath": "build/patches/glib-2-without-gregex.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/glib-2-without-gregex.patch"
+            },
+            {
+              "upstreamPath": "build/patches/glib-2-without-win32appinfo.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/glib-2-without-win32appinfo.patch"
+            }
+          ]
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "exif",
+      "version": "0.6.26",
+      "versionVariable": "VERSION_EXIF",
+      "downloadTemplate": "https://github.com/libexif/libexif/releases/download/v${VERSION_EXIF}/libexif-${VERSION_EXIF}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/exif/libexif-0.6.26.tar.xz",
+        "bytes": 1335488,
+        "sha256": "4a055ed6575e61ca46c3172be3c753cc16c9becd0f99ec71d58dd0e471476c0c",
+        "url": "https://github.com/libexif/libexif/releases/download/v0.6.26/libexif-0.6.26.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/exif/members.json",
+        "bytes": 83308,
+        "sha256": "b749fe175ebc5d6aaf39cd1a675a8d6586b3ebf6449a3dbe485305abe5da4326"
+      },
+      "root": "libexif-0.6.26/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "variablePrefix": "libexif"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/exif/notices/AUTHORS",
+          "bytes": 240,
+          "sha256": "a19ef6f43014fc57829658087d0c2bf59d97482e015cf553d7a68124603cbc44",
+          "member": "libexif-0.6.26/AUTHORS"
+        },
+        {
+          "path": "native-full-sources/exif/notices/COPYING",
+          "bytes": 26434,
+          "sha256": "36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89",
+          "member": "libexif-0.6.26/COPYING"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/exif\n$CURL https://github.com/libexif/libexif/releases/download/v${VERSION_EXIF}/libexif-${VERSION_EXIF}.tar.xz | tar xJC ${DEPS}/exif --strip-components=1\ncd ${DEPS}/exif\n./configure --host=${CHOST} --prefix=${TARGET} --enable-static --disable-shared --disable-dependency-tracking \\\n  --disable-nls --disable-docs --without-libiconv-prefix --without-libintl-prefix \\\n  CPPFLAGS=\"${CPPFLAGS} -DNO_VERBOSE_TAG_DATA\"\nmake install-strip doc_DATA=\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": []
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "heif",
+      "version": "1.23.2",
+      "versionVariable": "VERSION_HEIF",
+      "downloadTemplate": "https://github.com/strukturag/libheif/releases/download/v${VERSION_HEIF}/libheif-${VERSION_HEIF}.tar.gz",
+      "archive": {
+        "path": "native-full-sources/heif/libheif-1.23.2.tar.gz",
+        "bytes": 2111195,
+        "sha256": "8bd5d41d19dc84536d118b04774709f244df6104ef66d623dad5fa4650143405",
+        "url": "https://github.com/strukturag/libheif/releases/download/v1.23.2/libheif-1.23.2.tar.gz"
+      },
+      "members": {
+        "path": "native-full-sources/heif/members.json",
+        "bytes": 242493,
+        "sha256": "b446eaf9052e925f0e39f2e42cde6862e8016c7e1b5d861116ffe0d927718939"
+      },
+      "root": "libheif-1.23.2/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/libheif.mk",
+        "variablePrefix": "$(PKG)"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/heif/notices/COPYING",
+          "bytes": 44366,
+          "sha256": "fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596",
+          "member": "libheif-1.23.2/COPYING"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/heif\n$CURL https://github.com/strukturag/libheif/releases/download/v${VERSION_HEIF}/libheif-${VERSION_HEIF}.tar.gz | tar xzC ${DEPS}/heif --strip-components=1\ncd ${DEPS}/heif\nCFLAGS=\"${CFLAGS} -O3\" CXXFLAGS=\"${CXXFLAGS} -O3\" cmake -G\"Unix Makefiles\" \\\n  -DCMAKE_TOOLCHAIN_FILE=${ROOT}/Toolchain.cmake -DCMAKE_INSTALL_PREFIX=${TARGET} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release \\\n  -DBUILD_SHARED_LIBS=FALSE -DBUILD_DOCUMENTATION=0 -DBUILD_TESTING=0 -DENABLE_PLUGIN_LOADING=0 -DWITH_EXAMPLES=0 -DWITH_LIBDE265=0 -DWITH_X265=0\nmake install/strip\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": [
+            {
+              "upstreamPath": "build/patches/libheif-1-fixes.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/libheif-1-fixes.patch"
+            }
+          ]
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "rsvg",
+      "version": "2.62.91",
+      "versionVariable": "VERSION_RSVG",
+      "downloadTemplate": "https://download.gnome.org/sources/librsvg/$(without_patch $VERSION_RSVG)/librsvg-${VERSION_RSVG}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/rsvg/librsvg-2.62.91.tar.xz",
+        "bytes": 6766696,
+        "sha256": "6caeae129d40dd88f8ec49436fd89bfe4ada716a125187a7fa0def8fcaa0b250",
+        "url": "https://download.gnome.org/sources/librsvg/2.62/librsvg-2.62.91.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/rsvg/members.json",
+        "bytes": 754055,
+        "sha256": "bee81d4eb28c6c6e85706d76ddfa03661968b9e02ad81649cbeee5f1db471aa4"
+      },
+      "root": "librsvg-2.62.91/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "variablePrefix": "librsvg"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/rsvg/notices/AUTHORS",
+          "bytes": 1798,
+          "sha256": "14e765b9c1097d93f4b842a6ad23172b530cc00dfe7a5aae1b9afefdca54531b",
+          "member": "librsvg-2.62.91/AUTHORS"
+        },
+        {
+          "path": "native-full-sources/rsvg/notices/COPYING.LIB",
+          "bytes": 26530,
+          "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+          "member": "librsvg-2.62.91/COPYING.LIB"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/rsvg\n$CURL https://download.gnome.org/sources/librsvg/$(without_patch $VERSION_RSVG)/librsvg-${VERSION_RSVG}.tar.xz | tar xJC ${DEPS}/rsvg --strip-components=1\ncd ${DEPS}/rsvg\n# Disallow GIF and WebP embedded in SVG images\nsed -i'.bak' \"/image = /s/, \\\"gif\\\", \\\"webp\\\"//\" rsvg/Cargo.toml\n# We build Cairo with `-Dzlib=disabled`, which implicitly disables the PDF/PostScript surface backends\nsed -i'.bak' \"/cairo-rs = /s/, \\\"pdf\\\", \\\"ps\\\"//\" {librsvg-c,rsvg}/Cargo.toml\n# https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1066#note_2356762\nsed -i'.bak' \"/^if host_system in \\['windows'/s/, 'linux'//\" meson.build\n# Regenerate the lockfile after making the above changes\ncargo update --workspace\n# Remove the --static flag from the PKG_CONFIG env since Rust does not\n# parse that correctly.\nPKG_CONFIG=${PKG_CONFIG/ --static/} meson setup _build --default-library=static --buildtype=plain --strip --prefix=${TARGET} ${MESON} \\\n  -Dintrospection=disabled -Dpixbuf{,-loader}=disabled -Drsvg-convert=disabled -Ddocs=disabled -Dvala=disabled -Dtests=false \\\n  ${RUST_TARGET:+-Dtriplet=$RUST_TARGET}\nmeson install -C _build --tag devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": [
+            {
+              "upstreamPath": "build/patches/librsvg-2-fixes.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/librsvg-2-fixes.patch"
+            }
+          ]
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "vips",
+      "version": "8.18.6",
+      "versionVariable": "VERSION_VIPS",
+      "downloadTemplate": "https://github.com/libvips/libvips/releases/download/v${VERSION_VIPS}/vips-$(without_prerelease $VERSION_VIPS).tar.xz",
+      "archive": {
+        "path": "native-full-sources/vips/vips-8.18.6.tar.xz",
+        "bytes": 25431000,
+        "sha256": "3c41e1d5458081bfa4a5bc54e116c46259c75c6760a18027764555632b9dda3e",
+        "url": "https://github.com/libvips/libvips/releases/download/v8.18.6/vips-8.18.6.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/vips/members.json",
+        "bytes": 276166,
+        "sha256": "4c6b15a4b0482a92d721e4c88a8bcaaca92cba66931bed79d855be791d130dfe"
+      },
+      "root": "vips-8.18.6/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/vips.mk",
+        "variablePrefix": "$(PKG)"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/vips/notices/LICENSE",
+          "bytes": 26530,
+          "sha256": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551",
+          "member": "vips-8.18.6/LICENSE"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [
+            {
+              "path": "recipes/patches/libvips-cpp-soversion.patch",
+              "url": "https://gist.githubusercontent.com/lovell/313a6901e9db1bf285f2a1f1180499e4/raw/3988223c7dfa4d22745d9392034b0117abef1446/libvips-cpp-soversion.patch"
+            }
+          ],
+          "originalRegion": "mkdir ${DEPS}/vips\n$CURL https://github.com/libvips/libvips/releases/download/v${VERSION_VIPS}/vips-$(without_prerelease $VERSION_VIPS).tar.xz | tar xJC ${DEPS}/vips --strip-components=1\ncd ${DEPS}/vips\n# Use version number in SONAME\n$CURL https://gist.githubusercontent.com/lovell/313a6901e9db1bf285f2a1f1180499e4/raw/3988223c7dfa4d22745d9392034b0117abef1446/libvips-cpp-soversion.patch | patch -p1\n# Link libvips.so statically into libvips-cpp.so\nsed -i'.bak' \"s/library('vips'/static_&/\" libvips/meson.build\nsed -i'.bak' \"/version: library_version/{N;d;}\" libvips/meson.build\nif [ \"$LINUX\" = true ]; then\n  # Ensure libvips-cpp.so is linked with -z nodelete\n  sed -i'.bak' \"/gnu_symbol_visibility: 'hidden',/a link_args: nodelete_link_args,\" cplusplus/meson.build\n  # Ensure symbols from external libs (except for libglib-2.0.a and libgobject-2.0.a) are not exposed\n  EXCLUDE_LIBS=$(find ${TARGET}/lib -maxdepth 1 -name '*.a' ! -name 'libglib-2.0.a' ! -name 'libgobject-2.0.a' -printf \"-Wl,--exclude-libs=%f \")\n  EXCLUDE_LIBS=${EXCLUDE_LIBS%?}\n  # Localize the g_param_spec_types symbol to avoid collisions with shared libraries\n  # See: https://github.com/lovell/sharp/issues/2535#issuecomment-766400693\n  printf \"{local:g_param_spec_types;};\" > vips.map\nfi\n# Disable building man pages, gettext po files, tools, and (fuzz-)tests\nsed -i'.bak' \"/subdir('man')/{N;N;N;N;d;}\" meson.build\nCFLAGS=\"${CFLAGS} -O3\" CXXFLAGS=\"${CXXFLAGS} -O3\" meson setup _build --default-library=shared --buildtype=release --strip --prefix=${TARGET} ${MESON} \\\n  -Ddeprecated=false -Dexamples=false -Dauto_features=enabled -Dintrospection=disabled -Dmodules=disabled -Dcfitsio=disabled -Dfftw=disabled \\\n  -Djpeg-xl=disabled ${WITHOUT_HIGHWAY:+-Dhighway=disabled} -Dorc=disabled -Dmagick=disabled -Dmatio=disabled -Dnifti=disabled -Dopenexr=disabled \\\n  -Dopenjpeg=disabled -Dopenslide=disabled -Dpdfium=disabled -Dpoppler=disabled -Dquantizr=disabled -Draw=disabled -Dspng=disabled \\\n  -Dppm=false -Danalyze=false -Dradiance=false \\\n  ${LINUX:+-Dcpp_link_args=\"$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--version-script=$DEPS/vips/vips.map $EXCLUDE_LIBS\"}\nmeson install -C _build --tag runtime,devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": []
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "pango",
+      "version": "1.58.2",
+      "versionVariable": "VERSION_PANGO",
+      "downloadTemplate": "https://download.gnome.org/sources/pango/$(without_patch $VERSION_PANGO)/pango-${VERSION_PANGO}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/pango/pango-1.58.2.tar.xz",
+        "bytes": 1918112,
+        "sha256": "342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a",
+        "url": "https://download.gnome.org/sources/pango/1.58/pango-1.58.2.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/pango/members.json",
+        "bytes": 187314,
+        "sha256": "fbc28f0ec124f69035485aac12fe82aeb4dbe3ed9bee7b453fbf1f36f3551b8f"
+      },
+      "root": "pango-1.58.2/",
+      "checksumSource": {
+        "sourceId": "libvips-win64-mxe",
+        "upstreamPath": "build/overrides.mk",
+        "variablePrefix": "pango"
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/pango/notices/COPYING",
+          "bytes": 25292,
+          "sha256": "d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5",
+          "member": "pango-1.58.2/COPYING"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/pango\n$CURL https://download.gnome.org/sources/pango/$(without_patch $VERSION_PANGO)/pango-${VERSION_PANGO}.tar.xz | tar xJC ${DEPS}/pango --strip-components=1\ncd ${DEPS}/pango\n# Disable utils and tools\nsed -i'.bak' \"/subdir('utils')/{N;d;}\" meson.build\nmeson setup _build --default-library=static --buildtype=release --strip --prefix=${TARGET} ${MESON} \\\n  -Ddocumentation=false -Dbuild-testsuite=false -Dbuild-examples=false -Dintrospection=disabled -Dfontconfig=enabled\nmeson install -C _build --tag devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": []
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    },
+    {
+      "name": "cairo",
+      "version": "1.18.4",
+      "versionVariable": "VERSION_CAIRO",
+      "downloadTemplate": "https://cairographics.org/releases/cairo-${VERSION_CAIRO}.tar.xz",
+      "archive": {
+        "path": "native-full-sources/cairo/cairo-1.18.4.tar.xz",
+        "bytes": 32578804,
+        "sha256": "445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb",
+        "url": "https://cairographics.org/releases/cairo-1.18.4.tar.xz"
+      },
+      "members": {
+        "path": "native-full-sources/cairo/members.json",
+        "bytes": 1668091,
+        "sha256": "123ed2e6848d8513d74500d98288c6f65a1709a56e85fe3b9a024bbb18bfab16"
+      },
+      "root": "cairo-1.18.4/",
+      "checksumSource": {
+        "url": "https://cairographics.org/releases/cairo-1.18.4.tar.xz.sha256sum",
+        "receipt": {
+          "path": "native-full-sources/cairo/original.sha256sum",
+          "bytes": 86,
+          "sha256": "eef7d2408290f3c0e9c41ad478d2b86c8a37265e1829f33ad5aab8e032c0b9cb"
+        }
+      },
+      "notices": [
+        {
+          "path": "native-full-sources/cairo/notices/AUTHORS",
+          "bytes": 8148,
+          "sha256": "7118b55c2d911781622ecb281d9e11fd7eeb5f46c8925e6d740f96f89e79a8fe",
+          "member": "cairo-1.18.4/AUTHORS"
+        },
+        {
+          "path": "native-full-sources/cairo/notices/COPYING",
+          "bytes": 1576,
+          "sha256": "67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf",
+          "member": "cairo-1.18.4/COPYING"
+        },
+        {
+          "path": "native-full-sources/cairo/notices/COPYING-LGPL-2.1",
+          "bytes": 26533,
+          "sha256": "9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d",
+          "member": "cairo-1.18.4/COPYING-LGPL-2.1"
+        },
+        {
+          "path": "native-full-sources/cairo/notices/COPYING-MPL-1.1",
+          "bytes": 25755,
+          "sha256": "53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f",
+          "member": "cairo-1.18.4/COPYING-MPL-1.1"
+        }
+      ],
+      "modifications": {
+        "posix": {
+          "sourceId": "sharp-libvips",
+          "upstreamPath": "build/posix.sh",
+          "patches": [],
+          "originalRegion": "mkdir ${DEPS}/cairo\n$CURL https://cairographics.org/releases/cairo-${VERSION_CAIRO}.tar.xz | tar xJC ${DEPS}/cairo --strip-components=1\ncd ${DEPS}/cairo\nmeson setup _build --default-library=static --buildtype=release --strip --prefix=${TARGET} ${MESON} \\\n  ${LINUX:+-Dquartz=disabled} ${DARWIN:+-Dquartz=enabled} -Dfreetype=enabled -Dfontconfig=enabled -Dtee=disabled -Dxcb=disabled -Dxlib=disabled -Dzlib=disabled \\\n  -Dtests=disabled -Dspectre=disabled -Dsymbol-lookup=disabled\nmeson install -C _build --tag devel\n"
+        },
+        "windows": {
+          "sourceId": "libvips-win64-mxe",
+          "patches": [
+            {
+              "upstreamPath": "build/patches/cairo-1-fixes.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/cairo-1-fixes.patch"
+            },
+            {
+              "upstreamPath": "build/patches/cairo-1-nanoserver-compat.patch",
+              "path": "recipes/libvips-win64-mxe/build/patches/cairo-1-nanoserver-compat.patch"
+            }
+          ]
+        }
+      },
+      "acquisition": {
+        "kind": "current-exact-version-source-read",
+        "expectedChecksumMatched": true,
+        "scope": "Downloaded from the actual version URL; not a recovered historical producer HTTP response."
+      }
+    }
+  ],
+  "alreadySupplied": [
+    {
+      "name": "proxy-libintl",
+      "version": "0.5",
+      "catalog": "native-packages.json",
+      "source": "sharpNativeNotices.components",
+      "scope": "Complete tiny source and original archive already supplied, with conditional Darwin/musl and Windows recipe scope."
+    }
+  ],
+  "instructions": "native-full-sources/SOURCE-ACCESS.md",
+  "limitations": [
+    "These are complete pristine published source containers for the eight named component versions, with original archive bytes and original member metadata. They are not reconstructed historical compiler environments or byte-identical binary outputs.",
+    "Original archive source and supplied producer patches/in-place source edits are identified separately. No locally executed build or patch application is claimed.",
+    "This eight-container catalog is one source group. Additional selected POSIX native inputs are supplied in native-aggregate-sources/catalog.json, the Windows x64 Sharp static-dependency selection in windows-native-aggregate-sources/catalog.json, and current effective librsvg POSIX/Windows locks with all their selected registry containers in rsvg-posix-sources.json and rsvg-windows-sources.json. These current effective locks are distinct from the pristine original lock and any unrecovered historical post-edit lock.",
+    "Canvas current selected Rust containers and the separate complete Skia own/native dependency groups are indexed in README.md. Unselected original Cargo lock entries, optional configurations and all Skia DEPS are not made mandatory inputs by their presence in an original declaration.",
+    "The executable private Linux libvips build/replacement and Sharp/application consumer steps are documented in ../native-recombination-linux/README.md with Linux x64 PNG/JPEG/WebP scope and current compatible shared system prerequisites. This source catalog does not establish successful execution, all vendor codecs, other platform aggregate builds, historical compiler replay or byte-identical vendor output."
+  ],
+  "fallbacks": [
+    {
+      "name": "gvdb",
+      "library": "glib",
+      "wrap": {
+        "path": "native-fallback-sources/gvdb/glib-gvdb.wrap",
+        "bytes": 163,
+        "sha256": "d669f93cb531a04d719dcc5b790838452c918eea0a6134ae2bf17b470eb7838c",
+        "member": "glib-2.89.4/subprojects/gvdb.wrap"
+      },
+      "repository": "https://gitlab.gnome.org/GNOME/gvdb",
+      "candidate": {
+        "commit": "2b42fc75f09dbe1cd1057580b5782b08f2dcb400",
+        "tree": "29e73de6223f5cd5df2e5ee96f83329e6b691526"
+      },
+      "commitReceipt": {
+        "path": "native-fallback-sources/gvdb/commit.json",
+        "bytes": 894,
+        "sha256": "e1c1b4e2d7a634758ac6e214ccc67a8d72a699a6fd1534908a2beb0a5798676b",
+        "url": "https://gitlab.gnome.org/api/v4/projects/GNOME%2Fgvdb/repository/commits/2b42fc75f09dbe1cd1057580b5782b08f2dcb400"
+      },
+      "commitObject": {
+        "path": "native-fallback-sources/gvdb/commit.object",
+        "bytes": 387,
+        "sha256": "5f13c7539ca2c949e35052b71e627195062d3c36181cecf859acfa73106351ba"
+      },
+      "treeReceipt": {
+        "path": "native-fallback-sources/gvdb/tree.json",
+        "bytes": 2124,
+        "sha256": "3d2f2a41891fbb985864a8387ec1eb92ebdc5f082b86f42b007e7b302a7e98cc",
+        "url": "https://gitlab.gnome.org/api/v4/projects/GNOME%2Fgvdb/repository/tree?ref=2b42fc75f09dbe1cd1057580b5782b08f2dcb400&recursive=true&per_page=100"
+      },
+      "archive": {
+        "path": "native-fallback-sources/gvdb/gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400.tar.gz",
+        "bytes": 24716,
+        "sha256": "069a00aa1fc893f18423602f4e095583be5a220429f6e8a58d70511490b4b019",
+        "url": "https://gitlab.gnome.org/GNOME/gvdb/-/archive/2b42fc75f09dbe1cd1057580b5782b08f2dcb400/gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400.tar.gz"
+      },
+      "root": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/",
+      "members": {
+        "path": "native-fallback-sources/gvdb/members.json",
+        "bytes": 2616,
+        "sha256": "81edb8b2110a55bf92874f986252d028220dff7649d674eee881df9db6b675f9"
+      },
+      "notices": [
+        {
+          "path": "native-fallback-sources/gvdb/notices/COPYING",
+          "bytes": 26445,
+          "sha256": "bdbcdaa7858872393e9d6b216bbdc8a23e99d98dd6cdb7cda19458025b9e19fc",
+          "member": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/COPYING"
+        },
+        {
+          "path": "native-fallback-sources/gvdb/notices/LICENSES/LGPL-2.1-or-later.txt",
+          "bytes": 26001,
+          "sha256": "5749785c8bdefafcb5d798270ed0a967036fe2ca63dcedade1627565dfef81d2",
+          "member": "gvdb-2b42fc75f09dbe1cd1057580b5782b08f2dcb400/LICENSES/LGPL-2.1-or-later.txt"
+        }
+      ],
+      "acquisition": {
+        "kind": "current-exact-revision-source-read",
+        "scope": "Original GNOME GitLab archive, commit response, recursive tree response and raw Git commit object acquired at the precise revision in the supplied pristine GLib wrap. No historical producer HTTP response, build or linked-symbol reachability is claimed.",
+        "retrievedOn": "2026-10-27"
+      }
+    }
+  ]
+}

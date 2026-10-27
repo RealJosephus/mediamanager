@@ -1,0 +1,24 @@
+{
+  "platform": "linux",
+  "architecture": "x64",
+  "source": "vips",
+  "version": "8.18.6",
+  "aggregate": "libvips-cpp.so.8.18.6",
+  "originalPatch": "recipes/patches/libvips-cpp-soversion.patch",
+  "privatePatch": "png-red-bias.patch",
+  "redBias": 7,
+  "formats": ["png", "jpeg", "webp"],
+  "mesonOptions": [
+    "--default-library=shared", "--buildtype=release", "--strip", "--libdir=lib",
+    "--wrap-mode=nodownload", "-Ddeprecated=false", "-Dexamples=false", "-Dcplusplus=true",
+    "-Dauto_features=disabled", "-Dintrospection=disabled", "-Dmodules=disabled",
+    "-Dpng=enabled", "-Djpeg=enabled", "-Dwebp=enabled", "-Dzlib=enabled",
+    "-Dppm=false", "-Danalyze=false", "-Dradiance=false", "-Dnsgif=false"
+  ],
+  "systemPackages": [
+    "build-essential", "meson", "ninja-build", "pkg-config", "patch", "xz-utils", "binutils",
+    "libglib2.0-dev", "libexpat1-dev", "libjpeg-turbo8-dev", "libpng-dev", "libwebp-dev", "zlib1g-dev"
+  ],
+  "pkgConfigDependencies": ["glib-2.0", "gobject-2.0", "gio-2.0", "expat", "libjpeg", "libpng", "libwebp", "libwebpmux", "libwebpdemux", "zlib"],
+  "scope": "Current compatible Ubuntu development dependencies; the supplied libvips C code is statically linked into its C++ aggregate using the original SONAME and Linux nodelete rules. The private change adds seven, saturating at 255, to the red channel of 8-bit non-interlaced RGB/RGBA PNG decoding. Sharp and the actual application image processor consume PNG/JPEG/WebP in two fresh processes with separate writable assets and caches. This is an actual scoped modification/relink/replacement exercise, not a historical builder reconstruction or an assertion of all release codecs and platforms."
+}

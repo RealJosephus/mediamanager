@@ -1,0 +1,20 @@
+tree 6b2c91d1eb3a0e6354a940339a667414952c7eaa
+parent 04bc0e632138b8bf0b1964542c05e7f7fc14d0be
+author Florin Malita <fmalita@google.com> 1741117555 -0500
+committer Florin Malita <fmalita@google.com> 1741117555 -0500
+
+Fix non-SIMD (MSan) builds
+
+Previously, WITH_SIMD was always defined and we were simply switching
+the implementation to jsimd_none.c for MSan.
+
+The placeholder jsimd_none.c was removed in [1], so now we have to
+control SIMD via defines.
+
+This CL removes the hard-coded WITH_SIMD defines and consolidates all
+SIMD configuration in the "simd" library.
+
+[1] https://github.com/libjpeg-turbo/libjpeg-turbo/commit/e8b40f3c2ba187ba95c13c3e8ce21c8534256df7
+
+Bug: 398911117
+Change-Id: Ia8108469c312a1b9b5c9db1868556214e6db7599

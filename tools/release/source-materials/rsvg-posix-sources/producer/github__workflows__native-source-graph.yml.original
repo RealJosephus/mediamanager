@@ -1,0 +1,124 @@
+name: Native source dependency graph
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canvas:
+    name: Resolve declared Canvas source graph / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+          - os: windows-2025
+            target: x86_64-pc-windows-msvc
+          - os: macos-15
+            target: aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Select a currently available compatible Rust toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: Capture the original default Cargo graph on the actual host and target
+        shell: pwsh
+        run: node tools/release/capture-canvas-source-graph.js "$env:RUNNER_TEMP/mediamanager-canvas-source-graph" "${{ matrix.target }}"
+      - name: Preserve actual graph and original input coverage
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: canvas-source-graph-${{ matrix.os }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mediamanager-canvas-source-graph/receipt.json
+            ${{ runner.temp }}/mediamanager-canvas-source-graph/Cargo.lock
+            ${{ runner.temp }}/mediamanager-canvas-source-graph/logs
+            ${{ runner.temp }}/mediamanager-canvas-source-graph/new-crates
+          if-no-files-found: warn
+          retention-days: 30
+
+  rsvg-windows:
+    name: Resolve declared Windows librsvg source graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Select a currently available compatible Rust toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: Apply original Windows source changes and capture the default library dependency graph
+        run: node tools/release/capture-rsvg-windows-sources.js "$RUNNER_TEMP/mediamanager-windows-source-graph"
+      - name: Preserve actual source graph, effective lock, command output and newly acquired containers
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: windows-rsvg-source-graph-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mediamanager-windows-source-graph/receipt.json
+            ${{ runner.temp }}/mediamanager-windows-source-graph/pristine
+            ${{ runner.temp }}/mediamanager-windows-source-graph/effective
+            ${{ runner.temp }}/mediamanager-windows-source-graph/logs
+            ${{ runner.temp }}/mediamanager-windows-source-graph/new-crates
+          if-no-files-found: warn
+          retention-days: 30
+
+  rsvg-posix:
+    name: Resolve current post-edit POSIX librsvg source graph / ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            platform: linux-x64
+            target: x86_64-unknown-linux-gnu
+          - os: macos-15
+            platform: darwin-arm64v8
+            target: aarch64-apple-darwin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Supply GNU sed for the original inline edit commands on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install gnu-sed
+          echo "$(brew --prefix gnu-sed)/libexec/gnubin" >> "$GITHUB_PATH"
+      - name: Select the currently available nightly channel declared by the POSIX recipe
+        run: rustup toolchain install nightly --profile minimal
+      - name: Apply the original POSIX inline edits, regenerate the lock and capture the actual host graph
+        run: node tools/release/capture-rsvg-posix-sources.js "$RUNNER_TEMP/mediamanager-posix-source-graph" "${{ matrix.target }}" "${{ matrix.platform }}"
+      - name: Preserve original inputs, post-edit graph, actual tool identities and missing selected containers
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: posix-rsvg-source-graph-${{ matrix.platform }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/mediamanager-posix-source-graph/receipt.json
+            ${{ runner.temp }}/mediamanager-posix-source-graph/inputs
+            ${{ runner.temp }}/mediamanager-posix-source-graph/pristine
+            ${{ runner.temp }}/mediamanager-posix-source-graph/post-edit
+            ${{ runner.temp }}/mediamanager-posix-source-graph/effective
+            ${{ runner.temp }}/mediamanager-posix-source-graph/source-trees
+            ${{ runner.temp }}/mediamanager-posix-source-graph/toolchain
+            ${{ runner.temp }}/mediamanager-posix-source-graph/logs
+            ${{ runner.temp }}/mediamanager-posix-source-graph/new-crates
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,62 @@
+{
+  "requestedUrl": "https://storage.googleapis.com/storage/v1/b/downloads.webmproject.org/o/releases%2Fwebp%2Flibwebp-1.6.0.tar.gz",
+  "responseUrl": "https://storage.googleapis.com/storage/v1/b/downloads.webmproject.org/o/releases%2Fwebp%2Flibwebp-1.6.0.tar.gz",
+  "status": 200,
+  "headers": [
+    [
+      "Content-Type",
+      "application/json; charset=UTF-8"
+    ],
+    [
+      "X-GUploader-UploadID",
+      "AP6rU80ErRTjg9t5W-kp43Dv8YPQm_Tc58MdMJldTeTZ19d5PFNMypS7oydayMLzYcKLxr-Q"
+    ],
+    [
+      "ETag",
+      "CLyL6czvsI4DEAI="
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:37:35 GMT"
+    ],
+    [
+      "Vary",
+      "Origin"
+    ],
+    [
+      "Vary",
+      "X-Origin"
+    ],
+    [
+      "Cache-Control",
+      "private, max-age=0, must-revalidate, no-transform"
+    ],
+    [
+      "Expires",
+      "Tue, 27 Oct 2026 13:37:35 GMT"
+    ],
+    [
+      "X-Goog-Gcs-Base-Ts",
+      "1a17d94a148"
+    ],
+    [
+      "Content-Length",
+      "944"
+    ],
+    [
+      "Server",
+      "UploadServer"
+    ],
+    [
+      "Alt-Svc",
+      "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+    ],
+    [
+      "Connection",
+      "close"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:37:36.972139+00:00",
+  "bytes": 944,
+  "sha256": "dfe7aaaa6941f5f175aa27700ac1e61f296b34805227b861e8bcba0dd8042175"
+}

@@ -1,0 +1,20 @@
+tree aa8c71a20c8144165e0e4288c23b8a53c4922cbf
+parent 9801a2c5d6c67c467ffad676ac301379bb877fc3
+author Keith Smiley <keithbsmiley@gmail.com> 1666726198 -0700
+committer GitHub <noreply@github.com> 1666726198 +0200
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsBcBAABCAAQBQJjWDk2CRBK7hj4Ov3rIwAATEEIAJwZMy4P4pM7eW0jwkXZ4SMu
+ pSWuv91RmCtQQT7JYA7o8uNCLCEuMqPQNBHrwqOjjn1bJVQmxuBy7S6aI6T1KKhz
+ YhBs5QGUnCjgpBJeRu3pGqkFM1EWtp7SaeDGac68X3jax34nrffuiHkfAGZ9OF3y
+ xsY7gfmxASWQeVS5Aryi+oiwnP4c7g9c62pwqJpOIZCQUFZBFJRhdbjNP/kbzpfX
+ BueRLAqSY2ZTIjjA+dWSmTQpjA71BIyNl/eyBor/yAYs4a99v98YI9HAkWzB+tAz
+ hl71BM0tkE1OJ67oN/Nbez+rgwL3Y0r167D3N/lrqeFeDvlJxom5Ct89DdUJcQY=
+ =heSq
+ -----END PGP SIGNATURE-----
+ 
+
+Fix -Wstrict-prototypes warnings (#985)
+
+Envoy builds brotli with -Werror, and these strict prototypes are picked
+up by newer versions of clang.

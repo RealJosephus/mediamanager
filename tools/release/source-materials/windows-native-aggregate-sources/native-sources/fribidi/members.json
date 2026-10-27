@@ -1,0 +1,1552 @@
+[
+  {
+    "path": "fribidi-1.0.16/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/ar-lib",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 5875,
+    "sha256": "84416b321e061e716c917c0f733079c050781588d0381d7dfb6cc9aefd7b0f37",
+    "gitBlob": "c349042c3facd4c50f994acbb71399b8a0415d4f"
+  },
+  {
+    "path": "fribidi-1.0.16/config.guess",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 49482,
+    "sha256": "cf610daf8afdedbf2110abd79bdd4121d59080cab5ec46deaf67f97273bb6bda",
+    "gitBlob": "7f76b6228f73d674f58cfcc3523f99e253ee5515"
+  },
+  {
+    "path": "fribidi-1.0.16/test/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_isolate.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 176,
+    "sha256": "05e795e31ad3b0c19945171e8800b67c66468626585128ab22deee5d4318213e",
+    "gitBlob": "3845185d937ea05c9671c52e9920015e3a792813"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_explicit.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 949,
+    "sha256": "4c7a28dedd85084b84655ddb4fbea40550c90165bd9d0b3c8a8c08fd47b00840",
+    "gitBlob": "bdab752860aa3e0039f5728f26380847ff708c43"
+  },
+  {
+    "path": "fribidi-1.0.16/test/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 967,
+    "sha256": "c52dde9900af8cdc3447c6a95edb70860e3ac4561c3f4dcd1a24825eba3065e0",
+    "gitBlob": "32d2e30b51a741e676d778c92bb5bf653abf95ea"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_UTF-8_persian.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 969,
+    "sha256": "d2a5c9284b8924828152e4a66fe04300cfe2b345830b338568abddfe16ec72d8",
+    "gitBlob": "8191a65e4c024eb1006cc9d60f8c07814fc69a02"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_UTF-8_reordernsm.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 555,
+    "sha256": "c2775ce82713ee2a768c6e4baa364d7769f093745f7a9268fbfbafa97ef09855",
+    "gitBlob": "58653a6f579db6aa72b672f7b2dbff4bc4592c58"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_explicit.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 410,
+    "sha256": "80907575aa3569d735b195e8be395e914477cfd66d772874a66071ff4f7ca677",
+    "gitBlob": "70711e28c04eeb194eb1bed96d31cd2cc6a5eca9"
+  },
+  {
+    "path": "fribidi-1.0.16/test/run.tests",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 2148,
+    "sha256": "873e52bbf1f6cff8baa085f7a76e011e750f0f70076124aa33953abf13d1eb6e",
+    "gitBlob": "81676fc23ce235438a6818081d9da865fd8d4211"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_ISO8859-8_hebrew.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1152,
+    "sha256": "ccecbe7ba7da36b66727a54747712182cba5684b110d42b5650fc4d5aec127a2",
+    "gitBlob": "0579b87dd8adf025258f941b1359ef2cb9eb00be"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_isolate.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 528,
+    "sha256": "61d9c63a1f9cae28bfa3663cb769707642cf1e07cb2ea575cb8e84a643d8c162",
+    "gitBlob": "c2fc6c3d851237a41b839b1a6b2555c65c2e4cd8"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_UTF-8_persian.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2362,
+    "sha256": "8da878c82fc89f219694b00e7c5c8c7801cd920144d6b8983eb7c7bf6b466079",
+    "gitBlob": "84b81f7a8fdf8dc0107966d040721374b42abe0e"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_ISO8859-8_hebrew.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 284,
+    "sha256": "c4c4cbe8e5be70cac8bda6b7c8a28fa2c2aa7f1b970c512302164b69b1aad478",
+    "gitBlob": "b93617a5a52a34cd4a6ba85a4b50904e25fbe512"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/BidiTest.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11152,
+    "sha256": "21f339fcb6f1d7bb7e83f6ebe2e935a4ec4f88605e469e856b136fbaad73329c",
+    "gitBlob": "bad7a95d77fe09c13cc4ecbaab184713383e340d"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 350,
+    "sha256": "2550e452f96140d4b7123adff6a1823034db4ac4a507232f8698997f891971b4",
+    "gitBlob": "41d62f61bfabc4d226ef4d8a7310615bdb5cb7e1"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/run.tests",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 412,
+    "sha256": "44e9f95d98bf0d9e3352e3c922652247d4fdf7a407c392a7e4bff1c02b9dd652",
+    "gitBlob": "110bc1f3626cf48a8ec5851553126bfe5e9685f7"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/BidiTest.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7959974,
+    "sha256": "23413900dddcd2a246440f1f0cf27a3e1e62b3d0aebfa8f44ce241f5950fe956",
+    "gitBlob": "193d5691721e6e088714ca7c9bf1ed1501824a73"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 734,
+    "sha256": "6ea03c6adb0ffb2f3c9f73d3f01fe590cb98da5155f95020b3e3a44455caee72",
+    "gitBlob": "634b42d299be3513d9e841acfbc5ee628d06e980"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 33699,
+    "sha256": "37a7912ccf9405886ca1ad033114caa0723a0cc41391582d083c6e220e66f51b",
+    "gitBlob": "d270083be70e806232b2dd1a79476e5f045c1176"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/BidiCharacterTest.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 12268,
+    "sha256": "5baea6721611e8a1a7bda47b740617c360ad05ed7fb3f02a1e86455ff13071d6",
+    "gitBlob": "f832e4fe7d16c8fee4d6582d976e1a66e381d3c7"
+  },
+  {
+    "path": "fribidi-1.0.16/test/unicode-conformance/BidiCharacterTest.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6880530,
+    "sha256": "18507f7ec57ec8155b7771dbc88f3e3201ad08eba4dba70e4e095ef628020fa8",
+    "gitBlob": "c1cdda6c099da14ec785a260dbf7b7c1cee17836"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_UTF-8_reordernsm.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1370,
+    "sha256": "a84bebc6cf0de7b1f63bd17e7eec8e9579058afdf600bdb60f7728377ef1db52",
+    "gitBlob": "8138c617a5ec61ffb4b5c7b2ac2b9028ae9b5cce"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_implicit.reference",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1928,
+    "sha256": "2dc1bd91e92b9d1a29132519c9ed012b5abc82e142e7b0f357f95a6f5d4e7372",
+    "gitBlob": "e324a7ecac78fce454b21b5dcf7e8fad6650c096"
+  },
+  {
+    "path": "fribidi-1.0.16/test/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1172,
+    "sha256": "eb7c01489966f7aa9fef7fbaae59d0ede5b5303a1ac672b1a41b7d6047bd7b6a",
+    "gitBlob": "f075e756d8665310ca189db2ff3c25ee167b2d08"
+  },
+  {
+    "path": "fribidi-1.0.16/test/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 34522,
+    "sha256": "9cee2117b9290c89b56227897fba7d321f0a1b55a74b273378445bbb8309a77d",
+    "gitBlob": "8a09ebac6bca8f9a6a05d7d466a8756ed17c6b3a"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test-runner.py",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 1300,
+    "sha256": "a8994ed63d5732bd5f1bdaab7de3d678d4c547734b6ad3e7ac126f8261120316",
+    "gitBlob": "1ea9df80580a4f30e0ea3877b8dd235f12e1f901"
+  },
+  {
+    "path": "fribidi-1.0.16/test/test_CapRTL_implicit.input",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 663,
+    "sha256": "08a6d94bf353c0f6eea17d14d47fde956e02337dc0f0211f5fe44fb60aebe064",
+    "gitBlob": "ef6a3d5471c8be0dadfcf1576446d1d9853e6b6f"
+  },
+  {
+    "path": "fribidi-1.0.16/autogen.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 786,
+    "sha256": "3275c6269a71ef9e3e8b318599714948173e9f989c8263e88ce3f5d7d2c7f71d",
+    "gitBlob": "2530b374bbf066af50fae88903045e3a0e0279d8"
+  },
+  {
+    "path": "fribidi-1.0.16/THANKS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1242,
+    "sha256": "25add6c5ee91b15d6f7932905762d7fc71315a76f4b9750c19b8327880038655",
+    "gitBlob": "44f68af9957e6d1a907e6bc28f45c93f3eb5216f"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/UnicodeData.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2175362,
+    "sha256": "ff58e5823bd095166564a006e47d111130813dcf8bf234ef79fa51a870edb48f",
+    "gitBlob": "64258a37395359c2f8875fdf3432817c1c459c31"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/BidiBrackets.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8891,
+    "sha256": "b8f32554c6f658821fb0ee742d21c5b1f2086b9bf13071fed04894b022f93d67",
+    "gitBlob": "db4e41b6e6a53467b5dbddf8f42bd840412d1e1a"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/ArabicShaping.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 41236,
+    "sha256": "764f420cedfc8b43d9fec251c957a5d55fc45d40f6573f162990ed1dce7e36e0",
+    "gitBlob": "3c9e0ca80ff72acf9e7060da9d1471b19ccdc01e"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/BidiMirroring.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 26827,
+    "sha256": "d7afdadd1bbd66f5a663ac0e8f7958f18fd9491fc0bc59ec5877cb82db71db7d",
+    "gitBlob": "d8f60cb79fe9537c389bdb3ee5d5624880222ef3"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/unidata/ReadMe.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 693,
+    "sha256": "14cafa23788d3a20dd21d6b0cdcb8d6dab520781fcd9ad9392f3b88ea607e633",
+    "gitBlob": "2dfe542c248b836e727835db3cfd4b424d1aa897"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-unicode-version.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4061,
+    "sha256": "1810ef5c6c641ebdf33c10191008df133966e6ad4941be50ed291ccb228fc430",
+    "gitBlob": "35306ca3565580bcd90f038eb3c79f34409483c3"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-brackets-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7866,
+    "sha256": "ecb6671e106e6dcfc8ef642c78a4ed46ed31997176e1b0769e2107c449362458",
+    "gitBlob": "cd99e014bbcbd7c2f158a67b5f70cb368039306d"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/packtab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9602,
+    "sha256": "7296d4ab454b83b15b89496bee81669d096fdb05506bdfd70efc24a227d85afa",
+    "gitBlob": "af3988810adb5292176780a1040a1ddde35fbfb4"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2552,
+    "sha256": "3c7d7118340e65747458b87b05426f9a6769424d1166e9cd74219f641539b88c",
+    "gitBlob": "8c21e98b8ce030a88c2264063847b2e7e2c66ff5"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-arabic-shaping-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6513,
+    "sha256": "c4d40b6be2f38317b65651f7b22399007c5a15f852e7be6b73cb252eabb58c62",
+    "gitBlob": "809699b3464e5481c1d37ba5c559d7eeaef27e4c"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-mirroring-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5058,
+    "sha256": "c118c13170ce1e2ecf48a5e1764edb105d64f3574eed7652cea858892bb0683f",
+    "gitBlob": "e19be91ce51cc2c113fe01a68255a3cbf3f9a200"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-bidi-type-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7423,
+    "sha256": "bf2f7ec2c5e077cecbcab4d4b1aa62338328b991a1a82eecc878c467d95cd3ff",
+    "gitBlob": "05b1d164636cd9b68e183c4fa5708621296909f1"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3949,
+    "sha256": "56acb70e8837ba4847418178fe3f6368459dc2a2a0f821d807caf82a8d4b773f",
+    "gitBlob": "014c646b128606335e7b832db8da7896345f65ca"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 50456,
+    "sha256": "2d635a3ffae2f89890f2dc91081741896f8000dcdc758d4a2db5bd3b53b870a1",
+    "gitBlob": "ad461a8cc0bbe1d995801112f827d9b96fe0c882"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-brackets-type-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4903,
+    "sha256": "b13ad6b724fe55c89828c0413b16d47fe4334c68c310ce00677286a8eb698322",
+    "gitBlob": "9ec60cccc3f644679738a5be1f7bf1aa604a1a29"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/gen-joining-type-tab.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7196,
+    "sha256": "3f182b29b9b6a9d0fd541e1d1d85aa18567911411a3d1d31e8e9b1cb224247fa",
+    "gitBlob": "ced404a02f2ec2f536c2405a2aeea890af97d226"
+  },
+  {
+    "path": "fribidi-1.0.16/gen.tab/packtab.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1373,
+    "sha256": "433df96f42270b460dbfe0b1b56d2e3756f7342b7db41fbc97b598f6ff090bec",
+    "gitBlob": "7ae80f01ccf21ebc685f3e7039480a66def61f39"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-bidi.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6253,
+    "sha256": "819ec96d0a479a8516260b1a3b3993a244214ad6c0586d304249a691e1b5b274",
+    "gitBlob": "4e3277c10a6140a2f812e5e825d03b0899713839"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cp1256.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5494,
+    "sha256": "861ff96cf0140c0331515c75ea7c8c6c41f86ec0d5f18168feec8de4f181e912",
+    "gitBlob": "7915491f80f17ee0964cba39cdc617179de35666"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-enddecls.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 74,
+    "sha256": "5d140c2e49a3d4d0b5d9519df860e56ebeabbbf991fec37bde9ce7d868d12236",
+    "gitBlob": "eb300c9eeefa4403e5d86e42ac6905c996922046"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-iso8859-6.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1760,
+    "sha256": "88d7140e53ff20c41722ef25c83d0d66aa4e7894b6f39f26b5eb6fd462e4332b",
+    "gitBlob": "01a1c4a127783c219a69ae4cebe4779bfc7815e5"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-deprecated.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3624,
+    "sha256": "a2a3c686388445e828d4409688d3085e97547b00f97bf62013d7b912eaa80693",
+    "gitBlob": "bc0b8e2421451b389d8ee42f136ca6f4ea92abc3"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-bidi-types-list.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3773,
+    "sha256": "f8bbfd157de60bd62b2f565488c22630dda9315e50af7002856de557c0a1daa3",
+    "gitBlob": "c4ffc6f1de9bf258036f2cc1ed815de519315fe9"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-bidi-types.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14990,
+    "sha256": "693930457d718570f795fb0a02d3aa85188dc702e62f9707dc44a28ab5d2b260",
+    "gitBlob": "cfe3cf093c65379de265ab90a29b0a6c3a0b53a1"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-bidi.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 48114,
+    "sha256": "6aa9daf17b23154ee45f65e27336d26abdf319d6fb01fc96e8e5e49f6de3ad6e",
+    "gitBlob": "4ee258f4b55bd6fd61d874df1bfabfebb88b6738"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-iso8859-8.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3075,
+    "sha256": "9cf90ab7c085c7e71bb226a4125ffba0e73faf0545962b9644aef2a0134eb058",
+    "gitBlob": "00df20cd07def3d3554dee94e451cd00db375885"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-joining.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5211,
+    "sha256": "0e7da04154bd6c584b98aef21637b754e7aeee64e4f2c00014964ccf74bd357e",
+    "gitBlob": "99c4f377b7fc288cb3af30b14c49fcb50945e458"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/joining-types.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1564,
+    "sha256": "fa2da81134e45eea638bb8cd91d1fc9f359015579d0ffb8cdfd050e0271a8424",
+    "gitBlob": "6e11fa19327fd1655d7b13a02f7b7346f6ee0a98"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-bidi-types.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2880,
+    "sha256": "428a2779558f214d2c433fab1e7891448aa59117a16bad609a195cced731cadb",
+    "gitBlob": "76ce79e209ab94deb56321f2d897cf7b9b51f6ee"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/arabic-misc.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2708,
+    "sha256": "0cfac5c0124f11e1df8a01102321035eb420311d67968b21c96d3b67ac2edf90",
+    "gitBlob": "eaec96b05b041644c5a16d89f491f72a77a9b00f"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/debug.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3072,
+    "sha256": "e7aed7b76ff81142f464afd14474aed6eece449f6446d0dda124421e0b1cef8c",
+    "gitBlob": "74a5026aca2f84b6f9b2bd992be544266c72a398"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-iso8859-8.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1760,
+    "sha256": "c4295d8ae4e098b306cf68d2c2004e322a211c2c6f1edf3387314c25f3a5627d",
+    "gitBlob": "22af54ba178ec51c31a0eaecf1c029fd5943f404"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-arabic.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2823,
+    "sha256": "f4c5231a027536077ff577aa375e95f93ccd3275fd31a1951244ec449d4fd7cb",
+    "gitBlob": "ea82c68a85e21cec6b9da90be0cde9efc4f03aa6"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4831,
+    "sha256": "a3c26eda78b6563361253a094f2a7f5b725ed2bd7c6a8dfaa65883cf174ee18b",
+    "gitBlob": "6157a3a9d169cb0134db2bb8a8ef951319668457"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-joining-types.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2787,
+    "sha256": "5a06d1cf7b5575b9bae3dee01863c88cef469856418a2f7452c3fa3b254af203",
+    "gitBlob": "ba52cc7b17d3bfe341515edceff7f3bd3b915309"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-common.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4788,
+    "sha256": "7e0f4a124344941c40a3c3244ff30d0e9df8968b6287fc1f3a7a6495c7093e7b",
+    "gitBlob": "6d4dd5893032f698e292ac9798f30f8e8a775445"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-config.h.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 770,
+    "sha256": "9f91604dbcbf1a4856a80eca87f047dd79d096b82b0ff8a572047ae45c76c406",
+    "gitBlob": "c47057881794245b65ea866c78731f9b031797b5"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/joining-type.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 195929,
+    "sha256": "6d2855a54e356e4ff091c96265d5db4a5323e3d5e252adc1a4d33b1dc6a4734e",
+    "gitBlob": "d0f511b1249d9e21f986cc9712a614bfb529684a"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/brackets.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 38780,
+    "sha256": "f40f0623f0be96d2fd6d5a017f7b3ea81a3a1849f328e8d161ee2a50b92be940",
+    "gitBlob": "b337aa674341571701922a148a77994ac711b1cc"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/run.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3521,
+    "sha256": "36e08efc0d4d67595e25dd0ab7689258a3d3ed1b18b8a8b6c577bb6dfc8796ca",
+    "gitBlob": "44ddfecb442c964ab43897dfe4ef20ec346ddbc7"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-types.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2428,
+    "sha256": "c959bf5f15c0fc405205136cc0ed9c03aa63a9fc285696444dc594b0d6f4845f",
+    "gitBlob": "90238b4f2448f864770f0b3a8322d98a5d050bbd"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-begindecls.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 80,
+    "sha256": "7a8cd3e05e46dee19f658d67e485fca4acd06b96b4773bbf4607530564f3117f",
+    "gitBlob": "0f4acdd1d417552e47bb663358fc15f290c18fae"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-brackets.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3180,
+    "sha256": "f5a32f2ac8c0cdc445f82b9d81f6a5b4ae103ca65e03838eb09453b5185988d1",
+    "gitBlob": "5569defe558a38ba19d8f39b0fec9f4c27cf1701"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/arabic-shaping.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6743,
+    "sha256": "f4222f03c8ad1c3a2915aba51c8fbefc153d5ae59ea9ee627629a76bac2b1702",
+    "gitBlob": "ca24e9e5844aa231a5a1504e415e88718abcc0b1"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-flags.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2038,
+    "sha256": "819bf2e462e20a3f79a9f959be173550aa609f12eeecbf62e87109b8034dfb20",
+    "gitBlob": "166c93a6912003008dc53665634b83589a817c00"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-shape.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1753,
+    "sha256": "3ae216eef48ec7572b7ead3b063c255c956fe02249890e651231e8a04b564705",
+    "gitBlob": "aafd49771b3ca68591776d45a854ec858d116b4a"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2810,
+    "sha256": "2b1a880a19ee1f0cfd35f1bd49a83a4cb4166f9b9c487625625b9b4a5ff435b8",
+    "gitBlob": "7f15e4dc5460b692db313987299ac116b09c2e86"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/Headers.mk",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 646,
+    "sha256": "53f81cf506024b0862272480689fa1a270a6f56187d5aad587a8be4c8c3551c3",
+    "gitBlob": "2db988e5360257faf5a65298c86cbf92fd8de7c7"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-mirroring.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2392,
+    "sha256": "2839e84bba5edfb43e3be21006ea698376b007533f4c7bb52e6362ff98085315",
+    "gitBlob": "69701e7709be5b89a49e26fdec3f41e0170b7e63"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-unicode.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3352,
+    "sha256": "21ee4bf3f7a6dd19e5b35566cdf10a2cdf22b52d01aa3fe467d2da8f11cec2fe",
+    "gitBlob": "f5a578330475b5735413e3611d93df0deef7f259"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-arabic.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5434,
+    "sha256": "76a13aa93be6981d5ef3758bccce70ecba88a82d2168a0c4cfea5b8fac5cb519",
+    "gitBlob": "6854c1afb83a24004f8efd64f5a224731f71255d"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-deprecated.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6049,
+    "sha256": "8839fbc0faaa654dc2f166862962d74ec2c29932373eed1e35809b35eaa352f3",
+    "gitBlob": "cb2322d4d060d4c6603d8f1daaf36d41a2085c90"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/common.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3987,
+    "sha256": "bc9702345b53c6263efeec0c96ad465d91a0de9759e01427719c508ed85d1da3",
+    "gitBlob": "c05e692ec675d73abd701313b19fccc69a71ca19"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8903,
+    "sha256": "826707f6ddb46bd15b5d6799d01fb76c413b4b06fb48b8811ae151636cb638cd",
+    "gitBlob": "70bdab2c7fa0a07cc9db2f357a40c4b40f16674f"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/mirroring.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 40697,
+    "sha256": "35c6c9824255a34567c6295f4641c3cb7225a299917a36ae05196d5cf1708dad",
+    "gitBlob": "591ccc91820516f1b1ec5ed45b28276d7e182bc5"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-iso8859-6.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2020,
+    "sha256": "88c65fcb22941b51d81dca44aafb93b768967245d6b8f830ecfaa2b815aec31e",
+    "gitBlob": "d518723fa5c251061292141bb108988a72cd19f6"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3322,
+    "sha256": "bb3b0fea74d9e4d456a1241cc63a557365260180b8382bb622891df3c164647c",
+    "gitBlob": "98ea1090b94477bed7aa15a79c2db04db3b83adf"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cap-rtl.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8712,
+    "sha256": "210046d7bc36e8956620918549d9c3ef7d0179373779ea86348d2fa42f377284",
+    "gitBlob": "f74e010f5c553010e925617ca3891dae32ce8412"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi.def",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 798,
+    "sha256": "f7b307f510fb92243a642bb623ef3d0e6877f3e866a1b80d67dded8e212e222e",
+    "gitBlob": "66f627a1cc53e0126c9828e535ed55731215d1d5"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cp1256.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1727,
+    "sha256": "04cfd262ef6a20ad048eb9fdea340928afa1f9c69703746998a8b03c7f56847f",
+    "gitBlob": "8ca7c3d57c0213517ef6e77be9462a37e515d7c2"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/bidi-types.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1584,
+    "sha256": "9834f79a7e0d15116a902a1a97493411e8347806373fd97d3c00b0136baaca22",
+    "gitBlob": "86f3d02bfc356652799224b778ae6c08825f5d5e"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-list.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2266,
+    "sha256": "93aec7f29320d82933f5a4f18bf5bed4a4be8bb9a16cc0b7ad6452f4647840ef",
+    "gitBlob": "b0231d84c0349581dece1b07584d6132870dccf9"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-mirroring.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3028,
+    "sha256": "cc531e106e7b42748a997459464c8a08cc38cef4273d41afdbf2aa1bc36393f3",
+    "gitBlob": "ddc3a14ffefdfb78b490a2c1c36e9daf6edf5d1e"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2108,
+    "sha256": "2d6278a3b4d01ae9c81d2d2fc5a3839b87dfef875e56c9d735a2cb0aafb83413",
+    "gitBlob": "22b680af37a549b6602c797446f647cbd1a649b4"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/bidi-type.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 286363,
+    "sha256": "d1fcfc6aaf6751bfb54a67eb035dd0a99bc13930be1f3a85646847623cf68608",
+    "gitBlob": "4e524cb0328f9302305c1222f35ee2026362ae18"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-joining-types-list.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1697,
+    "sha256": "00b499c280d1331d802c5c778b66d4c2f80fb894c94dbdcb162c05fe8cfe4f8e",
+    "gitBlob": "198bad0f8e5d15a43d3fa94f83b7d8cffdfcb6b1"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-joining.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2868,
+    "sha256": "c9bbe87f5c5ce2ce99cd8568a0a79fc715c216de9f677973e711a798085099a1",
+    "gitBlob": "92539dd0117400fa88faf8056352ed3a7d978d35"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cap-rtl.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1848,
+    "sha256": "bd25adf8f55c63fb49518e2215301135f787d78d9c19e9dc9a395df7eb0ad231",
+    "gitBlob": "0d99d9b7a2d18d79e9e6c4ca1d5dd8c4b87bcdf8"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/brackets-type.tab.i",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 22390,
+    "sha256": "0ff0a5a8f24b8c3269d7238bb122ca5a80dced60d3a63c41b0b04f8c9c470251",
+    "gitBlob": "257e2717d13e42aec6b73a002914bd8b51818cf4"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-utf8.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3644,
+    "sha256": "8ba9950a162d2f8dd8720e4be0924c900d5d2683da1e33f2a7d4307c803acefa",
+    "gitBlob": "9fc8647924e7f5547003c592e84d8f63d9341859"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 54401,
+    "sha256": "1bf916093ebe08b9f1fef9e934abf592b007022b51243bbd39cf13d1ae326db5",
+    "gitBlob": "504bf171db1066f5b2adcc6382472fa4b62e4f88"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-unicode-version.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 330,
+    "sha256": "e384edfdc1276719ee2ca83139bd306f5296ad5d27bdcbecb805fe7b33707650",
+    "gitBlob": "f3525eb1ad1dd0d63abbf72f7de657e1d2b7f057"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-shape.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2670,
+    "sha256": "4c57bf3ed59c8f425990ca5df1a696a98f87075db00e0f1b6c99b8de0c2588d7",
+    "gitBlob": "ff258b5c57e6d8d00092a1740550afa643804a9c"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5027,
+    "sha256": "14ba20a9d4e9372f47817be2c466c9c53567781b623a58fa0004b4e24a835b2f",
+    "gitBlob": "29e82375b521e4da97bd62192053854e6fa4755b"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-utf8.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1809,
+    "sha256": "59f201f0e77ecbf04c75ab0e52172c81ac8812bc274932ccb0346d94d6de5f3c",
+    "gitBlob": "a8832cae6aa796810fb6977678c130aaf1861d44"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-joining-types.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8180,
+    "sha256": "f4703cad6845a1e4c11702999716b1667ad6e268ecfa64f91585d739e2ffd913",
+    "gitBlob": "99bbd804383f2e108d77840683ddd8f8435549ed"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cp1255.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3649,
+    "sha256": "25a952f4f076b7ad962d4b888ac85d1ebfea1b4a05f5e6c45b6d9eccbd39eb0c",
+    "gitBlob": "76eb1e1b038ce5cb667283565b519d4822dd2aaa"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-brackets.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2810,
+    "sha256": "ca97f3b6fee2546fb9f0d9b26efa3e98279d8a0f8bf1cac52d509858ec772a79",
+    "gitBlob": "1beb8f389aa596257307b5a73cd60657f5fe8bb4"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-run.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7441,
+    "sha256": "60d487f4b0e062d8c8dcc3ce1dd6905d440eac29aeee0e692a04ae5b57504721",
+    "gitBlob": "c74c8663fa778fe33e505ce67140a9e26f8554af"
+  },
+  {
+    "path": "fribidi-1.0.16/lib/fribidi-char-sets-cp1255.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1735,
+    "sha256": "a9a15bba6fe9de247a9ee92e4d8cf45f7e28fb99e3b2981dec1e803be79c44a1",
+    "gitBlob": "5fca17216baaf098526cd69c4404ea8d29b0adde"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/m4/m4_ax_prog_cc_for_build.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4035,
+    "sha256": "d1c6a543a8ef0a3c4c4595304306640beefdfb95b51c02588dd1f9f4b1b199f2",
+    "gitBlob": "12cb005a50640a211a1ea146e14f38a4edc86675"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/libtool.m4",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 306681,
+    "sha256": "c1a4cfb2c1dab76d4229b7c3ab04cdaf8dae0967fae71abb93d25e337745d64b",
+    "gitBlob": "c4c02946dece797da877e40488def858d724f103"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/ltversion.m4",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 699,
+    "sha256": "a27b754709de61575197bf5a980696c98ae49da3f92f0de8ee7f42dd543b7465",
+    "gitBlob": "fa04b52a3bf868bd57e7ba796d64385a51e7ec5a"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/ltsugar.m4",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 4384,
+    "sha256": "5a6735cda60e0ba0d1b706c0ef648f5d096298da46daefd9cdecdb6a0f4584d3",
+    "gitBlob": "48bc9344a4d661e116be1483d5520753875b2bd1"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/lt~obsolete.m4",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 6140,
+    "sha256": "26fa3285c35dd6ab00ed1e466ba92a17e4655e01897731ec18a587a4cf5e4f8d",
+    "gitBlob": "c6b26f88f6c3c1a052afa6314ba2adf832d785ee"
+  },
+  {
+    "path": "fribidi-1.0.16/m4/ltoptions.m4",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 14514,
+    "sha256": "e77ebba8361b36f14b4d0927173a034b98c5d05049697a9ded84d85eb99a7990",
+    "gitBlob": "94b082976667c0c9edf2e9ff7a668c1fd7d997bf"
+  },
+  {
+    "path": "fribidi-1.0.16/aclocal.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 57167,
+    "sha256": "9d7a392a3deaab38b608a6f5482a6a39aa8bd21656d42651e88b64ce1b516e1b",
+    "gitBlob": "9108a7fa187d66c6c8ac9de4efafdc6090096a19"
+  },
+  {
+    "path": "fribidi-1.0.16/config.sub",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 35406,
+    "sha256": "deb02c26f43b2ea64276c9ede77ec0f53d08e6256710f3c0a12275712085c348",
+    "gitBlob": "dba16e84c77c7d25871d80c24deff717faf4c094"
+  },
+  {
+    "path": "fribidi-1.0.16/ChangeLog",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8787,
+    "sha256": "ef40735afab830fdfbacfaf91e47abbfc8193a78b7e9b7f6fd7865f2fb05cbfe",
+    "gitBlob": "3208d3689d330ffbee5138555ff7ce6de5314385"
+  },
+  {
+    "path": "fribidi-1.0.16/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2597,
+    "sha256": "484ec5aa67a62a7917dcecd229cdf823d9ddc477f2c4e3de399494e19a97b511",
+    "gitBlob": "8457582161ff96a5e61e36d79826daee802006e4"
+  },
+  {
+    "path": "fribidi-1.0.16/fribidi.pc.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 408,
+    "sha256": "f41d7907c9486a7be6f1a47ca9afadc45b8cf9f9cf157d9236e38ccd764d05cf",
+    "gitBlob": "a5156712ae1424d014395b425e5f1a8ec6130afb"
+  },
+  {
+    "path": "fribidi-1.0.16/missing",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 6878,
+    "sha256": "a9865db4f39574ff128c0312c367f070d20f81847817021ecce95fd70a610c9d",
+    "gitBlob": "1fe1611f18514b7174f3529145b56cdc51d48c7c"
+  },
+  {
+    "path": "fribidi-1.0.16/README",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14,
+    "sha256": "3debe734c777df09c3c762cadd0fea1bebdb857c55243d605dc5b09211895bf3",
+    "gitBlob": "96dc92fbd0389e403e1bbd6d3288fba6ac3bcdc2"
+  },
+  {
+    "path": "fribidi-1.0.16/ChangeLog.old",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 32290,
+    "sha256": "0a196566c34a62398c78dd261a19823f175f15914b8a6de48e6171d0b016cdfc",
+    "gitBlob": "ba4caa2914fcc81daa5b4614043d56a8da176c85"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_shape.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2547,
+    "sha256": "4b78ff261c33b735b99b94ea938cd6cf2da21e9ec642762d3ecc221268a7bd1d",
+    "gitBlob": "a0917b4efbd16f8a13fed99a4301c302acc08e9a"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_shape_arabic.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2535,
+    "sha256": "2d60d5bd451d2b273479ab51776d0bebcb9e47c4a6e4719177c0baa17d39b2a3",
+    "gitBlob": "1e4097e30d7fcfd4d9aa93087eb379ed00dbbde3"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_mirror_char.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1926,
+    "sha256": "651308a324ee27d9f3d7aafb0003b8d58119e0480c2d8926c5d3e0077d75dc89",
+    "gitBlob": "fbef9df6a82d5781769e1018212341309608a39a"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_set_mirroring.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1812,
+    "sha256": "d6e4bead36770867daa36d36134f15559bd652d0742cf9eef517ad73e59dc435",
+    "gitBlob": "01e93ddd0756b75ca1a8a2fb880a6e1d27799a74"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_log2vis_get_embedding_levels.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2389,
+    "sha256": "be1c8e615b4c870318b5aa4e7b4f3649d2cc4b8e9c66e038d30581a3fb874f10",
+    "gitBlob": "20f403185d4ebada89bf4d05bca99f0c1c214c9d"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_par_embedding_levels.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2434,
+    "sha256": "5ecf81837b0c04fc0e8360baef6a47220a4a89fc8481a31f2147a917fa56821d",
+    "gitBlob": "2d6626d33a6d60a8b0aee473f066fdd9e33d4c0c"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_joining_type_name.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2328,
+    "sha256": "8dd6223fb66872fc8d8270fd5a60a1221deb847550604767e8fa8829265d77aa",
+    "gitBlob": "8a9d5866745cb6954758b59ab1a1bfa8f655cab6"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_type.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1472,
+    "sha256": "52543109d8e70f5dc773d8d0fc1eba796a3d6c5cd54538ea0da2250de503ca25",
+    "gitBlob": "a9f0f77cfe5329fc00cb2d1d27e3cb70700cd4f6"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1967,
+    "sha256": "b83b18ebccda6d1dfaaafdf87975af9d94f38933b862cd2b72d81177b156802e",
+    "gitBlob": "0900f55a1c200a80b8bf20c0178b76d637894e15"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_join_arabic.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2809,
+    "sha256": "37de5ccc17ba94ea8dfdfc6590e8b6acac998c2b179cc404beff33e308be04ed",
+    "gitBlob": "9d680addcb4682a6aad39cbb243c74bb94ce3d2b"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_joining_type.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2532,
+    "sha256": "ff07557aa404e685729adf0beb0c3a2f3634110052b3f2784705ce8834ce5fbe",
+    "gitBlob": "2f39e3072d18fe6c4f20c550a089a4456fd7e487"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_reorder_line.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4218,
+    "sha256": "d2ad09205cf18d0d57daeed295523883be61f1165ad84e7431f81aa268fdb361",
+    "gitBlob": "c13704dc6a8cb0a076b03e33c80d109c113ffb49"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_bidi_types.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1795,
+    "sha256": "4ff7d4c9d26cc45ef1ebbf2f5ecab239832296b2b69a0b7908f208be8f215ca1",
+    "gitBlob": "6c2db22771ee0257033ce2fa4e50eae9f053445d"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_joining_types.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2382,
+    "sha256": "9b70f2c3ac579654e9e70dbd1246fc761d90057dfcbdb75ad016c5f355564767",
+    "gitBlob": "5a1a13f64c9589c006d5e6ebcc6812b10f556afe"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_par_direction.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2871,
+    "sha256": "ae16361b9e4d9b66a412887f33ad257f867ce05a4e46fb633838446a6e1344f7",
+    "gitBlob": "a4c1d5ec1397c232ae55b1ecc91c25c46fb7fcac"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_parse_charset.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1991,
+    "sha256": "86dc0fe89028f405451ed33048e1c257af44a39b2bd35a05eeea35ed46acc2cd",
+    "gitBlob": "326f2e14cd42620a23ffd637e028f25f5649768a"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_remove_bidi_marks.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2837,
+    "sha256": "4584388f9e1453679289dc32a6883206356cbdf710285b5c7133d085df16459e",
+    "gitBlob": "193c7adae3e3140ad700647f035841cdf3bdaf07"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_bracket_types.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1911,
+    "sha256": "d8a7eff004b986ea228d61a60dfe8ff8f8d7dc6eaaf859a381b2543d6cc87b58",
+    "gitBlob": "dd15eae600029e99e3f9d38838955e6ea763d9a0"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_reorder_nsm_status.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1356,
+    "sha256": "ca9051a1a18a99682cce0a8ffc4e6696248b1e66703d0ba09c62c0cd0d10be7d",
+    "gitBlob": "8b4b9ba24f52bd1ed8aa406d4487e7edeedb9ff3"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/c2man.stamp",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_set_debug.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1303,
+    "sha256": "d663d9f971737932e0ab21c48cbf9e41107369f1dd92772649de454cc5e67928",
+    "gitBlob": "77d3676264a5139eaee45ca31c2129bbada7ff16"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_charset_to_unicode.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2244,
+    "sha256": "f42da4353445e13148834c9b80549bb104872d0a4aa46d2c525df9544f2dacaa",
+    "gitBlob": "fbd4873f24d8ffc864b153ec2ba8035ed304f73f"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_debug_status.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1266,
+    "sha256": "2a5335dd4e668290863b9fe2a5dd6e245cce35029f3f47d133c9e28bb7172438",
+    "gitBlob": "9f9199fe8a29857cede0235cd3c3852e752b7a46"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_bracket.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1878,
+    "sha256": "1ea5211f35e4a6097d9cc821d178b6438f4cbfe2d8ab68e9dea45cf8963ce938",
+    "gitBlob": "bb44260106104c87499c2e1c92ec538e78c5498c"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_log2vis.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3153,
+    "sha256": "c8c36c367c00f308c0c11642f3a76d0e373cd0da431dc7f7d2e34d54f370696e",
+    "gitBlob": "04afd8fc197ef62e266fb34db3753756020778c7"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_par_embedding_levels_ex.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3089,
+    "sha256": "9404f84e00a0431155affbe119bf28c241cb3db51a5937eacd300f3c4715c57e",
+    "gitBlob": "1b9b8545b4656a8e7fea3f5d4d2efcf8371011c8"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1290,
+    "sha256": "04f68ce22714c29b8372db4c81592fefe3803ac73c468933de4b1d3a5e0fec2c",
+    "gitBlob": "bbfb48fb8aa6ff97b95847d24d3e5516c7828eaa"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_mirroring_status.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1345,
+    "sha256": "ea3dc93290aef0c505b06687d31450ccd5bdaf06107d641184f5c48c44cbc3f8",
+    "gitBlob": "32d23ebe15dbe9e3ea4087f20d3fc4ef9d979ca7"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 18214,
+    "sha256": "7f28c10263a22fcd07d4d42f29ff92749e5535d1dbbab60cefd6c77329a87ca4",
+    "gitBlob": "1f01d6f6f637a17c8a480cc9805f8ff13ee0344b"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_bidi_type.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1887,
+    "sha256": "f70a6fd03bbc5f2f7407c77daa6db4a32862f6d894eb9067d2a4593de760dced",
+    "gitBlob": "1b2c6bad4d3df3c229a21c034e347801646a900f"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_shape_mirroring.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1876,
+    "sha256": "afe327b4a503547ee9ea77fe4768bd29db62f19ac4ed09f4749804661dd381ef",
+    "gitBlob": "5823bb2c473bc09aecbe7caa96cfb4c8632a5468"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_set_reorder_nsm.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2033,
+    "sha256": "def870e1c8855540e3c27ae20dc07c3453b753a6bb2858e0e24b139e4ca23c73",
+    "gitBlob": "11b54dbab0f148d7cfefc8bc14d50c7355bc026a"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_bidi_type_name.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1822,
+    "sha256": "1ba674986c1b901722fe0d59b30bef1c0d64808101ac5087910b6cbb51ef4d2e",
+    "gitBlob": "92524a39e524da64f84a6f30857c7730c32b8de1"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_unicode_to_charset.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2291,
+    "sha256": "e7341e3586210e61277b57e49b676077eee200345acdd9ea200918f0c6a4db78",
+    "gitBlob": "9e1bb65aba7bf2519a52c8f0d151476de745edf7"
+  },
+  {
+    "path": "fribidi-1.0.16/doc/fribidi_get_type_internal.3",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1490,
+    "sha256": "129d7dc2c023f71930b83a8de323c0e9d2e6c4808899dd288f7c2cdcf818a1d5",
+    "gitBlob": "73485edfa611754433938b304eedcf6f063404a1"
+  },
+  {
+    "path": "fribidi-1.0.16/INSTALL",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 15766,
+    "sha256": "edebc46c7d07258a20170050d9595ce4e630f5d584a4eb00220bb90c8997a31b",
+    "gitBlob": "e82fd21de2eae1cb6cbb75aeee697cdce8da3a59"
+  },
+  {
+    "path": "fribidi-1.0.16/configure.ac",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4902,
+    "sha256": "6c30b1c5867e5a3aa8cb3624ca73bcfa6168774b668c1560430e1a4402081a31",
+    "gitBlob": "9be44d00266f93077a96608a7e6d3a77b868addc"
+  },
+  {
+    "path": "fribidi-1.0.16/README.md",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6269,
+    "sha256": "332c43f81281d8817b13d3e1d93519f2a938b95b507b416b5adbbc331bfe5624",
+    "gitBlob": "e4b4c9f7318375586a674c93febe862fc17b1030"
+  },
+  {
+    "path": "fribidi-1.0.16/install-sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 15358,
+    "sha256": "3d7488bebd0cfc9b5c440c55d5b44f1c6e2e3d3e19894821bae4a27f9307f1d2",
+    "gitBlob": "ec298b53740270ce82b326c4c2deaa5dcdec4596"
+  },
+  {
+    "path": "fribidi-1.0.16/meson_options.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 458,
+    "sha256": "4f43276ba0e983d3a2d9ffc0afd49eaa3097f1bfc64a36a6cf621f1e5a4bf356",
+    "gitBlob": "f54a639bfa1ce3b1c93797c737f44efdc29a7010"
+  },
+  {
+    "path": "fribidi-1.0.16/NEWS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6516,
+    "sha256": "135dde188400962ddb2c4f0de53d639d1908db2612569d02a7c5e96c7dd60105",
+    "gitBlob": "023179acfce108facad50eaa02bac072b7150b3e"
+  },
+  {
+    "path": "fribidi-1.0.16/test-driver",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 4879,
+    "sha256": "08ff8986c3a0ce8bf32d25ec7e4752ffbce9c89589f018836c97a08b6573ac2c",
+    "gitBlob": "be73b80adf95515f3fc7cdc504facb29bc12e6b3"
+  },
+  {
+    "path": "fribidi-1.0.16/AUTHORS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1640,
+    "sha256": "cb173f55c9514c8f38f4647ac3fedd5f8611358d331e65ab955da931e826861c",
+    "gitBlob": "a47e0dc93650dfa93410a389b6eff84787e6d7cb"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "fribidi-1.0.16/bin/fribidi-bidi-types.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 243,
+    "sha256": "5281d01d11bcc1ea99427860c8c42faf69a984ddbca967581a8980fc47e1c2a2",
+    "gitBlob": "90ec366ecb382f502613594081f03c494378afc1"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/gettext.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 31,
+    "sha256": "f64ac9a6a7efcac83ba674cbccf1eff0ab50d87922cc0ab0ef9240dac7583731",
+    "gitBlob": "6ecfb919fe4504e31459f0fa34bb81b82329c4ec"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/getopt1.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4746,
+    "sha256": "cd98cec6151230732e76359608e2f4a93b5ad5d2b058a569ad2db01566a95a7d",
+    "gitBlob": "c205c50d4fd2ba9a5b75d9a35ef0e9648081b724"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/fribidi-main.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14453,
+    "sha256": "d5b6ac55697dd4b789bae5650945a6e9141102484d361ad33855dfdead341b5a",
+    "gitBlob": "3ae4fb637621d8a841e2b4cb1dccb0dfe50fbf2b"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/meson.build",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1423,
+    "sha256": "99092a414afa2bebc52fc78b0c9d91095f73f6032c0365a7df2ca414e9c58b30",
+    "gitBlob": "b4bbd68edafbbff61c4ea9ffbff20c49579a0ee0"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/fribidi-benchmark.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6996,
+    "sha256": "9cbe3c1895f08ef81fe4bea6029f63790879ef6504030307d13a2d4be00cf18f",
+    "gitBlob": "07ac336d595e349d0d0077338266e25cc22866d6"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/fribidi-caprtl2utf8.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 736,
+    "sha256": "8a91a2136d1fabb814eee8754c6f46e95ea155c78b22dcbc926927921dc45ddc",
+    "gitBlob": "982f8db74f1b003461daee6f0042eac076ec7f38"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 550,
+    "sha256": "6b0e3e41b54c6b37044c8676237d0ede7c9cc8918848d881a5ad7a13e809c14b",
+    "gitBlob": "599357717290a75f88901e7581f92ef975afca34"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 24928,
+    "sha256": "2372eccd81a6b91a260fcc84aa8937ec31e2b97cadee18ee8aa89fb6930112db",
+    "gitBlob": "7be6268573ba4de28ce7b28ba4f8e73ab3ee2437"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/getopt.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 34076,
+    "sha256": "c28370b58d2b1b671249a35913fa7fddd57770c1ec60e46cbcdfbc380f95a541",
+    "gitBlob": "fad1f5d4d4b51e6e68bd932e71b072d417b6336f"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/getopt_int.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4669,
+    "sha256": "6234c49a4151bcc2f8cf6cf92b03a6b0dea1db1815665ced9717e37cb86921b1",
+    "gitBlob": "24fcc2a0c77ccf5daf687cc13427dbee3c72ef26"
+  },
+  {
+    "path": "fribidi-1.0.16/bin/getopt.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6101,
+    "sha256": "06831177269a0c3a169463e32ea817919247eb249da9c22df81a01b0d2bc15b0",
+    "gitBlob": "51f5635fb2904bf37cbdf6549e4612a405e0bb43"
+  },
+  {
+    "path": "fribidi-1.0.16/ltmain.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 327299,
+    "sha256": "0f01592875edd61a11373d84a298cd6f5c1a8006db66fe5c864225b9e91a4dcf",
+    "gitBlob": "540a92ab54765696c6f096b7b9fa4b0818ef3ff6"
+  },
+  {
+    "path": "fribidi-1.0.16/compile",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 7400,
+    "sha256": "c207b390aac6323062b982214a6c63448e53e6911107993abe96f35fe7a30a18",
+    "gitBlob": "df363c8fbfbcbba9df21d8c9455b58c038697b61"
+  },
+  {
+    "path": "fribidi-1.0.16/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2362,
+    "sha256": "8e5bd2942d17c5e2f71740a8192607c138afc408a2101377c12ee59168599651",
+    "gitBlob": "8c516fb295f01a9c243c91f88b1f942b38b20e1f"
+  },
+  {
+    "path": "fribidi-1.0.16/TODO",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2629,
+    "sha256": "e391176791f01aabf1065da5dc741079816b49c0cc042073ac1576f8d57a0d3a",
+    "gitBlob": "9703ffda68544b3e0d20917916eba51eb7120116"
+  },
+  {
+    "path": "fribidi-1.0.16/config.h.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2835,
+    "sha256": "fb5ce9cdc3025e1ddcbcb24282d27b85a445a16eb5ab81a6b64bc75149ecfd92",
+    "gitBlob": "54986398ba6553bc8e75c10bc9041f1b5704184c"
+  },
+  {
+    "path": "fribidi-1.0.16/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 31924,
+    "sha256": "d25b928eee1e5a94689dbbcf5441e3419006b5ae416ca35b4ccb16c5d9ce3f4b",
+    "gitBlob": "eae91474b2add50fe1dca9f58c9f626a13d65343"
+  },
+  {
+    "path": "fribidi-1.0.16/depcomp",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 23568,
+    "sha256": "e44b49f71b265788187993090027193a6cd2b4718f9aa7be34412f537bce6873",
+    "gitBlob": "715e34311ed2d2dbff881aedc7e25b81db54614c"
+  },
+  {
+    "path": "fribidi-1.0.16/COPYING",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 26440,
+    "sha256": "32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b",
+    "gitBlob": "ae23fcfda2da8599b52baff4c257847205d78c56"
+  },
+  {
+    "path": "fribidi-1.0.16/configure",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 533554,
+    "sha256": "b9e7fffc20e71c03102da1fa77f1021a49e9c279afdbfa1f395c887aafe016d8",
+    "gitBlob": "ac72a368fca0d15744087fd47147cc81d2fd5e79"
+  }
+]

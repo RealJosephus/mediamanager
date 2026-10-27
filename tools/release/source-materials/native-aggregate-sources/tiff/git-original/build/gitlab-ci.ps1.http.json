@@ -1,0 +1,122 @@
+{
+  "requestedUrl": "https://gitlab.com/api/v4/projects/libtiff%2Flibtiff/repository/blobs/a69357ddecb6a4be3721a40a79a6e6147c6f9846/raw",
+  "responseUrl": "https://gitlab.com/api/v4/projects/libtiff%2Flibtiff/repository/blobs/a69357ddecb6a4be3721a40a79a6e6147c6f9846/raw",
+  "status": 200,
+  "headers": [
+    [
+      "Date",
+      "Tue, 27 Oct 2026 14:22:44 GMT"
+    ],
+    [
+      "Content-Type",
+      "text/plain; charset=utf-8"
+    ],
+    [
+      "Content-Length",
+      "9532"
+    ],
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "CF-Ray",
+      "a5125ac6aec1e866-FRA"
+    ],
+    [
+      "CF-Cache-Status",
+      "BYPASS"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Cache-Control",
+      "max-age=0, private, must-revalidate, no-store, no-cache"
+    ],
+    [
+      "Content-Disposition",
+      "inline"
+    ],
+    [
+      "Expires",
+      "Fri, 01 Jan 1990 00:00:00 GMT"
+    ],
+    [
+      "Server",
+      "cloudflare"
+    ],
+    [
+      "Strict-Transport-Security",
+      "max-age=31536000"
+    ],
+    [
+      "Vary",
+      "Origin"
+    ],
+    [
+      "content-security-policy",
+      "default-src 'none'"
+    ],
+    [
+      "gitlab-lb",
+      "haproxy-main-23-lb-gprd"
+    ],
+    [
+      "gitlab-sv",
+      "api-gke-us-east1-c"
+    ],
+    [
+      "nel",
+      "{\"max_age\": 0}"
+    ],
+    [
+      "ratelimit-limit",
+      "500"
+    ],
+    [
+      "ratelimit-name",
+      "throttle_unauthenticated_api"
+    ],
+    [
+      "ratelimit-observed",
+      "1"
+    ],
+    [
+      "ratelimit-remaining",
+      "499"
+    ],
+    [
+      "ratelimit-reset",
+      "1793110980"
+    ],
+    [
+      "referrer-policy",
+      "strict-origin-when-cross-origin"
+    ],
+    [
+      "x-content-type-options",
+      "nosniff"
+    ],
+    [
+      "x-frame-options",
+      "SAMEORIGIN"
+    ],
+    [
+      "x-gitlab-meta",
+      "{\"correlation_id\":\"a5125ac6aec1e866-FRA\",\"version\":\"1\"}"
+    ],
+    [
+      "x-request-id",
+      "a5125ac6aec1e866-FRA"
+    ],
+    [
+      "x-runtime",
+      "0.132281"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T14:22:46.569393+00:00",
+  "bytes": 9532,
+  "sha256": "46fb43d4cfcb494706331634f950d5c4a3bfa331fd3dd56f7e116c578a081b8c"
+}

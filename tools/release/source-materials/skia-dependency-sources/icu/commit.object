@@ -1,0 +1,17 @@
+tree 1a597ddb83a0d67c5138b9ef1554a45d5d152ec7
+parent 352f5a499abf9962440187295ab68eb38b339c43
+author Edgar Aguilar <eledgar@google.com> 1779216627 +0000
+committer Frank Tang <ftang@chromium.org> 1780516018 -0700
+
+[Fuzzing] Fix ICU initialization.
+
+Move environment initialization so it is handled correctly from
+an APK execution. Due to how the JVM initializes variables if
+the environment is defined outside LLVMFuzzer initialization
+it crashes.
+
+Bug: 500525162
+Change-Id: I0a1dae7760d488f5903a66048e5b3c7f09011d2e
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/deps/icu/+/7797883
+Reviewed-by: Frank Tang <ftang@chromium.org>
+Reviewed-by: Titouan Rigoudy <titouan@chromium.org>

@@ -1,0 +1,110 @@
+{
+  "requestedUrl": "https://github.com/mm2/Little-CMS/releases/download/lcms2.19.1/lcms2-2.19.1.tar.gz",
+  "responseUrl": "https://release-assets.githubusercontent.com/github-production-release-asset/507969/7245d98e-8078-4cc4-a0c8-2a23d121d342?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-27T14%3A08%3A11Z&rscd=attachment%3B+filename%3Dlcms2-2.19.1.tar.gz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-27T13%3A08%3A11Z&ske=2026-10-27T14%3A08%3A11Z&sks=b&skv=2018-11-09&sig=acDQJungI9hAoqIojraEWn8haHDMiViXI9IeBFLvq9k%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MzEwODM4OCwibmJmIjoxNzkzMTA4MDg4LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ._wTCyhZW8miUVCcdmWux0gRZmsI5ddSh0jTHUv7KeXM&response-content-disposition=attachment%3B%20filename%3Dlcms2-2.19.1.tar.gz&response-content-type=application%2Foctet-stream",
+  "status": 200,
+  "headers": [
+    [
+      "Connection",
+      "close"
+    ],
+    [
+      "Content-Length",
+      "5728743"
+    ],
+    [
+      "Last-Modified",
+      "Wed, 06 May 2026 08:27:59 GMT"
+    ],
+    [
+      "ETag",
+      "\"0x8DEAB4961D3E8DA\""
+    ],
+    [
+      "Server",
+      "Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0"
+    ],
+    [
+      "x-ms-request-id",
+      "a1fc415d-f01e-002e-2c39-51b342000000"
+    ],
+    [
+      "x-ms-version",
+      "2018-11-09"
+    ],
+    [
+      "x-ms-creation-time",
+      "Wed, 06 May 2026 08:27:59 GMT"
+    ],
+    [
+      "x-ms-blob-content-md5",
+      "VBl49zdJSZ6eAne/5aPIaA=="
+    ],
+    [
+      "x-ms-lease-status",
+      "unlocked"
+    ],
+    [
+      "x-ms-lease-state",
+      "available"
+    ],
+    [
+      "x-ms-blob-type",
+      "BlockBlob"
+    ],
+    [
+      "x-ms-server-encrypted",
+      "true"
+    ],
+    [
+      "x-ms-access-tier",
+      "Hot"
+    ],
+    [
+      "x-ms-access-tier-inferred",
+      "true"
+    ],
+    [
+      "Via",
+      "1.1 varnish, 1.1 varnish"
+    ],
+    [
+      "Accept-Ranges",
+      "bytes"
+    ],
+    [
+      "Age",
+      "1013"
+    ],
+    [
+      "Date",
+      "Tue, 27 Oct 2026 13:34:48 GMT"
+    ],
+    [
+      "X-Served-By",
+      "cache-iad-kiad7000124-IAD, cache-muc13951-MUC"
+    ],
+    [
+      "X-Cache",
+      "HIT, HIT"
+    ],
+    [
+      "X-Cache-Hits",
+      "1478, 0"
+    ],
+    [
+      "X-Timer",
+      "S1793108089.722307,VS0,VE95"
+    ],
+    [
+      "Content-Disposition",
+      "attachment; filename=lcms2-2.19.1.tar.gz"
+    ],
+    [
+      "Content-Type",
+      "application/octet-stream"
+    ]
+  ],
+  "retrievedAt": "2026-10-27T13:34:51.881018+00:00",
+  "bytes": 5728743,
+  "sha256": "bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8"
+}

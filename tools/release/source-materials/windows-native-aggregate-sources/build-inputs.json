@@ -1,0 +1,113 @@
+{
+  "retrievedOn": "2026-10-27",
+  "scope": "Current Windows x64 vips-web static-dependency target with an outer shared libvips-42.dll. Producer inputs only; no effective graph or native compilation is claimed before CI capture.",
+  "target": "x86_64-w64-mingw32.static",
+  "package": "vips-web",
+  "rootSourceId": "libvips-win64-mxe",
+  "sharpRecipeSourceId": "sharp-libvips",
+  "sharpInput": "build/win.sh",
+  "plugins": [
+    "plugins/llvm-mingw",
+    "build",
+    "build/plugins/mozjpeg",
+    "build/plugins/zlib-ng",
+    "build/plugins/web-deps",
+    "build/plugins/proxy-libintl"
+  ],
+  "sources": [
+    {
+      "name": "mxe",
+      "repository": "kleisauke/mxe",
+      "reference": "llvm-mingw-20260605",
+      "commit": "d973945bb92c7783d5afa41bb2b8d2e1a04eaba3",
+      "tree": "699d94af3061c86813559aae6035315f6bfb6810",
+      "archive": {
+        "path": "windows-native-aggregate-sources/mxe/mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3.tar.gz",
+        "bytes": 2645560,
+        "sha256": "1ac248d1411407b1bbef0a91297c620a1486bdda67cd5913505290d72495338d",
+        "url": "https://codeload.github.com/kleisauke/mxe/tar.gz/d973945bb92c7783d5afa41bb2b8d2e1a04eaba3"
+      },
+      "root": "mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3/",
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/mxe/archive-http.json",
+        "bytes": 1595,
+        "sha256": "569c0b121c304d8fb484be2b053bb252ea37516268512f814d11ed0f1b4089dc"
+      },
+      "commitReceipt": {
+        "path": "windows-native-aggregate-sources/mxe/commit.json",
+        "bytes": 4292,
+        "sha256": "eec780e0cfda051b6995e3b223e4263fddb7158e203839071bd67f9c9083e832",
+        "url": "https://api.github.com/repos/kleisauke/mxe/commits/llvm-mingw-20260605"
+      },
+      "treeReceipt": {
+        "path": "windows-native-aggregate-sources/mxe/tree.json",
+        "bytes": 296731,
+        "sha256": "96d2ca5d21b09d587f3692f55fba58750f4472b2797068cf5fdcc2694bed6d4f",
+        "url": "https://api.github.com/repos/kleisauke/mxe/git/trees/699d94af3061c86813559aae6035315f6bfb6810?recursive=1"
+      },
+      "members": {
+        "path": "windows-native-aggregate-sources/mxe/members.json",
+        "bytes": 369527,
+        "sha256": "922aada1da29c6bb304e416294a94e8d30829e7830f953d4883d9c7cd8ccd984"
+      },
+      "notices": [
+        {
+          "path": "windows-native-aggregate-sources/mxe/notices/LICENSE.md",
+          "bytes": 2240,
+          "sha256": "8635b0a1680ec574e1965e3b0dd3cc69ef7bfb0ff4a60d9663d0e56d9fece1ff",
+          "member": "mxe-d973945bb92c7783d5afa41bb2b8d2e1a04eaba3/LICENSE.md"
+        }
+      ],
+      "scope": "Current compatible source snapshot of the named original base branch; not a recovered historical builder checkout."
+    },
+    {
+      "name": "build-win64-mxe",
+      "repository": "libvips/build-win64-mxe",
+      "reference": "09cfccf20b91b441fbe97fa7a7ed8a597e55e830",
+      "commit": "09cfccf20b91b441fbe97fa7a7ed8a597e55e830",
+      "tree": "0e57a7f2db394d5252c65251d3282cc10cd82e1b",
+      "archive": {
+        "path": "windows-native-aggregate-sources/build-win64-mxe/build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830.tar.gz",
+        "bytes": 64592,
+        "sha256": "4a12e22fe03198300a5b55fe66cc0123b4b05fed968aa2059cfc37747a8ae3b5",
+        "url": "https://codeload.github.com/libvips/build-win64-mxe/tar.gz/09cfccf20b91b441fbe97fa7a7ed8a597e55e830"
+      },
+      "root": "build-win64-mxe-09cfccf20b91b441fbe97fa7a7ed8a597e55e830/",
+      "httpReceipt": {
+        "path": "windows-native-aggregate-sources/build-win64-mxe/archive-http.json",
+        "bytes": 1625,
+        "sha256": "d244bcb1cdc8dff2ff08c0632bec4de68d2077a52e853a570ebbec0aa1e8ffb7"
+      },
+      "commitReceipt": {
+        "path": "windows-native-aggregate-sources/build-win64-mxe/commit.json",
+        "bytes": 5951,
+        "sha256": "3dea77f5179f64ebac3429265fd81ae8069f23e13c1b0999b217ec24aef5d467",
+        "url": "https://api.github.com/repos/libvips/build-win64-mxe/commits/09cfccf20b91b441fbe97fa7a7ed8a597e55e830"
+      },
+      "treeReceipt": {
+        "path": "windows-native-aggregate-sources/build-win64-mxe/tree.json",
+        "bytes": 26437,
+        "sha256": "063d084bfd9a47f1b2ea17fec82c9866b66f03a6500ad7efec92d69854448651",
+        "url": "https://api.github.com/repos/libvips/build-win64-mxe/git/trees/0e57a7f2db394d5252c65251d3282cc10cd82e1b?recursive=1"
+      },
+      "members": {
+        "path": "windows-native-aggregate-sources/build-win64-mxe/members.json",
+        "bytes": 29981,
+        "sha256": "0c26fbdc8fc92978fc80f83a0bec71a79a18d6da3e04a96467129467c92f4f5a"
+      },
+      "notices": [],
+      "scope": "Complete original producer repository at the previously held release tag commit; includes all original recipes and patches."
+    }
+  ],
+  "toolBoundaries": [
+    "cc",
+    "meson-wrapper",
+    "rust"
+  ],
+  "limitations": [
+    "The current named MXE branch is supplied at its newly resolved commit. The historical builder base-image digest and its original MXE commit are not asserted to be recovered.",
+    "The original Sharp Windows script downloads the -static.zip variant and removes libvips-cpp-42.dll before packaging. The vips recipe still forces its outer libvips-42.dll to be shared. A .shared MXE target is a distinct profile.",
+    "The producer captures actual GNU Make normal/order-only dependencies and selected source/patch identities in CI without building packages. Available compatible tools are a separate build prerequisite, not a requirement to recover historical compiler binaries.",
+    "Native source closure, original constituent notices and modified aggregate build/replacement require the selected graph and its matching containers; these two producer repositories alone do not establish them."
+  ]
+}

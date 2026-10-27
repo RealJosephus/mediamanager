@@ -1,0 +1,2136 @@
+[
+  {
+    "path": "libexif-0.6.26/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/ChangeLog.git",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+  },
+  {
+    "path": "libexif-0.6.26/config.rpath",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 18717,
+    "sha256": "04de5f23828dc261f68d7209df911d89c38234eae930e60cbef66ddf7ea7754a",
+    "gitBlob": "c38b914d6be36839c83ef7f79e804e45ee9cb736"
+  },
+  {
+    "path": "libexif-0.6.26/libexif.spec",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1402,
+    "sha256": "ba4a54f4766ecd634a1f5ba83eec49be1856124b899eae465ec48b305120ceae",
+    "gitBlob": "2c6c26a05df7f92a207487072e5eab571f1d81bf"
+  },
+  {
+    "path": "libexif-0.6.26/install-sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 15442,
+    "sha256": "776876b3909b096439109a4c7642eb0f9100f6ba3fb42fa93d05351e50a0a7ef",
+    "gitBlob": "1d8d96696466c7db04a23ee3f3b2562e1c16f9c6"
+  },
+  {
+    "path": "libexif-0.6.26/SECURITY.md",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1372,
+    "sha256": "8483804922835defc520a2717126f438eb60808d4e91792a19ae5ad5617c1d10",
+    "gitBlob": "151c2a999cdffa7cdecca02f5e13c686e7d6179a"
+  },
+  {
+    "path": "libexif-0.6.26/ltmain.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 337554,
+    "sha256": "30712e3401deb6e6d5255c71f7bd57f374429d220cfc199ba1f2376ab42c2e35",
+    "gitBlob": "3e6a3db3a5a1d1527e98272823cbce852374c2e1"
+  },
+  {
+    "path": "libexif-0.6.26/INSTALL",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 17015,
+    "sha256": "8269293b2738175f54354957d64f691ea9a55ffacb9d8912c79060a9b9bf769b",
+    "gitBlob": "d43221a2ca12ce6f3d66936846b2068cafe1c57a"
+  },
+  {
+    "path": "libexif-0.6.26/config.h.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3256,
+    "sha256": "168c6bbaebba100c126a6d01f31749530e167e351b95dd35ea339ba07fbde22e",
+    "gitBlob": "c9e9c398e6cb49b4d491de6709c943a3a2103533"
+  },
+  {
+    "path": "libexif-0.6.26/aclocal.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 54395,
+    "sha256": "37ad2314485718772225bdf17bccf53dd50d1357e5ebb05c2b1642b9bb29be43",
+    "gitBlob": "fbca48aa50f26a99d6f57a3aa4aa097f2548655a"
+  },
+  {
+    "path": "libexif-0.6.26/README-Win32.txt",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 956,
+    "sha256": "940124234514695f99f8eefc2618bf5f12427a74286c0835a6fd3f1da0e4abdd",
+    "gitBlob": "58ff1a1b2d8859768db0e2cbbd0a942012cc34c1"
+  },
+  {
+    "path": "libexif-0.6.26/config.guess",
+    "kind": "file",
+    "mode": 484,
+    "bytes": 50850,
+    "sha256": "50205cf3ec5c7615b17f937a0a57babf4ec5cd0aade3d7b3cccbe5f1bf91a7ef",
+    "gitBlob": "a9d01fde461761d5843d56cb11e1a7156ddfe977"
+  },
+  {
+    "path": "libexif-0.6.26/test/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/test/test-extract.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2914,
+    "sha256": "0b93d9b06c4972fb04d35fb8d266bfd7077e57224b6fa5f9393e540c45ea3376",
+    "gitBlob": "01b2851f8445b4e860868f44e8af0fb1b89db2e5"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-parse-from-data.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5723,
+    "sha256": "dc219a387b174df190d6ec8eecbebf26378ff5ba98860fb74400344dcb6a78cc",
+    "gitBlob": "b69054b16a0a328d3bdf9505e03e148aa837461f"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-value.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11801,
+    "sha256": "02bb105ab77700077952c883f1ebbd8c90ddc536b9f9ff64a75099f2d67ad0ba",
+    "gitBlob": "0cc6ab89f840ba0047668f17b6318f406b405b4f"
+  },
+  {
+    "path": "libexif-0.6.26/test/check-mnote.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 449,
+    "sha256": "44c66063abe59f529fbea6b542c352c32914bdb6e328847822be8f6b4a4cf36f",
+    "gitBlob": "167c6cee3c6ed2485f8564a39276f2ae2569ce4a"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-null.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7285,
+    "sha256": "0a24d4f02c75301ae9c1081cb72ae69b4ebf8ac6bdc646334b497b221c45978e",
+    "gitBlob": "16e7e0b5478ef8c74689f3e66eefc72eec7233ed"
+  },
+  {
+    "path": "libexif-0.6.26/test/inc-comparetool.sh",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 460,
+    "sha256": "5cad2ea17844e2de571990eeffd8554f72454305650ab79410a55f52e37a00f1",
+    "gitBlob": "2342fb15f2172c32ab7963f1ec724f37d8678948"
+  },
+  {
+    "path": "libexif-0.6.26/test/extract-parse.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 2252,
+    "sha256": "7e7521af8a4dcf6ef1dd91b0558ef78c4df988910dad43c30170ee824677e6af",
+    "gitBlob": "548b7deaf98f54d805b42019bb476494ce794cd4"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-tagtable.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8260,
+    "sha256": "eeda69c238edb124ece7b4fc12a27b99dc6e3a1613380bb3502feff5ba0ebeef",
+    "gitBlob": "41acef541a5bd58b3c8777b2645ed67721c0c649"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-integers.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1351,
+    "sha256": "abc9afda9cfe38d377d27e882bbc5a999afb7112040cbd09c965d3547cbe477c",
+    "gitBlob": "579aa606f89e1ff3b245180149426ccde700515b"
+  },
+  {
+    "path": "libexif-0.6.26/test/swap-byte-order.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 857,
+    "sha256": "61f62c6c0019cf8a198e1b7154fd0445bd5135b2f8f1e236d43a7c5d0db264e9",
+    "gitBlob": "384d279615291f2cbc554b1d283de75540e00e5b"
+  },
+  {
+    "path": "libexif-0.6.26/test/check-failmalloc.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 3098,
+    "sha256": "c37b391afcbefa7a742847b1b5c6a1da871610b05aa0d2c65c8b008dcae94ec4",
+    "gitBlob": "addd66f67b78ceb8ed4e598fa6b4c1f3587e4211"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-mem.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2367,
+    "sha256": "0a8839d14b9e937cf9a4d4569b2b51329f364e84910f91529dceb112756773f6",
+    "gitBlob": "959de599f7f428e21c6172c4dfa84c02cade9040"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-fuzzer.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4615,
+    "sha256": "d23467762b4985421b7ac7d15024c28565f3e711da8b95e845bbdd30822e02b2",
+    "gitBlob": "40af77f9345c372322b981b4320d5fd5907487e3"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-fuzzer-persistent.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4451,
+    "sha256": "e698a5223118a35060f3eb17678ebc0eb9a54fb644bed3d388017532de8593aa",
+    "gitBlob": "694e0d20907a83513918f48f70a8a43f6f710303"
+  },
+  {
+    "path": "libexif-0.6.26/test/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2841,
+    "sha256": "bf1028c4ab81b6f2eb47909a3e4f6149f69cac2b8b459a92237d0746a14435da",
+    "gitBlob": "d8d4cf5de776ccaa12f5228864abf0eb9fcddc9c"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_4.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9132,
+    "sha256": "2d7741d71a38566fe2255c90400d87f58ea2f16d2f4f336a2c25a68b4e715a03",
+    "gitBlob": "297ea1c052c9894f2e8a68198058f06f3f779891"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_5.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9604,
+    "sha256": "f913e1e9d0c10898c5be0cf059f95e0632833841b4aed11cc3c7c61d08b56cb8",
+    "gitBlob": "f083f75f5f983889bfd6c46a66e69598ee8c78e6"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_3.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6593,
+    "sha256": "2dba96351676e9c7a3d942775bfa7cba32eaf47a9d72e01cfce8f0660cf9b808",
+    "gitBlob": "5408dbc0d115a6d3d5b6bbcd51ce13b7eabacbf2"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_5.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 13446,
+    "sha256": "b37c2ddc433d4e2ef390cf052dc8021d99d019893326cabd9e700f3db962ae49",
+    "gitBlob": "e6cfaa57392de8f74e0b081bdce0394661b9e819"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_2.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2850,
+    "sha256": "c91015558142356ab12770bbf8b9bd0ea23206f8200e916f796089bf33cb1190",
+    "gitBlob": "461d61362758bbec88dcc4612504adbcaccce1a7"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_3.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9487,
+    "sha256": "7d320261dbf9dc1cf29048b4d82b826178571b6494d415f96d82a016fd3fb107",
+    "gitBlob": "946678a829008f6f182c08fdf40f814f125100b6"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_2.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9268,
+    "sha256": "cd94ff4e0e59653fb01f8a0e7e125e05bad209ccaa3c9cd0e60286c3dde52034",
+    "gitBlob": "061ea5552bcfc7d41c199b330e5912dcc2d27f6a"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/canon_makernote_variant_1.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2026,
+    "sha256": "3383d8eee5db6ba415052d9da7c21ffa3f7e036d8afecd966c2fc7136fc90445",
+    "gitBlob": "1eb37d045b77a4c576fa41c06107a7353cc4ebc5"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/fuji_makernote_variant_1.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3978,
+    "sha256": "8caffc67d783040ebc2767352556e758d615a4bb32f15663a4bf3ef940a22cec",
+    "gitBlob": "75e03713d4f941e030ae006fb6604d65bd9352cc"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_2.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1346,
+    "sha256": "926bafc88a9eff4d14f5ae78f3b57eba38cf4f84a32708f167eaf988cdb824f2",
+    "gitBlob": "0ef0ef2faae7df556fee88c4c520b2d6928c049f"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/fuji_makernote_variant_1.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6856,
+    "sha256": "2391ca20dddfd6c48170c908f2400fd519af114b98fb9c593bd7097167e8a39f",
+    "gitBlob": "d0990f155d89db9ed58f9d6fdf9ae9145efb2314"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_3.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1918,
+    "sha256": "bf1ba33ad78dc0e8e54b016687cddeff093e501cbfa09e4aa34baff5bb0b0303",
+    "gitBlob": "d93b86fa95d508cb8c6e1d04199b97390e931d4c"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_4.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4805,
+    "sha256": "724a14cc9885625b198c7c077d7756ce8065bac73b8bec70f42c889f013593eb",
+    "gitBlob": "e158ef967d01563a3332a992a9328fdbd8118422"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_3.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6140,
+    "sha256": "984c1586dc7a8d6c656ff298c2f89e534a1f2131ccdec2bb64a045f73341b725",
+    "gitBlob": "42498e280eab22d53757eb6c4983ad12048d20fa"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/olympus_makernote_variant_4.jpg",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11458,
+    "sha256": "ffbfa3118530fd7552c4b95926b4f67e3a2bf200a9d96ff0ba2323c8edb93d55",
+    "gitBlob": "233ff7838fb4ecaf1f1cd86f31304143f775967c"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_2.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6029,
+    "sha256": "e635b2d24f3297b59bd366df4034baca665178e83ee6b5bac0979ac79c6227fb",
+    "gitBlob": "55163b3ba88dc50e91699dd5b1a1f083b2c481a1"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/pentax_makernote_variant_4.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14904,
+    "sha256": "1d9560738b741c9cad49ea8400aa91189a52cd7a18ded2891930e693ca995a62",
+    "gitBlob": "fa60d06679742729997c7d1f84f230686c83df54"
+  },
+  {
+    "path": "libexif-0.6.26/test/testdata/canon_makernote_variant_1.jpg.parsed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10541,
+    "sha256": "c9c928e72a10f8e855812e221446f5f8908f52613b5633af43f396fbbde2407c",
+    "gitBlob": "27e75e2b7752e25ac7adfeb70f893086d165c92a"
+  },
+  {
+    "path": "libexif-0.6.26/test/parse-regression.sh",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 798,
+    "sha256": "a2a463b3fe160fb7c8a81d81f63e68b7b0d98622ff3cb828904eff58a633d4f2",
+    "gitBlob": "1f97051149bf446173bc705f8c73bd3e79fe7f21"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-mnote.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2950,
+    "sha256": "800e8dc4be85cdaeae03904ce7bc6e30751132418a4bd7f667a228d96d3699e3",
+    "gitBlob": "a600007ab2584fbc50fea9274d6dac9120541750"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-parse.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5057,
+    "sha256": "7cde0290e0ea7aa589a41c2493d8e65930366b7a9e2ac78828347f3cbc64d49b",
+    "gitBlob": "e756db0d45cb8353218c3e9e173c0ec9b838e9ad"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-gps.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4379,
+    "sha256": "bbb72d17ce584adc73098572cd28efcf779be870c4afe72fa15be202fd5da1cf",
+    "gitBlob": "115db69a55a7ad97d692ff292a2e75d8c72c573f"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/test-nls.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2523,
+    "sha256": "d3e656f4249e93cc87911debb69a6172a26c58bd425cfe9c26720bacc90a22b1",
+    "gitBlob": "69aa5eb09391830fb68342b7b84508b9d61b42c3"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/check-nls.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1080,
+    "sha256": "5cc0bf1a9c65e35748fb8e92a086d1169ae1312ed4229cc4a0b4d82c4e5c3682",
+    "gitBlob": "28bd88a17067c5bafa72f00c1ae4dd962e00e34d"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1233,
+    "sha256": "90e415b98628d1c4398df5ec48d0a5111d85c8701bf042c126b9313266424791",
+    "gitBlob": "8db03d2765316978261bff662b8c9b7c07aec65d"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/check-localedir.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 783,
+    "sha256": "7d1c02e94683bc3ab9e19425e3da25c9a093ddfd52c9012c7f2508e6789261e2",
+    "gitBlob": "17dda01a75e205fa85932891cf317886e7b412e9"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/print-localedir.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 254,
+    "sha256": "58016ff0bda3dedd011ab0382b34ce33ac822739b13306d4cb2a03455f455d5c",
+    "gitBlob": "f4f906377705c52795950653bca9d6465e17b3ac"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/test-codeset.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4667,
+    "sha256": "74e859e35f0feeed8fd69791b439b29569209d1467a27f4ba5aea78674399a6e",
+    "gitBlob": "abed1b8e902ea9335318a87393cbac13a141df5e"
+  },
+  {
+    "path": "libexif-0.6.26/test/nls/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 37573,
+    "sha256": "457135404ca9a824accdecb964cdf630e69a714d668172be560c601089d5f537",
+    "gitBlob": "0002a223854f83d119bd7e51d0de73636d162f43"
+  },
+  {
+    "path": "libexif-0.6.26/test/test-sorted.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1925,
+    "sha256": "cc908de499d52923bd7525fe561cef62996521b9dc9036ae9c3c725673f041bc",
+    "gitBlob": "3b213467a2dc36b3abae4bae5ff928ed7139b202"
+  },
+  {
+    "path": "libexif-0.6.26/test/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 52698,
+    "sha256": "92a29177d8e5264ea399a2535396969bb9c05efb385d0fe396c15861e48996e6",
+    "gitBlob": "26b7464474a71b2eb688d6674a53566fce5b7428"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/m4m/failmalloc.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2088,
+    "sha256": "9c0fbf681216b7cda0e4b590d3f4b0e532aa4edb8f3066fd4d3ed0ecb18cd6db",
+    "gitBlob": "17bb12ca8b6baf28b414baee695462a3e4c512af"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/ax_valgrind_check.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8974,
+    "sha256": "7426ee77c35d6e6c3c482b0c52295b00493e29187ee28a974a2e3f030990d33e",
+    "gitBlob": "37636498577e616dbc888cf842902f887116b310"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/gp-check-prog.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1172,
+    "sha256": "393cc377767bdd0a34417b6216ac4baab36f3421ba33035ab7dc124e45f28820",
+    "gitBlob": "cea88fe9ad413016bc0e8b0c333e25beea8ab479"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/gp-gettext-hack.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2758,
+    "sha256": "18b8d5a8a5ac0c731b85ae5475752a0a660c8f933ebabbe8f7ee6557cca12dc4",
+    "gitBlob": "c09e16f3abc22c10be546cd80c62d42b5fc8c9c4"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 245,
+    "sha256": "33f13e6985c4b67aef3432c347f3219a72fe5083fd56c33a4b5bb3815aedfbaa",
+    "gitBlob": "0f7ca8cd040bf8d0bd85ad5fbf335ef7642b6d35"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/stdint.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 23713,
+    "sha256": "b0d14d484072c7a6ab8438a50df9af0e36e7b678fd15d0d768b1fae694450d13",
+    "gitBlob": "ee4c474a6b0d17b0ede5ae5768546b24ece77373"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/gp-documentation.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4512,
+    "sha256": "7b271bc0f88a05cd1f09c23e8b139a2ca7724ae8b0d2fd0fa6f39fc7da94dc65",
+    "gitBlob": "2f058e31a8b9947a5eb76c6cf83a2d61b9226f9c"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/gp-check-shell-environment.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1278,
+    "sha256": "63e6e2f716c9dcef4a5ce09cd55e6693f9399332d2e6c534c8d58320709f763e",
+    "gitBlob": "792ca92f0b33a7453523bbfc4ca2d04197d250c3"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/gp-config-msg.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2827,
+    "sha256": "33fc2c228c541cf9276b4a4d068049bacf1ea583e2294f48ed14760d32b6fdef",
+    "gitBlob": "75bf25a1fbee30106cfcc3fe030e3946fc2da1dd"
+  },
+  {
+    "path": "libexif-0.6.26/m4m/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 15750,
+    "sha256": "7366230315479bbbaae83da602286098ba2724045756b0e55550e836d66c70e7",
+    "gitBlob": "d899e9f6becc9c72023a0d240bddc7aa3c96eb3c"
+  },
+  {
+    "path": "libexif-0.6.26/ABOUT-NLS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 93787,
+    "sha256": "e97b73baef31710d510598584f5c0f5018cb0847770defa1347966909b7c1f5d",
+    "gitBlob": "b1de1b6832d00f7caadcdef7804ab001d945574b"
+  },
+  {
+    "path": "libexif-0.6.26/libexif.pc.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 363,
+    "sha256": "8acb1a9850a331ec065685443a25d1d4ef3d62e8db890f07da19a7821463b13d",
+    "gitBlob": "252c6ce1b7443f79f5509e4e001ac5b0e9e6a750"
+  },
+  {
+    "path": "libexif-0.6.26/po/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/po/en_AU.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 112188,
+    "sha256": "b7609016ce89bf017bc7e807d46f89048de97f83612f9fd3ccdbb111f0b6b562",
+    "gitBlob": "cd19101136fc43b9ade9b6cbb5a0b8084d3f9cc9"
+  },
+  {
+    "path": "libexif-0.6.26/po/it.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 86509,
+    "sha256": "e9034ff90f79fd0af2a793db7327f3a9d320126c06386599092218dbbca9e74b",
+    "gitBlob": "2ce6d17ddf03c961d6f89952bb661559c82cf907"
+  },
+  {
+    "path": "libexif-0.6.26/po/pt_BR.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 57508,
+    "sha256": "1b0d30079a2f596ad355b7125f2d2eab60ab7c891ce6d398ab30328820107aa0",
+    "gitBlob": "f2e9a9748eeb074ac00cc414f06258afe58984ae"
+  },
+  {
+    "path": "libexif-0.6.26/po/POTFILES.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 465,
+    "sha256": "9cb7af01c58e4b483deef917b9dc400d3b51da7e60a9c85a0d8a22f1196678a0",
+    "gitBlob": "56b7591cd791369ad9db8db1133d13e5fbab9be7"
+  },
+  {
+    "path": "libexif-0.6.26/po/ja.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 42852,
+    "sha256": "8a4ca45b827ab0916c581b4129613ca530d8685e1570201d36ba10faa2afe461",
+    "gitBlob": "e35d3000e99620d04f34abfe79a76c5f2c1087fc"
+  },
+  {
+    "path": "libexif-0.6.26/po/pl.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 132212,
+    "sha256": "eef088d8ab50f6bd0e1b1ba48e3356fec29f8fde388919efcceb5709816509f5",
+    "gitBlob": "7fa0bf6148f8b2bf6e85878d721fb32ecb30af67"
+  },
+  {
+    "path": "libexif-0.6.26/po/ru.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 97170,
+    "sha256": "774f2d6f674f42677e2d02b58a5ced3effa6d1c9a51c6deb02f1e76d25e24508",
+    "gitBlob": "bc6f40f92469217620705f74702284d47886c3e7"
+  },
+  {
+    "path": "libexif-0.6.26/po/vi.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 138127,
+    "sha256": "a8b8f13cf0348a989df9777599fb522ecdeb6d995c78109273ee271916a9a971",
+    "gitBlob": "1deb51894fd9af42b82d219a08c9ed040d9f241c"
+  },
+  {
+    "path": "libexif-0.6.26/po/zh_CN.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 188061,
+    "sha256": "83a490c2ed7fdea99d863ad51f793c25a18ffa85e74b622894324c51800a0212",
+    "gitBlob": "e2dc3c48aec5f01c8757b35006ea3b42a1aeb270"
+  },
+  {
+    "path": "libexif-0.6.26/po/en@quot.header",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1203,
+    "sha256": "90e35325bf9b6b9562bd0882128ea4650b65c9389b35edf9ff534dc3a48e8bed",
+    "gitBlob": "a9647fc35c3bc0b49aaafe20deeb5c30a80996bb"
+  },
+  {
+    "path": "libexif-0.6.26/po/vi.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 204713,
+    "sha256": "25ead3885c46833b5951afdf19e0763823a3cd5ec8bfd199dba014ca101ae799",
+    "gitBlob": "9da13e7e02c0170b12aa6a4425671bf4e15100b3"
+  },
+  {
+    "path": "libexif-0.6.26/po/sq.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 12699,
+    "sha256": "f89ba9184ae6daf5367a78fcd838fb92dd51840dfcc919ae35be01d5daeed39a",
+    "gitBlob": "cad9b045409520e92b692ae396d455bd8fe84ef1"
+  },
+  {
+    "path": "libexif-0.6.26/po/Makefile.in.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 16659,
+    "sha256": "654a0f33fb5c7f2b2d7b34d819bf6013ac1757cd0515b0d2232fb32f8a109b66",
+    "gitBlob": "fabdc76c9cfac7115efab9ffde1214f95772e01b"
+  },
+  {
+    "path": "libexif-0.6.26/po/bs.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 113124,
+    "sha256": "a73a8e3de897119c6ecf8da76568744fce4a54807e13433b7a8b2ab0f6735ceb",
+    "gitBlob": "8692c02f8a3ed5a0bc2fcc7193c886b87d8d5f59"
+  },
+  {
+    "path": "libexif-0.6.26/po/cs.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 168421,
+    "sha256": "cfc4b06d2832f40607db934b7dda9fba6faf9e9cbe00d3a88878a8c61b5bcb3d",
+    "gitBlob": "ba9846bcd253d9d2162df1b885e723fbf0af1679"
+  },
+  {
+    "path": "libexif-0.6.26/po/remove-potcdate.sin",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 432,
+    "sha256": "9a36cf3e93b6374521c81fa4f302350d3c04b95573f5570717284107689188e6",
+    "gitBlob": "2436c49e786dea6c9b4a8f87803288496ed38164"
+  },
+  {
+    "path": "libexif-0.6.26/po/boldquot.sed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 217,
+    "sha256": "33234736a58f1610c73e1c8c08faf1b2ef1397d878dd7d2cbd888ca0f2da4ffc",
+    "gitBlob": "4b937aa517bcff9f5adfc2a01d6d780445999297"
+  },
+  {
+    "path": "libexif-0.6.26/po/bs.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 189939,
+    "sha256": "745883f8ee51f0a23f63f58f7f29cb52e56450d31551ce8a9e25826537d42f88",
+    "gitBlob": "d80c89cd464493fcba7227e04597cc959266af18"
+  },
+  {
+    "path": "libexif-0.6.26/po/pt.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 146528,
+    "sha256": "c603b20b583721af7158a5a6727d36adc700a3965612815acfe8205cdbe5690c",
+    "gitBlob": "4a16061bed19960f2e87e4578f0599b00a536941"
+  },
+  {
+    "path": "libexif-0.6.26/po/de.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 127043,
+    "sha256": "0120ddcb6b3f63ef5f78ec32584bfa5c0af6c9c7aa2949ad4f7b039c69b99ce0",
+    "gitBlob": "4de7ec4e34eba60063f6d2d5b3e3b6489966580d"
+  },
+  {
+    "path": "libexif-0.6.26/po/da.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 113316,
+    "sha256": "40c915e037441b92e8cca9fe3c877171bb5fc271d854fce3197575aca85d79c6",
+    "gitBlob": "fbf7e3609296b39c43edd942c5211b5b9102a1dd"
+  },
+  {
+    "path": "libexif-0.6.26/po/zh_CN.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 123157,
+    "sha256": "650f8239784c78fb0cb7a4e9a4ffc26af7a1ff64a0359e835e6a4023696a464e",
+    "gitBlob": "e96a8fa5ad04a8c340c7e39af052c3506c015088"
+  },
+  {
+    "path": "libexif-0.6.26/po/ja.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 161297,
+    "sha256": "b56319a5b2cd40077cc4dcfa489474d7cfcd25eb38bde49c9fdd43c73bf6beca",
+    "gitBlob": "324410034f1f3ad71c2a3fd633c8c3a49f40e011"
+  },
+  {
+    "path": "libexif-0.6.26/po/Makevars",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2375,
+    "sha256": "ceb6286c13fb6d225a9ee4e7974f5cc00aad23c5a62259fc3d1d179c95825c5f",
+    "gitBlob": "a7f3f17d344527b7b52a7cf45e5088ea17b4cadd"
+  },
+  {
+    "path": "libexif-0.6.26/po/tr.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 167437,
+    "sha256": "bbf1c602c55f3e4f286441f2611980d3fefd9cc394ae5cda60ae9a61eab1acc4",
+    "gitBlob": "10066160baa8aa39fae97fc168df593b54829cbf"
+  },
+  {
+    "path": "libexif-0.6.26/po/es.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 200482,
+    "sha256": "1fb56b5890d97fb87f746bcb59523817b6b3770d8009edcd2fa03ee67f79beb7",
+    "gitBlob": "401a9b7270c07d12faeb0785f01ba681874f8cce"
+  },
+  {
+    "path": "libexif-0.6.26/po/pt.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 13493,
+    "sha256": "35a3b360518fb319458ca098080d4ebb269c2a42805a7abaff8a5f505c423d07",
+    "gitBlob": "b05921bea495487080e6e2803ba2f284d9acb513"
+  },
+  {
+    "path": "libexif-0.6.26/po/en_CA.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 147039,
+    "sha256": "df03bbbc9e81bdcc1010db87155048689afbb13ec6ea7eaee8535f3618b8b40c",
+    "gitBlob": "bf08583d69666a6852d7147419713e258fa9600c"
+  },
+  {
+    "path": "libexif-0.6.26/po/cs.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 57512,
+    "sha256": "9757f1df2ac61b44a877082cde4fd394e983e832f7184b457dce71569b88a71a",
+    "gitBlob": "7105264eb37c2f475461bfab2a6e4157e23e1c25"
+  },
+  {
+    "path": "libexif-0.6.26/po/uk.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 237704,
+    "sha256": "81987acce9db7b739d03786cee424b100a6f5c3bdce3564a2548c7574fd53ee1",
+    "gitBlob": "ff8fc3346b5fec78c78bf7d9858b65684afca655"
+  },
+  {
+    "path": "libexif-0.6.26/po/sr.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 230182,
+    "sha256": "07f9336c043d5ebf950931d5d3c71cdb037625b2e52bab1595cbb7fe9f348859",
+    "gitBlob": "09a7e8a032884bdc1e01a73fde0338a57197fb40"
+  },
+  {
+    "path": "libexif-0.6.26/po/it.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 188480,
+    "sha256": "3dda65b67024a69c7eaca7aab600f97b8913196482baf64a148a9d96175a8029",
+    "gitBlob": "71141ef382910c86dae1bca62c83a5ad2bf38b04"
+  },
+  {
+    "path": "libexif-0.6.26/po/ro.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 205386,
+    "sha256": "e1d2c1967bd706f1c8abb1539456b6ddc1a3d42b4036d23f9ebefff12210ed9a",
+    "gitBlob": "022a004853b46c3d334adf938e7e4dcf5a6f6149"
+  },
+  {
+    "path": "libexif-0.6.26/po/fr.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 198356,
+    "sha256": "46264c33ba51506bb9adfb2853d66b4712740fe1ac8c188d9fb2258a77a8e6c3",
+    "gitBlob": "53343f20cbf3a6d7f149edbabbe3e30bee1b8bd6"
+  },
+  {
+    "path": "libexif-0.6.26/po/pt_BR.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 164960,
+    "sha256": "bc5d9d19746cc9cbb9f326f4eabe9bb1e85a40679a9dc73dc02ec355e59bebe4",
+    "gitBlob": "da0ec591be3c6c7fa0319978ec8a5896fa4c087e"
+  },
+  {
+    "path": "libexif-0.6.26/po/sk.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 115638,
+    "sha256": "abb907c06312737540863516a95dc482d3dc851f93139b15a635836051060fe3",
+    "gitBlob": "251d0c03e582f2f27dd2df3f58cb862725302912"
+  },
+  {
+    "path": "libexif-0.6.26/po/Rules-quot",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1801,
+    "sha256": "b0a54c13622bdec8a5efc4cca44a5b82e33809b5d8947765ddb9f12a44273f47",
+    "gitBlob": "5931e539232121cc8a1ee61cf101399e33d51edf"
+  },
+  {
+    "path": "libexif-0.6.26/po/uk.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 172500,
+    "sha256": "aad28b0caafa6d64c9cd3ea60bff1d2b9c558b41b6068b0cc20db99392212644",
+    "gitBlob": "f415a854184fe9cb6b88ac7127d8335c8f2b3e81"
+  },
+  {
+    "path": "libexif-0.6.26/po/ar.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 134588,
+    "sha256": "a9c216eaed087df53f778590df51c6c9bcec1fc2750a482037128468346b88fe",
+    "gitBlob": "1974e279748b897e475fd06bfa967fdd5f6d9e14"
+  },
+  {
+    "path": "libexif-0.6.26/po/en@boldquot.header",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1337,
+    "sha256": "3b0b89aa6625c051e69cce1e341f973f62ca94aff62cbb36b4a452ce67eb261c",
+    "gitBlob": "fedb6a06d129acb554ccb20ba04e7ea5649aa2ac"
+  },
+  {
+    "path": "libexif-0.6.26/po/da.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 197489,
+    "sha256": "042cea23f4adcec3b2cf0c19730361de66851a762c59bb40d1f13b85bedf363d",
+    "gitBlob": "38948054fe3ce4a1b47631a392aebee73d0c0c96"
+  },
+  {
+    "path": "libexif-0.6.26/po/ro.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 139447,
+    "sha256": "07330ade240e8ef2eb99f36614c5a42bf465ad7e5469160726979687c3724001",
+    "gitBlob": "030d4ca7b50333dfcc5b11192f8182492b145408"
+  },
+  {
+    "path": "libexif-0.6.26/po/en_CA.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10496,
+    "sha256": "25538c447754539950cbe64a0b8da9afaf8bd3850cb847463e907136eba666c0",
+    "gitBlob": "833eeea9bd1d3ebed6a8024c96b924a67731de9e"
+  },
+  {
+    "path": "libexif-0.6.26/po/be.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 13760,
+    "sha256": "774e0b057a8ca891074221eecac37f39f4d7cb2b1ae524f2b76983f28e5eae69",
+    "gitBlob": "431ce04da88bb21fcdc8d6ebbf3488f80583c21f"
+  },
+  {
+    "path": "libexif-0.6.26/po/fr.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 125520,
+    "sha256": "e532266c319524ad2464011d380c7ddcbc4fd80df9d69a95a2dc215fdc2f7adc",
+    "gitBlob": "1b466c026a7250beaa5df762e54072c2ff095575"
+  },
+  {
+    "path": "libexif-0.6.26/po/pl.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 197405,
+    "sha256": "1ec57eff72e40351dc19a8e19e10ceacb2ea2f96b3aafcffe3c9bbef84ac5b7c",
+    "gitBlob": "826ac4e2d67706b17c6246f8c9384e89d1004051"
+  },
+  {
+    "path": "libexif-0.6.26/po/libexif-12.pot",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 142282,
+    "sha256": "19415e01f78df736b7434c33094b536bc84b75a5325bec897c11665c05a02ed9",
+    "gitBlob": "7e707d7f38b355c98b256c65178dc199ee681ddf"
+  },
+  {
+    "path": "libexif-0.6.26/po/tr.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 63491,
+    "sha256": "2cf5ee0d0eb9a8a3a2242ac073a56822d8ffe3fd6f724f335efd7fa092931b90",
+    "gitBlob": "edfa7879ff52284b12c8afad6b45615c9d39a032"
+  },
+  {
+    "path": "libexif-0.6.26/po/sv.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 195277,
+    "sha256": "2d774a9f9c7f30320a6d6f5ae3689d4ea1b0a7b0c8dc7422bdc3c732123624ce",
+    "gitBlob": "b373f3b5bc0c382ee8cbada5c5f47da6cdc338a7"
+  },
+  {
+    "path": "libexif-0.6.26/po/ka.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 64755,
+    "sha256": "8e9cd51bf735804010bba4596d2c8715733d264e0c3a149e09ea8f3b6fa007a2",
+    "gitBlob": "dea77a3c0fe47c6c951ba2aef79f6d2cec3df00f"
+  },
+  {
+    "path": "libexif-0.6.26/po/sq.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 146550,
+    "sha256": "a7cce66d85e0e89526b8d8c8724e693670b4715f1568a02162bde568859553cc",
+    "gitBlob": "738dde45a0503b43b65ef848e31f9bbe628a4860"
+  },
+  {
+    "path": "libexif-0.6.26/po/ms.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 26877,
+    "sha256": "f43c301b0eada2d1d7618744dbf2c1942edad7ef12722954e452b3c672ddcff7",
+    "gitBlob": "5ef7ccd20126dca6fe50104413932048048711fa"
+  },
+  {
+    "path": "libexif-0.6.26/po/be.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 148177,
+    "sha256": "b85a45b51709ad88964ce40685f96a7d00b1f5c62bcfc72c9d81d76d21a7d900",
+    "gitBlob": "62f688becbfe28cc6e687009fba98dd6f6265df6"
+  },
+  {
+    "path": "libexif-0.6.26/po/en_AU.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 188587,
+    "sha256": "7c1cc7f572361f8c55c2ff673af489a91066a8caa52e8ed24f9e3a7292e26771",
+    "gitBlob": "1e024748b10f336d1378f41d6ee037758b19267b"
+  },
+  {
+    "path": "libexif-0.6.26/po/ru.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 199198,
+    "sha256": "3ed762191dac017208ef614b8b6c7803b7838250cd209d6fb9cde13ad61bf0c9",
+    "gitBlob": "8ea6b1c64428e72251437293be4145b6cf9fb9dc"
+  },
+  {
+    "path": "libexif-0.6.26/po/stamp-po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10,
+    "sha256": "2cd8ec3de6a07e1fd39676100db57ba62372e820c19812fee55899f65746e192",
+    "gitBlob": "9788f70238c91894045d22366fa941580826c3c1"
+  },
+  {
+    "path": "libexif-0.6.26/po/ms.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 151451,
+    "sha256": "68d2a9346463537fabbbadf341bd5c5cabca24e8b7097e3d179f3be5b83e3d3a",
+    "gitBlob": "2dbcaed5e631410e590a898dcfdfd82deb51220c"
+  },
+  {
+    "path": "libexif-0.6.26/po/ka.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 175378,
+    "sha256": "0a2980be182d360a071b729aeed569244d68dfeace642d09e4de7dffdff9fec0",
+    "gitBlob": "bee9afe10a318d67dc8a755b62c0d51704296384"
+  },
+  {
+    "path": "libexif-0.6.26/po/insert-header.sin",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 672,
+    "sha256": "73e650aeccc3ef0a7c2e1bbab934b0882b61f19569e96e4615d069dc50b6becd",
+    "gitBlob": "b26de01f6c88c7b15bb4815a8fcd5120d479300d"
+  },
+  {
+    "path": "libexif-0.6.26/po/quot.sed",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 153,
+    "sha256": "d19ab2cc69000c1206f1b8460952857f05d154158da8b89273ac2900a5c80ec0",
+    "gitBlob": "0122c46318dc8bc115167fa2c259f8456668f861"
+  },
+  {
+    "path": "libexif-0.6.26/po/ar.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 198882,
+    "sha256": "8753f8b9460c42e8e88e88fabf201aa446eed4b644712782bb58c2e1b1fbf8a1",
+    "gitBlob": "8a52d7b8862f0fabd48dd0378dc8ad635a198d36"
+  },
+  {
+    "path": "libexif-0.6.26/po/sv.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 128139,
+    "sha256": "f4b5f46212bd643e82c01903109d0ab69e962ebd542dcf347d1c51338ceaf24d",
+    "gitBlob": "805665d8ce5a518239c36f02375651e1cf1ceda2"
+  },
+  {
+    "path": "libexif-0.6.26/po/en_GB.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 112202,
+    "sha256": "50f6851d4fb7ba270ca96cd04e493a27c1df73927830258cf1f4f97e6f2dee80",
+    "gitBlob": "e17c5bc7ead591801e7d676d1e99e0aca32b0392"
+  },
+  {
+    "path": "libexif-0.6.26/po/nl.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 114851,
+    "sha256": "5d7cdd6fcb1d09987e3e0e036f96f7e3cc2d6a94819790c8607b60fcf4cb8ded",
+    "gitBlob": "4b7404dc6529a4a6eaa7ceb37fb32a67b5efcc76"
+  },
+  {
+    "path": "libexif-0.6.26/po/nl.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 196982,
+    "sha256": "7826d5975394d885a20d8cf434ce5d38434f3516c5c328093ff8ed39405672f6",
+    "gitBlob": "3cf454fe29097067f49ffd14423cbbc31e6ef572"
+  },
+  {
+    "path": "libexif-0.6.26/po/en_GB.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 188611,
+    "sha256": "c2b31f98acab5510c913f1ee4efdb5c813f75aefb51c5b5acd71accb6eabae6d",
+    "gitBlob": "4ccbd42fb835018801cb25e2434c652207c191e5"
+  },
+  {
+    "path": "libexif-0.6.26/po/es.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 134878,
+    "sha256": "f36f979d14504197ee671e377c5d0aab300c43da33a9e9f5d328bf4b820687a2",
+    "gitBlob": "4114d0230731b9a06c1a521b08a83013c08984f0"
+  },
+  {
+    "path": "libexif-0.6.26/po/sr.gmo",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 165072,
+    "sha256": "45f89772d8dbbe1b85ad5999ecbba500aea02e92933134e61038781015e3f64a",
+    "gitBlob": "fc1297339e0a4e9276768e3a4c0304ea22eb5ef0"
+  },
+  {
+    "path": "libexif-0.6.26/po/sk.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 199426,
+    "sha256": "0d9ba3ac53cc7e45fca66cfa15dd031cd4a2470ad577983cfbcd30ff04d7bf18",
+    "gitBlob": "6f9ea32ea72b0479463b0587f73673495429836e"
+  },
+  {
+    "path": "libexif-0.6.26/po/de.po",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 195459,
+    "sha256": "3722f20f6da5db08ef3c8f0ea848d6ede977390af1b464a2062b7be516dc4c16",
+    "gitBlob": "fc9ca9bd2433dd926a16b340ea9b0d6ebef80d3e"
+  },
+  {
+    "path": "libexif-0.6.26/mkinstalldirs",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 3665,
+    "sha256": "13dd99b98c5265ad83a5d6c84371f5b492955cc783c5fb1716d0868d874fd76a",
+    "gitBlob": "498a641d250b191099c63d1f506b3763be5cc6fe"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/libtool.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 310981,
+    "sha256": "fe3baac94510d4b563ed7562035bdff366e37f9e0ac274bf10e4f22d08e8664e",
+    "gitBlob": "8d323b3ee4a638fd9e8682b9c81b31b71e27c55b"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/iconv.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9104,
+    "sha256": "e112805ba794cfc94497a482878ed1fc108b469fe69cfc67ad71e7c2e699d75a",
+    "gitBlob": "a50364656944dadd8a911c8916cff6084561530f"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/po.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 18977,
+    "sha256": "f56c45dff592596868e1e24516d357e54684f2fb627070673e2f457ca4a654e9",
+    "gitBlob": "1c70b6c1af5440502e9720ee429d882cd59ddd34"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/ltsugar.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4395,
+    "sha256": "4f022724d2703c0c318eed04e04e833b82761b0a0cc02c865d0b7c1e5b2c6aba",
+    "gitBlob": "5b5c80a3ad78a1c33104908a40e3f3f12e920df2"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/intlmacosx.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2539,
+    "sha256": "57e479d85cc4dd122c72f00e1959070469056571a86a18927bb3a21883e66c59",
+    "gitBlob": "ab97d39f940220eeb26d2852a7902e78e393e303"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/progtest.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3104,
+    "sha256": "3d672ae529f9fc6d680acac8bacc92b85193234914f50391a9042a9914cff47f",
+    "gitBlob": "7b3912329d529ea9f78e870fcac12edcbc6dde35"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/lt~obsolete.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6151,
+    "sha256": "5a416905cc27c5d99ff81b61b9cf6a85c168b80178bb88f4c3eaf2e8f76c8cac",
+    "gitBlob": "22b5346973571a78d046a0ce77bae488d4e43280"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/gettext.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 15245,
+    "sha256": "33e1da00df304d12291736692578ecc5ecd79251126b73294014b7849ef7b748",
+    "gitBlob": "8d1f0665c83add7ac466bd452ddd7beeb44b3a24"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/lib-ld.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3683,
+    "sha256": "b22befe244650b9ad8bd25525a3e77a1530ab740062fbfbf5ffde1e35f393634",
+    "gitBlob": "c145e478e997c5567a97a6fceec986910db9489e"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/ltversion.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 714,
+    "sha256": "40207e691ec7d3f06cedd592e50e44d7bc187b21ad791aeabdd50871b6606799",
+    "gitBlob": "228df3f39bf9c93c809285500486def24c2febac"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/lib-link.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 33059,
+    "sha256": "3584a567209050d2ca3f27e64cd219f587f28cecad7ea88008a4cba0cf431469",
+    "gitBlob": "073f04050cb143fb8e5748b3f6598261575ee566"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/ltoptions.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 15441,
+    "sha256": "4cc29b667909fcde7a08c984367bce1a1902c860acf8774794484a2e1adeb07b",
+    "gitBlob": "25caa890298a4e53619ff628fd7cd64d772a2afc"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/lib-prefix.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8466,
+    "sha256": "f2f2978fea9d0e51931f2f6a4465300c66001be2c3424e7104dba2c4fa26cf2b",
+    "gitBlob": "60908e8fb419800f8e183f05f6f71fa9787a68c7"
+  },
+  {
+    "path": "libexif-0.6.26/auto-m4/nls.m4",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1229,
+    "sha256": "261f4fa50f026a485079271dae94d64a257764d278767f59da403cfe4514c51c",
+    "gitBlob": "8f8a147beca14ac07c63ee665cc4e21bdd836a8f"
+  },
+  {
+    "path": "libexif-0.6.26/TODO",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 362,
+    "sha256": "a77532ce45464fa5471f6af8f4b286ba34ab506745d9fe2244c8f071ab833e9d",
+    "gitBlob": "75eefd09b97b4eba6da16e0950b18f1ee8febb5c"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-mnote-data.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4382,
+    "sha256": "175191aca25ae4c8bae8c9780f76fb6caec580174762f6e6ccb4ed45857628a5",
+    "gitBlob": "5a75381c5fb45437e341d77f392558dd826eeabd"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-gps-ifd.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1836,
+    "sha256": "00eaba0c0b97d6b0c371947b1fe966eb6946cbd6ddbfee852965499acf154757",
+    "gitBlob": "382e36a91a307839bcbfb737ffeddc3f4bb42031"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-log.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3501,
+    "sha256": "a94ca7448cb4d82d1fbef2f39778cccf1e7f00db90f30ce1c72c20f985239b81",
+    "gitBlob": "08bce27f0f230c6c82f2bc725098f92377fb5908"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-byte-order.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1612,
+    "sha256": "10d4531b48d9ad0bfd22d398220bca96a792d74361495d3d22cc328df4f070fe",
+    "gitBlob": "ac31d2db2dd538108d600b8f54aac7d4a564a62e"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/i18n.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1765,
+    "sha256": "b295b37d24ada0d6199d6e5662d1aa56614dd95ad3c9398eb96a091df35b54d9",
+    "gitBlob": "6e1ef2543263152e0a0dc7b108649b2a9caec03c"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/mnote-canon-entry.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 24879,
+    "sha256": "e3177fdd644fd847aa0ef586b0726e582362a247b1ff5db56ec26ef65f9182cd",
+    "gitBlob": "2849d5bae9ec6c9de34b7a469ccc21ffe1fe23b7"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/exif-mnote-data-canon.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 13187,
+    "sha256": "8b2c77252c01da150bbb52cf65ed081694efdb328e0b595ee12bee90d9f1deb9",
+    "gitBlob": "ecd180ec07751719f45ea349c4bc8097003955e3"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/mnote-canon-tag.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5251,
+    "sha256": "cd7f60fd915f685f684fba36d1bf8f4c01bf9ddc9c8048b20f5198cc96d95bbb",
+    "gitBlob": "19839adc48d896c80c82ae3bc7f0c24e94dac360"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/exif-mnote-data-canon.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2050,
+    "sha256": "76bdc6e95c049912b07015dddc4b9252cd84e5edd65d84f7af830675fa4fb2d8",
+    "gitBlob": "10f76658d0ea05ffc0dbb364e4fef7239c3c98f6"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/mnote-canon-tag.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 13687,
+    "sha256": "1d004b1bec0332b5c6cec8f893bcb2308161f42e6d45eeb2d2966161edf4a5b8",
+    "gitBlob": "33d2e6b5f8e1547d21113eebabaa1434056c8ef5"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/Makefile-files",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 418,
+    "sha256": "4f3d3ea3ad98becf727bc07f21a3651b1dd8bfa40dbe26dfcda072a3602d08fe",
+    "gitBlob": "edd7e54e71f69ed05da9ad74aa59c8cad2425ad7"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/canon/mnote-canon-entry.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1542,
+    "sha256": "c37acec70b4129424647cdbc6e89919169be147bf2291b413d3438bea45a6d33",
+    "gitBlob": "9cce0ab5380978d9d8d2f468a7825a107dd25263"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-mnote-data.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3719,
+    "sha256": "7d1d00faf3dda26bf9ee7f1ec51e2b63b073e49b80168bf38ddd0e5b32f4eccc",
+    "gitBlob": "8211c0812664a712e3ef8819d85dd26fd3628d90"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/mnote-pentax-entry.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14999,
+    "sha256": "b3cceed224d7e05b371262fa5e3b56762caeca8951f8bec4509c14895be09458",
+    "gitBlob": "0a6f87a1c92e3afc06cf18020ce410874925cd2b"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/exif-mnote-data-pentax.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 14138,
+    "sha256": "db0a8fc23b40a5147c1c28896ae3b182eb162a678537d0b8215ae696e4b1a739",
+    "gitBlob": "fabeba4bfa9b01bb0206dc2ce2752877bb32fccc"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/mnote-pentax-entry.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1456,
+    "sha256": "ec6071dea16fdd987340523c6abba9fed60b0f73c091ae9bd54891d2a3337d54",
+    "gitBlob": "1cc565e72b8d39c52a70e7e6ae947c2aa42163b5"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/exif-mnote-data-pentax.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2118,
+    "sha256": "d6b25ab9a77f8f58717c89e41826401ad09aaf572e7bfae84ef82814785bfacf",
+    "gitBlob": "1526622b3d801c1ff13d4dcd5cb5336e97ed22f7"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/mnote-pentax-tag.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8088,
+    "sha256": "4ababe7c6fb64192e19c440c944784b4e6771dcf867aec1ed051e76003d81671",
+    "gitBlob": "45635041519de8d04b2275af41662b312d18c379"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/Makefile-files",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 433,
+    "sha256": "af0bbef3aaafc2caf6fe89b5a98bfb58bc29d9554ec8196f8b7101a187c4e850",
+    "gitBlob": "5618ca0ae556330005da637964afaf50f7551fe0"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/pentax/mnote-pentax-tag.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9213,
+    "sha256": "22908167c1b809dc7214fea8573fbe80db4724825f096b79294fd4a830ba68c2",
+    "gitBlob": "04ade79979dd189ac8166d76adcb0b31604da060"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/mnote-olympus-entry.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 27506,
+    "sha256": "fcb0f25571f50aa4398a58db857981d5d3d089ef9d08cae0027a10f6fb3c1668",
+    "gitBlob": "f938d409232b30c2b9270ee30d12b07d7c3e5e7d"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/mnote-olympus-tag.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 16341,
+    "sha256": "34ce73a781a6e23eeda3caf5d43214c37a1547d50678f2ee4538754fcf925df6",
+    "gitBlob": "c99448bb12b0ed9d8018bcc36029bbe4c04e3ca4"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/exif-mnote-data-olympus.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2160,
+    "sha256": "361777caf0eb3ffae97bfcc737fde5247fc7df713ac2b769619f2d329c92ce8a",
+    "gitBlob": "eb7e0b113b7bd628356af56ce83faa8bcad22205"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/mnote-olympus-entry.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1468,
+    "sha256": "e3f6baf0c41095030caf4a91847b34286f4380483f7b8d5dc9399e5537ea5f7c",
+    "gitBlob": "d54095f6c9db58f03ed00ec6bee5ffb28f834263"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/mnote-olympus-tag.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11348,
+    "sha256": "e4b53b77652e29fd577a517841c5887fb8b0552efddcff1fc8e788536d7c77b1",
+    "gitBlob": "0c6c8a58ef40bc419607a5f7b6d943eacc091445"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/exif-mnote-data-olympus.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 20010,
+    "sha256": "e67c7b790e0f1c9af8c0b962856bd69abe70a0cb46d9d13706dc4d532b5b06d5",
+    "gitBlob": "37f08ff1c8ccd40639b8bdc100d04ca78bc346f8"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/olympus/Makefile-files",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 448,
+    "sha256": "3f3632ef83004d2836f69434db2577fe5c65e53261cb721c3079e9bfc29ced8a",
+    "gitBlob": "a3c0e7d6251d5b0655222c23da0d84177e3350c5"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-ifd.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1374,
+    "sha256": "48936288153686c642327d89081d69fdc2c645e7cfc56a155034fc58e7ab3f24",
+    "gitBlob": "34b5204749a09bd51e0a253d9f07c8b2f2277cbd"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/_stdint.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 76,
+    "sha256": "4f0de7785dd7e001a7d6f6d949d756d42727dab4cb80cb10a376ac8c64fd8982",
+    "gitBlob": "80ecf419bdfda4ca424ad134a119b09733598342"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3645,
+    "sha256": "89769c5d4cbbfd369ea48ff8e60fa1fcf31cd14afbeec9e66a156ca59330dd98",
+    "gitBlob": "62afde8dd2e6dc89b9a7b0202d403c3befd03bea"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-format.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2400,
+    "sha256": "e2f08fc01878a87c39a240c565407193bbd68fe9b1b28fa020b1544b54aa2022",
+    "gitBlob": "eb7e3e2a256f277342ada43d23258e5d9853a2cf"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-tag.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11383,
+    "sha256": "b0791780faa7bc18e9cf722314b1e3e7eb8f4145b1987fa54d5145316586a622",
+    "gitBlob": "91ce05cb95bde661b2351ea61ad739f847ed52e0"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-data.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 36506,
+    "sha256": "a6571b63f43615f20b419e6e0c4592259382a29897e4dd791762a37d846a7e02",
+    "gitBlob": "4bedf7e1b25d3e4fff469e1a8968259beda491e0"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1788,
+    "sha256": "24a5bf1a3fa4f2e3447bf0eead7df5a4e4a209e858bc7e9d6915e01ed90b86c3",
+    "gitBlob": "25edf9bc3f16b53477bf652349a55e602c8b537b"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-system.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1220,
+    "sha256": "68f1ed412e3c6439c8abda3b59ba837fb492675e38b3b2940def3bff6728cc40",
+    "gitBlob": "86bb76cb61f49139f8b929a16fc4e06a5764b506"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/mnote-fuji-entry.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 9841,
+    "sha256": "ff3682d16d365f12840119e2e75c6a4463f53ff3a1c78ddf799d679614b82b31",
+    "gitBlob": "5d9f16fdc7e5a2c2c5edf7c7218fe1a54019e203"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/exif-mnote-data-fuji.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 11059,
+    "sha256": "1574b14061c09560c78a89b8945ce206d5c995f72148be4dc3d5e6b0b4d747d1",
+    "gitBlob": "2dcb8775f1fea8fa2ca8fd6cc6fb192209e61bd4"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/mnote-fuji-entry.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1504,
+    "sha256": "9c256257c901f254396d04bed9415fa366bcbaffbe926680d364454c6ed4dfd0",
+    "gitBlob": "928260b1a15d2387f5568ee69d58e8236a77f31f"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/exif-mnote-data-fuji.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1922,
+    "sha256": "96bf00b5e603fe6cd4e3af5a768782de430da44dc53ff0b2d0b5bef3074dea41",
+    "gitBlob": "79095384a291ba0e52a4e176ed280b5b2d4dd016"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/mnote-fuji-tag.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4482,
+    "sha256": "6d9d63c7d21a70945e11e50ec4b1bac63987febc7043276995a0a741ea7d3409",
+    "gitBlob": "9b83a37f5c15c24e572458c718e52d2ef5979534"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/mnote-fuji-tag.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3947,
+    "sha256": "7470641828dea8d3123a6a0e73dbbb58132f0460b50fb72b98df30b98e09e42b",
+    "gitBlob": "dbd2738d3e1142041b2887f83e1b8f67959bded2"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/fuji/Makefile-files",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 403,
+    "sha256": "d5dd800707e6c5aca02b469e6e41823fcabe06ee4c917617d433a5d5675146b7",
+    "gitBlob": "531a818dc198bea526b36aa658bd52a20c21291d"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-loader.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4350,
+    "sha256": "38e733913ca23269eaedc073871d3bc96a70f4ebbac1f6981b11d9324800ea39",
+    "gitBlob": "2fdd4350ec835c233099ed1cdc19e5b9110a7b89"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-log.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3288,
+    "sha256": "bca7ef2d2d870fc1793444eaeb76bf3a9c5ae9b85216c3df473f09e90cd61934",
+    "gitBlob": "07f0625efd253764b1b09af55b60a897c5610239"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-loader.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10561,
+    "sha256": "e169305559f1cffcfb8edd4ac0ef838e752e37978ba3dd0c3f5a8cba8d39c5c1",
+    "gitBlob": "073f79f55003620f59a53a3ef11d46f34db8dd5a"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-tag.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 64853,
+    "sha256": "322f96ecf506aef7a8f1a0c08a03db8ea3d232c56b5cca2697d2c93f2e9a0db5",
+    "gitBlob": "84b7661b65fe9cca834d07aca6e4b495af89ffc3"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-data-type.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1510,
+    "sha256": "1c3a93e6f4c9abd058b1cccecd254a95d6c105ae50b8ce1d96e285f6b10bbb0b",
+    "gitBlob": "e321479648fb2e097268f2bd32ff379e0cfa6737"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-content.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 7976,
+    "sha256": "6b74555c3dd8e4ae67fddb4fe9c60f30ea12ad3cfce07a2a4a43c1946259b515",
+    "gitBlob": "f276f2a2e230c5e266a93bd03db4e42486c25c36"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-entry.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6365,
+    "sha256": "21d106588ae29b565012e6aae37a16e60c6d8baa6488a3bd88b9693f31a3908d",
+    "gitBlob": "0eb2642102911b6e7d90690fcb4cd9c5348fb3fe"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-ifd.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1724,
+    "sha256": "902e3021fbc59b73a4ed1d0bb0047f336b59b3a8a6c6b1f80d2664111c09d18b",
+    "gitBlob": "57bbc0d621abcbcee12b393b77c385a1fe536a52"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-mem.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2703,
+    "sha256": "19cfec41d806147de65c51807775603e694f1054339571630e9aaae1e65461ef",
+    "gitBlob": "8fe3509186b48dddacd607bf794efbd289d481ac"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-entry.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 56545,
+    "sha256": "761b47e70e37b36b5269f6fda07d5e3b2e568383bfe53df9df6e48b3112102cb",
+    "gitBlob": "f3156e501ea971a0daa59c306119893c5f992a10"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-byte-order.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1217,
+    "sha256": "78c37fa0bf5cd657c611c627b013120d7d56f0d401ddc24c2bdfe1e6ada6e26f",
+    "gitBlob": "a5ef80d15a1d74aaddfc94e4a4ee22ae786e20f4"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-gps-ifd.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3320,
+    "sha256": "ce3a757f7d5592e7b3e12dd87a2768b496af5e492ef8866286fd7b2e1c8e5f47",
+    "gitBlob": "d29e43b749e1771e51289e1e309d187651b515bc"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-format.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2030,
+    "sha256": "3d97e229a8c92d735c7904044144644be46750234cf7c287f9bbd1c662200e6e",
+    "gitBlob": "b7c632f449a71c1dc48d54264652c73104e3ad40"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-content.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5647,
+    "sha256": "7b5a483a32da576df7b75d4f191763b4aff36c76e2696f705263502d0d21d931",
+    "gitBlob": "d0d7e4c0755690f33413ac020899ee6f330f458e"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-mem.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2702,
+    "sha256": "6964b51c194329fc2ba384011ade69385d12ed4eac7d8176f17b0adf83912b49",
+    "gitBlob": "98d0bfbc7daf395231a81ff76f3516e5246ddb60"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-utils.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6289,
+    "sha256": "7d3d2d1f4ce0c79b4968e44737c37596011ffbe1ef67b9aca2c3f4ec191a0192",
+    "gitBlob": "2243daf6d366ee204a667a21ec98e7d506999c31"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-mnote-data-priv.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2648,
+    "sha256": "569452aef0ea3c12712c7eb0b331e2a092e58694f7106a945d640f7547c07ba9",
+    "gitBlob": "641b970bcd7b4b9fc661ce260cb313468505dfd2"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-data.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 8994,
+    "sha256": "169cb345abf8735b5901a119f7e2598f6e9c0116f15ace152df98b20764e1e95",
+    "gitBlob": "2857e9d44ad99ee46a3da8cc49c5590e6c895c2f"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/exif-utils.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 6029,
+    "sha256": "27dfcd61db7fd64ef1ea41eb3cf2a1fb767e104cb56458e8d943b0f4c7d7d383",
+    "gitBlob": "9cb279e5b731b920d879552f1c409963ab690e41"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/libexif.sym",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 2690,
+    "sha256": "bf260817bbdcfdda0db76443bc7fd8a8ba4237e597594ca22972cdbc811dc88f",
+    "gitBlob": "f1d77cf429b60f1b8ca61d47be89f3529b7b3198"
+  },
+  {
+    "path": "libexif-0.6.26/libexif/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 39049,
+    "sha256": "b936d7e0a3ae76566e700f3871909ca29573ac6cb405204489884e3df0e58b45",
+    "gitBlob": "c81e77d11db3bcb0c617ab7b7da152e24c9ec70a"
+  },
+  {
+    "path": "libexif-0.6.26/depcomp",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 23700,
+    "sha256": "ac3ae010382a83144ff6ec1a4c368a3f16a14ea2b12751aa73ddfb548d931574",
+    "gitBlob": "9f6725b9e0f5d699b10591f32af4bdf2b8516ff6"
+  },
+  {
+    "path": "libexif-0.6.26/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1684,
+    "sha256": "6464b9e7c4a653d9ca48e67a08cc3d8ffeb2efed04dfd9258267a9dddbd0c6c0",
+    "gitBlob": "ccbc068148a62dcc11ae60a18cf65de2fdd9f287"
+  },
+  {
+    "path": "libexif-0.6.26/AUTHORS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 240,
+    "sha256": "a19ef6f43014fc57829658087d0c2bf59d97482e015cf553d7a68124603cbc44",
+    "gitBlob": "f4f217f94f673e8af996a60428b098e8464bc32f"
+  },
+  {
+    "path": "libexif-0.6.26/doc/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/doc/Doxyfile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 107015,
+    "sha256": "866da897d00321013a6aaa297675f318a4eac9f418f3eb63f33be0deb682780d",
+    "gitBlob": "5bb632f208e0e7ffc70d6574b0fef467c7e1bca1"
+  },
+  {
+    "path": "libexif-0.6.26/doc/footer.html",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 412,
+    "sha256": "e20685e59fb9e79b6c6815007bae04a983f95f4c23d8b9e1a78501c9f08ba320",
+    "gitBlob": "fcc1b038b3e8de250c7e66d92f5842f9517de3a9"
+  },
+  {
+    "path": "libexif-0.6.26/doc/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 4231,
+    "sha256": "f9dbd8205bb9243ddc260b41cd667a025b4261495342ddfa2fa492da658755f5",
+    "gitBlob": "ffedc9858deb293dd004e820cad114ef80b5545b"
+  },
+  {
+    "path": "libexif-0.6.26/doc/README.apidocs",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 218,
+    "sha256": "874b036db84e1d21a8885ef08d533fa92a7f64fab85a5bc4e6ce263ca0c5749a",
+    "gitBlob": "4486f5dfce2e79c208db73ad8b0f0a6c9d68145f"
+  },
+  {
+    "path": "libexif-0.6.26/doc/libexif-api.html.tar.gz",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 240682,
+    "sha256": "262a4dc93400f0a9f8860b4d3462c06f6b4ab0f80857cfba1131a66a87090a34",
+    "gitBlob": "d018af4d7fcabed1a6294d78fb66d4f7247b5428"
+  },
+  {
+    "path": "libexif-0.6.26/doc/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 24610,
+    "sha256": "797eded8e049f4040dafbedff0c69a1cc6e01d19f33ac59c67f06ef7400bcade",
+    "gitBlob": "48a402322403f5fb08985976936a037f6400f932"
+  },
+  {
+    "path": "libexif-0.6.26/doc/Doxyfile-internals.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 107086,
+    "sha256": "4af1b9de001c8d4b5ebec755997a04bca2cfed72e29d458f662e177a8cfe7478",
+    "gitBlob": "2d76eabb268890e21a7b7440a546edca550f43e3"
+  },
+  {
+    "path": "libexif-0.6.26/libexif.spec.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1407,
+    "sha256": "45382d60e97db6107b6a1b8f5d6fd0ab0c445013774c360f9dfbfbb54ad03c0c",
+    "gitBlob": "4b9ae1acb7d47bcf0556fbc247e9cbf4a0ffbe1f"
+  },
+  {
+    "path": "libexif-0.6.26/README",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5960,
+    "sha256": "cf4073dbfe3013cdba2aa48d9f840d2fc6d0e1da7097fb25abcebb7d9182207c",
+    "gitBlob": "eb07b1f2a3dd28ee76a19aff37b7042bc9674465"
+  },
+  {
+    "path": "libexif-0.6.26/test-driver",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 5220,
+    "sha256": "f5031431dfc824ee2f012950aef35530e5acf3eb412421c8050662b616deaded",
+    "gitBlob": "d81fba79cdfeb2c8d12661222d0e5079a2cc72b2"
+  },
+  {
+    "path": "libexif-0.6.26/configure",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 639820,
+    "sha256": "e92fb05d0c0959b4a7b3af70f25b239e1f9ac15ac56f3e782fb47d63f14c2df6",
+    "gitBlob": "aef137d676fe01c602623b3a4426d6be0a510bde"
+  },
+  {
+    "path": "libexif-0.6.26/NEWS",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10242,
+    "sha256": "628948f6df177c5b83f42614d18eb67038050ae5ab9781a4a097f0d472f7bc6a",
+    "gitBlob": "bfb59a4f9eae3b796b2fd2bb0d0079ad76f23b8f"
+  },
+  {
+    "path": "libexif-0.6.26/configure.ac",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 10297,
+    "sha256": "6e3ee51ee91e91b9f87665fe3d907c2d8fa8cba61cf27d252805a6cb17a2c0f6",
+    "gitBlob": "d43d33fa1cd96407239461ea302e6c6dc4be8bb7"
+  },
+  {
+    "path": "libexif-0.6.26/binary-dist/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/binary-dist/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 422,
+    "sha256": "cee8337642567b3f5dd2728a4af2ea374b08cd98588f1abedef2e1bad667e29b",
+    "gitBlob": "906c04df60ec3525d7c19607871f3b5e5928b879"
+  },
+  {
+    "path": "libexif-0.6.26/binary-dist/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 16149,
+    "sha256": "b10acb3d828ee6f0ddf45a43399f9065f73d2c9b1fb4ba66a5d6efc82f72ddd9",
+    "gitBlob": "b5bdd5614fefb506572a9ebcc8f77d2f98dafeed"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/thumbnail.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 1963,
+    "sha256": "1f59e4768cb9306d9d4665733721ffcac74e8d92c50530649afecaf8dbfcffa1",
+    "gitBlob": "3bb843b00951b0e08a83c5efff6c1e25cf44fc6a"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/cam_features.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5355,
+    "sha256": "8a03a3fe78336442ac961812938cbf791cae34f5360be24fba7ebfe5b61d409c",
+    "gitBlob": "8edd3d547b3c09aee32be6c8fc99df17b108409b"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/photographer.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 3879,
+    "sha256": "5638779df96f4d3cd6a5460f1fd1d61ed1d939ece24a7b07ff65a156e1c576d8",
+    "gitBlob": "2f04e64e81d798cef2bf58979392c95eef9c94af"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 469,
+    "sha256": "74f31931a8e9177b1ea6f5aa606c69bd7f30ba670bb650d4d0bee5e9b3699b13",
+    "gitBlob": "d198802247200f2127ae89a96424de1f216b2b5c"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/write-exif.c",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 12769,
+    "sha256": "87da6fe90ff692c5031b709131183f6106a5764f8e7ee0eb09ef92ae1dfb7741",
+    "gitBlob": "4f9db046765c43a48860461ac7865fa5124e8dcc"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/examples/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 22885,
+    "sha256": "8514beed73e8bcc0ad3592dbb7a7d0a4f6e4c758595142debc3bf0d6caf1f8fa",
+    "gitBlob": "06a1a3ad31db795bbc174041384d36d53dcbc947"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/watcom/",
+    "kind": "directory",
+    "mode": 493,
+    "bytes": 0
+  },
+  {
+    "path": "libexif-0.6.26/contrib/watcom/Makefile",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 5908,
+    "sha256": "e384bbba37e586b734b6817f23987e85680704c32f0311ae741b83a22e5f2e6f",
+    "gitBlob": "6b09a4914ddede24e69a2e3dbd4a8cb785c63eaa"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/watcom/_stdint.h",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 466,
+    "sha256": "8e7e7ee6a577b6760d5409c2b23aa01a809c0dfefdcaea3edb932f2db481a37d",
+    "gitBlob": "c9ea7f8c6b2b7caca778f4e9801b7d72202ac99d"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/Makefile.am",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 302,
+    "sha256": "e77db872163bb06423f03bfde3cf6d09accaf261b3406b7eb761bf791471835b",
+    "gitBlob": "9be0755e0059f48737d63c248bbcf0dfa5cc00ff"
+  },
+  {
+    "path": "libexif-0.6.26/contrib/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 22215,
+    "sha256": "1dfb4747efb4914ac06a1d06b29b13714428a97c7da597967397544191b20043",
+    "gitBlob": "701171b054bcefac1f9d1a6bea5e3bd40ac6d32d"
+  },
+  {
+    "path": "libexif-0.6.26/COPYING",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 26434,
+    "sha256": "36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89",
+    "gitBlob": "602bfc94635ddf8f1bf2b00419a85ead645a5b67"
+  },
+  {
+    "path": "libexif-0.6.26/ChangeLog",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 68683,
+    "sha256": "2747f6b0cd2e6242233017b4f95ec07a0acd016dba6952f73c2d718d223343cc",
+    "gitBlob": "0c4610008bce3edcef6948e2c00607ee08cf885b"
+  },
+  {
+    "path": "libexif-0.6.26/config.sub",
+    "kind": "file",
+    "mode": 484,
+    "bytes": 39943,
+    "sha256": "26b852f75a637448360a956931439f7e818bf63150eaadb9b85484347628d1fd",
+    "gitBlob": "3d35cde174de9cd9788e4bff9b5391c1b06a2fbe"
+  },
+  {
+    "path": "libexif-0.6.26/compile",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 8064,
+    "sha256": "92ed7feeda61ad958dc3c4cc4efd724e1414482f1cad60b74b09e0633a93dfd6",
+    "gitBlob": "02ff093c33c755cd36ae69a501bbebafe4f483b1"
+  },
+  {
+    "path": "libexif-0.6.26/libexif-uninstalled.pc.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 280,
+    "sha256": "2fde90031d2eb2755fb096afa3f55465f525bd5772f88000166c18a241473850",
+    "gitBlob": "722150f359e973dd2bca0e55fb52f9484a9d4deb"
+  },
+  {
+    "path": "libexif-0.6.26/missing",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 7733,
+    "sha256": "4f17c4a66ec5b8000d44573a576f6b5d9c0c84848e8fd1286f84a52f439db4e9",
+    "gitBlob": "5e450bab3cdf4808973786e8f51d0a820b5afafe"
+  },
+  {
+    "path": "libexif-0.6.26/ar-lib",
+    "kind": "file",
+    "mode": 493,
+    "bytes": 6465,
+    "sha256": "8e211dd0df621bf4985c1d3466548564a835e379acfc12dc0c1009ced4f90417",
+    "gitBlob": "d0a7b5c8a548ca4e1bf832b5503b3eb4a53163dc"
+  },
+  {
+    "path": "libexif-0.6.26/Makefile.in",
+    "kind": "file",
+    "mode": 420,
+    "bytes": 35242,
+    "sha256": "7819ae21d693051047bb2cea67415cc004ed68407850723e8ada7f160b1e0822",
+    "gitBlob": "523015b192c87e6f621aac69c41a9e5a76330f2f"
+  }
+]
