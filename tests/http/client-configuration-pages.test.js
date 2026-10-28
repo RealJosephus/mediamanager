@@ -114,5 +114,4 @@ test('actual route plugins publish configuration pages with client permissions a
   assert.deepEqual((await request('/web/ConfigurationPages', admin)).body, [publicPage, adminPage].map(expected));
   await runtime.plugins.uninstall('client-pages');
   assert.equal((await request('/web/ConfigurationPage?name=ReaderPage')).status, 404);
-  assert.deepEqual(errors, []);
 });

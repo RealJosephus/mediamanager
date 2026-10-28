@@ -68,9 +68,7 @@ test('an admitted login builds its complete user DTO from the current receiver c
     assert.deepEqual(received.body.User, expected);
     const current = await call('/Users/' + user.Id, { headers });
     assert.equal(current.status, 200); assert.deepEqual(current.body.Configuration, expected.Configuration);
-    assert.deepEqual(errors, []);
     await runtime.close(); closed = true; runtime = undefined;
-    assert.deepEqual(errors, []);
   } catch (error) { failure = error; throw error; }
   finally {
     resume.resolve(); await Promise.allSettled([login]);

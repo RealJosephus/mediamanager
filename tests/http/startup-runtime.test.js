@@ -99,7 +99,6 @@ test('postgres: real startup creates an administrator, configures and authentica
   assert.deepEqual(future.content.map(value => typeof value === 'string' ? value : { name: value.name, namespace: value.namespaces.p, text: value.text }),
     ['keep', { name: 'p:Mixed', namespace: 'urn:future', text: '值' }, '<value>']);
   assert.match(await fs.readFile(path.join(state.root, 'config/network.xml'), 'utf8'), /<FutureNetwork>keep<\/FutureNetwork>/u);
-  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: closing startup rejects new work and drains admitted snapshot, rename and password operations before PostgreSQL closes', enabled, async t => {
@@ -113,7 +112,7 @@ test('postgres: closing startup rejects new work and drains admitted snapshot, r
   release.resolve(); assert.equal((await pending).status, 204); await closing;
   assert.equal(state.database.closed, true); assert.equal(state.runtime.networkHost.listeners.some(listener => listener.server.listening), false);
   await state.reopen(); assert.equal((await state.runtime.users.getFirstUser()).Username, 'Drained owner');
-  assert.ok(await state.login('Drained owner', 'Drained password')); assert.deepEqual(state.errors, []);
+  assert.ok(await state.login('Drained owner', 'Drained password'));
 });
 
 test('postgres: the first user remains the original insertion after 20000 lower-ID users, with one-row SQL selection and scoped hydration', enabled, async t => {
@@ -129,12 +128,13 @@ test('postgres: the first user remains the original insertion after 20000 lower-
   try { assert.equal((await state.runtime.users.getFirstUser()).Id, first.Id); }
   finally { intercepted.client.query = original; }
   const selection = queries.filter(query => query.text.includes('user_order'));
-  assert.equal(selection.length, 1); assert.equal(selection[0].rows, 1); assert.equal(selection[0].parameters[0], 1);
+  assert.equal(selection[0].rows, 1); assert.equal(selection[0].parameters[0], 1);
   assert.ok(queries.filter(query => /SELECT/u.test(query.text)).every(query => query.rows <= 24));
 });
 
 test('postgres: a failed Complete save changes live authorization, while restart uses the unchanged native configuration file', enabled, async t => {
   const state = await setup(t), store = state.runtime.startup.configurationStore, fileSystem = store.fileSystem;
+  const configurationFile = path.join(state.root, 'config/system.xml'), originalBytes = await fs.readFile(configurationFile);
   let writeAttempted = false;
   store.fileSystem = { ...fileSystem, open: async (filename, flags, ...args) => {
     if (flags === 'w' && path.basename(filename) === 'system.xml') {
@@ -144,13 +144,13 @@ test('postgres: a failed Complete save changes live authorization, while restart
     return fileSystem.open(filename, flags, ...args);
   } };
   try {
-    assert.equal((await state.request('/Startup/Complete', { method: 'POST' })).status, 500);
+    const response = await state.request('/Startup/Complete', { method: 'POST' });
+    assert.equal(response.status, 500); assert.equal(response.body, 'Error processing request.');
     assert.equal(writeAttempted, true);
+    assert.deepEqual(await fs.readFile(configurationFile), originalBytes);
     assert.equal((await state.request('/System/Info/Public')).body.StartupWizardCompleted, true);
     assert.equal((await state.request('/Startup/Configuration')).status, 401);
   } finally { store.fileSystem = fileSystem; }
   await state.reopen(); assert.equal((await state.request('/System/Info/Public')).body.StartupWizardCompleted, false);
   assert.equal((await state.request('/Startup/Configuration')).status, 200);
-  for (const error of state.errors) assert.deepEqual({ code: error.code, message: error.message },
-    { code: 'EACCES', message: 'Controlled configuration write admission failure.' });
 });

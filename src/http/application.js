@@ -1,4 +1,4 @@
-import { MIMEType } from 'node:util';
+import { jsonProfile } from './json-profile.js';
 import { createCoreLocalization } from '../core/i18n.js';
 import { loadLocalizationData } from '../core/localization-data.js';
 import { stringifyNativeJson } from '../core/json.js';
@@ -36,38 +36,15 @@ import { registerPasswordResetRoutes } from './password-reset-routes.js';
 import { registerDisplayPreferencesRoutes } from './display-preferences-routes.js';
 import { registerStartupRoutes } from './startup-routes.js';
 import { registerApiKeyRoutes } from './api-key-routes.js';
+import { registerActivityLogRoutes } from './activity-log-routes.js';
+import { registerMediaSegmentRoutes } from './media-segment-routes.js';
+import { registerLyricRoutes } from '../lyrics/routes.js';
+import { registerSystemLifecycleRoutes } from './system-lifecycle-routes.js';
+import { registerEnvironmentRoutes } from './environment-routes.js';
+import { registerClientLogRoutes } from './client-log-routes.js';
 import { registerPluginRoutes } from './plugin-routes.js';
 import { serverFriendlyName } from '../configuration.js';
 import { applyCors } from './cors.js';
-
-function jsonProfile(accept) {
-  let selected, selectedQuality = -1;
-  // BaseJellyfinApiController offers plain JSON, CamelCase and PascalCase.
-  // MVC chooses a matching offer by quality and then request order; a later
-  // profile in the SDK's Accept list must not change an earlier plain offer.
-  for (const range of accept.match(/(?:[^,"]|"(?:\\.|[^"\\])*")+/gu) ?? []) {
-    let mediaType;
-    try { mediaType = new MIMEType(range); }
-    catch { continue; }
-    if (!['application/json', 'application/*', '*/*'].includes(mediaType.essence)) continue;
-    const weight = mediaType.params.get('q') ?? '1';
-    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/u.test(weight)) continue;
-    const quality = Number(weight);
-    if (!Number.isFinite(quality) || quality <= selectedQuality) continue;
-    let profile, supported = true;
-    for (const [name, value] of mediaType.params) {
-      // Parameters after q describe the Accept offer, not the output format.
-      if (name === 'q') break;
-      if (name === 'profile' && /^(?:CamelCase|PascalCase)$/iu.test(value)) {
-        profile = /^CamelCase$/iu.test(value) ? 'CamelCase' : 'PascalCase';
-      } else if (name !== '*') supported = false;
-    }
-    if (supported) { selected = profile; selectedQuality = quality; }
-  }
-  // Native MVC falls back to its default plain JSON formatter when no offer
-  // matches; the application does not enable ReturnHttpNotAcceptable.
-  return selected;
-}
 
 export async function createApplication(services = {}) {
   const { authentication, serverId, serverName = 'MediaManager', serverVersion = '13.0.0', baseUrl = '', publicAddress, onError = () => {} } = services;
@@ -109,8 +86,8 @@ export async function createApplication(services = {}) {
     CachePath: services.applicationPaths?.cachePath ?? null,
     TranscodingTempPath: services.encodingPaths && services.applicationPaths?.cachePath
       ? await services.encodingPaths.getTranscodePath() : null,
-    // Web files are supplied by a separate static server; logs use onError.
-    WebPath: null, LogPath: null, PackageName: null
+    // Web files are supplied by a separate static server.
+    WebPath: null, LogPath: services.applicationPaths?.logDirectoryPath ?? null, PackageName: null
   }), { policy: 'FirstTimeSetupOrIgnoreParentalControl' });
   for (const [name, run] of Object.entries({ Cultures: () => data.cultures(localization.context.culture), Countries: () => data.countries,
     ParentalRatings: () => data.parentalRatings(services.configuration.MetadataCountryCode || 'US'), Options: () => data.options })) {
@@ -126,6 +103,12 @@ export async function createApplication(services = {}) {
   registerDisplayPreferencesRoutes(add, services);
   registerStartupRoutes(add, services);
   registerApiKeyRoutes(add, services);
+  registerActivityLogRoutes(add, services);
+  registerMediaSegmentRoutes(add, services);
+  registerLyricRoutes(add, services);
+  registerSystemLifecycleRoutes(add, services);
+  registerClientLogRoutes(add, services, localization);
+  registerEnvironmentRoutes(add, { ...services, localization });
   registerUserDataCopyRoutes(add, services);
   registerSearchHistoryRoutes(add, services);
   registerEmbyHomeSectionRoutes(add, services);
@@ -238,7 +221,7 @@ export async function createApplication(services = {}) {
         let auth;
         phase = 'authentication';
         try { auth = await authentication.authenticate(request); }
-        catch (error) { if (error.status !== 401) throw error; auth = { ...authentication.read(request), IsAuthenticated: false }; }
+        catch (error) { if (error?.status !== 401) throw error; auth = { ...authentication.read(request), IsAuthenticated: false }; }
         const embyClient = isEmbyClient({ request, auth, embyPath });
         const isPublic = typeof route.isPublic === 'function' ? route.isPublic({ request, query: url.searchParams, params }) : route.isPublic;
         if (!isPublic) {
@@ -248,7 +231,7 @@ export async function createApplication(services = {}) {
             authentication.authorize(auth, { policy, remoteEndPoint, startupWizardCompleted: Boolean(services.configuration.IsStartupWizardCompleted) });
           }
           catch (error) {
-            if (![401, 403].includes(error.status)) throw error;
+            if (![401, 403].includes(error?.status)) throw error;
             if (embyClient && error.status === 401) await embyTextResponse(401, 'Access token is invalid or expired.').send(request, response);
             else send(new HttpResult(error.status));
             return;
@@ -300,9 +283,9 @@ export async function createApplication(services = {}) {
         if (error instanceof HttpResult) { send(error); return; }
         if (error instanceof BindingError) { send(new HttpResult(400, error.problem())); return; }
         onError(error, { request, phase });
-        if (response.headersSent) { response.destroy(error); return; }
+        if (response.headersSent) { if (!response.writableEnded) response.destroy(error); return; }
         if (phase === 'base-url-redirect') { response.writeHead(500); response.end(); return; }
-        response.writeHead(error.status ?? error.statusCode ?? 500, { 'Content-Type': 'text/plain' });
+        response.writeHead(error?.status ?? error?.statusCode ?? 500, { 'Content-Type': 'text/plain' });
         response.end('Error processing request.');
       }
     });

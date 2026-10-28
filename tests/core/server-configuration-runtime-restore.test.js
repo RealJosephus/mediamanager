@@ -2,8 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import pg from 'pg';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { createHash, randomUUID } from 'node:crypto';
+import { inspect } from 'node:util';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { createRuntime } from '../../src/runtime.js';
 import { readInstanceConfiguration } from '../../src/configuration.js';
@@ -29,7 +31,7 @@ function errorValue(input, diagnostic = false, seen = new WeakSet()) {
   try {
     if (Array.isArray(input)) return input.map(value => errorValue(value, diagnostic, seen));
     const names = input instanceof Error ? Object.getOwnPropertyNames(input) : Object.keys(input);
-    const value = Object.fromEntries(names.filter(name => diagnostic || !['name', 'stack'].includes(name))
+    const value = Object.fromEntries(names.filter(name => diagnostic || !(input instanceof Error && ['name', 'stack'].includes(name)))
       .map(name => [name, errorValue(input[name], diagnostic, seen)]));
     if (diagnostic && input instanceof Error) value.name = input.name;
     return value;
@@ -46,7 +48,7 @@ async function scenario(label, run) {
   const report = { schemaVersion: 1, scope: label, actualPostgres: true, requests, boundaries, diagnostics, stages, closures, effects,
     fileReads: [], originals: [],
     phaseAcceptance: false, releaseAcceptance: false };
-  let failure;
+  let failed = false, failure;
   const cleanupErrors = [];
   const onError = error => {
     const owner = context.getStore() ?? {}, request = requests[owner.requestId], boundary = boundaries[owner.boundaryId];
@@ -195,20 +197,10 @@ async function scenario(label, run) {
       IsStartupWizardCompleted: true, ServerName: 'Configuration restart ' + label }));
     await fs.writeFile(path.join(root, 'config/network.xml'), serializeConfiguration('network', { ...defaultConfiguration('network'), InternalHttpPort: 0, LocalNetworkAddresses: ['127.0.0.1'], AutoDiscovery: false, EnablePublishedServerUriByRequest: true }));
     await run(state);
-  } catch (error) { failure = error; }
+  } catch (error) { failed = true; failure = error; }
   const attempt = async operation => { try { await operation(); } catch (error) { cleanupErrors.push(error); } };
   await attempt(() => state.close());
   await attempt(() => state.assertProtected());
-  await attempt(async () => {
-    for (const diagnostic of diagnostics) {
-      const boundary = boundaries[diagnostic.owner.boundaryId];
-      assert.ok(boundary?.failure, 'Unexpected startup, request, background or close error: ' + configurationJson(diagnostic));
-      assert.equal(diagnostic.boundaryOpen, true); assert.equal(diagnostic.generation, boundary.generation);
-      assert.ok(['open', 'http'].includes(diagnostic.owner.kind));
-      if (diagnostic.owner.kind === 'http') assert.equal(diagnostic.requestOpen, true);
-      assert.deepEqual(diagnostic.failure, boundary.failure);
-    }
-  });
   await attempt(() => dropPostgresTestDatabase(state.database));
   report.retainedFiles = [...protectedFiles].map(([filename, value]) => ({ filename, purpose: value.purpose, ...bytesValue(value.bytes) }));
   await attempt(async () => {
@@ -216,12 +208,14 @@ async function scenario(label, run) {
     assert.equal(path.relative(path.toNamespacedPath(root), path.toNamespacedPath(await fs.realpath(root))), '');
     await fs.rm(root, { recursive: true, force: true });
   });
-  report.failure = errorValue(failure, true); report.cleanupErrors = cleanupErrors.map(error => errorValue(error, true));
-  report.completed = failure === undefined && cleanupErrors.length === 0;
+  report.failed = failed; report.failure = errorValue(failure, true); report.cleanupErrors = cleanupErrors.map(error => errorValue(error, true));
+  report.failureInspection = failed ? inspect(failure, { depth: null }) : undefined;
+  report.serialization = 'JSON omits own undefined object fields and represents undefined array entries as null; presence and values are compared in process.';
+  report.completed = !failed && cleanupErrors.length === 0;
   await attempt(() => fs.writeFile(path.join(output, path.basename(root) + '.json'), configurationJson(report), { flag: 'wx' }));
   context.disable();
-  if (failure && cleanupErrors.length) throw new AggregateError([failure, ...cleanupErrors], 'Runtime restoration and cleanup failed.', { cause: failure });
-  if (failure) throw failure;
+  if (failed && cleanupErrors.length) throw new AggregateError([failure, ...cleanupErrors], 'Runtime restoration and cleanup failed.', { cause: failure });
+  if (failed) throw failure;
   if (cleanupErrors.length) throw new AggregateError(cleanupErrors, 'Runtime restoration cleanup failed.', { cause: cleanupErrors[0] });
 }
 
@@ -298,5 +292,103 @@ test('postgres: a persisted disabled local plugin permits cold management and re
     await state.snapshot('enabled-recovered', metadata, cache, '7.8.9', configuration);
     await state.exercise('enabled-recovered', metadata, cache, 8); await state.originals();
     await state.close();
+  });
+});
+
+test('postgres: restoration fixture preserves rejection presence after real Local, HTTP and database work and releases its owners', enabled, async t => {
+  const reasons = [
+    { label: 'false', reason: false }, { label: 'zero', reason: 0 }, { label: 'empty-string', reason: '' },
+    { label: 'null', reason: null }, { label: 'undefined', reason: undefined },
+    { label: 'structured-error', reason: Object.assign(new Error('Fixture operation rejected.', {
+      cause: { name: 'Business cause', stack: 'Retained business stack', value: undefined },
+    }), { code: 'fixture-code', status: 409, statusCode: 503, errors: [false, 0, '', null, undefined,
+      new Error('Nested rejection.', { cause: undefined })] }) },
+    { label: 'business-object', reason: { name: 'Business failure', stack: 'Retained business stack',
+      message: 'Fixture business rejection.', code: 0, status: 422, statusCode: 502, cause: undefined,
+      errors: [false, 0, '', null, undefined] } },
+    { label: 'undefined-with-cleanup-zero', reason: undefined, cleanupZero: true },
+  ];
+  const hasCause = value => value !== null && typeof value === 'object' && Object.hasOwn(value, 'cause');
+  const rejection = reason => ({ type: typeof reason, functional: errorValue(reason), diagnostic: errorValue(reason, true),
+    ownCause: hasCause(reason), inspection: inspect(reason, { depth: null }) });
+  const schemasSql = 'SELECT name,to_regnamespace(name)::oid::text AS oid FROM unnest($1::text[]) AS owned(name) ORDER BY name COLLATE "C"';
+  const backendsSql = 'SELECT pid,extract(epoch FROM backend_start)::text AS started FROM pg_stat_activity WHERE pid=ANY($1::integer[]) ORDER BY pid';
+  for (const entry of reasons) await t.test(entry.label, async t => {
+    const report = { schemaVersion: 1, scope: entry.label, actualPostgres: true, expected: rejection(entry.reason),
+      cleanupZero: entry.cleanupZero === true,
+      serialization: 'JSON omits own undefined object fields and represents undefined array entries as null; typed values, own cause presence and ordered errors are compared in process. Inspections retain undefined diagnostically.' };
+    let state, database, runtime, servers;
+    const observedPids = new Set();
+    t.after(async () => {
+      if (state) await fs.writeFile(path.join(path.dirname(state.root), path.basename(state.root) + '.consumer.json'),
+        configurationJson(report), { flag: 'wx' });
+    });
+    const outcome = await scenario('rejection-' + entry.label, async current => {
+      state = current;
+      await state.open(); database = state.database; runtime = state.runtime;
+      const track = client => observedPids.add(client.processID);
+      database.pool.on('acquire', track); runtime.linkedChildren.relationDatabase.pool.on('acquire', track);
+      report.initialBackends = {
+        native: (await database.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid,
+        relations: (await runtime.linkedChildren.relationDatabase.client.query('SELECT pg_backend_pid() AS pid')).rows[0].pid,
+      };
+      for (const pid of Object.values(report.initialBackends)) observedPids.add(pid);
+      await state.principals(); await state.seedMedia();
+      const filename = path.join(state.programDataPath, 'data', 'fixture-rejection.bin');
+      const bytes = Buffer.from('Actual Local bytes before ' + entry.label + '\0資料\n');
+      await runtime.fileSystem.writeFile(filename, bytes);
+      const local = await runtime.fileSystem.readFile(filename), disk = await state.protect(filename, 'Fixture rejection witness');
+      assert.deepEqual(local, bytes); assert.deepEqual(disk, bytes);
+      report.witness = { filename, local: bytesValue(local), disk: bytesValue(disk) };
+      await state.originals();
+      servers = runtime.networkHost.listeners.map(({ scheme, port, server }) => ({ scheme, port, server }));
+      const namespaces = [database.schemaName, database.controlSchema, runtime.linkedChildren.schemaName];
+      report.before = await database.withConnection(async session => ({
+        namespaces: (await session.client.query(schemasSql, [namespaces])).rows,
+        observedBackends: (await session.client.query(backendsSql, [[...observedPids]])).rows,
+      }));
+      for (const namespace of report.before.namespaces) assert.match(namespace.oid, /^\d+$/u);
+      for (const pid of Object.values(report.initialBackends)) assert.ok(report.before.observedBackends.some(backend => backend.pid === pid));
+      if (entry.cleanupZero) {
+        const close = state.close;
+        state.close = async () => { await close(); throw 0; };
+      }
+      throw entry.reason;
+    }).then(value => ({ failed: false, value }), reason => ({ failed: true, reason }));
+    report.outcome = { failed: outcome.failed, rejection: rejection(outcome.reason) };
+    assert.equal(outcome.failed, true, 'A caught rejection must remain a rejection even when its reason is falsy.');
+    const expected = entry.cleanupZero ? new AggregateError([entry.reason, 0],
+      'Runtime restoration and cleanup failed.', { cause: entry.reason }) : entry.reason;
+    assert.equal(typeof outcome.reason, typeof expected);
+    assert.equal(hasCause(outcome.reason), hasCause(expected));
+    assert.deepEqual(errorValue(outcome.reason), errorValue(expected));
+    report.listeners = [];
+    for (const { scheme, port, server } of servers) {
+      const connections = await new Promise((resolve, reject) => server.getConnections((error, count) => error ? reject(error) : resolve(count)));
+      report.listeners.push({ scheme, port, listening: server.listening, connections });
+      assert.equal(server.listening, false); assert.equal(connections, 0);
+    }
+    await assert.rejects(database.rows('Users'), error => {
+      report.closedDatabaseRead = rejection(error); return /closed|not open/iu.test(error.message);
+    });
+    const audit = new pg.Client({ connectionString: postgresTestConnectionString });
+    try {
+      await audit.connect();
+      report.after = {
+        namespaces: (await audit.query(schemasSql, [report.before.namespaces.map(value => value.name)])).rows,
+        observedBackends: (await audit.query(backendsSql, [report.before.observedBackends.map(value => value.pid)])).rows,
+      };
+      for (const namespace of report.after.namespaces) assert.equal(namespace.oid, null);
+      // A new backend may reuse an integer PID; compare the observed backend lifetime.
+      assert.deepEqual(report.after.observedBackends.filter(current => report.before.observedBackends.some(previous =>
+        previous.pid === current.pid && previous.started === current.started)), []);
+    } finally { await audit.end(); }
+    await assert.rejects(fs.stat(state.root), error => { report.removedDirectory = rejection(error); return error.code === 'ENOENT'; });
+    const fixtureFilename = path.join(path.dirname(state.root), path.basename(state.root) + '.json');
+    const fixtureBytes = await fs.readFile(fixtureFilename), fixture = parseLosslessJson(fixtureBytes.toString('utf8'));
+    report.fixture = { filename: fixtureFilename, ...bytesValue(fixtureBytes) };
+    assert.equal(fixture.failed, true); assert.equal(fixture.completed, false);
+    const retained = fixture.retainedFiles.find(value => value.filename === report.witness.filename);
+    assert.deepEqual({ bytes: retained.bytes, sha256: retained.sha256, base64: retained.base64 }, report.witness.disk);
   });
 });

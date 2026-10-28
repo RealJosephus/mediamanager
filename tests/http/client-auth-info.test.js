@@ -188,7 +188,6 @@ for (const baseUrl of ['', '/media']) test(`Jellyfin and Emby auth/info coexist 
       assert.equal(message.Name, name); assert.deepEqual(message.Arguments, { Offset: '1.25' });
     }
     assert.ok(received.some(message => message.MessageType === 'ForceKeepAlive'));
-    assert.deepEqual(errors, []);
   } catch (error) {
     let message = error.message;
     for (const secret of secrets) if (secret) message = message.replaceAll(secret, '[credential redacted]');

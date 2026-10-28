@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "client": "Client log CI",
+  "version": "1.0",
+  "apiKeyName": "Client log API 客户端 Café",
+  "chunkedLimit": { "prefixBytes": 1000000, "handshakeBytes": 65536, "overflowBytes": 1, "repetitions": 2, "status": 500 },
+  "chunkedSuccess": { "bytes": 999000, "handshakeBytes": 65536, "status": 200 },
+  "cases": [
+    { "name": "disabled before declared length", "enabled": false, "identity": "admin", "declaredBytes": 1000001, "headersOnly": true, "status": 403 },
+    { "name": "anonymous before disabled gate", "enabled": false, "identity": "anonymous", "status": 401 },
+    { "name": "anonymous enabled", "enabled": true, "identity": "anonymous", "status": 401 },
+    { "name": "invalid token before declared length", "identity": "invalid", "declaredBytes": 1000001, "headersOnly": true, "status": 401 },
+    { "name": "empty regular upload", "identity": "ordinary", "payload": "empty", "status": 200 },
+    { "name": "binary regular upload", "identity": "ordinary", "payload": "binary", "contentType": "application/octet-stream", "status": 200 },
+    { "name": "opaque malformed JSON upload", "identity": "ordinary", "payload": "opaque-json", "contentType": "application/json", "status": 200 },
+    { "name": "Unicode client and version", "identity": "ordinary", "payload": "unicode", "client": "客户端 Café", "version": "版本 2", "status": 200 },
+    { "name": "leaf traversal", "identity": "admin", "client": "../../logs/leaf-client", "version": "../versions/v2", "safeClient": "leaf-client", "safeVersion": "v2", "payload": "binary", "status": 200 },
+    { "name": "host path separators", "identity": "ordinary", "client": "C:\\client-logs\\win-leaf", "version": "D:\\versions\\v3", "windowsClient": "win-leaf", "windowsVersion": "v3", "payload": "unicode", "status": 200 },
+    { "name": "trailing separators have no leaf", "identity": "ordinary", "client": "nested/client/", "version": "nested/version/", "safeClient": "unknown-client", "safeVersion": "unknown-version", "status": 200 },
+    { "name": "dot leaves use unknown labels", "identity": "ordinary", "client": ".", "version": "..", "safeClient": "unknown-client", "safeVersion": "unknown-version", "status": 200 },
+    { "name": "real API key name and version", "identity": "api", "client": "Header cannot replace key name", "version": "header-version", "payload": "unicode", "status": 200 },
+    { "name": "exact one million bytes", "identity": "ordinary", "payload": "maximum", "status": 200 },
+    { "name": "declared one byte over maximum", "identity": "ordinary", "declaredBytes": 1000001, "headersOnly": true, "status": 413 },
+    { "name": "localized declared limit", "identity": "ordinary", "declaredBytes": 1000001, "headersOnly": true, "query": "?culture=sv-SE", "status": 413 },
+    { "name": "plain text declared limit", "identity": "ordinary", "declaredBytes": 1000001, "headersOnly": true, "accept": "text/plain", "status": 413 },
+    { "name": "null in decoded client label", "identity": "ordinary", "client": "bad\u0000client", "payload": "binary", "status": 400 },
+    { "name": "write after rejected requests", "identity": "ordinary", "payload": "unicode", "status": 200 }
+  ]
+}

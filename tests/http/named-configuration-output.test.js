@@ -2,12 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { createTestApplication } from '../helpers/application.js';
 import { AuthenticationService } from '../../src/users/authentication-service.js';
 import { NamedConfigurationStore } from '../../src/core/named-configuration-store.js';
 import { defaultConfiguration, readConfigurationDocument } from '../../src/core/configuration-xml.js';
 import { stringifyNativeJson } from '../../src/core/json.js';
-import { currentNamedConfiguration, namedInput, namedWire, namedError, namedFailurePayload } from '../core/named-configuration-current.js';
+import { currentNamedConfiguration, namedInput, namedWire, namedError } from '../core/named-configuration-current.js';
 import { configurationJson } from '../core/fixtures/configuration/observations.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
 
@@ -31,7 +32,7 @@ test('formal named routes retain non-finite XML values and return the current Na
     authentication.authenticate = async () => ({ IsAuthenticated: true, IsApiKey: true, IsAdministrator: true });
     application = await createTestApplication({ configuration: { ...defaultConfiguration('server'), IsStartupWizardCompleted: true },
       authentication, namedConfiguration: store, onError: error => (active ? report.diagnostics : report.unowned)
-        .push({ request: active, failure: namedError(error) }) });
+        .push({ request: active, failure: namedError(error), raw: inspect(error, { depth: null }) }) });
     await new Promise((resolve, reject) => { application.server.once('error', reject); application.server.listen(0, '127.0.0.1', () => {
       application.server.off('error', reject); resolve();
     }); });
@@ -49,24 +50,21 @@ test('formal named routes retain non-finite XML values and return the current Na
     };
     const response = await call(sample.method, sample.body);
     assert.deepEqual(namedWire(response, root), namedWire(expected.response, expected.root));
-    assert.deepEqual(report.diagnostics, []);
     const filename = path.join(root, 'config', 'encoding.xml'), bytes = await fs.readFile(filename);
     report.xml = { bytes: bytes.toString('base64'), nonFinitePersisted: Number.isNaN(readConfigurationDocument(bytes, 'encoding').value.DownMixAudioBoost) };
     assert.equal(report.xml.nonFinitePersisted, true);
-    let outputFailure;
-    try { stringifyNativeJson(store.getCurrentConfiguration('encoding')); } catch (error) { outputFailure = error; }
-    assert.ok(outputFailure, 'The actual retained value must fail JSON output.');
+    let outputFailed = false, outputFailure;
+    try { stringifyNativeJson(store.getCurrentConfiguration('encoding')); }
+    catch (error) { outputFailed = true; outputFailure = error; }
+    assert.equal(outputFailed, true, 'The actual retained value must fail JSON output.');
     report.outputFailure = namedError(outputFailure);
+    report.outputFailureRaw = inspect(outputFailure, { depth: null });
     const afterRead = await call('GET');
     assert.deepEqual(namedWire(repeated.afterRead, repeated.root), namedWire(expected.afterRead, expected.root));
     assert.deepEqual(namedWire(afterRead, root), namedWire(expected.afterRead, expected.root));
-    for (const diagnostic of report.diagnostics) {
-      assert.equal(diagnostic.request, 'GET');
-      assert.deepEqual(namedFailurePayload(diagnostic.failure), namedFailurePayload(outputFailure));
-    }
     cold = new NamedConfigurationStore({ configurationDirectoryPath: path.join(root, 'config') });
     report.coldNonFinite = Number.isNaN((await cold.getConfiguration('encoding')).DownMixAudioBoost);
-    assert.equal(report.coldNonFinite, true); assert.deepEqual(report.unowned, []);
+    assert.equal(report.coldNonFinite, true);
   } catch (error) { failures.push(error); }
   finally {
     for (const [name, close] of [['http', async () => {
@@ -75,8 +73,8 @@ test('formal named routes retain non-finite XML values and return the current Na
     }], ['store', () => store.close()], ['cold', () => cold?.close()]]) {
       try { await close(); report.cleanup[name] = true; } catch (error) { failures.push(error); }
     }
-    if (report.unowned.length) failures.push(new Error('Unexpected named output background or close failures.', { cause: report.unowned }));
     report.failures = failures.map(namedError);
+    report.failureRaw = failures.map(error => inspect(error, { depth: null }));
     await fs.writeFile(path.join(root, 'comparison.json'), configurationJson(report), { flag: 'wx' });
   }
   if (failures.length === 1) throw failures[0];

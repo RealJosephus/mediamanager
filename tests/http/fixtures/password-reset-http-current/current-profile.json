@@ -47,6 +47,12 @@
       "filename": "observations.js",
       "sha256": "aa94df603ad9818a0667c0bb4eb0c46d0f38d686defff872fa369a54a000a4d0",
       "bytes": 6075,
+      "role": "snapshotAndPinProofs"
+    },
+    {
+      "filename": "../../password-reset-current-observations.js",
+      "sha256": "bf500ca1212864f083b62b090b58c27b5a9289d1d0d44f8add690970b93c5a1a",
+      "bytes": 1761,
       "role": "functionalProjection"
     },
     {

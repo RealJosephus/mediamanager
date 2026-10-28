@@ -2,6 +2,7 @@ import { testFileSystem } from '../storage/plugin-files.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { MIMEType } from 'node:util';
 import { mkdtemp, mkdir, readFile, writeFile, readdir, rm, chmod, utimes } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -9,7 +10,9 @@ import { BrandingConfigurationStore, defaultBrandingOptions, readBrandingOptions
 import { BrandingService } from '../../src/branding/service.js';
 import { ImageService } from '../../src/images/service.js';
 import { createTestApplication } from '../helpers/application.js';
-import { dateTicks, MIN_DATE } from '../../src/library/records.js';
+import { MIN_DATE } from '../../src/library/records.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectBrandingHttpBody, projectBrandingFixtureState } from '../helpers/branding-fixture-projection.js';
 import { rawHttp } from '../images/http-client.js';
 import { imageHeaderProjection } from '../images/header-projection.js';
 import { imageUploadExtension, decodeBase64Stream } from '../../src/images/upload.js';
@@ -17,21 +20,8 @@ import { escapeXml } from '../../src/core/xml.js';
 
 const fixture = new URL('./fixtures/branding/', import.meta.url);
 const [nativeBytes, inputBytes, proofBytes] = await Promise.all(['native.json', 'input.json', 'provenance.json'].map(name => readFile(new URL(name, fixture))));
-const native = JSON.parse(nativeBytes), input = JSON.parse(inputBytes), proof = JSON.parse(proofBytes);
+const native = parseLosslessJson(nativeBytes.toString('utf8')), input = JSON.parse(inputBytes), proof = JSON.parse(proofBytes);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const noTrace = value => Array.isArray(value) ? value.map(noTrace) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([name]) => name !== 'traceId').map(([name, entry]) => [name, noTrace(entry)])) : value;
-function project(value, root) {
-  if (typeof value === 'string') {
-    if (value === root) return '{state}';
-    if (!value.startsWith(root + '/') && !value.startsWith(root + '\\')) return value;
-    return '{state}/' + value.slice(root.length + 1).replaceAll('\\', '/');
-  }
-  if (Array.isArray(value)) return value.map(entry => project(entry, root));
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, entry]) =>
-    [key, key === 'dateModified' ? String(dateTicks(entry)) : project(entry, root)]));
-  return value;
-}
 
 test('branding recordings bind actual MVC, named configuration, XML, files, MIME and Base64 transforms', async () => {
   assert.equal(hash(nativeBytes), proof.nativeSha256); assert.equal(hash(inputBytes), proof.inputSha256);
@@ -112,15 +102,18 @@ test('branding HTTP matches native actions, model binding, files and failure com
       const headers = Object.fromEntries(Object.keys(expected.headers).map(name => [name, actual.headers[name]]));
       assert.deepEqual(imageHeaderProjection(headers), imageHeaderProjection(expected.headers));
       assert.equal(actual.headers['transfermode.dlna.org'], undefined); assert.equal(actual.headers['realtimeinfo.dlna.org'], undefined);
-      if (expected.jsonBody != null) assert.deepEqual(project(noTrace(JSON.parse(actual.bytes)), directory), project(noTrace(expected.jsonBody), referenceDirectory));
+      const camel = new MIMEType(expected.headers['content-type'] ?? 'application/json').params.get('profile') === 'CamelCase';
+      if (expected.jsonBody != null) assert.deepEqual(
+        projectBrandingHttpBody(parseLosslessJson(actual.bytes.toString('utf8')), { status: actual.status, route: sample.path, root: directory, camel }),
+        projectBrandingHttpBody(expected.jsonBody, { status: expected.status, route: sample.path, root: referenceDirectory, camel }));
       else assert.deepEqual(actual.bytes, Buffer.from(expected.body, 'base64'));
       let disk = null; try { disk = readBrandingOptions(await readFile(filename)); } catch { }
       const files = [];
       for (const entry of await readdir(dataPath, { withFileTypes: true }).catch(error => { if (error.code === 'ENOENT') return []; throw error; }))
         if (entry.isFile()) files.push({ name: entry.name, bytes: (await readFile(path.join(dataPath, entry.name))).toString('base64') });
       files.sort((left, right) => left.name < right.name ? -1 : left.name > right.name ? 1 : 0);
-      assert.deepEqual(project({ live: store.options, disk, calls, files }, directory),
-        project({ live: expected.live, disk: expected.disk, calls: expected.calls, files: expected.files }, referenceDirectory));
+      assert.deepEqual(projectBrandingFixtureState({ live: store.options, disk, calls, files }, directory),
+        projectBrandingFixtureState({ live: expected.live, disk: expected.disk, calls: expected.calls, files: expected.files }, referenceDirectory));
     } finally {
       await branding.close(); await images.close(); await new Promise(resolve => application.server.close(resolve));
       if (sample.readOnlyConfig) await chmod(filename, 0o666);

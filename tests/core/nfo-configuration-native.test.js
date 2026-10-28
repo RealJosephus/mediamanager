@@ -53,7 +53,7 @@ test('NFO named current owner matches actual factory/events/aliases, keeps origi
       const reference = expected[index]; assert.deepEqual(projection(repeated[index]), projection(reference));
       const root = path.join(captured.output, 'node-folder-' + index); await fs.mkdir(root);
       const storage = await localStateStorage(root), directory = path.join(root, 'season'), target = path.join(directory, 'season.nfo'), spoolRoot = path.join(root, 'spool');
-      let actual, primary;
+      let actual, primaryFailed = false, primary;
       try {
         await storage.fileSystem.mkdir(directory); await storage.fileSystem.mkdir(spoolRoot);
         const original = Buffer.from(scenario.previousFolderNfo); await storage.fileSystem.writeFile(target, original);
@@ -61,36 +61,36 @@ test('NFO named current owner matches actual factory/events/aliases, keeps origi
         const plugin = createNfoPlugin({ vfs: storage.fileSystem.vfs, fileSystem: storage.fileSystem, spoolRoot, getConfiguration: () => configuration });
         const item = { Id: '20000000-0000-0000-0000-000000000004', Type: 'Season', Path: directory, Name: 'Folder fixture', IsFolder: true,
           IsFileProtocol: true, SupportsLocalMetadata: true, DateCreated: '2025-01-02T03:04:05Z', IndexNumber: 1 };
-        let failure = null;
+        let failed = false, failure = null, failurePayload;
         try { await plugin.save(item, { accessPath: '/state/season', people: [], images: [], mediaStreams: [],
           getUserData: async (current, userId) => {
             const exists = scenario.before.UserId === userId || scenario.after.UserId === userId;
             if (!exists || current.IsFolder) return null;
             throw new Error('Folder play state is unavailable.');
           } }); }
-        catch (error) { failure = namedError(error); }
+        catch (error) { failed = true; failure = namedError(error); failurePayload = namedFailurePayload(error); }
         const bytes = await storage.fileSystem.readFile(target), xml = readXml(bytes.toString());
         const nfo = { premiered: textOf(xml, 'premiered') ?? null, aired: textOf(xml, 'aired') ?? null,
           playcount: textOf(xml, 'playcount') ?? null, watched: textOf(xml, 'watched') ?? null,
           position: child(xml, 'resume') ? textOf(child(xml, 'resume'), 'position') ?? null : null,
           total: child(xml, 'resume') ? textOf(child(xml, 'resume'), 'total') ?? null : null,
           poster: child(xml, 'art') ? textOf(child(xml, 'art'), 'poster') ?? null : null };
-        actual = { name: sample.name, failed: failure !== null, failure, beforeBase64: original.toString('base64'), afterBase64: bytes.toString('base64'), title: textOf(xml, 'title'), nfo };
+        actual = { name: sample.name, failed, failure, failurePayload, beforeBase64: original.toString('base64'), afterBase64: bytes.toString('base64'), title: textOf(xml, 'title'), nfo };
         report.folderCases.push({ actual, reference, repeat: repeated[index] });
         assert.deepEqual(projection(actual), projection(reference), sample.name);
         if (reference.failed) {
           assert.deepEqual(bytes, original, 'An invalid configured UserId fails before replacing the actual folder NFO.');
-          let expectedFailure; try { nativeGuid(sample.userId); } catch (error) { expectedFailure = namedError(error); }
-          assert.deepEqual(namedFailurePayload(failure.cause), namedFailurePayload(expectedFailure));
-          assert.deepEqual(namedFailurePayload(failure), { message: 'NFO user data configuration is invalid.', cause: namedFailurePayload(expectedFailure) });
+          let expectedFailure; try { nativeGuid(sample.userId); } catch (error) { expectedFailure = namedFailurePayload(error); }
+          assert.deepEqual(failurePayload.cause, expectedFailure);
+          assert.deepEqual(failurePayload, { message: 'NFO user data configuration is invalid.', cause: expectedFailure });
           assert.equal(failure.status ?? failure.statusCode ?? 500, 500, 'An internal NFO configuration save error retains server-error classification.');
         }
         assert.deepEqual(await fs.readdir(spoolRoot), [], 'The actual prepared XML spool closes on success and failure.');
         const handle = await fs.open(target, 'r+'); await handle.close();
-      } catch (error) { primary = error; throw error; }
+      } catch (error) { primaryFailed = true; primary = error; throw error; }
       finally {
         try { await storage.close(); }
-        catch (cleanup) { throw new AggregateError(primary ? [primary, cleanup] : [cleanup], 'Folder NFO resources failed to close.', { cause: primary ?? cleanup }); }
+        catch (cleanup) { throw new AggregateError(primaryFailed ? [primary, cleanup] : [cleanup], 'Folder NFO resources failed to close.', { cause: primaryFailed ? primary : cleanup }); }
       }
     }
   } catch (error) { report.failures.push(namedError(error)); throw error; }

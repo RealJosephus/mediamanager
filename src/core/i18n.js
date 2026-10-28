@@ -1,6 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { readFile } from 'node:fs/promises';
 import { compositeFields, formatComposite } from './composite-format.js';
+import requestCultures from './resources/request-cultures.json' with { type: 'json' };
 
 const canonical = locale => String(locale ?? '').replaceAll('_', '-').toLowerCase();
 const nonempty = value => value !== null && value !== undefined && value !== '';
@@ -42,10 +43,15 @@ export class Localization {
     const supported = new Map(this.supportedCultures.map(value => [canonical(value), value]));
     const match = values => {
       for (let value of values) {
+        // Query duplicates are one comma-joined candidate. Truncating that
+        // combined value must not manufacture a valid language parent.
+        if (value.includes(',')) continue;
         for (let depth = 0; value && depth <= 5; depth++) {
           const key = String(value).toLowerCase();
           if (supported.has(key)) return supported.get(key);
-          const separator = value.lastIndexOf('-');
+          // Underscore request aliases fall through their parent; unlike
+          // resource names, they do not directly select a normalized region.
+          const separator = Math.max(value.lastIndexOf('-'), value.lastIndexOf('_'));
           value = separator < 0 ? '' : value.slice(0, separator);
         }
       }
@@ -138,8 +144,8 @@ export class Localization {
   }
 }
 
-export async function createCoreLocalization(options) {
-  const localization = new Localization(options);
+export async function createCoreLocalization(options = {}) {
+  const localization = new Localization({ ...options, supportedCultures: options.supportedCultures ?? requestCultures });
   const resources = JSON.parse(await readFile(new URL('./resources/en-US.json', import.meta.url), 'utf8'));
   localization.register('core', resources);
   return localization;

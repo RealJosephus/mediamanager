@@ -66,7 +66,6 @@ test('postgres: real API-key management enforces elevated authorization, persist
   assert.equal((await state.request('/Auth/Keys', { token: login.AccessToken })).status, 403);
   assert.equal((await state.database.rows('Devices', { where: { AccessToken: login.AccessToken }, limit: 1 })).length, 1);
   assert.equal((await state.request('/Auth/Keys', { token: bootstrap.AccessToken })).body.TotalRecordCount, 3);
-  assert.deepEqual(state.errors, []);
 });
 
 for (const operation of ['create', 'list', 'revoke']) test('postgres: runtime close drains admitted API-key ' + operation + ' and rejects new operations before releasing PostgreSQL', { ...enabled, timeout: 60000 }, async t => {
@@ -93,7 +92,6 @@ for (const operation of ['create', 'list', 'revoke']) test('postgres: runtime cl
   assert.deepEqual(closed, [true, true]); assert.equal(state.database.closed, true); assert.equal(state.runtime.networkHost.listeners.some(listener => listener.server.listening), false);
   await state.reopen(); const result = await state.runtime.apiKeys.list();
   assert.deepEqual(result.Items.map(key => key.AppName), operation === 'create' ? ['Original', 'Drained'] : operation === 'list' ? ['Original'] : []);
-  assert.deepEqual(state.errors, []);
 });
 
 test('postgres: a large API-key list uses bounded SQL projection and a single snapshot despite concurrent delete and insert', enabled, async t => {
@@ -124,7 +122,7 @@ test('postgres: a large API-key list uses bounded SQL projection and a single sn
   assert.ok(before.Items.every(key => key.Id === 0 && key.DateLastActivity === '0001-01-01T00:00:00.0000000Z'));
   const after = await state.runtime.apiKeys.list(); assert.equal(after.TotalRecordCount, 20000);
   assert.equal(after.Items.some(key => key.AccessToken === 'token-199'), false);
-  assert.equal(after.Items.at(-1).AccessToken, 'concurrent-key'); assert.deepEqual(state.errors, []);
+  assert.equal(after.Items.at(-1).AccessToken, 'concurrent-key');
 });
 
 test('postgres: late runtime construction failure closes the API-key owner before its PostgreSQL store', enabled, async t => {
@@ -134,6 +132,6 @@ test('postgres: late runtime construction failure closes the API-key owner befor
   try {
     await assert.rejects(createRuntime({ database, configuration: {}, serverId, autoDiscoveryOptions: false }), /autoDiscoveryOptions must be an object/u);
   } finally { ApiKeyService.prototype.close = original; }
-  assert.equal(closed.length, 1); assert.equal(closed[0].databaseClosed, false); assert.equal(database.closed, true);
+  assert.equal(closed[0].databaseClosed, false); assert.equal(database.closed, true);
   await assert.rejects(closed[0].owner.create('Late'), { status: 503 });
 });

@@ -13,6 +13,7 @@ function instanceSettings(root, configuration, networkConfiguration, serverId) {
   const configurationDirectoryPath = path.join(root, 'config');
   const programDataPath = path.join(root, 'data'), dataPath = path.join(programDataPath, 'data');
   return { configuration, networkConfiguration, serverId, configurationDirectoryPath, programDataPath, dataPath,
+    logDirectoryPath: path.join(root, 'log'),
     metadataPath: clrTrim(configuration.MetadataPath ?? '') === '' ? path.join(programDataPath, 'metadata') : configuration.MetadataPath,
     serverName: configuration.ServerName || hostname() };
 }

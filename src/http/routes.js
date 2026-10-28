@@ -18,6 +18,10 @@ import { parseQuery } from '../library/query.js';
 import { embyTextResponse } from './client-protocol.js';
 import { controllerItemFields } from './item-fields.js';
 import { registerChannelItemRoutes } from './channel-item-routes.js';
+import { registerYearRoutes } from './year-routes.js';
+import { registerTrailerRoutes } from './trailer-routes.js';
+import { registerSuggestionsRoutes } from './suggestions-routes.js';
+import { publicItemQueryEntries } from './item-query-parameters.js';
 
 const itemSortNames = ['Default', 'AiredEpisodeOrder', 'Album', 'AlbumArtist', 'Artist', 'DateCreated',
   'OfficialRating', 'DatePlayed', 'PremiereDate', 'StartDate', 'SortName', 'Name', 'Random', 'Runtime',
@@ -64,7 +68,9 @@ export function registerDomainRoutes(add, services) {
     if (fields.length) result.set('fields', fields.join(','));
     return result;
   };
-  const itemQuery = context => bindItemFields(context, [...context.query].filter(([name]) => {
+  const itemQuery = context => bindItemFields(context, publicItemQueryEntries(context.query, {
+    userScoped: Boolean(context.params.userId), embyClient: context.embyClient,
+  }).filter(([name]) => {
     const key = name.toLowerCase();
     // These are InternalItemsQuery-only properties and are not controller
     // parameters, so ASP.NET ignores them instead of exposing a public filter.
@@ -82,12 +88,19 @@ export function registerDomainRoutes(add, services) {
     if (!user && (required || id && !/^0{32}$/.test(id))) throw new HttpResult(404);
     return user;
   }
-  async function optionalRequestUser(context) {
+  function optionalRequestUserId(context) {
     let id = guid(context, 'userId', context.auth.UserId);
     if (/^0{32}$/.test(id ?? '')) id = context.auth.UserId;
     if (id && id !== context.auth.UserId && !context.auth.IsAdministrator) throw httpError(403, 'Forbidden');
+    return id;
+  }
+  async function optionalRequestUser(context) {
+    const id = optionalRequestUserId(context);
     return id && !/^0{32}$/.test(id) ? await users.getUser(id) : null;
   }
+  registerYearRoutes(add, services, { optionalRequestUserId, sortNames: itemSortNames });
+  registerTrailerRoutes(add);
+  registerSuggestionsRoutes(add, services);
   const controllerDtoOptions = (context, { userData = true } = {}) => {
     const enableImageTypes = commaEnums(context, 'enableImageTypes', itemImageTypes).map(String);
     const requestedFields = commaEnums(context, 'fields', controllerItemFields).filter(value => typeof value === 'string');
@@ -528,7 +541,7 @@ export function registerDomainRoutes(add, services) {
         .filter(session => String(session.UserId ?? '').replaceAll('-', '').toLowerCase() === target)
         .map(session => session.NowPlayingItem?.Id).filter(Boolean);
     }
-    const resumeQuery = bindItemFields(context, [...context.query.entries()].filter(([name]) => name.toLowerCase() !== 'excludeactivesessions'));
+    const resumeQuery = bindItemFields(context, publicItemQueryEntries(context.query, { resumeItems: true }));
     return library.queryResumeItems(resumeQuery, { user, activeItemIds });
   });
   add('GET', ['/UserViews', '/Users/{userId}/Views'], async context => library.getViews({ includeHidden: boolean(context, 'includeHidden', false),
@@ -567,6 +580,25 @@ export function registerDomainRoutes(add, services) {
       if (!user) throw httpError(400, 'Error processing request.');
       return await library.getIntros(itemId, { user });
     }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
+  });
+  add('GET', '/Videos/{itemId}/AdditionalParts', async context => {
+    const itemId = guid(context, 'itemId');
+    let userId = guid(context, 'userId', context.auth.UserId);
+    if (/^0{32}$/.test(userId ?? '')) userId = context.auth.UserId;
+    const user = await optionalRequestUser(context);
+    try { return await library.getAdditionalParts(itemId, { user, userRoot: Boolean(userId && !/^0{32}$/.test(userId)) }); }
+    catch (error) { if (error.status === 404) return notFound(); throw error; }
+  });
+  add('GET', ['/Items/{itemId}/LocalTrailers', '/Users/{userId}/Items/{itemId}/LocalTrailers'], async context => {
+    const itemId = guid(context, 'itemId');
+    let userId = guid(context, 'userId', context.auth.UserId);
+    if (/^0{32}$/.test(userId ?? '')) userId = context.auth.UserId;
+    // UserLibraryController calls GetUserById even for an API key. Its empty
+    // user selector is an argument failure, while a missing real user is 404.
+    if (!userId || /^0{32}$/.test(userId)) throw httpError(400, 'Error processing request.');
+    const user = await optionalRequestUser(context);
+    try { return await library.getLocalTrailers(itemId, { user }); }
     catch (error) { if (error.status === 404) return notFound(); throw error; }
   });
   for (const [endpoint, kind] of [['ThemeSongs', 'songs'], ['ThemeVideos', 'videos'], ['ThemeMedia', 'all']]) {

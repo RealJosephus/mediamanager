@@ -7,7 +7,7 @@ import { describeFile } from '../../tools/validation/inventory.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../tools/validation/paths.js';
-import { projectResetObservation } from './fixtures/password-reset-http-current/observations.js';
+import { projectResetObservation } from './password-reset-current-observations.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];
 const profileUrl = new URL('./fixtures/password-reset-http-current/current-profile.json', import.meta.url);

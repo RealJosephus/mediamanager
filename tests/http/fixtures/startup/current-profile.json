@@ -21,6 +21,12 @@
       "sha256": "c5936b638687cacfe334bd87f44813ff790ff5cb0708e981702d45fbdcc94916"
     },
     {
+      "role": "functionalProjection",
+      "filename": "../../startup-current-observations.js",
+      "bytes": 1273,
+      "sha256": "4814cd0d8b509d1634a259cfae4eb2e247919c336b3a6dd7a93986d8aac77bf9"
+    },
+    {
       "role": "buildProperties",
       "filename": "../../../Directory.Build.props",
       "bytes": 780,

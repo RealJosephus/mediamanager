@@ -20,6 +20,12 @@ omits it after reload/copy; it is retained in these raw records for diagnosis.
 The metadata comparison uses persisted layout fields. Expanded ParentItem
 comparison covers identity, name, type and collection type.
 
+Fixture identities are rebound only in user routes, section IDs, declared
+parent/library references, move/delete IDs and copy target users. Names,
+TextInfo, unrelated Query values and unknown content stay literal. The layout
+consumer compares complete Content-Type parameters and checks the actual PG
+layout after saves, copy and cold reload for absence of contextual UserId.
+
 The recorded section item queries, paging/count differences, complete item DTOs
 and client UI remain separate consumers. A passing layout consumer alone does
 not establish complete HomeSections or Emby 4.10 compatibility.

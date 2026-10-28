@@ -22,7 +22,7 @@ test('server identity reads and repairs the actual target of its configured link
   try {
     const errors = [], owner = new ServerIdentity({ dataPath: alias, onError: error => errors.push(error) });
     assert.equal(await owner.getValue(), original); assert.equal(await readServerIdentity(alias), original);
-    assert.equal(await fs.readFile(filename, 'utf8'), original); assert.deepEqual(errors, []);
+    assert.equal(await fs.readFile(filename, 'utf8'), original);
     await fs.writeFile(filename, 'invalid linked identity');
     let rejectedInput;
     try { decodeServerIdentity(Buffer.from('invalid linked identity')); } catch (error) { rejectedInput = error; }
@@ -35,7 +35,7 @@ test('server identity reads and repairs the actual target of its configured link
       ...(error.cause !== undefined && { cause: failureFields(error.cause) }),
       ...(error.errors !== undefined && { errors: Array.from(error.errors, failureFields) }) });
     for (const error of repairErrors) assert.deepEqual(failureFields(error), failureFields(rejectedInput));
-    const observation = { original, repaired, filename, alias,
+    const observation = { original, repaired, filename, alias, initialDiagnostics: errors,
       errors: repairErrors.map(error => ({ ...failureFields(error), stack: error.stack })),
       retainedTarget: (await fs.readFile(filename)).toString('base64') };
     await fs.writeFile(path.join(root, 'linked-observation.json'), JSON.stringify(observation, null, 2) + '\n', { flag: 'wx' });

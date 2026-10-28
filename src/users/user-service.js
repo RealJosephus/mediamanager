@@ -106,10 +106,10 @@ export function userImageTag(image) {
 export class UserService extends EventEmitter {
   constructor(options = {}) {
     super();
-    const { store, serverId, isLocalNetwork = isDefaultLocalNetwork,
+    const { store, serverId, activities, isLocalNetwork = isDefaultLocalNetwork,
       now = () => new Date(), getDeviceCapabilities = () => ({ SupportsPersistentIdentifier: true }), getImageTag } = options;
     if (!store || !serverId) throw new TypeError('UserService requires a store and serverId.');
-    Object.assign(this, { store, serverId, isLocalNetwork, now, getDeviceCapabilities, getImageTag, configurationOptions: options });
+    Object.assign(this, { store, serverId, activities, isLocalNetwork, now, getDeviceCapabilities, getImageTag, configurationOptions: options });
   }
   get castReceiverApplications() { const { castReceiverApplications = [] } = this.configurationOptions; return castReceiverApplications; }
 
@@ -316,6 +316,7 @@ export class UserService extends EventEmitter {
       return this.loadUser(database, await insertUser(database, Name));
     });
     this.emit('UserCreated', user);
+    await this.activities?.userEvent('UserCreated', user);
     if (Password !== null) {
       await this.changePassword(user.Id, Password);
       return this.getUserDto(await this.getUser(user.Id));
@@ -451,6 +452,7 @@ export class UserService extends EventEmitter {
       return this.loadUser(database, id);
     });
     this.emit('UserPasswordChanged', user);
+    await this.activities?.userEvent('UserPasswordChanged', user);
   }
 
   async deleteUser(id) {
@@ -465,6 +467,7 @@ export class UserService extends EventEmitter {
       return user;
     });
     this.emit('UserDeleted', user);
+    await this.activities?.userEvent('UserDeleted', user);
   }
 
   async authenticateUser(username, password, { remoteEndPoint, isUserSession = true } = {}) {
@@ -505,7 +508,10 @@ export class UserService extends EventEmitter {
       return { user: null, locked: locked ? await this.loadUser(database, user.Id) : null };
     });
     if (result.error) throw result.error;
-    if (result.locked) this.emit('UserLockedOut', result.locked);
+    if (result.locked) {
+      this.emit('UserLockedOut', result.locked);
+      await this.activities?.userEvent('UserLockedOut', result.locked);
+    }
     return result.user;
   }
 }

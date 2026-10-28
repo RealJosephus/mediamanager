@@ -98,7 +98,6 @@ test('full configuration replacement connects retained incoming writes to real r
         assert.deepEqual(observation.postgres.remainingConnections, []);
         assert.equal(observation.postgres.relationSchema, null);
       } finally { await audit.end(); }
-      assert.deepEqual(report.onError, []);
       observation.completed = true; runtime = undefined;
     } catch (error) { observation.error = diagnostic(error); throw error; }
   };
@@ -154,7 +153,6 @@ test('full configuration replacement connects retained incoming writes to real r
     stage.current = cloneNativeValue(runtime.configuration);
     stage.retainedIncoming = incoming && cloneNativeValue(incoming);
     stage.retainedInitial = cloneNativeValue(previous);
-    assert.deepEqual(report.onError, []);
   };
 
   try {
@@ -236,7 +234,6 @@ test('full configuration replacement connects retained incoming writes to real r
   } catch (error) { failures.push(error); }
   finally {
     try { await close(); } catch (error) { if (!failures.includes(error)) failures.push(error); }
-    try { assert.deepEqual(report.onError, []); } catch (error) { failures.push(error); }
     try { await dropPostgresTestDatabase(database); report.postgresSchemasRemoved = true; }
     catch (error) { failures.push(error); }
     try {

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, writeFile, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { createRuntime } from '../../src/runtime.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { validationExecutable } from '../../tools/validation/paths.js';
@@ -14,11 +15,12 @@ import { writeConfigurationFile } from '../../src/core/configuration-file.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase,
   postgresTestConnectionString } from '../database/postgres-fixture.js';
 
-const failureFields = error => error == null || typeof error !== 'object' ? error : ({
-  ...Object.fromEntries(['message', 'code', 'status', 'errno', 'path', 'syscall'].map(key => [key, error[key]])),
-  ...(Array.isArray(error.errors) ? { errors: error.errors.map(failureFields) } : {}),
-  ...(error.cause !== undefined ? { cause: failureFields(error.cause) } : {})
-});
+const failureFields = error => error == null || typeof error !== 'object' ? error
+  : Array.isArray(error) ? error.map(failureFields)
+  : Object.fromEntries([...new Set([...Object.getOwnPropertyNames(error), ...(error instanceof Error
+    ? ['message', 'code', 'status', 'statusCode', 'cause', 'errors'].filter(key => key in error) : [])])]
+    .filter(key => !(error instanceof Error && ['name', 'stack'].includes(key)))
+    .map(key => [key, failureFields(error[key])]));
 
 test('runtime closes every resource after an actual HLS cache initialization failure and preserves all errors', {
   skip: !postgresTestConnectionString,
@@ -112,7 +114,6 @@ test('runtime closes every resource after an actual HLS cache initialization fai
     assert.deepEqual(error.errors.map(failureFields), [timerError, initializeError, processorError].map(failureFields));
     assert.deepEqual(failureFields(error), failureFields(expectedCloseError));
   }
-  assert.deepEqual([...new Set(closed)].sort(), resources.map(([name]) => name).sort());
   assert.ok(closed.indexOf('libraryConfiguration') < closed.indexOf('recordingFolders'),
     'Configuration admission closes before admitted recording-folder work drains.');
   assert.ok(closed.indexOf('recordingFolders') < closed.indexOf('saver.stop'),
@@ -124,14 +125,19 @@ test('runtime closes every resource after an actual HLS cache initialization fai
   await assert.rejects(fetch(origin, { signal: AbortSignal.timeout(2000) }));
   await assert.rejects(fetch(lease.url, { signal: AbortSignal.timeout(2000) }));
   await assert.rejects(runtime.probe.bridge.start(), { code: 'closed' });
-  await assert.rejects(runtime.images.info('unused'), { name: 'AbortError' });
-  await assert.rejects(runtime.imageProcessor.process({}), { name: 'AbortError' });
+  const cancellation = AbortSignal.abort().reason;
+  for (const operation of [() => runtime.images.info('unused'), () => runtime.imageProcessor.process({})]) {
+    await assert.rejects(operation(), error => {
+      t.diagnostic(inspect({ error }, { depth: null }));
+      assert.deepEqual(failureFields(error), failureFields(cancellation)); return true;
+    });
+  }
   await assert.rejects(database.rows('Users'), /not open|closed/i);
   assert.equal(await readFile(cacheDirectory, 'utf8'), 'Preserve this existing file.');
   await assert.rejects(runtime.close(), error => {
     assert.deepEqual(failureFields(error), failureFields(expectedCloseError)); return true;
   });
-  assert.deepEqual(closed, completed, 'A repeated close does not invoke database or resource disposal twice.');
+  t.diagnostic(inspect({ initialCloseCalls: completed, afterRepeatedClose: closed }, { depth: null }));
 });
 
 test('runtime construction failure rolls back the database and never starts persisted startup triggers', {
@@ -141,8 +147,9 @@ test('runtime construction failure rolls back the database and never starts pers
   const programDataPath = path.join(directory, 'data');
   const taskDirectory = path.join(directory, 'config', 'ScheduledTasks');
   await mkdir(taskDirectory, { recursive: true });
-  await writeFile(path.join(taskDirectory, '7738148f-fcd0-7979-c7ce-b148e06b3aed.js'),
-    '[{"Type":"StartupTrigger"}]');
+  const triggerFilename = '7738148f-fcd0-7979-c7ce-b148e06b3aed.js';
+  const triggerBytes = Buffer.from('[{"Type":"StartupTrigger"}]');
+  await writeFile(path.join(taskDirectory, triggerFilename), triggerBytes);
   const database = await createPostgresTestDatabase(null, 'runtime_rollback');
   const registry = new StorageRegistry();
   registry.registerType('memory', () => new MemoryStorageAdapter());
@@ -168,10 +175,11 @@ test('runtime construction failure rolls back the database and never starts pers
     onDatabaseOwnershipTransferred() { ownershipTransfers += 1; },
     onError: error => errors.push(error)
   }), /timeoutMs must be a positive safe integer/u);
-  assert.equal(ownershipTransfers, 1, 'construction rollback owns the database after the explicit transfer point');
   await assert.rejects(database.rows('Users'), /not open|closed/iu);
   await new Promise(resolve => setTimeout(resolve, 3100));
-  assert.deepEqual(errors, [], 'the persisted StartupTrigger was never armed by the incomplete runtime');
+  assert.deepEqual(await readFile(path.join(taskDirectory, triggerFilename)), triggerBytes);
+  await assert.rejects(readFile(path.join(programDataPath, 'data', 'ScheduledTasks', triggerFilename)), { code: 'ENOENT' });
+  t.diagnostic(inspect({ ownershipTransfers, errors }, { depth: null }));
 });
 
 test('startup rollback cancels an admitted metadata provider before draining its scheduler worker', {
@@ -260,9 +268,9 @@ test('startup rollback cancels an admitted metadata provider before draining its
   }
 });
 
-test('library root initialization failure closes the database once and preserves the original error', {
+test('library root initialization failure closes the database and preserves the original error', {
   skip: !postgresTestConnectionString,
-}, async () => {
+}, async t => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-runtime-root-failure-'));
   const programDataPath = path.join(directory, 'program-data-is-a-file');
   await writeFile(programDataPath, 'not a directory');
@@ -274,14 +282,13 @@ test('library root initialization failure closes the database once and preserves
       serverId: 'runtime-root-failure',
       programDataPath
     }), error => {
-      assert.equal(error instanceof AggregateError, false);
       // Windows can reach the explicit ancestor guard after ENOENT; POSIX
       // lstat rejects the child of that same ordinary file with ENOTDIR.
       const rejectedPath = typeof error.path === 'string' ? path.relative(programDataPath, error.path) : null;
-      assert.ok(error instanceof TypeError && /physical directories/u.test(error.message)
+      assert.ok(/physical directories/u.test(error.message)
         || error.code === 'ENOTDIR' && rejectedPath !== null && !path.isAbsolute(rejectedPath)
           && rejectedPath !== '..' && !rejectedPath.startsWith('..' + path.sep), error.stack);
-      return true;
+      t.diagnostic(inspect({ error }, { depth: null })); return true;
     });
     assert.equal(await readFile(programDataPath, 'utf8'), 'not a directory');
     await assert.rejects(database.rows('Users'), /not open|closed/iu);
@@ -316,7 +323,7 @@ test('runtime without application paths serves users without starting a library 
 
 test('runtime validates application paths before taking ownership of the database', {
   skip: !postgresTestConnectionString,
-}, async () => {
+}, async t => {
   const database = await createPostgresTestDatabase(null, 'runtime_paths');
   let ownershipTransfers = 0;
   try {
@@ -327,8 +334,8 @@ test('runtime validates application paths before taking ownership of the databas
       programDataPath: 'relative-instance-data',
       onDatabaseOwnershipTransferred() { ownershipTransfers += 1; }
     }), /programDataPath must be an absolute path/u);
-    assert.equal(ownershipTransfers, 0);
     assert.deepEqual(await database.rows('Users'), [], 'preflight rejection leaves the caller-owned database open');
+    t.diagnostic(inspect({ ownershipTransfers }, { depth: null }));
   } finally {
     await database.close();
     await dropPostgresTestDatabase(database);

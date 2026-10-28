@@ -17,7 +17,7 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { recordOracle } from '../../tools/validation/oracle.js';
 import { recordCurrentOracleOnce } from '../helpers/current-oracle.js';
-import { projectStartupObservation, startupTables } from './fixtures/startup/observations.js';
+import { projectStartupObservation, startupTables } from './startup-current-observations.js';
 import { localStateStorage } from '../helpers/local-state-storage.js';
 
 const fixture = new URL('./fixtures/startup/', import.meta.url);

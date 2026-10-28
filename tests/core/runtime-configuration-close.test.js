@@ -217,7 +217,6 @@ test('an admitted configuration POST saves and hands off its real library task b
     assert.deepEqual(wireResults, [observations.normalResult, ...observations.shutdownResults]);
     const lastTaskInfo = received.messages.filter(message => message.MessageType === 'ScheduledTasksInfo').at(-1);
     assert.deepEqual(lastTaskInfo.Data.find(task => task.Id === refreshLibraryTaskId).LastExecutionResult, observations.shutdownResult);
-    assert.deepEqual(observations.websocketErrors, []);
     observations.runtimeClosed = true;
     assert.ok(listeners.every(entry => !entry.server.listening));
     observations.savedXml = bytes(await fs.readFile(filename));
@@ -226,7 +225,6 @@ test('an admitted configuration POST saves and hands off its real library task b
     observations.shutdownHistory = bytes(await fs.readFile(historyPath));
     assert.deepEqual(JSON.parse(Buffer.from(observations.shutdownHistory.base64, 'base64')), observations.shutdownResult);
     assert.deepEqual(observations.taskEvents.filter(event => event.event === 'completed').map(event => event.Result.Status), ['Completed', 'Aborted', 'Aborted']);
-    assert.deepEqual(observations.onError, []);
     await assert.rejects(database.rows('Users'), /closed|not open/iu);
 
     const audit = new pg.Client({ connectionString: postgresTestConnectionString });

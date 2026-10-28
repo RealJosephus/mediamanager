@@ -14,7 +14,7 @@ const eventForces = { SessionStarted: true, SessionEnded: true, PlaybackStart: t
 const field = (value, name) => value[name];
 
 export function createWebSocketServer(options) {
-  const { authentication, sessions, tasks, userData, users, library, refreshes, localization, configuration = {}, baseUrl = '', onError = () => {}, runBackground = operation => operation(), clock = () => Date.now() } = options;
+  const { authentication, sessions, activities, tasks, userData, users, library, refreshes, localization, configuration = {}, baseUrl = '', onError = () => {}, runBackground = operation => operation(), clock = () => Date.now() } = options;
   const getNetworkConfiguration = options.getNetworkConfiguration ?? (() => ({ BaseUrl: baseUrl }));
   const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false, maxPayload: 0 });
   const connections = new Set();
@@ -23,6 +23,7 @@ export function createWebSocketServer(options) {
   const detaching = new Set();
   const upgradeRequests = new Set();
   const upgradeSockets = new Set();
+  const pendingSends = new Set();
   const controllers = new Map();
   let accepting = true;
   let closed = false;
@@ -30,6 +31,7 @@ export function createWebSocketServer(options) {
   let sessionTail = Promise.resolve();
   let taskInfoTail = Promise.resolve();
   let taskEndedTail = Promise.resolve();
+  let activityTail = Promise.resolve();
   const report = error => {
     try { void Promise.resolve(onError(error)).catch(() => {}); }
     catch { /* WebSocket error reporting cannot poison the shared send tail. */ }
@@ -59,7 +61,10 @@ export function createWebSocketServer(options) {
   const releaseConnection = connection => {
     const controller = connection.controller;
     if (!controller?.connections.delete(connection) || controller.connections.size) return;
-    requestControllerDetach(controller);
+    // Native disposes its controllers during server shutdown after removing
+    // their disconnect callbacks. SessionService owns the remaining sessions;
+    // only an ordinary client disconnect should publish SessionEnded here.
+    if (!closed) requestControllerDetach(controller);
   };
   const userDataChanges = userData ? new UserDataChangeNotifier({ userData, sessions, onError, runBackground }) : null;
   userDataChanges?.start();
@@ -72,23 +77,52 @@ export function createWebSocketServer(options) {
     ? new RefreshProgressNotifier({ refreshes, sessions, library, onError, runBackground, clock })
     : null;
   refreshProgress?.start();
-  const send = (connection, messageType, data, messageId = randomUUID().replaceAll('-', '')) => new Promise((resolve, reject) => {
-    if (connection.socket.readyState !== WebSocket.OPEN) { resolve(); return; }
-    connection.socket.send(stringifyNativeJson({ MessageType: messageType, MessageId: messageId, Data: data }), error => error ? reject(error) : resolve());
-  });
+  const send = (connection, messageType, data, messageId = randomUUID().replaceAll('-', ''), { signal } = {}) => {
+    if (signal?.aborted) return Promise.reject(signal.reason);
+    if (connection.socket.readyState !== WebSocket.OPEN) return Promise.resolve();
+    const writing = new Promise((resolve, reject) => {
+      connection.socket.send(stringifyNativeJson({ MessageType: messageType, MessageId: messageId, Data: data }), error => error ? reject(error) : resolve());
+    });
+    pendingSends.add(writing);
+    let cancelled = false;
+    void writing.then(() => pendingSends.delete(writing), error => {
+      pendingSends.delete(writing);
+      // A cancelled HTTP waiter does not own the still-active socket write.
+      // Keep its eventual transport failure visible to the transport owner.
+      if (cancelled) report(error);
+    });
+    if (!signal) return writing;
+    return new Promise((resolve, reject) => {
+      const abort = () => { cancelled = true; reject(signal.reason); };
+      signal.addEventListener('abort', abort, { once: true });
+      void writing.then(value => {
+        signal.removeEventListener('abort', abort); resolve(value);
+      }, error => { signal.removeEventListener('abort', abort); reject(error); });
+      if (signal.aborted) abort();
+    });
+  };
   const publishSessions = force => {
     sessionTail = sessionTail.then(async () => {
+      const deliveries = [], now = clock();
       for (const connection of connections) for (const subscription of [...connection.sessionSubscriptions]) {
-        if (connection.socket.readyState !== WebSocket.OPEN || !force && BigInt(clock() - subscription.lastSent) < subscription.interval) continue;
-        await localization.run(connection.locale, async () => {
+        if (connection.socket.readyState !== WebSocket.OPEN || !force && BigInt(now - subscription.lastSent) < subscription.interval) continue;
+        deliveries.push(Promise.resolve().then(() => localization.run(connection.locale, async () => {
           let data = await sessions.getSessions(connection.auth);
           if (connection.auth.User && !connection.auth.IsApiKey && !connection.auth.User.Policy.IsAdministrator) {
             data = data.filter(session => sameGuid(session.UserId, connection.auth.User.Id) || session.AdditionalUsers.some(user => sameGuid(user.UserId, connection.auth.User.Id)));
           }
           await send(connection, 'Sessions', data);
           subscription.lastSent = clock();
-        });
+        })).catch(error => {
+          const index = connection.sessionSubscriptions.indexOf(subscription);
+          if (index !== -1) connection.sessionSubscriptions.splice(index, 1);
+          report(error);
+        }));
       }
+      // Eligible subscribers share one batch. A slow socket must not prevent
+      // another subscriber from receiving that same state, and the next batch
+      // still waits for every real send in this batch to settle.
+      await Promise.all(deliveries);
     }).catch(report);
   };
   const listeners = Object.entries(eventForces).map(([name, force]) => {
@@ -116,6 +150,26 @@ export function createWebSocketServer(options) {
     if (typeof sessions.sendMessageToAdminSessions !== 'function') return;
     taskEndedTail = taskEndedTail.then(() => sessions.sendMessageToAdminSessions('ScheduledTaskEnded', result)).catch(report);
   };
+  const publishActivityLog = () => {
+    activityTail = activityTail.then(async () => {
+      const deliveries = [];
+      for (const connection of connections) for (const subscription of [...connection.activitySubscriptions]) {
+        if (connection.socket.readyState !== WebSocket.OPEN) continue;
+        deliveries.push(Promise.resolve().then(() => localization.run(connection.locale, async () => {
+          // The designated listener emits an empty array for each actual
+          // entry-created event. Its interval/delay are stored, not polled.
+          await send(connection, 'ActivityLogEntry', []);
+          subscription.lastSent = clock();
+        })).catch(error => {
+          const index = connection.activitySubscriptions.indexOf(subscription);
+          if (index !== -1) connection.activitySubscriptions.splice(index, 1);
+          report(error);
+        }));
+      }
+      await Promise.all(deliveries);
+    }).catch(report);
+  };
+  activities?.on('EntryCreated', publishActivityLog);
   const taskListeners = tasks?.on ? [
     ['started', () => publishTasks(true)],
     ['progress', () => publishTasks(false)],
@@ -145,13 +199,14 @@ export function createWebSocketServer(options) {
     const pathname = requestPath(request).slice(prefix.length);
     const embyClient = isEmbyClient(authentication, { request, auth, embyPath: /^\/(?:emby|mediabrowser)(?:\/|$)/iu.test(pathname) });
     const connection = { socket, auth, locale, embyClient, lastActivity: clock(), lastKeepAlive: clock(),
-      sessionSubscriptions: [], taskSubscriptions: [] };
+      sessionSubscriptions: [], taskSubscriptions: [], activitySubscriptions: [] };
     connections.add(connection);
     socket.on('error', report);
     socket.on('close', () => {
       connections.delete(connection);
       connection.sessionSubscriptions.length = 0;
       connection.taskSubscriptions.length = 0;
+      connection.activitySubscriptions.length = 0;
       releaseConnection(connection);
     });
     try {
@@ -166,9 +221,9 @@ export function createWebSocketServer(options) {
         controller = { connections: new Set(),
           isActive() { return [...this.connections].some(value => value.socket.readyState === WebSocket.OPEN); },
           get supportsMediaControl() { return this.isActive(); },
-          async sendMessage(type, id, data, { embyMessageType } = {}) {
+          async sendMessage(type, id, data, { embyMessageType, signal } = {}) {
             const target = [...this.connections].filter(value => value.socket.readyState === WebSocket.OPEN).sort((a, b) => b.lastActivity - a.lastActivity)[0];
-            if (target) await localization.run(target.locale, () => send(target, target.embyClient && embyMessageType || type, data, id));
+            if (target) await localization.run(target.locale, () => send(target, target.embyClient && embyMessageType || type, data, id, { signal }));
           }
         };
         controllers.set(session.Id, controller);
@@ -195,6 +250,14 @@ export function createWebSocketServer(options) {
             const delay = int64(values[0]?.trim()), interval = int64(values[1]?.trim());
             connection.taskSubscriptions.push({ delay, interval, lastSent: 0 });
           } else if (type === 'ScheduledTasksInfoStop') connection.taskSubscriptions.shift();
+          else if (type === 'ActivityLogEntryStart') {
+            if (!connection.auth.IsApiKey && !connection.auth.User?.Policy?.IsAdministrator) {
+              throw Object.assign(new Error('Only admin users can retrieve the activity log.'), { status: 403 });
+            }
+            const values = String(field(message, 'Data')).split(',');
+            const delay = int64(values[0]?.trim()), interval = int64(values[1]?.trim());
+            connection.activitySubscriptions.push({ delay, interval, lastSent: 0 });
+          } else if (type === 'ActivityLogEntryStop') connection.activitySubscriptions.shift();
         } catch (error) { report(error); }
       }));
       await send(connection, 'ForceKeepAlive', 60);
@@ -265,6 +328,7 @@ export function createWebSocketServer(options) {
         for (const [name, listener] of listeners) sessions.off(name, listener);
         for (const [name, listener] of taskListeners) tasks.off?.(name, listener);
         sessions.off('SessionEnded', ended);
+        activities?.off('EntryCreated', publishActivityLog);
         const closeNotifier = notifier => Promise.resolve().then(() => notifier?.close()).catch(report);
         const userDataClosed = closeNotifier(userDataChanges);
         const libraryClosed = closeNotifier(libraryChanges);
@@ -287,6 +351,7 @@ export function createWebSocketServer(options) {
             sessionTail,
             taskInfoTail,
             taskEndedTail,
+            activityTail,
             ...upgradeRequests,
             ...connecting,
             userDataClosed,
@@ -299,6 +364,7 @@ export function createWebSocketServer(options) {
           if (connection.socket.readyState !== WebSocket.CLOSED) connection.socket.close(1000, 'System Shutdown');
         }
         await new Promise(resolve => wss.close(resolve));
+        await Promise.allSettled([...pendingSends]);
         await Promise.race([Promise.all([...detaching]), drainDeadline.promise]);
         clearTimeout(timeout);
       })().then(completion.resolve, completion.reject);

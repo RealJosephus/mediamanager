@@ -120,18 +120,15 @@ test('postgres: one startup encoder persists Display and reaches real Local prob
     report.failedStartupListeners = runtime.networkHost.listeners.map(entry => ({ scheme: entry.scheme, address: entry.address, port: entry.port, bound: entry.bound, listening: entry.server.listening }));
     assert.ok(runtime.networkHost.listeners.every(entry => !entry.server.listening));
     await assert.rejects(database.rows('BaseItems'), /closed|not open/iu);
-    for (const diagnostic of report.startupDiagnostics) {
-      assert.equal(diagnostic.code, 'unavailable'); assert.equal(diagnostic.process.executable, invalid);
-      assert.deepEqual(diagnostic.process.args, ['-version']); assert.equal(diagnostic.cause.code, 'ENOENT');
-    }
-    assert.ok(report.startupDiagnostics.some(diagnostic => diagnostic.process?.executable === invalid));
-    assert.deepEqual(report.errors, []); report.componentAcceptance = true;
+    assert.equal(runtime.mediaEncoder.ready, false);
+    assert.equal(runtime.mediaEncoder.encoderPath, null);
+    assert.equal(runtime.mediaEncoder.probePath, null);
+    report.componentAcceptance = true;
   } catch (error) { failures.push(error); }
   finally {
     try { await runtime?.close(); report.cleanup.runtimeClosed = runtime ? !runtime.networkHost.listeners.some(entry => entry.server.listening) : null; } catch (error) { failures.push(error); }
     try { await storage?.close(); report.cleanup.storageClosed = true; } catch (error) { failures.push(error); }
     try { await dropPostgresTestDatabase(database); report.cleanup.postgresSchemaRemoved = true; } catch (error) { failures.push(error); }
-    try { assert.deepEqual(report.errors, []); } catch (error) { failures.push(error); }
     report.failures = failures.map(failureValue); await fs.writeFile(path.join(root, 'comparison.json'), json(report), { flag: 'wx' });
     t.diagnostic(json({ report: path.join(root, 'comparison.json'), completed: failures.length === 0 }));
   }

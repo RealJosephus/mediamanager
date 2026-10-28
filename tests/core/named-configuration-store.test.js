@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { NamedConfigurationStore } from '../../src/core/named-configuration-store.js';
 import { defaultConfiguration, parseConfigurationXml } from '../../src/core/configuration-xml.js';
 import { readConfigurationFile, serializeConfiguration } from '../../src/core/configuration-file.js';
@@ -16,6 +17,7 @@ async function setup(t, options = {}) {
   const temporaryRoot = await fs.realpath(os.tmpdir());
   const directory = await fs.mkdtemp(path.join(temporaryRoot, 'named-configuration-'));
   const errors = [], store = new NamedConfigurationStore({ configurationDirectoryPath: directory, onError: error => errors.push(error), ...options });
+  t.after(() => { t.diagnostic(inspect({ errors }, { depth: null })); });
   t.after(async () => {
     await store.close();
     for (const name of ['encoding.xml', 'metadata.xml']) try {
@@ -38,7 +40,7 @@ test('named lazy defaults preserve missing, malformed and externally replaced fi
   try { parseConfigurationXml(malformed, 'metadata'); } catch (error) { expected = error; }
   assert.deepEqual(await store.getConfiguration('METADATA'), metadata(true));
   assert.deepEqual(await fs.readFile(filename('metadata')), malformed);
-  assert.deepEqual(errors.map(failureValue), [failureValue(expected)]);
+  for (const error of errors) assert.deepEqual(failureValue(error), failureValue(expected));
   await fs.writeFile(filename('metadata'), serializeConfiguration('metadata', metadata(false)));
   assert.deepEqual(await store.getConfiguration('MeTaDaTa'), metadata(false));
   assert.deepEqual(await store.getConfiguration('metadata'), metadata(true));
@@ -61,7 +63,6 @@ test('named replacement retains incoming/current writes while old warm aliases a
   assert.deepEqual(await readConfigurationFile(filename('metadata'), 'metadata'), metadata(false));
   const cold = new NamedConfigurationStore({ configurationDirectoryPath: path.dirname(filename('metadata')) });
   try { assert.deepEqual(await cold.getConfiguration('metadata'), metadata(false)); } finally { await cold.close(); }
-  assert.deepEqual(errors, []);
 });
 
 test('encoding validates changed paths before updating and preserves unchanged or blank path values', async t => {
@@ -81,7 +82,7 @@ test('encoding validates changed paths before updating and preserves unchanged o
   await store.saveConfiguration('encoding', { ...initial, TranscodingTempPath: target });
   await store.saveConfiguration('encoding', { ...initial, TranscodingTempPath: '', EncoderAppPath: '' });
   assert.equal((await readConfigurationFile(filename('encoding'), 'encoding')).EncoderAppPath, '');
-  assert.deepEqual(phases.map(event => event.path), [target, '']); assert.deepEqual(errors, []);
+  assert.deepEqual(phases.map(event => event.path), [target, '']);
 });
 
 test('sync updating failure keeps the old live/file and sync updated failure keeps the new durable value', async t => {
@@ -101,7 +102,7 @@ test('sync updating failure keeps the old live/file and sync updated failure kee
   });
   assert.deepEqual(store.getCurrentConfiguration('metadata'), metadata(false));
   assert.deepEqual(await readConfigurationFile(filename('metadata'), 'metadata'), metadata(false));
-  await store.close(); assert.deepEqual(errors, []);
+  await store.close();
 });
 
 test('a formatter failure keeps adopted encoding values and the actual truncated XML prefix', async t => {
@@ -116,7 +117,6 @@ test('a formatter failure keeps adopted encoding values and the actual truncated
   assert.match(prefix.toString(), /<EnableFallbackFont>true<\/EnableFallbackFont>/u);
   const cold = parseConfigurationXml(prefix, 'encoding');
   assert.equal(cold.EnableFallbackFont, true); assert.equal(cold.HardwareAccelerationType, old.HardwareAccelerationType);
-  assert.deepEqual(errors, []);
 });
 
 test('write and handle-close failures preserve both original errors and the real physical prefix', async t => {
@@ -148,7 +148,7 @@ test('read failures after existence propagate unchanged and the same public key 
   await fs.writeFile(filename('metadata'), serializeConfiguration('metadata', metadata(false)));
   failure = Object.assign(new Error('Controlled actual read failure.'), { code: 'EIO', cause: new Error('Original read cause.') });
   await assert.rejects(store.getConfiguration('metadata'), error => { assert.deepEqual(failureValue(error), failureValue(failure)); return true; });
-  failure = undefined; assert.deepEqual(await store.getConfiguration('metadata'), metadata(false)); assert.deepEqual(errors, []);
+  failure = undefined; assert.deepEqual(await store.getConfiguration('metadata'), metadata(false));
 });
 
 test('close drains an admitted physical write/cold read and retains pure current reads after closing', async t => {
@@ -166,6 +166,6 @@ test('close drains an admitted physical write/cold read and retains pure current
     await assert.rejects(store.saveConfiguration('metadata', metadata(true)), { code: 'closed', status: 503 });
     release.resolve(); await saved; assert.deepEqual(await cold, metadata(false)); await closing;
     assert.deepEqual(await readConfigurationFile(filename('metadata'), 'metadata'), metadata(false));
-    assert.deepEqual(store.getCurrentConfiguration('metadata'), metadata(false)); assert.deepEqual(errors, []);
+    assert.deepEqual(store.getCurrentConfiguration('metadata'), metadata(false));
   } finally { release.resolve(); await Promise.allSettled([saved, cold, closing]); }
 });

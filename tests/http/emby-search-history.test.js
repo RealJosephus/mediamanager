@@ -17,7 +17,7 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConne
 
 const bytes = await readFile(new URL('./fixtures/emby-search-history/reference.json', import.meta.url));
 assert.equal(createHash('sha256').update(bytes).digest('hex'), 'c0be200ceac8b5d0ed85d22a2d31af8e777cfeb50533c31ed28613e988b62d5a');
-const reference = JSON.parse(bytes), native = label => reference.records.find(record => record.label === label);
+const reference = JSON.parse(bytes);
 const mediaNames = ['Controlled audio A', 'Controlled audio B', 'Controlled audio C'];
 const item = (Id, type, Name, extra = {}) => postgresTestRow('BaseItems', {
   Id, Type: `MediaBrowser.Controller.Entities.${type === 'Audio' ? 'Audio.Audio' : type}`,
@@ -25,17 +25,18 @@ const item = (Id, type, Name, extra = {}) => postgresTestRow('BaseItems', {
   IsFolder: type !== 'Audio', MediaType: type === 'Audio' ? 'Audio' : 'Unknown', Data: '{}', ...extra,
 });
 
-test('Emby search history uses the current user and SQL filters, survives copying and restart, and leaves playback state intact', {
-  skip: !postgresTestConnectionString, timeout: 90000,
-}, async t => {
-  for (const source of reference.sources) for (const key of ['referenceUnchanged', 'runtimeUnchanged', 'processesStopped', 'instanceRemoved']) assert.equal(source[key], true);
+async function setupSearchHistoryScenario(t, scenario) {
+  const sources = reference.sources.filter(source => source.kind === scenario);
+  assert.equal(sources.length, 1);
+  for (const source of sources) for (const key of ['referenceUnchanged', 'runtimeUnchanged', 'processesStopped', 'instanceRemoved']) assert.equal(source[key], true);
+  const native = label => reference.records.find(record => record.scenario === scenario && record.label === label);
   const output = validationOutputRoot(); await mkdir(output, { recursive: true });
   const evidence = await mkdtemp(path.join(output, 'emby-search-history-'));
   const secrets = new Set([postgresTestConnectionString].filter(Boolean)), queryOwners = [];
   const journal = await createObservationJournal(path.join(evidence, 'observations.jsonl'), { secrets,
     scope: 'Actual PostgreSQL statements, public HTTP bodies, history rows and resource progress; diagnostic timing and query counts are not acceptance gates.' });
   let generation = 0;
-  journal.record({ kind: 'test-start', referenceSha256: createHash('sha256').update(bytes).digest('hex') });
+  journal.record({ kind: 'test-start', scenario, source: sources[0], referenceSha256: createHash('sha256').update(bytes).digest('hex') });
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'mediamanager-search-history-')));
   const options = { serverId: randomUUID().replaceAll('-', ''), networkConfiguration: { BaseUrl: '/media' }, configuration: { IsStartupWizardCompleted: true },
     programDataPath: path.join(root, 'program'), configurationDirectoryPath: path.join(root, 'config') };
@@ -129,14 +130,37 @@ test('Emby search history uses the current user and SQL filters, survives copyin
   await runtime.userData.update(source.Id, ids.a, { IsFavorite: true, Played: true, PlayCount: 1, LastPlayedDate: '2026-10-20T17:44:37.0000000Z' });
   const playback = await runtime.userData.get(source.Id, ids.a);
   const messages = [];
-  socket = new WebSocket(`ws://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}/media/emby?api_key=${sourceToken}&deviceId=history-reader`);
-  socket.on('message', data => messages.push(JSON.parse(String(data))));
-  await once(socket, 'open', { signal: t.signal });
   const waitFor = async predicate => {
     const deadline = Date.now() + 10000;
     while (!predicate()) { t.signal.throwIfAborted(); assert.ok(Date.now() < deadline, 'The actual client must receive the history user-data change.'); await delay(20, undefined, { signal: t.signal }); }
   };
-  await waitFor(() => messages.some(message => message.MessageType === 'ForceKeepAlive'));
+  if (scenario === 'history') {
+    socket = new WebSocket(`ws://127.0.0.1:${runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port}/media/emby?api_key=${sourceToken}&deviceId=history-reader`);
+    socket.on('message', data => messages.push(JSON.parse(String(data))));
+    await once(socket, 'open', { signal: t.signal });
+    await waitFor(() => messages.some(message => message.MessageType === 'ForceKeepAlive'));
+  }
+  const restart = async () => {
+    await closeSocket();
+    const schema = database.schemaName;
+    journal.record({ kind: 'runtime-close-start', generation });
+    await runtime.close(); runtime = null;
+    journal.record({ kind: 'runtime-close-settled', generation });
+    database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema });
+    await open();
+    return { database, runtime };
+  };
+  return { database, runtime, source, target, sourceId, targetId, ids, adminToken, sourceToken,
+    request, query, mark, clear, compare, native, historyRows, playback, messages, waitFor, restart };
+}
+
+test('Emby search history uses the current user and SQL filters, survives copying and restart, and leaves playback state intact', {
+  skip: !postgresTestConnectionString, timeout: 90000,
+}, async t => {
+  const scenario = await setupSearchHistoryScenario(t, 'history');
+  let { database, runtime } = scenario;
+  const { source, target, sourceId, targetId, ids, adminToken, sourceToken,
+    request, query, mark, clear, compare, native, historyRows, playback, messages, waitFor, restart } = scenario;
   assert.equal((await clear()).status, native('clear-source-initial').status);
   compare(await query(), 'initial-history');
   assert.equal((await mark([ids.a])).status, native('mark-first').status);
@@ -216,20 +240,19 @@ test('Emby search history uses the current user and SQL filters, survives copyin
   await runtime.users.updatePolicy(source.Id, { ...(await runtime.users.getUser(source.Id)).Policy, EnableAllFolders: false, EnabledFolders: [ids.collection] });
   assert.equal((await query()).body.TotalRecordCount, 3);
   const beforeRestart = await query();
-  await closeSocket();
-  const schema = database.schemaName;
-  journal.record({ kind: 'runtime-close-start', generation });
-  await runtime.close(); runtime = null;
-  journal.record({ kind: 'runtime-close-settled', generation });
-  database = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema });
-  await open();
+  ({ database, runtime } = await restart());
   assert.deepEqual((await query()).body, beforeRestart.body);
   assert.equal((await clear()).status, native('clear-source').status);
   compare(await query(), 'history-after-clear');
   assert.deepEqual(await runtime.userData.get(source.Id, ids.a), playback);
   assert.equal((await historyRows(target.Id)).length, 4);
   assert.equal((await database.rows('CustomItemDisplayPreferences', { where: { UserId: sourceId, Client: 'another-client' } }))[0].Value, 'untouched');
+});
 
+test('Emby search history preserves whole-second ties, distinct timestamp ordering and SQL pagination', {
+  skip: !postgresTestConnectionString, timeout: 90000,
+}, async t => {
+  const { database, source, ids, query, mark, clear, compare } = await setupSearchHistoryScenario(t, 'order');
   // A single submitted batch retains its ordering for ties; distinct seconds
   // separately test direction and paging without relying on a query-plan tie.
   assert.equal((await mark([ids.c, ids.b, ids.a])).status, 204);

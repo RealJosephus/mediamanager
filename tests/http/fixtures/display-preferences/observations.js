@@ -1,4 +1,5 @@
 import { tableDefinition } from '../../../../src/database/model.js';
+import { projectProblemTrace } from '../../../helpers/http-body-projection.js';
 
 export const preferenceTables = ['DisplayPreferences', 'ItemDisplayPreferences', 'CustomItemDisplayPreferences', 'HomeSection'];
 export function normalizePreferenceState(state) {
@@ -14,8 +15,7 @@ export function normalizePreferenceState(state) {
 export function projectPreferenceObservation(row) {
   return { name: row.name, before: normalizePreferenceState(row.before), after: normalizePreferenceState(row.after),
     observations: row.observations.map(observation => {
-      const json = observation.json && structuredClone(observation.json);
-      if (json && Object.hasOwn(json, 'traceId')) delete json.traceId;
+      const json = projectProblemTrace(observation.json && structuredClone(observation.json), observation.status);
       return { status: observation.status, contentType: observation.contentType,
         allow: observation.allow.split(',').map(value => value.trim()).filter(Boolean).sort(),
         ...(json == null ? { body: observation.body } : { json }), state: normalizePreferenceState(observation.state) };

@@ -372,6 +372,7 @@ export function createNativeCharsetStreamDetector() {
     for(const prober of probers)if(prober.feed(chunk)===FOUND){found={details:[detail(prober.name(),1)]};return;}
   };
   return Object.freeze({
+    get done(){return found!==null;},
     append(bytes){
       if(ended)throw new Error('Charset detection has completed.');if(!(bytes instanceof Uint8Array))throw new TypeError('Charset detection requires bytes.');
       if(!bytes.length)return;any=true;if(found)return;

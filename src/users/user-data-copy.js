@@ -32,7 +32,7 @@ async function copyPlaybackData(database, sourceId, targetId) {
 export async function copyUserData({ store, users, displayPreferences, sessions, onError = () => {} }, sourceId, targetIds, options) {
   const source = nativeGuid(sourceId), targets = [...new Set(targetIds.map(nativeGuid))];
   const selected = new Set(options), notifications = [];
-  let failure;
+  let failure, failed = false;
   try { await store.serializeWrites(async database => {
     const original = await users.loadUser(database, source);
     if (!original) throw domainError(500, 'Object reference not set to an instance of an object.');
@@ -54,11 +54,11 @@ export async function copyUserData({ store, users, displayPreferences, sessions,
       }
       if (selected.has('userdata')) await store.transaction(database => copyPlaybackData(database, source, target));
     }
-  }); } catch (error) { failure = error; }
+  }); } catch (error) { failure = error; failed = true; }
   // Network delivery cannot retain the database writer lock or reverse a
   // committed copy. Earlier successful targets still receive their updates.
   for (const { target, data, type } of notifications) try {
     await sessions.sendMessageToUserSessions([target], 'UserUpdated', data, { embyMessageType: type });
   } catch (error) { try { onError(error); } catch {} }
-  if (failure) throw failure;
+  if (failed) throw failure;
 }

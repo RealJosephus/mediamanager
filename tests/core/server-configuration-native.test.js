@@ -13,7 +13,7 @@ import { parseConfigurationXml, readConfigurationDocument } from '../../src/core
 import { serializeConfiguration } from '../../src/core/configuration-file.js';
 import { configurationJson, configurationValue } from './fixtures/configuration/observations.js';
 import { localStateStorage } from '../helpers/local-state-storage.js';
-import { recordOracle } from '../../tools/validation/oracle.js';
+import { compileOracle } from '../../tools/validation/oracle.js';
 import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js';
 import { describeFile } from '../../tools/validation/inventory.js';
 import { validationOutputRoot, assertValidationOutputChild } from '../../tools/validation/paths.js';
@@ -235,10 +235,12 @@ async function capture() {
       const actual = await describeFile(path.join(build.root, 'source', relative));
       assert.equal(actual.sha256, expected.sha256, relative); report.sourceBindings.push({ relative, source: actual });
     }
+    const oracle = await compileOracle({ project, output: path.join(output, 'build') });
+    report.oracleBuild = oracle.buildRecord;
     const captures = [];
     for (const label of ['initial', 'repeat']) {
       const directory = path.join(output, label);
-      const record = await recordOracle({ project, output: directory, args: [fileURLToPath(inputFile), '{output}/native.json'] });
+      const record = await oracle.record({ output: directory, args: [fileURLToPath(inputFile), '{output}/native.json'] });
       const filename = path.join(directory, 'native.json'), bytes = await fs.readFile(filename), native = parseLosslessJson(bytes.toString('utf8'));
       assert.equal(record.passed, true); assert.equal(record.outputs.find(entry => entry.filename === filename)?.sha256, sha(bytes));
       assert.equal(native.inputSha256, sha(inputBytes));
@@ -262,7 +264,7 @@ async function capture() {
     const consumeFile = path.join(output, 'candidate-read-input.json'), consumeBytes = Buffer.from(configurationJson(reads));
     await fs.writeFile(consumeFile, consumeBytes, { flag: 'wx' });
     const consumedRoot = path.join(output, 'native-candidate-read');
-    const consumedRecord = await recordOracle({ project, output: consumedRoot, args: ['consume', consumeFile, '{output}/native.json'] });
+    const consumedRecord = await oracle.record({ output: consumedRoot, args: ['consume', consumeFile, '{output}/native.json'] });
     const consumedFile = path.join(consumedRoot, 'native.json'), consumedBytes = await fs.readFile(consumedFile), consumed = parseLosslessJson(consumedBytes.toString('utf8'));
     assert.equal(consumedRecord.outputs.find(entry => entry.filename === consumedFile)?.sha256, sha(consumedBytes));
     assert.equal(consumed.inputSha256, sha(consumeBytes)); assert.equal(consumed.actualContinuedRead, true); assert.equal(consumed.actualXmlSerializer, true);

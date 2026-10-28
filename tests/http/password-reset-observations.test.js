@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { allowedMethods, projectResetObservation } from './fixtures/password-reset-http-current/observations.js';
+import { allowedMethods, projectResetObservation } from './password-reset-current-observations.js';
 
 test('password reset HTTP observations compare Allow as a case-sensitive method set', () => {
   assert.deepEqual(allowedMethods('DELETE, GET, POST'), allowedMethods('POST, GET, DELETE'));
@@ -28,4 +28,30 @@ test('password reset observations bind Windows and POSIX instance paths without 
   }
   const failed = structuredClone(posix); failed.observations[0].status = 500;
   assert.notDeepEqual(await projectResetObservation(failed), contract);
+});
+
+test('current password reset only projects actual root ProblemDetails and verified successful PIN fields', async () => {
+  const body = '{"Action":"ContactAdmin","traceId":17,"ProviderIds":{"traceId":"literal","ticks":9223372036854775807}}',
+    row = { name: 'current complete HTTP body', ProgramData: '/tmp/current-reset', before: { Users: [] }, after: { Users: [] },
+      events: [], catalogs: {}, passwordChecks: [], observations: [{ status: 200, contentType: 'application/json', allow: '',
+        hasJson: true, body, json: JSON.parse(body), files: [],
+        started: '2026-01-01T00:00:00Z', finished: '2026-01-01T00:00:00Z' }] };
+  const actual = await projectResetObservation(row);
+  assert.equal(actual.observations[0].body.traceId, 17);
+  assert.deepEqual(actual.observations[0].body.ProviderIds, { traceId: 'literal', ticks: 9223372036854775807n });
+  const problem = { status: 400, title: 'Bad Request', traceId: 'transport trace', errors: { traceId: ['literal'] },
+    Action: 'PinCode', PinFile: 'literal error extension', PinExpirationDate: 'literal date extension' };
+  const error = structuredClone(row); Object.assign(error.observations[0], { status: 400, json: problem, body: JSON.stringify(problem) });
+  const expected = await projectResetObservation(error);
+  assert.equal(expected.observations[0].body.traceId, '$trace'); assert.deepEqual(expected.observations[0].body.errors, problem.errors);
+  assert.equal(expected.observations[0].body.PinFile, problem.PinFile);
+  assert.equal(expected.observations[0].body.PinExpirationDate, problem.PinExpirationDate);
+  const absent = structuredClone(error); delete absent.observations[0].json.traceId;
+  absent.observations[0].body = JSON.stringify(absent.observations[0].json);
+  assert.notDeepEqual(await projectResetObservation(absent), expected);
+  for (const trace of [null, 42, {}]) {
+    const invalid = structuredClone(error); invalid.observations[0].json.traceId = trace;
+    invalid.observations[0].body = JSON.stringify(invalid.observations[0].json);
+    await assert.rejects(projectResetObservation(invalid));
+  }
 });

@@ -161,7 +161,7 @@ export async function loadConfigurationFile(filename, root, { fileSystem = fs, o
     bytes = await fileSystem.readFile(filename);
     const document = reader.readConfigurationDocument(bytes, root, { processors }); value = document.value; source = document.node;
   } catch (error) {
-    if (error.code !== 'ENOENT') onError(error);
+    if (error?.code !== 'ENOENT') onError(error);
     value = reader.defaultConfiguration(root, { processors });
     recovered = true;
   }
@@ -169,7 +169,7 @@ export async function loadConfigurationFile(filename, root, { fileSystem = fs, o
   const canonical = serialize(root, value);
   if (!bytes || !canonical.equals(bytes)) {
     let info;
-    try { info = await fileSystem.stat(filename); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    try { info = await fileSystem.stat(filename); } catch (error) { if (error?.code !== 'ENOENT') throw error; }
     if (process.platform === 'win32' && info?.isFile() && !(info.mode & 0o222)) throw Object.assign(new Error('Native configuration is read-only.'), { code: 'EACCES' });
     await fileSystem.mkdir(path.dirname(filename), { recursive: true });
     await fileSystem.writeFile(filename, serialize(root, value, { source }));

@@ -16,6 +16,7 @@ import { guid, nonemptyId, libraryError, sameId } from './library/records.js';
 import { LibraryTaskScheduler } from './library/library-task-scheduler.js';
 import { createConfiguredStorage } from './storage-bootstrap.js';
 import { DomainStore } from './database/domain-store.js';
+import { ActivityLogManager } from './activity/manager.js';
 import { UserService, AuthenticationService, ApiKeyService, DeviceService, QuickConnectService, PasswordResetService } from './users/index.js';
 import { createAudioBookItemResolver, createAudioItemResolver, createBookItemResolver, createBoxSetItemResolver, createPhotoAlbumResolver, createPhotoItemResolver, createPlaylistItemResolver, createTvItemResolver, createVideoFileResolver, DirectoryItemResolverPipeline, FolderValidationService, LibraryDirectoryMonitor, LibraryMonitorHost, ItemCreationService, ItemDeletionService, LibraryMetadataScanService, LibraryScanHost, LibraryScanLifecycle, LibraryScanService, LibraryService, LinkedChildReferenceService, MusicGenresPostScanTask, PlaylistService, ResolvedItemLifecycleHost, SimilarItemsManager, TopLevelFolderValidationService } from './library/index.js';
 import { SessionService, UserDataService } from './sessions/index.js';
@@ -41,9 +42,11 @@ import { copyNativeItemRepositoryFrame, publishNativeItemLinks } from './library
 import { CleanDatabasePostScanTask } from './library/clean-database-post-scan-task.js';
 import { SplashscreenPostScanTask } from './library/splashscreen-post-scan-task.js';
 import { ExtractionService } from './playback/extraction.js';
+import { SubtitleCache } from './playback/subtitle-cache.js';
 import { RemuxService } from './playback/remux.js';
 import { MediaEncoder } from './playback/media-encoder.js';
 import path from 'node:path';
+import { mkdir } from 'node:fs/promises';
 import { HlsService } from './playback/hls.js';
 import { ImageProcessor } from './images/processor.js';
 import { ImageService } from './images/service.js';
@@ -101,15 +104,16 @@ function absoluteApplicationPath(value, name) {
 
 export async function createRuntime({ database, configuration, serverId, serverName = configuration?.ServerName || 'MediaManager', serverVersion = '13.0.0',
   networkConfiguration, publicAddress,
-  programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath, libraryOptions, directoryItemResolvers,
+  programDataPath, configurationDirectoryPath, dataPath, metadataPath, cachePath, logDirectoryPath, libraryOptions, directoryItemResolvers,
   pluginOptions = {}, storageConfiguration, environment, portableMountContract,
   vfs, identityMap, ignoreIdentityMap = identityMap, mediaEncoderOptions = {}, probeOptions, extractionOptions, remuxOptions, hlsOptions, imageOptions = {}, metadataOptions = {}, onError,
-  autoDiscoveryOptions, onDatabaseOwnershipTransferred } = {}) {
+  autoDiscoveryOptions, onDatabaseOwnershipTransferred, systemLifecycle } = {}) {
   programDataPath = absoluteApplicationPath(programDataPath, 'programDataPath');
   configurationDirectoryPath = absoluteApplicationPath(configurationDirectoryPath, 'configurationDirectoryPath');
   dataPath = absoluteApplicationPath(dataPath, 'dataPath');
   metadataPath = absoluteApplicationPath(metadataPath, 'metadataPath');
   cachePath = absoluteApplicationPath(cachePath, 'cachePath');
+  logDirectoryPath = absoluteApplicationPath(logDirectoryPath, 'logDirectoryPath');
   const rollback = [];
   let splashscreen;
   let cancelMetadata = () => {};
@@ -126,10 +130,12 @@ export async function createRuntime({ database, configuration, serverId, serverN
   dataPath ??= programDataPath && path.join(programDataPath, 'data');
   metadataPath ??= programDataPath && path.join(programDataPath, 'metadata');
   cachePath ??= programDataPath && path.join(programDataPath, 'cache');
-  const applicationPaths = { programDataPath, dataPath, configurationDirectoryPath,
+  logDirectoryPath ??= programDataPath && path.resolve(programDataPath, '..', 'log');
+  const applicationPaths = { programDataPath, dataPath, configurationDirectoryPath, logDirectoryPath,
     defaultMetadataPath: programDataPath ? path.join(programDataPath, 'metadata') : metadataPath,
     metadataPath: clrTrim(configuration.MetadataPath ?? '') ? configuration.MetadataPath : (programDataPath ? path.join(programDataPath, 'metadata') : metadataPath),
     cachePath: clrTrim(configuration.CachePath ?? '') ? configuration.CachePath : cachePath };
+  if (logDirectoryPath) await mkdir(logDirectoryPath, { recursive: true });
   await store.transaction(database => initializeLiveTvState(database, { dataPath, logger }));
   const namedConfiguration = configurationDirectoryPath ? new NamedConfigurationStore({ configurationDirectoryPath, onError,
     loadedConfigurations: networkConfiguration === undefined ? [] : [['network', networkConfiguration]] }) : undefined;
@@ -184,8 +190,10 @@ export async function createRuntime({ database, configuration, serverId, serverN
   rollback.push(() => networkHost.close());
   await networkHost.initialize();
   const localization = await createCoreLocalization({ serverCulture: configuration.UICulture || 'en-US' });
+  const activities = new ActivityLogManager({ store, localization, onError });
+  rollback.push(() => activities.close());
   const isLocalNetwork = address => network.isInLocalNetwork(address);
-  const users = new UserService({ store, serverId, isLocalNetwork,
+  const users = new UserService({ store, serverId, activities, isLocalNetwork,
     get castReceiverApplications() { return currentConfiguration().CastReceiverApplications ?? []; } });
   const liveTv = new LiveTvService({ users, configurationDirectoryPath, onError });
   rollback.push(() => liveTv.close());
@@ -287,7 +295,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     : undefined;
   if (playlists) rollback.push(() => playlists.close());
   const userData = new UserDataService({ store, library, users, get configuration() { return currentConfiguration(); } });
-  const sessions = new SessionService({ store, library, userData, users, serverId, get configuration() { return currentConfiguration(); }, onError });
+  const sessions = new SessionService({ store, library, userData, users, activities, serverId, get configuration() { return currentConfiguration(); }, onError });
   rollback.push(() => sessions.close());
   const liveTvTimers = new LiveTvTimersService({ store, serverId, liveTv, users, sessions, dataPath, onError,
     loadProgramDtos: (_database, ids) => library.loadLiveTvTimerProgramDtos(ids),
@@ -309,7 +317,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
     get configuration() { return currentConfiguration(); },
     onError
   }) : undefined;
-  const authentication = new AuthenticationService({ store, users, sessions, serverId, serverName, serverVersion,
+  const authentication = new AuthenticationService({ store, users, sessions, activities, serverId, serverName, serverVersion,
     // Both supported client protocols remain available independently of the
     // source server's switch for its older authorization transports.
     isLocalNetwork, enableLegacyAuthorization: true });
@@ -338,7 +346,8 @@ export async function createRuntime({ database, configuration, serverId, serverN
     get metadataPath() { return applicationPaths.metadataPath; }, logger });
   const probe = vfs && identityMap ? new ProbeService({ store, vfs, identityMap, mediaEncoder, probeOptions, localization, library, externalData }) : undefined;
   if (probe) rollback.push(() => probe.close());
-  const extraction = probe ? new ExtractionService({ vfs, bridge:probe.bridge, ...extractionOptions, mediaEncoder, getEncodingOptions }) : undefined;
+  const extraction = probe ? new ExtractionService({ vfs, bridge:probe.bridge, ...extractionOptions, mediaEncoder, getEncodingOptions,
+    subtitleCache: new SubtitleCache({ fileSystem, dataPath, onError }) }) : undefined;
   if (extraction) rollback.push(() => extraction.close());
   const remux = probe ? new RemuxService({ vfs, bridge:probe.bridge, ...remuxOptions, mediaEncoder }) : undefined;
   if (remux) rollback.push(() => remux.close());
@@ -347,8 +356,9 @@ export async function createRuntime({ database, configuration, serverId, serverN
   if (hls) rollback.push(() => hls.close());
   sessions.hls = hls;
   let liveTvMediaSources, liveStreams, liveStreamProbe;
-  const playback = new PlaybackService({ library, vfs, identityMap, sessions, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
+  const playback = new PlaybackService({ library, vfs, identityMap, sessions, activities, get configuration() { return currentConfiguration(); }, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls,
     getLiveTvMediaSources: () => liveTvMediaSources, getLiveStreams: () => liveStreams });
+  rollback.push(() => { playback.beginClose(); return playback.drainSubtitlePreparations(); });
   const { cachePath: imageCachePath, ...imageProcessorOptions } = imageOptions;
   const imageProcessor = new ImageProcessor({ fileSystem,
     get cachePath() { return imageCachePath ?? (applicationPaths.cachePath && path.join(applicationPaths.cachePath, 'images')); },
@@ -616,7 +626,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   });
   const stopStorageObserver = () => { stopBeforeStorageObserver(); stopAfterStorageObserver(); };
   rollback.push(stopStorageObserver);
-  const services = { storage: configuredStorage, storageReadiness, fileSystem, get configuration() { return currentConfiguration(); }, get networkConfiguration() { return getNetworkConfiguration(); }, getNetworkConfiguration, getSmartApiUrl, network, baseUrl, publicAddress, store, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
+  const services = { storage: configuredStorage, storageReadiness, fileSystem, get configuration() { return currentConfiguration(); }, get networkConfiguration() { return getNetworkConfiguration(); }, getNetworkConfiguration, getSmartApiUrl, network, baseUrl, publicAddress, store, activities, users, devices, library, itemCreation, itemDeletion, unsafeItemDeletion, folderValidation, linkedChildReferences, playlists, topLevelValidation, libraryScanHost, libraryScanLifecycle, libraryScanner, metadataScanner, artistsPostScanTask, genresPostScanTask, musicGenresPostScanTask, studiosPostScanTask, tasks, userData, sessions, syncPlay, refreshes, authentication, localization, playback, probe, externalData, extraction, remux, hls, images, imageProcessor, metadata, metadataUpdates, resolvedItemLifecycle, metadataEditor, itemUpdates, plugins, similarItems, ignoreRule, serverId, serverName, serverVersion };
   services.collectionPosterVerifyPostScanTask = collectionPosterVerifyPostScanTask;
   services.channels = channels;
   services.liveTv = liveTv;
@@ -661,6 +671,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
   services.fallbackFonts = fallbackFonts;
   services.applicationPaths = applicationPaths;
   services.networkHost = networkHost;
+  services.systemLifecycle = systemLifecycle;
   await plugins.connect({ ...services, get configuration() { return currentConfiguration(); }, vfs, identityMap, metadataVfs, metadataIdentityMap, loadContext, seriesLifecycle, metadataImages, spoolRoot, fileSystem });
   application = await createApplication({ ...services, get configuration() { return currentConfiguration(); }, onError });
   rollback.push(async () => { application.beginClose(); await application.drainRequests(); });
@@ -718,6 +729,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       const errors = [];
       const attempt = async operation => { try { await operation(); } catch (error) { errors.push(error); } };
       application.beginClose();
+      playback.beginClose();
       // Keep the listeners available for shutdown responses until admitted
       // requests drain. Only an unfinished startup needs cancellation now.
       if (!startupReady) networkHost.beginClose();
@@ -817,6 +829,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       ]);
       await fallbackFontsClosing;
       await attempt(() => application.drainRequests());
+      await attempt(() => playback.drainSubtitlePreparations());
       await pluginMutationsClosing;
       // Every admitted HTTP/setup/library/editor producer has now reached its
       // final configuration write. Keep the scheduler and its SQL/metadata
@@ -859,6 +872,7 @@ export async function createRuntime({ database, configuration, serverId, serverN
       await mediaEncoderClosing;
       await attempt(() => sessions.close());
       await attempt(() => plugins.close());
+      await attempt(() => activities.close());
       await attempt(() => configuredStorage.close());
       await attempt(() => linkedChildren.flushReleases());
       await attempt(() => linkedChildren.close());

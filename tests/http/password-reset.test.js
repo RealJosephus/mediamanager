@@ -9,7 +9,7 @@ import { parsePasswordHash, verifyPasswordHash } from '../../src/core/password.j
 import { md5Guid } from '../../src/core/identity.js';
 import { wireGuid } from '../../src/users/native.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString } from '../database/postgres-fixture.js';
-import { normalizeSnapshot, projectResetObservation } from './fixtures/password-reset-http-current/observations.js';
+import { normalizeSnapshot, projectResetObservation } from './password-reset-current-observations.js';
 import { currentPasswordResetHttp, passwordResetInput } from './password-reset-http-current.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'postgres'];

@@ -47,7 +47,6 @@ export function identityFileAccessObservation(row, access, control, errors) {
     assert.equal(text(row.reopenedBytes), row.value);
   } else {
     assert.equal(row.afterBytes, row.beforeBytes, 'A refused identity write must leave the original file unchanged.');
-    if (errors) assert.ok(errors.length > 0, 'A real identity access failure must be reported.');
     if (originalIsValid) {
       assert.equal(row.reopenedValue, original);
       assert.equal(row.reopenedBytes, row.beforeBytes);

@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { parseLosslessJson } from '../core/json.js';
 import { wireGuid } from '../users/native.js';
 import { clrTrim, clrWhitespace } from '../metadata/whitespace.js';
@@ -13,19 +13,19 @@ export const noContent = () => new HttpResult(204);
 export const httpError = (status, message) => Object.assign(new Error(message), { status });
 export const badRequest = () => new HttpResult(400, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1', title: 'Bad Request', status: 400,
-  traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`,
+  traceId: randomUUID(),
 });
 export const unauthorized = () => new HttpResult(401, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.2', title: 'Unauthorized', status: 401,
-  traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`,
+  traceId: randomUUID(),
 });
 const unsupportedMediaType = () => new HttpResult(415, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.16', title: 'Unsupported Media Type', status: 415,
-  traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`
+  traceId: randomUUID()
 });
 export const notFound = () => new HttpResult(404, {
   type: 'https://tools.ietf.org/html/rfc9110#section-15.5.5', title: 'Not Found', status: 404,
-  traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00`,
+  traceId: randomUUID(),
 });
 
 export class BindingError extends Error {
@@ -36,7 +36,7 @@ export class BindingError extends Error {
   }
   problem() {
     return { type: 'https://tools.ietf.org/html/rfc9110#section-15.5.1', title: 'One or more validation errors occurred.',
-      status: 400, errors: this.errors, traceId: `00-${randomBytes(16).toString('hex')}-${randomBytes(8).toString('hex')}-00` };
+      status: 400, errors: this.errors, traceId: randomUUID() };
   }
 }
 

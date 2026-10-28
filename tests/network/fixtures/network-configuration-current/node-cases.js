@@ -10,11 +10,11 @@ import { StartupService } from '../../../../src/users/startup-service.js';
 import { namedError, namedExpand, namedFailurePayload } from '../../../core/named-configuration-current.js';
 
 export const disk = filename => {
-  let bytes = null, directory = false, value = null, error = null;
+  let bytes = null, directory = false, value = null, error = null, failed = false;
   try { directory = sync.statSync(filename).isDirectory(); if (!directory) bytes = sync.readFileSync(filename); }
-  catch (failure) { if (!['ENOENT', 'ENOTDIR'].includes(failure.code)) error = namedError(failure); }
-  if (bytes !== null) try { value = parseConfigurationXml(bytes, 'network'); } catch (failure) { error = namedError(failure); }
-  return { bytes: bytes?.toString('base64') ?? null, directory, accepted: bytes === null ? null : error === null, value, error };
+  catch (failure) { if (!['ENOENT', 'ENOTDIR'].includes(failure.code)) { failed = true; error = namedError(failure); } }
+  if (bytes !== null) try { value = parseConfigurationXml(bytes, 'network'); } catch (failure) { failed = true; error = namedError(failure); }
+  return { bytes: bytes?.toString('base64') ?? null, directory, accepted: bytes === null ? null : !failed, value, error };
 };
 
 export async function candidateNetworkConfiguration(sample, root) {
@@ -25,15 +25,16 @@ export async function candidateNetworkConfiguration(sample, root) {
   const store = new NamedConfigurationStore({ configurationDirectoryPath: directory, fileSystem: { ...fs, async readFile(name, ...args) {
     const attempt = { owner: active, filename: name, bytes: null, parserFailure: null, sourceFailure: null }; reads.push(attempt);
     if (mode === 'io') {
-      const cause = Object.assign(new Error('Original storage failure.'), { code: 'fixture-read-cause', status: 503, statusCode: 507 });
+      const cause = Object.assign(new Error('Original storage failure.'), { code: 'fixture-read-cause', status: 503, statusCode: 507,
+        cause: undefined, errors: [false, 0, '', null, undefined], details: { name: 'Storage business name', stack: 'Storage business stack' } });
       const failure = Object.assign(new Error('Controlled named read failure.', { cause }), { code: 'EIO', status: 500, statusCode: 500 });
-      attempt.sourceFailure = namedError(failure); throw failure;
+      attempt.sourceFailure = namedError(failure); attempt.sourceFailurePayload = namedFailurePayload(failure); throw failure;
     }
     try {
       const bytes = await fs.readFile(name, ...args); attempt.bytes = bytes.toString('base64');
       try { parseConfigurationXml(bytes, 'network'); } catch (error) { attempt.parserFailure = namedError(error); }
       return bytes;
-    } catch (error) { attempt.sourceFailure = namedError(error); throw error; }
+    } catch (error) { attempt.sourceFailure = namedError(error); attempt.sourceFailurePayload = namedFailurePayload(error); throw error; }
   } }, onError: error => diagnostics.push({ owner: active, error: namedError(error) }) });
   const snapshot = () => structuredClone({ current: Object.fromEntries([...warm].map(key => [key, store.getCurrentConfiguration(key)])), retained,
     disk: disk(filename), linkedDisk: null, files: sync.readdirSync(directory).filter(name => name === 'network.xml').sort() });
@@ -45,14 +46,14 @@ export async function candidateNetworkConfiguration(sample, root) {
   try {
     const before = snapshot();
     for (const [index, step] of sample.steps.entries()) {
-      active = { index, action: step.action, key: step.key ?? sample.key }; let value = null, error = null;
+      active = { index, action: step.action, key: step.key ?? sample.key }; let value = null, error = null, failed = false, failurePayload;
       try {
         const key = active.key;
         if (step.action === 'get') { value = await store.getConfiguration(key); warm.add(key); if (step.retain) retained[step.retain] = value; }
-        else if (step.action === 'save') { const incoming = Object.assign(defaultConfiguration('network'), namedExpand(step.values, root));
+        else if (step.action === 'save') { const incoming = Object.assign(defaultConfiguration('network'), namedExpand(step.values, root, key));
           if (step.retain) retained[step.retain] = incoming; await store.saveConfiguration(key, incoming); }
         else if (step.action === 'saveRetained') await store.saveConfiguration(key, retained[step.retain]);
-        else if (step.action === 'mutate') Object.assign(retained[step.retain], namedExpand(step.values, root));
+        else if (step.action === 'mutate') Object.assign(retained[step.retain], namedExpand(step.values, root, key));
         else if (step.action === 'mutateBaseUrlFromSelf') retained[step.retain].BaseUrl = retained[step.retain].BaseUrl;
         else if (step.action === 'startup') {
           const startup = new StartupService({ users: {}, configuration: {}, namedConfiguration: store });
@@ -64,18 +65,17 @@ export async function candidateNetworkConfiguration(sample, root) {
         else if (step.action === 'physical' && step.mode === 'readonly') await fs.chmod(filename, 0o444);
         else if (step.action === 'physical' && step.mode === 'writable') await fs.chmod(filename, 0o666);
         else throw new Error('Unknown Network configuration fixture operation.');
-      } catch (failure) { error = namedError(failure); }
-      steps.push(structuredClone({ step, accepted: error === null, result: value, error, state: snapshot() }));
-    }
-    for (const diagnostic of diagnostics) {
-      const source = reads.find(read => read.owner.index === diagnostic.owner.index && read.owner.key === diagnostic.owner.key
-        && read.parserFailure !== null && JSON.stringify(namedFailurePayload(read.parserFailure)) === JSON.stringify(namedFailurePayload(diagnostic.error)));
-      assert.ok(source, 'Every optional Network load diagnostic belongs to the same actual read/decoder failure.');
+      } catch (failure) { failed = true; error = namedError(failure); failurePayload = namedFailurePayload(failure); }
+      steps.push(structuredClone({ step, accepted: !failed, result: value, error, failurePayload, state: snapshot() }));
     }
     if (sample.name === 'real-read-io-failure') {
-      const source = reads.find(read => read.sourceFailure?.code === 'EIO'); assert.ok(source);
-      const delivered = steps.find(row => row.step.action === 'get').error;
-      assert.deepEqual(namedFailurePayload(delivered), namedFailurePayload(source.sourceFailure));
+      const rejected = steps.find(row => row.step.action === 'get' && !row.accepted);
+      assert.ok(rejected, 'The actual named read must reject its current operation.');
+      const source = reads.find(read => read.owner.index === steps.indexOf(rejected) && read.sourceFailurePayload?.code === 'EIO');
+      assert.ok(source, 'The rejected operation must reach its actual EIO read owner.');
+      assert.deepEqual(rejected.failurePayload, source.sourceFailurePayload);
+      assert.deepEqual(rejected.failurePayload.cause.errors, [false, 0, '', null, undefined]);
+      assert.deepEqual(rejected.failurePayload.cause.details, { name: 'Storage business name', stack: 'Storage business stack' });
     }
     result = { name: sample.name, key: sample.key, root, before, steps, events, after: snapshot(), diagnostics, reads, filename };
   } finally { await store.close(); }
@@ -100,12 +100,12 @@ export async function candidateNetworkConsumer(sample, interfaces, root, urls = 
     lookup: async hostname => { throw new Error('Unspecified DNS fixture: ' + hostname); } });
   const events = [], steps = [], diagnostics = [];
   network.logger = { error: error => diagnostics.push({ error: namedError(error) }) };
-  let primary, result;
+  let primary, primaryFailed = false, result;
   try {
     await network.initialize();
     store.on('updated', incoming => events.push(structuredClone(incoming)));
     for (const step of sample.steps) {
-      let error = null;
+      let error = null, failed = false, failurePayload;
       try {
         if (step.action === 'save') {
           const incoming = Object.assign(defaultConfiguration('network'), step.values), key = step.key ?? 'network';
@@ -114,8 +114,8 @@ export async function candidateNetworkConsumer(sample, interfaces, root, urls = 
         }
         else if (step.action === 'mutate') Object.assign(store.getCurrentConfiguration('network'), step.values);
         else if (step.action !== 'inspect') throw new Error('Unknown network consumer fixture operation.');
-      } catch (failure) { error = namedError(failure); }
-      const state = { step, accepted: error === null, error, interfaceInput: preparation, configuration: store.getCurrentConfiguration('network') };
+      } catch (failure) { failed = true; error = namedError(failure); failurePayload = namedFailurePayload(failure); }
+      const state = { step, accepted: !failed, error, failurePayload, interfaceInput: preparation, configuration: store.getCurrentConfiguration('network') };
       if (urls) {
         state.requests = sample.requests.map(request => ({ request,
           value: network.getSmartApiUrl({ headers: { host: request.host }, socket: { remoteAddress: request.remote, encrypted: request.scheme === 'https' } }) }));
@@ -126,12 +126,12 @@ export async function candidateNetworkConsumer(sample, interfaces, root, urls = 
       steps.push(structuredClone(state));
     }
     result = { name: sample.name, initialInterfaceInput, steps, events, diagnostics };
-  } catch (error) { primary = error; }
+  } catch (error) { primaryFailed = true; primary = error; }
   finally {
     const cleanup = [];
     for (const close of [() => network.close(), () => store.close()]) try { await close(); } catch (error) { cleanup.push(error); }
-    if (cleanup.length) throw new AggregateError(primary ? [primary, ...cleanup] : cleanup, 'Network component resources failed to close.', { cause: primary ?? cleanup[0] });
+    if (cleanup.length) throw new AggregateError(primaryFailed ? [primary, ...cleanup] : cleanup, 'Network component resources failed to close.', { cause: primaryFailed ? primary : cleanup[0] });
   }
-  if (primary) throw primary;
+  if (primaryFailed) throw primary;
   return result;
 }

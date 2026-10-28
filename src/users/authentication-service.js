@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { EventEmitter } from 'node:events';
 import { readAuthorization } from '../core/authorization.js';
 import { domainError, nativeGuid, wireGuid, nativeDate, wireDate, equalsIgnoreCase, scheduleAllowed,
-  normalizeMembers } from './native.js';
+  normalizeMembers, permissionNames } from './native.js';
 import { isDefaultLocalNetwork } from './network.js';
 
 const empty = value => !value || !value.trim();
@@ -10,12 +10,12 @@ const zeroGuid = '00000000000000000000000000000000';
 
 export class AuthenticationService extends EventEmitter {
   #loginTail = Promise.resolve();
-  constructor({ store, users, sessions, serverId, serverName = 'MediaManager', serverVersion = '13.0.0',
+  constructor({ store, users, sessions, activities, serverId, serverName = 'MediaManager', serverVersion = '13.0.0',
     enableLegacyAuthorization = false, isLocalNetwork = isDefaultLocalNetwork, now = () => new Date(),
     logger = { error() {} } } = {}) {
     super();
     if (!store || !users || !serverId) throw new TypeError('AuthenticationService requires store, users and serverId.');
-    Object.assign(this, { store, users, sessions, serverId, serverName, serverVersion, enableLegacyAuthorization, isLocalNetwork, now, logger });
+    Object.assign(this, { store, users, sessions, activities, serverId, serverName, serverVersion, enableLegacyAuthorization, isLocalNetwork, now, logger });
     users.authentication = this;
     if (sessions?.getDeviceCapabilities) users.getDeviceCapabilities = deviceId => sessions.getDeviceCapabilities(deviceId);
   }
@@ -92,6 +92,11 @@ export class AuthenticationService extends EventEmitter {
     if (policy === 'LiveTvAccess' && !auth.IsAdministrator && !auth.User.Policy.EnableLiveTvAccess) throw domainError(403, '');
     if (policy === 'LiveTvManagement' && !auth.IsAdministrator && !auth.User.Policy.EnableLiveTvManagement) throw domainError(403, '');
     if (policy === 'CollectionManagement' && !auth.IsAdministrator && !auth.User.Policy.EnableCollectionManagement) throw domainError(403, '');
+    // Native's policy projection omits this flag; authorization reads the
+    // persisted permission rather than the public UserPolicy DTO default.
+    if (policy === 'LyricManagement' && !auth.IsAdministrator
+      && !auth.User.Permissions.some(permission => permission.Kind === permissionNames.indexOf('EnableLyricManagement') && permission.Value)) throw domainError(403, '');
+    if (policy === 'Download' && !auth.IsAdministrator && !auth.User.Policy.EnableContentDownloading) throw domainError(403, '');
     if (policy === 'FirstTimeSetupOrElevated' && !auth.IsAdministrator) throw domainError(403, '');
     if (requiredPermission && !auth.User.Permissions.some(permission => permission.Value && permission.Kind === requiredPermission)) throw domainError(403, '');
     return true;
@@ -102,6 +107,7 @@ export class AuthenticationService extends EventEmitter {
     for (const field of ['Client', 'DeviceId', 'Device', 'Version']) if (typeof authorization[field] !== 'string' || !authorization[field]) throw domainError(400, `Value cannot be null or empty. (Parameter '${field}')`);
     const operation = this.#loginTail.then(async () => {
       const user = await this.users.authenticateUser(input.Username, input.Pw, { remoteEndPoint, isUserSession: true });
+      if (!user) await this.activities?.authenticationFailed(input.Username, remoteEndPoint);
       return this.#createSession(user, authorization, { remoteEndPoint });
     });
     this.#loginTail = operation.catch(() => {});
@@ -152,6 +158,7 @@ export class AuthenticationService extends EventEmitter {
     const session = await this.sessions.logActivity(auth, { remoteEndPoint });
     const result = { User: this.users.getUserDto(user), SessionInfo: session, AccessToken: device.AccessToken, ServerId: this.serverId };
     this.emit('AuthenticationResult', result);
+    await this.activities?.authenticationSucceeded(result);
     return result;
   }
 

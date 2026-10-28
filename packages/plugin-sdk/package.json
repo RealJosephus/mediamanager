@@ -7,6 +7,7 @@
     "./storage/errors": "./storage/errors.js",
     "./storage/paths": "./storage/paths.js",
     "./storage/range": "./storage/range.js",
+    "./storage/uri": "./storage/uri.js",
     "./library/native-item-value": "./library/native-item-value.js",
     "./core/xml": "./core/xml.js",
     "./core/xml-stream": "./core/xml-stream.js",
@@ -50,6 +51,7 @@
     "./live-tv/contract": "./live-tv/contract.js",
     "./live-tv/raw-input": "./live-tv/raw-input.js",
     "./core/json-tokens": "./core/json-tokens.js",
-    "./core/json": "./core/json.js"
+    "./core/json": "./core/json.js",
+    "./lyrics/contract": "./lyrics/contract.js"
   }
 }

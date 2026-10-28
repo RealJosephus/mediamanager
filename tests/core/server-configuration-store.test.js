@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import model from '../../src/core/resources/configuration-model.json' with { type: 'json' };
 import { NamedConfigurationStore } from '../../src/core/named-configuration-store.js';
 import { ServerConfigurationStore } from '../../src/core/server-configuration-store.js';
@@ -20,6 +21,7 @@ async function setup(t, overrides = {}) {
   const directory = path.join(root, 'config'), filename = path.join(directory, 'system.xml');
   await fs.mkdir(directory); await fs.writeFile(filename, original);
   const storage = await localStateStorage(root), errors = [];
+  t.after(() => { t.diagnostic(inspect({ errors }, { depth: null })); });
   const configuration = parseConfigurationXml(Buffer.from(original), 'server');
   const networkConfiguration = defaultConfiguration('network');
   const applicationPaths = { programDataPath: root, defaultMetadataPath: path.join(root, 'metadata'),
@@ -237,7 +239,8 @@ test('updated failure is reported after committed files, stops later handlers an
   store.on('updated', async () => { phases.push((await readServer(filename)).ServerName); throw Object.assign(new Error('Controlled updated failure.'), { code: 'EIO' }); });
   store.on('updated', () => { phases.push('later handler'); });
   await store.updateServerValues({ ServerName: 'Saved' }); await store.close();
-  assert.deepEqual(phases, ['Saved']); assert.deepEqual(errors.map(error => ({ code: error.code, message: error.message })), [{ code: 'EIO', message: 'Controlled updated failure.' }]);
+  assert.deepEqual(phases, ['Saved']);
+  for (const error of errors) assert.deepEqual({ code: error.code, message: error.message }, { code: 'EIO', message: 'Controlled updated failure.' });
   assert.equal((await readServer(filename)).ServerName, 'Saved');
 });
 

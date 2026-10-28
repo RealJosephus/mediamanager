@@ -16,7 +16,7 @@ const missing = key => Object.assign(new Error('Configuration with key ' + key +
 const existenceFailures = new Set(['ENOENT', 'ENOTDIR', 'EACCES', 'EPERM', 'EINVAL', 'ENAMETOOLONG', 'ELOOP', 'EIO', 'ENODEV', 'ENXIO', 'ERR_INVALID_ARG_VALUE']);
 const nonempty = value => value != null && clrTrim(value) !== '';
 const publicIoFailure = error => {
-  if (['ENOENT', 'ENOTDIR'].includes(error.code) && error.status == null && error.statusCode == null) error.status = 404;
+  if (['ENOENT', 'ENOTDIR'].includes(error?.code) && error.status == null && error.statusCode == null) error.status = 404;
   return error;
 };
 
@@ -88,13 +88,13 @@ export class NamedConfigurationStore extends EventEmitter {
   async #read(key, root) {
     const filename = this.#filename(key), defaults = () => defaultConfiguration(root);
     try { if ((await this.fileSystem.stat(filename)).isDirectory()) return defaults(); }
-    catch (error) { if (existenceFailures.has(error.code)) return defaults(); throw error; }
+    catch (error) { if (existenceFailures.has(error?.code)) return defaults(); throw error; }
     let bytes;
     try { bytes = await this.fileSystem.readFile(filename); }
     catch (error) {
       // A failed read after File.Exists is distinct from an absent file. Native
       // I/O failures propagate; access denial is logged before using defaults.
-      if (!['EACCES', 'EPERM'].includes(error.code)) throw publicIoFailure(error);
+      if (!['EACCES', 'EPERM'].includes(error?.code)) throw publicIoFailure(error);
       await this.#diagnose(error, { key, filename, phase: 'configuration-read' }); return defaults();
     }
     try { return readConfigurationDocument(bytes, root).value; }
@@ -140,7 +140,7 @@ export class NamedConfigurationStore extends EventEmitter {
         if (nonempty(configuration.TranscodingTempPath) && configuration.TranscodingTempPath !== current.TranscodingTempPath) {
           let directory = false, failure;
           try { directory = (await this.fileSystem.stat(configuration.TranscodingTempPath)).isDirectory(); }
-          catch (error) { if (!existenceFailures.has(error.code)) throw error; failure = error; }
+          catch (error) { if (!existenceFailures.has(error?.code)) throw error; failure = error; }
           if (!directory) throw Object.assign(new Error(configuration.TranscodingTempPath + ' does not exist.', failure ? { cause: failure } : undefined), { code: 'ENOENT', status: 404 });
         }
         if (nonempty(configuration.EncoderAppPath) && configuration.EncoderAppPath !== current.EncoderAppPath) {

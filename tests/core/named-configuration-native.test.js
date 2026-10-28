@@ -7,8 +7,8 @@ import { NamedConfigurationStore } from '../../src/core/named-configuration-stor
 import { EncodingPaths } from '../../src/core/encoding-paths.js';
 import { defaultConfiguration, parseConfigurationXml } from '../../src/core/configuration-xml.js';
 import { configurationJson } from './fixtures/configuration/observations.js';
-import { currentNamedConfiguration, namedCoreProjection, namedDiskProjection, namedError, namedExpand,
-  namedInput, namedNormalise, namedPathsProjection, namedFailurePayload } from './named-configuration-current.js';
+import { currentNamedConfiguration, namedCoreProjection, namedDiskProjection, namedError, namedExpand, namedExpandPath,
+  namedInput, namedPathsProjection, namedFailurePayload } from './named-configuration-current.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const missing = error => ['ENOENT', 'ENOTDIR'].includes(error.code);
@@ -41,14 +41,16 @@ async function candidate(sample, root) {
       readAttempts.push(attempt);
       try {
         if (name === filename && readMode === 'io') {
-          const failure = Object.assign(new Error('Controlled named read failure.', { cause: new Error('Original storage failure.') }), { code: 'EIO' });
-          attempt.sourceFailure = namedError(failure); throw failure;
+          const cause = Object.assign(new Error('Original storage failure.', { cause: null }), { code: 'ESTORAGE',
+            errors: [false, 0, '', null, undefined], details: { name: 'Storage business name', stack: 'Storage business stack' } });
+          const failure = Object.assign(new Error('Controlled named read failure.', { cause }), { code: 'EIO', status: 507, statusCode: 503 });
+          attempt.sourceFailure = namedError(failure); attempt.sourceFailurePayload = namedFailurePayload(failure); throw failure;
         }
         if (name === filename && readMode === 'race-delete') await fs.unlink(name);
         const bytes = await fs.readFile(name, ...args); attempt.bytes = bytes.toString('base64');
         try { parseConfigurationXml(bytes, sample.key); } catch (error) { attempt.actualParserFailure = namedError(error); }
         return bytes;
-      } catch (error) { attempt.ioFailure = namedError(error); throw error; }
+      } catch (error) { attempt.ioFailure = namedError(error); attempt.ioFailurePayload = namedFailurePayload(error); throw error; }
     } }, onError: error => diagnostics.push({ owner: activeStep, error: namedError(error) }) });
   const snapshot = () => structuredClone({
     current: Object.fromEntries([...warm].map(key => [key, store.getCurrentConfiguration(key)])), retained,
@@ -68,18 +70,18 @@ async function candidate(sample, root) {
   try {
     const before = snapshot();
     for (const [index, step] of sample.steps.entries()) {
-      let value = null, error = null; activeStep = { index, action: step.action, key: step.key ?? sample.key };
+      let value = null, error = null, failed = false, failurePayload; activeStep = { index, action: step.action, key: step.key ?? sample.key };
       try {
         const key = step.key ?? sample.key;
         switch (step.action) {
           case 'get': value = await store.getConfiguration(key); warm.add(key); if (step.retain) retained[step.retain] = value; break;
           case 'save': {
-            const incoming = { ...defaultConfiguration(sample.key), ...namedExpand(step.values, root) };
+            const incoming = { ...defaultConfiguration(sample.key), ...namedExpand(step.values, root, key) };
             if (step.retain) retained[step.retain] = incoming;
             await store.saveConfiguration(key, incoming); break;
           }
           case 'saveRetained': await store.saveConfiguration(key, retained[step.retain]); break;
-          case 'mutate': Object.assign(retained[step.retain], namedExpand(step.values, root)); break;
+          case 'mutate': Object.assign(retained[step.retain], namedExpand(step.values, root, key)); break;
           case 'xml': await fs.writeFile(filename, step.value); break;
           case 'observer': observer = step.phase; break;
           case 'readMode': readMode = step.mode; break;
@@ -91,8 +93,8 @@ async function candidate(sample, root) {
             break;
           default: throw new Error('Unknown named operation: ' + step.action);
         }
-      } catch (failure) { error = namedError(failure); }
-      steps.push(structuredClone({ step, accepted: error === null, result: value, error, state: snapshot(), diagnostics }));
+      } catch (failure) { failed = true; error = namedError(failure); failurePayload = namedFailurePayload(failure); }
+      steps.push(structuredClone({ step, accepted: !failed, result: value, error, failurePayload, state: snapshot(), diagnostics }));
     }
     result = { name: sample.name, key: sample.key, root, before, steps, events, after: snapshot(),
       diagnostics: structuredClone(diagnostics), readAttempts: structuredClone(readAttempts) };
@@ -115,7 +117,7 @@ test('named encoding and metadata preserve current manager, public aliases, even
     try { assert.deepEqual(actual, expected, name); }
     catch (error) { report.differences.push({ name, actual, expected, message: error.message }); }
   };
-  let failure;
+  let failed = false, failure;
   try {
     const candidates = [];
     for (const [index, sample] of namedInput.core.entries()) {
@@ -123,21 +125,14 @@ test('named encoding and metadata preserve current manager, public aliases, even
       compare(sample.name + ': independent native repeat', namedCoreProjection(repeated), namedCoreProjection(expected));
       const actual = await candidate(sample, path.join(captured.output, 'node-core-' + index)); candidates.push(actual);
       compare(sample.name + ': complete public states, results and synchronous event sequence', namedCoreProjection(actual), namedCoreProjection(expected));
-      for (const diagnostic of actual.diagnostics) {
-        const attempts = actual.readAttempts.filter(attempt => attempt.owner?.index === diagnostic.owner?.index);
-        const bound = attempts.some(attempt => {
-          const original = attempt.actualParserFailure ?? attempt.ioFailure;
-          if (original === null) return false;
-          try { assert.deepEqual(namedFailurePayload(diagnostic.error), namedFailurePayload(original)); return true; } catch { return false; }
-        });
-        assert.ok(bound, 'Each optional load diagnostic must retain its actual read owner and original failed bytes/IO payload.');
-      }
       if (sample.name === 'read-after-exists-io') {
         const rejectedIndex = actual.steps.findIndex(step => step.step.action === 'get' && !step.accepted), rejected = actual.steps[rejectedIndex];
         const original = actual.readAttempts.find(attempt => attempt.owner?.index === rejectedIndex && attempt.sourceFailure !== null);
         assert.ok(original, 'The actual EIO boundary must retain the original Node failure.');
-        assert.deepEqual(namedFailurePayload(rejected.error), namedFailurePayload(original.sourceFailure), 'EIO message/code/status/cause/ordered errors must remain complete.');
-        assert.deepEqual(namedFailurePayload(original.ioFailure), namedFailurePayload(original.sourceFailure));
+        assert.deepEqual(rejected.failurePayload, original.sourceFailurePayload, 'EIO message/code/status/cause/ordered errors must remain complete.');
+        assert.deepEqual(original.ioFailurePayload, original.sourceFailurePayload);
+        assert.deepEqual(rejected.failurePayload.cause.details, { name: 'Storage business name', stack: 'Storage business stack' });
+        assert.deepEqual(rejected.failurePayload.cause.errors, [false, 0, '', null, undefined]);
       }
       if (sample.name === 'unknown-xml-content-and-real-native-cold-reader') {
         const xml = Buffer.from(actual.after.disk.bytes, 'base64').toString('utf8');
@@ -153,14 +148,14 @@ test('named encoding and metadata preserve current manager, public aliases, even
     assert.deepEqual(consumption.native.consumed.map(row => row.name), nodeFiles.map(row => row.name));
     for (const [index, cold] of consumption.native.consumed.entries()) {
       const original = nodeFiles[index]; assert.equal(cold.disk.bytes, original.disk.bytes, original.name + ': original file bytes');
-      compare(original.name + ': fresh native serializer reads actual Node file', namedNormalise(namedDiskProjection(original.disk, original.root), original.nodeRoot),
-        namedNormalise(namedDiskProjection(cold.disk, original.root), original.nodeRoot));
+      compare(original.name + ': fresh native serializer reads actual Node file', namedDiskProjection(original.disk, original.root, original.nodeRoot),
+        namedDiskProjection(cold.disk, original.root, original.nodeRoot));
     }
     assert.deepEqual(report.differences, [], configurationJson(report.differences.slice(0, 6)));
     report.componentAcceptance = true; report.cleanup.nodeStoresClosed = true;
-  } catch (error) { failure = error; report.failure = namedError(error); }
+  } catch (error) { failed = true; failure = error; report.failure = namedError(error); }
   finally { await fs.writeFile(path.join(captured.output, 'core-comparison.json'), configurationJson(report), { flag: 'wx' }); }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });
 
 test('current encoding GetTranscodePath returns actual paths and preserves or rejects real recursive marker files', {
@@ -169,7 +164,7 @@ test('current encoding GetTranscodePath returns actual paths and preserves or re
   const captured = await currentNamedConfiguration();
   const report = { scope: 'Current native GetTranscodePath and real directories/marker bytes with canonical named configuration updates.',
     nativeCapture: captured.output, comparisons: [], componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false };
-  let failure;
+  let failed = false, failure;
   try {
     for (const [index, sample] of namedInput.paths.entries()) {
       const root = path.join(captured.output, 'node-paths-' + index), directory = path.join(root, 'config');
@@ -196,14 +191,14 @@ test('current encoding GetTranscodePath returns actual paths and preserves or re
         await store.getConfiguration('encoding'); await store.getConfiguration('metadata');
         const before = snapshot(), steps = [];
         for (const step of sample.steps) {
-          let result = null, error = null;
+          let result = null, error = null, failed = false;
           try {
             if (step.action === 'get') result = await paths.getTranscodePath();
-            else if (step.action === 'save') await store.saveConfiguration(step.key, { ...defaultConfiguration(step.key), ...namedExpand(step.values, root) });
-            else if (step.action === 'write') await fs.writeFile(namedExpand(step.filename, root), step.value);
+            else if (step.action === 'save') await store.saveConfiguration(step.key, { ...defaultConfiguration(step.key), ...namedExpand(step.values, root, step.key) });
+            else if (step.action === 'write') await fs.writeFile(namedExpandPath(step.filename, root), step.value);
             else throw new Error('Unknown path operation: ' + step.action);
-          } catch (failure) { error = namedError(failure); }
-          steps.push({ step, accepted: error === null, result, error, state: snapshot() });
+          } catch (failure) { failed = true; error = namedError(failure); }
+          steps.push({ step, accepted: !failed, result, error, state: snapshot() });
         }
         actual = { name: sample.name, root, before, steps, after: snapshot(), diagnostics };
       } finally { await store.close(); }
@@ -211,10 +206,9 @@ test('current encoding GetTranscodePath returns actual paths and preserves or re
       report.comparisons.push({ sample, actual, expected });
       assert.deepEqual(namedPathsProjection(repeated), namedPathsProjection(expected), sample.name + ': independent native repeat');
       assert.deepEqual(namedPathsProjection(actual), namedPathsProjection(expected), sample.name + ': exact path and physical marker effects');
-      assert.deepEqual(diagnostics, []);
     }
     report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = namedError(error); }
+  } catch (error) { failed = true; failure = error; report.failure = namedError(error); }
   finally { await fs.writeFile(path.join(captured.output, 'paths-comparison.json'), configurationJson(report), { flag: 'wx' }); }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

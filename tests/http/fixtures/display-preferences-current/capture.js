@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { currentNativeReference } from '../../../../tools/compat/current-native-reference.js';
 import { describeFile } from '../../../../tools/validation/inventory.js';
-import { recordOracle } from '../../../../tools/validation/oracle.js';
+import { compileOracle } from '../../../../tools/validation/oracle.js';
 import { assertValidationOutputChild, validationOutputRoot } from '../../../../tools/validation/paths.js';
 import { projectPreferenceObservation } from '../display-preferences/observations.js';
 
@@ -89,8 +89,10 @@ async function capture(mode) {
     const samples = JSON.parse(await readFile(inputFilename, 'utf8'));
     assert.equal(samples.length, 119);
     assert.equal(samples.reduce((count, sample) => count + (sample.steps?.length ?? 1), 0), 126);
+    const oracle = await compileOracle({ project, output: path.join(output, 'build'), environment: current.environment });
+    report.oracleBuild = oracle.buildRecord;
     for (const label of ['first', 'repeat']) {
-      const receipt = await recordOracle({ project, output: path.join(output, label), environment: current.environment,
+      const receipt = await oracle.record({ output: path.join(output, label),
         args: [mode, inputFilename, '{output}/native.json', current.sourceDatabase] });
       const nativeFilename = path.join(output, label, 'native.json');
       const nativeBytes = await readFile(nativeFilename), native = JSON.parse(nativeBytes);

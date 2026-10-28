@@ -17,7 +17,12 @@ semantics. `WasSearched` in the POST body is unbound; even false or an invalid
 string marks the supplied items.
 
 The Node consumer uses real PostgreSQL, HTTP, WebSocket delivery and a database
-close/reopen. It compares the query envelope, item identities/names and relevant
+close/reopen. The independent official `history` and `order` sources each run
+in their own test with a separate database, runtime, observation journal and
+ninety-second budget. History retains copying and restart; order retains the
+complete tie and eight-query pagination matrix. Each journal binds its source
+and the unchanged reference bytes.
+It compares the query envelope, item identities/names and relevant
 playback state with these observations, using an explicit Audio filter for the
 controlled items. The original complete item responses remain available here;
 this consumer does not claim complete Emby BaseItemDto compatibility, every

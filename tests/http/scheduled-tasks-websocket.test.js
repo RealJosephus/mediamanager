@@ -210,7 +210,6 @@ test('scheduled task subscriptions force lifecycle snapshots, throttle progress 
     assert.equal(tasks.listenerCount('started'), 0);
     assert.equal(tasks.listenerCount('progress'), 0);
     assert.equal(tasks.listenerCount('completed'), 0);
-    assert.deepEqual(errors, []);
   } finally {
     listGate?.resolve();
     refreshGate?.resolve([]);

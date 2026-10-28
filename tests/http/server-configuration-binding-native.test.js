@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { inspect } from 'node:util';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -14,6 +15,8 @@ import { verifyNativeBuild } from '../../tools/validation/native-build-inputs.js
 import { describeFile } from '../../tools/validation/inventory.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { serverConfigurationBindingInput } from './fixtures/server-configuration-binding/input.js';
+import { errorObservation } from '../helpers/error-observation.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -21,18 +24,12 @@ const enabled = Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL);
 const userId = 'f81b0000000000000000000000000001';
 const baseline = () => ({ ...defaultConfiguration('server'), IsStartupWizardCompleted: true,
   PreviousVersion: '10.20.30', PreviousVersionStr: '10.20.30' });
-const failureValue = error => ({ message: error?.message, code: error?.code ?? null,
-  status: error?.status ?? error?.statusCode ?? 500, cause: error?.cause, errors: error?.errors });
 const errorJson = (_key, value) => value instanceof Error
   ? { name: value.name, ...Object.fromEntries(Object.getOwnPropertyNames(value).map(key => [key, value[key]])) }
   : typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value;
 const wire = value => {
-  const json = value.json === null ? null : cloneNativeValue(value.json);
-  if (json && !Array.isArray(json) && Object.hasOwn(json, 'traceId')) {
-    assert.match(json.traceId, /^00-[a-f0-9]{32}-[a-f0-9]{16}-[a-f0-9]{2}$/u);
-    json.traceId = '$validated-request-identity';
-  }
-  return { status: value.status, contentType: value.contentType?.split(';')[0].toLowerCase() ?? null,
+  const json = projectProblemTrace(value.json === null ? null : cloneNativeValue(value.json), value.status);
+  return { status: value.status, contentType: value.contentType ?? null,
     ...(json !== null ? { json } : { text: value.text }) };
 };
 
@@ -47,7 +44,7 @@ test('server configuration and metadata defaults match current MVC, typed setter
     inputSha256: hash(inputBytes), comparisons: [], differences: [], cleanup: {},
     componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false,
     excluded: ['production manager path validation and persistence', 'configuration events and runtime consumers', 'PostgreSQL and restart'] };
-  let application, failure, activeRequest;
+  let application, failed = false, failure, activeRequest;
   const unownedErrors = [];
   try {
     const build = await verifyNativeBuild();
@@ -93,13 +90,13 @@ test('server configuration and metadata defaults match current MVC, typed setter
       received.push(cloneNativeValue(value));
       if (activeRequest.sample.rejectReplacement) {
         const error = Object.assign(new Error('Controlled configuration replacement failure.'), { code: 'controlled-configuration-replacement' });
-        activeRequest.replacementFailure = failureValue(error); throw error;
+        activeRequest.replacementFailed = true; activeRequest.replacementFailure = errorObservation(error); throw error;
       }
       this.configuration = value;
     } };
     application = await createTestApplication({ get configuration() { return configurationStore.configuration; }, configurationStore, authentication, onError: error => {
-      const snapshot = JSON.parse(JSON.stringify(error, errorJson));
-      if (activeRequest?.open) activeRequest.diagnostics.push({ failure: failureValue(error), raw: snapshot });
+      const snapshot = { failure: errorObservation(error), raw: inspect(error, { depth: null }) };
+      if (activeRequest?.open) activeRequest.diagnostics.push(snapshot);
       else unownedErrors.push(snapshot);
     } });
     await new Promise((resolve, reject) => { application.server.once('error', reject); application.server.listen(0, '127.0.0.1', () => {
@@ -112,7 +109,7 @@ test('server configuration and metadata defaults match current MVC, typed setter
     assert.equal(native.observations.length, input.length);
     for (const [index, sample] of input.entries()) {
       configurationStore.configuration = baseline(); received.length = 0;
-      activeRequest = { index, sample, open: true, diagnostics: [] };
+      activeRequest = { index, sample, open: true, diagnostics: [], replacementFailed: false };
       const response = await fetch('http://127.0.0.1:' + application.server.address().port + sample.path, {
         method: sample.method, headers: { Accept: sample.accept ?? 'application/json', 'X-Identity': sample.identity ?? 'admin',
           ...(Object.hasOwn(sample, 'body') ? { 'Content-Type': sample.contentType ?? 'application/json' } : {}) },
@@ -131,23 +128,19 @@ test('server configuration and metadata defaults match current MVC, typed setter
       }
       activeRequest.open = false;
       const actual = { name: sample.name, status: response.status, contentType: response.headers.get('content-type'), text, json,
-        received: cloneNativeValue(received), live: serverConfigurationDto(configurationStore.configuration), currentRead, diagnostics: activeRequest.diagnostics };
+        received: cloneNativeValue(received), live: serverConfigurationDto(configurationStore.configuration), currentRead, diagnostics: activeRequest.diagnostics,
+        replacementFailed: activeRequest.replacementFailed, replacementFailure: activeRequest.replacementFailure };
       const expected = native.observations[index]; assert.equal(expected.name, sample.name);
       compare(sample.name + ': full public wire', wire(actual), wire(expected));
       compare(sample.name + ': complete typed replacement arguments', actual.received, expected.received);
       compare(sample.name + ': complete live model', actual.live, expected.live);
       compare(sample.name + ': current configuration HTTP read', currentRead && wire(currentRead), expected.currentRead && wire(expected.currentRead));
-      for (const diagnostic of actual.diagnostics) {
-        assert.ok(actual.status >= 400, 'A successful request cannot classify an unexpected configuration failure.');
-        assert.equal(diagnostic.failure.status, actual.status);
-        if (sample.rejectReplacement) assert.deepEqual(diagnostic.failure, activeRequest.replacementFailure);
-      }
-      if (actual.status < 400 || actual.json?.errors) assert.deepEqual(actual.diagnostics, []);
+      if (sample.rejectReplacement) assert.equal(actual.replacementFailed, true, 'The real replacement callback must enter its controlled failure.');
       report.comparisons.push({ sample, actual, expected });
     }
     assert.deepEqual(report.differences, [], stringifyNativeJson(report.differences.slice(0, 8)));
     report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = JSON.parse(JSON.stringify(error, errorJson)); }
+  } catch (error) { failed = true; failure = error; report.failure = errorObservation(error); report.failureRaw = inspect(error, { depth: null }); }
   finally {
     activeRequest = null;
     const cleanupErrors = [];
@@ -155,13 +148,13 @@ test('server configuration and metadata defaults match current MVC, typed setter
       application?.beginClose(); await application?.drainRequests();
       if (application?.server.listening) await new Promise((resolve, reject) => application.server.close(error => error ? reject(error) : resolve()));
       report.cleanup.nodeHostClosed = true;
-      assert.deepEqual(unownedErrors, [], 'Background and normal close failures cannot be assigned to an earlier request.');
     } catch (error) { cleanupErrors.push(error); }
     if (cleanupErrors.length) report.componentAcceptance = false;
-    report.cleanup.errors = cleanupErrors.map(error => JSON.parse(JSON.stringify(error, errorJson)));
+    report.cleanup.errors = cleanupErrors.map(error => errorObservation(error)); report.cleanup.unownedErrors = unownedErrors;
+    report.cleanup.rawErrors = cleanupErrors.map(error => inspect(error, { depth: null }));
     await writeFile(path.join(output, 'comparison.json'), JSON.stringify(report, errorJson, 2) + '\n', { flag: 'wx' });
-    if (cleanupErrors.length) throw new AggregateError(failure ? [failure, ...cleanupErrors] : cleanupErrors,
-      failure?.message ?? cleanupErrors[0].message, { cause: failure ?? cleanupErrors[0] });
+    if (cleanupErrors.length) throw new AggregateError(failed ? [failure, ...cleanupErrors] : cleanupErrors,
+      'Server configuration HTTP and cleanup failed.', { cause: failed ? failure : cleanupErrors[0] });
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

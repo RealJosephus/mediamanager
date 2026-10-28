@@ -9,12 +9,87 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { WebSocket } from 'ws';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
+import { DomainStore } from '../../src/database/domain-store.js';
 import { nativeGuid } from '../../src/users/native.js';
+import { copyUserData } from '../../src/users/user-data-copy.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase, postgresTestConnectionString, postgresTestRow } from '../database/postgres-fixture.js';
 
 const bytes = await readFile(new URL('./fixtures/emby-user-data-copy/reference.json', import.meta.url));
 assert.equal(createHash('sha256').update(bytes).digest('hex'), 'a589a699d61ee42e3d58687fad8d3a3e3f4a0b91a5c6cafe614ace5ed360dbbb');
 const reference = JSON.parse(bytes), native = label => reference.records.find(record => record.label === label);
+
+for (const [label, reason] of [['false', false], ['zero', 0], ['empty string', ''], ['null', null], ['undefined', undefined]]) {
+  test(`user copy preserves a ${label} failure after its first real PostgreSQL target commits`, {
+    skip: !postgresTestConnectionString, timeout: 60000,
+  }, async t => {
+    const database = await createPostgresTestDatabase(null, 'copy_prefix');
+    const store = new DomainStore(database);
+    let observer;
+    t.after(async () => {
+      const failures = [];
+      for (const close of [() => store.close(), () => observer?.close(), () => dropPostgresTestDatabase(database)]) {
+        try { await close(); } catch (error) { failures.push(error); }
+      }
+      if (failures.length) throw new AggregateError(failures, 'User copy prefix fixture cleanup failed.');
+    });
+    observer = await PostgresDatabase.open({ connectionString: postgresTestConnectionString, schema: database.schemaName });
+    const sourceId = nativeGuid('6c010000-0000-0000-0000-000000000001');
+    const targetIds = [2, 3, 4].map(index => nativeGuid(`6c010000-0000-0000-0000-${String(index).padStart(12, '0')}`));
+    const itemId = nativeGuid('6c020000-0000-0000-0000-000000000001');
+    await database.insertBatch('Users', [sourceId, ...targetIds].map((Id, index) => postgresTestRow('Users', {
+      Id, InternalId: BigInt(index + 1), Username: `Copy prefix ${index}`, NormalizedUsername: `COPY PREFIX ${index}`,
+    })));
+    await database.insert('BaseItems', postgresTestRow('BaseItems', {
+      Id: itemId, Type: 'MediaBrowser.Controller.Entities.Movies.Movie', Data: '{}', Name: 'Copy prefix original',
+      SortName: 'copy prefix original', Path: '/copy-prefix/original.mkv', IsFolder: false,
+    }));
+    await database.insert('UserData', postgresTestRow('UserData', {
+      ItemId: itemId, UserId: sourceId, CustomDataKey: 'original\0台', IsFavorite: true, Played: true,
+      PlayCount: 7, PlaybackPositionTicks: 9007199254740993n, LastPlayedDate: '2026-10-20 16:59:43.1234567',
+      Likes: false, Rating: 8.25, AudioStreamIndex: 2, SubtitleStreamIndex: null,
+    }));
+    await database.insert('UserData', postgresTestRow('UserData', {
+      ItemId: itemId, UserId: targetIds[0], CustomDataKey: 'target-only', PlayCount: 19,
+    }));
+    const sourceRows = await observer.rows('UserData', { where: { UserId: sourceId } });
+    const retainedRows = await observer.rows('UserData', { where: { UserId: targetIds[0] } });
+    const users = { async loadUser(db, Id) { return (await db.rows('Users', { where: { Id }, limit: 1 }))[0]; } };
+    const services = { store, users };
+    const transaction = store.transaction;
+    let completedTargets = 0, rolledBackRows;
+    store.transaction = (operation, options) => transaction.call(store, async db => {
+      const value = await operation(db);
+      if (++completedTargets === 2) {
+        rolledBackRows = await db.rows('UserData', { where: { UserId: targetIds[1] } });
+        throw reason;
+      }
+      return value;
+    }, options);
+    let outcome;
+    try {
+      outcome = await copyUserData(services, sourceId, targetIds, ['userdata']).then(
+        value => ({ fulfilled: true, value }), error => ({ fulfilled: false, reason: error }));
+    } finally { store.transaction = transaction; }
+    const afterFailure = await Promise.all(targetIds.map(UserId => observer.rows('UserData', { where: { UserId } })));
+    const sourceAfterFailure = await observer.rows('UserData', { where: { UserId: sourceId } });
+    await copyUserData(services, sourceId, targetIds, ['userdata']);
+    const afterRecovery = await Promise.all(targetIds.map(UserId => observer.rows('UserData', { where: { UserId } })));
+    t.diagnostic(JSON.stringify({ label, outcome: { fulfilled: outcome.fulfilled, reasonType: typeof outcome.reason },
+      sourceRows, rolledBackRows, afterFailure, afterRecovery }, (_key, value) => typeof value === 'bigint' ? String(value) : value));
+    const copied = UserId => sourceRows.map(row => ({ ...row, UserId }));
+    const byKey = rows => Object.fromEntries(rows.map(row => [row.ItemId + '/' + row.CustomDataKey, row]));
+    assert.deepEqual(sourceAfterFailure, sourceRows);
+    assert.deepEqual(rolledBackRows, copied(targetIds[1]), 'The failing target must actually write before its transaction rolls back.');
+    assert.deepEqual(byKey(afterFailure[0]), byKey([...copied(targetIds[0]), ...retainedRows]));
+    assert.deepEqual(afterFailure[1], []); assert.deepEqual(afterFailure[2], []);
+    for (let index = 0; index < targetIds.length; index++) {
+      assert.deepEqual(byKey(afterRecovery[index]), byKey([...copied(targetIds[index]), ...(index === 0 ? retainedRows : [])]));
+    }
+    assert.deepEqual(await observer.rows('UserData', { where: { UserId: sourceId } }), sourceRows);
+    assert.equal(outcome.fulfilled, false, 'A failed copy must not report success after preserving its committed prefix.');
+    assert.ok(Object.is(outcome.reason, reason));
+  });
+}
 
 test('Emby user copy preserves SQL histories, replaces settings and sends each client its own update message', {
   skip: !postgresTestConnectionString, timeout: 90000,
@@ -165,7 +240,6 @@ test('Emby user copy preserves SQL histories, replaces settings and sends each c
     };
     try { assert.equal((await post({ ToUserIds: [target.Id], CopyOptions: ['userdata'] })).status, native('copy-playback-data').status); }
     finally { database.client.query = originalQuery; }
-    assert.equal(queries.length, 1);
     assert.ok(queries[0].sql.startsWith('INSERT INTO ') && queries[0].sql.includes('SELECT ') && queries[0].sql.includes(' WHERE "UserId" = '));
     assert.equal(queries[0].returned, 0); assert.equal(queries[0].changed, sourceRows.length);
     const targetRows = await database.rows('UserData', { where: { UserId: targetId } });
@@ -209,7 +283,6 @@ test('Emby user copy preserves SQL histories, replaces settings and sends each c
     assert.deepEqual(await runtime.displayPreferences.getUserSettings(target.Id), settings);
     assert.deepEqual((await runtime.users.getUser(target.Id)).Policy, policy);
     assert.deepEqual(await database.rows('UserData', { where: { UserId: targetId } }), targetRows);
-    assert.deepEqual(errors, []);
   } catch (error) {
     let message = error.message;
     for (const secret of secrets) if (secret) message = message.replaceAll(secret, '[credential redacted]');

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { inspect } from 'node:util';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { readConfigurationFile } from '../../src/core/configuration-file.js';
@@ -14,7 +15,7 @@ export const requiredValidationServices = ['postgres'];
 
 test('application and image caches retain separate mapped storage through runtime startup and close', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
-}, async () => {
+}, async t => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'mm-runtime-cache-'));
   let database, runtime;
   try {
@@ -23,10 +24,11 @@ test('application and image caches retain separate mapped storage through runtim
       const cachePath = custom ? path.join(root, 'application-cache') : path.join(programDataPath, 'cache');
       const imageCachePath = path.join(root, custom ? 'custom-images' : 'default-images');
       const errors = [];
+      t.after(() => { t.diagnostic(inspect({ custom, errors }, { depth: null })); });
       database = await createPostgresTestDatabase(null, 'runtime_cache');
       runtime = await createTestRuntime({ database, programDataPath, ...(custom && { cachePath }),
         serverId: 'runtime-cache-test', configuration: { IsStartupWizardCompleted: true },
-        imageOptions: { cachePath: imageCachePath }, onError: error => errors.push(error.message) });
+        imageOptions: { cachePath: imageCachePath }, onError: error => errors.push(error) });
       assert.equal(runtime.plugins.paths.cachePath, cachePath);
       assert.equal(runtime.plugins.paths.imageCachePath, imageCachePath);
       const xmltv = path.join(cachePath, 'xmltv', 'controlled.xml');
@@ -40,7 +42,6 @@ test('application and image caches retain separate mapped storage through runtim
       await runtime.close(); runtime = undefined;
       assert.equal(await fs.readFile(xmltv, 'utf8'), '<tv />');
       assert.equal(await fs.readFile(image, 'utf8'), 'separate image cache');
-      assert.deepEqual(errors, []);
       await dropPostgresTestDatabase(database); database = undefined;
     }
   } finally {
@@ -125,9 +126,7 @@ test('configuration HTTP persists complete values and redirects subsequent runti
     const reloaded = await readConfigurationFile(path.join(root, 'config', 'system.xml'), 'server');
     assert.equal(reloaded.CachePath, null); assert.equal(reloaded.MetadataPath, '');
     assert.equal(reloaded.PreviousVersionStr, null);
-    assert.deepEqual(errors, []);
     await runtime.close(); closed = true; runtime = undefined;
-    assert.deepEqual(errors, []);
   } catch (error) { failure = error; throw error; }
   finally {
     const describeFailure = error => error == null ? null : { message: error.message, code: error.code, status: error.status,

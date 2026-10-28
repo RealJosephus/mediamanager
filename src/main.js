@@ -1,11 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PostgresDatabase } from './database/postgres.js';
-import { verifyPostgresTransferContract } from './database/postgres-transfer-contract.js';
 import { createRuntime } from './runtime.js';
 import { readInstanceConfiguration } from './configuration.js';
+import { resolveProductionEnvironment, verifyProductionDatabaseContract } from './production-target.js';
 import { readMediaEncoderStartupOptions } from './playback/media-encoder.js';
 import { readPublishedServerStartupOptions } from './network/startup.js';
+import { SystemLifecycle } from './system/lifecycle.js';
 
 function optionalEnvironmentInteger(environment, name, minimum, description) {
   const raw = environment[name];
@@ -27,14 +28,7 @@ export function readPostgresPoolOptions(environment) {
   return Object.fromEntries(Object.entries(values).filter(([, value]) => value !== undefined));
 }
 
-export async function verifyProductionDatabaseContract(database, expectedServerId) {
-  const contract = await verifyPostgresTransferContract(database, {
-    expectedServerId,
-    requirePinnedEnvelope: true,
-    requirePortableMountContract: true,
-  });
-  return contract.portableMountContract;
-}
+export { verifyProductionDatabaseContract };
 
 export async function prepareProductionDatabase(database, expectedServerId) {
   const portableMountContract = await verifyProductionDatabaseContract(database, expectedServerId);
@@ -42,7 +36,9 @@ export async function prepareProductionDatabase(database, expectedServerId) {
   return portableMountContract;
 }
 
-export async function startProductionInstance({ environment = process.env, args = [], onError = error => console.error(error.message) } = {}) {
+export async function startProductionInstance({ environment = process.env, args = [], onError = error => console.error(error),
+  systemLifecycle, onApplication } = {}) {
+  environment = await resolveProductionEnvironment(environment);
   if (environment.MEDIAMANAGER_DATABASE !== undefined) {
     throw new Error('MEDIAMANAGER_DATABASE is no longer supported; the production runtime always uses PostgreSQL.');
   }
@@ -96,11 +92,13 @@ export async function startProductionInstance({ environment = process.env, args 
       ...networkStartup,
       storageConfiguration: environment.MEDIAMANAGER_STORAGE, environment, portableMountContract,
       mediaEncoderOptions,
+      systemLifecycle,
       database,
       onError,
       autoDiscoveryOptions: {},
       onDatabaseOwnershipTransferred() { databaseOwnedByCaller = false; }
     });
+    onApplication?.({ close });
     await application.start();
     return { ...application, close };
   } catch (error) {
@@ -114,12 +112,21 @@ export async function startProductionInstance({ environment = process.env, args 
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const application = await startProductionInstance({ args: process.argv.slice(2) });
-  for (const listener of application.networkHost.listeners) {
-    const address = listener.address.includes(':') ? '[' + listener.address + ']' : listener.address;
-    console.log(`MediaManager listening on ${listener.scheme}://${address}:${listener.port}.`);
-  }
-  for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => {
-    application.close().catch(error => { console.error(error.message); process.exitCode = 1; });
+  // A published target selects the next process. Runtime restarts keep this
+  // process's captured instance, database and storage selection.
+  const environment = resolveProductionEnvironment(process.env);
+  const lifecycle = new SystemLifecycle({
+    start: async ownership => startProductionInstance({ environment: await environment, args: process.argv.slice(2), ...ownership }),
+    onReady(application) {
+      for (const listener of application.networkHost.listeners) {
+        const address = listener.address.includes(':') ? '[' + listener.address + ']' : listener.address;
+        console.log(`MediaManager listening on ${listener.scheme}://${address}:${listener.port}.`);
+      }
+    },
   });
+  const stop = () => { void lifecycle.close().catch(() => {}); };
+  for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, stop);
+  try { await lifecycle.run(); }
+  catch (error) { console.error(error); process.exitCode = 1; }
+  finally { for (const signal of ['SIGINT', 'SIGTERM']) process.removeListener(signal, stop); }
 }
