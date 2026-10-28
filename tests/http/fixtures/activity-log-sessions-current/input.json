@@ -1,0 +1,56 @@
+{
+  "client": "Activity sessions consumer",
+  "version": "1",
+  "apiKeyName": "ActivitySessionsConsumer",
+  "users": {
+    "primary": "Activity sessions primary",
+    "additional": "Activity sessions additional"
+  },
+  "devices": {
+    "control": { "id": "activity-sessions-control", "name": "Activity control" },
+    "observer": { "id": "activity-sessions-observer", "name": "Activity observer" },
+    "primary": { "id": "activity-sessions-shared", "name": "Activity player" },
+    "api": { "id": "activity-sessions-shared", "name": "Activity API player" },
+    "failure": { "id": "activity-sessions-failure", "name": "Activity failing writer" }
+  },
+  "activityTypes": [
+    "SessionStarted", "SessionEnded", "AudioPlayback", "VideoPlayback", "Playback", "AudioPlaybackStopped", "VideoPlaybackStopped"
+  ],
+  "items": [
+    { "key": "video", "id": "8b000000000000000000000000000001", "kind": "Movie", "mediaType": "Video", "name": "Stored video", "filename": "video.mkv", "runtimeTicks": 6000000000 },
+    { "key": "audio", "id": "8b000000000000000000000000000002", "kind": "Audio", "mediaType": "Audio", "name": "Stored audio", "filename": "audio.flac", "runtimeTicks": 6000000000 },
+    { "key": "book", "id": "8b000000000000000000000000000003", "kind": "Book", "mediaType": "Book", "name": "Stored book", "filename": "book.epub", "runtimeTicks": 6000000000 },
+    { "key": "themeSong", "id": "8b000000000000000000000000000004", "kind": "Audio", "mediaType": "Audio", "name": "Stored theme song", "filename": "theme.flac", "runtimeTicks": 6000000000, "extraType": 8 },
+    { "key": "themeVideo", "id": "8b000000000000000000000000000005", "kind": "Movie", "mediaType": "Video", "name": "Stored theme video", "filename": "theme.mkv", "runtimeTicks": 6000000000, "extraType": 9 }
+  ],
+  "externalMediaId": "8b000000000000000000000000000099",
+  "positions": { "start": 123456789, "progress": 1000000001, "stop": 2000000003 },
+  "mediaInfo": {
+    "video": { "Name": "Wire episode 中文", "SeriesName": "Wire series", "Artists": ["First wire artist", "Second wire artist"], "MediaType": "Video", "Type": "Movie" },
+    "audio": { "Name": "Wire song", "SeriesName": "Wire audio series", "Artists": ["Primary wire artist", "Unused wire artist"], "MediaType": "Audio", "Type": "Audio" },
+    "book": { "Name": "Wire book", "SeriesName": "", "Artists": [], "MediaType": "Book", "Type": "Book" },
+    "themeSong": { "Name": "Wire theme song", "SeriesName": "", "Artists": ["Theme artist"], "MediaType": "Audio", "Type": "Audio" },
+    "themeVideo": { "Name": "Wire theme video", "SeriesName": "", "Artists": [], "MediaType": "Video", "Type": "Movie" },
+    "external": { "Name": "Wire external video", "SeriesName": "External series", "Artists": ["External first artist", "External second artist"], "MediaType": "Video", "Type": "Video" }
+  },
+  "steps": [
+    { "name": "primary-session-start", "operation": "login", "events": ["SessionStarted"] },
+    { "name": "existing-session-reuse", "operation": "reuse", "events": [] },
+    { "name": "attach-additional-user", "operation": "additional", "events": [] },
+    { "name": "video-uses-first-user-and-wire-series-artist", "operation": "cycle", "item": "video", "events": { "start": ["VideoPlayback"], "progress": [], "stop": ["VideoPlaybackStopped"] } },
+    { "name": "audio-uses-wire-media-info", "operation": "cycle", "item": "audio", "events": { "start": ["AudioPlayback"], "progress": [], "stop": ["AudioPlaybackStopped"] } },
+    { "name": "book-start-has-generic-playback-without-stop-entry", "operation": "cycle", "item": "book", "events": { "start": ["Playback"], "progress": [], "stop": [] } },
+    { "name": "theme-song-eight-skips-activity", "operation": "cycle", "item": "themeSong", "events": { "start": [], "progress": [], "stop": [] } },
+    { "name": "theme-video-nine-skips-activity", "operation": "cycle", "item": "themeVideo", "events": { "start": [], "progress": [], "stop": [] } },
+    { "name": "missing-media-info-does-not-become-a-logger-entry", "operation": "cycle", "item": null, "mediaInfo": null, "events": { "start": [], "progress": [], "stop": [] } },
+    { "name": "custom-media-info-without-library-item-keeps-null-item-id", "operation": "cycle", "item": null, "mediaInfo": "external", "events": { "start": ["VideoPlayback"], "progress": [], "stop": ["VideoPlaybackStopped"] } },
+    { "name": "api-key-empty-primary-ignores-additional-users", "operation": "api-cycles", "item": "video", "events": { "start": [], "progress": [], "stop": [] } },
+    { "name": "failed-session-activity-preserves-authentication-and-logout", "operation": "failed-session", "activityFailure": true, "events": [] },
+    { "name": "failed-playback-activity-preserves-both-users-state", "operation": "cycle", "item": "video", "activityFailure": true, "events": { "start": [], "progress": [], "stop": [] } },
+    { "name": "activity-writer-recovers-for-real-playback", "operation": "cycle", "item": "audio", "events": { "start": ["AudioPlayback"], "progress": [], "stop": ["AudioPlaybackStopped"] } },
+    { "name": "logout-ends-user-and-empty-primary-device-sessions", "operation": "logout", "events": ["SessionEnded"] },
+    { "name": "same-device-relogin-starts-a-session", "operation": "login", "events": ["SessionStarted"] },
+    { "name": "same-device-authentication-ends-before-starting", "operation": "login", "events": ["SessionEnded", "SessionStarted"] },
+    { "name": "final-real-logout", "operation": "logout", "events": ["SessionEnded"] }
+  ]
+}

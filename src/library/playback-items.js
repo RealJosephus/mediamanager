@@ -546,7 +546,7 @@ export async function expandPostgresPlayItems(database, library, itemIds, {
   mixing = false,
   enableNextEpisodeAutoPlay = false,
 } = {}) {
-  const rows = await mappedRows(database, itemIds);
+  const rows = mixing ? [] : await mappedRows(database, itemIds);
   const byId = new Map(rows.map(item => [idKey(item.Id), item]));
   const result = [];
   const planning = {};
@@ -557,10 +557,19 @@ export async function expandPostgresPlayItems(database, library, itemIds, {
     ? await expandContainers(database, library, expandable, user, planning) : new Map();
   const userViews = new Map();
   for (const requested of itemIds) {
+    if (mixing) {
+      if (!nonemptyId(requested)) throw failure(400, "Guid can't be empty. (Parameter 'id')");
+      const mix = item => item ? queryPostgresInstantMix(database, library, item, user, planning) : [];
+      // Each input observes the real manager cache and the previous input's
+      // committed genre creation before resolving its own source identity.
+      result.push(...await (library.itemCreation
+        ? library.itemCreation.withItem(requested, mix)
+        : mix((await mappedRows(database, [requested]))[0])));
+      continue;
+    }
     const item = byId.get(idKey(requested));
     if (!item) continue;
-    if (mixing) result.push(...await queryPostgresInstantMix(database, library, item, user, planning));
-    else if (item.Type === 'UserView') {
+    if (item.Type === 'UserView') {
       const key = idKey(item.Id);
       if (!userViews.has(key)) userViews.set(key, await userViewItems(library, item, user));
       result.push(...userViews.get(key));

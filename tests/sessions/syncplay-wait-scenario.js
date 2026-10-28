@@ -3,7 +3,7 @@ import { WebSocket } from 'ws';
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
 
-export async function recordSyncPlayWait(origin, { advanceWait = () => delay(31500) } = {}) {
+export async function recordSyncPlayWait(origin) {
   const actors = {}, records = [], raw = [], sockets = [];
   async function call(route, actor, body) {
     const response = await fetch(origin + route, { method: body === undefined ? 'GET' : 'POST', headers: { Authorization: `MediaBrowser Client="SyncPlayWait", Device="Isolated", DeviceId="sync-wait-${actor}", Version="1"${actors[actor]?.token ? `, Token="${actors[actor].token}"` : ''}`, 'Content-Type': 'application/json' }, body: body === undefined ? undefined : stringifyNativeJson(body) });
@@ -31,7 +31,7 @@ export async function recordSyncPlayWait(origin, { advanceWait = () => delay(315
     }
     const started = performance.now();
     await step('repeat-buffer-keeps-deadline', '/SyncPlay/Buffering', 'playing', { PlaylistItemId: actors.playing.playlistId });
-    await advanceWait();
+    await delay(31500);
     const waitedMs = performance.now() - started;
     await step('playing-timeout', `/SyncPlay/${actors.playing.groupId}`, 'playing');
     await step('paused-timeout', `/SyncPlay/${actors.paused.groupId}`, 'paused');

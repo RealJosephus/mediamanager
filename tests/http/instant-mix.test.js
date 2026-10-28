@@ -12,6 +12,8 @@ import { cleanValue, guid, idKey } from '../../src/library/records.js';
 import { nativeMusicGenreIdentity } from '../../src/library/identity.js';
 import { withMusicGenreSelector } from '../../src/library/music-mix-genres.js';
 import { seedPostgresRuntime } from '../sessions/postgres-seed.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const fixtureRoot = new URL('./fixtures/instant-mix/', import.meta.url);
 const [inputBytes, nativeBytes, provenanceBytes] = await Promise.all(['input.json', 'native.json', 'provenance.json']
@@ -30,7 +32,19 @@ const nativeType = type => type === 'Playlist' ? 'MediaBrowser.Controller.Playli
 const projection = body => ({ ...body, Items: body.Items.map(item => ({
   Id: item.Id, Name: item.Name, Type: item.Type, ...(Object.hasOwn(item, 'Overview') ? { Overview: item.Overview } : {}),
 })).toSorted((a, b) => a.Id.localeCompare(b.Id)) });
-const problemProjection = text => { const { traceId: _traceId, ...body } = JSON.parse(text); return body; };
+const problemProjection = (text, status) => projectProblemTrace(parseLosslessJson(text), status);
+
+test('InstantMix error comparison preserves root trace presence and opaque JSON values', () => {
+  const text = '{"status":400,"title":"Bad request","traceId":"request-trace","errors":{"traceId":["business-trace"]},"Unknown":{"traceId":"business-value","ticks":9223372036854775807}}';
+  const expected = problemProjection(text, 400);
+  assert.equal(expected.traceId, '$trace');
+  assert.deepEqual(expected.errors, { traceId: ['business-trace'] });
+  assert.deepEqual(expected.Unknown, { traceId: 'business-value', ticks: 9223372036854775807n });
+  assert.notDeepEqual(problemProjection(text.replace(',"traceId":"request-trace"', ''), 400), expected);
+  assert.throws(() => problemProjection(text.replace('"request-trace"', 'false'), 400), assert.AssertionError);
+  assert.notDeepEqual(problemProjection(text, 200), problemProjection(text.replace('"request-trace"', '"other-business-value"'), 200));
+  assert.notDeepEqual(problemProjection(text.replace('business-value', 'changed'), 400), expected);
+});
 
 test('InstantMix HTTP recorder seals native MVC, manager, traversal, lookup and controlled DTO boundaries', async () => {
   assert.equal(hash(nativeBytes), provenance.nativeSha256);
@@ -210,7 +224,7 @@ test('postgres: InstantMix routes match native HTTP binding, lookup order, selec
           assert.ok(actualBody.Items.every(item => Object.hasOwn(item, 'UserData')
             === Boolean((query.enableuserdata ?? true) && state.boundRequests[0].user)));
         }
-      } else if (expected.contentType?.includes('json')) assert.deepEqual(problemProjection(actual.body), problemProjection(expected.body));
+      } else if (expected.contentType?.includes('json')) assert.deepEqual(problemProjection(actual.body, actual.status), problemProjection(expected.body, expected.status));
       else assert.equal(actual.body, expected.body);
       const successfulIds = expected.calls.filter(call => call.method === 'GetMusicGenre' && call.id).map(call => call.id);
       const existing = new Set([idKey(id(23)), idKey(id(28))]);

@@ -1,0 +1,50 @@
+{
+  "client": "Activity events consumer",
+  "device": "Isolated activity events device",
+  "users": {
+    "reader": "Activity events reader",
+    "created": "Activity events created",
+    "protected": "Activity events protected",
+    "failed": "Activity events failure",
+    "rejected": "Activity events rejected"
+  },
+  "types": [
+    "UserCreated", "UserDeleted", "UserPasswordChanged", "UserLockedOut",
+    "AuthenticationSucceeded", "AuthenticationFailed", "UserDownloadingContent"
+  ],
+  "source": {
+    "filename": "Activity.epub",
+    "itemId": "8a000000000000000000000000000001",
+    "hex": "000102030405060708090a0b0c0d0e0f1020ff80fe7f0040424446484a4c4e50"
+  },
+  "steps": [
+    { "name": "anonymous-create-denied", "operation": "create", "user": "rejected", "identity": "anonymous", "status": 401, "events": [] },
+    { "name": "ordinary-create-denied", "operation": "create", "user": "rejected", "identity": "reader", "status": 403, "events": [] },
+    { "name": "unknown-user-does-not-publish-failed-authentication", "operation": "login", "username": "Activity events unknown", "password": "wrong", "device": "unknown", "status": 401, "events": [] },
+    { "name": "empty-user-does-not-publish-failed-authentication", "operation": "login", "username": "", "password": "wrong", "device": "empty", "status": 400, "events": [] },
+    { "name": "create-without-password", "operation": "create", "user": "created", "status": 200, "events": ["UserCreated"] },
+    { "name": "create-with-password", "operation": "create", "user": "protected", "password": "initial", "status": 200, "events": ["UserCreated", "UserPasswordChanged"] },
+    { "name": "change-password", "operation": "password", "user": "created", "password": "changed", "status": 204, "events": ["UserPasswordChanged"] },
+    { "name": "configure-session-and-lockout-policy", "operation": "policy", "user": "created", "policy": { "MaxActiveSessions": 1, "LoginAttemptsBeforeLockout": 2 }, "status": 204, "events": [] },
+    { "name": "successful-authentication", "operation": "login", "user": "created", "password": "changed", "device": "created-first", "status": 200, "events": ["AuthenticationSucceeded"] },
+    { "name": "maximum-sessions-does-not-publish-authentication", "operation": "login", "user": "created", "password": "changed", "device": "created-second", "status": 403, "events": [] },
+    { "name": "configure-device-policy", "operation": "policy", "user": "protected", "policy": { "EnableAllDevices": false, "EnabledDevices": ["permitted-events-device"] }, "status": 204, "events": [] },
+    { "name": "device-denial-does-not-publish-authentication", "operation": "login", "user": "protected", "password": "initial", "device": "forbidden-events-device", "status": 403, "events": [] },
+    { "name": "disable-user", "operation": "policy", "user": "protected", "policy": { "IsDisabled": true }, "status": 204, "events": [] },
+    { "name": "disabled-user-does-not-publish-authentication", "operation": "login", "user": "protected", "password": "initial", "device": "disabled", "status": 403, "events": [] },
+    { "name": "existing-user-wrong-password", "operation": "login", "user": "created", "password": "wrong", "device": "wrong-first", "status": 401, "events": ["AuthenticationFailed"] },
+    { "name": "lockout-precedes-failed-authentication", "operation": "login", "user": "created", "password": "wrong", "device": "wrong-second", "status": 401, "events": ["UserLockedOut", "AuthenticationFailed"] },
+    { "name": "locked-user-does-not-publish-authentication", "operation": "login", "user": "created", "password": "changed", "device": "locked", "status": 403, "events": [] },
+    { "name": "delete-user", "operation": "delete", "user": "protected", "status": 204, "events": ["UserDeleted"] },
+    { "name": "download-through-common-writer", "operation": "download", "status": 200, "events": ["UserDownloadingContent"] },
+    { "name": "failed-user-created-log-preserves-created-user", "operation": "create", "user": "failed", "activityFailure": true, "status": 200, "events": [] },
+    { "name": "failed-password-log-preserves-password", "operation": "password", "user": "failed", "password": "changed", "activityFailure": true, "status": 204, "events": [] },
+    { "name": "failed-success-log-preserves-authentication-and-token", "operation": "login", "user": "failed", "password": "changed", "device": "failed-success", "activityFailure": true, "status": 200, "events": [] },
+    { "name": "failed-failure-log-preserves-login-attempt", "operation": "login", "user": "failed", "password": "wrong", "device": "failed-wrong-first", "activityFailure": true, "status": 401, "events": [] },
+    { "name": "configure-failure-lockout-policy", "operation": "policy", "user": "failed", "policy": { "LoginAttemptsBeforeLockout": 2 }, "status": 204, "events": [] },
+    { "name": "failed-lockout-log-preserves-disabled-user", "operation": "login", "user": "failed", "password": "wrong", "device": "failed-wrong-second", "activityFailure": true, "status": 401, "events": [] },
+    { "name": "failed-download-log-preserves-file", "operation": "download", "activityFailure": true, "status": 200, "events": [] },
+    { "name": "failed-delete-log-preserves-deletion", "operation": "delete", "user": "failed", "activityFailure": true, "status": 204, "events": [] },
+    { "name": "delete-locked-user", "operation": "delete", "user": "created", "status": 204, "events": ["UserDeleted"] }
+  ]
+}

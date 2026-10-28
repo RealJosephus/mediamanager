@@ -35,9 +35,9 @@ export class SessionService extends EventEmitter {
   #timersClosing = false;
   constructor(options) {
     super();
-    const { store, library, userData, users, serverId, clock = () => new Date(), automaticProgress = true,
+    const { store, library, userData, users, activities, serverId, clock = () => new Date(), automaticProgress = true,
       onError = () => {} } = options;
-    Object.assign(this, { options, store, library, userData, users, serverId, clock, automaticProgress, onError });
+    Object.assign(this, { options, store, library, userData, users, activities, serverId, clock, automaticProgress, onError });
     users?.on?.('UserCreated', this.#cacheUser);
     users?.on?.('UserUpdated', this.#cacheUser);
     users?.on?.('UserDeleted', this.#forgetUser);
@@ -86,15 +86,15 @@ export class SessionService extends EventEmitter {
       if (!session.Controllers.some(entry => entry.isActive())) {
         this.#sessions.delete(sessionId);
         if (session.PlayState.LiveStreamId) await this.closeLiveStreamIfNeeded(session.PlayState.LiveStreamId, session.Id);
-        this.#sessionEnded(session);
+        await this.#sessionEnded(session);
       }
     };
   }
-  async sendCommand(sessionId, messageType, data, { controllingSessionId } = {}) {
+  async sendCommand(sessionId, messageType, data, { controllingSessionId, signal } = {}) {
     const session = this.#session(sessionId);
     await this.#assertControl(session, controllingSessionId);
     const messageId = randomUUID().replaceAll('-', '');
-    for (const controller of session.Controllers) await controller.sendMessage(messageType, messageId, data);
+    for (const controller of session.Controllers) await controller.sendMessage(messageType, messageId, data, { signal });
   }
   async sendMessageToUserSessions(userIds, messageType, data, options) {
     const normalized = userIds.map(guidN);
@@ -130,15 +130,15 @@ export class SessionService extends EventEmitter {
       return deliver();
     });
   }
-  async sendPlaystate(sessionId, data, { controllingSessionId } = {}) {
+  async sendPlaystate(sessionId, data, { controllingSessionId, signal } = {}) {
     const command = { ...data };
     if (controllingSessionId) {
       const userId = this.#session(controllingSessionId).UserId;
       if (userId !== emptyGuid) command.ControllingUserId = userId;
     }
-    return this.sendCommand(sessionId, 'Playstate', command, { controllingSessionId });
+    return this.sendCommand(sessionId, 'Playstate', command, { controllingSessionId, signal });
   }
-  async sendPlay(sessionId, data, { controllingSessionId } = {}) {
+  async sendPlay(sessionId, data, { controllingSessionId, signal } = {}) {
     const target = this.#session(sessionId);
     const user = target.UserId !== emptyGuid ? await this.#user(target.UserId) : null;
     const mixing = data.PlayCommand === 'PlayInstantMix';
@@ -159,7 +159,7 @@ export class SessionService extends EventEmitter {
       const userId = this.#session(controllingSessionId).UserId;
       if (userId !== emptyGuid) command.ControllingUserId = userId;
     }
-    return this.sendCommand(sessionId, 'Play', command, { controllingSessionId });
+    return this.sendCommand(sessionId, 'Play', command, { controllingSessionId, signal });
   }
   async reportViewing(sessionId, itemId, { controllingSessionId } = {}) {
     let item;
@@ -183,12 +183,14 @@ export class SessionService extends EventEmitter {
         }))[0]);
         session = { Id: id, UserId: guidN(userId), UserName: User?.Username ?? null, Client, DeviceId, DeviceName: options?.CustomName || auth.Device || 'Network Device', HasCustomDeviceName: Boolean(options?.CustomName), ApplicationVersion: Version, ServerId: this.serverId, PlayState: emptyPlayerState(), AdditionalUsers: [], Capabilities: this.getDeviceCapabilities(DeviceId), RemoteEndPoint: remoteEndPoint, LastActivityDate: '0001-01-01T00:00:00.0000000Z', LastPlaybackCheckIn: '0001-01-01T00:00:00.0000000Z', LastPausedDate: null, DeviceType: null, NowPlayingItem: null, NowViewingItem: null, TranscodingInfo: null, NowPlayingQueue: [], PlaylistItemId: null, UserPrimaryImageTag: this.#primaryImageTag(User), Controllers: [] };
         this.#sessions.set(id, session);
+        await this.activities?.sessionEvent('SessionStarted', this.#dto(session));
         this.emit('SessionStarted', { SessionInfo: this.#dto(session) });
       }
       const previous = session.LastActivityDate;
       session.UserName = User?.Username ?? null;
       session.UserPrimaryImageTag = this.#primaryImageTag(User);
       session.RemoteEndPoint = remoteEndPoint; session.Client = Client; session.ApplicationVersion = Version;
+      if (!User) session.AdditionalUsers = [];
       if (!session.HasCustomDeviceName || !session.DeviceName) session.DeviceName = auth.Device ?? null;
       session.LastActivityDate = this.#now();
       if (User) await this.store.transaction(async (db) => {
@@ -264,12 +266,17 @@ export class SessionService extends EventEmitter {
   async endByDevice(deviceId) {
     return this.#run(async () => {
       for (const session of [...this.#sessions.values()]) if (insensitive(session.DeviceId, deviceId)) {
-        this.#stopTimer(session.Id); this.#sessions.delete(session.Id); this.emit('SessionEnded', { SessionInfo: this.#dto(session) });
+        this.#sessions.delete(session.Id); await this.#sessionEnded(session);
       }
     });
   }
-  #sessionEnded(session) { this.#stopTimer(session.Id); this.emit('SessionEnded', { SessionInfo: this.#dto(session) }); }
-  async endSession(sessionId) { const session = this.#session(sessionId, false); if (session) { this.#sessions.delete(sessionId); this.#sessionEnded(session); } }
+  async #sessionEnded(session) {
+    this.#stopTimer(session.Id);
+    const info = this.#dto(session);
+    this.emit('SessionEnded', { SessionInfo: info });
+    await this.activities?.sessionEvent('SessionEnded', info);
+  }
+  async endSession(sessionId) { const session = this.#session(sessionId, false); if (session) { this.#sessions.delete(sessionId); await this.#sessionEnded(session); } }
   #stopTimer(id) { clearInterval(this.#timers.get(id)); this.#timers.delete(id); this.#reports.delete(id); }
   #startTimer(session, info) {
     this.#stopTimer(session.Id);
@@ -333,7 +340,7 @@ export class SessionService extends EventEmitter {
       }
     }
     const users = [];
-    for (const id of [session.UserId, ...session.AdditionalUsers.map((user) => user.UserId)]) if (id !== emptyGuid) {
+    for (const id of session.UserId === emptyGuid ? [] : [session.UserId, ...session.AdditionalUsers.map((user) => user.UserId)]) {
       const user = await this.#user(id); if (user) users.push(user); else if (sameGuid(id, session.UserId)) throw failure(500, 'User not found');
     }
     const item = info.ItemId && guidN(info.ItemId) !== emptyGuid
@@ -367,6 +374,7 @@ export class SessionService extends EventEmitter {
     const event = { Item: item, Users: users, PlaybackPositionTicks: info.PositionTicks, MediaSourceId: info.MediaSourceId, MediaInfo: info.Item, DeviceName: session.DeviceName, ClientName: session.Client, DeviceId: session.DeviceId, Session: this.#dto(session), PlaySessionId: info.PlaySessionId };
     if (phase === 'progress') Object.assign(event, { IsPaused: info.IsPaused ?? false, IsAutomated: automated });
     if (phase === 'stop') event.PlayedToCompletion = completed;
+    if (phase !== 'progress') await this.activities?.playbackEvent(phase, event);
     this.emit({ start: 'PlaybackStart', progress: 'PlaybackProgress', stop: 'PlaybackStopped' }[phase], event);
     if (phase !== 'stop' && info.PlaySessionId?.trim()) this.hls?.ping(info.PlaySessionId, info.IsPaused ?? false);
     if (phase !== 'stop' && !automated) this.#startTimer(session, info);

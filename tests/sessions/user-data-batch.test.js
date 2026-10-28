@@ -8,7 +8,7 @@ import { openMetadataRelations, closeMetadataFixture, removeMetadataTestRoot } f
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DomainStore } from '../../src/database/domain-store.js';
-import { tableDefinition } from '../../src/database/model.js';
+import { tableDefinition, quoteIdentifier } from '../../src/database/model.js';
 import { LibraryService } from '../../src/library/library-service.js';
 import { UserDataService, guidN } from '../../src/sessions/user-data.js';
 import { fixtureRow } from '../database/fixtures.js';
@@ -98,18 +98,32 @@ test('getMany projects large user-data batches with fixed-size relationship read
       RetentionDate: null,
     });
 
-    const reads = [], relationReads = [];
+    const reads = [], relationReads = [], hydratedBatches = [];
+    const baseItemsTableId = Number((await database.client.query({
+      text: 'SELECT $1::regclass::oid AS "oid"',
+      values: [`${quoteIdentifier(database.schemaName)}."BaseItems"`],
+    })).rows[0].oid);
     const rows = database.rows.bind(database);
-    database.rows = (name, options) => { reads.push(name); return rows(name, options); };
+    database.rows = (name, options) => {
+      if (name !== 'BaseItems') reads.push(name);
+      return rows(name, options);
+    };
     const query = database.client.query.bind(database.client);
-    database.client.query = (...args) => {
+    database.client.query = async (...args) => {
       const statement = typeof args[0] === 'string' ? args[0] : args[0].text;
       const relation = /\bFROM\s+(?:"[^"]+"\.)?"(BaseItemImageInfos|BaseItemTrailerTypes)"/u.exec(statement)?.[1];
       if (relation) {
         reads.push(relation);
         relationReads.push({ name: relation, values: (typeof args[0] === 'string' ? args[1] : args[0].values).map(value => value.map(bytes => decodeNativeTextBytes(bytes))) });
       }
-      return query(...args);
+      const result = await query(...args);
+      const fields = result.command === 'SELECT'
+        ? result.fields.filter(field => field.tableID === baseItemsTableId) : [];
+      const idField = fields.find(field => field.name === 'Id');
+      if (idField && fields.some(field => field.name === 'Data')) {
+        hydratedBatches.push(result.rows.map(row => decodeNativeTextBytes(row[idField.name])));
+      }
+      return result;
     };
     library = new LibraryService({fileSystem: testFileSystem,  store, linkedChildren, serverId: 'user-data-batch-test' });
     await attachLibraryNavigation(library);
@@ -123,6 +137,10 @@ test('getMany projects large user-data batches with fixed-size relationship read
     assert.equal(result[0].IsFavorite, true);
     assert.equal(result.at(-1).ItemId, guidN(itemId(itemCount - 1)));
     assert.equal(result.at(-1).PlayCount, itemCount - 1);
+    assert.deepEqual(result.map(item => item.ItemId), itemIds.map(guidN));
+    assert.ok(hydratedBatches.length > 0, 'The requested items cross the actual PostgreSQL full-row boundary.');
+    for (const batch of hydratedBatches) assert.deepEqual(batch.toSorted(), itemIds.toSorted(),
+      'every discovery and hydration read contains only the complete requested batch');
     assert.deepEqual(relationReads.map(read => read.name).toSorted(), ['BaseItemImageInfos', 'BaseItemTrailerTypes']);
     for (const read of relationReads) {
       assert.deepEqual(read.values, [itemIds], 'each ordered relation uses one query scoped to the complete requested batch');
@@ -133,7 +151,6 @@ test('getMany projects large user-data batches with fixed-size relationship read
       'BaseItemMetadataFields',
       'BaseItemProviders',
       'BaseItemTrailerTypes',
-      'BaseItems',
       'ItemValuesMap',
       'LinkedChildren',
       'LinkedChildren',
@@ -142,6 +159,15 @@ test('getMany projects large user-data batches with fixed-size relationship read
     ]);
     assert.equal(reads.filter(name => name === 'UserData').length, 1,
       'projecting each item must reuse the user-data rows loaded for the batch');
+
+    const fullBatchHydrations = hydratedBatches.splice(0);
+    const pairIds = [itemId(0), itemId(itemCount - 1)];
+    const pairData = await userData.getMany(USER, pairIds.map(id => ({ id })));
+    assert.deepEqual(pairData, [result[0], result.at(-1)]);
+    assert.equal(hydratedBatches.length, fullBatchHydrations.length,
+      'sixty times as many notification items must not add per-item full-row reads');
+    for (const batch of hydratedBatches) assert.deepEqual(batch.toSorted(), pairIds.toSorted(),
+      'the small notification batch excludes unrelated full rows');
 
     reads.length = 0;
     const parentRecord = await library.getItemRecord(PARENT);

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { WebSocket } from 'ws';
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseLosslessJson, stringifyNativeJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const movie = '22222222222222222222222222222222', other = '33333333333333333333333333333333';
 const missing = 'ffffffffffffffffffffffffffffffff', empty = '00000000000000000000000000000000';
@@ -119,25 +120,66 @@ export async function recordSyncPlay(origin) {
 }
 
 export function normalizeSyncPlay(recording) {
-  const ids = new Map(); let sequence = 0;
-  function normalize(value, key = '') {
-    if (key === 'traceId') { assert.match(value, /^00-[0-9a-f]{32}-[0-9a-f]{16}-00$/); return '<traceId>'; }
-    if (key === 'MessageId') { assert.match(value, /^[0-9a-f]{32}$/); return '<MessageId>'; }
-    if (['When', 'EmittedAt', 'LastUpdate', 'LastUpdatedAt', 'RequestReceptionTime', 'ResponseTransmissionTime'].includes(key)) {
-      assert.match(value, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,7})?Z$/); assert.ok(Number.isFinite(Date.parse(value)));
-      return '<server-time>';
+  const groups = new Map(), playlist = new Map();
+  const object = value => value && typeof value === 'object' && !Array.isArray(value);
+  const isGuid = value => typeof value === 'string' && /^(?:[a-f0-9]{32}|[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})$/iu.test(value);
+  const guid = value => isGuid(value) ? value.replaceAll('-', '').toLowerCase() : value;
+  const register = (values, value, role) => {
+    const key = guid(value);
+    if (isGuid(value) && key !== empty && !values.has(key)) values.set(key, `<${role}-${values.size}>`);
+  };
+  const reference = (values, value) => values.get(guid(value)) ?? guid(value);
+  const fields = (value, roles) => object(value) ? Object.fromEntries(Object.entries(value)
+    .map(([key, entry]) => [key, Object.hasOwn(roles, key) ? roles[key](entry) : entry])) : value;
+  const isGroupInfo = value => object(value) && typeof value.GroupId === 'string' && typeof value.GroupName === 'string'
+    && Array.isArray(value.Participants) && Object.hasOwn(value, 'State') && Object.hasOwn(value, 'LastUpdatedAt');
+  // Bind actual GroupInfo declarations and actual queue entries before their
+  // references. GroupName, participant names and unknown GUID text are not IDs.
+  for (const record of recording.records) {
+    for (const body of record.status === 200 ? Array.isArray(record.body) ? record.body : [record.body] : []) {
+      if (isGroupInfo(body)) register(groups, body.GroupId, 'group');
     }
-    if (typeof value === 'string' && /^[0-9a-f]{32}$/.test(value) && ![empty, movie, other, missing].includes(value)) {
-      if (!ids.has(value)) ids.set(value, `<generated-${sequence++}>`); return ids.get(value);
+    for (const messages of Object.values(record.messages ?? {})) for (const message of messages) {
+      if (!object(message) || message.MessageType !== 'SyncPlayGroupUpdate') continue;
+      if (message.Data?.Type === 'GroupJoined' && isGroupInfo(message.Data.Data)) register(groups, message.Data.Data.GroupId, 'group');
+      if (message.Data?.Type === 'PlayQueue' && Array.isArray(message.Data.Data?.Playlist)) {
+        for (const item of message.Data.Data.Playlist) register(playlist, item.PlaylistItemId, 'playlist');
+      }
     }
-    if (typeof value === 'string' && /^[0-9a-f-]{36}$/.test(value)) return normalize(value.replaceAll('-', ''));
-    if (Array.isArray(value)) {
-      const entries = value.map(entry => normalize(entry));
-      // The native ConcurrentDictionary does not define group enumeration order.
-      return entries.length && entries.every(entry => entry && Object.hasOwn(entry, 'GroupName')) ? entries.sort((a, b) => a.GroupId.localeCompare(b.GroupId)) : entries;
-    }
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, entry]) => [name, normalize(entry, name)]));
-    return value;
   }
-  return normalize(recording.records);
+  const time = value => {
+    assert.match(value, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,7})?Z$/u);
+    assert.ok(Number.isFinite(Date.parse(value))); return '<server-time>';
+  };
+  const group = value => reference(groups, value), playlistId = value => reference(playlist, value);
+  const groupInfo = value => isGroupInfo(value) ? fields(value, { GroupId: group, LastUpdatedAt: time,
+    // GetInfo enumerates a ConcurrentDictionary and then Distinct user names.
+    // Sort only this membership list, preserving names and duplicate counts.
+    Participants: values => values.every(value => typeof value === 'string') ? [...values].sort() : values,
+  }) : value;
+  const queue = value => fields(value, { LastUpdate: time,
+    Playlist: values => Array.isArray(values) ? values.map(item => fields(item, { ItemId: guid, PlaylistItemId: playlistId })) : values,
+  });
+  const message = value => {
+    if (!object(value) || !['SyncPlayCommand', 'SyncPlayGroupUpdate'].includes(value.MessageType)) return value;
+    const result = fields(value, { MessageId: value => { assert.match(value, /^[0-9a-f]{32}$/u); return '<MessageId>'; } });
+    if (Object.hasOwn(value, 'Data')) result.Data = value.MessageType === 'SyncPlayCommand'
+      ? fields(value.Data, { GroupId: group, PlaylistItemId: playlistId, When: time, EmittedAt: time })
+      : fields(value.Data, { GroupId: group, Data: data => value.Data.Type === 'GroupJoined' ? groupInfo(data)
+        : value.Data.Type === 'PlayQueue' ? queue(data) : value.Data.Type === 'GroupLeft' ? group(data) : data });
+    return result;
+  };
+  return recording.records.map(record => {
+    let body = projectProblemTrace(record.body, record.status);
+    if (record.status === 200) {
+      if (record.name === 'public-clock') body = fields(body, { RequestReceptionTime: time, ResponseTransmissionTime: time });
+      else if (Array.isArray(body) && body.every(isGroupInfo)) {
+        // The group dictionary's enumeration order is not a protocol order.
+        body = body.map(groupInfo).sort((a, b) => a.GroupId.localeCompare(b.GroupId));
+      } else body = groupInfo(body);
+    }
+    return { ...record, ...(Object.hasOwn(record, 'body') ? { body } : {}),
+      ...(Object.hasOwn(record, 'messages') ? { messages: Object.fromEntries(Object.entries(record.messages)
+        .map(([actor, values]) => [actor, values.map(message)])) } : {}) };
+  });
 }

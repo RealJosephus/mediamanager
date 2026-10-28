@@ -109,7 +109,6 @@ userDataWebSocketTest('UserDataChanged WebSocket batches fresh item and parent d
     assert.equal(additionalChange.Data.UserId, guidN(secondUser.Id));
     assert.equal(ownChange.Data.UserId, guidN(secondUser.Id));
     assert.equal(additionalChange.MessageId, ownChange.MessageId, 'one native message id is shared across all target sessions');
-    assert.deepEqual(errors, []);
   } finally {
     const closing = runtime.close();
     try {

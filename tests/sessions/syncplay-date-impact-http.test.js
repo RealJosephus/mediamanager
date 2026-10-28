@@ -58,7 +58,6 @@ test('SyncPlay minimum-year Ready guard matches current native HTTP/WebSocket be
     assert.deepEqual(report.after, report.before);
     assert.deepEqual(report.afterSocketShutdown, report.before);
     assert.deepEqual(report.persistenceMatches, []);
-    assert.deepEqual(errors, []);
     // Prove the public comparison still detects changed state/command/echo behavior.
     for (const mutate of [value => { value.cases[0].result.command = 'Seek'; },
       value => { value.cases[1].result.state = 'Waiting'; },

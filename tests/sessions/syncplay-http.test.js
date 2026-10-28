@@ -7,6 +7,7 @@ import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { recordSyncPlay, normalizeSyncPlay } from './syncplay-scenario.js';
 import { recordSyncPlayAccess } from './syncplay-access-scenario.js';
 import { recordSyncPlayWait } from './syncplay-wait-scenario.js';
+import { recordSyncPlayDisconnect } from './syncplay-disconnect-scenario.js';
 import { seedPostgresRuntime } from './postgres-seed.js';
 
 for (const [name, record, fixture, expectedErrors] of [['protocol', recordSyncPlay, 'reference.json', 2], ['access', recordSyncPlayAccess, 'access-reference.json', 1], ['wait', recordSyncPlayWait, 'wait-reference.json', 0]])
@@ -17,11 +18,7 @@ test(`SyncPlay ${name} HTTP and WebSocket reproduce native operations (postgres)
   const errors = [];
   const runtime = await createTestRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: 'syncplay-test', onError: error => errors.push({ status: error.status, message: error.message }) });
   try {
-    let waitClock = 0;
-    if (name === 'wait' && !process.env.MEDIAMANAGER_SYNCPLAY_REAL_WAIT) runtime.syncPlay.groupOptions = { monotonic: () => waitClock };
-    const actual = await record(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`, name === 'wait' && !process.env.MEDIAMANAGER_SYNCPLAY_REAL_WAIT ? {
-      advanceWait: async () => { waitClock += 31500; await runtime.syncPlay.checkTimeouts(); await runtime.syncPlay.drain(); }
-    } : {});
+    const actual = await record(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`);
     const expected = parseLosslessJson(await readFile(new URL(`./fixtures/syncplay/${fixture}`, import.meta.url), 'utf8'));
     const normalizedExpected = normalizeSyncPlay(expected), normalizedActual = normalizeSyncPlay(actual);
     const differences = [];
@@ -40,4 +37,23 @@ test(`SyncPlay ${name} HTTP and WebSocket reproduce native operations (postgres)
     await runtime.syncPlay.drain();
     await runtime.close();
   }
+});
+
+test('SyncPlay disconnect releases waiting members and removes the last member through real HTTP and WebSocket (postgres)', { timeout: 120000 }, async t => {
+  const seed = JSON.parse(await readFile(new URL('./fixtures/syncplay/seed.json', import.meta.url), 'utf8'), (_, value) => value && typeof value === 'object' && '$integer' in value ? BigInt(value.$integer) : value);
+  const database = await createPostgresTestDatabase(t, 'syncplay_disconnect');
+  await seedPostgresRuntime(database, seed);
+  const errors = [];
+  const runtime = await createTestRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: 'syncplay-disconnect',
+    onError: error => errors.push({ status: error.status, message: error.message }) });
+  try {
+    const actual = await recordSyncPlayDisconnect(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`);
+    assert.equal(actual.cleanup.clientSocketsClosed, true);
+    assert.deepEqual(errors, []);
+    if (process.env.MEDIAMANAGER_SYNCPLAY_EVIDENCE) {
+      await writeFile(`${process.env.MEDIAMANAGER_SYNCPLAY_EVIDENCE}/postgres-disconnect.json`, stringifyNativeJson({ actual, errors }), { flag: 'wx' });
+    }
+    t.diagnostic(stringifyNativeJson({ states: actual.states, cleanup: actual.cleanup, currentNativeCompared: false }));
+  } finally { await runtime.close(); }
+  assert.ok(runtime.networkHost.listeners.every(entry => !entry.server.listening));
 });

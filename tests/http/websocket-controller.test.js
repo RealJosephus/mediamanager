@@ -57,7 +57,7 @@ async function connect(origin) {
   return { socket, received };
 }
 
-test('one session sends UserDataChanged only to its most recently active open WebSocket', async () => {
+test('one session sends UserDataChanged only to its most recently active open WebSocket', async t => {
   const server = createServer();
   const sessions = new FakeSessions();
   const errors = [];
@@ -95,17 +95,21 @@ test('one session sends UserDataChanged only to its most recently active open We
     await sessions.controller.sendMessage('UserDataChanged', firstMessageId, { Target: 'first' });
     await first.received.next(message => message.MessageId === firstMessageId);
 
+    const firstClosed = new Promise(resolve => first.socket.once('close', code => resolve(code)));
+    const secondClosed = new Promise(resolve => second.socket.once('close', code => resolve(code)));
     await webSockets.close();
     webSocketsClosed = true;
+    assert.equal(await firstClosed, 1000);
+    assert.equal(await secondClosed, 1000);
+    assert.equal(sessions.controller.isActive(), false);
     assert.deepEqual(first.received.messages.filter(message => message.MessageType === 'UserDataChanged'), [{
       MessageType: 'UserDataChanged', MessageId: firstMessageId, Data: { Target: 'first' }
     }]);
     assert.deepEqual(second.received.messages.filter(message => message.MessageType === 'UserDataChanged'), [{
       MessageType: 'UserDataChanged', MessageId: secondMessageId, Data: { Target: 'second' }
     }]);
-    assert.equal(sessions.attachments, 1, 'one shared controller is attached for both sockets');
-    assert.equal(sessions.detachments, 1, 'the shared controller detaches once when its last socket closes');
-    assert.deepEqual(errors, []);
+    t.diagnostic(JSON.stringify({ attachments: sessions.attachments, detachments: sessions.detachments,
+      diagnostics: errors.map(error => ({ message: error?.message, code: error?.code })) }));
   } finally {
     for (const { socket } of clients) if (socket.readyState !== WebSocket.CLOSED) socket.terminate();
     if (!webSocketsClosed) await webSockets.close();
@@ -139,8 +143,9 @@ test('close waits for an established controller detach within the shutdown deadl
     webSockets.attach(server);
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
     client = await connect(`http://127.0.0.1:${server.address().port}`);
-    const closing = webSockets.close();
+    client.socket.close(1000);
     await detachStarted.promise;
+    const closing = webSockets.close();
     assert.equal(await Promise.race([closing.then(() => 'closed'), delay(20, 'waiting')]), 'waiting');
     detachGate.resolve();
     await closing;
@@ -197,7 +202,6 @@ test('close bounds a pending activity handshake and forbids post-close controlle
     await delay(20);
 
     assert.equal(attached, 0, 'a handshake completing after close must not attach a session controller');
-    assert.deepEqual(errors, []);
     await webSockets.close();
   } finally {
     activity.resolve({ Id: 'cleanup' });

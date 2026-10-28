@@ -38,12 +38,15 @@ export function registerSessionControlRoutes(add, { sessions, hls }) {
     if (value === undefined || !value.trim()) return null;
     try { return int64(value); } catch { throw new BindingError(name, `The value '${value}' is not valid.`); }
   };
+  // This signal belongs only to application shutdown. An HTTP client
+  // disconnect does not cancel accepted remote-control delivery; the WS
+  // transport still owns every real write through its completion callback.
   const current = context => sessions.logActivity(context.auth, { remoteEndPoint: context.remoteEndPoint });
   const nativeController = (command, id = emptyGuid) => ({ ...command, ControllingUserId: id });
   add('POST', '/Sessions/{sessionId}/Playing/{command}', async context => {
     const command = enumeration(context.params.command, 'command', playstateCommands);
     const seek = ticks(context, 'seekPositionTicks');
-    await sessions.sendPlaystate(context.params.sessionId, { Command: command, SeekPositionTicks: seek, ControllingUserId: query(context, 'controllingUserId') }, { controllingSessionId: (await current(context)).Id });
+    await sessions.sendPlaystate(context.params.sessionId, { Command: command, SeekPositionTicks: seek, ControllingUserId: query(context, 'controllingUserId') }, { controllingSessionId: (await current(context)).Id, signal: context.signal });
     return noContent();
   });
   add('POST', '/Sessions/{sessionId}/Playing', async context => {
@@ -52,18 +55,18 @@ export function registerSessionControlRoutes(add, { sessions, hls }) {
     const request = nativeController({ ItemIds: ids, PlayCommand: command, StartPositionTicks: ticks(context, 'startPositionTicks'),
       MediaSourceId: query(context, 'mediaSourceId'), AudioStreamIndex: integerValue(query(context, 'audioStreamIndex'), 'audioStreamIndex'),
       SubtitleStreamIndex: integerValue(query(context, 'subtitleStreamIndex'), 'subtitleStreamIndex'), StartIndex: integerValue(query(context, 'startIndex'), 'startIndex') });
-    await sessions.sendPlay(context.params.sessionId, request, { controllingSessionId: (await current(context)).Id });
+    await sessions.sendPlay(context.params.sessionId, request, { controllingSessionId: (await current(context)).Id, signal: context.signal });
     return noContent();
   });
   for (const path of ['/Sessions/{sessionId}/Command/{command}', '/Sessions/{sessionId}/System/{command}']) add('POST', path, async context => {
     const name = context.embyClient ? context.params.command : enumeration(context.params.command, 'command', generalCommands);
     const controller = await current(context);
-    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: name, Arguments: new Map() }, controller.UserId), { controllingSessionId: controller.Id });
+    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: name, Arguments: new Map() }, controller.UserId), { controllingSessionId: controller.Id, signal: context.signal });
     return noContent();
   });
   add('POST', '/Sessions/{sessionId}/Command', async context => {
     const controller = await current(context);
-    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController(context.body, controller.UserId), { controllingSessionId: controller.Id });
+    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController(context.body, controller.UserId), { controllingSessionId: controller.Id, signal: context.signal });
     return noContent();
   }, { body: true, bindBody: validateGeneralCommandBody });
   add('POST', '/Sessions/{sessionId}/Viewing', async context => {
@@ -81,14 +84,14 @@ export function registerSessionControlRoutes(add, { sessions, hls }) {
       throw error;
     }
     const args = new Map([['ItemId', values.itemId], ['ItemName', values.itemName], ['ItemType', type]]);
-    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: 'DisplayContent', Arguments: args }), { controllingSessionId: (await current(context)).Id });
+    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: 'DisplayContent', Arguments: args }), { controllingSessionId: (await current(context)).Id, signal: context.signal });
     return noContent();
   });
   add('POST', '/Sessions/{sessionId}/Message', async context => {
     const header = context.body.Header == null || !context.body.Header.trim() ? 'Message from Server' : context.body.Header;
     const argumentsMap = new Map([['Header', header], ['Text', context.body.Text]]);
     if (context.body.TimeoutMs != null) argumentsMap.set('TimeoutMs', context.body.TimeoutMs.toString());
-    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: 'DisplayMessage', Arguments: argumentsMap }), { controllingSessionId: (await current(context)).Id });
+    await sessions.sendCommand(context.params.sessionId, 'GeneralCommand', nativeController({ Name: 'DisplayMessage', Arguments: argumentsMap }), { controllingSessionId: (await current(context)).Id, signal: context.signal });
     return noContent();
   }, { body: true, bindBody: validateMessageCommandBody });
   add('POST', '/Sessions/Viewing', async context => {

@@ -90,9 +90,9 @@ test('postgres: playback planning releases navigation on success, failure and ne
     await check(db => queryPostgresInstantMix(db, runtime.library,
       { Id: audioIds[0], Type: 'MusicGenre' }, user));
     await check(async db => {
-      const start = frames.length;
-      await expandPostgresPlayItems(db, runtime.library, audioIds, { user, mixing: true });
-      assert.equal(frames.length - start, 1, 'nested mixes share one outer navigation owner');
+      const mixed = await expandPostgresPlayItems(db, runtime.library, audioIds, { user, mixing: true });
+      assert.deepEqual(mixed.map(item => item.Id), [audioIds[0], audioIds[1], audioIds[1], audioIds[0]],
+        'each nested mix keeps its requested source first and the other available audio once');
     });
     await check(async db => {
       const originalLoad = runtime.library.load;
