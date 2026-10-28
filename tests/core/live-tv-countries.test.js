@@ -236,7 +236,8 @@ test('countries independent HTTP deadline closes a held body and retains public 
   const client = new LiveTvCountriesClient({ cachePath: root, url: origin, timeoutMs: 250,
     fetch: (url, options) => { signals.push(options.signal); return fetch(url, options); } }); t.after(() => client.close());
   await assert.rejects(client.getCountries(), { status: 500 });
-  assert.equal(signals[0].aborted, true); assert.equal(signals[0].reason.name, 'TimeoutError');
+  assert.equal(signals[0].aborted, true); assert.equal(signals[0].reason.message, 'The HTTP client request timed out.');
+  t.diagnostic(JSON.stringify(errorDiagnostic(signals[0].reason)));
   await closed.promise; assert.equal(await fileExists(path.join(root, 'sd-countries.json')), false);
   mode = 'failure'; await assert.rejects(client.getCountries(), { code: 'http-error', status: 500, httpStatus: 503 });
   assert.equal(signals[1].aborted, false);

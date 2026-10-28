@@ -40,6 +40,16 @@ Int32, null roots/members and response-status differences. Actual BaseTunerHost
 sequences cover memory retention, cache bypass, old memory after empty refresh,
 OpenOrCreate short writes with a retained invalid suffix, strict typed cold cache
 reads, favorite/DRM filtering, duplicate channels and earlier-host precedence.
+Two additional real HTTP cases use host IDs `.` and `..`, whose native cache
+names are `._channels` and `.._channels`. Each actual Native host first writes
+its complete cache and a fresh host reads it after HTTP 503; every original
+cache byte remains in the report. The Node worker consumer uses the actual
+configured host ID when locating that file. Both identities are observed before
+their new differences are asserted, after the original consumers and owners
+close. Separate installed and official package cases require full mapped cache
+content, fresh activation, source-failure fallback and late-work rejection.
+The current Node guard can fail before producing a cache, so a red first action
+does not certify later Node cold-read behavior.
 One cache is first produced by the installed Node plugin through its mapped
 storage, embedded byte-for-byte in the hashed oracle input, and consumed by a
 fresh actual native BaseTunerHost typed fallback reader after a real HTTP 503.

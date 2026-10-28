@@ -25,6 +25,7 @@ Directory.CreateDirectory(root);
 var parsed = new List<object>(); var sources = new List<object>(); var validation = new List<object>();
 var cache = new List<object>();
 var cacheFiles = new List<object>();
+var cacheIdentities = new List<object>();
 object? multipleHosts = null;
 var handler = new ControlledHandler();
 using var client = new HttpClient(handler);
@@ -112,6 +113,32 @@ try
     var beforeMultiple = handler.Requests.Count;
     multipleHosts = new { channels = await Host(multiOptions, Path.Combine(root, "multiple-cache")).GetChannels(false, CancellationToken.None),
         requests = handler.Requests.Count - beforeMultiple };
+    foreach (var sample in input.GetProperty("cacheIdentities").EnumerateArray())
+    {
+        var name = sample.GetProperty("name").GetString()!;
+        var info = sample.GetProperty("info").Deserialize<TunerHostInfo>(json)!;
+        var cachePath = Path.Combine(root, "cache-identity-" + name); Directory.CreateDirectory(cachePath);
+        var filename = Path.Combine(cachePath, info.Id + "_channels");
+        var observations = new List<object>();
+        async Task Capture(string phase, bool enabled)
+        {
+            var before = handler.Requests.Count; List<ChannelInfo>? channels = null; string? error = null;
+            // Each phase has a fresh real BaseTunerHost, so the second read
+            // cannot succeed using the first host's channel dictionary.
+            try { channels = await Host(new LiveTvOptions { TunerHosts = new[] { info } }, cachePath).GetChannels(enabled, CancellationToken.None); }
+            catch (Exception caught) { error = caught.GetType().Name; }
+            var contents = File.Exists(filename) ? File.ReadAllBytes(filename) : null;
+            observations.Add(new { name = phase, channels, failed = error is not null, error,
+                requests = handler.Requests.Skip(before).ToArray(), cache = contents is null ? null : new {
+                    filename = Path.GetFileName(filename), bytesBase64 = Convert.ToBase64String(contents), length = contents.Length,
+                    sha256 = Convert.ToHexStringLower(SHA256.HashData(contents)) } });
+        }
+        handler.Fail = false; handler.Status = HttpStatusCode.OK;
+        handler.Bytes = Convert.FromBase64String(input.GetProperty("cacheBytesBase64").GetString()!);
+        await Capture("force", false);
+        handler.Fail = true; await Capture("cold-source-failure", true);
+        cacheIdentities.Add(new { name, info, observations });
+    }
 }
 finally { Directory.Delete(root, true); }
 var assemblies = new[] { typeof(M3uParser).Assembly, typeof(M3UTunerHost).Assembly, typeof(MediaSourceManager).Assembly,
@@ -120,7 +147,7 @@ var assemblies = new[] { typeof(M3uParser).Assembly, typeof(M3UTunerHost).Assemb
 File.WriteAllText(args[1], JsonSerializer.Serialize(new { inputSha256 = Convert.ToHexString(SHA256.HashData(inputBytes)).ToLowerInvariant(),
     actualM3uParser = true, actualBaseTunerHost = true, actualM3uTunerHost = true, actualPathProtocol = true,
     networkClassificationControlled = true, transportControlled = true, recordingOrTranscodingStarted = false,
-    privateInputsRemoved = !Directory.Exists(root), parsed, sources, validation, cache, cacheFiles, multipleHosts, assemblies }, json));
+    privateInputsRemoved = !Directory.Exists(root), parsed, sources, validation, cache, cacheFiles, multipleHosts, cacheIdentities, assemblies }, json));
 
 public class Stub : DispatchProxy
 {

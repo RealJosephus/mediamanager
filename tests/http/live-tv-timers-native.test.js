@@ -12,6 +12,7 @@ import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { dateTicks } from '../../src/library/records.js';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
+import { projectItemBody, projectProblemTrace } from '../helpers/http-body-projection.js';
 import { createTimerRuntime, databaseFilename, documentSnapshot, guid, idKey, itemIdentity, makeDocuments,
   seedGuide, sha, sqliteSnapshot, timerIdentity, writeDocuments } from './fixtures/live-tv-timers-http/scenario.js';
 
@@ -27,17 +28,19 @@ const unusedPort = () => new Promise((resolve, reject) => {
 const portAvailable = port => new Promise(resolve => {
   const server = createServer(); server.once('error', () => resolve(false)).listen(port, '127.0.0.1', () => server.close(() => resolve(true)));
 });
-const dates = new Set(['StartDate', 'EndDate', 'DateCreated', 'DateLastSaved', 'DateLastRefreshed', 'PremiereDate']);
 const wire = response => {
-  const project = (value, key) => {
-    if (Array.isArray(value)) return value.map(entry => project(entry));
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, entry]) => [name, project(entry, name)]));
-    if (key === 'traceId') { assert.ok(typeof value === 'string' && value); return '$trace'; }
-    if (dates.has(key) && typeof value === 'string') return { ticks: String(dateTicks(value)), utc: value.endsWith('Z') };
-    return value;
+  const date = value => ({ ticks: String(dateTicks(value)), utc: value.endsWith('Z') });
+  const timer = value => {
+    if (!value || Array.isArray(value) || typeof value !== 'object') return value;
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key,
+      ['StartDate', 'EndDate'].includes(key) && typeof entry === 'string' ? date(entry)
+        : key === 'ProgramInfo' ? projectItemBody(entry, { date }) : entry]));
   };
+  const body = response.bodyJson;
+  const projected = response.status !== 200 ? projectProblemTrace(body, response.status)
+    : body && Array.isArray(body.Items) ? { ...body, Items: body.Items.map(timer) } : timer(body);
   return { status: response.status, contentType: response.contentType,
-    body: Object.hasOwn(response, 'bodyJson') ? project(response.bodyJson) : response.bodyText };
+    body: Object.hasOwn(response, 'bodyJson') ? projected : response.bodyText };
 };
 const guidForms = n => {
   const d = guid(n).toLowerCase(), raw = idKey(n);

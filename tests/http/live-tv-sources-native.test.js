@@ -17,6 +17,7 @@ import { startProductionInstance } from '../../src/main.js';
 import { dateTicks } from '../../src/library/records.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { prepareNativeMediaSeed } from './native-media-seed.js';
+import { errorObservation } from '../helpers/error-observation.js';
 import { canonical, canonicalRows, databaseFilename, idKey, initialConfiguration,
   portableMountContract, prepareSources, sha, snapshot, sqliteSnapshot, stateFiles, storageDocument } from './fixtures/live-tv-sources-http/scenario.js';
 
@@ -25,8 +26,9 @@ const enabled = process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MED
 const resourceLease = enabled ? await acquireTestResource('hdhomerun-discovery-65001') : null;
 const inputBytes = await readFile(new URL('./fixtures/live-tv-sources-http/input.json', import.meta.url)), input = JSON.parse(inputBytes);
 const authorization = token => `MediaBrowser Client="Live TV sources", Device="Isolated", DeviceId="live-tv-sources-http", Version="1"${token ? `, Token="${token}"` : ''}`;
-const wire = response => ({ status: response.status, contentType: response.contentType,
-  body: Object.hasOwn(response, 'bodyJson') ? response.bodyJson : response.bodyText });
+const wire = (response, route, options) => ({ status: response.status, contentType: response.contentType,
+  body: Object.hasOwn(response, 'bodyJson') ? canonical(response.bodyJson,
+    { ...options, role: 'http', route, status: response.status }) : response.bodyText });
 const sha1 = value => createHash('sha1').update(value, 'utf8').digest('hex');
 const sleep = () => new Promise(resolve => setTimeout(resolve, 100));
 const unusedPort = () => new Promise((resolve, reject) => {
@@ -46,9 +48,10 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
   const root = await realpath(output.root), referenceRoot = path.join(root, 'reference'), nativeCache = path.join(referenceRoot, 'cache');
   const nodeCache = path.join(referenceRoot, 'data/cache'), port = await unusedPort(), nativeOrigin = `http://127.0.0.1:${port}`;
   const report = { inputSha256: sha(inputBytes), cases: [], differences: [], stages: [], processes: [], cleanup: [], runtimeErrors: [], nodeShutdownStates: [] };
+  const failures = [];
   const tokens = { anonymous: undefined, invalid: 'invalid-live-tv-source-token' }, users = {}, probes = [], engines = {};
   report.engines = engines;
-  let current, native, database, application, sources, initialFiles, failure;
+  let current, native, database, application, sources, initialFiles;
   const request = async (origin, route, { mode = 'apiKey', token = tokens[mode], method = 'GET', body, rawBody, contentType = 'application/json' } = {}) => {
     const startedAt = Date.now();
     const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(30000), headers: {
@@ -349,7 +352,7 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
       const networkFilename = path.join(referenceRoot, 'config/network.xml'), networkBytes = await readFile(networkFilename);
       (report.nodeNetworkInputs ??= []).push({ bytes: networkBytes.length, sha256: sha(networkBytes), base64: networkBytes.toString('base64'),
         scope: 'Native is stopped; warm and cold Node lifetimes reuse its unchanged current copy and reserved port.' });
-      const app = await startProductionInstance({ environment, onError: cause => report.runtimeErrors.push({ name: cause?.name, code: cause?.code,
+      const app = await startProductionInstance({ environment, onError: cause => report.runtimeErrors.push({ name: cause?.name, code: cause?.code, failure: errorObservation(cause),
         message: cause?.message ?? String(cause), status: cause?.status ?? cause?.statusCode, stack: cause?.stack, value: inspect(cause, { depth: 8 }) }) });
       application = app;
       assert.equal(app.networkHost.listeners.find(entry => entry.scheme === 'http').port, port);
@@ -375,34 +378,29 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
     report.inventories = { native: nativeEngine.inventory, node: nodeEngine.inventory };
     assert.deepEqual(nodeEngine.inventory, nativeEngine.inventory, 'The installed official tuner inventory must match the complete native inventory.');
     assert.equal(nodeEngine.cases.length, nativeEngine.cases.length);
-    const routeIdentity = (value, engine) => { let result = value; for (const [identity, label] of Object.entries(engine.ids)) result = result.replaceAll(identity, label).replaceAll(identity.toUpperCase(), label); return result; };
+    const routeIdentity = (value, engine) => {
+      for (const [identity, label] of Object.entries(engine.ids)) {
+        if (value === identity + '_channels') return label + '_channels';
+        if (value === 'xmltv/' + identity + '.xml') return 'xmltv/' + label + '.xml';
+      }
+      return value.replace(/([?&](?:id|providerId)=)([^&#]*)/giu, (match, prefix, identity) => {
+        try { return prefix + (engine.ids[idKey(decodeURIComponent(identity))] ?? identity); } catch { return match; }
+      });
+    };
     for (const [index, candidate] of nodeEngine.cases.entries()) {
       const expected = nativeEngine.cases[index], name = candidate.name; assert.equal(name, expected.name);
       const options = engine => ({ ids: engine.ids, clock: engine.clock,
+        baselineItems: new Map(engine.baseline.database.BaseItems.map(row => [idKey(row.Id), row])),
         inheritedItemValueIds: new Set(engine.baseline.database.ItemValues.map(value => idKey(value.ItemValueId))) });
-      let requestMatched = false, responseMatched = false;
       collect(name + ': request', () => {
-        assert.deepEqual(canonical({ ...candidate.request, route: routeIdentity(candidate.request.route, nodeEngine) }, options(nodeEngine)),
-          canonical({ ...expected.request, route: routeIdentity(expected.request.route, nativeEngine) }, options(nativeEngine)));
-        requestMatched = true;
+        assert.deepEqual(canonical({ ...candidate.request, route: routeIdentity(candidate.request.route, nodeEngine) },
+          { ...options(nodeEngine), role: 'request', route: candidate.request.route }),
+        canonical({ ...expected.request, route: routeIdentity(expected.request.route, nativeEngine) },
+          { ...options(nativeEngine), role: 'request', route: expected.request.route }));
       });
       collect(name + ': HTTP', () => {
-        assert.deepEqual(canonical(wire(candidate.response), options(nodeEngine)), canonical(wire(expected.response), options(nativeEngine)));
-        responseMatched = true;
-      });
-      collect(name + ': request diagnostics', () => {
-        const diagnostics = report.runtimeErrors.filter(value => value.requestObservation?.index === index);
-        const missingProvider = name.startsWith('authorization lineups:') && ['allowed', 'manager', 'admin', 'apiKey'].includes(candidate.request.mode)
-          || ['unknown tuner', 'unknown listings'].includes(name);
-        const missingSequence = name.startsWith('authorization mapping options:') && ['admin', 'apiKey'].includes(candidate.request.mode)
-          || ['missing mapping provider', 'missing tuner mapping saves before lookup failure'].includes(name);
-        if (expected.response.status >= 400 && (missingProvider || missingSequence)) {
-          assert.ok(requestMatched && responseMatched, 'The complete actual native request and failure response must agree before classifying diagnostics.');
-          for (const diagnostic of diagnostics) {
-            assert.equal(diagnostic.status, expected.response.status, 'Only the matching request failure can classify its diagnostic.');
-            diagnostic.expectedRequestDiagnostic = { ...diagnostic.requestObservation, completeNativeWireMatched: true };
-          }
-        } else assert.deepEqual(diagnostics, [], name + ': successful or unclassified requests must not hide runtime errors.');
+        assert.deepEqual(wire(candidate.response, candidate.request.route, options(nodeEngine)),
+          wire(expected.response, expected.request.route, options(nativeEngine)));
       });
       collect(name + ': current rows', () => assert.deepEqual(canonicalRows(candidate.after.database, options(nodeEngine)), canonicalRows(expected.after.database, options(nativeEngine))));
       const cacheKeys = (value, engine) => Object.keys(value.after.files.cache).map(key => routeIdentity(key, engine)).sort();
@@ -430,8 +428,9 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
         && value.stage === candidate.stage && routeIdentity(value.relative, nativeEngine) === relative);
       assert.ok(expected, candidate.name + ': native must produce the same cache/configuration file identity');
       const left = typed.results.find(value => value.name === candidate.name), right = typed.results.find(value => value.name === expected.name);
-      collect(candidate.name + ': actual typed file consumer', () => assert.deepEqual(canonical({ value: left.value, error: left.error }, { ids: nodeEngine.ids }),
-        canonical({ value: right.value, error: right.error }, { ids: nativeEngine.ids })));
+      collect(candidate.name + ': actual typed file consumer', () => assert.deepEqual(
+        { value: canonical(left.value, { ids: nodeEngine.ids, role: candidate.kind }), error: left.error },
+        { value: canonical(right.value, { ids: nativeEngine.ids, role: expected.kind }), error: right.error }));
     }
     const listeners = application.networkHost.listeners;
     await application.close(); assert.ok(listeners.every(listener => !listener.server.listening)); application = undefined;
@@ -440,32 +439,33 @@ test('M3U XMLTV source management matches actual native HTTP, configuration and 
       listeners: listeners.map(({ scheme, address, port, server }) => ({ scheme, address, port, listening: server.listening })) });
     assert.deepEqual(report.nodeShutdownStates.at(-1), nodeEngine.final, 'Shutdown must preserve complete final rows, authoritative timer state and source/cache bytes.');
     assert.deepEqual(report.differences, []);
-    assert.deepEqual(report.runtimeErrors.filter(value => !value.expectedRequestDiagnostic), [], 'Production must not hide provider/Guide/background failures.');
-  } catch (cause) { failure = cause; report.failure = { name: cause.name, message: cause.message, stack: cause.stack }; }
+  } catch (cause) { failures.push(cause); report.failure = errorObservation(cause); report.failureRaw = inspect(cause, { depth: null }); }
   finally {
-    try { await stopNative('native-finally'); } catch (cause) { failure ??= cause; report.cleanup.push({ name: 'native', error: cause.message }); }
+    try { await stopNative('native-finally'); } catch (cause) { failures.push(cause); report.cleanup.push({ name: 'native', error: errorObservation(cause), raw: inspect(cause, { depth: null }) }); }
     if (application) try {
       const listeners = application.networkHost.listeners;
       await application.close(); assert.ok(listeners.every(listener => !listener.server.listening));
       for (const listener of listeners.filter(entry => entry.bound)) assert.equal(await portAvailable(listener.port), true);
       report.cleanup.push({ name: 'production-runtime-finally', closed: true, listenerReleased: true });
     }
-    catch (cause) { failure ??= cause; report.cleanup.push({ name: 'production-runtime', error: cause.message }); }
+    catch (cause) { failures.push(cause); report.cleanup.push({ name: 'production-runtime', error: errorObservation(cause), raw: inspect(cause, { depth: null }) }); }
     try { await dropPostgresTestDatabase(database); report.cleanup.push({ name: 'postgres-schema', removed: true }); }
-    catch (cause) { failure ??= cause; report.cleanup.push({ name: 'postgres-schema', error: cause.message }); }
+    catch (cause) { failures.push(cause); report.cleanup.push({ name: 'postgres-schema', error: errorObservation(cause), raw: inspect(cause, { depth: null }) }); }
     if (current) try { await current.finish(); report.cleanup.push({ name: 'protected-inputs', unchanged: true }); }
-    catch (cause) { failure ??= cause; report.inputVerificationFailure = cause.message; }
+    catch (cause) { failures.push(cause); report.inputVerificationFailure = errorObservation(cause); }
     for (const [source, destination] of [['record.json', 'typed-receipt.json'], ['typed.json', 'typed-native.json'],
       ['build.stdout.txt', 'typed-build-stdout.log'], ['build.stderr.txt', 'typed-build-stderr.log'], ['stdout.txt', 'typed-stdout.log'], ['stderr.txt', 'typed-stderr.log']]) {
       try { await writeFile(path.join(root, destination), await readFile(path.join(root, 'typed', source)), { flag: 'wx' }); }
-      catch (cause) { if (cause.code !== 'ENOENT') { failure ??= cause; report.cleanup.push({ name: 'typed-evidence-publication', error: cause.message }); } }
+      catch (cause) { if (cause?.code !== 'ENOENT') { failures.push(cause); report.cleanup.push({ name: 'typed-evidence-publication', error: errorObservation(cause), raw: inspect(cause, { depth: null }) }); } }
     }
-    report.passed = !failure; report.phaseAcceptance = false; report.releaseAcceptance = false;
+    report.failures = failures.map(cause => ({ value: errorObservation(cause), raw: inspect(cause, { depth: null }) }));
+    report.passed = failures.length === 0; report.phaseAcceptance = false; report.releaseAcceptance = false;
     report.discoveryBoundary = 'Discover and Discvover establish authorization and typed bool failure only. Successful ambient HDHomeRun discovery is not claimed. Actual native Guide device scans remain real and visible in native process logs.';
     report.boundary = 'Actual native HTTP/controller/provider/queued Guide with explicitly empty timer inputs, stopped private SQLite core transfer and production PostgreSQL entry with official mapped M3U/XMLTV. Complete response bodies/files/current rows and the complete installed tuner-type inventory are compared. Dynamic source IDs are mapped only after format/uniqueness/config identity checks. Only bounded creation/save/refresh timestamps are compared as observed clocks. No playback, recorder, encoder, full listings-provider execution, CLI import/export roundtrip or final release acceptance.';
     await writeFile(path.join(root, 'report.json'), filterEvidenceJson(report)); await output.publishAndClose();
   }
-  if (failure) throw output.publicError(failure);
+  if (failures.length) throw output.publicError(failures.length === 1 && failures[0] instanceof Error ? failures[0]
+    : new AggregateError(failures, 'Live TV sources HTTP and cleanup failed.', { cause: failures[0] }));
 });
 
 // Release after all test hooks, streams, processes and resource postconditions.

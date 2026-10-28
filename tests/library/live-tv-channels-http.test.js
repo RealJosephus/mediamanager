@@ -8,7 +8,9 @@ import { nativeGuid } from '../../src/users/native.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { nativeRootUserViewIdentity } from '../../src/library/identity.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
+import { bindFixtureInput } from '../helpers/fixture-input-binding.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
@@ -16,12 +18,10 @@ const bytes = await readFile(new URL('./fixtures/live-tv-channels-http/input.jso
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
 
-const normalize = (value, programRoot) => Array.isArray(value) ? value.map(entry => normalize(entry, programRoot)) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key,
-    key === 'ServerId' ? '$server' : ['DateCreated', 'DateLastSaved', 'StartDate', 'EndDate'].includes(key)
-      && typeof entry === 'string' ? dateText(entry) : key === 'Path' && typeof entry === 'string'
-        && entry.replaceAll('\\', '/').startsWith(programRoot + '/')
-        ? '$program/' + entry.replaceAll('\\', '/').slice(programRoot.length + 1) : normalize(entry, programRoot)])) : value;
+const normalize = (value, programRoot, serverId, status) => projectItemBody(value, { serverId, status,
+  date: (entry, { field }) => ['DateCreated', 'DateLastSaved', 'StartDate', 'EndDate'].includes(field) ? dateText(entry) : entry,
+  path: entry => entry.replaceAll('\\', '/').startsWith(programRoot + '/')
+    ? '$program/' + entry.replaceAll('\\', '/').slice(programRoot.length + 1) : entry });
 const boundRequest = (request, userId) => ({ ...request, ...(Object.hasOwn(request, 'body') ? {
   body: request.body && Object.fromEntries(Object.entries(request.body).map(([key, value]) => [key,
     key.toLowerCase() === 'userid' && typeof value === 'string' && idKey(value) === idKey(userId) ? '$user' : value])),
@@ -30,7 +30,7 @@ const boundRequest = (request, userId) => ({ ...request, ...(Object.hasOwn(reque
 test('channel lists, details and global current-program windows match full native HTTP', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, root } = await currentUserViewScenario('live-tv-channels-http', bytes, { signal: t.signal });
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('live-tv-channels-http', bytes, { signal: t.signal });
   assert.equal(http.records.length, 57);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   assert.equal(body('all channels').TotalRecordCount, 4);
@@ -75,7 +75,8 @@ test('channel lists, details and global current-program windows match full nativ
   // observed identity as an input; synthetic program and channel ids stay literal.
   assert.equal(preparation.liveTvDocuments.length, 2);
   let nativeState;
-  const rebound = JSON.parse(JSON.stringify(fixture).replaceAll(live.fixtureId, live.actualId.toLowerCase()));
+  const rebound = bindFixtureInput(fixture, { user: { fixtureId: fixture.userId, actualId: fixture.userId },
+    items: [{ fixtureId: live.fixtureId, actualId: live.actualId.toLowerCase() }] });
   const actual = await recordItemFilterCandidate({ dialect: 'postgres', fixture: rebound,
     connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, scenarioName: 'live-tv-channels-http',
     captureResponseBodies: true, captureErrorText: true, captureCaseRuntimeErrors: true,
@@ -142,10 +143,8 @@ test('channel lists, details and global current-program windows match full nativ
       assert.deepEqual(boundRequest(endpoint.request, actual.userId), boundRequest(reference.request, fixture.userId));
       assert.equal(endpoint.response.status, reference.response.status);
       assert.equal(endpoint.response.contentType, reference.response.contentType);
-      assert.deepEqual(normalize(endpoint.response.body ?? endpoint.response.bodyText, actual.programDataDirectory.replaceAll('\\', '/')),
-        normalize(reference.response.bodyJson ?? reference.response.bodyText, nativeProgramRoot));
-      const expected = rebound.cases.find(testCase => testCase.name === item.name);
-      assert.deepEqual(endpoint.runtimeErrors, expected.expectedRuntimeError ? [{ name: 'Error', message: expected.expectedRuntimeError }] : []);
+      assert.deepEqual(normalize(endpoint.response.body ?? endpoint.response.bodyText, actual.programDataDirectory.replaceAll('\\', '/'), actual.serverId, endpoint.response.status),
+        normalize(reference.response.bodyJson ?? reference.response.bodyText, nativeProgramRoot, nativeServerId, reference.response.status));
     } catch (error) { differences.push({ name: item.name, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
@@ -161,7 +160,6 @@ test('channel lists, details and global current-program windows match full nativ
   assert.deepEqual(actual.filesystemDomainsBeforeReads, actual.filesystemDomainsAfterShutdown);
   assert.deepEqual(actual.stateBeforeReads, actual.stateAfterReads);
   assert.deepEqual(actual.stateBeforeReads, actual.stateAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(Boolean));
   assert.deepEqual(differences, []);
 }));

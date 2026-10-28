@@ -58,7 +58,7 @@ export class HdHomerunTuner {
   #cacheFile(info) {
     const cachePath = this.cachePath;
     if (!path.isAbsolute(cachePath ?? '')) throw new TypeError('HDHomeRun channel cache requires an absolute mapped cache root.');
-    if (info.Id != null && /[\\/:\0]|^\.{1,2}$/u.test(info.Id)) throw new TypeError('A tuner cache identity must be one file-name component.');
+    if (info.Id != null && /[\\/:\0]/u.test(info.Id)) throw new TypeError('A tuner cache identity must be one file-name component.');
     return path.join(cachePath, (info.Id ?? '') + '_channels');
   }
   async #request(url, signal) {

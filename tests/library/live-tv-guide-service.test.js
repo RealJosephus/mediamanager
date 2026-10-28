@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { mkdir, appendFile } from 'node:fs/promises';
 import { LiveTvService } from '../../src/library/live-tv-service.js';
 import { LiveTvGuideService } from '../../src/library/live-tv-guide-service.js';
 import { ItemDeletionService } from '../../src/library/item-deletion-service.js';
@@ -8,12 +9,14 @@ import { ExternalDataManager } from '../../src/library/external-data.js';
 import { LinkedChildReferenceService } from '../../src/library/linked-child-reference-service.js';
 import { MetadataImageAssets } from '../../src/metadata/image-assets.js';
 import { newNativeItemEntity } from '../../src/library/native-item-entity.js';
+import { observeNativeResourceGraph } from '../../src/library/native-resource-graph.js';
 import { guideChannelId } from '../../src/library/live-tv-guide-channel.js';
 import { guideProgramId } from '../../src/library/live-tv-guide-program.js';
 import { idKey, dateTicks } from '../../src/library/records.js';
 import { quoteIdentifier as q } from '../../src/database/model.js';
 import { setupChildrenFixture, useIdentityPathReversalControl } from '../metadata/children-fixture.js';
 import { testFileSystem } from '../storage/plugin-files.js';
+import { executionObservation } from '../../tools/validation/execution-diagnostics.js';
 
 export const requiredValidationServices = ['postgres'];
 const enabled = process.env.MEDIAMANAGER_TEST_POSTGRES;
@@ -27,10 +30,107 @@ const program = (id, fields = {}) => ({ Id: id, Name: id, ShowId: null, SeriesId
   ProductionYear: null, OriginalAirDate: null, EpisodeNumber: null, SeasonNumber: null, ImagePath: null, ImageUrl: null,
   ThumbImageUrl: null, LogoImageUrl: null, BackdropImageUrl: null, ProviderIds: {}, SeriesProviderIds: {}, Etag: 'ordinary', ...fields });
 
+function observeClosePhase(phase, operation) {
+  if (!path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '')) return operation();
+  let observation;
+  try {
+    observation = executionObservation('guide.close-control.' + phase,
+      { fixture: 'tests/library/live-tv-guide-service.test.js' });
+    void observation.record('started').catch(() => {});
+  } catch { return operation(); }
+  let result;
+  try { result = operation(); }
+  catch (reason) {
+    void observation.record('failed', { resultKind: 'threw' }).catch(() => {}); throw reason;
+  }
+  // Record actual settlement without yielding before synchronous admission or
+  // replacing the original Promise/value/rejection used by the real owner.
+  void Promise.resolve(result).then(
+    () => observation.record('completed', { resultKind: 'returned' }),
+    () => observation.record('failed', { resultKind: 'threw' }),
+  ).catch(() => {});
+  return result;
+}
+
+function observeCloseOwners(fixture) {
+  if (!path.isAbsolute(process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT ?? '')) return;
+  const diagnosticRoot = process.env.MEDIAMANAGER_TEST_DIAGNOSTICS_ROOT;
+  const tokens = new Map();
+  const token = value => {
+    if (value === null || value === undefined) return null;
+    if (!tokens.has(value)) tokens.set(value, tokens.size + 1);
+    return tokens.get(value);
+  };
+  const root = value => ({ token: token(value.token), entityId: token(value.entityId),
+    resourceId: token(value.resourceId), references: value.references });
+  const resource = value => ({ id: token(value.id), entityId: token(value.entityId), state: value.state,
+    revision: value.revision, preparedRevision: value.preparedRevision });
+  let recorded = 0, tail = mkdir(diagnosticRoot, { recursive: true }).catch(() => {});
+  const graphObservation = observeNativeResourceGraph(fixture.linkedChildren.resourceGraph, value => {
+    // This bounded record of actual acquisitions and callback settlement is
+    // diagnostic only. No count, identity or stack is an acceptance condition.
+    if (recorded === 512) return;
+    const record = { schemaVersion: 1, pid: process.pid, sequence: ++recorded,
+      stage: 'guide.resource-graph', at: new Date().toISOString(), event: value.event };
+    if (value.root) record.root = root(value.root);
+    if (value.resource) record.resource = resource(value.resource);
+    if (value.roots) { record.roots = value.roots.map(root); record.rootsCount = value.rootsCount; }
+    if (value.resources) { record.resources = value.resources.map(resource); record.resourcesCount = value.resourcesCount; }
+    if (value.source) record.source = value.source;
+    if (recorded === 512) record.limitReached = true;
+    const text = JSON.stringify(record) + '\n';
+    tail = tail.then(() => appendFile(path.join(diagnosticRoot, `process-${process.pid}-guide-resource-graph.jsonl`), text)).catch(() => {});
+  });
+  const observe = (owner, method, phase, onResult) => {
+    if (!owner) return;
+    try {
+      const own = Object.getOwnPropertyDescriptor(owner, method);
+      let descriptor = own;
+      for (let prototype = Object.getPrototypeOf(owner); !descriptor && prototype; prototype = Object.getPrototypeOf(prototype)) {
+        descriptor = Object.getOwnPropertyDescriptor(prototype, method);
+      }
+      // Observation must not invoke an accessor or replace an immutable method.
+      if (!descriptor || !Object.hasOwn(descriptor, 'value') || !descriptor.configurable
+        || typeof descriptor.value !== 'function') return;
+      const original = descriptor.value;
+      const value = function (...args) {
+        const result = observeClosePhase(phase, () => Reflect.apply(original, this, args));
+        if (onResult) void Promise.resolve(result).then(onResult, () => {}).catch(() => {});
+        return result;
+      };
+      // Inherited methods must stay out of {...owner}: Guide batch options copy
+      // enumerable dependencies and have their own close lifecycle.
+      Object.defineProperty(owner, method, own ? { ...own, value }
+        : { configurable: true, enumerable: false, writable: true, value });
+    } catch { /* Optional observation cannot change the original owner path. */ }
+  };
+  for (const [owner, method, phase] of [
+    [fixture.guide, 'close', 'guide'], [fixture.liveTv, 'close', 'configuration'],
+    [fixture.host, 'close', 'metadata-host'], [fixture.library.itemCreation, 'close', 'item-creation'],
+    [fixture.library, 'close', 'library'], [fixture.linkedChildren, 'flushReleases', 'relations-flush'],
+    [fixture.linkedChildren, 'flushOwnedReleases', 'relations-owned-flush'],
+    [fixture.linkedChildren.resourceGraph, 'close', 'resource-graph'],
+    [fixture.linkedChildren, 'close', 'relations'], [fixture.storage, 'close', 'storage'],
+    [fixture.store, 'close', 'domain-store'], [fixture.database, 'close', 'database'],
+  ]) observe(owner, method, phase);
+  observe(fixture.guide, 'loadContext', 'metadata-context-load',
+    loaded => observe(loaded, 'dispose', 'metadata-context-dispose'));
+  return graphObservation;
+}
+
 async function setup(t) {
+  let liveTv, guide;
+  t.after(async () => {
+    const failures = [];
+    for (const close of [() => guide?.close(), () => liveTv?.close()]) {
+      try { await close(); } catch (reason) { failures.push(reason); }
+    }
+    if (failures.length === 1) throw failures[0];
+    if (failures.length) throw new AggregateError(failures, 'Guide fixture resources failed to close.', { cause: failures[0] });
+  });
   const fixture = await setupChildrenFixture(t); useIdentityPathReversalControl(fixture);
   await fixture.seed({ target: 'root', items: [{ key: 'root', type: 'AggregateFolder', Id: 'a9800000000000000000000000000001', Name: 'Root', Path: null }] });
-  const liveTv = new LiveTvService({ configurationDirectoryPath: path.join(fixture.stateRoot, 'config'), fileSystem: testFileSystem });
+  liveTv = new LiveTvService({ configurationDirectoryPath: path.join(fixture.stateRoot, 'config'), fileSystem: testFileSystem });
   const calls = [], errors = [], progress = [], configuration = await liveTv.getConfiguration();
   configuration.GuideDays = 99;
   const updates = fixture.host.updates, itemCreation = fixture.library.itemCreation;
@@ -49,7 +149,7 @@ async function setup(t) {
   }, async getPrograms(id, start, end, options) {
     calls.push({ kind: 'programs', id, start, end }); options.signal.throwIfAborted(); return getPrograms(id, options);
   } };
-  const guide = new LiveTvGuideService({ ...fixture, liveTv, itemCreation, itemDeletion: deletion, updates,
+  guide = new LiveTvGuideService({ ...fixture, liveTv, itemCreation, itemDeletion: deletion, updates,
     services: () => [provider], recordingFolders: { async reconcile() { calls.push({ kind: 'folders' }); } },
     sources: { async scanForTunerDeviceChanges({ signal }) { signal.throwIfAborted(); calls.push({ kind: 'scan' }); } },
     metadataScanner: { async refreshLiveItem(item, options) {
@@ -59,7 +159,6 @@ async function setup(t) {
     images: { async preCache(view, maxDate) { calls.push({ kind: 'precache', count: String(await view.count()), maxDate }); } },
     metadataAssets: new MetadataImageAssets({ ...fixture, fileSystem: testFileSystem }),
     now: () => new Date('2500-01-01T12:00:00Z'), onError: error => errors.push(error) });
-  t.after(async () => { await guide.close(); await liveTv.close(); });
   return { ...fixture, liveTv, guide, calls, errors, progress, configuration,
     setChannels: value => { channels = value; }, setPrograms: value => { getPrograms = value; },
     refresh: signal => guide.refresh({ signal, reportProgress: value => progress.push(value) }) };
@@ -141,20 +240,41 @@ test('already canceled refresh preserves recording-folder coordination before th
 });
 
 test('guide close aborts and drains late service work and releases its configuration admission before disposal', { skip: !enabled, timeout: 30000 }, async t => {
-  const fixture = await setup(t), entered = Promise.withResolvers(), release = Promise.withResolvers();
-  let signal, pending;
-  fixture.setChannels([channel('held')]);
-  fixture.setPrograms(async (_id, options) => { signal = options.signal; entered.resolve(); await release.promise; return [program('late')]; });
+  const entered = Promise.withResolvers(), release = Promise.withResolvers();
+  const releaseCanceledTest = () => observeClosePhase('test-cancel-release', () => release.resolve());
+  t.signal.addEventListener('abort', releaseCanceledTest, { once: true });
+  let fixture, signal, pending, failed = false, failure;
   try {
-    pending = fixture.refresh(); const settled = Promise.allSettled([pending]);
-    await Promise.race([entered.promise, pending.then(() => { throw new Error('Refresh completed before the controlled service boundary.'); })]);
+    fixture = await observeClosePhase('setup', () => setup(t));
+    const graphObservation = observeCloseOwners(fixture);
+    t.after(() => graphObservation?.release());
+    fixture.setChannels([channel('held')]);
+    fixture.setPrograms(async (_id, options) => {
+      signal = options.signal; entered.resolve();
+      await observeClosePhase('held-service-release', () => release.promise); return [program('late')];
+    });
+    pending = observeClosePhase('refresh', () => fixture.refresh()); const settled = Promise.allSettled([pending]);
+    await observeClosePhase('service-entry', () => Promise.race([entered.promise,
+      pending.then(() => { throw new Error('Refresh completed before the controlled service boundary.'); })]));
     let drained = false; const closing = fixture.guide.close().then(() => { drained = true; });
     assert.equal(signal.aborted, true); await assert.rejects(fixture.refresh(), { status: 503 });
     await new Promise(resolve => setImmediate(resolve)); assert.equal(drained, false);
     const configurationClosing = fixture.liveTv.close(); release.resolve();
-    const [result] = await settled; assert.equal(result.status, 'rejected'); assert.equal(result.reason.name, 'AbortError');
+    const [result] = await observeClosePhase('refresh-settled', () => settled); assert.equal(result.status, 'rejected'); assert.equal(result.reason.name, 'AbortError');
     await closing; await configurationClosing; assert.equal(drained, true);
-    assert.deepEqual(await fixture.database.rows('BaseItems', { where: { Type: programType } }), []);
-    await assertReleased(fixture);
-  } finally { release.resolve(); await Promise.allSettled([pending]); await fixture.guide.close(); }
+    assert.deepEqual(await observeClosePhase('program-rows', () => fixture.database.rows('BaseItems', { where: { Type: programType } })), []);
+    await observeClosePhase('released-resources', () => assertReleased(fixture));
+  } catch (reason) { failed = true; failure = reason; }
+  finally {
+    release.resolve();
+    const errors = [];
+    for (const close of [() => observeClosePhase('finally-refresh', () => Promise.allSettled([pending])), () => fixture?.guide.close()]) {
+      try { await close(); } catch (reason) { errors.push(reason); }
+    }
+    t.signal.removeEventListener('abort', releaseCanceledTest);
+    if (failed && errors.length) throw new AggregateError([failure, ...errors], 'Guide close control and cleanup failed.', { cause: failure });
+    if (failed) throw failure;
+    if (errors.length === 1) throw errors[0];
+    if (errors.length) throw new AggregateError(errors, 'Guide close control cleanup failed.', { cause: errors[0] });
+  }
 });

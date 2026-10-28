@@ -1,8 +1,9 @@
 import { buildPostgresItemPageQuery } from '../database/postgres-item-query.js';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { createHash, randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
 import { reconcileLiveTvStateFiles } from '../database/live-tv-state-import.js';
+import { stageLiveTvStateFile, removeUnpublishedLiveTvStateFiles, liveTvStateFileFailure } from '../database/live-tv-state-files.js';
 import { readNativeImageRows } from '../database/native-relation-order.js';
 import { decodeNativeTextBytes } from '../database/native-text.js';
 import { cloneNativeValue } from '../core/json.js';
@@ -29,7 +30,7 @@ const sha256 = value => createHash('sha256').update(value).digest('hex');
 
 function stateFailure(message, cause) {
   const error = libraryError(500, message);
-  if (cause) error.cause = cause;
+  if (arguments.length > 1) error.cause = cause;
   return error;
 }
 
@@ -181,38 +182,42 @@ export class LiveTvTimersService {
     if (!this.stateDirectory) return Promise.reject(libraryError(409, 'Live TV timer persistence requires a native data path.'));
     const operation = this.#mutationTail.then(async () => {
       if (this.#poisoned) throw this.#poisoned;
-      let plannedResult, result;
+      let plannedResult, result, callbackCompleted = false, transactionCompleted = false, sourcesChanged = false;
       try {
-        result = await this.store.serializeWrites(database => database.transaction(async database => {
-          const table = `${q(database.controlSchema)}.state`;
-          const selected = await database.client.query({ text: `SELECT value FROM ${table} WHERE key = $1 FOR UPDATE`,
-            values: [liveTvStateKey] });
-          if (selected.rows.length !== 1 || typeof selected.rows[0].value !== 'string') {
-            throw stateFailure('The authoritative Live TV state is unavailable.');
-          }
-          let document;
-          try { document = JSON.parse(selected.rows[0].value); }
-          catch (error) { throw stateFailure('The authoritative Live TV state is invalid.', error); }
-          const planned = plan(document);
-          if (!planned) return null;
-          plannedResult = planned;
-          const replacements = [];
-          try {
-            for (const [kind, bytes] of planned.files) replacements.push(await this.#stageFile(filenames[kind], bytes));
-            await database.client.query({ text: `UPDATE ${table} SET value = $2 WHERE key = $1`,
-              values: [liveTvStateKey, JSON.stringify(planned.document)] });
-            for (const replacement of replacements) {
-              await this.stateFileSystem.rename(replacement.temporary, replacement.filename);
-              replacement.published = true;
+        result = await this.store.serializeWrites(async database => {
+          const result = await database.transaction(async database => {
+            const table = `${q(database.controlSchema)}.state`;
+            const selected = await database.client.query({ text: `SELECT value FROM ${table} WHERE key = $1 FOR UPDATE`,
+              values: [liveTvStateKey] });
+            if (selected.rows.length !== 1 || typeof selected.rows[0].value !== 'string') {
+              throw stateFailure('The authoritative Live TV state is unavailable.');
             }
-          } finally {
-            for (const replacement of replacements) if (!replacement.published) {
-              try { await this.stateFileSystem.rm(replacement.temporary, { force: true }); }
-              catch { /* Preserve the mutation failure. */ }
-            }
-          }
-          return planned;
-        }));
+            let document;
+            try { document = JSON.parse(selected.rows[0].value); }
+            catch (error) { throw stateFailure('The authoritative Live TV state is invalid.', error); }
+            const planned = plan(document);
+            if (!planned) return null;
+            plannedResult = planned;
+            sourcesChanged = !sameSources(document, planned.document);
+            const replacements = [], errors = [];
+            try {
+              for (const [kind, bytes] of planned.files) replacements.push(await stageLiveTvStateFile(
+                this.stateDirectory, filenames[kind], bytes, this.stateFileSystem));
+              await database.client.query({ text: `UPDATE ${table} SET value = $2 WHERE key = $1`,
+                values: [liveTvStateKey, JSON.stringify(planned.document)] });
+              for (const replacement of replacements) {
+                await this.stateFileSystem.rename(replacement.temporary, replacement.filename);
+                replacement.published = true;
+              }
+            } catch (error) { errors.push(error); }
+            errors.push(...await removeUnpublishedLiveTvStateFiles(replacements, this.stateFileSystem));
+            if (errors.length) throw liveTvStateFileFailure(errors);
+            callbackCompleted = true;
+            return planned;
+          });
+          transactionCompleted = true;
+          return result;
+        });
       } catch (error) {
         let authoritative;
         try {
@@ -231,11 +236,14 @@ export class LiveTvTimersService {
           });
         } catch (recoveryError) {
           const fatal = stateFailure('Live TV timer persistence could not restore its PostgreSQL-owned files.',
-            new AggregateError([error, recoveryError], error.message, { cause: error }));
+            liveTvStateFileFailure([error, recoveryError]));
           this.#poisoned ??= fatal;
           throw this.#poisoned;
         }
-        if (!plannedResult || !sameSources(authoritative, plannedResult.document)) throw error;
+        // Equal bytes cannot prove a failed no-op publication committed, nor
+        // turn a known callback or post-commit cleanup failure into success.
+        if (!callbackCompleted || transactionCompleted || !sourcesChanged
+          || !plannedResult || !sameSources(authoritative, plannedResult.document)) throw error;
         result = plannedResult;
       }
       if (result) this.#queueNotifications(result.events);
@@ -243,17 +251,6 @@ export class LiveTvTimersService {
     });
     this.#mutationTail = operation.catch(() => {});
     return operation;
-  }
-
-  async #stageFile(name, bytes) {
-    await this.stateFileSystem.mkdir(this.stateDirectory, { recursive: true });
-    const filename = path.join(this.stateDirectory, name), temporary = path.join(this.stateDirectory, `.${name}.${randomUUID()}.tmp`);
-    try { await this.stateFileSystem.writeFile(temporary, bytes, { flag: 'wx' }); }
-    catch (error) {
-      try { await this.stateFileSystem.rm(temporary, { force: true }); } catch { /* Preserve the staging failure. */ }
-      throw error;
-    }
-    return { filename, temporary, published: false };
   }
 
   #queueNotifications(events) {

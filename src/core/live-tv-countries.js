@@ -8,6 +8,13 @@ const cacheMilliseconds = 7 * 86400000;
 const ioCodes = new Set(['EIO', 'ENOENT', 'ENOTDIR', 'EMFILE', 'ENFILE', 'EBUSY', 'ENOSPC', 'EEXIST', 'ENAMETOOLONG', 'EROFS', 'EFBIG', 'EINVAL']);
 const io = error => ioCodes.has(error?.code);
 const unavailable = () => Object.assign(new Error('Live TV country discovery has closed.'), { status: 503 });
+const httpFailure = reason => Object.assign(new Error(reason?.message ?? 'The country discovery HTTP request failed.', { cause: reason }),
+  Object.fromEntries(['code', 'statusCode', 'errors'].filter(key => reason?.[key] !== undefined).map(key => [key, reason[key]])),
+  { status: 500 }, reason?.httpStatus != null || reason?.status != null && reason.status !== 500
+    ? { httpStatus: reason.httpStatus ?? reason.status } : {});
+const operationFailure = errors => errors.length === 1 ? errors[0]
+  : Object.assign(new AggregateError(errors, errors[0]?.message ?? 'Country cache cleanup failed.', { cause: errors[0] }),
+    Object.fromEntries(['code', 'status', 'statusCode'].filter(key => errors[0]?.[key] !== undefined).map(key => [key, errors[0][key]])));
 const trim = value => value.replace(/^[\u0009-\u000d\u0020\u0085\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+|[\u0009-\u000d\u0020\u0085\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]+$/gu, '');
 function day(value, utc = true) {
   const date = new Date(value);
@@ -97,7 +104,7 @@ export class LiveTvCountriesClient {
       let modified;
       try { modified = (await this.fileSystem.stat(filename)).mtimeMs; }
       catch (error) {
-        if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
+        if (!['ENOENT', 'ENOTDIR'].includes(error?.code)) throw error;
         modified = Date.parse('1601-01-01T00:00:00Z');
       }
       if (new Date(this.now()).getTime() - modified < cacheMilliseconds) {
@@ -120,20 +127,16 @@ export class LiveTvCountriesClient {
       if (!response.ok) throw Object.assign(new Error(`Response status code does not indicate success: ${response.status}.`),
         { code: 'http-error', httpStatus: response.status, status: 500 });
     } catch (error) {
-      if (error.status != null && error.status !== 500) error.httpStatus ??= error.status;
-      error.status = 500;
-      throw error;
+      throw httpFailure(error);
     } finally { clearTimeout(timer); await response?.body?.cancel().catch(() => {}); }
     await this.fileSystem.mkdir(path.dirname(filename), { recursive: true });
     // Match File.WriteAllBytesAsync: create/truncate before the async write,
     // and do not publish memory bytes until both write and disposal succeed.
-    const file = await this.fileSystem.open(filename, 'w'); let primary;
+    const file = await this.fileSystem.open(filename, 'w'), errors = [];
     try { await file.writeFile(bytes); }
-    catch (error) { primary = error; throw error; }
-    finally {
-      try { await file.close(); }
-      catch (error) { throw primary ? new AggregateError([primary, error], primary.message, { cause: primary }) : error; }
-    }
+    catch (error) { errors.push(error); }
+    try { await file.close(); } catch (error) { errors.push(error); }
+    if (errors.length) throw operationFailure(errors);
     this.#cache = bytes; return Buffer.from(bytes);
   }
 

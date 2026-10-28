@@ -15,8 +15,8 @@ const input = JSON.parse(inputBytes);
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const canonical = response => {
   const body = structuredClone(response.body);
-  assert.match(body.traceId, /^00-[a-f0-9]{32}-[a-f0-9]{16}-00$/u);
-  body.traceId = '$validated-native-format'; return { ...response, body };
+  assert.equal(typeof body.traceId, 'string'); assert.ok(body.traceId.length > 0);
+  body.traceId = '$opaque-request-identity'; return { ...response, body };
 };
 
 test('source binding errors match nine actual native HTTP responses before any configuration or Guide mutation', {

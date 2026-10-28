@@ -80,9 +80,19 @@ declaration of available transcoding. Public consumer projection and actual
 playback remain outside this slice. `phaseAcceptance` and `releaseAcceptance`
 therefore stay false.
 
+The declarative cache identity cases use `.` and `..`. Actual BaseTunerHost
+appends `_channels` first, producing `._channels` and `.._channels` inside the
+cache root. The native component records force-refresh output and a fresh
+host's source-failure fallback with every cache byte, length and SHA-256.
+Node then records both identities against fresh direct consumers, including
+reading those exact native-produced bytes. Installed and official PluginHost
+consumers separately require complete mapped cache contents, a fresh activation
+after source removal, actual close and rejection of late work. These cases can
+expose the current Node guard before either cache operation; an attempted case
+does not certify its later cold-read steps.
+
 Owned cache files must remain beneath their explicitly mapped cache root.
-Tuner IDs containing a path separator, colon, NUL or an entire `.`/`..`
-component are therefore rejected for cache access. Native Path.Combine can
-instead form a nested or escaping path from these inputs. This concrete owned
-cache restriction is not a claim that a compatibility exception has been
-accepted or that the corresponding final release requirement is complete.
+Path separators, colon and NUL remain rejected, with actual outer-cache bytes
+preserved. Native Path.Combine can instead form a nested or escaping path from
+those inputs. This restriction is not a compatibility exception or a claim
+that the corresponding final release requirement is complete.

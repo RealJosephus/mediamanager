@@ -1,8 +1,9 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { createHash, randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
 import { quoteIdentifier as q } from './model.js';
 import { indexLiveTvDocument, liveTvStateKey } from '../library/live-tv-state.js';
+import { stageLiveTvStateFile, removeUnpublishedLiveTvStateFiles, liveTvStateFileFailure } from './live-tv-state-files.js';
 
 const liveTvFiles = [['timers', 'timers.json'], ['seriesTimers', 'seriestimers.json']];
 
@@ -33,13 +34,15 @@ export async function reconcileLiveTvStateFiles(persisted, { dataPath, fileSyste
     }
     let current;
     try { current = await fileSystem.readFile(target); }
-    catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error; }
+    catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error?.code)) throw error; }
     if (current?.equals(bytes)) continue;
-    const temporary = path.join(directory, `.${filename}.${randomUUID()}.tmp`);
+    const replacement = await stageLiveTvStateFile(directory, filename, bytes, fileSystem), errors = [];
     try {
-      await fileSystem.writeFile(temporary, bytes, { flag: 'wx' });
-      await fileSystem.rename(temporary, target);
-    } finally { await fileSystem.rm(temporary, { force: true }); }
+      await fileSystem.rename(replacement.temporary, target);
+      replacement.published = true;
+    } catch (error) { errors.push(error); }
+    errors.push(...await removeUnpublishedLiveTvStateFiles([replacement], fileSystem));
+    if (errors.length) throw liveTvStateFileFailure(errors);
   }
 }
 
@@ -63,7 +66,7 @@ export async function initializeLiveTvState(database, { dataPath, logger } = {})
   for (const [kind, filename] of liveTvFiles) {
     let source;
     try { source = await fs.readFile(path.join(dataPath, 'livetv', filename)); }
-    catch (error) { if (!['ENOENT', 'ENOTDIR', 'EISDIR'].includes(error.code)) throw error; }
+    catch (error) { if (!['ENOENT', 'ENOTDIR', 'EISDIR'].includes(error?.code)) throw error; }
     const imported = source ? indexLiveTvDocument(kind, source) : { rows: [], issue: null };
     documents[kind] = { ...imported, sourceHex: source ? source.toString('hex') : null,
       sourceSha256: source ? createHash('sha256').update(source).digest('hex') : null };

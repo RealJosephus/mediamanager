@@ -13,7 +13,8 @@ import { readXmlTvChannels, readXmlTvPrograms } from './reader.js';
 import { nativeXmlTvProgramEtag } from './program-etag.js';
 
 const age = 3600000, timeoutMilliseconds = 900000;
-const activeTemporaryFiles = new Set();
+// Installed packages have distinct module URLs but can share an explicit cache root.
+const activeTemporaryFiles = globalThis[Symbol.for('mediamanager.xmltv.temporaryFiles')] ??= new Set();
 const defaults = { KidsCategories: ['kids', 'family', 'children', 'childrens', 'disney'],
   MovieCategories: ['movie'], NewsCategories: ['news', 'journalism', 'documentary', 'current affairs'],
   SportsCategories: ['sports', 'basketball', 'baseball', 'football'] };
@@ -128,7 +129,9 @@ export function createXmlTvListingsProvider(pathOptions = {}) {
       throw error('download-backoff', 'Skipping the XMLTV download after a recent failure: ' + info.Path);
     }
     await fileSystem.mkdir(cacheRoot, { recursive: true });
-    const temporary = filename + '.tmp', temporaryIdentity = process.platform === 'win32' ? ordinalIgnoreCaseKey(temporary) : temporary;
+    const physicalRoot = await fileSystem.realpath(cacheRoot), temporary = filename + '.tmp';
+    const physicalTemporary = path.join(physicalRoot, path.basename(temporary));
+    const temporaryIdentity = process.platform === 'win32' ? ordinalIgnoreCaseKey(physicalTemporary) : physicalTemporary;
     const timeout = new AbortController(), timer = setTimeout(() => timeout.abort(), downloadTimeoutMs);
     timer.unref?.();
     const downloadSignal = AbortSignal.any([signal, timeout.signal]);

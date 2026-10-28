@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import * as fs from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { setImmediate, setTimeout } from 'node:timers/promises';
@@ -216,4 +217,74 @@ test('close drains an admitted cancellation waiting on another PostgreSQL writer
   assert.deepEqual(JSON.parse(bytes), [
     { Id: 'closing', SeriesTimerId: 'series', Status: 'Cancelled', IsManual: true },
   ]);
+});
+
+test('idempotent cancellation preserves staging failures, closes the actual file and recovers on the next operation', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const fixture = await timerFixture(t, 'live_tv_timer_noop_failure', {
+    timers: '[{"Id":"cancelled","SeriesTimerId":"series","Status":"Cancelled","IsManual":true}]',
+  });
+  const before = await savedState(fixture.primaryDatabase), timerBefore = await readFile(fixture.timerFile);
+  const requested = before.value.timers.rows[0].internalId;
+  for (const [name, reason] of [['false', false], ['zero', 0], ['empty', ''], ['null', null], ['undefined', undefined],
+    ['errno', Object.assign(new Error('Controlled timer staging write failure.'), { code: 'ENOSPC', statusCode: 507 })]]) {
+    await t.test(name, async () => {
+      const handles = [], removed = [];
+      fixture.primaryService.stateFileSystem = { ...fs,
+        async open(filename, flags) {
+          const handle = await fs.open(filename, flags); handles.push(handle);
+          return { async writeFile(bytes) {
+            await handle.writeFile(bytes.subarray(0, 7));
+            throw reason;
+          }, close: () => handle.close() };
+        },
+        async rm(filename, options) { await fs.rm(filename, options); removed.push(filename); },
+      };
+      try {
+        await assert.rejects(fixture.primaryService.cancelTimer(requested), error => Object.is(error, reason));
+        assert.equal(handles.length, 1); assert.equal(removed.length, 1);
+        await assert.rejects(handles[0].stat(), { code: 'EBADF' });
+        assert.deepEqual((await savedState(fixture.primaryDatabase)).value, before.value);
+        assert.deepEqual(await readFile(fixture.timerFile), timerBefore);
+        assert.deepEqual((await readdir(fixture.stateDirectory)).sort(), ['seriestimers.json', 'timers.json']);
+      } finally { fixture.primaryService.stateFileSystem = fs; }
+      assert.equal(await fixture.primaryService.cancelTimer(requested), true);
+      await assertSourceMatchesFile(fixture.primaryDatabase, 'timers', fixture.timerFile);
+      assert.deepEqual(await readFile(fixture.timerFile), timerBefore);
+    });
+  }
+});
+
+test('timer staging reports write, close and removal failures in order after actual cleanup without poisoning PostgreSQL', {
+  skip: !postgresTestConnectionString,
+}, async t => {
+  const fixture = await timerFixture(t, 'live_tv_timer_cleanup_failure', {
+    timers: '[{"Id":"cleanup","SeriesTimerId":"series","Status":"New"}]',
+  });
+  const before = await savedState(fixture.primaryDatabase), timerBefore = await readFile(fixture.timerFile);
+  const primary = Object.assign(new Error('Controlled timer partial write failure.'), { code: 'ENOSPC', status: 507 });
+  const closeFailure = { operation: 'close' }, removeFailure = 0, handles = [], order = [];
+  fixture.primaryService.stateFileSystem = { ...fs,
+    async open(filename, flags) {
+      const handle = await fs.open(filename, flags); handles.push(handle);
+      return { async writeFile(bytes) { await handle.writeFile(bytes.subarray(0, 11)); order.push('write'); throw primary; },
+        async close() { await handle.close(); order.push('close'); throw closeFailure; } };
+    },
+    async rm(filename, options) { await fs.rm(filename, options); order.push('remove'); throw removeFailure; },
+  };
+  try {
+    await assert.rejects(fixture.primaryService.cancelTimer(before.value.timers.rows[0].internalId), failure => {
+      assert.ok(failure instanceof AggregateError); assert.equal(failure.cause, primary);
+      assert.deepEqual(failure.errors, [primary, closeFailure, removeFailure]);
+      assert.equal(failure.code, 'ENOSPC'); assert.equal(failure.status, 507); return true;
+    });
+    assert.deepEqual(order, ['write', 'close', 'remove']);
+    assert.equal(handles.length, 1); await assert.rejects(handles[0].stat(), { code: 'EBADF' });
+    assert.deepEqual((await savedState(fixture.primaryDatabase)).value, before.value);
+    assert.deepEqual(await readFile(fixture.timerFile), timerBefore);
+    assert.deepEqual((await readdir(fixture.stateDirectory)).sort(), ['seriestimers.json', 'timers.json']);
+  } finally { fixture.primaryService.stateFileSystem = fs; }
+  assert.equal(await fixture.primaryService.cancelTimer(before.value.timers.rows[0].internalId), true);
+  await assertSourceMatchesFile(fixture.primaryDatabase, 'timers', fixture.timerFile);
 });

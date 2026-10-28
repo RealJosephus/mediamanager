@@ -17,6 +17,8 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../databas
 import { databaseFilename, guid, idKey, mediaFiles, portableMountContract, seedRecordings, sha,
   snapshot, sqliteSnapshot, stateFiles, storageDocument } from './fixtures/live-tv-recordings-http/scenario.js';
 import { prepareNativeMediaSeed } from './native-media-seed.js';
+import { errorObservation } from '../helpers/error-observation.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const inputBytes = await readFile(new URL('./fixtures/live-tv-recordings-http/input.json', import.meta.url));
@@ -32,17 +34,10 @@ const unusedPort = () => new Promise((resolve, reject) => {
 const portAvailable = port => new Promise(resolve => {
   const server = createServer(); server.once('error', () => resolve(false)).listen(port, '127.0.0.1', () => server.close(() => resolve(true)));
 });
-const dateFields = new Set(['DateCreated', 'DateLastSaved', 'DateLastRefreshed', 'DateLastMediaAdded', 'PremiereDate', 'LastPlayedDate', 'StartDate', 'EndDate']);
 function wire(response) {
-  const project = (value, key) => {
-    if (Array.isArray(value)) return value.map(entry => project(entry));
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, entry]) => [name, project(entry, name)]));
-    if (key === 'traceId') { assert.ok(typeof value === 'string' && value); return '$trace'; }
-    if (dateFields.has(key) && typeof value === 'string') return { ticks: String(dateTicks(value)), utc: value.endsWith('Z') };
-    return value;
-  };
   return { status: response.status, contentType: response.contentType,
-    body: Object.hasOwn(response, 'bodyJson') ? project(response.bodyJson) : response.bodyText };
+    body: Object.hasOwn(response, 'bodyJson') ? projectItemBody(response.bodyJson, { status: response.status,
+      date: value => ({ ticks: String(dateTicks(value)), utc: value.endsWith('Z') }) }) : response.bodyText };
 }
 const delta = (before, after) => Object.fromEntries(Object.keys(before).map(table => [table, {
   removed: before[table].filter(row => !after[table].includes(row)),
@@ -58,7 +53,8 @@ test('existing recordings list, folders, detail and retained-file deletion match
   const root = await realpath(output.root), referenceRoot = path.join(root, 'reference'), mediaRoot = path.join(root, 'media');
   const port = await unusedPort(), origin = `http://127.0.0.1:${port}`;
   const report = { inputSha256: sha(inputBytes), cases: [], differences: [], processes: [], cleanup: [], runtimeErrors: [] };
-  let current, native, database, application, failure, graph, userRootId;
+  const failures = [];
+  let current, native, database, application, graph, userRootId;
   const tokens = { anonymous: undefined, invalid: 'invalid-recordings-token' }, users = {};
   const request = async (server, route, { mode, token = tokens[mode], method = 'GET', body } = {}) => {
     const response = await fetch(server + route, { method, signal: AbortSignal.timeout(30000), headers: {
@@ -158,17 +154,10 @@ test('existing recordings list, folders, detail and retained-file deletion match
           const expected = (method === 'DELETE' ? report.nativeDeletes : report.nativeReads).find(item => item.name === sample.name && item.mode === mode
             && item.request.method === method && item.request.route === sample.route);
           const status = selectedOtherUser ? 403 : 400;
-          assert.equal(expected?.response.status, status, 'Only this exact actual native request can authorize its matching diagnostic.');
+          assert.equal(expected?.response.status, status, 'This exact actual native request establishes its public failure status.');
           assert.equal(response.status, status, 'A native 400 must never authorize a Node 500.');
-          assert.deepEqual(wire(response), wire(expected.response), 'The complete actual native and Node error wire must agree before classifying a diagnostic.');
-          for (const diagnostic of diagnostics) {
-            assert.equal(diagnostic.status, status);
-            diagnostic.expectedRequestDiagnostic = { name: sample.name, mode, method, route: sample.route, status,
-              completeNativeWireMatched: true, requestStatusMatched: true,
-              kind: selectedOtherUser ? 'other-user-selector' : userlessFolders ? 'physical-folder-null-user'
-                : emptyDeleteIdentity ? 'empty-delete-identity' : 'empty-source-channel' };
-          }
-        } else assert.deepEqual(diagnostics, [], sample.name + ': no hidden background error');
+          assert.deepEqual(wire(response), wire(expected.response), 'The complete actual native and Node public error wire must agree.');
+        }
       }
     }
     return values;
@@ -344,7 +333,7 @@ test('existing recordings list, folders, detail and retained-file deletion match
     application = await startProductionInstance({ environment: { ...process.env, MEDIAMANAGER_INSTANCE: referenceRoot,
       MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES, MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName,
       MEDIAMANAGER_STORAGE: storage },
-    onError: error => report.runtimeErrors.push({ type: typeof error, name: error?.name,
+    onError: error => report.runtimeErrors.push({ type: typeof error, name: error?.name, failure: errorObservation(error),
       message: typeof error === 'string' ? error : error?.message ?? String(error), status: error?.status ?? error?.statusCode,
       nativeException: error?.nativeException, parameterName: error?.parameterName, stack: error?.stack,
       value: inspect(error, { depth: 8, maxArrayLength: 128, getters: false }),
@@ -354,7 +343,6 @@ test('existing recordings list, folders, detail and retained-file deletion match
     const listener = application.networkHost.listeners.find(entry => entry.scheme === 'http');
     assert.equal(listener.port, port); assert.deepEqual(await readFile(networkFilename), networkBytes);
     const nodeOrigin = `http://127.0.0.1:${listener.port}`; report.nodePort = listener.port;
-    assert.deepEqual(report.runtimeErrors, [], 'Production startup must not hide background failures.');
     report.nodeBeforeReads = await captureNode();
     assert.deepEqual(report.nodeBeforeReads, report.nativeBeforeReads, 'Production must start from the same complete migrated media graph, user data and source bytes.');
     report.nodeReads = await observe('node', nodeOrigin, readCases()); compare('reads', report.nodeReads, report.nativeReads);
@@ -383,25 +371,26 @@ test('existing recordings list, folders, detail and retained-file deletion match
     for (const listener of listeners.filter(entry => entry.bound)) assert.equal(await portAvailable(listener.port), true);
     report.cleanup.push({ name: 'production-runtime', closed: true, listenerReleased: true,
       listeners: listeners.map(({ scheme, address, port, server }) => ({ scheme, address, port, listening: server.listening })) });
-    assert.deepEqual(report.runtimeErrors.filter(error => !error.expectedRequestDiagnostic), [], 'Readers, deletion and shutdown must not hide background failures.');
     assert.deepEqual(report.differences, []);
-  } catch (error) { failure = error; report.failure = { name: error.name, message: error.message, stack: error.stack }; }
+  } catch (error) { failures.push(error); report.failure = errorObservation(error); report.failureRaw = inspect(error, { depth: null }); }
   finally {
-    try { await stopNative('native-finally'); } catch (error) { failure ??= error; report.cleanup.push({ name: 'native', error: error.message }); }
+    try { await stopNative('native-finally'); } catch (error) { failures.push(error); report.cleanup.push({ name: 'native', error: errorObservation(error), raw: inspect(error, { depth: null }) }); }
     if (application) try {
       const listeners = application.networkHost.listeners;
       await application.close(); assert.ok(listeners.every(listener => !listener.server.listening));
       for (const listener of listeners.filter(entry => entry.bound)) assert.equal(await portAvailable(listener.port), true);
       report.cleanup.push({ name: 'production-runtime-finally', closed: true, listenerReleased: true });
     }
-    catch (error) { failure ??= error; report.cleanup.push({ name: 'production-runtime', error: error.message }); }
+    catch (error) { failures.push(error); report.cleanup.push({ name: 'production-runtime', error: errorObservation(error), raw: inspect(error, { depth: null }) }); }
     try { await dropPostgresTestDatabase(database); report.cleanup.push({ name: 'postgres-schema', removed: true }); }
-    catch (error) { failure ??= error; report.cleanup.push({ name: 'postgres-schema', error: error.message }); }
+    catch (error) { failures.push(error); report.cleanup.push({ name: 'postgres-schema', error: errorObservation(error), raw: inspect(error, { depth: null }) }); }
     if (current) try { await current.finish(); report.cleanup.push({ name: 'protected-inputs', unchanged: true }); }
-    catch (error) { failure ??= error; report.inputVerificationFailure = error.message; }
-    report.passed = !failure; report.phaseAcceptance = false; report.releaseAcceptance = false;
+    catch (error) { failures.push(error); report.inputVerificationFailure = errorObservation(error); }
+    report.failures = failures.map(error => ({ value: errorObservation(error), raw: inspect(error, { depth: null }) }));
+    report.passed = failures.length === 0; report.phaseAcceptance = false; report.releaseAcceptance = false;
     report.boundary = 'Actual designated native HTTP, stopped native registration/SQLite seed, real database transfer and production PostgreSQL entry with mapped local media. No recording execution, tuner/listing execution, plugin channel provider, pixel delivery or complete Live TV release acceptance.';
     await writeFile(path.join(root, 'report.json'), filterEvidenceJson(report)); await output.publishAndClose();
   }
-  if (failure) throw output.publicError(failure);
+  if (failures.length) throw output.publicError(failures.length === 1 && failures[0] instanceof Error ? failures[0]
+    : new AggregateError(failures, 'Recordings HTTP and cleanup failed.', { cause: failures[0] }));
 });

@@ -4,6 +4,9 @@ import { setImmediate } from 'node:timers/promises';
 import { LiveTvService } from '../../src/library/live-tv-service.js';
 import { liveTvConfigurationReader } from '../../src/core/live-tv-configuration-store.js';
 import { LiveTvTimersService } from '../../src/library/live-tv-timers-service.js';
+import { tableDefinition } from '../../src/database/model.js';
+import { encodeValue } from '../../src/database/values.js';
+import { fixtureRow } from '../database/fixtures.js';
 
 const failureFields = error => ({ message: error?.message, code: error?.code ?? null,
   status: error?.status ?? error?.statusCode ?? null });
@@ -88,11 +91,10 @@ for (const synchronous of [false, true]) for (const programFails of [false, true
 
 test('a Series primary image avoids querying or hydrating an unused program fallback', async () => {
   const seriesId = 'a3000000000000000000000000000003', queries = [];
+  const columns = tableDefinition('BaseItems').columns;
+  const series = { ...fixtureRow(tableDefinition('BaseItems')), Id: seriesId,
+    Type: 'MediaBrowser.Controller.Entities.TV.Series', Data: '{}', Name: 'Controlled series' };
   const database = { dialect: 'postgres', schemaName: 'timer_lifecycle', controlSchema: 'timer_control',
-    async rows(table) {
-      assert.equal(table, 'BaseItems');
-      return [{ Id: seriesId, Type: 'MediaBrowser.Controller.Entities.TV.Series', Data: '{}', Name: 'Controlled series' }];
-    },
     client: { async query(plan) {
       queries.push(plan);
       assert.ok(!plan.text.includes("'programPrimary'::text AS slot"), 'Native must not evaluate the program fallback after a Series primary winner.');
@@ -100,7 +102,11 @@ test('a Series primary image avoids querying or hydrating an unused program fall
         assert.ok(plan.text.includes('WHERE selected."Id" IS NOT NULL'));
         return { rows: [{ request: 0, slot: 'seriesPrimary', Id: Buffer.from(seriesId) }] };
       }
-      if (plan.text.startsWith('SELECT "Id" FROM')) return { rows: [{ Id: Buffer.from(seriesId) }] };
+      if (plan.text.includes('FROM "timer_lifecycle"."BaseItems"')) {
+        assert.deepEqual(plan.values, [[seriesId]], 'Only the selected Series image owner is hydrated.');
+        return { rows: [Object.fromEntries(columns.map(column => [column.name,
+          encodeValue(column, series[column.name], 'postgres')]))] };
+      }
       assert.ok(plan.text.includes('BaseItemImageInfos'), 'Only selected image relations may be loaded.');
       return { rows: [] };
     } } };

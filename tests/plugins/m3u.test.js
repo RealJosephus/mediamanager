@@ -84,11 +84,53 @@ test('installed and official M3U activate before connect, then read admitted sha
     assert.equal((await value.tuner.getChannels(false, {}))[0].Path, second);
     await assert.rejects(value.host.configure('m3u', { Url: filename }), /shared Live TV configuration/);
     assert.equal(value.host.get('m3u').status, 'active');
-    value.configure([defaults({ Id: '../outside-owned-cache', Url: next })]);
-    await assert.rejects(value.tuner.getChannels(false, {}), /single file-name component/);
+    const outside = path.join(value.root, 'outside-owned-cache_channels'), sentinel = Buffer.from('Owned outer cache must remain intact.\0中文');
+    await writeFile(outside, sentinel);
+    for (const id of ['../outside-owned-cache', 'nested/channel', 'nested\\channel', 'volume:stream', 'nul\0id']) {
+      value.configure([defaults({ Id: id, Url: next })]);
+      await assert.rejects(value.tuner.getChannels(false, {}), /single file-name component/);
+      assert.deepEqual(await readFile(outside), sentinel);
+    }
     value.rejectAdmissions(); assert.throws(() => value.tuner.getChannels(false, {}), { status: 503 });
     assert.equal(value.counters().admissions, value.counters().released);
   }
+});
+
+for (const preinstalled of [false, true]) for (const id of ['.', '..']) test(`M3U ${preinstalled ? 'official' : 'installed'} cache ${JSON.stringify(id)} survives a fresh cold source failure`, { timeout: 30000 }, async t => {
+  const value = await fixture(t, { preinstalled }), observed = { id, preinstalled, phases: [], diagnostics: value.diagnostics, cleanup: {} };
+  let failure, failed = false;
+  const closeErrors = [];
+  try {
+    const filename = path.join(value.root, 'playlist.m3u'), source = 'rtsp://203.0.113.9/cache-' + id.length;
+    await writeFile(filename, playlist([source])); value.configure([defaults({ Id: id, Url: filename })]); await value.connect();
+    const force = value.tuner, forcePhase = { name: 'force', source: filename, startedAt: new Date().toISOString() };
+    observed.phases.push(forcePhase);
+    const first = await force.getChannels(false, {}), cacheFile = path.join(value.cachePath, id + '_channels');
+    const bytes = await readFile(cacheFile);
+    Object.assign(forcePhase, { channels: first, cacheFile, bytesBase64: bytes.toString('base64') });
+    assert.equal(first[0].Path, source);
+    assert.deepEqual(JSON.parse(bytes).map(channel => ({ ...channel, ChannelType: channel.ChannelType === 0 ? 'TV' : channel.ChannelType })), JSON.parse(JSON.stringify(first)));
+    await value.host.setEnabled('m3u', false);
+    assert.throws(() => force.getChannels(true, {}), { status: 503 });
+    await rm(filename); await value.host.setEnabled('m3u', true); await value.connect();
+    const cold = value.tuner, fallback = await cold.getChannels(true, {}), after = await readFile(cacheFile);
+    observed.phases.push({ name: 'cold-source-failure', channels: fallback, cacheFile, bytesBase64: after.toString('base64') });
+    assert.deepEqual(JSON.parse(JSON.stringify(fallback)), JSON.parse(JSON.stringify(first))); assert.deepEqual(after, bytes);
+    await value.host.setEnabled('m3u', false);
+    assert.throws(() => cold.getChannels(true, {}), { status: 503 });
+  } catch (error) { failed = true; failure = error; }
+  finally {
+    for (const [name, close] of [['host', () => value.host.close()], ['storage', () => value.storage.close()]]) {
+      try { await close(); observed.cleanup[name] = { closedAt: new Date().toISOString() }; }
+      catch (error) { closeErrors.push(error); observed.cleanup[name] = { reasonType: typeof error, message: error?.message }; }
+    }
+    if (closeErrors.length) {
+      const errors = failed ? [failure, ...closeErrors] : closeErrors;
+      failed = true; failure = errors.length === 1 ? errors[0] : new AggregateError(errors, 'M3U cache consumer cleanup failed.', { cause: errors[0] });
+    }
+    try { t.diagnostic(JSON.stringify(observed)); } catch { /* Preserve the actual consumer outcome. */ }
+  }
+  if (failed) throw failure;
 });
 
 test('M3U follows cache path updates between requests and keeps an admitted cache write on its original path', { timeout: 30000 }, async t => {

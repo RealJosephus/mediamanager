@@ -1,5 +1,9 @@
 {
   "schemaVersion": 1,
+  "cacheIdentities": [
+    { "name": "dot", "id": "." },
+    { "name": "dotdot", "id": ".." }
+  ],
   "parsers": [
     { "name": "attributes-order-duplicates", "text": "#EXTM3U\n#EXTINF:-1 tvg-id=\"guide.one\" channel-id=\"c1\" tvg-name=\"Unused\" tvg-logo=\"https://img/一.png\" logo=\"fallback\" group-title=\"News & 中文\" tvg-chno=\"12.5\",12. - News 中文\nhttp://127.0.0.1/live/12.ts\n#EXTINF:-1,Duplicate retained\nhttp://127.0.0.1/live/12.ts\n#EXTINF:-1 TVG-ID=\"7\" TVG-LOGO=\"FIRST\" tvg-logo=\"LAST\",7 Name\nhttps://example.invalid/7.m3u8?token=opaque\n" },
     { "name": "state-comments-and-schemes", "text": "ignored-before-extinf\n#extinf:-1 tvg-name=\"First\",\n#EXTVLCOPT:http-user-agent=Not consumed\n# comment\n\n#EXTM3U retained-pending\nrtsp://127.0.0.1/stream\n#EXTINF:-1,Rejected file\nZ:\\Forbidden\\source.ts\nhttp://127.0.0.1/orphan\n#EXTINF:-1,Rejected FTP\nftp://example.invalid/7.ts\n#EXTINF:-1,RTP\nrtp://239.1.2.3:1234\n#EXTINF:-1,UDP\nudp://@239.1.2.3:1234\n#EXTINF:-1,Replaced\n#EXTINF:-1,Winner\nHTTP://127.0.0.1/2.ts\n#EXTINF:-1,Pending EOF" },

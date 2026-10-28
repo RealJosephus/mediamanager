@@ -84,10 +84,57 @@ test('installed and official HDHomeRun use shared admitted configuration and a m
     const before = requests.length; await value.tuner.getChannels(true, {}); assert.equal(requests.length, before);
     const info = defaults({ Url: origin }); await value.tuner.validate(info, {}); assert.equal(info.DeviceId, 'C0FFEE');
     await assert.rejects(value.host.configure('hdhomerun', { Url: origin }), /shared Live TV configuration/);
-    value.configure([defaults({ Id: '../outside', Url: origin })]); await assert.rejects(value.tuner.getChannels(false, {}), /one file-name component/);
+    const outside = path.join(value.root, 'outside_channels'), sentinel = Buffer.from('Owned outer cache must remain intact.\0中文');
+    await fs.writeFile(outside, sentinel);
+    for (const id of ['../outside', 'nested/channel', 'nested\\channel', 'volume:stream', 'nul\0id']) {
+      value.configure([defaults({ Id: id, Url: origin })]); await assert.rejects(value.tuner.getChannels(false, {}), /one file-name component/);
+      assert.deepEqual(await fs.readFile(outside), sentinel);
+    }
     value.rejectAdmissions(); assert.throws(() => value.tuner.getChannels(true, {}), { status: 503 });
     assert.equal(value.counters().admitted, value.counters().released);
   }
+});
+
+for (const preinstalled of [false, true]) for (const id of ['.', '..']) test(`HDHomeRun ${preinstalled ? 'official' : 'installed'} cache ${JSON.stringify(id)} survives a fresh cold source failure`, { timeout: 30000 }, async t => {
+  let sourceFails = false;
+  const requests = [], origin = await server(t, (request, response) => {
+    requests.push({ url: request.url, status: sourceFails ? 503 : 200 });
+    response.writeHead(sourceFails ? 503 : 200, { 'Content-Type': 'application/json' });
+    response.end(sourceFails ? '{}' : JSON.stringify(request.url === '/discover.json' ? device(origin) : [channel(origin)]));
+  });
+  const value = await fixture(t, { preinstalled }), observed = { id, preinstalled, requests, phases: [], diagnostics: value.diagnostics, cleanup: {} };
+  let failure, failed = false;
+  const closeErrors = [];
+  try {
+    value.configure([defaults({ Id: id, Url: origin })]); await value.connect();
+    const force = value.tuner, forcePhase = { name: 'force', source: origin, startedAt: new Date().toISOString() };
+    observed.phases.push(forcePhase);
+    const first = await force.getChannels(false, {}), cacheFile = path.join(value.cachePath, id + '_channels');
+    const bytes = await fs.readFile(cacheFile);
+    Object.assign(forcePhase, { channels: first, cacheFile, bytesBase64: bytes.toString('base64'), sha256: sha(bytes) });
+    assert.equal(first[0].Path, origin + '/live.ts');
+    assert.deepEqual(wire(JSON.parse(bytes).map(channel => ({ ...channel, ChannelType: channel.ChannelType === 0 ? 'TV' : channel.ChannelType }))), wire(first));
+    await value.host.setEnabled('hdhomerun', false);
+    assert.throws(() => force.getChannels(true, {}), { status: 503 });
+    sourceFails = true; await value.host.setEnabled('hdhomerun', true); await value.connect();
+    const cold = value.tuner, fallback = await cold.getChannels(true, {}), after = await fs.readFile(cacheFile);
+    observed.phases.push({ name: 'cold-source-failure', channels: fallback, cacheFile, bytesBase64: after.toString('base64'), sha256: sha(after) });
+    assert.deepEqual(wire(fallback), wire(first)); assert.deepEqual(after, bytes);
+    await value.host.setEnabled('hdhomerun', false);
+    assert.throws(() => cold.getChannels(true, {}), { status: 503 });
+  } catch (error) { failed = true; failure = error; }
+  finally {
+    for (const [name, close] of [['host', () => value.host.close()], ['storage', () => value.storage.close()]]) {
+      try { await close(); observed.cleanup[name] = { closedAt: new Date().toISOString() }; }
+      catch (error) { closeErrors.push(error); observed.cleanup[name] = { reasonType: typeof error, message: error?.message }; }
+    }
+    if (closeErrors.length) {
+      const errors = failed ? [failure, ...closeErrors] : closeErrors;
+      failed = true; failure = errors.length === 1 ? errors[0] : new AggregateError(errors, 'HDHomeRun cache consumer cleanup failed.', { cause: errors[0] });
+    }
+    try { t.diagnostic(JSON.stringify(observed)); } catch { /* Preserve the actual consumer outcome. */ }
+  }
+  if (failed) throw failure;
 });
 
 test('HDHomeRun follows cache path updates between requests and keeps an admitted cache write on its original path', { timeout: 30000 }, async t => {
@@ -240,6 +287,9 @@ function definitions(origin) {
       { name: 'default-lineup-channel-source', infos: [info], actions: [action('sources', { channelId: 'hdhr_', lineup: '[{}]' })] },
       { name: 'legacy-source-and-construction', infos: [info], actions: [action('sources', { channelId: 'hdhr_7.1', lineup: JSON.stringify([channel(origin, { URL: 'hdhomerun://192.0.2.2/tuner0/v7.1' })]) }), action('construct', { streamId: 'native_controlled' })] },
       { name: 'wrong-channel-prefix', infos: [info], actions: [action('sources', { channelId: 'other_7.1' })] },
+      ...['.', '..'].map((id, index) => ({ name: 'cache-identity-' + (index === 0 ? 'dot' : 'dotdot'), cacheIdentity: true,
+        infos: [defaults({ Id: id, Url: origin })], actions: [action('channels', { enabled: false }),
+          action('channels', { enabled: true, restart: true, modelStatus: 503, lineupStatus: 503 })] })),
     ] };
 }
 
@@ -419,12 +469,13 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
         const destination = activeName === 'discovery' ? origin + '/discover.json' : url;
         return fetch(destination, { ...options, headers: { ...options.headers, 'X-Fixture-Sample': activeName, 'X-Fixture-Step': String(step) } });
       } } }); await controlled.connect();
+    const cacheIdentityComparisons = [];
     for (const sample of input.cases) {
       // Fresh plugin activation, rather than a synthetic cache reset, owns both
       // model and channel dictionaries for each native component scenario.
       await controlled.host.setEnabled('hdhomerun', false); await controlled.host.setEnabled('hdhomerun', true); await controlled.connect();
       const infos = structuredClone(sample.infos); controlled.configure(infos); const observations = []; activeName = sample.name;
-      const cacheFile = path.join(controlled.cachePath, 'official-hdhr_channels');
+      const cacheFile = path.join(controlled.cachePath, (infos[0].Id ?? '') + '_channels');
       for (const existing of await fs.readdir(controlled.cachePath).catch(cause => cause.code === 'ENOENT' ? [] : Promise.reject(cause))) await fs.unlink(path.join(controlled.cachePath, existing));
       if (sample.cacheBase64 !== undefined) { await fs.mkdir(controlled.cachePath, { recursive: true }); await fs.writeFile(cacheFile, Buffer.from(sample.cacheBase64, 'base64')); }
       for (const [index, action] of sample.actions.entries()) {
@@ -452,7 +503,8 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
         const actualValues = failureValues(actual), expectedValues = failureValues(target);
         report.comparisons.push({ name: sample.name, index: observation.index, actual: actualValues, expected: expectedValues,
           raw: { actual: observation.actual, native: expected.observations[observation.index] } });
-        assert.deepEqual(actualValues, expectedValues, sample.name + ':' + observation.index);
+        if (sample.cacheIdentity) cacheIdentityComparisons.push({ actualValues, expectedValues, name: sample.name, index: observation.index });
+        else assert.deepEqual(actualValues, expectedValues, sample.name + ':' + observation.index);
       }
     }
     const constructions = native.results.filter(value => value.name.endsWith('-construction')).map(value => ({ name: value.name, observation: value.observations.at(-1) }));
@@ -482,6 +534,10 @@ test('HDHomeRun designated model/lineup/cache/validation/source construction and
     await controlled.host.close(); await controlled.storage.close(); report.cleanup.pluginAndStorageClosed = true;
     assert.equal(controlled.counters().admitted, controlled.counters().released);
     assert.ok(requests.every(value => value.method === 'GET')); assert.ok(report.excludedEncodedProfiles.some(value => value.profiles.length === 6));
+    // Capture both actual safe identities and finish every original consumer
+    // and owner before reporting the first new cache-boundary difference.
+    for (const comparison of cacheIdentityComparisons) assert.deepEqual(comparison.actualValues, comparison.expectedValues,
+      comparison.name + ':' + comparison.index);
   } catch (cause) { failure = cause; }
   finally {
     try {

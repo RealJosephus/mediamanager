@@ -25,9 +25,11 @@ function fixture({ timers, seriesTimers, failRename, beforeRename, corruptHash, 
       if (!files.has(filename)) throw Object.assign(new Error('missing'), { code: 'ENOENT' });
       return Buffer.from(files.get(filename));
     },
-    async writeFile(filename, bytes, options) {
-      if (options?.flag === 'wx' && files.has(filename)) throw Object.assign(new Error('exists'), { code: 'EEXIST' });
-      files.set(filename, Buffer.from(bytes));
+    async open(filename, flags) {
+      assert.equal(flags, 'wx');
+      if (files.has(filename)) throw Object.assign(new Error('exists'), { code: 'EEXIST' });
+      files.set(filename, Buffer.alloc(0));
+      return { async writeFile(bytes) { files.set(filename, Buffer.from(bytes)); }, async close() {} };
     },
     async rename(source, target) {
       await beforeRename?.(source, target);
@@ -47,7 +49,7 @@ function fixture({ timers, seriesTimers, failRename, beforeRename, corruptHash, 
       }
       return result;
     }
-    catch (error) { if (!error.commitOutcomeUnknown) state = before; throw error; }
+    catch (error) { if (!error?.commitOutcomeUnknown) state = before; throw error; }
   }, client: { async query(plan) {
     if (plan.text.startsWith('SELECT value')) return { rows: [{ value: state }] };
     if (plan.text.startsWith('UPDATE')) { assert.equal(plan.values[0], liveTvStateKey); state = plan.values[1]; return { rows: [] }; }

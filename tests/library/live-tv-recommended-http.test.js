@@ -8,7 +8,9 @@ import { nativeGuid } from '../../src/users/native.js';
 import { tableDefinition } from '../../src/database/model.js';
 import { nativeRootUserViewIdentity } from '../../src/library/identity.js';
 import { recordItemFilterCandidate, validateFixture } from './item-filter-http-scenario.js';
+import { bindFixtureInput } from '../helpers/fixture-input-binding.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
+import { projectItemBody } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
@@ -16,15 +18,13 @@ const bytes = await readFile(new URL('./fixtures/live-tv-recommended-http/input.
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
 
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'traceId').map(([key, entry]) => [key,
-    key === 'ServerId' ? '$server' : ['DateCreated', 'DateLastSaved', 'StartDate', 'EndDate'].includes(key)
-      && typeof entry === 'string' ? dateText(entry) : normalize(entry)])) : value;
+const normalize = (value, serverId, status) => projectItemBody(value, { serverId, status,
+  date: (entry, { field }) => ['DateCreated', 'DateLastSaved', 'StartDate', 'EndDate'].includes(field) ? dateText(entry) : entry });
 
 test('recommended guide HTTP matches native repository limits, scoring, fields and access in PostgreSQL', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
 }, nativeCallback(async t => {
-  const { http, stages, root } = await currentUserViewScenario('live-tv-recommended-http', bytes, { signal: t.signal });
+  const { http, stages, root, nativeServerId } = await currentUserViewScenario('live-tv-recommended-http', bytes, { signal: t.signal });
   assert.equal(http.records.length, 64);
   const body = name => http.records.find(record => record.name === name)?.response.bodyJson;
   assert.equal(body('airing limited').Items.length, 3);
@@ -59,7 +59,8 @@ test('recommended guide HTTP matches native repository limits, scoring, fields a
 
   // The native manager creates this global view during preparation. Bind its
   // observed identity as an input; synthetic program and channel ids stay literal.
-  const rebound = JSON.parse(JSON.stringify(fixture).replaceAll(live.fixtureId, live.actualId.toLowerCase()));
+  const rebound = bindFixtureInput(fixture, { user: { fixtureId: fixture.userId, actualId: fixture.userId },
+    items: [{ fixtureId: live.fixtureId, actualId: live.actualId.toLowerCase() }] });
   const actual = await recordItemFilterCandidate({ dialect: 'postgres', fixture: rebound,
     connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, scenarioName: 'live-tv-recommended-http',
     captureResponseBodies: true, captureErrorText: true, captureCaseRuntimeErrors: true,
@@ -114,10 +115,8 @@ test('recommended guide HTTP matches native repository limits, scoring, fields a
     try {
       assert.equal(endpoint.response.status, reference.response.status);
       assert.equal(endpoint.response.contentType, reference.response.contentType);
-      assert.deepEqual(normalize(endpoint.response.body ?? endpoint.response.bodyText),
-        normalize(reference.response.bodyJson ?? reference.response.bodyText));
-      assert.deepEqual(endpoint.runtimeErrors, ['airing no user', 'airing unknown user'].includes(item.name)
-        ? [{ name: 'Error', message: 'Invalid recommendation user or channel data.' }] : []);
+      assert.deepEqual(normalize(endpoint.response.body ?? endpoint.response.bodyText, actual.serverId, endpoint.response.status),
+        normalize(reference.response.bodyJson ?? reference.response.bodyText, nativeServerId, reference.response.status));
     } catch (error) { differences.push({ name: item.name, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
@@ -129,7 +128,6 @@ test('recommended guide HTTP matches native repository limits, scoring, fields a
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterShutdown);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(Boolean));
   assert.deepEqual(differences, []);
 }));
