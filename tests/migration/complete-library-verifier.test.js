@@ -160,6 +160,7 @@ async function fixture(t, scenario = {}) {
       ];
       if (scenario.missingLibrary) folders.pop();
       if (scenario.extraLibrary) folders.push({ ItemId: compact(ids.extra), Name: 'Extra', CollectionType: 'movies', Locations: [root] });
+      if (scenario.invalidVirtualFolder) Object.assign(folders[0], scenario.invalidVirtualFolder);
       sendJson(response, folders); return;
     }
     if (request.method === 'GET' && url.pathname === '/Items') {
@@ -275,12 +276,25 @@ test('native scan cancellation never becomes a completion receipt', async t => {
   await assert.rejects(running, error => error?.name === 'AbortError' || /cancelled by test/u.test(error?.message));
 });
 
-test('native scan proof rejects changed receipts that are stale or were never observed running', async t => {
-  for (const [name, scenario] of [
-    ['stale changed receipt', { staleChangedReceipt: true }],
-    ['instant unobserved receipt', { instantCompletion: true }],
-  ]) await t.test(name, async t => {
-    const value = await fixture(t, scenario);
+test('native scan proof rejects a changed receipt that predates the accepted request', async t => {
+  const value = await fixture(t, { staleChangedReceipt: true });
+  await assert.rejects(runNativeCompleteLibraryScan(verificationOptions(value)), rejectsCode('scan-not-completed'));
+});
+
+test('a new successful scan receipt remains valid when the scan finishes between HTTP polls', async t => {
+  const value = await fixture(t, { instantCompletion: true });
+  const result = await verifyNativeCompleteLibrary(value.declaration, verificationOptions(value));
+  assert.equal(result.scan.completed, true);
+  assert.equal(result.scan.status, 'Completed');
+  assert.equal(result.scan.observedRunning, false);
+  assert.deepEqual(result.checks, { scanCompleted: true, libraryInventoryExact: true, declaredItemsPlayable: true });
+  assert.equal(result.acceptancePromotionRequired, true);
+  assert.equal(result.access.completeLibraryVerified, false);
+});
+
+test('an unobserved running state cannot turn an unsuccessful new receipt into scan completion', async t => {
+  for (const scanStatus of ['Cancelled', 'Failed', 'Aborted']) await t.test(scanStatus, async t => {
+    const value = await fixture(t, { instantCompletion: true, scanStatus });
     await assert.rejects(runNativeCompleteLibraryScan(verificationOptions(value)), rejectsCode('scan-not-completed'));
   });
 });
@@ -306,6 +320,27 @@ test('complete library inventory is bidirectional for configured native librarie
       await assert.rejects(verifyNativeCompleteLibrary(value.declaration, verificationOptions(value)), rejectsCode('library-inventory-mismatch'));
     });
   }
+});
+
+test('invalid virtual folders retain the exact Native JSON and unknown fields with the rejected field identity', async t => {
+  const invalidVirtualFolder = { ItemId: 'unknown-native-id', Locations: [],
+    UnknownNativeMember: { untouched: ['opaque', null, { nested: true }] } };
+  const value = await fixture(t, { invalidVirtualFolder });
+  await assert.rejects(verifyNativeCompleteLibrary(value.declaration, verificationOptions(value)), error => {
+    assert.equal(rejectsCode('invalid-response')(error), true);
+    assert.equal(error.evidence.scan.completed, true);
+    assert.equal(error.evidence.index, 0);
+    assert.deepEqual(error.evidence.invalidFields, ['ItemId', 'Locations']);
+    assert.deepEqual(error.evidence.folder.UnknownNativeMember, invalidVirtualFolder.UnknownNativeMember);
+    const request = error.evidence.requests.find(entry => entry.route === '/Library/VirtualFolders');
+    assert.equal(request.status, 200);
+    const bytes = Buffer.from(request.response.bodyBase64, 'base64');
+    assert.equal(bytes.length, request.response.bytes);
+    assert.equal(createHash('sha256').update(bytes).digest('hex'), request.response.sha256);
+    assert.equal(bytes.toString('utf8'), request.response.bodyText);
+    assert.deepEqual(JSON.parse(request.response.bodyText)[0], error.evidence.folder);
+    return true;
+  });
 });
 
 test('complete library inventory does not hide unsupported, missing or non-filesystem items with server filters', async t => {

@@ -16,10 +16,32 @@ import { acquireOperationLease } from './operation-lease.js';
 import { assertPortableMountRetarget, canonicalPortableMountContract,
   projectPortableJellyfinPath } from '../storage/portable-mount-contract.js';
 import { createSqliteExportPathProjector } from './sqlite-export-paths.js';
+import { projectRestoredDatabasePaths } from './state-database-paths.js';
 import { captureLiveTvState, validateLiveTvState } from './live-tv-state.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
-const normalizeThrown = (value, label) => value instanceof Error ? value : new Error(`${label}: ${String(value)}`, { cause: value });
+function preserveFailureFields(error, reason) {
+  for (const field of ['code', 'status', 'statusCode']) {
+    try {
+      const value = reason?.[field];
+      if (value !== undefined) error[field] = value;
+    } catch { /* Diagnostic access must not replace the operation's original reason. */ }
+  }
+  return error;
+}
+
+function normalizeThrown(value, label) {
+  if (value instanceof Error) return value;
+  let description = 'unprintable thrown value';
+  try { description = String(value); } catch { /* The original value remains in cause. */ }
+  return preserveFailureFields(new Error(`${label}: ${description}`, { cause: value }), value);
+}
+
+function failureMessage(error, fallback) {
+  try { const message = error.message; if (typeof message === 'string') return message; }
+  catch { /* Journaling is diagnostic; a hostile getter must not replace the failure. */ }
+  return fallback;
+}
 const dateFromNanoseconds = value => new Date(Number(value / 1_000_000n));
 const inside = (root, target) => { const relative = path.relative(root, target); return relative === '' || (!relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative)); };
 const pathIdentity = value => process.platform === 'win32' ? path.resolve(value).toLowerCase() : path.resolve(value);
@@ -35,6 +57,7 @@ const controlFileLimits = Object.freeze({
   commit: 64 * 1024,
   progress: 1024 * 1024,
   restoredState: 4 * 1024 * 1024,
+  restorePreparation: 64 * 1024,
   systemConfiguration: 8 * 1024 * 1024,
 });
 const readOnlyNoFollowFlags = fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0);
@@ -506,8 +529,8 @@ async function withOperationLease(identity, label, operation) {
   try { await lease.release(); }
   catch (releaseError) {
     if (failed) {
-      const cause = normalizeThrown(operationError, `${label} failed`);
-      throw new AggregateError([cause, releaseError], `${label} failed and its lease could not be released`, { cause });
+      throw preserveFailureFields(new AggregateError([operationError, releaseError],
+        `${label} failed and its lease could not be released`, { cause: operationError }), operationError);
     }
     throw releaseError;
   }
@@ -563,14 +586,151 @@ function rewriteConfiguredPath(xml, tag, value) {
   return xml.replace(expression, `<${tag}>${escaped}</${tag}>`);
 }
 
-async function createRestorePlan(packageDirectory, manifest, destination) {
+function restorePreparationBinding(manifest, manifestSha256, destination) {
+  return { kind: 'state-package-database-preparation', generation: manifest.generation, manifestSha256, destination,
+    sourceSha256: manifest.database.sha256,
+    sourceInstanceStatePaths: { programData: manifest.instanceState.paths.programData, metadata: manifest.instanceState.paths.metadata },
+    targetInstanceStatePaths: { programData: path.join(destination, 'data'), metadata: restoredBindingPath(manifest, destination, 'metadata') } };
+}
+
+async function inspectRestorePreparation(staging, relative, expected, { requireBinding = false } = {}) {
+  const directory = path.join(staging, relative);
+  let metadata;
+  try { metadata = await lstat(directory); }
+  catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    if (requireBinding) throw new Error('Restore database preparation has no committed directory');
+    return { exists: false, files: [] };
+  }
+  if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new Error('Restore preparation must be a physical directory');
+  await assertPhysicalDirectory(staging, directory, 'Restore preparation');
+  const inventory = await inventoryUnder(directory);
+  if (inventory.directories.length) throw new Error('Unexpected directory in restore database preparation');
+  const binding = await readOptionalJson(directory, 'binding.json', controlFileLimits.restorePreparation, 'Restore database preparation binding');
+  if (requireBinding && binding === undefined) throw new Error('Restore database preparation has no committed binding');
+  if (binding !== undefined && canonicalJson(binding) !== canonicalJson(expected)) {
+    throw new Error('Restore database preparation binding differs from this package and destination');
+  }
+  const companions = new Set(['jellyfin.db', 'jellyfin.db-journal', 'jellyfin.db-wal', 'jellyfin.db-shm']);
+  for (const filename of inventory.files) {
+    const target = atomicTemporaryTarget(filename);
+    // The request digest is part of this directory's name. An interrupted
+    // atomic binding write owns only its control temporary; no database bytes
+    // may exist until the complete binding has been committed and reread.
+    const permitted = filename === 'binding.json' || target === 'binding.json'
+      || binding !== undefined && (companions.has(filename) || target === 'jellyfin.db');
+    if (!permitted) throw new Error(`Unbound or unexpected file in restore database preparation: ${filename}`);
+    const info = await lstat(path.join(directory, filename), { bigint: true });
+    if (!info.isFile() || info.isSymbolicLink() || info.nlink !== 1n) {
+      throw new Error(`Restore database preparation entry is not a private regular file: ${filename}`);
+    }
+  }
+  return { exists: true, files: inventory.files };
+}
+
+async function clearRestorePreparation(staging, relative, expected, lease) {
+  const owned = await inspectRestorePreparation(staging, relative, expected);
+  if (!owned.exists) return [];
+  // Validate every member before unlinking any one of them. The durable
+  // binding is removed last, so another interruption retains ownership of all
+  // remaining payload and SQLite journal files.
+  const files = [...owned.files].sort((left, right) => left === 'binding.json' ? 1 : right === 'binding.json' ? -1 : left.localeCompare(right, 'en'));
+  for (const filename of files) {
+    lease.assertHeld();
+    await removeStaleRegularFile(path.join(staging, relative), filename, `Owned restore preparation ${filename}`);
+  }
+  lease.assertHeld();
+  await rmdir(path.join(staging, relative));
+  return files;
+}
+
+async function prepareRestoreDatabase(packageDirectory, manifest, manifestSha256, destination, staging, { signal, onPreparation, lease }) {
+  const binding = restorePreparationBinding(manifest, manifestSha256, destination);
+  const requestSha256 = sha256Value(canonicalJson(binding));
+  // Preserve every digest bit without pushing the SQLite journal beyond the
+  // Windows path boundary inside the already generation-bound staging tree.
+  const relative = `.db-${Buffer.from(requestSha256, 'hex').toString('base64url')}`;
+  const temporaryDirectory = path.join(staging, relative);
+  const filename = path.join(temporaryDirectory, 'jellyfin.db');
+  const prior = await inspectRestorePreparation(staging, relative, binding);
+  await assertRestoreInventory(staging, [...manifest.instanceFiles.map(file => file.path), manifest.database.restorePath,
+    restoredStatePath, restoredStateTemporaryPath, ...prior.files.map(file => `${relative}/${file}`)],
+  [...manifest.directories.map(directory => directory.path), relative],
+  { atomicTargets: [...manifest.instanceFiles.map(file => file.path), manifest.database.restorePath, restoredStatePath] });
+  lease.assertHeld();
+  const recoveredFiles = await clearRestorePreparation(staging, relative, binding, lease);
+  await ensurePhysicalDirectory(staging, temporaryDirectory, 'Restore database preparation');
+  let database, disposed = false;
+  const dispose = async () => {
+    if (disposed) return;
+    const errors = [];
+    try { database?.close(); } catch (error) { errors.push(error); }
+    database = undefined;
+    try { lease.assertHeld(); await clearRestorePreparation(staging, relative, binding, lease); } catch (error) { errors.push(error); }
+    try {
+      if (!(await readdir(staging)).length) { lease.assertHeld(); await rmdir(staging); }
+    } catch (error) { if (error.code !== 'ENOENT') errors.push(error); }
+    if (errors.length) throw new AggregateError(errors, 'Restore database preparation cleanup failed');
+    disposed = true;
+  };
+  const observe = stage => onPreparation?.({ stage, generation: manifest.generation, destination, staging,
+    relativeDirectory: relative, requestSha256, sourceSha256: manifest.database.sha256,
+    recovered: prior.exists, recoveredFiles });
+  try {
+    signal?.throwIfAborted();
+    lease.assertHeld();
+    await atomicWriteBuffer(temporaryDirectory, path.join(temporaryDirectory, 'binding.json'),
+      Buffer.from(`${JSON.stringify(binding, null, 2)}\n`), 'Restore database preparation binding');
+    await inspectRestorePreparation(staging, relative, binding, { requireBinding: true });
+    await observe('binding-committed');
+    await inspectRestorePreparation(staging, relative, binding, { requireBinding: true });
+    lease.assertHeld();
+    await atomicCopyVerified(packageDirectory, path.join(packageDirectory, manifest.database.path), temporaryDirectory, filename,
+      'State package database for restore projection', { expectedSha256: manifest.database.sha256 });
+    await inspectRestorePreparation(staging, relative, binding, { requireBinding: true });
+    database = new SqliteDatabase(filename);
+    await observe('database-opened');
+    await inspectRestorePreparation(staging, relative, binding, { requireBinding: true });
+    database.database.exec('PRAGMA journal_mode = DELETE');
+    const projection = await projectRestoredDatabasePaths(database, {
+      portableMountContract: manifest.database.portableMountContract,
+      sourceInstanceStatePaths: binding.sourceInstanceStatePaths,
+      targetInstanceStatePaths: binding.targetInstanceStatePaths,
+      signal,
+    });
+    database.close(); database = undefined;
+    const file = await inspectRegularFile(temporaryDirectory, filename, 'Projected restore database');
+    return { sourceRoot: temporaryDirectory, source: ['jellyfin.db'], bytes: file.bytes, sha256: file.sha256,
+      projection: { sourceSha256: manifest.database.sha256, targetSha256: file.sha256, ...projection },
+      recovery: { relativeDirectory: relative, requestSha256, recovered: prior.exists, recoveredFiles },
+      stagingFiles: [`${relative}/binding.json`, `${relative}/jellyfin.db`], dispose };
+  } catch (error) {
+    try { await dispose(); }
+    catch (cleanupError) { throw new AggregateError([error, cleanupError], 'Restore database preparation and cleanup failed', { cause: error }); }
+    throw error;
+  }
+}
+
+async function withPreparedRestorePlan(plan, operation) {
+  let result, failed = false, primary;
+  try { result = await operation(); }
+  catch (error) { failed = true; primary = error; }
+  try { await plan.dispose(); }
+  catch (cleanupError) {
+    if (failed) throw new AggregateError([primary, cleanupError], 'State package restore and database preparation cleanup failed', { cause: primary });
+    throw cleanupError;
+  }
+  if (failed) throw primary;
+  return result;
+}
+
+async function createRestorePlan(packageDirectory, manifest, manifestSha256, destination, staging, options) {
   if (manifest.database.restorePath !== expectedDatabaseRestorePath(manifest.instanceState)) {
     throw new Error('State package database restore path differs from the discovered native database path');
   }
   const files = [
     ...manifest.instanceFiles.map(file => ({ path: file.path, bytes: file.bytes, sha256: file.sha256, modifiedAt: file.modifiedAt,
       source: ['files', ...file.path.split('/')] })),
-    { path: manifest.database.restorePath, sha256: manifest.database.sha256, source: [manifest.database.path] },
   ];
   const system = files.find(file => file.path === 'config/system.xml');
   if (!system) throw new Error('State package is missing the native system configuration');
@@ -588,10 +748,15 @@ async function createRestorePlan(packageDirectory, manifest, destination) {
     system.bytes = system.content.length;
     system.sha256 = sha256Value(system.content);
   }
+  const preparedDatabase = await prepareRestoreDatabase(packageDirectory, manifest, manifestSha256, destination, staging, options);
+  files.unshift({ path: manifest.database.restorePath, sourceRoot: preparedDatabase.sourceRoot,
+    source: preparedDatabase.source, bytes: preparedDatabase.bytes, sha256: preparedDatabase.sha256 });
   const systemConfigurationSha256 = system.sha256;
   const layoutSha256 = sha256Value(JSON.stringify({ destination, pathBindings: manifest.instanceState.pathBindings,
-    systemConfigurationSha256 }));
-  return { files, directories: manifest.directories, systemConfigurationSha256, layoutSha256 };
+    systemConfigurationSha256, databaseProjection: preparedDatabase.projection }));
+  return { files, directories: manifest.directories, systemConfigurationSha256, layoutSha256,
+    databaseProjection: preparedDatabase.projection, preparationRecovery: preparedDatabase.recovery,
+    preparationStagingFiles: preparedDatabase.stagingFiles, dispose: preparedDatabase.dispose };
 }
 
 function restoredState(manifest, destination, stage, manifestSha256, plan) {
@@ -602,7 +767,7 @@ function restoredState(manifest, destination, stage, manifestSha256, plan) {
     systemConfigurationSha256: plan.systemConfigurationSha256,
     destination,
     stage,
-    database: { restorePath: manifest.database.restorePath, sha256: manifest.database.sha256 },
+    database: { restorePath: manifest.database.restorePath, sha256: plan.databaseProjection.targetSha256 },
     extensionStateSha256: sha256Value(canonicalJson(manifest.extensionState)),
     mediaAccessSha256: sha256Value(canonicalJson(manifest.mediaAccess)),
   };
@@ -618,7 +783,7 @@ function validateRestoredState(value, manifest, destination, expectedStage, mani
     || value.generation !== manifest.generation
     || value.manifestSha256 !== manifestSha256 || value.destination !== destination || value.stage !== expectedStage
     || value.layoutSha256 !== plan.layoutSha256 || value.systemConfigurationSha256 !== plan.systemConfigurationSha256
-    || value.database?.restorePath !== manifest.database.restorePath || value.database?.sha256 !== manifest.database.sha256
+    || value.database?.restorePath !== manifest.database.restorePath || value.database?.sha256 !== plan.databaseProjection.targetSha256
     || value.extensionStateSha256 !== sha256Value(canonicalJson(manifest.extensionState))
     || value.mediaAccessSha256 !== sha256Value(canonicalJson(manifest.mediaAccess))) {
     throw new Error('Restore state does not match the requested package generation and destination');
@@ -1241,7 +1406,7 @@ async function createStatePackageOwned(options, lease) {
     return verified;
   } catch (thrown) {
     const error = normalizeThrown(thrown, 'State package capture failed');
-    progress.updatedAt = new Date().toISOString(); progress.lastError = error.message;
+    progress.updatedAt = new Date().toISOString(); progress.lastError = failureMessage(error, 'State package capture failed');
     try { lease.assertHeld(); await journal(staging, progress); } catch {}
     throw error;
   }
@@ -1365,9 +1530,11 @@ export async function restoreStatePackage(directory, destination, options = {}) 
     lease => restoreStatePackageOwned(directory, destination, options, lease));
 }
 
-async function restoreStatePackageOwned(directory, destination, { signal, onProgress } = {}, lease) {
+async function restoreStatePackageOwned(directory, destination, { signal, onProgress, onPreparation } = {}, lease) {
   lease.assertHeld();
   if (onProgress != null && typeof onProgress !== 'function') throw new TypeError('Restore progress callback must be a function');
+  if (onPreparation != null && typeof onPreparation !== 'function') throw new TypeError('Restore preparation callback must be a function');
+  signal?.throwIfAborted();
   directory = path.resolve(directory);
   const { manifest, manifestSha256 } = await verifyStatePackageDetailed(directory);
   const physicalPackage = await realpath(directory);
@@ -1384,7 +1551,20 @@ async function restoreStatePackageOwned(directory, destination, { signal, onProg
   }
   const physicalDestination = destination;
   if (inside(physicalPackage, physicalDestination) || inside(physicalDestination, physicalPackage)) throw new Error('Restore destination overlaps package');
-  const plan = await createRestorePlan(directory, manifest, destination);
+  if (inside(physicalPackage, physicalStaging) || inside(physicalStaging, physicalPackage)) throw new Error('Restore staging directory overlaps package');
+  let stagingMetadata;
+  try { stagingMetadata = await lstat(staging); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const resumed = Boolean(stagingMetadata);
+  if (stagingMetadata) await assertPhysicalDirectory(staging, staging, 'Restore staging');
+  else { lease.assertHeld(); await mkdir(staging, { recursive: false }); }
+  const plan = await createRestorePlan(directory, manifest, manifestSha256, destination, staging, { signal, onPreparation, lease });
+  return withPreparedRestorePlan(plan, () => restorePreparedStatePackage({ directory, manifest, manifestSha256, destination,
+    physicalPackage, physicalStaging, staging, signal, onProgress, plan, lease, resumed }));
+}
+
+async function restorePreparedStatePackage({ directory, manifest, manifestSha256, destination,
+  physicalPackage, physicalStaging, staging, signal, onProgress, plan, lease, resumed }) {
   if (inside(physicalPackage, physicalStaging) || inside(physicalStaging, physicalPackage)) throw new Error('Restore staging directory overlaps package');
   let destinationMetadata;
   try { destinationMetadata = await lstat(destination); }
@@ -1393,19 +1573,12 @@ async function restoreStatePackageOwned(directory, destination, { signal, onProg
     if (!destinationMetadata.isDirectory() || destinationMetadata.isSymbolicLink()) throw new Error('Restore destination already exists and is not a restored directory');
     await verifyRestoredTree(destination, manifest, destination, 'complete', manifestSha256, plan);
     lease.assertHeld();
-    return { destination, manifest, mediaAccessVerified: false, resumed: true, alreadyRestored: true, reusedFiles: plan.files.length };
+    return { destination, manifest, databaseProjection: plan.databaseProjection, preparationRecovery: plan.preparationRecovery,
+      mediaAccessVerified: false, resumed: true, alreadyRestored: true, reusedFiles: plan.files.length };
   }
-  let stagingMetadata, resumed = false;
-  try { stagingMetadata = await lstat(staging); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; }
-  if (stagingMetadata) {
-    if (!stagingMetadata.isDirectory() || stagingMetadata.isSymbolicLink()) throw new Error('Restore staging path is not a directory');
-    resumed = true;
-  } else { lease.assertHeld(); await mkdir(staging, { recursive: false }); }
-
   const expectedFiles = plan.files;
-  const allowedPaths = [...expectedFiles.map(file => file.path), restoredStatePath, restoredStateTemporaryPath];
-  const allowedDirectories = manifest.directories.map(entry => entry.path);
+  const allowedPaths = [...expectedFiles.map(file => file.path), restoredStatePath, restoredStateTemporaryPath, ...plan.preparationStagingFiles];
+  const allowedDirectories = [...manifest.directories.map(entry => entry.path), plan.preparationRecovery.relativeDirectory];
   lease.assertHeld();
   await assertRestoreInventory(staging, allowedPaths, allowedDirectories,
     { atomicTargets: [...expectedFiles.map(file => file.path), restoredStatePath] });
@@ -1418,13 +1591,15 @@ async function restoreStatePackageOwned(directory, destination, { signal, onProg
   }
   if (!['restoring', 'complete'].includes(state.stage)) throw new Error('Restore staging state has an unknown stage');
   if (state.stage === 'complete') {
+    await plan.dispose();
     await verifyRestoredTree(staging, manifest, destination, 'complete', manifestSha256, plan);
     if (pathIdentity(await prospectivePhysicalPath(destination, 'Restore destination')) !== pathIdentity(destination)) {
       throw new Error('Restore destination parent changed before publication');
     }
     lease.assertHeld();
     await rename(staging, destination);
-    return { destination, manifest, mediaAccessVerified: false, resumed: true, alreadyRestored: false, reusedFiles: expectedFiles.length };
+    return { destination, manifest, databaseProjection: plan.databaseProjection, preparationRecovery: plan.preparationRecovery,
+      mediaAccessVerified: false, resumed: true, alreadyRestored: false, reusedFiles: expectedFiles.length };
   }
 
   for (const directory of [...manifest.directories].sort((left, right) => left.path.split('/').length - right.path.split('/').length)) {
@@ -1453,11 +1628,12 @@ async function restoreStatePackageOwned(directory, destination, { signal, onProg
     if (!reused) {
       const modifiedAt = file.modifiedAt ? new Date(file.modifiedAt) : undefined;
       if (file.content) await atomicWriteBuffer(staging, filename, file.content, `Restore asset ${file.path}`, { modifiedAt });
-      else await atomicCopyVerified(directory, path.join(directory, ...file.source), staging, filename,
+      else await atomicCopyVerified(file.sourceRoot ?? directory, path.join(file.sourceRoot ?? directory, ...file.source), staging, filename,
         `Restore asset ${file.path}`, { expectedBytes: file.bytes, expectedSha256: file.sha256, modifiedAt });
       await inspectRegularFile(staging, filename, `Restored asset ${file.path}`,
         { expectedBytes: file.bytes, expectedSha256: file.sha256 });
     } else reusedFiles++;
+    if (file.path === manifest.database.restorePath) await plan.dispose();
     completed++;
     await onProgress?.({ path: file.path, completed, total: expectedFiles.length, reused });
   }
@@ -1481,7 +1657,8 @@ async function restoreStatePackageOwned(directory, destination, { signal, onProg
   }
   lease.assertHeld();
   await rename(staging, destination);
-  return { destination, manifest, mediaAccessVerified: false, resumed, alreadyRestored: false, reusedFiles };
+  return { destination, manifest, databaseProjection: plan.databaseProjection, preparationRecovery: plan.preparationRecovery,
+    mediaAccessVerified: false, resumed, alreadyRestored: false, reusedFiles };
 }
 
 export async function restoreRemoteStatePackage(directory, options) {

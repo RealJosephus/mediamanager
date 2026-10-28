@@ -67,6 +67,22 @@ test('media access declarations validate current original identity and sidecar r
   });
 });
 
+test('SAMI original access binds the .smi file to its actually saved subtitle stream', async t => {
+  const db = database(t), input = plan();
+  const bytes = Buffer.from('\uFEFF<SAMI><BODY><SYNC Start=0><P>Migration SAMI\r\n<SYNC Start=500><P>&nbsp;\r\n</BODY></SAMI>\r\n');
+  const sidecar = { kind: 'subtitle', identityPath: 'Z:\\Media\\movie.ko.smi', streamIndex: 4,
+    read: { kind: 'native-subtitle-original' }, expected: { bytes: String(bytes.length), sha256: sha(bytes) } };
+  input.items[0].sidecars.push(sidecar);
+  db.insert('MediaStreamInfos', { ...emptyRow('MediaStreamInfos'), ItemId: id, StreamIndex: 4, StreamType: 2,
+    IsExternal: true, Codec: 'sami', Path: sidecar.identityPath });
+  assert.equal((await validateMediaAccessPlan(input, db)).references[0].sidecars, 5);
+  db.update('MediaStreamInfos', { ItemId: id, StreamIndex: 4 }, { Codec: 'subrip' });
+  await assert.rejects(validateMediaAccessPlan(input, db), /subtitle is not the saved external stream/u);
+  db.update('MediaStreamInfos', { ItemId: id, StreamIndex: 4 }, { Codec: 'sami', Path: 'Z:\\Media\\movie.ko.sami' });
+  sidecar.identityPath = 'Z:\\Media\\movie.ko.sami';
+  await assert.rejects(validateMediaAccessPlan(input, db), /unsupported sidecar scheme/u);
+});
+
 test('declared NFO sidecars use direct native filesystem bytes and reject missing or mismatched content', async t => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-native-nfo-'));
   t.after(() => rm(root, { recursive: true }));

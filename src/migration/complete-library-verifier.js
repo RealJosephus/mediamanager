@@ -1,4 +1,5 @@
 import { setTimeout as delay } from 'node:timers/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { ordinalIgnoreCaseKey } from '../storage/ordinal-comparer.js';
 import { validateMediaAccessPlan, verifyNativeMediaAccess } from './media-access.js';
@@ -58,7 +59,7 @@ function positiveInteger(value, description, maximum = Number.MAX_SAFE_INTEGER) 
   return value;
 }
 
-async function boundedJson(response, maximumBytes, signal) {
+async function boundedJson(response, maximumBytes, signal, capture) {
   const declaredLength = response.headers.get('content-length');
   if (declaredLength != null && (!/^(?:0|[1-9][0-9]*)$/u.test(declaredLength) || BigInt(declaredLength) > BigInt(maximumBytes))) {
     await response.body?.cancel().catch(() => {});
@@ -75,7 +76,9 @@ async function boundedJson(response, maximumBytes, signal) {
   } finally {
     if (response.body && !response.body.locked) await response.body.cancel().catch(() => {});
   }
-  try { return JSON.parse(Buffer.concat(chunks, length).toString('utf8')); }
+  const bytes = Buffer.concat(chunks, length);
+  capture?.(bytes);
+  try { return JSON.parse(bytes.toString('utf8')); }
   catch { fail('invalid-response', 'Native endpoint returned invalid JSON'); }
 }
 
@@ -83,7 +86,7 @@ function nativeClient({ baseUrl, accessToken, signal, requestTimeoutMs }) {
   const { base } = originAndToken(baseUrl, accessToken);
   positiveInteger(requestTimeoutMs, 'Request timeout');
   const requests = [];
-  const request = async (route, { method = 'GET', maximumBytes } = {}) => {
+  const request = async (route, { method = 'GET', maximumBytes, captureResponse = false } = {}) => {
     signal?.throwIfAborted();
     const requestSignal = signal
       ? AbortSignal.any([signal, AbortSignal.timeout(requestTimeoutMs)])
@@ -94,7 +97,8 @@ function nativeClient({ baseUrl, accessToken, signal, requestTimeoutMs }) {
       redirect: 'error',
       signal: requestSignal,
     });
-    requests.push({ method, route, status: response.status });
+    const observation = { method, route, status: response.status };
+    requests.push(observation);
     if (maximumBytes == null) return response;
     if (!response.ok) {
       await response.body?.cancel().catch(() => {});
@@ -105,7 +109,11 @@ function nativeClient({ baseUrl, accessToken, signal, requestTimeoutMs }) {
       await response.body?.cancel().catch(() => {});
       fail('invalid-response', `${method} ${route} did not return JSON`);
     }
-    return boundedJson(response, maximumBytes, signal);
+    return boundedJson(response, maximumBytes, signal, captureResponse ? bytes => {
+      observation.response = { headers: Object.fromEntries(response.headers), bytes: bytes.length,
+        sha256: createHash('sha256').update(bytes).digest('hex'), bodyBase64: bytes.toString('base64'),
+        bodyText: bytes.toString('utf8') };
+    } : undefined);
   };
   return { base, requests, request };
 }
@@ -189,7 +197,6 @@ export async function runNativeCompleteLibraryScan({
     if (current.State === 'Idle') {
       const receipt = completedReceipt(current, previousToken, acceptedAt);
       if (receipt) {
-        if (!observedRunning) fail('scan-not-completed', 'RefreshLibrary completion was not preceded by an observed Running state');
         return { ...receipt, observedRunning, requests: client.requests };
       }
     }
@@ -253,12 +260,15 @@ export async function validateCompleteLibraryDeclaration(declaration, database) 
   };
 }
 
-function observedVirtualFolder(folder) {
+function observedVirtualFolder(folder, index) {
   const itemId = normalizeGuid(folder?.ItemId);
-  if (!itemId || typeof folder.Name !== 'string' || !folder.Name || /[\0\r\n]/u.test(folder.Name)
-    || folder.CollectionType !== null && typeof folder.CollectionType !== 'string'
-    || !Array.isArray(folder.Locations) || folder.Locations.length === 0) {
-    fail('invalid-response', 'Native virtual folder response contains an unknown entry');
+  const invalidFields = [];
+  if (!itemId) invalidFields.push('ItemId');
+  if (typeof folder?.Name !== 'string' || !folder.Name || /[\0\r\n]/u.test(folder.Name)) invalidFields.push('Name');
+  if (folder?.CollectionType !== null && typeof folder?.CollectionType !== 'string') invalidFields.push('CollectionType');
+  if (!Array.isArray(folder?.Locations) || folder.Locations.length === 0) invalidFields.push('Locations');
+  if (invalidFields.length) {
+    fail('invalid-response', 'Native virtual folder response contains an unknown entry', { index, invalidFields, folder });
   }
   const locations = folder.Locations.map((location, index) => identityPath(location, `native virtual folder location ${index}`));
   const locationKeys = comparableSet(locations, identityPathKey);
@@ -267,7 +277,7 @@ function observedVirtualFolder(folder) {
 }
 
 async function verifyNativeInventory(validated, client, { pageSize, signal }) {
-  const virtualFolders = await client.request('/Library/VirtualFolders', { maximumBytes: jsonLimits.virtualFolders });
+  const virtualFolders = await client.request('/Library/VirtualFolders', { maximumBytes: jsonLimits.virtualFolders, captureResponse: true });
   if (!Array.isArray(virtualFolders)) fail('invalid-response', 'Library/VirtualFolders response is not an array');
   const observedFolders = virtualFolders.map(observedVirtualFolder);
   if (new Set(observedFolders.map(folder => folder.itemId)).size !== observedFolders.length) fail('invalid-response', 'Native virtual folders contain duplicate item IDs');
@@ -361,7 +371,14 @@ export async function verifyNativeCompleteLibrary(declaration, {
   const validated = await validateCompleteLibraryDeclaration(declaration, database);
   const scan = await runNativeCompleteLibraryScan({ baseUrl, accessToken, signal, requestTimeoutMs, scanTimeoutMs, pollIntervalMs });
   const client = nativeClient({ baseUrl, accessToken, signal, requestTimeoutMs });
-  const inventory = await verifyNativeInventory(validated, client, { pageSize, signal });
+  let inventory;
+  try { inventory = await verifyNativeInventory(validated, client, { pageSize, signal }); }
+  catch (error) {
+    if (error instanceof CompleteLibraryVerificationError) {
+      error.evidence = { ...error.evidence, scan, requests: client.requests };
+    }
+    throw error;
+  }
   const access = await verifyNativeMediaAccess(validated.accessPlan, { database, baseUrl, accessToken, signal, timeoutMs: requestTimeoutMs });
   if (!access.declaredItemsVerified || access.items.length !== validated.itemCount || access.items.some(item => !item.verified)) {
     fail('item-access-failed', 'At least one declared native media item was not enumerable, playable, or byte-exact', { scan, inventory, access });

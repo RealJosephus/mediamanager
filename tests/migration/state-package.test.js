@@ -159,8 +159,10 @@ test('local restore refuses unrelated destinations and unexpected staged entries
   const controller = new AbortController(); controller.abort();
   await assert.rejects(restoreStatePackage(packageDirectory, destination, { signal: controller.signal }), /abort/iu);
   const staging = path.join(fixture.directory, `.restored.mediamanager-restore-${manifest.generation}`);
+  await mkdir(staging, { recursive: true });
   await writeFile(path.join(staging, 'foreign.txt'), 'do not publish');
   await assert.rejects(restoreStatePackage(packageDirectory, destination), /Unexpected file/u);
+  assert.equal(await readFile(path.join(staging, 'foreign.txt'), 'utf8'), 'do not publish');
   await assert.rejects(access(destination), { code: 'ENOENT' });
 });
 

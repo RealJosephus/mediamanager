@@ -1,0 +1,13 @@
+{
+  "scope": "A CI-generated 100000-item catalog in the exact same-run Native SQLite model, with 100000 ancestor and user-state rows. This verifies real PostgreSQL queries and whole-database exchange at the stated cardinality, not 100000 physical media files or a user production instance.",
+  "items": 100000,
+  "parentId": "87210000-0000-0000-0000-000000000000",
+  "idPrefix": "87200000-0000-0000-0000-",
+  "ticksBase": "9007199254740993",
+  "data": "{ \"UnknownProvider\" : [9223372036854775807,\"中文\"], \"traceId\":\"87200000-0000-0000-0000-000000000027\", \"dup\":1, \"dup\":2, \"null\":null }",
+  "retained": 27,
+  "deletedByNode": 99999,
+  "addedByNode": 100001,
+  "addedByNative": 100002,
+  "query": { "year": 2007, "startIndex": 3, "limit": 128 }
+}

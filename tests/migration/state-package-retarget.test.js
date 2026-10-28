@@ -136,7 +136,7 @@ test('PostgreSQL state package retargets its SQLite paths, contract and media-ac
     assert.equal((await exported.rows('BaseItems', { where: { Id: fixtureIds.BaseItems } }))[0].Path,
       '/srv/jellyfin/media/Films/One.mkv');
     assert.equal((await exported.rows('BaseItems', { where: { Id: internalId } }))[0].Path,
-      `%AppDataPath%${path.sep}root`);
+      internalPath);
   } finally { exported.close(); }
 
   const altered = structuredClone(manifest);

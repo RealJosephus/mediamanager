@@ -33,6 +33,8 @@ import { knownAncestorIgnoreIdentityMap } from '../library/ignore-namespace-fixt
 import { prepareFrozenVideo } from '../helpers/frozen-av.js';
 import { stopNativeReference } from '../../tools/compat/native-shutdown.js';
 import { prepareNativeApplicationData, resolveNativeTools, verifyNativeProcessInputs } from '../../tools/compat/native-process-inputs.js';
+import { samiMediaFilename, samiFallbackMediaFilename, samiMediaBytes, observeSamiMediaConsumer,
+  observeSamiFallbackMediaConsumer, assertSameSamiMediaConsumer, assertRestoredSamiCache } from './helpers/sami-media-consumer.js';
 
 const id = '22222222-2222-2222-2222-222222222222';
 const negativeId = '92929292-9292-9292-9292-929292929292';
@@ -57,6 +59,7 @@ const hostPathStyle = process.platform === 'win32' ? 'windows' : 'posix';
 // Only these reports may leave the private exchange root. Never copy an
 // instance, database, network configuration or state package into CI artifacts.
 const branchReports = ['branch-result.json', 'owned-maintenance.json', 'capture-source-generation.json', 'capture-source-generation-failure.json',
+  'sami-media-consumers.json', 'sami-fallback-media-consumers.json',
   'initial-nfo-restore.json', 'native-item.json', 'native-signed-access.json',
   'native-nfo-item.json', 'native-media-access.json', 'native-changed-nfo-item.json', 'reverse-nfo-restore.json',
   'reverse-native-nfo-item.json', 'reverse-native-media-access.json', 'reverse-node-reimport.json',
@@ -303,12 +306,15 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
   const srtSubtitle = Buffer.from('1\n00:00:00,000 --> 00:00:00,100\nCurrent candidate subtitle 中文\n');
   const ssaSubtitle = Buffer.from('[Script Info]\nScriptType: v4.00\n[V4 Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding\nStyle: Default,Arial,20,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,1,2,0,2,10,10,10,0,1\n[Events]\nFormat: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\nDialogue: Marked=0,0:00:00.00,0:00:00.10,Default,,0,0,0,,Current candidate SSA 中文\n');
   const vttSubtitle = Buffer.from('WEBVTT\n\n00:00:00.000 --> 00:00:00.100\nCurrent candidate WebVTT 中文\n');
+  const samiSubtitle = samiMediaBytes(false), nativeChangedSami = samiMediaBytes(true);
   const candidateNfo = Buffer.from('<?xml version="1.0" encoding="utf-8"?>\r\n<movie>\r\n  <title>Candidate NFO title 中文</title>\r\n  <plot>Candidate NFO overview &amp; exact bytes.</plot>\r\n  <uniqueid type="tmdb" default="true">919191</uniqueid>\r\n</movie>\r\n');
   const nativeChangedNfo = Buffer.from('<?xml version="1.0" encoding="utf-8"?>\n<movie>\n  <title>Native changed NFO title 中文</title>\n  <plot>Native changed overview &amp; reverse migration.</plot>\n  <uniqueid type="tmdb" default="true">929292</uniqueid>\n</movie>\n');
   await writeFile(path.join(candidateMedia, 'feature.de.ass'), assSubtitle);
   await writeFile(path.join(candidateMedia, 'feature.en.forced.srt'), srtSubtitle);
   await writeFile(path.join(candidateMedia, 'feature.ja.ssa'), ssaSubtitle);
   await writeFile(path.join(candidateMedia, 'feature.fr.vtt'), vttSubtitle);
+  await writeFile(path.join(candidateMedia, samiMediaFilename), samiSubtitle);
+  await writeFile(path.join(candidateMedia, samiFallbackMediaFilename), samiSubtitle);
   const reports = [];
   for (const [index, storageProtocol] of ['webdav', 'alist'].entries()) await t.test(storageProtocol, async () => {
     const phase = name => process.stderr.write('[native-media-phase] ' + JSON.stringify({
@@ -338,6 +344,14 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
     const ownedMaintenance = { itemId: trailerId, identityPath: trailerPath, mediaSha256: sha(media),
       input: { inspectedIdentityFlag: { present: Object.hasOwn(nativeSettings.configuration, 'EnableCaseSensitiveItemIds'), value: enableCaseSensitiveItemIds ?? null },
         nodeConfiguration, ownerPath: path.join(readable, 'feature.mkv'), programDataPath }, initial: {}, reimport: {} };
+    const samiConsumers = { scope: 'Normally discovered .smi SAMI over WebDAV/AList, public PlaybackInfo and delivery, SQLite return, Native changed subtitle and fresh PG.',
+      observations: [], completeLibraryVerified: false, phaseAcceptance: false, releaseAcceptance: false };
+    const observeSami = (stage, selectedDatabase, origin, source) => observeSamiMediaConsumer({ stage, database: selectedDatabase, origin,
+      source, token, itemId: id, identityRoot: readable, signal: t.signal, observations: samiConsumers.observations });
+    const samiFallbackConsumers = { scope: 'Normally discovered .sami with real SRT conversion, persistent cache and Native/fresh PG exchange over WebDAV/AList.',
+      observations: [], restoredCaches: [], completeLibraryVerified: false, phaseAcceptance: false, releaseAcceptance: false };
+    const observeSamiFallback = (stage, selectedDatabase, origin, source, dataPath) => observeSamiFallbackMediaConsumer({ stage, database: selectedDatabase, origin,
+      source, token, itemId: id, identityRoot: readable, dataPath, signal: t.signal, observations: samiFallbackConsumers.observations });
     const userRootDirectory = path.join(programDataPath, 'root/default'); await mkdir(userRootDirectory, { recursive: true });
     const libraryDirectory = path.join(programDataPath, 'data/root/default/Return'); await mkdir(libraryDirectory, { recursive: true });
     await writeFile(path.join(libraryDirectory, 'options.xml'), `<LibraryOptions><Enabled>true</Enabled><EnableEmbeddedTitles>true</EnableEmbeddedTitles><EnableRealtimeMonitor>false</EnableRealtimeMonitor><PathInfos><MediaPathInfo><Path>${readable}</Path></MediaPathInfo></PathInfos><TypeOptions><TypeOptions><Type>Movie</Type><MetadataFetchers/><ImageFetchers/></TypeOptions></TypeOptions></LibraryOptions>`);
@@ -478,7 +492,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       phase('candidate-runtime-create-start');
       runtime = await createTestRuntime({ database, vfs, identityMap, ignoreIdentityMap, serverId: stateId, programDataPath: path.join(working, 'data'),
         configuration: nodeConfiguration, libraryOptions,
-        onError: error => runtimeErrors.push(error?.stack ?? error?.message ?? String(error)) });
+        onError: (error, context) => runtimeErrors.push({ error: errorValue(error),
+          ...(context?.request ? { method: context.request.method, route: context.request.url, phase: context.phase } : {}) }) });
       databaseOwner = 'runtime';
       phase('candidate-runtime-created');
       const context = await runtime.metadata.loadContext(id);
@@ -506,18 +521,26 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       const externalSrt = streams.find(stream => stream.StreamType === 2 && stream.IsExternal && /\.srt$/i.test(stream.Path ?? ''));
       const externalSsa = streams.find(stream => stream.StreamType === 2 && stream.IsExternal && /\.ssa$/i.test(stream.Path ?? ''));
       const externalVtt = streams.find(stream => stream.StreamType === 2 && stream.IsExternal && /\.vtt$/i.test(stream.Path ?? ''));
-      assert.ok(externalAss); assert.ok(externalSrt); assert.ok(externalSsa); assert.ok(externalVtt);
+      const externalSami = streams.find(stream => stream.StreamType === 2 && stream.IsExternal && /\.smi$/i.test(stream.Path ?? ''));
+      const externalSamiFallback = streams.find(stream => stream.StreamType === 2 && stream.IsExternal && /\.sami$/i.test(stream.Path ?? ''));
+      assert.ok(externalAss); assert.ok(externalSrt); assert.ok(externalSsa); assert.ok(externalVtt); assert.ok(externalSami); assert.ok(externalSamiFallback);
+      const nodeSami = await observeSami('node-discovered', database, candidateBase, samiSubtitle);
+      const nodeSamiFallback = await observeSamiFallback('node-discovered', database, candidateBase, samiSubtitle, runtime.applicationPaths.dataPath);
+      assert.equal(nodeSamiFallback.cache.before.cache.exists, false, 'The first normally discovered SAMI conversion starts without a persistent SRT.');
+      assert.equal(nodeSamiFallback.cache.before.metadata.exists, false, 'The first normally discovered SAMI conversion starts without a source fingerprint.');
+      assert.deepEqual(await readFile(path.join(candidateMedia, samiFallbackMediaFilename)), samiSubtitle);
       // The negative item carries the same metadata but deliberately has no native filesystem directory.
       for (const stream of streams) await database.insert('MediaStreamInfos', { ...stream, ItemId: negativeId, Path: stream.Path?.replace(readable, missing) ?? null });
       await database.update('BaseItems', { Id: negativeId }, { RunTimeTicks: changed.RunTimeTicks, TotalBitrate: changed.TotalBitrate, Width: changed.Width, Height: changed.Height,
         Data: changed.Data.replaceAll(readable.replaceAll('\\', '\\\\'), missing.replaceAll('\\', '\\\\')) });
-      const entry = (itemId, identityRoot, nfoBytes) => ({ itemId, identityPath: path.join(identityRoot, 'feature.mkv'), identityRoot,
+      const entry = (itemId, identityRoot, nfoBytes, samiBytes = samiSubtitle) => ({ itemId, identityPath: path.join(identityRoot, 'feature.mkv'), identityRoot,
         enumeration: { kind: 'native-filesystem', root: identityRoot }, read: { kind: 'native-local-media-proxy' }, expected: expected(media, true),
         sidecars: [
           { kind: 'subtitle', identityPath: path.join(identityRoot, 'feature.de.ass'), streamIndex: externalAss.StreamIndex, read: { kind: 'native-subtitle-original' }, expected: expected(assSubtitle) },
           { kind: 'subtitle', identityPath: path.join(identityRoot, 'feature.en.forced.srt'), streamIndex: externalSrt.StreamIndex, read: { kind: 'native-subtitle-original' }, expected: expected(srtSubtitle) },
           { kind: 'subtitle', identityPath: path.join(identityRoot, 'feature.ja.ssa'), streamIndex: externalSsa.StreamIndex, read: { kind: 'native-subtitle-original' }, expected: expected(ssaSubtitle) },
           { kind: 'subtitle', identityPath: path.join(identityRoot, 'feature.fr.vtt'), streamIndex: externalVtt.StreamIndex, read: { kind: 'native-subtitle-original' }, expected: expected(vttSubtitle) },
+          { kind: 'subtitle', identityPath: path.join(identityRoot, samiMediaFilename), streamIndex: externalSami.StreamIndex, read: { kind: 'native-subtitle-original' }, expected: expected(samiBytes) },
           ...(nfoBytes ? [{ kind: 'nfo', identityPath: path.join(identityRoot, 'movie.nfo'), read: { kind: 'native-filesystem-sidecar' },
             stateAssetId: 'movie-nfo', expected: expected(nfoBytes) }] : []),
         ] });
@@ -554,6 +577,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         },
       });
       let captured;
+      const beforeCapture = await databaseDigest(database);
       try {
         captured = await createStatePackage({ database, destination: path.join(root, 'package'), instanceState, captureSession,
           baseline: 'Frozen current Jellyfin including local modifications', mediaAccess: plan,
@@ -567,20 +591,37 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         catch (diagnostic) { throw new AggregateError([error, diagnostic], error.message, { cause: error }); }
         throw error;
       }
-      const before = await databaseDigest(database);
-      assert.ok(captured.database.pathProjection.rewrittenPaths > 0);
-      assert.notDeepEqual(captured.database.tables, before,
-        'instance-state virtualization must change the portable database digest without adding a media mount');
+      assert.deepEqual(await databaseDigest(database), beforeCapture,
+        'Capturing a portable database must preserve every source table.');
+      assert.deepEqual(captured.source.database.tables, beforeCapture);
+      const packaged = new SqliteDatabase(path.join(root, 'package/jellyfin.db'), { readOnly: true });
+      try {
+        assert.deepEqual(await databaseDigest(packaged), captured.database.tables);
+        assert.equal(packaged.rows('BaseItems', { where: { Id: userRootId } })[0].Path, userRootDirectory);
+        assert.equal(packaged.rows('BaseItems', { where: { Id: collectionId } })[0].Path,
+          path.join('%AppDataPath%', 'root', 'default', 'Return'));
+        assert.equal(packaged.rows('BaseItems', { where: { Id: id } })[0].Path, changed.Path);
+        if (aggregate) assert.equal(packaged.rows('BaseItems', { where: { Id: aggregate.Id } })[0].Path,
+          path.join(working, 'data/root'));
+      } finally { packaged.close(); }
       assert.deepEqual(captured.database.portableMountContract.mounts.map(mount => mount.mountId),
         ['missing-return-media', 'return-media'], 'portable mount contracts use canonical mountId order');
       const restored = await restoreStatePackage(path.join(root, 'package'), returned); assert.equal(restored.mediaAccessVerified, false);
       const returnedInstanceState = await discoverInstanceState({ instanceRoot: returned });
       assert.equal(returnedInstanceState.identity.serverId, stateId);
+      await assertRestoredSamiCache({ stage: 'pg-to-native-state-package', dataPath: path.join(returned, 'data/data'),
+        expected: nodeSamiFallback, observations: samiFallbackConsumers.restoredCaches });
       const initialRemoteRestore = await restoreRemoteStatePackage(path.join(root, 'package'), { vfs, targets: { 'movie-nfo': returnedNfoVirtual } });
       assert.equal(initialRemoteRestore.complete, true); assert.deepEqual(await readFile(path.join(readable, 'movie.nfo')), candidateNfo);
       await writeFile(path.join(root, 'initial-nfo-restore.json'), json(initialRemoteRestore));
       readback = new SqliteDatabase(path.join(returned, 'data/data/jellyfin.db'), { readOnly: true });
-      assert.deepEqual(await databaseDigest(readback), captured.database.tables);
+      assert.deepEqual(await databaseDigest(readback), restored.databaseProjection.tables);
+      assert.equal(readback.rows('BaseItems', { where: { Id: userRootId } })[0].Path, path.join(returned, 'data/root/default'));
+      assert.equal(readback.rows('BaseItems', { where: { Id: collectionId } })[0].Path,
+        path.join('%AppDataPath%', 'root', 'default', 'Return'));
+      assert.equal(readback.rows('BaseItems', { where: { Id: id } })[0].Path, changed.Path);
+      if (aggregate) assert.equal(readback.rows('BaseItems', { where: { Id: aggregate.Id } })[0].Path,
+        path.join(returned, 'data/root'));
       // Provision an independent synthetic return drive, without including media bytes in the state package.
       await writeFile(path.join(readable, 'feature.mkv'), media);
       await writeFile(trailerPath, media);
@@ -588,6 +629,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       await writeFile(path.join(readable, 'feature.en.forced.srt'), srtSubtitle);
       await writeFile(path.join(readable, 'feature.ja.ssa'), ssaSubtitle);
       await writeFile(path.join(readable, 'feature.fr.vtt'), vttSubtitle);
+      await writeFile(path.join(readable, samiMediaFilename), samiSubtitle);
+      await writeFile(path.join(readable, samiFallbackMediaFilename), samiSubtitle);
       await actual.api('admin/setting/save', [{ key: 'sign_all', value: String(storageProtocol === 'webdav'), type: 'bool', group: 4, flag: 1 }]);
       native = await startNative(returned, port, token, { evidenceDirectory: root });
       const detailsResponse = await fetch(`${native.baseUrl}/Items?Ids=${id}&Fields=Path&Recursive=true`, { headers: { Authorization: `MediaBrowser Token="${token}"` } });
@@ -629,6 +672,11 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       await writeFile(path.join(root, 'native-media-access.json'), json(report).replaceAll(token, '[isolated token redacted]'));
       assert.equal(report.items[0].verified, true, json(report.items[0]));
       assert.equal(report.items[0].sidecars.find(sidecar => sidecar.kind === 'nfo')?.verified, true);
+      const nativeSami = await observeSami('native-return-and-refresh', readback, native.baseUrl, samiSubtitle);
+      assertSameSamiMediaConsumer(nativeSami, nodeSami);
+      const nativeSamiFallback = await observeSamiFallback('native-return-and-refresh', readback, native.baseUrl, samiSubtitle, path.join(returned, 'data/data'));
+      assertSameSamiMediaConsumer(nativeSamiFallback, nodeSamiFallback);
+      assert.deepEqual(await readFile(path.join(readable, samiFallbackMediaFilename)), samiSubtitle);
       assert.equal(report.items[1].verified, false); assert.equal(report.items[1].original.verified, false); assert.equal(report.items[1].range.verified, false);
       assert.equal(report.items[1].sidecars.every(sidecar => !sidecar.verified), true);
       assert.equal(report.items[1].enumeration[0].verified, false); assert.equal(report.declaredItemsVerified, false); assert.equal(report.completeLibraryVerified, false);
@@ -645,7 +693,11 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         changedRefreshDatabase.close();
       }
       await writeFile(path.join(readable, 'movie.nfo'), nativeChangedNfo);
+      await writeFile(path.join(readable, samiMediaFilename), nativeChangedSami);
+      await writeFile(path.join(readable, samiFallbackMediaFilename), nativeChangedSami);
       const future = new Date(Date.now() + 120000); await utimes(path.join(readable, 'movie.nfo'), future, future);
+      await utimes(path.join(readable, samiMediaFilename), future, future);
+      await utimes(path.join(readable, samiFallbackMediaFilename), future, future);
       native = await startNative(returned, port, token, { evidenceDirectory: root, evidenceName: 'native-changed-process' });
       const nativeChangedRefreshStatus = await refreshNative(native.baseUrl, token, id);
       const nativeChangedItem = await waitNativeItem(native.baseUrl, token, id, item => item.Overview === 'Native changed overview & reverse migration.'
@@ -653,6 +705,16 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       assert.equal(nativeChangedItem.Name, 'Current candidate embedded title');
       await writeFile(path.join(root, 'native-changed-nfo-item.json'), json(nativeChangedItem));
       assert.deepEqual(await readFile(path.join(readable, 'movie.nfo')), nativeChangedNfo);
+      const changedNativeInput = new SqliteDatabase(path.join(returned, 'data/data/jellyfin.db'), { readOnly: true, requireMigrationHistory: true });
+      let changedNativeSami, changedNativeSamiFallback;
+      try {
+        changedNativeSami = await observeSami('native-changed-source', changedNativeInput, native.baseUrl, nativeChangedSami);
+        changedNativeSamiFallback = await observeSamiFallback('native-changed-source', changedNativeInput, native.baseUrl, nativeChangedSami, path.join(returned, 'data/data'));
+      }
+      finally { changedNativeInput.close(); }
+      assert.notEqual(changedNativeSami.cues.sha256, nativeSami.cues.sha256, 'A real Native source change reaches public subtitle consumers.');
+      assert.notEqual(changedNativeSamiFallback.cues.sha256, nativeSamiFallback.cues.sha256, 'A real Native source change invalidates the persisted SRT consumer.');
+      assert.deepEqual(await readFile(path.join(readable, samiFallbackMediaFilename)), nativeChangedSami);
       const stoppedNative = native;
       const nativeStopReceipt = await stoppedNative.stop(); native = null;
 
@@ -662,7 +724,7 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       assertOwnedTrailerRow(ownedMaintenance.nativeStored);
       const nativeProviders = Object.fromEntries((await nativeDatabase.rows('BaseItemProviders', { where: { ItemId: id } })).map(row => [row.ProviderId, row.ProviderValue]));
       assert.equal(nativeStored.Name, nativeChangedItem.Name); assert.equal(nativeStored.Overview, nativeChangedItem.Overview); assert.equal(nativeProviders.Tmdb, '929292');
-      const reversePlan = { scope: 'explicit-items', items: [entry(id, readable, nativeChangedNfo), entry(negativeId, missing)] };
+      const reversePlan = { scope: 'explicit-items', items: [entry(id, readable, nativeChangedNfo, nativeChangedSami), entry(negativeId, missing)] };
       const reversePackage = path.join(root, 'reverse-package');
       const nativeInstanceState = await discoverInstanceState({ instanceRoot: returned });
       assert.equal(nativeInstanceState.identity.serverId, stateId);
@@ -672,16 +734,26 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         receipt: nativeStopReceipt,
         assertStopped: () => stoppedNative.assertStopped(),
       });
+      const beforeReverseCapture = await databaseDigest(nativeDatabase);
       const reverseCaptured = await createStatePackage({ database: nativeDatabase, destination: reversePackage, instanceState: nativeInstanceState,
         captureSession: nativeCaptureSession, baseline: 'Frozen current Jellyfin including local modifications', mediaAccess: reversePlan,
         remoteState: { vfs, assets: [{ assetId: 'movie-nfo', virtualPath: returnedNfoVirtual, restorePath: 'movie.nfo', kind: 'nfo' }] } });
+      assert.deepEqual(await databaseDigest(nativeDatabase), beforeReverseCapture);
+      assert.deepEqual(reverseCaptured.source.database.tables, beforeReverseCapture);
       nativeDatabase.close(); nativeDatabase = null;
       const reverseReturned = path.join(root, 'reverse-restored');
-      await restoreStatePackage(reversePackage, reverseReturned);
+      const reverseRestored = await restoreStatePackage(reversePackage, reverseReturned);
       const reverseReturnedInstanceState = await discoverInstanceState({ instanceRoot: reverseReturned });
       assert.equal(reverseReturnedInstanceState.identity.serverId, stateId);
+      await assertRestoredSamiCache({ stage: 'native-to-pg-state-package', dataPath: path.join(reverseReturned, 'data/data'),
+        expected: changedNativeSamiFallback, observations: samiFallbackConsumers.restoredCaches });
       reverseReadback = new SqliteDatabase(path.join(reverseReturned, 'data/data/jellyfin.db'), { readOnly: true });
-      assert.deepEqual(await databaseDigest(reverseReadback), reverseCaptured.database.tables); reverseReadback.close(); reverseReadback = null;
+      assert.deepEqual(await databaseDigest(reverseReadback), reverseRestored.databaseProjection.tables);
+      assert.equal(reverseReadback.rows('BaseItems', { where: { Id: userRootId } })[0].Path, path.join(reverseReturned, 'data/root/default'));
+      assert.equal(reverseReadback.rows('BaseItems', { where: { Id: id } })[0].Path, changed.Path);
+      if (aggregate) assert.equal(reverseReadback.rows('BaseItems', { where: { Id: aggregate.Id } })[0].Path,
+        path.join(reverseReturned, 'data/root'));
+      reverseReadback.close(); reverseReadback = null;
       await rm(path.join(readable, 'movie.nfo'));
       const reverseRemoteRestore = await restoreRemoteStatePackage(reversePackage, { vfs, targets: { 'movie-nfo': returnedNfoVirtual } });
       assert.equal(reverseRemoteRestore.complete, true); assert.deepEqual(await readFile(path.join(readable, 'movie.nfo')), nativeChangedNfo);
@@ -717,6 +789,9 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       const reverseReport = await verifyNativeMediaAccess(reversePlan, { database: reverseReadback, baseUrl: native.baseUrl, accessToken: token });
       await writeFile(path.join(root, 'reverse-native-media-access.json'), json(reverseReport).replaceAll(token, '[isolated token redacted]'));
       assert.equal(reverseReport.items[0].verified, true, json(reverseReport.items[0])); assert.equal(reverseReport.completeLibraryVerified, false);
+      assertSameSamiMediaConsumer(await observeSami('native-reverse-state-package', reverseReadback, native.baseUrl, nativeChangedSami), changedNativeSami);
+      assertSameSamiMediaConsumer(await observeSamiFallback('native-reverse-state-package', reverseReadback, native.baseUrl, nativeChangedSami,
+        path.join(reverseReturned, 'data/data')), changedNativeSamiFallback);
       reverseReadback.close(); reverseReadback = null;
       await native.stop(); native = null;
       // Complete the reverse sidecar path by importing the state actually used
@@ -768,9 +843,13 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       reimportRuntime = await createTestRuntime({ database: reimportDatabase, vfs: reimportVfs, identityMap: reimportIdentityMap,
         ignoreIdentityMap: reimportIgnoreIdentityMap, serverId: stateId, programDataPath: path.join(reverseReturned, 'data'),
         configuration: reimportConfiguration, libraryOptions,
-        onError: error => reimportRuntimeErrors.push(error?.stack ?? error?.message ?? String(error)) });
+        onError: (error, context) => reimportRuntimeErrors.push({ error: errorValue(error),
+          ...(context?.request ? { method: context.request.method, route: context.request.url, phase: context.phase } : {}) }) });
       reimportDatabaseOwner = 'runtime';
       const reimportBase = `http://127.0.0.1:${reimportRuntime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`;
+      assertSameSamiMediaConsumer(await observeSami('fresh-pg-before-refresh', reimportDatabase, reimportBase, nativeChangedSami), changedNativeSami);
+      assertSameSamiMediaConsumer(await observeSamiFallback('fresh-pg-before-refresh', reimportDatabase, reimportBase, nativeChangedSami,
+        reimportRuntime.applicationPaths.dataPath), changedNativeSamiFallback);
       ownedMaintenance.reimport.beforeHttp = await readOwnedTrailer(reimportBase);
       assert.equal(ownedMaintenance.reimport.beforeHttp.status, 200, ownedMaintenance.reimport.beforeHttp.bodyText);
       assert.equal(JSON.parse(ownedMaintenance.reimport.beforeHttp.bodyText).Path, trailerPath);
@@ -789,6 +868,10 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
       assert.equal(refreshedReimport.Overview, 'Native changed overview & reverse migration.');
       assert.equal((await reimportDatabase.rows('BaseItemProviders', { where: { ItemId: id, ProviderId: 'Tmdb' } }))[0].ProviderValue, '929292');
       assert.equal(refreshedReimport.RunTimeTicks, mediaRunTimeTicks);
+      assertSameSamiMediaConsumer(await observeSami('fresh-pg-after-refresh', reimportDatabase, reimportBase, nativeChangedSami), changedNativeSami);
+      assertSameSamiMediaConsumer(await observeSamiFallback('fresh-pg-after-refresh', reimportDatabase, reimportBase, nativeChangedSami,
+        reimportRuntime.applicationPaths.dataPath), changedNativeSamiFallback);
+      assert.deepEqual(await readFile(path.join(readable, samiFallbackMediaFilename)), nativeChangedSami);
       assert.deepEqual(await readFile(path.join(readable, 'movie.nfo')), nativeChangedNfo);
       const reimportMedia = await reimportVfs.openRead('/reimport-media/feature.mkv');
       try { const chunks = []; for await (const chunk of reimportMedia.stream) chunks.push(Buffer.from(chunk)); assert.deepEqual(Buffer.concat(chunks), media); }
@@ -892,6 +975,8 @@ test('PostgreSQL runtime over WebDAV and AList returns SQLite exchange state to 
         operationFailure: errorValue(operationError), cleanupFailures: cleanupErrors.map(error => errorValue(error)),
         runtimeErrors, reimportRuntimeErrors })));
       await attempt(() => writeFile(path.join(root, 'owned-maintenance.json'), json(ownedMaintenance)));
+      await attempt(() => writeFile(path.join(root, 'sami-media-consumers.json'), json(samiConsumers)));
+      await attempt(() => writeFile(path.join(root, 'sami-fallback-media-consumers.json'), json(samiFallbackConsumers)));
     }
     phase('branch-cleanup-settled');
     if (operationError && cleanupErrors.length) {

@@ -1,12 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { access, link, mkdir, readFile, readdir, rename, rm, symlink, truncate, unlink, writeFile } from 'node:fs/promises';
+import fs from 'node:fs';
+import { access, link, mkdir, readFile, readdir, realpath, rename, rm, symlink, truncate, unlink, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
+import { Server } from 'node:net';
 import path from 'node:path';
+import { SqliteDatabase } from '../../src/database/sqlite.js';
+import { databaseDigest } from '../../src/migration/database-transfer.js';
 import { createStatePackage, restoreStatePackage, verifyStatePackage } from '../../src/migration/state-package.js';
 import { createIsolatedOfflineCopyCaptureSession } from '../../src/migration/capture-session.js';
 import { StorageRegistry, VirtualFileSystem } from '../../src/storage/index.js';
 import { MemoryStorageAdapter } from '../../src/storage/testing/memory-adapter.js';
+import { seedAllTables } from '../database/fixtures.js';
 import { createInstanceFixture } from './instance-fixture.js';
 
 const sha256Value = value => createHash('sha256').update(value).digest('hex');
@@ -123,16 +129,64 @@ async function resignCaptureIdentity(directory, manifest) {
   await resignManifest(directory, manifest);
 }
 
-function captureSession(fixture, instanceState, { recordedAt, postFailure } = {}) {
+function captureSession(fixture, instanceState, options = {}) {
+  const { recordedAt, postFailure } = options;
   return createIsolatedOfflineCopyCaptureSession({
     instanceState,
     ownerId: 'state-package-resilience-fixture',
     recordedAt,
     assertHeld: phase => {
       fixture.database.preflight();
-      if (phase === 'post' && postFailure !== undefined) throw postFailure;
+      if (phase === 'post' && Object.hasOwn(options, 'postFailure')) throw postFailure;
     },
   });
+}
+
+function observeLeaseRelease(identity, cleanupFailure) {
+  const digest = sha256Value(process.platform === 'win32' ? identity.toLowerCase() : identity);
+  const originalOpen = fs.promises.open, originalServerClose = Server.prototype.close;
+  const files = [], servers = [];
+  let closeFailed = false;
+  if (process.platform === 'darwin') {
+    fs.promises.open = async (...args) => {
+      const file = await originalOpen(...args), filename = String(args[0]);
+      if (path.dirname(filename) === '/Users/Shared/mediamanager-operation-leases'
+        && path.basename(filename).includes(digest)) {
+        const close = file.close.bind(file), stat = file.stat.bind(file);
+        files.push({ stat });
+        file.close = async () => {
+          await close();
+          closeFailed = true;
+          throw cleanupFailure;
+        };
+      }
+      return file;
+    };
+    syncBuiltinESMExports();
+  } else {
+    const endpoint = process.platform === 'win32' ? '\\\\.\\pipe\\mediamanager-operation-' + digest
+      : '\0mediamanager-operation-' + digest;
+    Server.prototype.close = function closeOwnedLease(callback) {
+      if (this.address() !== endpoint) return originalServerClose.call(this, callback);
+      servers.push(this);
+      return originalServerClose.call(this, error => {
+        if (error !== null && error !== undefined) return callback(error);
+        closeFailed = true;
+        callback(cleanupFailure);
+      });
+    };
+  }
+  return {
+    restore() {
+      fs.promises.open = originalOpen; syncBuiltinESMExports();
+      Server.prototype.close = originalServerClose;
+    },
+    async assertClosed() {
+      assert.equal(closeFailed, true, 'The controlled failure follows the actual OS resource close.');
+      for (const file of files) await assert.rejects(file.stat(), { code: 'EBADF' });
+      for (const server of servers) assert.equal(server.listening, false);
+    },
+  };
 }
 
 test('capture resumes the same generation after process restart with a new session receipt', async t => {
@@ -179,24 +233,166 @@ test('primitive capture failures always journal string errors and remain resumab
   const base = await fixture.packageOptions({ destination });
   const staging = captureStagingPath(destination);
   let generation;
-  for (const [index, thrown] of [['string', 'primitive hold failure'], ['null', null]].entries()) {
+  for (const [index, thrown] of ['primitive hold failure', false, 0, '', null, undefined].entries()) {
     const session = captureSession(fixture, base.instanceState, {
       recordedAt: `2026-10-04T03:1${index}:00.000Z`,
       postFailure: thrown,
     });
-    await assert.rejects(createStatePackage({ ...base, captureSession: session }), new RegExp(thrown === null ? 'null' : thrown, 'u'));
+    await assert.rejects(createStatePackage({ ...base, captureSession: session }), error => {
+      assert.ok(error instanceof Error);
+      assert.equal(Object.hasOwn(error, 'cause'), true);
+      assert.equal(error.cause, thrown);
+      return true;
+    });
     const progress = JSON.parse(await readFile(path.join(staging, 'progress.json'), 'utf8'));
     assert.equal(progress.stage, 'database-captured');
     assert.equal(typeof progress.lastError, 'string');
-    assert.match(progress.lastError, new RegExp(thrown === null ? 'null' : thrown, 'u'));
+    assert.ok(progress.lastError.includes(String(thrown)));
     generation ??= progress.generation;
     assert.equal(progress.generation, generation);
   }
 
   const recovered = await createStatePackage({ ...base, captureSession: captureSession(fixture, base.instanceState, {
-    recordedAt: '2026-10-04T03:12:00.000Z',
+    recordedAt: '2026-10-04T03:20:00.000Z',
   }) });
   assert.equal(recovered.generation, generation);
+});
+
+test('capture journals hostile diagnostic values without replacing their cause and resumes its generation', async t => {
+  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-hostile-error-' });
+  const destination = path.join(fixture.directory, 'package');
+  const base = await fixture.packageOptions({ destination });
+  const diagnosticFailure = new Error('Diagnostic conversion must not become the capture failure');
+  const hostileMessage = new Error('Original capture failure', { cause: false });
+  Object.defineProperty(hostileMessage, 'message', { get() { throw diagnosticFailure; } });
+  const reasons = [Object.create(null), { toString() { throw diagnosticFailure; } }, {
+    toString() { return {}; }, valueOf() { throw diagnosticFailure; },
+  }, hostileMessage];
+  let generation;
+  for (const reason of reasons) {
+    await assert.rejects(createStatePackage({ ...base,
+      captureSession: captureSession(fixture, base.instanceState, { postFailure: reason }),
+    }), error => {
+      if (reason instanceof Error) assert.equal(error, reason);
+      else { assert.ok(error instanceof Error); assert.equal(error.cause, reason); }
+      assert.notEqual(error, diagnosticFailure);
+      return true;
+    });
+    const progress = JSON.parse(await readFile(path.join(captureStagingPath(destination), 'progress.json'), 'utf8'));
+    assert.equal(progress.stage, 'database-captured');
+    assert.equal(typeof progress.lastError, 'string');
+    assert.ok(progress.lastError.length > 0);
+    assert.notEqual(progress.lastError, diagnosticFailure.message);
+    generation ??= progress.generation;
+    assert.equal(progress.generation, generation);
+  }
+  assert.equal(hostileMessage.cause, false);
+  const recovered = await createStatePackage(base);
+  assert.equal(recovered.generation, generation);
+  assert.equal(JSON.parse(await readFile(path.join(destination, 'progress.json'), 'utf8')).lastError, null);
+});
+
+test('capture retains a hostile failure from a real SQLite export read and recovers all table values', async t => {
+  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-export-error-' });
+  seedAllTables(fixture.database);
+  const destination = path.join(fixture.directory, 'package');
+  const base = await fixture.packageOptions({ destination });
+  const beforeBytes = await readFile(fixture.database.filename), before = await databaseDigest(fixture.database);
+  const reason = Object.assign(Object.create(null), { code: 'CAPTURE_EXPORT_READ_FAILED', status: 0, statusCode: false });
+  const exportStaging = path.join(captureStagingPath(destination), '.jellyfin.db.tmp.mediamanager-export-staging');
+  const originalRows = fixture.database.rows;
+  let readFailed = false;
+  fixture.database.rows = function rowsAfterActualRead(...args) {
+    const result = originalRows.apply(this, args);
+    // Source identity reads remain real and successful; only the actual export's owned staging arms this failure.
+    if (!readFailed && fs.existsSync(exportStaging)) { readFailed = true; throw reason; }
+    return result;
+  };
+  try {
+    await assert.rejects(createStatePackage(base), error => {
+      assert.ok(error instanceof Error);
+      assert.equal(error.cause, reason);
+      for (const field of ['code', 'status', 'statusCode']) assert.equal(error[field], reason[field]);
+      return true;
+    });
+  } finally { fixture.database.rows = originalRows; }
+  assert.equal(readFailed, true);
+  assert.equal(fixture.database.database.isTransaction, false);
+  assert.deepEqual(await readFile(fixture.database.filename), beforeBytes);
+  assert.deepEqual(await databaseDigest(fixture.database), before);
+  const progress = JSON.parse(await readFile(path.join(captureStagingPath(destination), 'progress.json'), 'utf8'));
+  assert.equal(progress.stage, 'files-captured');
+  assert.equal(typeof progress.lastError, 'string');
+  await assert.rejects(access(exportStaging), { code: 'ENOENT' });
+  const recovered = await createStatePackage(base);
+  assert.equal(recovered.generation, progress.generation);
+  const packaged = new SqliteDatabase(path.join(destination, 'jellyfin.db'), { readOnly: true });
+  try { assert.deepEqual(await databaseDigest(packaged), before); }
+  finally { packaged.close(); }
+});
+
+test('restore preserves each raw operation reason when its actual OS lease close also fails', async t => {
+  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-release-errors-' });
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  const publicFailure = Object.assign(new Error('Controlled restore operation', { cause: null }), {
+    code: 0, status: false, statusCode: '', errors: [false, 0, null, undefined],
+  });
+  const getterFailure = new Error('A public diagnostic getter must not become the failure');
+  const hostileFailure = new Error('Controlled restore with hostile public fields', { cause: 0 });
+  for (const field of ['code', 'status', 'statusCode']) {
+    Object.defineProperty(hostileFailure, field, { get() { throw getterFailure; } });
+  }
+  for (const [index, reason] of [false, 0, '', null, undefined, publicFailure, hostileFailure].entries()) {
+    const destination = path.join(fixture.directory, `restored-${index}`);
+    const physicalDestination = path.join(await realpath(fixture.directory), path.basename(destination));
+    const cleanupFailure = index === 0 ? 0 : new Error('Actual restore lease closed before reporting cleanup failure');
+    const observer = observeLeaseRelease(physicalDestination, cleanupFailure);
+    let progressed = false;
+    try {
+      await assert.rejects(restoreStatePackage(packageDirectory, destination, {
+        onProgress() { progressed = true; throw reason; },
+      }), error => {
+        assert.ok(error instanceof AggregateError);
+        assert.equal(Object.hasOwn(error, 'cause'), true);
+        assert.equal(error.cause, reason);
+        assert.deepEqual(error.errors, [reason, cleanupFailure]);
+        if (reason === publicFailure) {
+          for (const field of ['code', 'status', 'statusCode']) assert.equal(error[field], reason[field]);
+          assert.equal(reason.cause, null);
+          assert.deepEqual(reason.errors, [false, 0, null, undefined]);
+        }
+        return true;
+      });
+    } finally { observer.restore(); }
+    assert.equal(progressed, true);
+    await observer.assertClosed();
+    const recovered = await restoreStatePackage(packageDirectory, destination);
+    assert.equal(recovered.resumed, true);
+    assert.deepEqual(recovered.manifest, manifest);
+    const restored = new SqliteDatabase(path.join(destination, ...manifest.database.restorePath.split('/')), { readOnly: true });
+    try { assert.deepEqual(await databaseDigest(restored), manifest.database.tables); }
+    finally { restored.close(); }
+  }
+});
+
+test('a sole actual state-package lease close failure remains raw after publication and allows a new owner', async t => {
+  const fixture = await createInstanceFixture(t, { prefix: 'mediamanager-state-release-only-' });
+  const packageDirectory = path.join(fixture.directory, 'package');
+  const manifest = await createStatePackage(await fixture.packageOptions({ destination: packageDirectory }));
+  const destination = path.join(fixture.directory, 'restored');
+  const physicalDestination = path.join(await realpath(fixture.directory), path.basename(destination));
+  const observer = observeLeaseRelease(physicalDestination, false);
+  try {
+    await assert.rejects(restoreStatePackage(packageDirectory, destination), reason => {
+      assert.equal(reason, false);
+      return true;
+    });
+  } finally { observer.restore(); }
+  await observer.assertClosed();
+  const recovered = await restoreStatePackage(packageDirectory, destination);
+  assert.equal(recovered.alreadyRestored, true);
+  assert.deepEqual(recovered.manifest, manifest);
 });
 
 test('capture resumes exact remote asset temporaries left before and after atomic publication', async t => {

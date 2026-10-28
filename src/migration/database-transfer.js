@@ -27,6 +27,23 @@ export const postgresCommitOutcomeUnknownCode = 'POSTGRES_COMMIT_OUTCOME_UNKNOWN
 
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+function failureAggregate(reason, cleanupErrors, message) {
+  try { const value = reason?.message; if (typeof value === 'string') message = value; }
+  catch { /* A diagnostic getter must not replace an operation or cleanup failure. */ }
+  const aggregate = new AggregateError([reason, ...cleanupErrors], message, { cause: reason });
+  for (const name of ['code', 'status', 'statusCode']) {
+    try { const value = reason?.[name]; if (value !== undefined) aggregate[name] = value; }
+    catch { /* The original reason remains in cause and errors. */ }
+  }
+  return aggregate;
+}
+const nullCell = Object.freeze(['null']);
+const trueCell = Object.freeze(['boolean', true]);
+const falseCell = Object.freeze(['boolean', false]);
+const canonicalRow = (table, row) => JSON.stringify(table.columns.map(column => {
+  const value = row[column.name];
+  return value === null ? nullCell : value === true ? trueCell : value === false ? falseCell : canonicalCell(value);
+}));
 const sqliteCompanionSuffixes = ['', '-journal', '-wal', '-shm'];
 export {
   pinnedNativeDataMigrationProductVersion,
@@ -159,7 +176,7 @@ export async function databaseDigest(database, { batchSize = 128, signal, rowTra
       const batch = page.rows;
       for (const original of batch) {
         const row = rowTransform ? rowTransform(table.name, original) : original;
-        hash.update(`${JSON.stringify(table.columns.map((column) => canonicalCell(row[column.name])))}\n`);
+        hash.update(`${canonicalRow(table, row)}\n`);
       }
       count += batch.length;
       if (!page.more) break;
@@ -284,7 +301,7 @@ export async function createSqliteTarget(filename, envelope) {
       try { await removeOwnedFile(filename, identity, 'Migration target'); }
       catch (cleanupError) { cleanupErrors.push(cleanupError); }
     }
-    if (cleanupErrors.length) throw new AggregateError([error, ...cleanupErrors], error.message, { cause: error });
+    if (cleanupErrors.length) throw failureAggregate(error, cleanupErrors, 'SQLite target creation and cleanup failed');
     throw error;
   }
 }
@@ -471,12 +488,9 @@ export async function transferDatabase(source, target, options = {}) {
         const batch = page.rows;
         for (const row of batch) {
           for (const column of table.columns) encodeValue(column, row[column.name], target.dialect);
-          hash.update(`${JSON.stringify(table.columns.map((column) => canonicalCell(row[column.name])))}\n`);
+          hash.update(`${canonicalRow(table, row)}\n`);
         }
-        if (target.dialect === 'postgres') {
-          if (batch.length) await target.insertBatch(table.name, batch);
-        }
-        else for (const row of batch) await target.insert(table.name, row, { consumer: 'exchange' });
+        if (batch.length) await target.insertBatch(table.name, batch);
         count += batch.length;
         if (!page.more) break;
         after = page.after;
@@ -489,7 +503,7 @@ export async function transferDatabase(source, target, options = {}) {
     if (target.dialect === 'postgres' && transferMountContract) {
       await writePortableMountContract(target, transferMountContract);
     }
-    const actual = await databaseDigest(target, { batchSize });
+    const actual = await databaseDigest(target, { batchSize, signal });
     if (!same(actual, sourceTables)) throw new Error('Full field-by-field migration digest mismatch');
     if (target.dialect === 'sqlite' && target.database.prepare('PRAGMA foreign_key_check').all().length) throw new Error('Target foreign key violations');
     if (target.dialect === 'sqlite' && target.migrationFileIdentity) {
@@ -542,7 +556,7 @@ export async function transferDatabase(source, target, options = {}) {
       try { await releasePostgresSourceSnapshotLock(source); }
       catch (releaseError) { rollbackErrors.push(releaseError); }
     }
-    if (rollbackErrors.length) throw new AggregateError([error, ...rollbackErrors], error.message, { cause: error });
+    if (rollbackErrors.length) throw failureAggregate(error, rollbackErrors, 'Database transfer and rollback failed');
     throw error;
   } finally {
     if (source.dialect === 'postgres') source.inTransaction = false;
@@ -647,7 +661,7 @@ async function readStableSqliteFile(filename, options, expectedGeneration, lease
       try { target.close(); }
       catch (cleanupError) { cleanupErrors.push(cleanupError); }
     }
-    if (cleanupErrors.length) throw new AggregateError([error, ...cleanupErrors], error.message, { cause: error });
+    if (cleanupErrors.length) throw failureAggregate(error, cleanupErrors, 'SQLite export verification and cleanup failed');
     throw error;
   }
 }
@@ -738,7 +752,7 @@ async function verifyPublishedSqliteExport(source, filename, options, lease) {
       try { await releasePostgresSourceSnapshotLock(source); }
       catch (cleanupError) { cleanupErrors.push(cleanupError); }
     }
-    if (cleanupErrors.length) throw new AggregateError([error, ...cleanupErrors], error.message, { cause: error });
+    if (cleanupErrors.length) throw failureAggregate(error, cleanupErrors, 'Published SQLite verification and cleanup failed');
     throw error;
   } finally {
     if (source.dialect === 'postgres') source.inTransaction = false;
@@ -834,7 +848,7 @@ async function exportCurrentSqliteOwned(source, filename, staging, options, leas
         catch (cleanupError) { cleanupErrors.push(cleanupError); }
       }
     }
-    if (cleanupErrors.length) throw new AggregateError([error, ...cleanupErrors], error.message, { cause: error });
+    if (cleanupErrors.length) throw failureAggregate(error, cleanupErrors, 'SQLite export and cleanup failed');
     throw error;
   }
 }
@@ -844,17 +858,17 @@ export async function exportCurrentSqlite(source, filename, options = {}) {
   filename = path.resolve(filename);
   const staging = path.join(path.dirname(filename), `.${path.basename(filename)}.mediamanager-export-staging`);
   const lease = await acquireOperationLease(await prospectivePhysicalPath(filename), { label: 'SQLite export' });
-  let result, operationError;
+  let result, operationError, operationFailed = false;
   try {
     await assertSqliteSourceIsolation(source, filename, staging);
     lease.assertHeld();
     result = await exportCurrentSqliteOwned(source, filename, staging, options, lease);
-  } catch (error) { operationError = error; }
+  } catch (error) { operationFailed = true; operationError = error; }
   try { await lease.release(); }
   catch (releaseError) {
-    if (operationError) throw new AggregateError([operationError, releaseError], operationError.message, { cause: operationError });
+    if (operationFailed) throw failureAggregate(operationError, [releaseError], 'SQLite export and lease release failed');
     throw releaseError;
   }
-  if (operationError) throw operationError;
+  if (operationFailed) throw operationError;
   return result;
 }

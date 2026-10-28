@@ -1,4 +1,3 @@
-import { validationPath } from '../validation/paths.js';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { SqliteDatabase } from '../../src/database/sqlite.js';
@@ -26,15 +25,22 @@ function pathsOverlap(left, right) {
   return relative === '' || (!path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`));
 }
 
-const [sourceRoot, workRoot, destination, contractFilename] = process.argv.slice(2);
-if (!sourceRoot || !workRoot || !destination || !contractFilename || process.argv.length !== 6
+const [sourceRoot, workRoot, destination, contractFilename, baselineFilename] = process.argv.slice(2);
+if (!sourceRoot || !workRoot || !destination || !contractFilename || !baselineFilename || process.argv.length !== 7
   || !process.env.MEDIAMANAGER_TEST_POSTGRES) {
-  throw new Error('Usage: MEDIAMANAGER_TEST_POSTGRES=... node tools/database/prepare-reference-roundtrip.js STOPPED_INSTANCE NEW_WORK_DIRECTORY NEW_INSTANCE PORTABLE_MOUNT_CONTRACT_JSON (STOPPED_INSTANCE must already be offline)');
+  throw new Error('Usage: MEDIAMANAGER_TEST_POSTGRES=... node tools/database/prepare-reference-roundtrip.js STOPPED_INSTANCE NEW_WORK_DIRECTORY NEW_INSTANCE PORTABLE_MOUNT_CONTRACT_JSON BASELINE_MANIFEST_JSON (STOPPED_INSTANCE must already be offline)');
 }
 // Mount identity is evidence supplied by the caller. It must not be guessed
 // from current rows, an adjacent historical artifact, or storage credentials.
 const portableMountContract = (await readStableJsonFile(contractFilename,
   'Portable mount contract', canonicalPortableMountContract)).value;
+const baseline = (await readStableJsonFile(baselineFilename, 'Baseline manifest', value => {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || typeof value.head !== 'string' || !value.head
+    || typeof value.contentDigest !== 'string' || !/^[a-f0-9]{64}$/iu.test(value.contentDigest)) {
+    throw new TypeError('Baseline manifest requires its head and SHA-256 contentDigest.');
+  }
+  return { head: value.head, contentDigest: value.contentDigest };
+})).value;
 const sourceState = await discoverInstanceState({ instanceRoot: sourceRoot });
 const isolatedWorkRoot = await assertIsolatedInstanceOutput({ instanceState: sourceState, output: workRoot });
 const isolatedDestination = await assertIsolatedInstanceOutput({ instanceState: sourceState, output: destination });
@@ -87,10 +93,9 @@ try {
   }, portableMountContract });
   const marker = await postgres.insert('ActivityLogs', { DateCreated: '2026-09-26 12:34:56.1234567', ItemId: null, LogSeverity: 2, Name: 'Current Node PostgreSQL state', Overview: 'Created after importing the native Jellyfin instance.', RowVersion: 0n, ShortOverview: null, Type: 'System', UserId: '00000000-0000-0000-0000-000000000000' });
   await postgres.update('ActivityLogs', { Id: marker.Id }, { Name: 'Edited current Node PostgreSQL state', ShortOverview: '中文 / current state' }, { rowVersion: 0n });
-  const baselineManifest = JSON.parse(await readFile(validationPath('.test-input/baselines/jellyfin-current/manifest.json'), 'utf8'));
   const packagePath = path.join(isolatedWorkRoot, 'package');
   const manifest = await createStatePackage({ database: postgres, destination: packagePath, instanceState,
-    baseline: { head: baselineManifest.head, contentDigest: baselineManifest.contentDigest }, captureSession,
+    baseline, captureSession,
     extensionState: { validation: 'native-sqlite-to-postgres-current-state-to-native-sqlite', markerId: marker.Id } });
   await restoreStatePackage(packagePath, isolatedDestination);
   const restoredState = await discoverInstanceState({ instanceRoot: isolatedDestination });

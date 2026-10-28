@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { nativeModel } from '../../src/database/model.js';
-import { nativeTextCell, nativeTextBytes } from '../../src/database/native-text.js';
+import { NativeTextCell, nativeTextCell, nativeTextBytes } from '../../src/database/native-text.js';
 import {
   assertPinnedNativeEnvelope,
   pinnedNativeSqliteSchemaFingerprint,
@@ -18,7 +18,7 @@ import {
   pinnedNativeDataMigrationProductVersion,
   pinnedNativeSqliteMigrationHistory,
 } from '../../src/migration/database-transfer.js';
-import { createSqliteExportPathProjector } from '../../src/migration/sqlite-export-paths.js';
+import { createSqliteExportPathProjector, rewriteSqliteExportPaths } from '../../src/migration/sqlite-export-paths.js';
 import { fixtureIds, seedAllTables } from '../database/fixtures.js';
 
 const exchangeRow = (tableName, row) => {
@@ -41,6 +41,119 @@ const fixtureContract = {
 const nativeChannelId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 const nativeRemoteImageId = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb';
 
+test('SQLite path rewriting visits every complete row across multiple pages while preserving raw fields and keys', async () => {
+  const database = new SqliteDatabase(':memory:', { create: true });
+  try {
+    seedAllTables(database);
+    const template = database.rows('BaseItems', { limit: 1 })[0];
+    const rawData = ' { "Counter":9007199254740993, "Path":"unknown root path", "traceId":"保留\\u0000opaque" } ';
+    const additions = Array.from({ length: 257 }, (_, index) => {
+      const suffix = String(index + 1).padStart(12, '0');
+      return { ...template, Id: 'abdf0000-0000-0000-0000-' + suffix,
+        Path: 'Z:\\Bulk\\' + suffix + '.mkv', Data: rawData, RunTimeTicks: template.RunTimeTicks + BigInt(index) };
+    }).reverse();
+    for (let position = 0; position < additions.length; position += 128) database.insertBatch('BaseItems', additions.slice(position, position + 128));
+    const stream = database.rows('MediaStreamInfos', { limit: 1 })[0];
+    const streamAdditions = Array.from({ length: 129 }, (_, index) => ({ ...stream, StreamIndex: index + 2,
+      Path: 'Z:\\Streams\\' + (index + 2) + '.srt' })).reverse();
+    for (let position = 0; position < streamAdditions.length; position += 128) database.insertBatch('MediaStreamInfos', streamAdditions.slice(position, position + 128));
+    const before = database.rows('BaseItems', { consumer: 'exchange' });
+    const streamsBefore = database.rows('MediaStreamInfos', { consumer: 'exchange' });
+    const expectedPaths = new Map([[fixtureIds.BaseItems, '/srv/jellyfin/media/媒体/100% #.mkv'],
+      ...additions.map(row => [row.Id, '/srv/jellyfin/media/Bulk/' + row.Id.slice(-12) + '.mkv'])]);
+    const fingerprint = database.preflight().fingerprint;
+    await rewriteSqliteExportPaths(database, { sourceContract: fixtureContract, targetContract, batchSize: 128 });
+    const after = database.rows('BaseItems', { consumer: 'exchange' });
+    assert.equal(after.length, before.length);
+    const columns = nativeModel.tables.find(table => table.name === 'BaseItems').columns;
+    for (const [index, row] of after.entries()) for (const column of columns) {
+      const expected = column.name === 'Path' ? nativeTextCell(expectedPaths.get(before[index].Id.string())) : before[index][column.name];
+      if (column.type === 'TEXT' && expected !== null) assert.deepEqual(nativeTextBytes(row[column.name]), nativeTextBytes(expected), column.name);
+      else assert.deepEqual(row[column.name], expected, column.name);
+    }
+    const streamsAfter = database.rows('MediaStreamInfos', { consumer: 'exchange' });
+    assert.equal(streamsAfter.length, streamsBefore.length);
+    const streamColumns = nativeModel.tables.find(table => table.name === 'MediaStreamInfos').columns;
+    for (const [index, row] of streamsAfter.entries()) for (const column of streamColumns) {
+      const expected = column.name === 'Path' ? nativeTextCell(row.StreamIndex === stream.StreamIndex
+        ? '/srv/jellyfin/media/媒体/100% #.mkv' : '/srv/jellyfin/media/Streams/' + row.StreamIndex + '.srt') : streamsBefore[index][column.name];
+      if (column.type === 'TEXT' && expected !== null) assert.deepEqual(nativeTextBytes(row[column.name]), nativeTextBytes(expected), column.name);
+      else assert.deepEqual(row[column.name], expected, column.name);
+    }
+    assert.equal(database.preflight().fingerprint, fingerprint);
+  } finally { database.close(); }
+});
+
+test('observed native media scalar paths preserve HTTP(S) URI bytes and opaque Data through path projection', () => {
+  const types = ['MediaBrowser.Controller.Entities.Photo', 'MediaBrowser.Controller.Entities.Book',
+    'MediaBrowser.Controller.Entities.Audio.Audio', 'MediaBrowser.Controller.Entities.Movies.Movie',
+    'MediaBrowser.Controller.LiveTv.LiveTvChannel'];
+  for (const type of types) for (const value of [
+    'HtTp://Photos.Example.invalid:80/album/a%2Fb%20c.jpg?part=1&part=2&name=%E4%B8%AD#Preview',
+    'HtTpS://Photos.Example.invalid:443/album/a%2fb.jpg?signature=a%2Fb+z&empty=',
+  ]) {
+    const data = '{ "Path" : ' + JSON.stringify(value) + ', "Counter":9007199254740993, "Path":'
+      + JSON.stringify(value) + ',"CameraMake":"中文" }';
+    for (const target of [sourceContract, targetContract]) {
+      const projector = createSqliteExportPathProjector({ sourceContract, targetContract: target });
+      const row = exchangeRow('BaseItems', {
+        Type: type, ChannelId: null, Path: value, Data: data,
+      });
+      const projected = projector.projectRow('BaseItems', row);
+      assert.deepEqual(nativeTextBytes(projected.Path), Buffer.from(value));
+      assert.deepEqual(nativeTextBytes(projected.Data), Buffer.from(data));
+      assert.equal(projected.ChannelId, null);
+    }
+  }
+});
+
+test('native media HTTP policy retains exact scalar types and nested path restrictions', () => {
+  const projector = createSqliteExportPathProjector({ sourceContract, targetContract });
+  for (const [type, value, pattern] of [
+    ['MediaBrowser.Controller.Entities.Photo', 'https://user:secret@photos.invalid/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.Photo', 'webdav://photos.invalid/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.Photo', 's3:bucket/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.Photo', 'custom:opaque-photo', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.Photo', 'ftp://photos.invalid/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.Photo', '/vfs/movies/a.jpg', /VFS access path/u],
+    ['MediaBrowser.Controller.Entities.Folder', 'https://photos.invalid/a.jpg', /storage protocol URL/u],
+    ['ThirdParty.Entities.Photo', 'https://photos.invalid/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.Entities.PhotoAlbum', 'https://photos.invalid/a.jpg', /storage protocol URL/u],
+    ['MediaBrowser.Controller.LiveTv.LiveTvChannel', 'https://user:secret@channels.invalid/live.ts', /storage protocol URL/u],
+    ['MediaBrowser.Controller.LiveTv.LiveTvChannel', 'ftp://channels.invalid/live.ts', /storage protocol URL/u],
+  ]) {
+    const row = exchangeRow('BaseItems', {
+      Type: type, ChannelId: null, Path: value, Data: null,
+    });
+    assert.throws(() => projector.projectRow('BaseItems', row), pattern, `${type} Path: ${value}`);
+  }
+  for (const data of [
+    { AdditionalParts: ['https://photos.invalid/part.jpg'] },
+    { LinkedAlternateVersions: [{ Path: 'https://photos.invalid/alternate.jpg' }] },
+  ]) assert.throws(() => projector.projectRow('BaseItems', exchangeRow('BaseItems', {
+    Type: 'MediaBrowser.Controller.Entities.Photo', ChannelId: null,
+    Path: 'https://photos.invalid/a.jpg', Data: JSON.stringify(data),
+  })), /storage protocol URL/u);
+});
+
+test('unknown root Data.Path values remain raw for Photo, Movie and unknown item types', () => {
+  // BaseItem.Path is JsonIgnore and Photo does not override it. A root Data
+  // member with that name is opaque, unlike the typed nested media paths.
+  const projector = createSqliteExportPathProjector({ sourceContract, targetContract });
+  for (const type of ['MediaBrowser.Controller.Entities.Photo', 'MediaBrowser.Controller.Entities.Movies.Movie',
+    'ThirdParty.Entities.Unknown']) {
+    for (const data of [
+      '{ "Path":"https://user:secret@photos.invalid/a.jpg", "Path":"custom:opaque-provider", "Counter":9007199254740993 }',
+      '{"Path":{"Path":"/vfs/movies/provider.jpg"},"Provider":"中文"}',
+    ]) {
+      const row = exchangeRow('BaseItems', { Type: type, ChannelId: null, Path: 'Z:\\Media\\local.jpg', Data: data });
+      const projected = projector.projectRow('BaseItems', row);
+      assert.equal(projected.Path.string(), '/srv/jellyfin/media/local.jpg');
+      assert.deepEqual(nativeTextBytes(projected.Data), Buffer.from(data));
+    }
+  }
+});
+
 for (const type of ['CollectionFolder', 'AggregateFolder']) test(`${type} export retains its configuration location and retargets only its media locations`, () => {
   const programData = path.resolve('export-owner-state', 'data');
   const metadata = path.resolve('export-owner-state', 'metadata');
@@ -50,7 +163,7 @@ for (const type of ['CollectionFolder', 'AggregateFolder']) test(`${type} export
     [path.resolve('export-owner-state', 'root', 'default', 'Library'),
       path.resolve('export-owner-state', 'root', 'default', 'Library'),
       path.resolve('export-owner-state', 'root', 'default', 'Library')],
-    ['%AppDataPath%' + path.sep + 'collections', path.join(programData, 'collections'), '%AppDataPath%' + path.sep + 'collections'],
+    ['%AppDataPath%' + path.sep + 'collections', path.join(programData, 'data', 'collections'), '%AppDataPath%' + path.sep + 'collections'],
   ]) {
     const data = '{"PhysicalLocationsList":[' + JSON.stringify(location) + ',"Z:\\\\Media\\\\Films"],"Counter":9007199254740993}';
     const row = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.' + type, Path: ownerPath, Data: data });
@@ -59,6 +172,39 @@ for (const type of ['CollectionFolder', 'AggregateFolder']) test(`${type} export
     assert.deepEqual(JSON.parse(result.Data.string()).PhysicalLocationsList, [expected, '/srv/jellyfin/media/Films']);
     assert.match(result.Data.string(), /"Counter":9007199254740993/u);
   }
+});
+
+test('native instance token roots distinguish DataPath from ProgramDataPath and rebind only declared instance roles', () => {
+  const source = { programData: path.resolve('original-instance', 'data'), metadata: path.resolve('external-native-metadata') };
+  const target = { programData: path.resolve('restored-instance', 'data'), metadata: path.resolve('restored-instance', 'metadata-external') };
+  const sourceOwner = path.join(source.programData, 'root', 'default', 'Library');
+  const targetOwner = path.join(target.programData, 'root', 'default', 'Library');
+  const data = '{ "PhysicalLocationsList" : [' + JSON.stringify(sourceOwner)
+    + ',"Z:\\\\Media\\\\Films"], "Unknown" : { "Path" : ' + JSON.stringify(sourceOwner) + ', "Counter":9223372036854775807 } }';
+  const row = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Path: sourceOwner, Data: data });
+  const exportProjector = createSqliteExportPathProjector({ sourceContract, targetContract: sourceContract, instanceStatePaths: source });
+  assert.strictEqual(exportProjector.projectRow('BaseItems', row), row);
+  const restoreProjector = createSqliteExportPathProjector({ sourceContract, targetContract: sourceContract,
+    instanceStatePaths: source, targetInstanceStatePaths: target });
+  const restored = restoreProjector.projectRow('BaseItems', row);
+  assert.equal(restored.Path.string(), targetOwner);
+  assert.equal(restored.Data.string(), data.replace(JSON.stringify(sourceOwner), JSON.stringify(targetOwner)));
+  assert.match(restored.Data.string(), /"Counter":9223372036854775807/u);
+  for (const [filename, expected] of [
+    [path.join(source.programData, 'data', 'collections'), '%AppDataPath%' + path.sep + 'collections'],
+    [path.join(source.metadata, 'views', 'one'), '%MetadataPath%' + path.sep + 'views' + path.sep + 'one'],
+  ]) {
+    const typed = exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.UserView', Path: filename, Data: null });
+    assert.equal(exportProjector.projectRow('BaseItems', typed).Path.string(), expected);
+    assert.equal(restoreProjector.projectRow('BaseItems', typed).Path.string(), expected);
+  }
+  const opaque = exchangeRow('BaseItems', { Type: 'Unknown.Provider.Folder', Path: 'Z:\\Media\\unknown', Data: data.replace('PhysicalLocationsList', 'UnknownLocations') });
+  assert.strictEqual(restoreProjector.projectRow('BaseItems', opaque), opaque);
+  assert.throws(() => restoreProjector.projectRow('BaseItems', { ...opaque, Path: nativeTextCell(sourceOwner) }),
+    /outside every portable mount/u, 'Unknown types do not gain instance-owned direct path permission.');
+  const invalid = { ...exchangeRow('BaseItems', { Type: 'MediaBrowser.Controller.Entities.CollectionFolder', Path: sourceOwner, Data: null }),
+    Data: new NativeTextCell(Buffer.from([0xff, 0x80, 0])) };
+  assert.deepEqual(nativeTextBytes(restoreProjector.projectRow('BaseItems', invalid).Data), Buffer.from([0xff, 0x80, 0]));
 });
 
 for (const [name, type, property, location] of [
@@ -270,6 +416,41 @@ test('SQLite export preserves native internal repository paths and HTTP image/ch
   } finally { returned?.close(); source.close(); await rm(directory, { recursive: true, force: true }); }
 });
 
+test('SQLite export retains Photo HTTP scalar paths and raw Data when filesystem mounts are retargeted', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-export-photo-http-'));
+  const source = new SqliteDatabase(':memory:', { create: true });
+  const filename = path.join(directory, 'returned.db');
+  let returned;
+  try {
+    seedAllTables(source);
+    const photoPath = 'HtTpS://Photos.Example.invalid:443/album/a%2fb.jpg?part=1&part=2&token=a%2Fb+z';
+    const data = '{"Path":' + JSON.stringify(photoPath) + ', "Counter":9007199254740993,"CameraMake":"中文"}';
+    source.update('BaseItems', { Id: fixtureIds.BaseItems }, {
+      Type: 'MediaBrowser.Controller.Entities.Photo', ChannelId: null, Path: photoPath, Data: data,
+    });
+    const chapter = source.rows('Chapters')[0];
+    source.update('Chapters', { ItemId: chapter.ItemId, ChapterIndex: chapter.ChapterIndex }, {
+      ImagePath: 'Z:\\Media\\chapter.jpg',
+    });
+    const image = source.rows('BaseItemImageInfos')[0];
+    source.update('BaseItemImageInfos', { Id: image.Id }, { Path: 'Z:\\Media\\poster.jpg' });
+    await exportCurrentSqlite(source, filename, {
+      testOnlyAllowSyntheticEnvelope: true,
+      portableMountContract: sourceContract,
+      targetPortableMountContract: targetContract,
+    });
+    returned = new SqliteDatabase(filename, { readOnly: true });
+    for (const database of [source, returned]) {
+      const row = database.rows('BaseItems', { where: { Id: fixtureIds.BaseItems } })[0];
+      assert.equal(row.Path, photoPath);
+      assert.equal(row.Data, data);
+      assert.equal(row.ChannelId, null);
+    }
+    assert.equal(returned.rows('BaseItemImageInfos', { where: { Id: image.Id } })[0].Path,
+      '/srv/jellyfin/media/poster.jpg');
+  } finally { returned?.close(); source.close(); await rm(directory, { recursive: true, force: true }); }
+});
+
 test('SQLite export keeps instance-state paths outside the portable media mount contract', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-export-instance-state-'));
   const source = new SqliteDatabase(':memory:', { create: true });
@@ -425,6 +606,7 @@ for (const [name, leakedPath, message] of [
   try {
     seedAllTables(source);
     source.update('BaseItems', { Id: fixtureIds.BaseItems }, {
+      Type: 'MediaBrowser.Controller.Entities.Folder',
       Path: leakedPath,
       ChannelId: '00000000-0000-0000-0000-000000000000',
     });

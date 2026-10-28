@@ -13,6 +13,7 @@ const originalTextSubtitleCodecs = {
   srt: new Set(['srt', 'subrip']),
   // FFmpeg reports SSA files as the ASS codec; Jellyfin selects the parser from the external filename.
   ssa: new Set(['ass', 'ssa']),
+  smi: new Set(['sami']),
   vtt: new Set(['vtt', 'webvtt']),
 };
 const fail = message => { throw new TypeError(`Invalid media access plan: ${message}`); };
@@ -257,7 +258,7 @@ export async function verifyNativeMediaAccess(plan, { database, baseUrl, accessT
   }
   return { checkedAt: new Date().toISOString(), origin: base.origin, scope: plan.scope, declaration, server, items, requests: records,
     declaredItemsVerified: plan.items.length > 0 && server.verified && items.every(item => item.verified), completeLibraryVerified: false,
-    limitations: ['Only explicitly declared items, original-byte ASS, SSA, SRT/SubRip or VTT/WebVTT text subtitle routes, and declared native NFO files were checked.',
+    limitations: ['Only explicitly declared items, original-byte ASS, SSA, SAMI .smi, SRT/SubRip or VTT/WebVTT text subtitle routes, and declared native NFO files were checked.',
       'Graphical subtitles and subtitle conversion were not checked.', 'Endpoint identity is self-reported; binary provenance must be checked separately.',
       'NFO byte access is a direct native filesystem observation; parsed metadata must be checked through a real Jellyfin refresh.',
       'DirectoryContents uses the native filesystem; this does not run the full library scanner.', 'No write, deletion, decoding or client playback verification.'] };

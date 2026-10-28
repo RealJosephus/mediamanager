@@ -101,6 +101,7 @@ export function validateRemoteAssetManifest(files) {
 
 async function digestRemote(vfs, virtualPath, version, signal, { maxBytes, expectedBytes } = {}) {
   const handle = await vfs.openRead(virtualPath, { ifMatch: version, signal });
+  let failed = false, primary;
   try {
     if (handle.version !== version) throw new Error('Remote asset did not honor its version precondition.');
     const digest = createHash('sha256');
@@ -113,7 +114,14 @@ async function digestRemote(vfs, virtualPath, version, signal, { maxBytes, expec
     if (handle.contentLength != null && handle.contentLength !== bytes) throw new StorageError('invalid-response', 'Remote asset read was truncated.');
     if (expectedBytes != null && bytes !== expectedBytes) throw new Error('Remote state asset size differs from its bound generation.');
     return { sha256: digest.digest('hex'), bytes };
-  } finally { await handle.close(); }
+  } catch (error) { failed = true; primary = error; throw error; }
+  finally {
+    try { await handle.close(); }
+    catch (error) {
+      if (failed) throw new AggregateError([primary, error], 'Remote asset read and cleanup failed.', { cause: primary });
+      throw error;
+    }
+  }
 }
 
 async function readBoundLocalAsset(filesRootBinding, file, maxAssetBytes) {
@@ -129,6 +137,7 @@ async function readBoundLocalAsset(filesRootBinding, file, maxAssetBytes) {
     throw new Error('Remote state asset path escapes the package files directory.');
   }
   const handle = await open(filename, fsConstants.O_RDONLY | (fsConstants.O_NOFOLLOW ?? 0));
+  let failed = false, primary;
   try {
     const before = await handle.stat({ bigint: true });
     const rebound = await lstat(filename, { bigint: true });
@@ -154,7 +163,14 @@ async function readBoundLocalAsset(filesRootBinding, file, maxAssetBytes) {
     const payloadSha256 = createHash('sha256').update(payload).digest('hex');
     if (payloadSha256 !== file.sha256) throw new Error('Remote state asset payload checksum mismatch.');
     return payload;
-  } finally { await handle.close(); }
+  } catch (error) { failed = true; primary = error; throw error; }
+  finally {
+    try { await handle.close(); }
+    catch (error) {
+      if (failed) throw new AggregateError([primary, error], 'State asset payload read and cleanup failed.', { cause: primary });
+      throw error;
+    }
+  }
 }
 
 /** Resolve and bind the current versions of explicit remote sidecars before package capture starts. */
@@ -235,7 +251,7 @@ export async function captureRemoteAssets(options) {
     try {
       try { handle = await vfs.openRead(asset.virtualPath, { ifMatch: asset.version, signal }); }
       catch (error) {
-        if (error.code === 'version-changed') throw new Error('Remote state changed during generation capture.', { cause: error });
+        if (error?.code === 'version-changed') throw new Error('Remote state changed during generation capture.', { cause: error });
         throw error;
       }
       if (handle.version !== asset.version) throw new Error('Remote asset did not honor its version precondition.');
@@ -250,7 +266,8 @@ export async function captureRemoteAssets(options) {
     } catch (error) {
       thrown = normalizeThrown(error, 'Remote asset capture failed');
     } finally {
-      const closed = await Promise.allSettled([output.close(), handle?.close()]);
+      const closed = await Promise.allSettled([() => output.close(), () => handle?.close()]
+        .map(close => Promise.resolve().then(close)));
       const closeErrors = closed.filter(item => item.status === 'rejected').map(item => normalizeThrown(item.reason, 'Remote asset capture close failed'));
       if (closeErrors.length) thrown = thrown
         ? new AggregateError([thrown, ...closeErrors], 'Remote asset capture and cleanup failed', { cause: thrown })
@@ -353,7 +370,7 @@ export async function restoreRemoteAssets(options) {
     if (!capabilities.create || !capabilities.replace || !capabilities.conditionalWrite || !capabilities.atomicReplace || !capabilities.reliableVersion) throw new Error('Remote restore requires create, atomic conditional replace and reliable versions.');
     let current;
     try { current = await vfs.stat(target, { signal }); }
-    catch (error) { if (error.code !== 'not-found') throw error; }
+    catch (error) { if (error?.code !== 'not-found') throw error; }
     if (current) {
       if (current.kind !== 'file' || typeof current.version !== 'string' || !current.version) throw new Error('Remote restore target is not a versioned file.');
       if (current.size != null && current.size !== BigInt(file.bytes)) throw new Error('Remote restore refuses to overwrite different target content.');
@@ -400,6 +417,14 @@ export async function restoreRemoteAssets(options) {
       if (digest.sha256 !== file.sha256 || digest.bytes !== BigInt(file.bytes)) throw new Error('Remote restore verification failed.');
       progress.completed.push({ assetId: file.remote.assetId, target, version: current.version, sha256: digest.sha256, reused: existed });
     }
+    for (const completed of progress.completed) {
+      checkAbort(signal);
+      const current = await vfs.stat(completed.target, { signal });
+      if (current.kind !== 'file' || current.version !== completed.version) {
+        throw new Error('Remote restore target changed before completion.');
+      }
+    }
+    checkAbort(signal);
     progress.complete = true;
     return progress;
   } catch (thrown) {

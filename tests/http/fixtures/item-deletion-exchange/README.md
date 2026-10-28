@@ -14,6 +14,22 @@ identities. HTTP metadata updates, image uploads and favorite requests establish
 the business rows and assets. All scheduled triggers are disabled in this private
 instance before the explicit scan.
 
+Before the Favorite writes, the test opens a real authenticated Native WebSocket
+using the copied producer's actual token, user and persisted device identity.
+A real KeepAlive response establishes that the socket can consume messages. The
+report retains every received and sent frame in full, including its original
+bytes, parsed message and hash. Each successful Photo Favorite write must then
+be observed in a subsequent `UserDataChanged` payload for that item and user
+with the returned Favorite value. One frame may contain several writes, and
+several frames may complete them. Unrelated messages and diagnostics are retained
+without count, ordering or absence requirements.
+
+The socket completes its actual close handshake before Native shutdown. This
+barrier waits for the public consequences of this fixture's own writes; it does
+not sleep for a notifier interval or inspect its private timer. The resulting
+session and activity side effects remain in the complete SQLite snapshot and
+subsequent PostgreSQL exchange. No rows are removed to hide them.
+
 After Native has stopped, preparation adds one declared unknown `Data` member to
 the fourth photo and one unrelated binary file under the private instance. These
 are explicit opaque preservation inputs, not Native-produced business results.

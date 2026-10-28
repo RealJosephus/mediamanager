@@ -16,6 +16,7 @@ test('same-run native supply preserves a stopped empty instance and a separate c
   const { initialization, seed } = supplied;
   assert.equal(initialization.credentialsRecorded, false);
   assert.equal(initialization.build.runtimeUnchanged, true);
+  assert.equal(supplied.build.runtimeIdentitySha256, initialization.build.runtimeIdentitySha256);
   assert.equal(initialization.process.exitCode, 0);
   assert.equal(initialization.process.stopped, true);
   assert.deepEqual(initialization.executables.map(value => value.name), ['dotnet', 'ffmpeg', 'ffprobe']);

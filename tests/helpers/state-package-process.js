@@ -27,14 +27,23 @@ try {
     const manifest = await createStatePackage({ database, instanceState, captureSession, baseline, destination: packageDirectory });
     await notify({ event: 'complete', generation: manifest.generation, pid: process.pid });
   } else {
-    assert.ok(mode === 'restore' || mode === 'restore-interrupted');
+    assert.ok(['restore', 'restore-interrupted', 'restore-preparation-interrupted'].includes(mode));
+    let latestPreparation;
     const result = await restoreStatePackage(packageDirectory, destination, {
+      onPreparation: async preparation => {
+        latestPreparation = preparation;
+        if (mode === 'restore-preparation-interrupted' && preparation.stage === 'database-opened') {
+          await pause({ event: 'restore-preparation-durable', pid: process.pid, preparation });
+        }
+      },
       onProgress: async progress => {
-        if (mode === 'restore-interrupted' && progress.completed === 1) await pause({ event: 'restore-durable', pid: process.pid, progress });
+        if (mode === 'restore-interrupted' && progress.completed === 1) await pause({ event: 'restore-durable', pid: process.pid, progress,
+          preparation: latestPreparation });
       }
     });
     await notify({ event: 'complete', resumed: result.resumed, alreadyRestored: result.alreadyRestored,
-      reusedFiles: result.reusedFiles, generation: result.manifest.generation, pid: process.pid });
+      reusedFiles: result.reusedFiles, generation: result.manifest.generation, pid: process.pid,
+      databaseProjection: result.databaseProjection, preparationRecovery: result.preparationRecovery });
   }
 } catch (error) {
   console.error(error.stack); process.exitCode = 1;

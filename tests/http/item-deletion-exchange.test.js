@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { addAbortListener, once } from 'node:events';
 import { copyFile, cp, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { WebSocket } from 'ws';
+import { parseLosslessJson } from '../../src/core/json.js';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
@@ -13,6 +16,7 @@ import { SqliteDatabase } from '../../src/database/sqlite.js';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { transferDatabase, exportCurrentSqlite } from '../../src/migration/database-transfer.js';
 import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { errorObservation } from '../helpers/error-observation.js';
 import { addOpaquePreparation, assertAssets, assertRemoved, assertUserDataRetention, completeSnapshot, createMedia, databaseFilename,
   idKey, imageFiles, input, inputBytes, installStoppedExport, itemSnapshot, photoBytes,
   portAvailable, removeSyntheticPreparation, responseProjection, sha, stoppedDatabase, unusedPort,
@@ -24,7 +28,7 @@ const enabled = process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MED
 
 test('Item DELETE committed prefix survives complete SQLite export, actual Native continuation and fresh PostgreSQL reimport', {
   skip: !enabled, timeout: 720000,
-}, async () => {
+}, async t => {
   const destination = path.join(validationOutputRoot(), 'item-deletion-exchange-' + randomUUID());
   const output = await createPrivateFilterOutput(destination);
   output.addSecret(process.env.MEDIAMANAGER_TEST_POSTGRES);
@@ -37,7 +41,7 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
     completeLibraryVerified: false, fullInstanceVerified: false,
     scope: 'Four actual scanned Photo items; real Native and Node HTTP deletion with a committed batch prefix, 31 business tables and both EF tables, unchanged unknown Data and declared assets, actual Native edit and deletion, fresh-PG reimport. No full-library, arbitrary Folder/owned/version, state-package or production-scale claim.' };
   let current, native, runtime, database, returnedDatabase, sqlite, failure, safeToRemove = true;
-  let nodeOrigin, token, ids, media, opaque, images, initialSurvivors, initialUserData;
+  let nodeOrigin, token, ids, media, opaque, images, initialSurvivors, initialUserData, nativeDevice, preparationClient;
   const request = async (origin, route, { method = 'GET', body, raw, contentType } = {}) => {
     const response = await fetch(origin + route, { method, signal: AbortSignal.timeout(30000),
       headers: { Authorization: `MediaBrowser Token="${token}"`, Accept: 'application/json',
@@ -51,6 +55,75 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
     report.requests.push({ origin, route, method, ...(body === undefined ? {} : { body }),
       ...(raw === undefined ? {} : { rawBytes: Buffer.byteLength(raw), rawSha256: sha(raw) }), response: result });
     return result;
+  };
+  const connectPreparationSocket = async () => {
+    const device = Object.fromEntries(['UserId', 'DeviceId', 'AppName', 'AppVersion', 'DeviceName'].map(key => [key, nativeDevice[key]]));
+    const authorization = 'MediaBrowser ' + Object.entries({ Client: device.AppName, Device: device.DeviceName,
+      DeviceId: device.DeviceId, Version: device.AppVersion, Token: token }).map(([key, value]) => key + '=' + JSON.stringify(value)).join(', ');
+    const socket = new WebSocket(nativeOrigin.replace('http:', 'ws:') + '/socket?'
+      + new URLSearchParams({ ApiKey: token, DeviceId: device.DeviceId }), { headers: { Authorization: authorization } });
+    const record = report.nativePreparationSocket = { device, connection: { origin: nativeOrigin, path: '/socket',
+      queryKeys: ['ApiKey', 'DeviceId'], accessTokenSha256: sha(Buffer.from(token)) },
+      frames: [], sentFrames: [], errors: [], favoriteWrites: [], closed: false,
+      scope: 'Actual authenticated Native WebSocket; complete frames and semantic Favorite notifications for this fixture\'s own writes. Batches, ordering of unrelated frames and diagnostic counts are not acceptance conditions.' };
+    const client = preparationClient = { socket, record, failed: false, reason: undefined }, waiters = new Set();
+    const notify = () => { for (const check of [...waiters]) check(); };
+    const fail = reason => { if (!client.failed) { client.failed = true; client.reason = reason; } record.errors.push(errorObservation(reason)); notify(); };
+    const send = message => {
+      const body = JSON.stringify(message), bytes = Buffer.from(body);
+      record.sentFrames.push({ body, base64: bytes.toString('base64'), sha256: sha(bytes), sentAt: new Date().toISOString() });
+      socket.send(body, error => { if (error) fail(error); });
+    };
+    client.closed = new Promise(resolve => socket.once('close', (code, reason) => {
+      record.closed = true; record.close = { code, reason: reason.toString('utf8'), base64: reason.toString('base64'), at: new Date().toISOString() };
+      resolve(); notify();
+    }));
+    socket.on('error', fail);
+    socket.on('message', (bytes, isBinary) => {
+      const raw = Buffer.from(bytes), frame = { body: raw.toString('utf8'), base64: raw.toString('base64'), sha256: sha(raw),
+        isBinary, receivedAt: new Date().toISOString() };
+      record.frames.push(frame);
+      try { frame.message = parseLosslessJson(frame.body); } catch (error) { frame.parseError = errorObservation(error); }
+      if (frame.message?.MessageType === 'ForceKeepAlive' && socket.readyState === WebSocket.OPEN) {
+        try { send({ MessageType: 'KeepAlive' }); } catch (error) { fail(error); }
+      }
+      notify();
+    });
+    client.waitFor = (predicate, label) => {
+      const completion = Promise.withResolvers(); let settled = false;
+      const finish = (failed, value) => { if (settled) return; settled = true; if (failed) completion.reject(value); else completion.resolve(value); };
+      const check = () => {
+        try {
+          t.signal.throwIfAborted();
+          if (client.failed) { finish(true, client.reason); return; }
+          const value = predicate();
+          if (value) finish(false, value);
+          else if (record.closed) finish(true, new Error('The authenticated Native WebSocket closed before ' + label));
+        } catch (error) { finish(true, error); }
+      };
+      waiters.add(check);
+      const aborted = addAbortListener(t.signal, check);
+      const timer = setTimeout(() => finish(true, new Error('The authenticated Native WebSocket did not deliver ' + label)), 30000);
+      check();
+      return completion.promise.finally(() => { clearTimeout(timer); aborted[Symbol.dispose](); waiters.delete(check); });
+    };
+    await once(socket, 'open', { signal: AbortSignal.any([t.signal, AbortSignal.timeout(30000)]) });
+    record.openedAt = new Date().toISOString();
+    send({ MessageType: 'KeepAlive' });
+    await client.waitFor(() => record.frames.find(frame => frame.message?.MessageType === 'KeepAlive'), 'its real KeepAlive response');
+    return client;
+  };
+  const closePreparationSocket = async () => {
+    if (!preparationClient) return;
+    const { socket, record } = preparationClient;
+    if (socket.readyState !== WebSocket.CLOSED) {
+      const timer = setTimeout(() => { record.terminatedAfterCloseDeadline = true; socket.terminate(); }, 10000);
+      timer.unref();
+      try { socket.close(1000, 'Favorite notifications received'); await preparationClient.closed; }
+      finally { clearTimeout(timer); }
+    }
+    if (preparationClient.failed) throw preparationClient.reason;
+    assert.equal(record.close.code, 1000, 'The authenticated Native WebSocket must complete its real close handshake.');
   };
   const stopNative = async label => {
     if (!native) return;
@@ -134,10 +207,20 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
       'Emby.Server.Implementations/Library/LibraryManager.cs', 'MediaBrowser.Controller/Entities/Photo.cs',
       'MediaBrowser.Model/Entities/CollectionTypeOptions.cs',
       'MediaBrowser.Controller/Entities/BaseItem.cs', 'Jellyfin.Server.Implementations/Item/ItemPersistenceService.cs',
-      'Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs', 'Jellyfin.Api/Controllers/ImageController.cs']);
+      'Emby.Server.Implementations/Library/Resolvers/PhotoResolver.cs', 'Jellyfin.Api/Controllers/ImageController.cs',
+      'Emby.Server.Implementations/EntryPoints/UserDataChangeNotifier.cs',
+      'Emby.Server.Implementations/Session/SessionWebSocketListener.cs',
+      'Emby.Server.Implementations/HttpServer/WebSocketManager.cs']);
     await cp(current.sourceRoot, instanceRoot, { recursive: true, force: false, errorOnExist: true });
     await current.prepareClone(instanceRoot, nativePort);
     report.syntheticPreparation = removeSyntheticPreparation(instanceRoot);
+    await stoppedDatabase(databaseFilename(instanceRoot));
+    const deviceDatabase = new SqliteDatabase(databaseFilename(instanceRoot), { readOnly: true, requireMigrationHistory: true });
+    try {
+      nativeDevice = deviceDatabase.rows('Devices', { where: { AccessToken: token } })[0];
+      assert.ok(nativeDevice?.DeviceId, 'The copied producer must supply the device bound to its actual access token.');
+      assert.equal(idKey(nativeDevice.UserId), idKey(current.userId));
+    } finally { deviceDatabase.close(); }
     media = await createMedia(root);
     native = current.start({ referenceRoot: instanceRoot, outputRoot: root, label: 'native-preparation', origin: nativeOrigin });
     await native.ready();
@@ -185,6 +268,7 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
     });
     ids = photos.map(photo => idKey(photo.Id)); media.ids = ids;
     assert.equal(new Set(ids).size, input.photos.length); report.identities = photos;
+    const client = await connectPreparationSocket(), favorites = [];
     for (const photo of photos) {
       const detail = await request(nativeOrigin, '/Items/' + photo.Id); assert.equal(detail.status, 200);
       assert.equal((await request(nativeOrigin, '/Items/' + photo.Id, { method: 'POST', body: { ...detail.bodyJson,
@@ -192,10 +276,27 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
         LockData: true, LockedFields: input.lockedFields } })).status, 204);
       assert.equal((await request(nativeOrigin, '/Items/' + photo.Id + '/Images/Banner', { method: 'POST',
         contentType: 'image/png', raw: photoBytes.toString('base64') })).status, 204);
-      assert.equal((await request(nativeOrigin, '/UserFavoriteItems/' + photo.Id, { method: 'POST' })).status, 200);
+      const frameBoundary = client.record.frames.length, requestedAt = new Date().toISOString();
+      const favorite = await request(nativeOrigin, '/UserFavoriteItems/' + photo.Id, { method: 'POST' });
+      assert.equal(favorite.status, 200); assert.equal(favorite.bodyJson.IsFavorite, true);
+      const expected = { itemId: idKey(photo.Id), userId: idKey(current.userId), IsFavorite: favorite.bodyJson.IsFavorite,
+        requestedAt, response: favorite.bodyJson };
+      favorites.push({ ...expected, frameBoundary }); client.record.favoriteWrites.push(expected);
     }
+    client.record.matchedFavorites = await client.waitFor(() => {
+      const matches = favorites.map(expected => {
+        const frame = client.record.frames.slice(expected.frameBoundary).find(frame => frame.message?.MessageType === 'UserDataChanged'
+          && idKey(frame.message.Data?.UserId) === expected.userId
+          && Array.isArray(frame.message.Data?.UserDataList)
+          && frame.message.Data.UserDataList.some(value => idKey(value?.ItemId) === expected.itemId && value?.IsFavorite === expected.IsFavorite));
+        return frame ? { itemId: expected.itemId, userId: expected.userId, frameSha256: frame.sha256, receivedAt: frame.receivedAt,
+          userData: frame.message.Data.UserDataList.find(value => idKey(value?.ItemId) === expected.itemId && value?.IsFavorite === expected.IsFavorite) } : null;
+      });
+      return matches.every(Boolean) ? matches : undefined;
+    }, 'the Favorite result for every Photo/UserId it actually wrote');
     await idleTasks(nativeOrigin);
     report.nativeInitialReads = await readItems(nativeOrigin, []);
+    await closePreparationSocket();
     await stopNative('native-preparation');
     opaque = await addOpaquePreparation(instanceRoot, ids[3]); report.opaquePreparation = opaque;
     const sourceFilename = path.join(root, 'initial-native.db');
@@ -293,13 +394,13 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
     assertOpaque(await itemSnapshot(returnedDatabase, [ids[3]]));
     report.freshNodeAssets = await assertAssets(media, images, opaque, [0, 1]);
     await stopNode('node-after-native-continuation');
-    assert.deepEqual(report.errors, []);
     report.passed = true;
   } catch (error) { failure = error; report.failure = { name: error.name, message: error.message, stack: error.stack }; }
   finally {
     const attempt = async operation => { try { await operation(); } catch (error) {
       failure ??= error; report.cleanup.push({ error: { name: error.name, message: error.message } });
     } };
+    await attempt(() => closePreparationSocket());
     await attempt(() => stopNative('native-finally'));
     await attempt(() => stopNode('node-finally'));
     await attempt(() => { sqlite?.close(); sqlite = undefined; });
@@ -320,7 +421,7 @@ test('Item DELETE committed prefix survives complete SQLite export, actual Nativ
       actualNativeHttp: Boolean(report.nativeInitialReads && report.nativeContinuedReads),
       productionPostgresRuntime: Boolean(report.nodeAfterDelete && report.freshNodeReads),
       fullInstanceVerified: false, completeLibraryVerified: false, phaseAcceptance: false }, secrets));
-    if (native || runtime) safeToRemove = false;
+    if (native || runtime || preparationClient && preparationClient.socket.readyState !== WebSocket.CLOSED) safeToRemove = false;
     if (safeToRemove) await attempt(() => output.publishAndClose());
     else {
       await mkdir(destination);

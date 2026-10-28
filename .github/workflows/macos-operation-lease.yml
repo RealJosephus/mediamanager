@@ -1,0 +1,73 @@
+name: macOS operation lease
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  operation-lease:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.16.0'
+      - name: Install the locked native dependency without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Preserve the actual candidate and runner identity
+        shell: bash
+        run: |
+          mkdir -p .test-output/macos-operation-lease
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          import { lstat, readFile, writeFile } from 'node:fs/promises';
+          const git = args => execFileSync('git', args);
+          const head = git(['rev-parse', 'HEAD']).toString().trim();
+          const tree = git(['rev-parse', 'HEAD^{tree}']).toString().trim();
+          const pin = bytes => ({ bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+          const sources = [];
+          for (const path of ['src/migration/operation-lease.js', 'src/plugins/host.js',
+            'tests/migration/operation-lease.test.js', 'tests/helpers/operation-lease-owner.js',
+            '.github/workflows/macos-operation-lease.yml']) {
+            const bytes = await readFile(path), committed = git(['show', head + ':' + path]);
+            if (!bytes.equals(committed)) throw new Error('The actual test source differs from its fixed candidate: ' + path);
+            sources.push({ path, ...pin(bytes) });
+          }
+          const parents = [];
+          for (const path of ['/', '/Users', '/Users/Shared']) {
+            const info = await lstat(path, { bigint: true });
+            parents.push({ path, directory: info.isDirectory(), symbolicLink: info.isSymbolicLink(),
+              mode: (info.mode & 0o7777n).toString(8), uid: String(info.uid), gid: String(info.gid) });
+          }
+          await writeFile('.test-output/macos-operation-lease/candidate.json', JSON.stringify({
+            candidate: { head, tree }, runId: process.env.GITHUB_RUN_ID, attempt: process.env.GITHUB_RUN_ATTEMPT,
+            event: process.env.GITHUB_EVENT_NAME, workflowRef: process.env.GITHUB_WORKFLOW_REF,
+            node: process.version, platform: process.platform, architecture: process.arch,
+            runnerUid: process.getuid(), runnerGid: process.getgid(), parents, sources,
+            scope: 'Same-candidate real kernel lease, atomic carrier publication, original 30-second test budget, and root-to-runner UID contention/kill/reacquisition. No full or release acceptance.',
+          }, null, 2) + '\n');
+          NODE
+      - name: Exercise the actual root and runner owners
+        shell: bash
+        run: |
+          set -o pipefail
+          peer_uid="$(id -u)"
+          peer_gid="$(id -g)"
+          node_path="$(command -v node)"
+          sudo -n env MEDIAMANAGER_TEST_LEASE_PEER_UID="$peer_uid" MEDIAMANAGER_TEST_LEASE_PEER_GID="$peer_gid" \
+            "$node_path" --test --test-reporter=tap --test-timeout=30000 tests/migration/operation-lease.test.js \
+            2>&1 | tee .test-output/macos-operation-lease/original.tap
+      - name: Preserve original component evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: macos-operation-lease-${{ github.sha }}
+          path: .test-output/macos-operation-lease
+          if-no-files-found: error
+          retention-days: 30

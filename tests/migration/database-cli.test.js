@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { DatabaseSync, backup } from 'node:sqlite';
-import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import pg from 'pg';
@@ -18,6 +19,7 @@ import {
 import { importJellyfinSqlite, runImportJellyfinCli } from '../../tools/database/import-jellyfin.js';
 import { exportJellyfinSqlite, runExportJellyfinCli } from '../../tools/database/export-jellyfin.js';
 import { createLockedSqliteSnapshot, databaseCliExitCodes, DatabaseCliError } from '../../tools/database/cli-common.js';
+import { currentNativeSqliteInputs } from '../../tools/validation/current-native-sqlite-inputs.js';
 
 const instanceBinding = {
   serverId: '0123456789abcdef0123456789abcdef',
@@ -494,10 +496,13 @@ test('PostgreSQL create-open removes only its newly created schemas when later i
   timeout: 60_000,
 }, async () => {
   const schema = `cli_open_cleanup_${process.pid}_${Date.now().toString(36)}`;
-  const originalInitialize = PostgresDatabase.prototype.initializeRuntimeSchema;
+  const originalTransaction = PostgresDatabase.prototype.transaction;
   const client = new pg.Client({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES });
-  PostgresDatabase.prototype.initializeRuntimeSchema = async function injectedInitializationFailure() {
-    throw new Error('injected post-create initialization failure');
+  PostgresDatabase.prototype.transaction = async function injectedInitializationFailure(callback, options) {
+    if (this.schemaName === schema && options?.readOnly !== true) {
+      throw new Error('injected post-create initialization failure');
+    }
+    return originalTransaction.call(this, callback, options);
   };
   try {
     await assert.rejects(PostgresDatabase.open({
@@ -506,7 +511,7 @@ test('PostgreSQL create-open removes only its newly created schemas when later i
       create: true,
     }), /injected post-create initialization failure/u);
   } finally {
-    PostgresDatabase.prototype.initializeRuntimeSchema = originalInitialize;
+    PostgresDatabase.prototype.transaction = originalTransaction;
   }
   try {
     await client.connect();
@@ -558,18 +563,27 @@ test('real CLI roundtrip preserves the current native SQLite source in PostgreSQ
   const schema = `cli_${process.pid}_${Date.now().toString(36)}`;
   const binding = path.join(directory, 'binding.json');
   const contract = path.join(directory, 'contract.json');
+  const source = path.join(directory, 'source.db');
   const output = path.join(directory, 'jellyfin.db');
   await writeFile(binding, JSON.stringify(instanceBinding));
   await writeFile(contract, process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE_MOUNT_CONTRACT_JSON);
   let client, native, returned;
   try {
+    const supplied = await currentNativeSqliteInputs();
+    // Even a no-change write reservation can alter WAL shared-memory bytes.
+    // The shared sealed input is only copied; every SQLite handle owns this
+    // private copy, including the CLI's actual write barrier.
+    await copyFile(supplied.filename, source);
+    const sourceBytes = await readFile(source);
+    assert.equal(createHash('sha256').update(sourceBytes).digest('hex'), supplied.receipt.input.sha256);
     const imported = await importJellyfinSqlite([
-      '--source', process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE,
+      '--source', source,
       '--postgres-url-env', 'MEDIAMANAGER_TEST_POSTGRES',
       '--schema', schema,
       '--instance-binding', binding,
       '--mount-contract', contract,
     ]);
+    assert.equal(imported.source, source);
     assert.equal(imported.verified, true);
     assert.equal(imported.nativeSchemaFingerprint, pinnedNativeSqliteSchemaFingerprint);
     assert.equal(imported.migrationHistoryRows, pinnedNativeSqliteMigrationHistory.length);
@@ -579,7 +593,7 @@ test('real CLI roundtrip preserves the current native SQLite source in PostgreSQ
     assert.equal(exported.verified, true);
     assert.equal(exported.nativeSchemaFingerprint, pinnedNativeSqliteSchemaFingerprint);
     assert.equal(exported.migrationHistoryRows, pinnedNativeSqliteMigrationHistory.length);
-    native = new SqliteDatabase(process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE, {
+    native = new SqliteDatabase(source, {
       readOnly: true, requireMigrationHistory: true,
     });
     returned = new SqliteDatabase(output, { readOnly: true, requireMigrationHistory: true });
@@ -587,6 +601,9 @@ test('real CLI roundtrip preserves the current native SQLite source in PostgreSQ
     assert.deepEqual(await databaseDigest(returned), await databaseDigest(native));
     assert.equal(returned.database.prepare('PRAGMA integrity_check').get().integrity_check, 'ok');
     assert.deepEqual(returned.database.prepare('PRAGMA foreign_key_check').all(), []);
+    assert.deepEqual(await readFile(source), sourceBytes);
+    assert.deepEqual(await readFile(supplied.filename), sourceBytes);
+    assert.deepEqual((await currentNativeSqliteInputs()).inputs, supplied.inputs);
   } finally {
     returned?.close();
     native?.close();

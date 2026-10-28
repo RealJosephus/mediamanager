@@ -1,0 +1,25 @@
+{
+  "scope": "A whole same-run CI-owned instance and generated 100000-Movie catalog, one explicitly materialized unchanged frozen transport, and one independent durable conditional HTTP plugin-state object. This does not verify a 100000-file scan, reachability of every generated media path, or a user production instance.",
+  "items": 100000,
+  "parentId": "87210000-0000-0000-0000-000000000000",
+  "idPrefix": "87200000-0000-0000-0000-",
+  "ticksBase": "9007199254740993",
+  "data": "{ \"UnknownProvider\" : [9223372036854775807,\"中文\"], \"traceId\":\"87200000-0000-0000-0000-000000000027\", \"dup\":1, \"dup\":2, \"null\":null }",
+  "retained": 27,
+  "deletedByNode": 99999,
+  "addedByNode": 100001,
+  "addedByNative": 100002,
+  "query": { "year": 2007, "startIndex": 3, "limit": 128 },
+  "asset": {
+    "path": "tests/fixtures/frozen-av/source.m2ts",
+    "bytes": 110592,
+    "sha256": "719919ca910fdaf4b035d2dac56cdbb4c95efe7c5a465f93303901e8b747f027"
+  },
+  "remote": {
+    "assetId": "production-plugin-state",
+    "virtualPath": "/remote/source/production-state.bin",
+    "restorePath": "production-state.bin",
+    "kind": "plugin-state",
+    "payload": "{ \"unknown\":9007199254740993, \"traceId\":\"literal\", \"dup\":1, \"dup\":2, \"value\":\"保留\\u0000\" }\n"
+  }
+}

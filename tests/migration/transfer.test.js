@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { once } from 'node:events';
-import { writeFileSync } from 'node:fs';
+import fs, { writeFileSync } from 'node:fs';
 import { access, link, mkdtemp, readFile, readdir, realpath, rm, writeFile } from 'node:fs/promises';
+import { syncBuiltinESMExports } from 'node:module';
+import { Server } from 'node:net';
 import { DatabaseSync } from 'node:sqlite';
 import os from 'node:os';
 import path from 'node:path';
@@ -422,6 +425,179 @@ test('SQLite export preserves its original failure when staging cleanup also fai
   }
 });
 
+function sqliteExportFailureReasons() {
+  const diagnostic = new Error('Reading this message must not replace the export failure');
+  const hostile = {};
+  for (const name of ['message', 'code', 'status', 'statusCode']) {
+    Object.defineProperty(hostile, name, { get() { throw diagnostic; } });
+  }
+  const controlled = Object.assign(new Error('Controlled export source failure', { cause: 0 }), {
+    code: 'EXPORT_SOURCE_CONTROLLED', status: 0, statusCode: 503, errors: [false, 0, '', null, undefined],
+  });
+  return [['false', false], ['zero', 0], ['bigint zero', 0n], ['NaN', NaN],
+    ['empty string', ''], ['null', null], ['undefined', undefined], ['throwing message getter', hostile],
+    ['Error with public status and original failure details', controlled]];
+}
+
+async function assertFailedSqliteExportAndRecovery(reason, cleanupKind) {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-export-reason-'));
+  const sourceFilename = path.join(directory, 'source.db'), filename = path.join(directory, 'current.db');
+  const staging = path.join(directory, '.current.db.mediamanager-export-staging');
+  const originalClose = SqliteDatabase.prototype.close, originalOpen = fs.promises.open;
+  const originalServerClose = Server.prototype.close;
+  const cleanupFailure = new Error('Injected failure after the owned resource actually closed');
+  const closedTargets = new Set(), leaseFiles = [];
+  let source, result, sourceRows, leaseServer, originalDetails, readFailed = false, leaseCloseFailed = false;
+  let bodyFailed = false, bodyFailure;
+  const restoreHooks = () => {
+    SqliteDatabase.prototype.close = originalClose;
+    if (source && sourceRows) source.rows = sourceRows;
+    fs.promises.open = originalOpen; syncBuiltinESMExports();
+    Server.prototype.close = originalServerClose;
+  };
+  try {
+    if (reason instanceof Error) originalDetails = {
+      cause: reason.cause, errors: reason.errors, values: [...reason.errors],
+    };
+    source = new SqliteDatabase(sourceFilename, { create: true });
+    seedAllTables(source);
+    const unknownText = Buffer.concat([Buffer.from('{ "unknown-provider" : [9223372036854775807, "中文'),
+      Buffer.from([0, 1, 0x80, 0xff]), Buffer.from('"], "Path" : "leave this unknown text alone" }')]);
+    source.database.prepare('UPDATE "BaseItems" SET "Data" = CAST(? AS TEXT) WHERE "Id" = ?')
+      .run(unknownText, fixtureIds.BaseItems);
+    const beforeBytes = await readFile(sourceFilename), beforeTables = await databaseDigest(source);
+    const beforeEnvelope = await getNativeEnvelope(source);
+    const rawData = database => Buffer.from(database.database
+      .prepare('SELECT CAST("Data" AS BLOB) AS "value" FROM "BaseItems" WHERE "Id" = ?')
+      .get(fixtureIds.BaseItems).value);
+    assert.deepEqual(rawData(source), unknownText);
+    sourceRows = source.rows.bind(source);
+    source.rows = (...args) => {
+      const rows = sourceRows(...args);
+      // In particular, undefined is thrown by a real read, not AbortSignal's default DOMException.
+      if (!readFailed) { readFailed = true; throw reason; }
+      return rows;
+    };
+    SqliteDatabase.prototype.close = function closeOwnedStaging() {
+      originalClose.call(this);
+      if (this.filename === staging) {
+        closedTargets.add(this);
+        if (readFailed && cleanupKind === 'staging-close') throw cleanupFailure;
+      }
+    };
+    if (cleanupKind === 'lease-release') {
+      const physical = path.join(await realpath(directory), path.basename(filename));
+      const identity = process.platform === 'win32' ? physical.toLowerCase() : physical;
+      const digest = createHash('sha256').update(identity).digest('hex');
+      if (process.platform === 'darwin') {
+        fs.promises.open = async (...args) => {
+          const file = await originalOpen(...args), opened = String(args[0]);
+          if (path.dirname(opened) === '/Users/Shared/mediamanager-operation-leases'
+            && path.basename(opened).includes(digest)) {
+            // Only this identity's actual carrier is controlled; preparation may use the same FD.
+            const close = file.close.bind(file), stat = file.stat.bind(file);
+            leaseFiles.push({ file, close, stat });
+            file.close = async () => {
+              await close();
+              if (readFailed) { leaseCloseFailed = true; throw cleanupFailure; }
+            };
+          }
+          return file;
+        };
+        syncBuiltinESMExports();
+      } else {
+        const endpoint = process.platform === 'win32' ? '\\\\.\\pipe\\mediamanager-operation-' + digest
+          : '\0mediamanager-operation-' + digest;
+        Server.prototype.close = function closeOwnedLease(callback) {
+          if (this.address() !== endpoint) return originalServerClose.call(this, callback);
+          leaseServer = this;
+          return originalServerClose.call(this, error => {
+            if (error) return callback(error);
+            leaseCloseFailed = true; callback(cleanupFailure);
+          });
+        };
+      }
+    }
+    try {
+      await assert.rejects(exportSynthetic(source, filename), error => {
+        if (cleanupKind === 'none') assert.equal(error, reason);
+        else {
+          assert.ok(error instanceof AggregateError);
+          assert.equal(Object.hasOwn(error, 'cause'), true);
+          assert.equal(error.cause, reason);
+          assert.deepEqual(error.errors, [reason, cleanupFailure]);
+        }
+        if (originalDetails) {
+          assert.equal(error.message, reason.message);
+          for (const name of ['code', 'status', 'statusCode']) assert.equal(error[name], reason[name]);
+          assert.equal(reason.cause, originalDetails.cause);
+          assert.equal(reason.errors, originalDetails.errors);
+          assert.deepEqual(reason.errors, originalDetails.values);
+          const primary = cleanupKind === 'none' ? error : error.cause;
+          assert.equal(primary.cause, originalDetails.cause);
+          assert.equal(primary.errors, originalDetails.errors);
+        }
+        return true;
+      });
+    } finally { restoreHooks(); }
+    assert.equal(readFailed, true);
+    assert.ok(closedTargets.size > 0, 'The real staging SQLite connection closed before failure delivery.');
+    for (const target of closedTargets) assert.throws(() => target.database.prepare('SELECT 1'));
+    if (cleanupKind === 'lease-release') {
+      assert.equal(leaseCloseFailed, true);
+      if (process.platform === 'darwin') {
+        for (const file of leaseFiles) await assert.rejects(file.stat(), { code: 'EBADF' });
+      } else assert.equal(leaseServer.listening, false);
+    }
+    assert.equal(source.database.isTransaction, false);
+    await assert.rejects(access(filename), { code: 'ENOENT' });
+    assert.deepEqual(await readdir(directory), ['source.db']);
+    assert.deepEqual(await readFile(sourceFilename), beforeBytes);
+    assert.deepEqual(await databaseDigest(source), beforeTables);
+    assert.deepEqual(await getNativeEnvelope(source), beforeEnvelope);
+    assert.deepEqual(rawData(source), unknownText);
+
+    const exported = await exportSynthetic(source, filename);
+    assert.equal(exported.verified, true);
+    result = new SqliteDatabase(filename, { readOnly: true });
+    assert.deepEqual(await databaseDigest(result), beforeTables);
+    assert.deepEqual(await getNativeEnvelope(result), beforeEnvelope);
+    assert.deepEqual(rawData(result), unknownText);
+    assert.deepEqual(await readFile(sourceFilename), beforeBytes);
+    assert.deepEqual((await readdir(directory)).sort(), ['current.db', 'source.db']);
+  } catch (failure) { bodyFailed = true; bodyFailure = failure; }
+  finally {
+    restoreHooks();
+    const failures = [];
+    const cleanup = [() => result?.close(), () => source?.close(),
+      ...leaseFiles.map(({ file, close }) => async () => { if (file.fd !== -1) await close(); }),
+      async () => {
+        if (leaseServer?.listening) await new Promise((resolve, reject) => {
+          originalServerClose.call(leaseServer, error => error ? reject(error) : resolve());
+        });
+      },
+      () => rm(directory, { recursive: true })];
+    for (const close of cleanup) try { await close(); } catch (failure) { failures.push(failure); }
+    if (bodyFailed && failures.length) throw new AggregateError([bodyFailure, ...failures],
+      'SQLite export failure fixture and cleanup failed', { cause: bodyFailure });
+    if (bodyFailed) throw bodyFailure;
+    if (failures.length === 1) throw failures[0];
+    if (failures.length) throw new AggregateError(failures, 'SQLite export failure fixture cleanup failed', { cause: failures[0] });
+  }
+}
+
+test('SQLite export preserves raw source reasons, staging cleanup order and a complete same-target retry', async t => {
+  for (const [label, reason] of sqliteExportFailureReasons()) for (const cleanup of ['none', 'staging-close']) {
+    await t.test(label + ' / ' + cleanup, () => assertFailedSqliteExportAndRecovery(reason, cleanup));
+  }
+});
+
+test('SQLite export retains the source reason when its actual OS lease close also fails', async t => {
+  for (const [label, reason] of sqliteExportFailureReasons()) {
+    await t.test(label, () => assertFailedSqliteExportAndRecovery(reason, 'lease-release'));
+  }
+});
+
 test('concurrent SQLite exports hold one OS-owned lease and never remove the active staging file', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'mediamanager-export-lease-'));
   const source = new SqliteDatabase(':memory:', { create: true });
@@ -609,6 +785,53 @@ test('SQLite import preserves native internal and HTTP image/channel paths witho
   } finally { source.close(); backing.close(); }
 });
 
+test('native media HTTP paths and opaque Data.Path survive the receipt component and reverse SQLite transfer', async () => {
+  // This SQLite-backed target exercises path auditing and receipts, not a real
+  // PostgreSQL owner or Native HTTP delivery.
+  for (const [type, itemPath] of [
+    ['MediaBrowser.Controller.Entities.Photo', 'HtTp://Photos.Example.invalid:80/album/a%2Fb.jpg?part=1&part=2&name=%E4%B8%AD'],
+    ['MediaBrowser.Controller.Entities.Photo', 'HtTpS://Photos.Example.invalid:443/album/a%2fb.jpg?token=a%2Fb+z&empty='],
+    ['MediaBrowser.Controller.Entities.Book', 'HtTpS://Media.Example.invalid:443/book%2Fpart.epub?part=1&part=2'],
+    ['MediaBrowser.Controller.Entities.Audio.Audio', 'HtTp://Media.Example.invalid:80/audio%2Fpart.wav?token=a%2Fb+z'],
+    ['MediaBrowser.Controller.Entities.Movies.Movie', 'HtTpS://Media.Example.invalid:443/movie%2fpart.mkv?part=1&part=2'],
+    ['MediaBrowser.Controller.LiveTv.LiveTvChannel', 'HtTpS://Channels.Example.invalid:443/live%2fpart.ts?part=1&part=2'],
+    ['ThirdParty.Entities.Unknown', 'Z:\\Media\\unknown.bin'],
+  ]) {
+    const source = new SqliteDatabase(':memory:', { create: true });
+    const backing = new SqliteDatabase(':memory:', { create: true });
+    const returned = new SqliteDatabase(':memory:', { create: true });
+    const store = {
+      database: backing, insertions: 0,
+      control: { instanceBinding: null, nativeEnvelope: null, transferReceipt: null },
+    };
+    try {
+      await seedPortableTables(source);
+      const data = '{ "Path":"https://user:secret@opaque.invalid/provider", "Path":"custom:opaque-provider",'
+        + '"Counter":9007199254740993,"Provider":"中文" }';
+      await source.update('BaseItems', { Id: fixtureIds.BaseItems }, {
+        Type: type, ChannelId: null, Path: itemPath, Data: data,
+      });
+      const before = await databaseDigest(source);
+      const imported = await transferDatabase(source, new MockPostgresTarget(store), {
+        instanceBinding, portableMountContract,
+      });
+      assert.deepEqual(imported.tables, before);
+      assert.deepEqual(store.control.transferReceipt.sourceTables, before);
+      assert.deepEqual(await databaseDigest(source), before);
+      assert.deepEqual(await databaseDigest(backing), before);
+      const exported = await transferDatabase(new MockPostgresTarget(store), returned);
+      assert.deepEqual(exported.tables, before);
+      assert.deepEqual(await databaseDigest(returned), before);
+      for (const database of [source, backing, returned]) {
+        const row = (await database.rows('BaseItems', { where: { Id: fixtureIds.BaseItems } }))[0];
+        assert.equal(row.Path, itemPath);
+        assert.equal(row.Data, data);
+        assert.equal(row.ChannelId, null);
+      }
+    } finally { source.close(); backing.close(); returned.close(); }
+  }
+});
+
 test('a committed PostgreSQL receipt resumes with its unchanged persisted mount contract when the retry omits it', async () => {
   const source = new SqliteDatabase(':memory:', { create: true });
   const backing = new SqliteDatabase(':memory:', { create: true });
@@ -674,9 +897,12 @@ test('SQLite import audits every path against the portable mount before issuing 
     ['unmapped absolute path', { Path: 'E:\\Outside\\movie.mkv' }, /outside every portable mount/iu],
     ['relative path', { Path: 'relative\\movie.mkv' }, /outside every portable mount/iu],
     ['storage protocol path', { Path: 'webdav://backend.invalid/movie.mkv', ChannelId: nativeChannelId }, /storage protocol URL/iu],
-    ['ordinary item HTTP path', { Path: 'https://alist.invalid/dav/movie.mkv', ChannelId: '00000000-0000-0000-0000-000000000000' }, /storage protocol URL/iu],
+    ['ordinary Folder HTTP path', { Type: 'MediaBrowser.Controller.Entities.Folder', Path: 'https://media.invalid/folder', ChannelId: '00000000-0000-0000-0000-000000000000' }, /storage protocol URL/iu],
     ['channel HTTP path with user information', { Path: 'https://user:secret@channels.invalid/live.m3u8', ChannelId: nativeChannelId }, /storage protocol URL/iu],
     ['VFS access path', { Path: '/media/movie.mkv', ChannelId: nativeChannelId }, /VFS access path/iu],
+    ['Photo HTTP credentials', { Type: 'MediaBrowser.Controller.Entities.Photo', ChannelId: null, Path: 'https://user:secret@photos.invalid/a.jpg' }, /storage protocol URL/iu],
+    ['Photo linked alternate HTTP credentials', { Type: 'MediaBrowser.Controller.Entities.Photo', ChannelId: null, Path: 'Z:\\Media\\a.jpg', Data: '{"LinkedAlternateVersions":[{"Path":"https://user:secret@photos.invalid/a.jpg"}]}' }, /storage protocol URL/iu],
+    ['ordinary Movie additional part HTTP path', { Type: 'MediaBrowser.Controller.Entities.Movies.Movie', ChannelId: null, Path: 'Z:\\Media\\movie.mkv', Data: '{"AdditionalParts":["https://photos.invalid/movie.mkv"]}' }, /storage protocol URL/iu],
   ]) await t.test(name, async () => {
     const source = new SqliteDatabase(':memory:', { create: true });
     const backing = new SqliteDatabase(':memory:', { create: true });
@@ -993,8 +1219,8 @@ test('cancellation rolls back target data and leaves source unchanged', async ()
     seedAllTables(source);
     const before = await databaseDigest(source);
     const controller = new AbortController();
-    const originalInsert = target.insert.bind(target);
-    target.insert = (...args) => { const result = originalInsert(...args); controller.abort(); return result; };
+    const originalInsert = target.insertBatch.bind(target);
+    target.insertBatch = (...args) => { const result = originalInsert(...args); controller.abort(); return result; };
     await assert.rejects(transferDatabase(source, target, { signal: controller.signal }), /abort/i);
     assert.ok((await databaseDigest(target)).every((table) => table.rows === 0));
     assert.deepEqual(await databaseDigest(source), before);

@@ -30,6 +30,14 @@ const instanceStateBaseItemTypes = new Set([
   'UserView',
 ]);
 
+const nativeHttpBaseItemTypes = new Set([
+  'MediaBrowser.Controller.Entities.Audio.Audio',
+  'MediaBrowser.Controller.Entities.Book',
+  'MediaBrowser.Controller.Entities.Movies.Movie',
+  'MediaBrowser.Controller.Entities.Photo',
+  'MediaBrowser.Controller.LiveTv.LiveTvChannel',
+]);
+
 const dataPathArrays = new Set([
   'AdditionalParts',
   'AudioFiles',
@@ -63,10 +71,11 @@ function directPathOptions(tableName, column, row) {
   if (tableName === 'BaseItems') return {
     allowInternalPath: true,
     instanceState: instanceStateBaseItemTypes.has(row.Type?.split('.').at(-1)),
-    // Jellyfin channel/live-TV items can natively identify their stream with a
-    // supported remote playback protocol. Ordinary library items remain
-    // filesystem-semantic and must map through the portable mount contract.
-    protocolPolicy: nonzeroGuidPattern.test(row.ChannelId) ? 'media' : 'none',
+    // These observed native media types persist HTTP(S) identities separately
+    // from their typed CanDownload gate. Channel media URLs retain their
+    // independent policy; other items require filesystem identities.
+    protocolPolicy: nonzeroGuidPattern.test(row.ChannelId) ? 'media'
+      : nativeHttpBaseItemTypes.has(row.Type) ? 'http' : 'none',
   };
   return {};
 }
@@ -87,14 +96,21 @@ function canonicalInstanceStateRoots(value) {
   return result;
 }
 
-function virtualInstanceStatePath(value, roots) {
+function virtualInstanceStatePath(value, roots, targetRoots = null) {
   if (!roots || typeof value !== 'string' || !path.isAbsolute(value)) return value;
-  // Match Jellyfin's ReverseVirtualPath ordering: its program-data replacement
-  // precedes the (possibly external) internal-metadata replacement.
-  for (const [key, token] of [['programData', '%AppDataPath%'], ['metadata', '%MetadataPath%']]) {
-    const relative = path.relative(roots[key], path.resolve(value));
+  // Match Jellyfin's ReverseVirtualPath ordering: first DataPath
+  // (ProgramDataPath/data), then internal metadata. In particular,
+  // ProgramDataPath/root is an absolute native path, never %AppDataPath%/root.
+  for (const [root, token] of [[path.join(roots.programData, 'data'), '%AppDataPath%'], [roots.metadata, '%MetadataPath%']]) {
+    const relative = path.relative(root, path.resolve(value));
     if (relative === '' || !path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`)) {
       return relative === '' ? token : `${token}${path.sep}${relative}`;
+    }
+  }
+  if (targetRoots) {
+    const relative = path.relative(roots.programData, path.resolve(value));
+    if (relative === '' || !path.isAbsolute(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`)) {
+      return path.join(targetRoots.programData, relative);
     }
   }
   return value;
@@ -164,15 +180,17 @@ function projectBaseItemData(value, project, label, { physicalLocationOwnerPath,
 }
 
 export function createSqliteExportPathProjector({ sourceContract = null, targetContract = sourceContract,
-  instanceStatePaths = null } = {}) {
+  instanceStatePaths = null, targetInstanceStatePaths = null } = {}) {
   const instanceRoots = canonicalInstanceStateRoots(instanceStatePaths);
+  const targetInstanceRoots = canonicalInstanceStateRoots(targetInstanceStatePaths);
+  if (targetInstanceRoots && !instanceRoots) throw new TypeError('Target instance paths require their explicit source instance paths');
   const statistics = { auditedPaths: 0, rewrittenPaths: 0 };
   const project = (value, label, options = {}) => {
     if (value == null || value === '') return value;
     statistics.auditedPaths += 1;
     const { instanceState = false, allowInstanceState = false, ...pathOptions } = options;
     const instanceProjected = instanceState || allowInstanceState
-      ? virtualInstanceStatePath(value, instanceRoots) : value;
+      ? virtualInstanceStatePath(value, instanceRoots, targetInstanceRoots) : value;
     const projected = projectPortableJellyfinPath(instanceProjected, sourceContract,
       instanceState ? sourceContract : targetContract, {
       label,
@@ -245,10 +263,10 @@ export async function rewriteSqliteExportPaths(database, options = {}) {
   try {
     for (const [tableName, columns] of directPathColumns) {
       const table = nativeModel.tables.find(candidate => candidate.name === tableName);
-      let offset = 0;
+      let after;
       for (;;) {
         signal?.throwIfAborted();
-        const rows = await database.rows(tableName, { limit: batchSize, offset, consumer: 'exchange' });
+        const rows = await database.rows(tableName, { limit: batchSize, ...(after === undefined ? {} : { after }), consumer: 'exchange' });
         for (const row of rows) {
           const projected = projector.projectRow(tableName, row);
           if (projected !== row) {
@@ -261,8 +279,10 @@ export async function rewriteSqliteExportPaths(database, options = {}) {
             }
           }
         }
-        offset += rows.length;
         if (rows.length < batchSize) break;
+        // Only path/Data cells change; the complete primary-key cursor remains
+        // stable while every original row is audited in the same order.
+        after = Object.fromEntries(table.primaryKey.map(key => [key, rows.at(-1)[key]]));
       }
     }
     database.database.exec('COMMIT');

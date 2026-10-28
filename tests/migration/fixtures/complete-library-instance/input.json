@@ -1,0 +1,16 @@
+{
+  "scope": "A complete CI-owned filesystem movie library and its whole local instance state. Frozen media is copied unchanged; this is neither a user production instance nor a production-cardinality catalog.",
+  "asset": {
+    "path": "tests/fixtures/frozen-av/source.m2ts",
+    "bytes": 110592,
+    "sha256": "719919ca910fdaf4b035d2dac56cdbb4c95efe7c5a465f93303901e8b747f027"
+  },
+  "library": { "name": "Complete isolated movie library", "collectionType": "movies" },
+  "files": [
+    { "key": "retained", "name": "Retained", "phase": "initial" },
+    { "key": "nodeDeleted", "name": "Deleted by Node", "phase": "initial" },
+    { "key": "played", "name": "Played", "phase": "initial" },
+    { "key": "nodeAdded", "name": "Added by Node", "phase": "node" },
+    { "key": "nativeAdded", "name": "Added by Native", "phase": "native" }
+  ]
+}
