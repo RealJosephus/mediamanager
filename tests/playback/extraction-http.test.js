@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
-import { setTimeout as delay } from 'node:timers/promises';
+import { once } from 'node:events';
 import { PostgresDatabase } from '../../src/database/postgres.js';
 import { tableDefinition } from '../../src/database/model.js';
+import { StorageError } from '../../src/storage/errors.js';
+import { dropPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { createPlaybackState } from './runtime-state.js';
 import { probeStreamRow } from '../../src/library/probe-service.js';
@@ -11,15 +13,15 @@ import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/extraction-reference.json' with { type: 'json' };
 import errors from './fixtures/extraction-errors.json' with { type: 'json' };
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const itemId = '22222222-2222-2222-2222-222222222222';
 const id = itemId.replaceAll('-', '');
 const source = reference.sources[0].source;
 const subtitlePath = `/Videos/${id}/${id}/Subtitles/1/0/Stream.srt`;
 const attachmentPath = `/Videos/${id}/${id}/Attachments/3`;
-const normalize = text => {
-  const value = JSON.parse(text); if (value && typeof value === 'object') delete value.traceId; return value;
-};
+const normalize = (text, status) => projectProblemTrace(parseLosslessJson(text), status);
 async function seed(database) {
   for (const [table, rows] of Object.entries(libraryFixture.tables)) {
     const columns = tableDefinition(table).columns, pending = [...rows], inserted = new Set();
@@ -37,14 +39,24 @@ async function seed(database) {
     ({ ...stream, ItemId: itemId, Filename: stream.FileName })[column.name] ?? null])));
 }
 
-test('real embedded extraction, attachment MVC errors and access cancellation on PostgreSQL', {
-  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
-}, async () => {
+test('real embedded extraction, attachment MVC errors and controller disconnect preserve shared extraction on PostgreSQL', {
+  skip: !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 60000,
+}, async t => {
   const schema = `extraction_http_${randomBytes(8).toString('hex')}`;
-  const fixture = await extractionFixture(Object.fromEntries(reference.sources.map(value => ['/' + value.name, Buffer.from(value.media, 'base64')])));
-  const state = await createPlaybackState();
-  let database, runtime;
+  let fixture, state, database, runtime, inputGate, originalRead;
+  t.after(async () => {
+    inputGate?.release.resolve(); if (originalRead) fixture.adapter.openRead = originalRead;
+    const cleanupErrors = [];
+    for (const operation of [() => runtime ? runtime.close() : database?.close(),
+      () => dropPostgresTestDatabase(database), () => fixture?.close(), () => state?.close()]) {
+      try { await operation(); } catch (error) { cleanupErrors.push(error); }
+    }
+    if (cleanupErrors.length === 1) throw cleanupErrors[0];
+    if (cleanupErrors.length) throw new AggregateError(cleanupErrors, 'Extraction HTTP fixture cleanup failed.', { cause: cleanupErrors[0] });
+  });
   try {
+    fixture = await extractionFixture(Object.fromEntries(reference.sources.map(value => ['/' + value.name, Buffer.from(value.media, 'base64')])));
+    state = await createPlaybackState();
     database = await PostgresDatabase.open({ connectionString: process.env.MEDIAMANAGER_TEST_POSTGRES, schema, create: true });
     await seed(database);
     runtime = await createTestRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: libraryFixture.serverId,
@@ -66,7 +78,7 @@ test('real embedded extraction, attachment MVC errors and access cancellation on
       assert.equal(response.status, expected.status, expected.name);
       assert.equal(response.headers.get('content-type'), expected.contentType, expected.name);
       assert.equal(response.headers.get('content-length'), expected.length, expected.name);
-      assert.deepEqual(normalize(await response.text()), normalize(expected.text), expected.name);
+      assert.deepEqual(normalize(await response.text(), response.status), normalize(expected.text, expected.status), expected.name);
     }
     assert.equal(fixture.requests.length, before, 'Missing item/source/attachment must not touch VFS.');
     for (const expected of reference.outputs.filter(value => value.source === 'media.mkv')) {
@@ -93,20 +105,48 @@ test('real embedded extraction, attachment MVC errors and access cancellation on
     assert.equal(fixture.requests.length, visibleReads, 'Authenticated visibility checks must happen before cache and VFS access.');
     await runtime.users.updatePolicy(user.Id, { ...libraryFixture.user.Policy });
     fixture.replace('/media.mkv', Buffer.from(reference.sources[0].media, 'base64'));
-    fixture.setDelay(1000);
+    inputGate = { entered: Promise.withResolvers(), release: Promise.withResolvers(), inputs: [] };
+    originalRead = fixture.adapter.openRead.bind(fixture.adapter);
+    fixture.adapter.openRead = async (...arguments_) => {
+      const handle = await originalRead(...arguments_), input = { signal: arguments_[1]?.signal, closed: false };
+      inputGate.inputs.push(input);
+      return { ...handle, stream: (async function* () {
+        for await (const chunk of handle.stream) {
+          inputGate.entered.resolve(input); await inputGate.release.promise;
+          input.signal?.throwIfAborted(); yield chunk;
+        }
+      })(), async close() { await handle.close(); input.closed = true; } };
+    };
+    const publicServer = runtime.networkHost.listeners.find(entry => entry.scheme === 'http').server;
+    const requested = once(publicServer, 'request', { signal: t.signal });
     const controller = new AbortController();
-    const readCount = fixture.requests.filter(value => value.method === 'GET').length;
-    const pending = fetch(origin + subtitlePath, { headers, signal: controller.signal });
+    const pending = fetch(origin + subtitlePath, { headers, signal: AbortSignal.any([t.signal, controller.signal]) });
     const cancelled = assert.rejects(pending, { name: 'AbortError' });
-    for (let i = 0; i < 300 && fixture.requests.filter(value => value.method === 'GET').length === readCount; i++) await delay(10);
-    assert.ok(fixture.requests.filter(value => value.method === 'GET').length > readCount);
+    void cancelled.catch(() => {});
+    const [incoming, outgoing] = await requested; assert.equal(incoming.url, subtitlePath);
+    const closed = once(outgoing, 'close', { signal: t.signal });
+    const input = await Promise.race([inputGate.entered.promise, pending.then(() => { throw new Error('The extraction input was not held.'); })]);
     controller.abort(); await cancelled;
-    for (let i = 0; i < 300 && !fixture.closedReads; i++) await delay(10);
-    assert.ok(fixture.closedReads, 'Disconnecting the HTTP client must cancel the extraction input.');
+    await closed; assert.equal(outgoing.destroyed, true); assert.equal(outgoing.writableFinished, false);
+    // The designated controller passes CancellationToken.None to its encoder.
+    // A client disconnect does not cancel the admitted shared producer.
+    assert.equal(input.signal.aborted, false);
+    const sharedRequested = once(publicServer, 'request', { signal: t.signal });
+    const shared = fetch(origin + subtitlePath, { headers, signal: t.signal }); void shared.catch(() => {});
+    const [sharedIncoming] = await sharedRequested; assert.equal(sharedIncoming.url, subtitlePath);
+    assert.equal(input.signal.aborted, false); inputGate.release.resolve();
+    const expected = reference.outputs.find(value => value.source === 'media.mkv' && value.type === 'subtitle' && value.index === 1);
+    const sharedResponse = await shared; assert.equal(sharedResponse.status, 200);
+    assert.deepEqual(Buffer.from(await sharedResponse.arrayBuffer()), Buffer.from(expected.bytes, 'base64'));
+    await runtime.playback.drainSubtitlePreparations();
+    for (const owned of inputGate.inputs) assert.equal(owned.closed, true, 'The actual source read handle closed after production drained.');
+    // Keep the source version metadata available while its body is unavailable.
+    // The completed producer must leave a usable cache for a later HTTP reader.
+    fixture.adapter.openRead = async () => { throw new StorageError('unavailable', 'The source body is unavailable after the completed extraction.'); };
+    const cached = await fetch(origin + subtitlePath, { headers, signal: t.signal }); assert.equal(cached.status, 200);
+    assert.deepEqual(Buffer.from(await cached.arrayBuffer()), Buffer.from(expected.bytes, 'base64'));
     assert.equal(fixture.requests.some(value => value.authorization), false, 'The private VFS bridge must never expose the user token upstream.');
   } finally {
-    if (database) { await database.client.query(`DROP SCHEMA "${schema}" CASCADE`); await database.client.query(`DROP SCHEMA "${schema}__mm" CASCADE`); }
-    try { if (runtime) await runtime.close(); else await database?.close(); await fixture.close(); }
-    finally { await state.close(); }
+    inputGate?.release.resolve();
   }
 });

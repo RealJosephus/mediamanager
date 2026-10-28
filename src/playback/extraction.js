@@ -1,7 +1,12 @@
 import { spawn } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { ProbeReadBridge } from '../storage/probe-bridge.js';
 import { StorageError } from '../storage/errors.js';
+import { createNativeCharsetStreamDetector } from '../core/native-charset.js';
+import { isExternalSubtitleFallback, subtitleExtensionHint } from './subtitle-source.js';
 
 const failure = (code, message, cause) => Object.assign(new StorageError(code, message), cause === undefined ? {} : { cause });
 const checkAbort = signal => { if (signal?.aborted) throw failure('cancelled', 'Media extraction was cancelled.', signal.reason); };
@@ -44,7 +49,7 @@ export function subtitleInputIndex(source, stream) {
 
 function privateInput(url) {
   const value = new URL(url);
-  if (value.protocol !== 'http:' || value.hostname !== '127.0.0.1' || !/^\/[a-f0-9]{64}$/.test(value.pathname)
+  if (value.protocol !== 'http:' || value.hostname !== '127.0.0.1' || !/^\/[a-f0-9]{64}(?:\.(?:smi|sami|srt|subrip|ass|ssa|vtt|webvtt))?$/.test(value.pathname)
     || value.username || value.password || value.search || value.hash) throw new TypeError('Extraction requires a private VFS bridge lease.');
   return value.href;
 }
@@ -53,13 +58,22 @@ function streamIndex(value) {
   return value;
 }
 
-export function buildExtractionArguments(url, { kind, index, muxer }) {
+export function buildExtractionArguments(url, { kind, index, muxer, encoding, directory, output }) {
   url = privateInput(url);
   index = streamIndex(index);
   const common = ['-nostdin', '-hide_banner', '-loglevel', 'error', '-protocol_whitelist', 'http,tcp'];
   if (kind === 'attachment') {
     // No output stream is selected. Dumping extradata does not decode media.
     return [...common, `-dump_attachment:${index}`, 'pipe:1', '-i', url];
+  }
+  if (kind === 'text-subtitle') {
+    if (muxer !== 'srt' || typeof directory !== 'string' || path.dirname(directory) !== path.resolve(tmpdir())
+      || !path.basename(directory).startsWith('mediamanager-subtitle-') || output !== path.join(directory, 'converted.srt')) {
+      throw new TypeError('External text conversion requires its private SRT output.');
+    }
+    if (typeof encoding !== 'string' || !/^[A-Za-z0-9._-]*$/u.test(encoding)) throw new TypeError('The subtitle input encoding is invalid.');
+    return [...common, '-y', ...(encoding ? ['-sub_charenc', encoding] : []), '-i', url, '-map', `0:s:${index}`,
+      '-an', '-vn', '-dn', '-c:s', 'srt', '-f', 'srt', output];
   }
   if (kind !== 'subtitle' || !['ass', 'srt', 'sup', 'matroska'].includes(muxer)) throw new TypeError('Only audited subtitle copy muxers are allowed.');
   return [...common, '-i', url, '-map', `0:${index}`, '-an', '-vn', '-dn', '-c:s', 'copy', '-flush_packets', '1', '-f', muxer, 'pipe:1'];
@@ -85,30 +99,35 @@ export class ExtractionService {
   #closeFailures = [];
   #processes = new Set();
 
-  constructor({ vfs, bridge, mediaEncoder, getEncodingOptions, timeoutMs = 300000, maxOutputBytes = 32 * 1024 * 1024, maxCacheBytes = 64 * 1024 * 1024, maxConcurrentExtractions = 4, onProcess = () => {} }) {
+  constructor({ vfs, bridge, mediaEncoder, subtitleCache, getEncodingOptions, timeoutMs = 300000, maxOutputBytes = 32 * 1024 * 1024, maxCacheBytes = 64 * 1024 * 1024, maxConcurrentExtractions = 4, onProcess = () => {} }) {
     if (!vfs) throw new TypeError('Extraction requires VFS.');
     if (!mediaEncoder) throw new TypeError('Extraction requires its startup media encoder.');
+    if (!subtitleCache?.getOrCreate || !subtitleCache?.close) throw new TypeError('Extraction requires its metadata subtitle cache.');
     if (typeof getEncodingOptions !== 'function') throw new TypeError('Extraction requires current encoding configuration.');
     for (const [name, value] of Object.entries({ timeoutMs, maxOutputBytes, maxCacheBytes, maxConcurrentExtractions })) {
       if (!Number.isSafeInteger(value) || value < 1) throw new TypeError(`${name} must be a positive safe integer.`);
     }
-    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, getEncodingOptions, timeoutMs, maxOutputBytes, maxCacheBytes, maxConcurrentExtractions, onProcess });
+    Object.assign(this, { vfs, bridge: bridge ?? new ProbeReadBridge(vfs), ownsBridge: !bridge, mediaEncoder, subtitleCache, getEncodingOptions, timeoutMs, maxOutputBytes, maxCacheBytes, maxConcurrentExtractions, onProcess });
   }
   get available() { return this.mediaEncoder.ready; }
 
   supportsSubtitle(source, stream, outputFormat) {
-    const format = subtitleExtractionFormat(stream)?.[0]?.toLowerCase();
+    const format = isExternalSubtitleFallback(stream) ? 'srt' : subtitleExtractionFormat(stream)?.[0]?.toLowerCase();
     const delivered = outputFormat?.toLowerCase();
     const outputs = format === 'srt' ? ['srt', 'subrip', 'vtt', 'webvtt', 'json']
       : format === 'ass' ? ['ass', 'vtt', 'webvtt']
         : format === 'ssa' ? ['ssa', 'ass', 'vtt', 'webvtt'] : [format];
-    return this.available && Boolean(format) && (!delivered || outputs.includes(delivered)) && !source.IsInfiniteStream
+    return this.available && (!isExternalSubtitleFallback(stream) || this.subtitleCache.available) && Boolean(format) && (!delivered || outputs.includes(delivered)) && !source.IsInfiniteStream
       && (!source.VideoType || ['VideoFile', 'Iso'].includes(source.VideoType)) && stream.SupportsExternalStream !== false;
   }
 
   async subtitle(source, stream, virtualPath, { signal } = {}) {
     if (!this.available) throw failure('unavailable', 'The ffmpeg extraction process is unavailable.');
     if (!this.supportsSubtitle(source, stream)) throw failure('not-supported', 'This subtitle requires an unsupported extraction or conversion branch.');
+    if (isExternalSubtitleFallback(stream)) return this.#requestJob(randomUUID(), (ownerSignal, reportCleanupFailure) => this.subtitleCache.getOrCreate(source, stream, {
+      signal: ownerSignal, statSource: /^https?:\/\//iu.test(stream.Path) ? () => null : () => this.vfs.stat(virtualPath),
+      produce: initial => this.#convertExternalText(source, stream, virtualPath, initial, ownerSignal, reportCleanupFailure),
+    }), signal);
     const [format, muxer] = subtitleExtractionFormat(stream);
     return this.#extract(source, stream, virtualPath, { kind: 'subtitle', format, muxer, index: subtitleInputIndex(source, stream), signal });
   }
@@ -132,23 +151,28 @@ export class ExtractionService {
       source.Id, source.Path, stream.Index, stream.Codec, operation])).digest('hex') : randomUUID();
     const cached = this.#cache.get(key);
     if (cached) { this.#cache.delete(key); this.#cache.set(key, cached); return { ...cached, bytes: Buffer.from(cached.bytes) }; }
+    return this.#requestJob(key, async (ownerSignal, reportCleanupFailure) => {
+      const result = await this.#perform(virtualPath, resolved, before, operation, ownerSignal, reportCleanupFailure);
+      if (reliable && !ownerSignal.aborted && !this.#closed && result.bytes.length <= this.maxCacheBytes) {
+        while (this.#cacheSize + result.bytes.length > this.maxCacheBytes && this.#cache.size) {
+          const oldest = this.#cache.keys().next().value;
+          this.#cacheSize -= this.#cache.get(oldest).bytes.length; this.#cache.delete(oldest);
+        }
+        this.#cache.set(key, result); this.#cacheSize += result.bytes.length;
+      }
+      return result;
+    }, signal);
+  }
+
+  async #requestJob(key, perform, signal) {
+    checkAbort(signal);
+    if (this.#closed) throw failure('closed', 'Media extraction is closed.');
     let job = this.#jobs.get(key);
     if (!job || job.controller.signal.aborted) {
       const controller = new AbortController();
       job = { controller, clients: 0, settled: false };
-      job.promise = this.#perform(virtualPath, resolved, before, operation, controller.signal, error => {
+      job.promise = perform(controller.signal, error => {
         if (this.#closed || job.clients === 0) this.#closeFailures.push(error);
-      }).then(result => {
-        if (reliable && !controller.signal.aborted && !this.#closed && result.bytes.length <= this.maxCacheBytes) {
-          while (this.#cacheSize + result.bytes.length > this.maxCacheBytes && this.#cache.size) {
-            const oldest = this.#cache.keys().next().value;
-            this.#cacheSize -= this.#cache.get(oldest).bytes.length;
-            this.#cache.delete(oldest);
-          }
-          this.#cache.set(key, result);
-          this.#cacheSize += result.bytes.length;
-        }
-        return result;
       }).finally(() => { job.settled = true; if (this.#jobs.get(key) === job) this.#jobs.delete(key); });
       this.#jobs.set(key, job);
     }
@@ -160,6 +184,47 @@ export class ExtractionService {
       job.clients--;
       if (!job.clients && !job.settled) job.controller.abort(signal?.reason);
     }
+  }
+
+  async #convertExternalText(source, stream, virtualPath, initial, signal, reportCleanupFailure) {
+    let handle;
+    const detector = createNativeCharsetStreamDetector();
+    let encoding, detectionError, detectionFailed = false;
+    try {
+      handle = await this.vfs.openRead(virtualPath, { signal });
+      for await (const chunk of handle.stream) { checkAbort(signal); detector.append(chunk); if (detector.done) break; }
+      encoding = detector.finish().details?.[0]?.name ?? '';
+    } catch (error) { detectionError = error; detectionFailed = true; }
+    try { await handle?.close(); } catch (error) {
+      const ordered = detectionFailed ? combinedFailure([detectionError, error], detectionError?.message ?? 'Subtitle charset detection failed.') : error;
+      reportCleanupFailure(ordered); throw ordered;
+    }
+    if (detectionFailed) throw detectionError;
+    if (stream.Path.endsWith('.sami') && /^utf-16(?:le|be)$/iu.test(encoding)) encoding = '';
+    const temporaryRoot = path.resolve(tmpdir()), directory = await mkdtemp(path.join(temporaryRoot, 'mediamanager-subtitle-'));
+    const output = path.join(directory, 'converted.srt');
+    const errors = [];
+    let lease, execution, bytes = Buffer.alloc(0), exists = false, remove = false, cleanupFailed = false;
+    try {
+      if (initial !== null) await writeFile(output, initial, { flag: 'wx' });
+      lease = await this.bridge.lease(virtualPath, { signal, expiresInMs: null, extensionHint: subtitleExtensionHint(stream) });
+      try {
+        execution = await this.#run(buildExtractionArguments(lease.url, { kind: 'text-subtitle', muxer: 'srt', index: subtitleInputIndex(source, stream), encoding,
+          directory, output }), { signal, redacted: lease.url, subtitle: true });
+      } catch (error) { errors.push(error); remove = ['cancelled', 'subtitle-timeout'].includes(error?.code); }
+      try { bytes = await readFile(output); exists = true; }
+      catch (error) { if (error?.code !== 'ENOENT') errors.push(error); }
+    } catch (error) { errors.push(error); }
+    finally {
+      try { await lease?.release(); } catch (error) { errors.push(error); cleanupFailed = true; }
+      try {
+        if (path.dirname(directory) !== temporaryRoot || !path.basename(directory).startsWith('mediamanager-subtitle-')) throw new Error('The subtitle temporary directory is not owned.');
+        await rm(directory, { recursive: true });
+      } catch (error) { errors.push(error); cleanupFailed = true; }
+    }
+    const failed = errors.length > 0, error = errors.length === 1 ? errors[0] : failed ? combinedFailure(errors, errors[0]?.message ?? 'Subtitle conversion failed.') : undefined;
+    if (cleanupFailed) reportCleanupFailure(error);
+    return { bytes, exists, remove, failed, execution, ...(failed ? { error } : {}) };
   }
 
   async #perform(virtualPath, resolved, before, operation, signal, reportCleanupFailure) {
@@ -185,10 +250,10 @@ export class ExtractionService {
       extracted = { bytes, format: operation.format, consistency: resolved.capabilities.reliableVersion === true && before.version != null ? 'versioned' : 'unversioned' };
     } catch (error) { errors.push(error); }
     try { await lease.release(); } catch (error) {
-      errors.push(error); reportCleanupFailure(errors.length === 1 ? error : combinedFailure(errors, errors[0].message));
+      errors.push(error); reportCleanupFailure(errors.length === 1 ? error : combinedFailure(errors, errors[0]?.message ?? 'Media extraction failed.'));
     }
     if (errors.length === 1) throw errors[0];
-    if (errors.length > 1) throw combinedFailure(errors, errors[0].message);
+    if (errors.length > 1) throw combinedFailure(errors, errors[0]?.message ?? 'Media extraction failed.');
     return extracted;
   }
 
@@ -256,6 +321,7 @@ export class ExtractionService {
       this.#cache.clear();
       this.#cacheSize = 0;
       const errors = [...this.#closeFailures];
+      try { await this.subtitleCache.close(); } catch (error) { errors.push(error); }
       try { if (this.ownsBridge) await this.bridge.close(); } catch (error) { errors.push(error); }
       if (errors.length === 1) throw errors[0];
       if (errors.length) throw combinedFailure(errors, 'Media extraction cleanup failed.');

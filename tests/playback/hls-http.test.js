@@ -21,6 +21,7 @@ import { hlsManifestProjection } from './layout-projection.js';
 import { readDeliveredHlsLayouts } from './hls-layout-reader.js';
 import { observeComparison } from '../comparison-observations.js';
 import { assertValidationOutputChild } from '../../tools/validation/paths.js';
+import { playbackTransportSummary, projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
 
 const id = '22222222222222222222222222222222';
 const headersOf = response => ({ status: response.status, headers: Object.fromEntries(['content-type', 'content-length', 'accept-ranges', 'expires', 'cache-control', 'etag', 'last-modified'].map(key => [key, response.headers.get(key)])) });
@@ -63,17 +64,15 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
     const login = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'MediaBrowser Client="HLS Fixture", Device="Isolated", DeviceId="hls-fixture", Version="1"' }, body: JSON.stringify({ Username: 'HlsReader', Pw: 'isolated-hls-password' }) });
     assert.equal(login.status, 200); const token = (await login.json()).AccessToken;
     const headers = { Authorization: `MediaBrowser Token="${token}"`, 'Content-Type': 'application/json' };
-    const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'PlaySessionId').map(([key, value]) => [key, normalize(value)]))
-      : typeof value === 'string' ? value.replaceAll(token, '<token>').replace(/PlaySessionId=[^&\r\n]+/g, 'PlaySessionId=<session>') : value;
     const info = async entry => { const response = await fetch(origin + `/Items/${id}/PlaybackInfo`, { method: 'POST', headers, body: JSON.stringify({ DeviceProfile: entry.profile, MediaSourceId: id, ...entry.options }) }); return { status: response.status, body: await response.json() }; };
     let lastSegment, lastBytes;
     for (const expected of reference.records) {
       const entry = reference.profiles.find(value => value.name === expected.name), actualInfo = await info(entry);
-      assert.deepEqual(normalize(actualInfo), expected.info, expected.name + ' PlaybackInfo');
+      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expected.info, expected.name + ' PlaybackInfo');
       const masterUrl = origin + actualInfo.body.MediaSources[0].TranscodingUrl, playSessionId = actualInfo.body.PlaySessionId;
       const master = await fetch(masterUrl, { headers }), masterText = await master.text();
       const compareManifest = (response, text, wanted, label) => {
-        const actual = { ...headersOf(response), text: normalize(text) };
+        const actual = { ...headersOf(response), text: projectHlsRequestIdentities(text, { token, playSessionId }) };
         observeComparison(t, label + ' raw manifest', actual, wanted);
         assert.equal(Number(response.headers.get('content-length')), Buffer.byteLength(text));
         const project = ({ text, headers, ...value }) => {
@@ -152,7 +151,7 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
       assert.equal(response.status, expected.status, expected.name);
       const text = await response.text();
       assert.equal(Number(response.headers.get('content-length')), Buffer.byteLength(text));
-      assert.deepEqual(hlsManifestProjection(normalize(text)), hlsManifestProjection(expected.text), expected.name);
+      assert.deepEqual(hlsManifestProjection(projectHlsRequestIdentities(text, { token, playSessionId: sessionId })), hlsManifestProjection(expected.text), expected.name);
     }
     const mainUrl = new URL((await (await fetch(masterUrl, { headers })).text()).split(/\r?\n/).find(line => line && !line.startsWith('#')), masterUrl);
     const segmentUrl = new URL((await (await fetch(mainUrl, { headers })).text()).split(/\r?\n/).find(line => line && !line.startsWith('#')), mainUrl);
@@ -167,8 +166,19 @@ test('native HLS manifest semantics, reader delivery, copy packets, seek and tas
       const expected = lifecycle.find(value => value.name === name), response = await fetch(url, { headers, ...init }), bytes = Buffer.from(await response.arrayBuffer());
       const actual = { name, status: response.status, headers: Object.fromEntries(Object.keys(expected.headers).map(key => [key, response.headers.get(key)])), size: bytes.length };
       if (actual.headers['last-modified']) actual.headers['last-modified'] = '<date>';
-      if (expected.body != null) { actual.body = typeof expected.body === 'object' ? JSON.parse(bytes.toString()) : bytes.toString(); if (actual.body?.traceId) delete actual.body.traceId; }
-      assert.deepEqual(actual, expected, name);
+      if (expected.body != null) actual.body = typeof expected.body === 'object' ? JSON.parse(bytes.toString()) : bytes.toString();
+      observeComparison(t, name + ' raw lifecycle response', { ...actual, bodyBase64: bytes.toString('base64') }, expected);
+      const declaredLength = response.headers.get('content-length');
+      if (declaredLength !== null && init?.method !== 'HEAD') assert.equal(Number(declaredLength), bytes.length, name + ' actual Content-Length');
+      if (expected.body !== null && typeof expected.body === 'object') {
+        assert.equal(typeof actual.body.traceId, 'string', name + ' opaque request trace');
+        const { traceId, ...body } = actual.body;
+        const { size: actualWireSize, ...envelope } = actual;
+        const { size: recordedWireSize, ...recordedEnvelope } = expected;
+        const withoutLength = ({ headers, ...value }) => ({ ...value, headers: Object.fromEntries(Object.entries(headers)
+          .filter(([key]) => key !== 'content-length')) });
+        assert.deepEqual(withoutLength({ ...envelope, body }), withoutLength(recordedEnvelope), name);
+      } else assert.deepEqual(actual, expected, name);
     }
     const other = await runtime.users.createUser({ Name: 'HlsOther', Password: 'other-password' });
     await runtime.users.updatePolicy(other.Id, { ...policy, IsAdministrator: false });

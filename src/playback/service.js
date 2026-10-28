@@ -3,32 +3,45 @@ import { randomUUID } from 'node:crypto';
 import { negotiateSource } from './profile.js';
 import { decodeSubtitle, convertSubtitle } from './subtitles.js';
 import { normalizeSubtitleBytes } from './subtitle-charset.js';
+import { isExternalSubtitleFallback, subtitleInputFormat } from './subtitle-source.js';
+import { identityPathStyle } from '../storage/uri.js';
 import { HttpResult, httpError, notFound } from '../http/binding.js';
 import { vfsStreamResult, BinaryResult } from '../http/binary-result.js';
 import { remoteStaticStreamResult } from './remote-static.js';
 import { StorageError, checkAbort } from '../storage/errors.js';
 import { hlsPlan, masterPlaylist, mainPlaylist, storedKeyframeData, subtitlePlaylist } from './hls.js';
 import { MatroskaKeyframeService } from './matroska-keyframes.js';
-import { guid } from '../library/records.js';
+import { guid, nonemptyId } from '../library/records.js';
+import { canDownloadItem } from '../library/download-permission.js';
 import { substitutePath } from '../library/path-substitution.js';
 import { selectDefaultTracks } from '../library/media-streams.js';
 import { readUserData } from '../sessions/user-data.js';
 import { getMimeType } from '../http/mime-types.js';
 
-const mimeTypes = { mkv: 'video/x-matroska', mks: 'video/x-matroska', mp4: 'video/mp4', mov: 'video/quicktime', webm: 'video/webm', avi: 'video/x-msvideo',
-  ts: 'video/mp2t', mpegts: 'video/mp2t', mp3: 'audio/mpeg', m4a: 'audio/mp4', m4b: 'audio/mp4', flac: 'audio/flac', wav: 'audio/wav',
-  aac: 'audio/aac', ogg: 'audio/ogg', srt: 'application/x-subrip', vtt: 'text/vtt', webvtt: 'application/octet-stream', ass: 'text/x-ssa', ssa: 'text/x-ssa',
-  json: 'application/json', jpg: 'image/jpeg', png: 'image/png', txt: 'text/plain', ttml: 'application/ttml+xml' };
-export const mimeType = filename => mimeTypes[path.win32.extname(filename ?? '').slice(1).toLowerCase()] ?? 'application/octet-stream';
-
 export class PlaybackService {
+  #subtitleOwner = new AbortController();
+  #subtitlePreparations = new Set();
+
+  beginClose() { this.#subtitleOwner.abort(new StorageError('closed', 'Subtitle delivery is closing.')); }
+
+  async drainSubtitlePreparations() {
+    while (this.#subtitlePreparations.size) await Promise.allSettled([...this.#subtitlePreparations]);
+  }
+
+  #prepareSubtitle(operation) {
+    const work = Promise.resolve().then(() => { this.#subtitleOwner.signal.throwIfAborted(); return operation(); });
+    this.#subtitlePreparations.add(work);
+    void work.finally(() => this.#subtitlePreparations.delete(work)).catch(() => {});
+    return work;
+  }
+
   constructor(options) {
-    const { library, vfs, identityMap, sessions, configuration = {}, getEncodingOptions,
+    const { library, vfs, identityMap, sessions, activities, configuration = {}, getEncodingOptions,
       getNetworkConfiguration = () => ({ BaseUrl: '' }),
       getSmartApiUrl = request => `${request.socket?.encrypted ? 'https' : 'http'}://${request.headers.host}`,
       serverVersion = '13.0.0', isLocalNetwork, probe, extraction, remux, hls, keyframes, getLiveTvMediaSources, getLiveStreams } = options;
     if (typeof getEncodingOptions !== 'function') throw new TypeError('Playback requires current encoding configuration.');
-    Object.assign(this, { library, vfs, identityMap, sessions, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
+    Object.assign(this, { library, vfs, identityMap, sessions, activities, getEncodingOptions, getNetworkConfiguration, getSmartApiUrl, serverVersion, isLocalNetwork, probe, extraction, remux, hls, getLiveTvMediaSources, getLiveStreams });
     Object.defineProperty(this, 'configuration', { get() { const { configuration: current = configuration } = options; return current; } });
     this.keyframes = keyframes ?? (library?.store && vfs ? new MatroskaKeyframeService({ store: library.store, vfs, onError: error => hls?.onError?.(error) }) : undefined);
   }
@@ -36,7 +49,7 @@ export class PlaybackService {
   accessPath(item, identityPath = item.Path, bindItem = true) {
     if (!this.vfs || !this.identityMap) throw httpError(503, 'Media storage has not been configured.');
     return this.identityMap.resolve({ itemId: bindItem ? item.Id.replaceAll('-', '').toLowerCase() : undefined,
-      identityPath, style: /^(?:[a-z]:|\\\\)/i.test(identityPath ?? '') ? 'windows' : 'posix' });
+      identityPath, style: identityPathStyle(identityPath) });
   }
 
   #canResolveSource(source) {
@@ -188,10 +201,31 @@ export class PlaybackService {
       // shortcuts use their URL; Audio and /Items/{id}/File retain the file.
       const source = (await this.library.getMediaSources(item.Id, { user }))
         .find(value => value.Id.toLowerCase() === item.Id.replaceAll('-', '').toLowerCase());
-      if (source?.Protocol === 'Http') return remoteStaticStreamResult(source.Path, source.RequiredHttpHeaders, this.serverVersion);
+      if (source?.Protocol === 'Http') return remoteStaticStreamResult(this.vfs, this.accessPath(item, source.Path, false),
+        { headers: source.RequiredHttpHeaders, serverVersion: this.serverVersion });
       if (source && source.Protocol !== 'File') throw httpError(400, `Input protocol ${source.Protocol} cannot be streamed statically`);
     }
-    return vfsStreamResult(this.vfs, this.accessPath(item), { contentType: mimeType(item.Path), filename: filename ? path.win32.basename(item.Path).replaceAll('"', '') : undefined });
+    return vfsStreamResult(this.vfs, this.accessPath(item), { contentType: getMimeType(item.Path), filename: filename ? path.win32.basename(item.Path).replaceAll('"', '') : undefined });
+  }
+
+  async download(itemId, { user, auth = {} } = {}) {
+    if (!nonemptyId(itemId)) throw httpError(400, "Guid can't be empty. (Parameter 'id')");
+    let item;
+    try { item = await this.library.getItemRecord(itemId, { user }); }
+    catch (error) { if (error?.status === 404) return notFound(); throw error; }
+    if (!canDownloadItem(item, user)) throw httpError(400, 'Item does not support downloading');
+    if (user) {
+      // LibraryController commits this best-effort activity before preparing
+      // the file response, including failed and partial media requests.
+      await this.activities.downloading(user, item, auth);
+    }
+    if (item.Path == null || item.Path === '') throw httpError(400, 'A download path is required.');
+    const filename = path.basename(item.Path).replaceAll('"', '');
+    const options = { contentType: getMimeType(item.Path), filename, serverVersion: this.serverVersion };
+    const accessPath = this.accessPath(item);
+    return /^https?:\/\//iu.test(item.Path)
+      ? remoteStaticStreamResult(this.vfs, accessPath, options)
+      : vfsStreamResult(this.vfs, accessPath, options);
   }
 
   async remuxStream(itemId, { user, ...options } = {}) {
@@ -275,9 +309,9 @@ export class PlaybackService {
 
   canDeliverHlsSubtitle(source, stream) {
     if (!stream.IsTextSubtitleStream) return false;
-    if (!stream.IsExternal || /\.mks$/i.test(stream.Path ?? '')) return this.extraction?.supportsSubtitle(source, stream, 'vtt') === true;
-    const format = path.win32.extname(stream.Path ?? '').slice(1).toLowerCase() || stream.Codec?.toLowerCase();
-    return ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa'].includes(format);
+    if (!stream.IsExternal || /\.mks$/i.test(stream.Path ?? '') || isExternalSubtitleFallback(stream)) return this.extraction?.supportsSubtitle(source, stream, 'vtt') === true;
+    const format = subtitleInputFormat(stream);
+    return ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(format);
   }
 
   async subtitleHlsPlaylist(itemId, mediaSourceId, segmentLength, { user, accessToken } = {}) {
@@ -299,51 +333,80 @@ export class PlaybackService {
     if (!stream) throw httpError(404, 'Subtitle stream not found.');
     if (!format) {
       if (!stream.Path) throw httpError(404, 'Subtitle stream file not found.');
-      return vfsStreamResult(this.vfs, this.accessPath(item, stream.Path, false), { contentType: mimeType(stream.Path) });
+      const accessPath = this.accessPath(item, stream.Path, false), contentType = getMimeType(stream.Path);
+      return /^https?:\/\//iu.test(stream.Path)
+        ? remoteStaticStreamResult(this.vfs, accessPath, { serverVersion: this.serverVersion, contentType })
+        : vfsStreamResult(this.vfs, accessPath, { contentType });
     }
     const embedded = !stream.IsExternal || /\.mks$/i.test(stream.Path ?? '');
-    if (embedded && !this.extraction) throw httpError(503, 'Media extraction has not been configured.');
+    const textFallback = isExternalSubtitleFallback(stream);
+    if ((embedded || textFallback) && !this.extraction) throw httpError(503, 'Media extraction has not been configured.');
     const identityPath = embedded ? stream.Path || source.Path : stream.Path;
     const accessPath = embedded && !stream.Path ? this.accessPath({ Id: source.Id, Path: source.Path }) : this.accessPath(item, identityPath, false);
     format = format.toLowerCase() === 'js' ? 'json' : format.toLowerCase();
-    let inputFormat = path.win32.extname(stream.Path ?? '').slice(1).toLowerCase() || stream.Codec;
-    inputFormat = ({ subrip: 'srt', webvtt: 'vtt', hdmv_pgs_subtitle: 'pgssub', sup: 'pgssub' })[inputFormat] ?? inputFormat;
-    return new BinaryResult(async (request, response) => {
+    let inputFormat = subtitleInputFormat(stream);
+    return new BinaryResult((request, response) => this.#prepareSubtitle(async () => {
       const controller = new AbortController();
       const abort = () => controller.abort();
       request.once('aborted', abort);
       response.once('close', abort);
-      let handle;
+      if (request.aborted || response.destroyed) abort();
+      let handle, failed = false, primary, cleanupFailed = false;
       try {
         let bytes;
-        if (embedded) {
-          const extracted = await this.extraction.subtitle(source, stream, accessPath, { signal: controller.signal });
+        if (embedded || textFallback) {
+          const extracted = await this.extraction.subtitle(source, stream, accessPath, { signal: this.#subtitleOwner.signal });
           bytes = extracted.bytes;
           inputFormat = extracted.format;
         } else {
-          handle = await this.vfs.openRead(accessPath, { signal: controller.signal });
+          handle = await this.vfs.openRead(accessPath, { signal: this.#subtitleOwner.signal });
           const chunks = [];
           let length = 0;
           for await (const chunk of handle.stream) {
+            checkAbort(this.#subtitleOwner.signal);
             length += chunk.length;
             if (length > 32 * 1024 * 1024) throw httpError(413, 'Subtitle exceeds the supported in-memory size.');
             chunks.push(chunk);
           }
           bytes = Buffer.concat(chunks);
         }
-        checkAbort(controller.signal);
+        checkAbort(this.#subtitleOwner.signal);
         if (inputFormat === 'mks' && /^(?:dvdsub|vobsub)$/i.test(format)) throw httpError(400, 'Unsupported file extension: mks.');
         if (stream.IsTextSubtitleStream) bytes = normalizeSubtitleBytes(bytes);
         const text = stream.IsTextSubtitleStream ? new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes) : null;
+        if (textFallback && !['srt', 'subrip', 'vtt', 'webvtt', 'json', 'ass', 'ssa', 'ttml'].includes(format)) throw httpError(400, `Unsupported format: ${format}`);
         if (inputFormat !== format && !(inputFormat === 'ssa' && format === 'ass')) bytes = Buffer.from(convertSubtitle(text ?? decodeSubtitle(bytes), inputFormat, format, options));
         if (format === 'vtt' && options.addVttTimeMap) bytes = Buffer.from(bytes.toString('utf8').replaceAll('WEBVTT', 'WEBVTT\nX-TIMESTAMP-MAP=MPEGTS:900000,LOCAL:00:00:00.000'));
-        await BinaryResult.bytes(bytes, mimeType(`subtitle.${format}`), { knownLength: format !== 'json' }).send(request, response);
-      } catch (error) {
-        if (!controller.signal.aborted && ['subtitle-start-failure', 'subtitle-timeout', 'invalid-subtitle-timeout', 'cancelled'].includes(error.code)) error.status ??= 404;
+        checkAbort(controller.signal);
+        await BinaryResult.bytes(bytes, getMimeType(`subtitle.${format}`), { knownLength: format !== 'json' }).send(request, response);
+      } catch (error) { failed = true; primary = error; }
+      finally {
+        request.removeListener('aborted', abort); response.removeListener('close', abort);
+        try { await handle?.close(); }
+        catch (error) {
+          if (!failed) {
+            if (error === null || !['object', 'function'].includes(typeof error)) error = new Error('Subtitle source cleanup failed.', { cause: error });
+            throw error;
+          }
+          cleanupFailed = true;
+          primary = Object.assign(new AggregateError([primary, error], primary?.message ?? 'Subtitle preparation and source cleanup failed.', { cause: primary }),
+            Object.fromEntries(['code', 'status', 'statusCode'].filter(key => primary?.[key] !== undefined).map(key => [key, primary[key]])));
+        }
+      }
+      if (failed) {
+        let error = primary;
+        if (error === null || !['object', 'function'].includes(typeof error)) error = new Error('Subtitle preparation failed.', { cause: error });
+        if (textFallback) {
+          error.status ??= error.code === 'invalid-subtitle-timeout' ? 400 : 500;
+        }
+        else if (/^https?:\/\//iu.test(stream.Path ?? '')) {
+          error.status ??= 500;
+        }
+        else if (!controller.signal.aborted && ['subtitle-start-failure', 'subtitle-timeout', 'invalid-subtitle-timeout', 'cancelled'].includes(error.code)) error.status ??= 404;
+        if (cleanupFailed && controller.signal.aborted) throw error;
         this.extractionError(error, controller.signal);
       }
-      finally { request.removeListener('aborted', abort); response.removeListener('close', abort); await handle?.close(); }
-    });
+    }));
   }
 
   async attachment(itemId, mediaSourceId, index, { user } = {}) {

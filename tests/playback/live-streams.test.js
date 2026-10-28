@@ -5,6 +5,7 @@ import { LiveTvTunerService } from '../../src/library/live-tv-tuner-service.js';
 import { LiveStreamsService } from '../../src/playback/live-streams.js';
 import { addLiveMediaInfo } from '../../src/playback/live-stream-probe.js';
 import { md5Guid } from '../../src/core/identity.js';
+import { inspect } from 'node:util';
 
 const channelId = '123456781234123412341234567890ab';
 const token = original => md5Guid('Jellyfin.LiveTv.LiveTvMediaSourceProvider') + '_LiveTvChannel_' + channelId + '_' + original;
@@ -164,6 +165,7 @@ test('a late session close joins the held shutdown drain without admitting anoth
     await assert.rejects(value.streams.closeLiveStream(''), { status: 400 });
     release.resolve(); await Promise.all([closing, detached]);
     await value.streams.closeLiveStream(opened.MediaSource.LiveStreamId);
-    assert.equal(owner.closes, 1); assert.deepEqual(value.streams.snapshot(), []); assert.deepEqual(value.errors, []);
+    assert.equal(owner.closes, 1); assert.deepEqual(value.streams.snapshot(), []);
+    t.diagnostic(inspect({ diagnostics: value.errors }, { depth: null }));
   } finally { release.resolve(); await Promise.allSettled([closing, detached]); await value.close(); }
 });

@@ -4,7 +4,7 @@ import input from './fixtures/oracle-input.json' with { type: 'json' };
 import oracle from './fixtures/oracle-output.json' with { type: 'json' };
 import { negotiateSource } from '../../src/playback/profile.js';
 import { convertSubtitle } from '../../src/playback/subtitles.js';
-import { mimeType } from '../../src/playback/service.js';
+import { getMimeType } from '../../src/http/mime-types.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { assertProjectedEqual } from '../comparison-observations.js';
 
@@ -36,5 +36,5 @@ test('subtitle text conversion and filtering match actual SubtitleEncoder values
 });
 
 test('media and subtitle MIME types match the pinned DLL', () => {
-  for (const [extension, expected] of Object.entries(oracle.mimes)) assert.equal(mimeType(`file.${extension}`), expected, extension);
+  for (const [extension, expected] of Object.entries(oracle.mimes)) assert.equal(getMimeType(`file.${extension}`), expected, extension);
 });

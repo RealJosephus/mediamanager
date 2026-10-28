@@ -120,7 +120,7 @@ test('exact external matches remain ahead of earlier conversion profiles', () =>
     { PlayMethod: 'Transcode', CanExtractSubtitle: () => true }), { Method: 'External', Format: 'srt' });
 });
 
-test('the conversion pass retains ASS and SSA HLS WebVTT delivery', () => {
+test('ASS and SSA keep the advertised conversion restriction for HLS WebVTT delivery', () => {
   const source = { Container: 'mkv' };
   const profile = { SubtitleProfiles: [{ Format: 'vtt', Method: 'Hls' }] };
 
@@ -128,6 +128,6 @@ test('the conversion pass retains ASS and SSA HLS WebVTT delivery', () => {
     const stream = { Type: 'Subtitle', Index: 0, Codec: codec, IsExternal: isExternal, IsTextSubtitleStream: true,
       SupportsExternalStream: true, Path: isExternal ? `/media/subtitle.${codec}` : undefined };
     assert.deepEqual(subtitleProfile(source, stream, profile, source.Container,
-      { PlayMethod: 'Transcode', CanExtractSubtitle: () => true }), { Method: 'Hls', Format: 'vtt' }, `${codec}/${isExternal ? 'external' : 'embedded'}`);
+      { PlayMethod: 'Transcode', CanExtractSubtitle: () => true }), { Method: 'Encode', Format: codec }, `${codec}/${isExternal ? 'external' : 'embedded'}`);
   }
 });

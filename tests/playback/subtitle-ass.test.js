@@ -2,7 +2,7 @@ import { createPlaybackState } from './runtime-state.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
@@ -17,6 +17,8 @@ import library from '../library/fixtures/reference-media.json' with { type: 'jso
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { assertProjectedEqual, observeComparison } from '../comparison-observations.js';
+import { errorObservation } from '../helpers/error-observation.js';
+import { filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 
 const inputs = Object.fromEntries(Object.entries(reference.inputs).map(([format, bytes]) => [format, decodeSubtitle(Buffer.from(bytes, 'base64'))]));
 const cases = [
@@ -69,7 +71,7 @@ async function seed(database) {
   await database.insert('MediaStreamInfos', probeStreamRow('22222222-2222-2222-2222-222222222222', ssaStream));
 }
 
-test('PlaybackInfo and authenticated HLS deliver external ASS as native WebVTT without AV work', {
+test('ASS playback negotiation preserves the AV boundary while authenticated subtitle renditions deliver native WebVTT', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES
 }, async t => {
   const database = await createPostgresTestDatabase(t, 'subtitle_ass');
@@ -79,39 +81,70 @@ test('PlaybackInfo and authenticated HLS deliver external ASS as native WebVTT w
   fixture.identityMap.addPrefix({ identityRoot: 'Z:\\Hls', accessRoot: '/', style: 'windows', returnAccess: 'Isolated ASS fixture.' });
   const cacheDirectory = await mkdtemp(path.join(tmpdir(), `mediamanager-ass-hls-${randomBytes(4).toString('hex')}-`));
   const state = await createPlaybackState({ TranscodingTempPath: cacheDirectory });
-  let runtime;
+  const readers = [], processes = [], cleanup = [], cleanupErrors = [], diagnostics = [];
+  const openRead = fixture.adapter.openRead.bind(fixture.adapter);
+  fixture.adapter.openRead = async (...args) => {
+    const handle = await openRead(...args), reader = { path: args[0], closed: false }; readers.push(reader);
+    return { ...handle, async close() { await handle.close(); reader.closed = true; } };
+  };
+  let runtime, accessToken, failed = false, primary;
+  const observe = (label, value) => {
+    try { t.diagnostic(label + ' ' + filterEvidenceJson(value, new Set([accessToken].filter(Boolean))).trim()); } catch { /* Diagnostics do not replace a business result. */ }
+  };
+  const inputBytes = { '/source.mkv': Buffer.from(hlsReference.media, 'base64'), '/fixture.ass': Buffer.from(reference.inputs.ass, 'base64'),
+    '/fixture.ssa': Buffer.from(reference.inputs.ssa, 'base64') };
+  const readInputs = async () => {
+    const result = [];
+    for (const [name, expected] of Object.entries(inputBytes)) {
+      const handle = await fixture.vfs.openRead(name), chunks = [];
+      try { for await (const bytes of handle.stream) chunks.push(bytes); } finally { await handle.close(); }
+      const bytes = Buffer.concat(chunks); assert.deepEqual(bytes, expected, name + ': unchanged original source bytes');
+      result.push({ path: name, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
+    }
+    return result;
+  };
   try {
     await seed(database);
-    const processes = [];
+    const before = await readInputs(); observe('ass-input-before', before);
     runtime = await createTestRuntime({ database, configuration: { UICulture: 'en-US', IsStartupWizardCompleted: true }, serverId: library.serverId,
       programDataPath: state.root, vfs: fixture.vfs, identityMap: fixture.identityMap,
-      hlsOptions: { onProcess: process => processes.push(process) } });
+      extractionOptions: { onProcess: process => processes.push({ kind: 'extraction', ...process }) },
+      remuxOptions: { onProcess: process => processes.push({ kind: 'remux', ...process }) },
+      hlsOptions: { onProcess: process => processes.push({ kind: 'hls', ...process }) }, onError: error => diagnostics.push(errorObservation(error)) });
     const user = await runtime.users.createUser({ Name: 'AssReader', Password: 'isolated-ass-password' });
     await runtime.users.updatePolicy(user.Id, { ...library.user.Policy, EnableVideoPlaybackTranscoding: false, EnablePlaybackRemuxing: true });
+    const { Policy } = await runtime.users.getUser(user.Id); observe('ass-policy', Policy);
+    assert.equal(Policy.EnableVideoPlaybackTranscoding, false); assert.equal(Policy.EnablePlaybackRemuxing, true);
 
     const origin = `http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`;
-    const login = await (await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { 'Content-Type': 'application/json',
+    const loginResponse = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { 'Content-Type': 'application/json',
       Authorization: 'MediaBrowser Client="ASS HLS", Device="Isolated", DeviceId="ass-hls", Version="1"' },
-    body: JSON.stringify({ Username: 'AssReader', Pw: 'isolated-ass-password' }) })).json();
+    body: JSON.stringify({ Username: 'AssReader', Pw: 'isolated-ass-password' }) });
+    assert.equal(loginResponse.status, 200); const login = await loginResponse.json(); accessToken = login.AccessToken;
     const headers = { Authorization: `MediaBrowser Token="${login.AccessToken}"`, 'Content-Type': 'application/json' };
+    const me = await fetch(origin + '/Users/Me', { headers }); assert.equal(me.status, 200);
+    assert.equal((await me.json()).Id.replaceAll('-', '').toLowerCase(), user.Id.replaceAll('-', '').toLowerCase());
     const infoResponse = await fetch(origin + `/Items/${itemId}/PlaybackInfo`, { method: 'POST', headers,
       body: JSON.stringify({ DeviceProfile: hlsProfile, MediaSourceId: itemId, SubtitleStreamIndex: 3 }) });
     assert.equal(infoResponse.status, 200);
     const info = await infoResponse.json(), source = info.MediaSources[0];
-    assert.equal(source.SupportsTranscoding, true);
-    assert.equal(source.MediaStreams.find(stream => stream.Index === 3).DeliveryMethod, 'Hls');
-    assert.equal(source.MediaStreams.find(stream => stream.Index === 4).DeliveryMethod, 'Hls');
-    assert.match(source.TranscodingUrl, /SubtitleMethod=Hls/u);
-    const masterUrl = new URL(source.TranscodingUrl, origin);
-    const masterResponse = await fetch(masterUrl, { headers });
-    assert.equal(masterResponse.status, 200);
-    const master = await masterResponse.text();
-    assert.match(master, /#EXT-X-MEDIA:TYPE=SUBTITLES[^\r\n]+Subtitles\/3\/subtitles\.m3u8/u);
-    const subtitleUrl = new URL(/URI="([^"]+)"/u.exec(master)[1], masterUrl);
+    observe('ass-public-playback-info', info);
+    // Native profile negotiation requires Encode for ASS/SSA -> VTT. R6 does
+    // not advertise that AV branch. MediaInfoHelper's broader native flag is
+    // not claimed to be an executable Node capability or equal to this flag.
+    assert.equal(source.SupportsTranscoding, false);
+    assert.equal(source.MediaStreams.find(stream => stream.Index === 3).DeliveryMethod, 'Encode');
+    assert.equal(source.MediaStreams.find(stream => stream.Index === 4).DeliveryMethod, 'Encode');
+    assert.equal(source.TranscodingUrl, undefined);
+    const subtitleUrl = new URL(`/Videos/${itemId}/${source.Id}/Subtitles/3/subtitles.m3u8?SegmentLength=30`, origin);
+    const anonymousPlaylist = await fetch(subtitleUrl); assert.equal(anonymousPlaylist.status, 401); await anonymousPlaylist.arrayBuffer();
     const playlistResponse = await fetch(subtitleUrl, { headers });
     assert.equal(playlistResponse.status, 200);
     const playlist = await playlistResponse.text();
+    observe('ass-subtitle-playlist', { status: playlistResponse.status, headers: Object.fromEntries(playlistResponse.headers), text: playlist });
     const segmentUrl = new URL(playlist.split(/\r?\n/u).find(line => line && !line.startsWith('#')), subtitleUrl);
+    const anonymousUrl = new URL(segmentUrl); anonymousUrl.searchParams.delete('ApiKey');
+    const anonymousSegment = await fetch(anonymousUrl); assert.equal(anonymousSegment.status, 401); await anonymousSegment.arrayBuffer();
     const segmentResponse = await fetch(segmentUrl, { headers });
     assert.equal(segmentResponse.status, 200); assert.equal(segmentResponse.headers.get('content-type'), reference.records['ass-vtt-hls-full'].contentType);
     assert.equal(segmentResponse.headers.get('content-length'), reference.records['ass-vtt-hls-full'].contentLength);
@@ -130,8 +163,18 @@ test('PlaybackInfo and authenticated HLS deliver external ASS as native WebVTT w
     }
     assert.deepEqual(processes, []);
     assert.equal(fixture.requests.every(request => request.authorization == null), true);
+    const after = await readInputs(); observe('ass-input-after', after); assert.deepEqual(after, before);
+  } catch (error) { failed = true; primary = error; observe('ass-failure', errorObservation(error));
   } finally {
-    await runtime?.close(); await fixture.close(); await state.close(); if (!runtime) await database.close();
-    assert.equal(path.dirname(cacheDirectory), tmpdir()); await rm(cacheDirectory, { recursive: true, force: true });
+    for (const [label, operation] of [
+      ['runtime', async () => { await runtime?.close(); if (runtime) assert.ok(runtime.networkHost.listeners.every(entry => !entry.server.listening)); }],
+      ['source', () => fixture.close()], ['state', () => state.close()], ['database', () => database.close()],
+      ['hls-cache', async () => { assert.equal(path.dirname(cacheDirectory), tmpdir()); await rm(cacheDirectory, { recursive: true, force: true }); }],
+    ]) try { await operation(); cleanup.push({ label, closed: true }); } catch (error) { cleanupErrors.push(error); cleanup.push({ label, error: errorObservation(error) }); }
+    observe('ass-lifecycle', { readers, processes, requests: fixture.requests, diagnostics, cleanup });
   }
+  if (cleanupErrors.length) throw new AggregateError(failed ? [primary, ...cleanupErrors] : cleanupErrors,
+    primary?.message ?? 'ASS subtitle consumer cleanup failed.', { cause: failed ? primary : cleanupErrors[0] });
+  if (failed) throw primary;
+  assert.ok(readers.every(reader => reader.closed), 'Every actual source reader finished its close.');
 });

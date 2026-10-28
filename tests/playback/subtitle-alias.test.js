@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import input from './fixtures/subtitle-alias-input.json' with { type: 'json' };
 import oracle from './fixtures/subtitle-alias-output.json' with { type: 'json' };
 import { convertSubtitle } from '../../src/playback/subtitles.js';
-import { mimeType } from '../../src/playback/service.js';
+import { getMimeType } from '../../src/http/mime-types.js';
 import { parseLosslessJson } from '../../src/core/json.js';
 import { assertProjectedEqual } from '../comparison-observations.js';
 import { subtitleLayoutProjection } from './layout-projection.js';
@@ -21,5 +21,5 @@ test('subtitle writers, aliases and time filtering match the actual SubtitleEnco
         entry.outputFormat.toLowerCase() === 'json' ? parseLosslessJson : value => subtitleLayoutProjection(value, entry.outputFormat));
     }
   }
-  for (const [extension, expectedType] of Object.entries(oracle.mimes)) assert.equal(mimeType(`file.${extension}`), expectedType, extension);
+  for (const [extension, expectedType] of Object.entries(oracle.mimes)) assert.equal(getMimeType(`file.${extension}`), expectedType, extension);
 });

@@ -1,9 +1,14 @@
 import http from 'node:http';
 import { once } from 'node:events';
 import { Readable } from 'node:stream';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { StorageRegistry, VirtualFileSystem, IdentityAccessMap } from '../../src/storage/index.js';
 import { StorageError } from '../../src/storage/errors.js';
 import { rangeHeader, resolveRange } from '../../src/storage/range.js';
+import { SubtitleCache } from '../../src/playback/subtitle-cache.js';
+import { localStateStorage } from '../helpers/local-state-storage.js';
 
 // A conditional HTTP object fixture, never a production media backend.
 export async function extractionFixture(files, { reliableVersion = true, advisoryVersion = false, delayMs = 0, chunkBytes, chunkDelayMs = 0 } = {}) {
@@ -66,7 +71,17 @@ export async function extractionFixture(files, { reliableVersion = true, advisor
   const registry = new StorageRegistry(); registry.registerType('network-fixture', () => adapter); await registry.createInstance('fixture', 'network-fixture', {});
   const vfs = new VirtualFileSystem(registry); vfs.mount({ path: '/', instanceId: 'fixture', capabilities: {} });
   const identityMap = new IdentityAccessMap(); identityMap.addPrefix({ identityRoot: 'Z:\\Extraction', accessRoot: '/', style: 'windows', returnAccess: 'Isolated HTTP fixture only.' });
+  const temporaryRoot = path.resolve(tmpdir()), cacheRoot = await mkdtemp(path.join(temporaryRoot, 'mediamanager-extraction-state-'));
+  const cacheStorage = await localStateStorage(cacheRoot);
   return { vfs, identityMap, requests, adapter, get closedReads() { return closedReads; }, setDelay(value) { delayMs = value; },
+    createSubtitleCache() { return new SubtitleCache({ fileSystem: cacheStorage.fileSystem, dataPath: cacheRoot }); },
     replace(name, bytes) { const current = objects.get(name); objects.set(name, { bytes, revision: (current?.revision ?? 0) + 1 }); },
-    async close() { await registry.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); } };
+    async close() {
+      try { await registry.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+      finally {
+        await cacheStorage.close();
+        if (path.dirname(cacheRoot) !== temporaryRoot || !path.basename(cacheRoot).startsWith('mediamanager-extraction-state-')) throw new Error('The extraction fixture state is not owned.');
+        await rm(cacheRoot, { recursive: true });
+      }
+    } };
 }

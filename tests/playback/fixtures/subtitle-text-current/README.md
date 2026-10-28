@@ -26,8 +26,19 @@ diagnostic. Error bodies are not fed to subtitle readers.
 
 The Node consumer uses PostgreSQL and the ordinary Local storage plugin. It
 records full public response bytes, same-format originals, warm and cold rows,
-real client cancellation and reader closure. Native observations supply every
-new expected conversion. No local recording, media generation, subtitle burn,
+and actual client and runtime ownership boundaries. The nonempty-format Native
+Controller passes `CancellationToken.None` to the encoder. The Node consumer
+therefore waits for the actual server response to close after its client
+disconnects, releases the held Local input, and checks the producer's complete
+source bytes/hash, settled reader close, preparation and HTTP action drain.
+It then reads the same cold public route again and compares its complete response
+with the response included in the Native matrix. A separate held Local read
+remains unreleased by the harness while actual `runtime.close()` cancels its
+owner; its actual signal, settled reader close, public response closure and full
+runtime/storage/PostgreSQL closure are checked. These are separate from explicit
+encoder-caller token cancellation in the HTTP subtitle fixture. Error names and
+stacks remain diagnostics. Native observations supply every new expected
+conversion. No local recording, media generation, subtitle burn,
 OCR or AV encoding is involved.
 
 The public execution harness is shared with current writer and charset

@@ -86,6 +86,8 @@ export function registerPlaybackRoutes(add, { playback, users }) {
   add('GET', '/Videos/{videoId}/{mediaSourceId}/Attachments/{index}', context => playback.attachment(guidValue(context.params.videoId,'videoId'),
     context.params.mediaSourceId, integerValue(context.params.index,'index'), { user: context.auth.User }), { public:true });
   add('GET', '/Items/{itemId}/File', context => playback.file(itemId(context), { user: context.auth.User }));
+  add('GET', '/Items/{itemId}/Download', context => playback.download(itemId(context), { user: context.auth.User,
+    auth: context.auth }), { policy: 'Download' });
   for (const kind of ['Videos', 'Audio']) for (const method of ['GET', 'HEAD']) {
     add(method, [`/${kind}/{itemId}/stream`, `/${kind}/{itemId}/stream.{container}`], async context => {
       const selected = await user(context);

@@ -60,7 +60,7 @@ test('the frozen embedded ASS packet copy converts to the native WebVTT bytes', 
   assert.equal(convertSubtitle(text, 'ass', 'vtt', { endPositionTicks: 300210000n, copyTimestamps: true }), embeddedReference.nativeVtt);
 });
 
-test('embedded ASS is an authenticated HLS WebVTT rendition on PostgreSQL', {
+test('embedded ASS retains its negotiation restriction while an explicit authenticated HLS subtitle request delivers WebVTT', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
 }, async () => {
   const schema = `embedded_subtitle_hls_${randomBytes(8).toString('hex')}`;
@@ -89,16 +89,11 @@ test('embedded ASS is an authenticated HLS WebVTT rendition on PostgreSQL', {
       body: JSON.stringify({ DeviceProfile: profile, MediaSourceId: itemId, SubtitleStreamIndex: 2 }) });
     assert.equal(infoResponse.status, 200);
     const info = await infoResponse.json(), source = info.MediaSources[0];
-    assert.equal(source.SupportsTranscoding, true);
-    assert.equal(source.MediaStreams.find(stream => stream.Index === 2).DeliveryMethod, 'Hls');
+    assert.equal(source.SupportsTranscoding, false);
+    assert.equal(source.MediaStreams.find(stream => stream.Index === 2).DeliveryMethod, 'Encode');
     assert.equal(source.MediaStreams.find(stream => stream.Index === 3).DeliveryMethod, 'Encode');
-    const masterUrl = new URL(source.TranscodingUrl, origin);
-    const masterResponse = await fetch(masterUrl, { headers });
-    assert.equal(masterResponse.status, 200);
-    const master = await masterResponse.text();
-    assert.match(master, /#EXT-X-MEDIA:TYPE=SUBTITLES[^\r\n]+Subtitles\/2\/subtitles\.m3u8/u);
-    assert.doesNotMatch(master, /Subtitles\/3\/subtitles\.m3u8/u);
-    const subtitleUrl = new URL(/URI="([^"]+)"/u.exec(master)[1], masterUrl);
+    assert.equal(source.TranscodingUrl, undefined);
+    const subtitleUrl = new URL(`/Videos/${itemId}/${source.Id}/Subtitles/2/subtitles.m3u8?SegmentLength=30`, origin);
     const playlistResponse = await fetch(subtitleUrl, { headers });
     assert.equal(playlistResponse.status, 200);
     const playlist = await playlistResponse.text();

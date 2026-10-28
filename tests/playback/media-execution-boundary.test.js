@@ -18,11 +18,15 @@ const reviewedPluginImports = new Set([
   'import(pathToFileURL(path.join(directory,record.package.manifest.mediamanager.entry)).href)',
 ]);
 const reviewedResourceImports = new Map([
+  // Kernel lease operations load the locked FFI only when acquiring on Darwin.
+  ['migration/operation-lease.js', new Set(["import('koffi')"])],
   ['images/system-fonts/index.js', new Set(["import('koffi')", "import('./win32.js')", "import('./darwin.js')", "import('./linux.js')", "import('@napi-rs/canvas')"])],
   ['images/system-fonts/text.js', new Set(["import('./harfbuzz/index.mjs')"])],
   ['storage/archive-worker.js', new Set(["import('./resources/archive-codec.mjs')"])],
 ]);
 const reviewedWorkerImports = new Map([
+  // Thread identity controls native process.env lookup semantics only.
+  ['production-target.js', ['isMainThread']],
   ['storage/archive-reader.js', ['Worker']],
   ['storage/archive-worker.js', ['parentPort', 'workerData']],
   ['images/jpeg-codec/index.js', ['Worker']],
@@ -113,6 +117,26 @@ function bindingIdentifier(node, parent) {
 export function auditMediaExecutionSource(relative, source) {
   const syntax = parse(source, { ecmaVersion: 'latest', sourceType: 'module', allowHashBang: true });
   const expression = node => source.slice(node.start, node.end).replace(/\s+/gu, '');
+  const bindsSymbol = pattern => pattern?.type === 'Identifier' ? pattern.name === 'Symbol'
+    : pattern?.type === 'AssignmentPattern' ? bindsSymbol(pattern.left)
+      : pattern?.type === 'RestElement' ? bindsSymbol(pattern.argument)
+        : pattern?.type === 'ArrayPattern' ? pattern.elements.some(bindsSymbol)
+          : pattern?.type === 'ObjectPattern' && pattern.properties.some(property => bindsSymbol(
+            property.type === 'RestElement' ? property.argument : property.value));
+  let symbolShadowed = false;
+  walkSyntax(syntax, node => {
+    if (node.type === 'VariableDeclarator' && bindsSymbol(node.id)
+      || /^(?:Function|ArrowFunction)/u.test(node.type) && (bindsSymbol(node.id) || node.params.some(bindsSymbol))
+      || /^Class/u.test(node.type) && bindsSymbol(node.id)
+      || node.type === 'CatchClause' && bindsSymbol(node.param)
+      || /^Import.*Specifier$/u.test(node.type) && node.local?.name === 'Symbol'
+      || node.type === 'AssignmentExpression' && bindsSymbol(node.left)
+      || node.type === 'UpdateExpression' && bindsSymbol(node.argument)) symbolShadowed = true;
+  });
+  const symbolRegistryKey = key => !symbolShadowed && key?.type === 'CallExpression'
+    && key.callee?.type === 'MemberExpression' && key.callee.object?.type === 'Identifier'
+    && key.callee.object.name === 'Symbol' && propertyName(key.callee) === 'for'
+    && key.arguments.length === 1 && typeof staticText(key.arguments[0]) === 'string';
   walkSyntax(syntax, node => {
     if (node.type === 'ImportExpression') assert.equal(relative === 'plugins/host.js'
       && reviewedPluginImports.has(expression(node)) || reviewedResourceImports.get(relative)?.has(expression(node)) === true, true,
@@ -193,7 +217,7 @@ export function auditMediaExecutionSource(relative, source) {
         assert.fail(`${relative} must not use an indirect execution bridge`);
       }
       if (node.object?.type === 'Identifier' && node.object.name === 'globalThis'
-        && (node.computed && property === null || property !== 'fetch')) {
+        && property !== 'fetch' && !(node.computed && symbolRegistryKey(node.property))) {
         assert.fail(`${relative} must not use an indirect execution bridge`);
       }
       if (node.object?.type === 'Identifier' && node.object.name === 'global') {
@@ -240,7 +264,7 @@ async function sourceFiles(directory) {
   return (await filesIn(directory)).filter(filename => /\.(?:c|m)?js$/u.test(filename));
 }
 
-test('production process execution stays inside the audited probe and packet-copy boundary', async () => {
+test('production process execution stays inside the audited probe, packet-copy and subtitle-text boundary', async () => {
   const processModules = [];
   for (const filename of (await Promise.all(productionRoots.map(sourceFiles))).flat()) {
     const relative = path.relative(sourceRoot, filename).replaceAll('\\', '/');
@@ -255,6 +279,15 @@ test('production process execution stays inside the audited probe and packet-cop
 });
 
 test('plugin entry and resource exceptions remain limited to their reviewed expressions', () => {
+  assert.equal(auditMediaExecutionSource('../plugins/xmltv/provider.js',
+    "const owners = globalThis[Symbol.for('ordinary-owned-metadata')] ??= new Set();"), false);
+  for (const source of ["const Symbol = { for: () => 'process' }; globalThis[Symbol.for('metadata')];",
+    "function metadata(Symbol) { return globalThis[Symbol.for('metadata')]; }",
+    "const { Symbol } = other; globalThis[Symbol.for('metadata')];"]) {
+    assert.throws(() => auditMediaExecutionSource('../plugins/xmltv/provider.js', source), /indirect execution bridge/u);
+  }
+  assert.equal(auditMediaExecutionSource('production-target.js', "import { isMainThread } from 'node:worker_threads';"), false);
+  assert.throws(() => auditMediaExecutionSource('production-target.js', "import { Worker } from 'node:worker_threads';"), /alternate execution runtime/u);
   const workerImport = "import { Worker } from 'node:worker_threads';";
   for (const [relative, construction] of reviewedWorkerConstructions) {
     assert.equal(auditMediaExecutionSource(relative, workerImport + construction.replace('newWorker', 'new Worker').replace('newURL', 'new URL')), false);
@@ -266,6 +299,8 @@ test('plugin entry and resource exceptions remain limited to their reviewed expr
     assert.throws(() => auditMediaExecutionSource(relative, "await import('node:child_process');"), /dynamic import/u);
     assert.throws(() => auditMediaExecutionSource(relative, 'await import(entry);'), /dynamic import/u);
   }
+  assert.equal(auditMediaExecutionSource('migration/operation-lease.js', "await import('koffi');"), false);
+  assert.throws(() => auditMediaExecutionSource('library/query.js', "await import('koffi');"), /dynamic import/u);
   for (const expression of reviewedPluginImports) {
     assert.equal(auditMediaExecutionSource('plugins/host.js', expression + ';'), false);
     assert.throws(() => auditMediaExecutionSource('../plugins/local/adapter.js', expression + ';'), /dynamic import/u);

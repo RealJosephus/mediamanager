@@ -76,3 +76,28 @@ export function fallbackFontInput() {
     ] },
   ];
 }
+
+export const fallbackFontFailureFiles = [
+  { path: 'fonts-A/Body.TTF', bytes: 'AAECAwQFBgcICQoLDA0ODw==' },
+  { path: 'fonts-A/Large.woff', length: 65536 },
+];
+
+export function fallbackFontFailureInput() {
+  return [
+    ['delete-before-execution', 'Body.TTF'],
+    ['delete-before-sendfile', 'Body.TTF'],
+    ['delete-before-sendfile', 'Large.woff'],
+  ].map(([executionFault, filename], index) => ({ name: 'physical-file-failure-' + index, root: 'fonts-A', steps: [
+    request('failed-file', file(filename), { executionFault, observeFailure: true }),
+    request('recovered-file', file(filename), { observeFailure: true }),
+  ] }));
+}
+
+export function fallbackFontBrowserInput() {
+  return fallbackFontFailureInput().flatMap(sample => ['worker', 'renderer'].map(browserMode => ({
+    ...sample, name: sample.name + '-' + browserMode,
+    steps: sample.steps.map((step, index) => ({ ...step,
+      ...(index === 0 || browserMode === 'worker' ? { browserMode } : {}),
+    })),
+  })));
+}

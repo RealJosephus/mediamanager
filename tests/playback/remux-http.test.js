@@ -17,6 +17,7 @@ import { probeStreamRow } from '../../src/library/probe-service.js';
 import reference from './fixtures/remux-reference.json' with { type: 'json' };
 import extracted from './fixtures/extraction-reference.json' with { type: 'json' };
 import library from '../library/fixtures/reference-media.json' with { type: 'json' };
+import { playbackTransportSummary } from '../helpers/playback-transport-projection.js';
 
 const itemId = '22222222-2222-2222-2222-222222222222';
 const id = itemId.replaceAll('-', '');
@@ -61,7 +62,7 @@ test('native progressive remux HTTP, packet hashes, multi-version access and can
     const login = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'MediaBrowser Client="Remux Fixture", Device="Isolated", DeviceId="remux-fixture", Version="1"' }, body: JSON.stringify({ Username: 'RemuxReader', Pw: 'isolated-remux-password' }) });
     assert.equal(login.status, 200);
     const token = (await login.json()).AccessToken, headers = { Authorization: `MediaBrowser Token="${token}"`, 'Content-Type': 'application/json' };
-    const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'PlaySessionId').map(([key, value]) => [key, normalize(value)])) : typeof value === 'string' ? value.replaceAll(token, '<token>').replace(/PlaySessionId=[^&]+/g, 'PlaySessionId=<session>') : value;
+    const normalize = body => playbackTransportSummary(body, token);
     const info = async (entry, sourceId = id) => {
       const response = await fetch(origin + `/Items/${sourceId}/PlaybackInfo`, { method: 'POST', headers, body: JSON.stringify({ DeviceProfile: entry.profile, MediaSourceId: sourceId, ...entry.options }) });
       assert.equal(response.status, 200); return response.json();

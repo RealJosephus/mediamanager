@@ -59,7 +59,7 @@ function packetProjection(value) {
 test('actual PGS, VobSub and S_TEXT/SSA containers match the frozen extraction oracle', async t => {
   const fixtureFiles = files();
   const fixture = await extractionFixture(fixtureFiles);
-  const service = new ExtractionService({ vfs: fixture.vfs, mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding') });
+  const service = new ExtractionService({ vfs: fixture.vfs, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding') });
   t.after(async () => { await service.close(); await fixture.close(); });
 
   for (const expected of reference.outputs) {
@@ -99,7 +99,7 @@ test('VobSub advertisement retains native failure while manual MKS serves native
   assert.equal(delivery.Codec, 'DVDSUB');
   assert.match(delivery.DeliveryUrl, /\/Stream\.dvdsub\?ApiKey=isolated-test-token$/u);
   const fixture = await extractionFixture({ '/vobsub.mks': Buffer.from(entry.media, 'base64') });
-  const extraction = new ExtractionService({ vfs: fixture.vfs, mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding') });
+  const extraction = new ExtractionService({ vfs: fixture.vfs, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding') });
   const playback = new PlaybackService({
     getEncodingOptions: () => defaultConfiguration('encoding'),
     library: {

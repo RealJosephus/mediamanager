@@ -13,6 +13,7 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../databas
 import { tableDefinition } from '../../src/database/model.js';
 import { createTestRuntime } from '../helpers/runtime.js';
 import { remoteStaticStreamResult } from '../../src/playback/remote-static.js';
+import { openHttpStorage } from '../storage/http-fixture.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
 import nativeContract from './fixtures/remote-static-native-redirect-matrix.json' with { type: 'json' };
@@ -292,6 +293,7 @@ test('frozen native HTTP(S) .strm static byte proxy on PostgreSQL',
   });
 
 test('remote static proxy closes its upstream stream when the client disconnects', async () => {
+  const storage = await openHttpStorage();
   let upstreamClosed = false;
   const upstream = createServer((_request, response) => {
     response.writeHead(200, { 'Content-Type': 'application/octet-stream' });
@@ -301,7 +303,7 @@ test('remote static proxy closes its upstream stream when the client disconnects
   });
   upstream.listen(0, '127.0.0.1'); await once(upstream, 'listening');
   const proxy = createServer((request, response) => {
-    remoteStaticStreamResult(`http://127.0.0.1:${upstream.address().port}/slow`).send(request, response)
+    remoteStaticStreamResult(storage.vfs, storage.access(`http://127.0.0.1:${upstream.address().port}/slow`)).send(request, response)
       .catch(error => response.destroy(error));
   });
   proxy.listen(0, '127.0.0.1'); await once(proxy, 'listening');
@@ -314,12 +316,14 @@ test('remote static proxy closes its upstream stream when the client disconnects
     for (let attempt = 0; attempt < 100 && !upstreamClosed; attempt++) await new Promise(resolve => setTimeout(resolve, 10));
     assert.equal(upstreamClosed, true);
   } finally {
+    await storage.close();
     proxy.closeAllConnections(); await new Promise(resolve => proxy.close(resolve));
     upstream.closeAllConnections(); await new Promise(resolve => upstream.close(resolve));
   }
 });
 
 test('remote static proxy reads HTTPS bytes when the isolated test certificate is trusted', async () => {
+  const storage = await openHttpStorage();
   const requests = [];
   const upstream = createHttpsServer({ cert: tlsCertificate, key: tlsKey }, (request, response) => {
     requests.push({ url: request.url, accept: request.headers.accept, encoding: request.headers['accept-encoding'] });
@@ -328,7 +332,7 @@ test('remote static proxy reads HTTPS bytes when the isolated test certificate i
   });
   upstream.listen(0, '127.0.0.1'); await once(upstream, 'listening');
   const proxy = createServer((request, response) => {
-    remoteStaticStreamResult(`https://127.0.0.1:${upstream.address().port}/full`).send(request, response)
+    remoteStaticStreamResult(storage.vfs, storage.access(`https://127.0.0.1:${upstream.address().port}/full`)).send(request, response)
       .catch(error => response.destroy(error));
   });
   proxy.listen(0, '127.0.0.1'); await once(proxy, 'listening');
@@ -343,6 +347,7 @@ test('remote static proxy reads HTTPS bytes when the isolated test certificate i
     assert.deepEqual(requests, [{ url: '/full', accept: 'application/json; q=1.0, application/xml; q=0.9, */*; q=0.8',
       encoding: 'gzip, deflate, br' }]);
   } finally {
+    await storage.close();
     setDefaultCACertificates(trusted);
     proxy.closeAllConnections(); await new Promise(resolve => proxy.close(resolve));
     upstream.closeAllConnections(); await new Promise(resolve => upstream.close(resolve));

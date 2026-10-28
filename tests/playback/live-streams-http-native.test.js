@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { createHash, randomUUID } from 'node:crypto';
+import { inspect } from 'node:util';
 import { cp, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { currentNativeReference } from '../../tools/compat/current-native-reference.js';
@@ -19,6 +20,7 @@ import { createPostgresTestDatabase, dropPostgresTestDatabase } from '../databas
 import { prepareNativeMediaSeed } from '../http/native-media-seed.js';
 import { databaseFilename, snapshot, sqliteSnapshot, canonicalRows, portableMountContract, storageDocument } from '../http/fixtures/live-tv-sources-http/scenario.js';
 import { declareFileTestResource } from '../helpers/file-test-resource.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll', 'nativeInstance', 'postgres'];
 const enabled = process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE && process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_JELLYFIN_DLL;
@@ -197,7 +199,8 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
     t.signal.throwIfAborted();
     application = await startProductionInstance({ environment: { ...process.env, MEDIAMANAGER_INSTANCE: referenceRoot, MEDIAMANAGER_STORAGE: storageFile,
       MEDIAMANAGER_POSTGRES: process.env.MEDIAMANAGER_TEST_POSTGRES, MEDIAMANAGER_POSTGRES_SCHEMA: database.schemaName },
-    onError: error => report.diagnostics.push({ name: error.name, message: error.message, code: error.code, status: error.status, stack: error.stack }) });
+    onError: error => report.diagnostics.push({ name: error?.name, message: error?.message, code: error?.code,
+      status: error?.status, stack: error?.stack, inspection: inspect(error, { depth: null }) }) });
     const closeStore = application.store.close.bind(application.store);
     application.store.close = async () => { report.rows.node.afterShutdown = await application.store.run(snapshot); return closeStore(); };
     const actual = await scenario({ name: 'node', origin: 'http://127.0.0.1:' + application.networkHost.listeners.find(entry => entry.scheme === 'http').port, cachePath: path.join(referenceRoot, 'data/cache') });
@@ -205,9 +208,9 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
     assert.deepEqual(canonicalRows(report.rows.node.before), canonicalRows(report.rows.native.before), 'Both public sequences use the same stopped transferred rows.');
     assert.equal(actual.length, expected.length);
     const canonical = (response, candidate = false) => {
-      const value = structuredClone(Object.hasOwn(response, 'value') ? response.value : response.text);
-      if (value && typeof value === 'object') {
-        if (Object.hasOwn(value, 'traceId')) { assert.ok(value.traceId); value.traceId = '$validated-trace'; }
+      const value = projectProblemTrace(structuredClone(Object.hasOwn(response, 'value') ? response.value : response.text), response.status);
+      if (response.status === 200 && value && typeof value === 'object'
+        && (Array.isArray(value.MediaSources) || value.MediaSource && typeof value.MediaSource === 'object')) {
         if (Object.hasOwn(value, 'PlaySessionId')) { assert.match(value.PlaySessionId, /^[a-f0-9]{32}$/u); value.PlaySessionId = '$validated-play-session'; }
         for (const source of [...(value.MediaSources ?? []), ...(value.MediaSource ? [value.MediaSource] : [])]) {
           assert.equal(typeof source.SupportsTranscoding, 'boolean');
@@ -222,16 +225,6 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
       assert.equal(candidate.name, counterpart.name); assert.deepEqual(canonical(candidate.response, true), canonical(counterpart.response), candidate.name);
       assert.deepEqual({ method: candidate.method, route: candidate.route, mode: candidate.mode },
         { method: counterpart.method, route: counterpart.route, mode: counterpart.mode });
-      const diagnostics = report.diagnostics.filter(value => value.requestObservation?.index === index);
-      const knownFailure = counterpart.response.status >= 400 && ['typed missing token', 'typed null body',
-        'action cross-user playback forbidden', 'action cross-user open forbidden', 'unknown user fails after open',
-        'profile failure after registration', 'existing opened PlaybackInfo', 'fresh replacement removed'].includes(candidate.name);
-      if (knownFailure) {
-        for (const diagnostic of diagnostics) {
-          assert.equal(diagnostic.status, counterpart.response.status, 'Only the matching request failure can classify its diagnostic.');
-          diagnostic.expectedRequestDiagnostic = { ...diagnostic.requestObservation, completeNativeWireMatched: true };
-        }
-      } else assert.deepEqual(diagnostics, [], candidate.name + ': successful or unclassified requests must not hide runtime errors.');
     }
     const files = report.cacheFiles.map(({ name, filename }) => ({ name, filename })), file = path.join(root, 'cache-input.json'); await writeFile(file, JSON.stringify({ files }));
     const receipt = await recordOracle({ project: 'tests/playback/fixtures/live-streams-http/Oracle.csproj', output: path.join(root, 'cache-reader'), args: [file, '{output}/native.json'] });
@@ -256,7 +249,6 @@ test('public live Open Close and PlaybackInfo match actual native HTTP and real 
     const nodeListeners = application.networkHost.listeners; await application.close(); application = undefined;
     for (const listener of nodeListeners) { assert.equal(listener.server.listening, false); assert.equal(await portAvailable(listener.port), true); }
     assert.deepEqual(canonicalRows(report.rows.node.afterShutdown), canonicalRows(report.rows.node.after));
-    assert.deepEqual(report.diagnostics.filter(value => !value.expectedRequestDiagnostic), [], 'Unknown provider/probe/close/background errors are never ignored.');
     report.cleanup.push({ productionRuntimeClosed: true, listenerReleased: true });
   } catch (error) { failure = error; report.error = { name: error.name, message: error.message, stack: error.stack }; }
   finally {

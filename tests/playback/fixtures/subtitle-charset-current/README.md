@@ -18,9 +18,11 @@ remain unchanged. Detector labels, confidence values and implementation state
 are not response consumers. Generated layout uses only the existing exercised
 text-reader allowances.
 
-Production detection uses the unmodified
-[jschardet 4.0.0 package](https://github.com/aadsm/jschardet) under 0BSD and the
-existing Node text decoders. The dependency lock retains the registry artifact
-URL, version and SHA-512 integrity. Its original license ships in the package.
-No .NET charset model, subtitle renderer or AV process is used in production.
-This component does not establish full or release acceptance.
+Production detection reuses the existing JavaScript stream detector in
+`src/core/native-charset.js` and Node text decoders. The designated public
+subtitle consumer takes the first result without the Playlist confidence
+threshold. The original thirty inputs and their authored bytes remain
+unchanged. Full public delivery bytes and converted text determine compatibility;
+detector labels, confidence formatting and candidate details do not add a gate.
+No subtitle renderer or AV process is used. This component does not establish
+full or release acceptance.

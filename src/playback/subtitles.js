@@ -5,6 +5,11 @@ import { readSamiCues } from './subtitle-sami.js';
 
 export { decodeSubtitleBytes as decodeSubtitle } from './subtitle-charset.js';
 
+export function supportsSubtitleTextConversion(inputFormat, outputFormat) {
+  return ['srt', 'vtt', 'ass', 'ssa', 'smi'].includes(inputFormat?.toLowerCase())
+    && ['srt', 'subrip', 'vtt', 'webvtt', 'json', 'ass', 'ssa', 'ttml'].includes(outputFormat?.toLowerCase());
+}
+
 function ticks(text) {
   const match = /^(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})$/.exec(text);
   if (!match) return null;
@@ -197,7 +202,7 @@ export function convertSubtitle(text, inputFormat, outputFormat, { startPosition
   outputFormat = outputFormat.toLowerCase();
   if (['subrip', 'webvtt'].includes(inputFormat)) throw Object.assign(new Error(`Unsupported file extension: ${inputFormat}`), { status: 400 });
   if (inputFormat === 'sub') throw subtitleError('Unsupported format: sub');
-  if (!['srt', 'vtt', 'ass', 'ssa', 'smi'].includes(inputFormat) || !['srt', 'subrip', 'vtt', 'webvtt', 'json', 'ass', 'ssa', 'ttml'].includes(outputFormat)) {
+  if (!supportsSubtitleTextConversion(inputFormat, outputFormat)) {
     throw Object.assign(new Error('This subtitle conversion has not been implemented.'), { status: 501 });
   }
   const lines = text.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/);

@@ -1,5 +1,6 @@
 import { once } from 'node:events';
 import { StorageError, checkAbort } from '../storage/errors.js';
+export { singleRange } from '../storage/range.js';
 
 export class BinaryResult {
   constructor(send) { this.send = send; }
@@ -13,20 +14,6 @@ export class BinaryResult {
   }
 }
 
-export function singleRange(value) {
-  if (value === undefined) return undefined;
-  const match = /^bytes\s*=\s*(\d*)\s*-\s*(\d*)\s*$/i.exec(value);
-  if (!match || !match[1] && !match[2]) throw new StorageError('not-supported', 'Only a single byte range is supported.');
-  if (!match[1]) {
-    if (BigInt(match[2]) === 0n) throw new StorageError('range-not-satisfiable', 'The suffix range is empty.');
-    return { suffix: BigInt(match[2]) };
-  }
-  const result = { start: BigInt(match[1]) };
-  if (match[2]) result.end = BigInt(match[2]);
-  if (result.end !== undefined && result.end < result.start) throw new StorageError('range-not-satisfiable', 'The range is reversed.');
-  return result;
-}
-
 export function contentDisposition(filename) {
   // ASP.NET ContentDispositionHeaderValue.SetHttpFileName replaces non-ASCII
   // characters in filename and retains Unicode in the RFC 5987 parameter.
@@ -36,25 +23,30 @@ export function contentDisposition(filename) {
   return `attachment; filename=${token}; filename*=UTF-8''${encoded}`;
 }
 
-export function vfsStreamResult(vfs, accessPath, { contentType, filename } = {}) {
+export function vfsStreamResult(vfs, accessPath, { contentType, filename, requestHeaders, preserveErrorHeaders = [] } = {}) {
   return new BinaryResult(async (request, response) => {
     const controller = new AbortController();
     const abort = () => controller.abort();
     request.once('aborted', abort);
     response.once('close', abort);
-    let handle;
+    if (request.aborted || response.destroyed) abort();
+    const previousHeaders = new Map();
+    const setHeader = (name, value) => {
+      const key = name.toLowerCase();
+      if (!previousHeaders.has(key)) previousHeaders.set(key, response.getHeader(name));
+      response.setHeader(name, value);
+    };
+    let handle, failed = false, primary, cleanupFailed = false;
     try {
       // The pinned proxy uses GET even for HEAD; opening then closing preserves
       // upstream range metadata without consuming the media body.
-      handle = await vfs.openRead(accessPath, { range: singleRange(request.headers.range),
-        ifRange: request.headers['if-range'], signal: controller.signal });
+      handle = await vfs.openResponse(accessPath, { rangeHeader: request.headers.range,
+        ifRange: request.headers['if-range'], requestHeaders, signal: controller.signal });
       checkAbort(controller.signal);
-      response.statusCode = handle.rangeHonored ? 206 : 200;
-      response.setHeader('Content-Type', handle.contentType ?? contentType ?? 'application/octet-stream');
-      response.setHeader('Accept-Ranges', handle.acceptRanges || (handle.rangeHonored || vfs.capabilities(accessPath).randomRead === true ? 'bytes' : 'none'));
-      if (handle.contentLength != null) response.setHeader('Content-Length', String(handle.contentLength));
-      if (handle.rangeHonored) response.setHeader('Content-Range', `bytes ${handle.range.start}-${handle.range.end}/${handle.totalSize ?? '*'}`);
-      if (filename) response.setHeader('Content-Disposition', contentDisposition(filename));
+      response.statusCode = handle.statusCode;
+      for (const [name, value] of Object.entries(handle.headers)) setHeader(name, value);
+      if (!response.hasHeader('Content-Type')) setHeader('Content-Type', contentType ?? 'application/octet-stream');
+      if (filename) setHeader('Content-Disposition', contentDisposition(filename));
       if (request.method === 'HEAD') { response.end(); return; }
       let written = 0n;
       for await (const chunk of handle.stream) {
@@ -66,23 +58,51 @@ export function vfsStreamResult(vfs, accessPath, { contentType, filename } = {})
       if (handle.contentLength != null && written !== BigInt(handle.contentLength)) throw new StorageError('invalid-response', 'The media stream was truncated.');
       response.end();
     } catch (error) {
-      if (response.headersSent || controller.signal.aborted) { response.destroy(); return; }
-      if (error.code === 'range-not-satisfiable') {
-        response.statusCode = 416;
-        if (error.details?.totalSize != null) response.setHeader('Content-Range', `bytes */${error.details.totalSize}`);
-        if (error.details?.contentType || contentType) response.setHeader('Content-Type', error.details?.contentType ?? contentType);
-        response.setHeader('Accept-Ranges', error.details?.acceptRanges || 'bytes');
-        response.setHeader('Content-Length', '0');
-        response.end();
-      } else {
-        error.status ??= ({ 'not-found': 404, 'permission-denied': 403, 'authentication-required': 403,
-          'version-changed': 412, 'not-supported': 501, timeout: 504 })[error.code] ?? 502;
-        throw error;
-      }
+      failed = true; primary = error;
+      if (response.headersSent || controller.signal.aborted) { response.destroy(); abort(); }
     } finally {
       request.removeListener('aborted', abort);
       response.removeListener('close', abort);
-      await handle?.close();
+      try { await handle?.close(); }
+      catch (error) {
+        if (!failed) {
+          if (error === null || !['object', 'function'].includes(typeof error)) error = new Error('Media source cleanup failed.', { cause: error });
+          throw error;
+        }
+        cleanupFailed = true;
+        primary = Object.assign(new AggregateError([primary, error], primary?.message ?? 'Media stream and source cleanup failed.', { cause: primary }),
+          Object.fromEntries(['code', 'status', 'statusCode'].filter(key => primary?.[key] !== undefined).map(key => [key, primary[key]])));
+      }
     }
+    if (!failed) return;
+    let error = primary;
+    if (error === null || !['object', 'function'].includes(typeof error)) error = new Error('Media stream failed.', { cause: error });
+    if (response.headersSent || controller.signal.aborted) {
+      if (!response.destroyed) response.destroy();
+      if (cleanupFailed) throw error;
+      return;
+    }
+    // An error response owns its body framing and type. Restore this send's
+    // unpublished headers except source metadata explicitly retained by its
+    // caller; existing outer response metadata remains authoritative.
+    for (const [name, value] of previousHeaders) {
+      if (preserveErrorHeaders.includes(name)) continue;
+      if (value === undefined) response.removeHeader(name); else response.setHeader(name, value);
+    }
+    if (error.code === 'range-not-satisfiable') {
+      const details = cleanupFailed ? error.cause?.details : error.details;
+      response.statusCode = 416;
+      if (details?.totalSize != null) response.setHeader('Content-Range', `bytes */${details.totalSize}`);
+      if (details?.contentType || contentType) response.setHeader('Content-Type', details?.contentType ?? contentType);
+      if (filename) response.setHeader('Content-Disposition', contentDisposition(filename));
+      response.setHeader('Accept-Ranges', details?.acceptRanges || 'bytes');
+      response.setHeader('Content-Length', '0');
+      response.end();
+      if (cleanupFailed) throw error;
+      return;
+    }
+    error.status ??= error.statusCode ?? ({ 'not-found': 404, 'permission-denied': 403, 'authentication-required': 403,
+      'version-changed': 412, 'not-supported': 501, timeout: 504 })[error.code] ?? 502;
+    throw error;
   });
 }

@@ -12,6 +12,7 @@ import { parseLosslessJson } from '../../src/core/json.js';
 import { createMediaFixture } from './http-scenario.js';
 import { recordPlaybackBinding } from './binding-scenario.js';
 import { createPlaybackState } from './runtime-state.js';
+import { projectPlaybackInfoBody } from '../helpers/http-body-projection.js';
 import libraryFixture from '../library/fixtures/reference-media.json' with { type: 'json' };
 import streamsFixture from '../library/fixtures/reference-streams.json' with { type: 'json' };
 import inputs from './fixtures/json-model-binding/http-input.json' with { type: 'json' };
@@ -39,13 +40,8 @@ async function seed(database) {
 }
 
 // Only per-request identifiers and the isolated synthetic subtitle path vary.
-function normalize(value) {
-  if (Array.isArray(value)) return value.map(normalize);
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
-    .filter(([key]) => key !== 'traceId' && key !== 'PlaySessionId').map(([key, entry]) => [key, normalize(entry)]));
-  if (value === nativeSubtitlePath || value === `${subtitleRoot}\\fixture.srt`) return '<synthetic-subtitle>';
-  return value;
-}
+const normalize = record => ({ ...record, body: projectPlaybackInfoBody(record.body, { status: record.status,
+  path: value => value === nativeSubtitlePath || value === `${subtitleRoot}\\fixture.srt` ? '<synthetic-subtitle>' : value }) });
 
 test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete responses', {
   skip: !process.env.MEDIAMANAGER_TEST_POSTGRES,
@@ -76,7 +72,7 @@ test('104 native PlaybackInfo HTTP binding cases on PostgreSQL match complete re
       await writeFile(path.join(process.env.MEDIAMANAGER_BINDING_EVIDENCE, 'postgres-durable-http.json'), `${exactJson(actual)}\n`);
       await writeFile(path.join(process.env.MEDIAMANAGER_BINDING_EVIDENCE, 'postgres-durable-http-report.json'), `${exactJson({
         cases: actual.length, equal: actual.length - differences.length, compatible: differences.length === 0,
-        normalizations: ['traceId', 'PlaySessionId', 'isolated synthetic subtitle path'], differences,
+        normalizations: ['Root ProblemDetails trace value, with presence retained', 'PlaybackInfoResponse correlation value, with presence retained', 'Declared synthetic subtitle stream path only'], differences,
       })}\n`);
     }
     assert.deepEqual(differences, [], 'All 104 native binding responses must match without static source capability exclusions.');

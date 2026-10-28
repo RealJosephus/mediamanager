@@ -3,6 +3,8 @@ import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 import assert from 'node:assert/strict';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { setTimeout as delay } from 'node:timers/promises';
+import path from 'node:path';
+import { tmpdir } from 'node:os';
 import { ExtractionService, buildExtractionArguments, subtitleInputIndex } from '../../src/playback/extraction.js';
 import { ProbeReadBridge } from '../../src/storage/probe-bridge.js';
 import { negotiateSource } from '../../src/playback/profile.js';
@@ -30,7 +32,7 @@ async function until(predicate) {
 async function setup(t, options = {}, fixtureOptions = {}) {
   const fixture = await extractionFixture(files(), fixtureOptions);
   const processes = [];
-  const service = new ExtractionService({ vfs: fixture.vfs, mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding'), onProcess: entry => processes.push(entry.args), ...options });
+  const service = new ExtractionService({ vfs: fixture.vfs, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions: () => defaultConfiguration('encoding'), onProcess: entry => processes.push(entry.args), ...options });
   t.after(async () => { await service.close(); await fixture.close(); });
   return { fixture, service, processes, count: () => processes.filter(args => !args.includes('-version')).length };
 }
@@ -168,6 +170,10 @@ test('embedded External negotiation matches the native DLL only after its extrac
   assert.equal(actual.MediaStreams.find(value => value.Index === expected.SubtitleStreamIndex).DeliveryMethod, 'External');
   assert.equal(service.supportsSubtitle(source, { Codec: 'dvdsub' }, 'dvdsub'), false, 'An MKS packet-copy output must not be advertised as an IDX/SUB pair.');
   assert.equal(service.supportsSubtitle(source, { Codec: 'dvdsub' }, 'mks'), true);
+  const sami = { Type: 'Subtitle', Codec: 'sami', IsExternal: true, Path: 'Z:\\Extraction\\original.sami' };
+  assert.equal(service.supportsSubtitle(source, sami, 'vtt'), true);
+  assert.equal(service.supportsSubtitle(source, { ...sami, Path: 'https://example.invalid/original.sami' }, 'vtt'), true);
+  assert.equal(service.supportsSubtitle(source, { ...sami, Path: 'relative.sami' }, 'vtt'), false);
 });
 
 test('extraction enforces output limits, timeout and shutdown cancellation', async t => {
@@ -197,4 +203,34 @@ test('stream indexes follow native input-path grouping and process arguments rej
   assert.throws(() => buildExtractionArguments('file:///private.mkv', { kind: 'subtitle', index: 0, muxer: 'srt' }), TypeError);
   assert.throws(() => buildExtractionArguments('http://127.0.0.1:123/' + 'a'.repeat(64), { kind: 'subtitle', index: -1, muxer: 'srt' }), TypeError);
   assert.throws(() => buildExtractionArguments('http://127.0.0.1:123/' + 'a'.repeat(64), { kind: 'subtitle', index: 0, muxer: 'mpegts' }), TypeError);
+  const directory = path.join(path.resolve(tmpdir()), 'mediamanager-subtitle-arguments'), output = path.join(directory, 'converted.srt');
+  const url = 'http://127.0.0.1:123/' + 'a'.repeat(64) + '.sami', operation = { kind: 'text-subtitle', index: 0, muxer: 'srt', encoding: 'utf-8', directory, output };
+  const args = buildExtractionArguments(url, operation);
+  assert.deepEqual(args.slice(args.indexOf('-c:s'), args.indexOf('-c:s') + 2), ['-c:s', 'srt']);
+  assert.ok(args.includes('-an') && args.includes('-vn') && args.includes('-dn'));
+  assert.equal(args.at(-1), output);
+  assert.equal(args[args.indexOf('-i') + 1], url);
+  for (const changed of [{ muxer: 'ass' }, { encoding: 'utf-8 -c:v h264' }, { output: path.join(tmpdir(), 'unowned.srt') }, { kind: 'audio' }])
+    assert.throws(() => buildExtractionArguments(url, { ...operation, ...changed }), TypeError);
+});
+
+test('SAMI source reads retain a falsy rejection before their actual handle-close failure without starting a media tool', async t => {
+  const fixture = await extractionFixture({ '/source.sami': Buffer.from('<SAMI><BODY><SYNC Start=1000><P>Ordinary text</P></SYNC></BODY></SAMI>') });
+  const secondary = new Error('The actual source handle closed with a secondary error.'), processes = [];
+  const originalRead = fixture.adapter.openRead.bind(fixture.adapter); let read = false, closed = false;
+  fixture.adapter.openRead = async (...arguments_) => {
+    const handle = await originalRead(...arguments_);
+    return { ...handle, stream: (async function* () { for await (const _chunk of handle.stream) { read = true; throw false; } })(),
+      async close() { await handle.close(); closed = true; throw secondary; } };
+  };
+  const service = new ExtractionService({ vfs: fixture.vfs, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t),
+    getEncodingOptions: () => defaultConfiguration('encoding'), onProcess: value => processes.push(value) });
+  t.after(async () => { await service.close(); await fixture.close(); });
+  const stream = { Type: 'Subtitle', Index: 0, IsExternal: true, IsTextSubtitleStream: true, Codec: 'sami', Path: 'Z:\\Extraction\\source.sami' };
+  const source = { Id: 'f8900000-0000-0000-0000-000000000110', MediaStreams: [stream] };
+  await assert.rejects(service.subtitle(source, stream, '/source.sami'), error => {
+    assert.equal(error.cause, false); assert.deepEqual(error.errors, [false, secondary]); return true;
+  });
+  assert.ok(read && closed, 'The actual HTTP/VFS body was read and its owned handle closed.');
+  assert.deepEqual(processes, []); assert.ok(fixture.requests.some(request => request.method === 'GET'));
 });

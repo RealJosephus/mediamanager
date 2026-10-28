@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import { createRuntime } from '../../../src/runtime.js';
 import { readInstanceConfiguration } from '../../../src/configuration.js';
@@ -46,6 +46,13 @@ export async function runSubtitleTextScenario(t, { prefix, scenarios, fixtureFil
     componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false };
   const Id = 'F8600000-0000-0000-0000-000000000001', id = Id.replaceAll('-', '').toLowerCase();
   const failures = [], recordFailure = error => { failures.push(error); report.failures.push(errorValue(error)); };
+  const atBoundary = async (operation, message) => {
+    const deadline = new AbortController();
+    try {
+      return await Promise.race([operation, delay(10000, undefined, { ref: false, signal: AbortSignal.any([t.signal, deadline.signal]) })
+        .then(() => { throw new Error(message); })]);
+    } finally { deadline.abort(); }
+  };
   const assertPublicFailure = (observation, native) => {
     assert.equal(observation.status, native.wire.status, observation.name + ': actual Native public error status');
     assert.equal(observation.headers['content-type'], native.wire.contentType, observation.name + ': actual Native public error MIME');
@@ -60,15 +67,29 @@ export async function runSubtitleTextScenario(t, { prefix, scenarios, fixtureFil
       const handle = await openRead(location, options);
       if (!location.startsWith('/inputs/')) return handle;
       const reader = { generation, location, closed: false }; report.readers.push(reader);
-      const selected = gate; selected?.opened.resolve();
+      const selected = gate;
+      if (selected) {
+        Object.assign(reader, { bytesRead: 0, readCompleted: false }); selected.reader = reader;
+      }
       return { ...handle, stream: (async function* () {
         if (selected) {
-          const aborted = Promise.withResolvers(), abort = () => aborted.reject(options.signal.reason);
+          const aborted = Promise.withResolvers(), abort = () => {
+            reader.abortReason = errorValue(options.signal.reason); selected.ownerAborted.resolve(reader.abortReason);
+            aborted.reject(options.signal.reason);
+          };
           options.signal?.addEventListener('abort', abort, { once: true });
-          try { options.signal?.throwIfAborted(); await Promise.race([selected.release.promise, aborted.promise]); options.signal?.throwIfAborted(); }
+          try {
+            options.signal?.throwIfAborted(); selected.opened.resolve();
+            await Promise.race([selected.release.promise, aborted.promise]); options.signal?.throwIfAborted();
+          }
           finally { options.signal?.removeEventListener('abort', abort); }
         }
-        yield* handle.stream;
+        const digest = selected && createHash('sha256');
+        for await (const bytes of handle.stream) {
+          if (selected) { reader.bytesRead += bytes.length; digest.update(bytes); }
+          yield bytes;
+        }
+        if (selected) { reader.sha256 = digest.digest('hex'); reader.readCompleted = true; }
       })(), close: async () => {
         try { await handle.close(); reader.closed = true; }
         catch (error) { reader.closeError = errorValue(error); throw error; }
@@ -83,6 +104,12 @@ export async function runSubtitleTextScenario(t, { prefix, scenarios, fixtureFil
       onError: error => report.diagnostics.push(errorValue(error)) });
     await runtime.start();
     origin = 'http://127.0.0.1:' + runtime.networkHost.listeners.find(listener => listener.scheme === 'http').port;
+    for (const listener of runtime.networkHost.listeners) listener.server.on('request', (incoming, response) => {
+      const selected = gate;
+      if (selected && incoming.method === 'GET' && incoming.url === selected.route) response.once('close', () => selected.publicClosed.resolve({
+        generation, method: incoming.method, route: incoming.url, writableFinished: response.writableFinished,
+      }));
+    });
   };
   const close = async () => {
     gate?.release.resolve(); gate = undefined;
@@ -137,15 +164,53 @@ export async function runSubtitleTextScenario(t, { prefix, scenarios, fixtureFil
     report.coldStreams = await database.rows('MediaStreamInfos', { where: { ItemId: Id } });
     assert.deepEqual(report.coldItems, report.warmItems); assert.deepEqual(report.coldStreams, report.warmStreams);
     await collect();
-    gate = { opened: Promise.withResolvers(), closed: Promise.withResolvers(), release: Promise.withResolvers() };
+    const reference = report.conversions.find(observation => observation.generation === generation);
+    assert.ok(reference, 'The declared comparison matrix has a complete cold public response.');
+    const sample = scenarios.conversions.find(sample => sample.name === reference.name), source = sources.get(sample.source);
+    const heldFormat = sample.format, heldRoute = route(source, heldFormat, sample);
+    assert.equal(reference.route, heldRoute, 'The held reader uses the actual declared conversion, source and playback window.');
+    const hold = () => ({ route: heldRoute, opened: Promise.withResolvers(), closed: Promise.withResolvers(),
+      release: Promise.withResolvers(), publicClosed: Promise.withResolvers(), ownerAborted: Promise.withResolvers() });
+    gate = hold();
     cancellation = new AbortController();
-    pendingRequest = request('actual-reader-cancellation', sources.values().next().value, 'vtt', {}, AbortSignal.any([t.signal, cancellation.signal]));
+    pendingRequest = request('actual-controller-disconnect', source, heldFormat, sample, AbortSignal.any([t.signal, cancellation.signal]));
     pendingRequest.catch(() => {});
-    await Promise.race([gate.opened.promise, delay(10000, undefined, { ref: false }).then(() => { throw new Error('The actual Local subtitle reader did not open.'); })]);
-    cancellation.abort();
-    await assert.rejects(pendingRequest, error => { report.cancelled = errorValue(error); return error.name === 'AbortError'; });
-    await Promise.race([gate.closed.promise, delay(10000, undefined, { ref: false }).then(() => { throw new Error('Cancelling the public subtitle request did not close its actual Local reader.'); })]);
-    gate = undefined; await close();
+    await atBoundary(gate.opened.promise, 'The actual Local subtitle reader did not open.');
+    const disconnectReason = Object.assign(new Error('The controlled subtitle HTTP client disconnected.'), { code: 'subtitle-client-disconnect' });
+    cancellation.abort(disconnectReason);
+    await assert.rejects(pendingRequest, error => {
+      report.cancelled = errorValue(error);
+      assert.equal(error.code, disconnectReason.code); assert.equal(error.message, disconnectReason.message); return true;
+    });
+    assert.equal(cancellation.signal.aborted, true);
+    report.clientDisconnect = { boundary: 'The formatted Controller uses CancellationToken.None; release the held actual source only after the public response closes.',
+      referenceName: reference.name, reader: gate.reader,
+      publicDisconnect: await atBoundary(gate.publicClosed.promise, 'The actual subtitle HTTP response did not close after its client disconnected.') };
+    gate.release.resolve();
+    await atBoundary(gate.closed.promise, 'The detached subtitle producer did not close its actual Local reader after source release.');
+    assert.equal(gate.reader.closed, true); assert.equal(gate.reader.readCompleted, true);
+    assert.equal(gate.reader.bytesRead, source.bytes); assert.equal(gate.reader.sha256, source.sha256);
+    await atBoundary(runtime.playback.drainSubtitlePreparations(), 'The detached subtitle producer did not finish after its actual reader closed.');
+    await atBoundary(runtime.drainRequests(), 'The detached subtitle HTTP action did not finish.');
+    report.clientDisconnect.producerDrained = true;
+    gate = undefined; pendingRequest = undefined; cancellation = undefined;
+    report.clientDisconnect.readback = await request('after-controller-disconnect', source, heldFormat, sample);
+    const publicValue = value => ({ status: value.status, contentType: value.headers['content-type'], bytes: value.bytes, sha256: value.sha256 });
+    assert.deepEqual(publicValue(report.clientDisconnect.readback), publicValue(reference), 'Complete cold HTTP delivery after the detached producer drains.');
+    gate = hold();
+    pendingRequest = request('actual-runtime-owner-cancellation', source, heldFormat, sample); pendingRequest.catch(() => {});
+    await atBoundary(gate.opened.promise, 'The shutdown preparation did not open its actual Local subtitle reader.');
+    report.shutdown = { boundary: 'Actual Node runtime.close cancels its admitted subtitle owner while the Local source remains held.', reader: gate.reader };
+    const shutdown = runtime.close(); shutdown.catch(() => {});
+    report.shutdown.ownerAbort = await atBoundary(gate.ownerAborted.promise, 'Runtime close did not cancel its actual held subtitle source.');
+    assert.equal(report.shutdown.ownerAbort.code, 'closed');
+    await atBoundary(gate.closed.promise, 'Runtime close did not settle its actual Local subtitle reader close.');
+    assert.equal(gate.reader.closed, true);
+    report.shutdown.publicDisconnect = await atBoundary(gate.publicClosed.promise, 'Runtime close did not close the admitted subtitle HTTP response.');
+    await shutdown; report.shutdown.runtimeClosed = true;
+    await assert.rejects(pendingRequest, error => { report.shutdown.clientError = errorValue(error); return true; });
+    await close(); gate = undefined; pendingRequest = undefined;
+    await assert.rejects(database.rows('BaseItems'), /closed|not open/iu);
     const captured = await captureSubtitleText(output, scenarios, report.conversions.map(({ name, generation, format, bytes, status }) => ({ name, generation, format, bytes, status })), { signal: t.signal, fixtureFiles });
     report.native = captured.report.captures;
     const expected = new Map(captured.first.conversions.map(row => [row.name, row]));

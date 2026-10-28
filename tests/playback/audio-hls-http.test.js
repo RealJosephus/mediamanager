@@ -13,6 +13,7 @@ import { createTestRuntime } from '../helpers/runtime.js';
 import { IdentityAccessMap } from '../../src/storage/index.js';
 import { extractionFixture } from './extraction-fixture.js';
 import reference from './fixtures/audio-hls-reference.json' with { type: 'json' };
+import { playbackTransportSummary, projectHlsRequestIdentities } from '../helpers/playback-transport-projection.js';
 
 
 
@@ -55,23 +56,21 @@ test('native audio HLS manifests, copy packets, seek and task lifecycle on Postg
     const login = await fetch(origin + '/Users/AuthenticateByName', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'MediaBrowser Client="HLS Fixture", Device="Isolated", DeviceId="hls-fixture", Version="1"' }, body: JSON.stringify({ Username: 'HlsReader', Pw: 'isolated-hls-password' }) });
     assert.equal(login.status, 200); const token = (await login.json()).AccessToken;
     const headers = { Authorization: `MediaBrowser Token="${token}"`, 'Content-Type': 'application/json' };
-    const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'PlaySessionId').map(([key, value]) => [key, normalize(value)]))
-      : typeof value === 'string' ? value.replaceAll(token, '<token>').replace(/PlaySessionId=[^&\r\n]+/g, 'PlaySessionId=<session>') : value;
     const info = async entry => { const response = await fetch(origin + `/Items/${id}/PlaybackInfo`, { method: 'POST', headers, body: JSON.stringify({ DeviceProfile: entry.profile, MediaSourceId: id, ...entry.options }) }); return { status: response.status, body: await response.json() }; };
     let lastSegment, lastBytes;
     for (const expected of reference.records) {
       const entry = reference.profiles.find(value => value.name === expected.name), actualInfo = await info(entry);
-      assert.deepEqual(normalize(actualInfo), expected.info, expected.name + ' PlaybackInfo');
+      assert.deepEqual({ ...actualInfo, body: playbackTransportSummary(actualInfo.body, token) }, expected.info, expected.name + ' PlaybackInfo');
       // Native audio URLs enter encoding unless AudioCodec=copy is explicit.
       // PlaybackInfo is compared unchanged; executable manifests use the separately
       // recorded native copy branch and the candidate rewrites its variant to copy.
       const masterUrl = origin + actualInfo.body.MediaSources[0].TranscodingUrl, playSessionId = actualInfo.body.PlaySessionId;
       const master = await fetch(masterUrl, { headers }), masterText = await master.text();
-      assert.deepEqual({ ...headersOf(master), text: normalize(masterText) }, expected.master, expected.name + ' master');
+      assert.deepEqual({ ...headersOf(master), text: projectHlsRequestIdentities(masterText, { token, playSessionId }) }, expected.master, expected.name + ' master');
       assert.deepEqual(headersOf(await fetch(masterUrl, { headers, method: 'HEAD' })), expected.head);
       const variant = masterText.split(/\r?\n/).find(line => line && !line.startsWith('#')), mainUrl = new URL(variant, masterUrl);
       const main = await fetch(mainUrl, { headers }), mainText = await main.text();
-      assert.deepEqual({ ...headersOf(main), text: normalize(mainText) }, expected.main, expected.name + ' main');
+      assert.deepEqual({ ...headersOf(main), text: projectHlsRequestIdentities(mainText, { token, playSessionId }) }, expected.main, expected.name + ' main');
       assert.equal(runtime.hls.hasJob(playSessionId), false, 'Manifests must not start a process.');
       let init = Buffer.alloc(0);
       for (const segment of expected.segments) {

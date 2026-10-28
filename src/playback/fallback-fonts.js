@@ -59,19 +59,19 @@ export class FallbackFonts {
     const pending = Promise.resolve().then(async () => {
       try { combined.throwIfAborted(); return await operation(combined, operationState); }
       catch (error) {
-        if (['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error.code)) error.status ??= 404;
+        if (['ENOENT', 'ENOTDIR', 'not-found', 'not-directory'].includes(error?.code)) error.status ??= 404;
         throw error;
       }
     });
     this.#operations.add(pending);
-    const finished = error => {
+    const finished = (failed, error) => {
       this.#operations.delete(pending);
       // Record each operation once. A cleanup failure remains observable at
       // owner close even if its HTTP response has already finished.
-      if (operationState.cleanupFailure) this.#closeFailures.push(operationState.cleanupFailure);
-      else if (this.#closed && error && !cancelled(error, this.#lifetime.signal)) this.#closeFailures.push(error);
+      if (Object.hasOwn(operationState, 'cleanupFailure')) this.#closeFailures.push(operationState.cleanupFailure);
+      else if (this.#closed && failed && !cancelled(error, this.#lifetime.signal)) this.#closeFailures.push(error);
     };
-    pending.then(() => finished(), finished);
+    pending.then(() => finished(false), error => finished(true, error));
     return pending;
   }
 
@@ -84,7 +84,7 @@ export class FallbackFonts {
     catch (error) {
       // Directory.Exists also returns false for an impossible filename. The
       // mapping above must succeed before a backend path probe is classified.
-      if (['ENOENT', 'ENOTDIR', 'invalid-path'].includes(error.code)) return [];
+      if (['ENOENT', 'ENOTDIR', 'invalid-path'].includes(error?.code)) return [];
       throw error;
     }
     signal.throwIfAborted();
@@ -140,7 +140,13 @@ export class FallbackFonts {
     const signal = AbortSignal.any([active, controller.signal]);
     request.once('aborted', abort); response.once('close', abort); this.#responses.add(response);
     if (request.aborted || response.destroyed) controller.abort();
-    let handle, primary;
+    const previousHeaders = new Map();
+    const setHeader = (name, value) => {
+      const key = name.toLowerCase();
+      if (!previousHeaders.has(key)) previousHeaders.set(key, response.getHeader(name));
+      response.setHeader(name, value);
+    };
+    let handle, failed = false, primary;
     try {
       signal.throwIfAborted();
       // PhysicalFile resolves its file information when the result executes.
@@ -148,7 +154,7 @@ export class FallbackFonts {
       if (!info.isFile()) throw Object.assign(new Error('The fallback font is no longer a file.'), { code: 'ENOENT', status: 404 });
       const fraction = (info.mtimeNs % 1_000_000_000n + 1_000_000_000n) % 1_000_000_000n;
       const modified = Number((info.mtimeNs - fraction) / 1_000_000_000n) * 1000;
-      response.setHeader('Last-Modified', new Date(modified).toUTCString());
+      setHeader('Last-Modified', new Date(modified).toUTCString());
       const since = httpDate(request.headers['if-modified-since']), unmodified = httpDate(request.headers['if-unmodified-since']);
       const now = Math.floor(Date.now() / 1000) * 1000;
       const validSince = Number.isFinite(since) && since <= now, validUnmodified = Number.isFinite(unmodified) && unmodified <= now;
@@ -158,8 +164,8 @@ export class FallbackFonts {
       if (validSince && modified <= since && !validUnmodified) {
         response.statusCode = 304; response.end(); return;
       }
-      response.setHeader('Content-Type', getMimeType(filename));
-      response.setHeader('Content-Length', String(info.size));
+      setHeader('Content-Type', getMimeType(filename));
+      setHeader('Content-Length', String(info.size));
       if (request.method === 'HEAD') { response.end(); return; }
       handle = await this.fileSystem.openRead(filename, { signal });
       let written = 0n;
@@ -171,14 +177,20 @@ export class FallbackFonts {
       if (written !== info.size) throw Object.assign(new Error('The fallback font ended before its declared length.'), { code: 'invalid-response' });
       response.end();
     } catch (error) {
-      primary = error;
+      failed = true; primary = error;
       if (response.headersSent || cancelled(error, signal)) response.destroy();
-      if (!cancelled(error, signal)) throw error;
+      if (!cancelled(error, signal)) {
+        // An unpublished file selection must not frame the middleware's error body.
+        if (!response.headersSent) for (const [name, value] of previousHeaders) {
+          if (value === undefined) response.removeHeader(name); else response.setHeader(name, value);
+        }
+        throw error;
+      }
     } finally {
       request.removeListener('aborted', abort); response.removeListener('close', abort); this.#responses.delete(response);
       try { await handle?.close(); }
       catch (cleanup) {
-        operation.cleanupFailure = primary ? failure([primary, cleanup]) : cleanup;
+        operation.cleanupFailure = failed ? failure([primary, cleanup]) : cleanup;
         throw operation.cleanupFailure;
       }
     }

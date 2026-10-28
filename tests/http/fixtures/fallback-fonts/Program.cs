@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using System.Globalization;
+using System.IO.Pipelines;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -35,6 +37,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +52,7 @@ using Microsoft.Extensions.Options;
 var inputBytes = File.ReadAllBytes(args[0]);
 var input = JsonDocument.Parse(inputBytes).RootElement;
 var root = Path.GetFullPath(args[1]);
+JsonElement? browser = args.Length > 3 ? JsonDocument.Parse(File.ReadAllBytes(args[3])).RootElement.Clone() : null;
 var fileInputs = Directory.EnumerateFiles(Path.Combine(root, "files"), "*", SearchOption.AllDirectories).Select(filename => {
     var info = new FileInfo(filename);
     return new { filename = info.FullName, size = info.Length, info.CreationTimeUtc, info.LastWriteTimeUtc,
@@ -69,13 +76,34 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy(Policies.RequiresElevation, policy => policy.AddAuthenticationSchemes("fixture").RequireClaim(ClaimTypes.Role, UserRoles.Administrator));
 });
 builder.Services.AddJellyfinApi([], new NetworkConfiguration()).ConfigureApplicationPartManager(value => value.FeatureProviders.Add(new OnlySubtitleController()));
+builder.Services.Configure<MvcOptions>(options => options.Filters.Add(new PhysicalFileFailureFilter(capture)));
 builder.Services.Replace(ServiceDescriptor.Transient<SubtitleController>(services => new SubtitleController(capture.Configuration,
     Stub.Make<ILibraryManager>(), Stub.Make<ISubtitleManager>(), Stub.Make<ISubtitleEncoder>(), Stub.Make<IMediaSourceManager>(),
     Stub.Make<IProviderManager>(), capture.FileSystem, services.GetRequiredService<IHttpClientFactory>(), services.GetRequiredService<ILogger<SubtitleController>>())));
 var app = builder.Build(); var observations = new List<object>(); using var client = new HttpClient();
 TaskCompletionSource? requestFinished = null;
 try {
-    app.Use(async (context, next) => { try { await next(); } finally { requestFinished?.TrySetResult(); } });
+    if (browser is JsonElement browserConfiguration) {
+        var assetRoot = Path.GetFullPath(browserConfiguration.GetProperty("assetRoot").GetString()!);
+        if (!assetRoot.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.Ordinal)) throw new InvalidOperationException("Browser assets must belong to this font capture.");
+        var assets = browserConfiguration.GetProperty("assets").EnumerateArray().ToDictionary(value => value.GetProperty("filename").GetString()!, value => value.Clone());
+        if (assets.Keys.Any(filename => filename != Path.GetFileName(filename))) throw new InvalidOperationException("Invalid browser font asset name.");
+        app.Use(async (context, next) => {
+            if (context.Request.Path.StartsWithSegments("/font-consumer", out var remaining) && assets.TryGetValue(remaining.Value!.TrimStart('/'), out var asset)) {
+                var bytes = await File.ReadAllBytesAsync(Path.Combine(assetRoot, asset.GetProperty("filename").GetString()!));
+                if (Convert.ToHexStringLower(SHA256.HashData(bytes)) != asset.GetProperty("sha256").GetString()) throw new InvalidOperationException("Browser font asset changed.");
+                context.Response.ContentType = asset.GetProperty("type").GetString(); context.Response.ContentLength = bytes.Length;
+                await context.Response.Body.WriteAsync(bytes); return;
+            }
+            await next();
+        });
+    }
+    app.Use(async (context, next) => { try { await next(); } finally {
+        if (browser is null || context.Request.Path.StartsWithSegments("/FallbackFont/Fonts")) {
+            capture.FinalResponse = Capture.ResponseValue(context.Response);
+            requestFinished?.TrySetResult();
+        }
+    } });
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseRequestLocalization(new RequestLocalizationOptions {
         DefaultRequestCulture = new RequestCulture("en-US"),
@@ -94,6 +122,26 @@ try {
             request.Headers.TryAddWithoutValidation("Accept", Capture.Text(step, "accept") ?? "application/json");
             request.Headers.TryAddWithoutValidation("X-Identity", Capture.Text(step, "identity") ?? "admin");
             if (step.TryGetProperty("headers", out var headers)) foreach (var header in headers.EnumerateObject()) request.Headers.TryAddWithoutValidation(header.Name, header.Value.GetString());
+            if (step.TryGetProperty("browserMode", out var browserMode)) {
+                if (browser is null) throw new InvalidOperationException("Browser font observation needs its owned control channel.");
+                var callback = new Uri(browser.Value.GetProperty("control").GetString()!);
+                if (!callback.IsLoopback || callback.Scheme != "http") throw new InvalidOperationException("Browser control must remain on loopback.");
+                using var callbackDeadline = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+                using var callbackResponse = await client.PostAsJsonAsync(callback, new { origin = address, step }, callbackDeadline.Token);
+                var callbackBytes = await callbackResponse.Content.ReadAsByteArrayAsync(callbackDeadline.Token);
+                callbackResponse.EnsureSuccessStatusCode();
+                var observedBrowser = JsonSerializer.Deserialize<JsonElement>(callbackBytes);
+                await requestFinished.Task.WaitAsync(TimeSpan.FromSeconds(30));
+                steps.Add(new { name = Capture.Text(step, "name"), browser = observedBrowser,
+                    executionFault = capture.ExecutionFault, finalResponse = capture.FinalResponse,
+                    diskBeforeBase64 = Convert.ToBase64String(before), diskAfterBase64 = Convert.ToBase64String(File.ReadAllBytes(capture.ConfigFile)),
+                    diagnostics = diagnostics.ToArray() });
+                continue;
+            }
+            if (step.TryGetProperty("observeFailure", out var observeFailure) && observeFailure.GetBoolean()) {
+                steps.Add(await capture.ObserveFailure(client, request, requestFinished.Task, step, before, diagnostics, snapshots));
+                continue;
+            }
             var cancelRead = step.TryGetProperty("cancelAfterFirstRead", out var cancel) && cancel.GetBoolean();
             using var cancellation = new CancellationTokenSource();
             using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellation.Token);
@@ -144,6 +192,9 @@ public sealed class Capture(string root) {
     public ServerConfigurationManager Configuration = null!;
     public ManagedFileSystem FileSystem = null!;
     public EncodingOptions Held = null!;
+    public string? ExecutionFaultMode;
+    public object? ExecutionFault;
+    public object? FinalResponse;
     public EncodingOptions Current => Configuration.GetEncodingOptions();
     public EncodingOptions Disk => (EncodingOptions)new MyXmlSerializer().DeserializeFromFile(typeof(EncodingOptions), ConfigFile);
     public string ConfigFile => Path.Combine(Paths.ConfigurationDirectoryPath, "encoding.xml");
@@ -161,10 +212,86 @@ public sealed class Capture(string root) {
         FileSystem = new ManagedFileSystem(NullLogger<ManagedFileSystem>.Instance, Paths, []);
     }
     public void Before(JsonElement step) {
+        ExecutionFaultMode = Text(step, "executionFault"); ExecutionFault = null; FinalResponse = null;
         if (step.TryGetProperty("replaceRoot", out var replace)) Configuration.SaveConfiguration("encoding", Options(replace.GetString()));
         if (step.TryGetProperty("mutateHeldRoot", out var held)) Held.FallbackFontPath = Resolve(held.GetString());
         if (step.TryGetProperty("mutateCurrentRoot", out var current)) Current.FallbackFontPath = Resolve(current.GetString());
     }
+    public static object ResponseValue(HttpResponse response) => new {
+        hasStarted = response.HasStarted, status = response.StatusCode,
+        headers = response.Headers.ToDictionary(value => value.Key.ToLowerInvariant(), value => value.Value.ToString()),
+    };
+    public static object? ErrorValue(Exception? error) => error is null ? null : new {
+        type = error.GetType().FullName, error.Message, error.StackTrace,
+        cause = ErrorValue(error.InnerException),
+        errors = error is AggregateException group ? group.InnerExceptions.Select(ErrorValue).ToArray() : null,
+    };
+    public async Task MissingFile(string filename, HttpResponse response, string phase, Func<Task<Exception?>> operation) {
+        var bytes = File.ReadAllBytes(filename); var before = ResponseValue(response);
+        var backup = filename + "." + Guid.NewGuid().ToString("N") + ".held";
+        File.Move(filename, backup);
+        Exception? primary = null;
+        try { primary = await operation(); }
+        catch (Exception error) { primary = error; throw; }
+        finally {
+            var after = ResponseValue(response); Exception? cleanup = null; var restored = false;
+            try { File.Move(backup, filename); restored = File.Exists(filename) && File.ReadAllBytes(filename).AsSpan().SequenceEqual(bytes); }
+            catch (Exception error) { cleanup = error; }
+            ExecutionFault = new { phase, filename, bytes = bytes.Length,
+                sha256 = Convert.ToHexStringLower(SHA256.HashData(bytes)), before, after,
+                failure = ErrorValue(primary), cleanup = ErrorValue(cleanup), restored };
+            if (cleanup is not null) throw primary is null ? cleanup : new AggregateException(primary, cleanup);
+        }
+    }
+    public async Task<object> ObserveFailure(HttpClient client, HttpRequestMessage request, Task requestFinished, JsonElement step,
+        byte[] before, ConcurrentQueue<object> diagnostics, JsonSerializerOptions snapshots) {
+        using var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        using var body = new MemoryStream();
+        HttpResponseMessage? response = null; Exception? clientFailure = null;
+        int? status = null; var headers = new Dictionary<string, string>(); var bodyComplete = false;
+        try {
+            response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellation.Token);
+            status = (int)response.StatusCode;
+            headers = response.Headers.Concat(response.Content.Headers).ToDictionary(value => value.Key.ToLowerInvariant(), value => string.Join(", ", value.Value));
+            await using var reader = await response.Content.ReadAsStreamAsync(cancellation.Token);
+            var buffer = new byte[8192]; int count;
+            while ((count = await reader.ReadAsync(buffer, cancellation.Token)) != 0) body.Write(buffer, 0, count);
+            bodyComplete = true;
+        } catch (Exception error) { clientFailure = error; }
+        finally { response?.Dispose(); }
+        await requestFinished.WaitAsync(TimeSpan.FromSeconds(30));
+        return new { name = Text(step, "name"), status, headers, bodyBase64 = Convert.ToBase64String(body.ToArray()), bodyComplete,
+            clientFailure = ErrorValue(clientFailure), executionFault = ExecutionFault, finalResponse = FinalResponse,
+            current = JsonSerializer.SerializeToElement(Current, snapshots), held = JsonSerializer.SerializeToElement(Held, snapshots),
+            disk = JsonSerializer.SerializeToElement(Disk, snapshots), diskBeforeBase64 = Convert.ToBase64String(before),
+            diskAfterBase64 = Convert.ToBase64String(File.ReadAllBytes(ConfigFile)), diagnostics = diagnostics.ToArray() };
+    }
+}
+public sealed class PhysicalFileFailureFilter(Capture capture) : IAsyncResultFilter {
+    public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next) {
+        var mode = capture.ExecutionFaultMode;
+        if (mode is null || context.Result is not PhysicalFileResult file) { await next(); return; }
+        if (mode == "delete-before-execution") {
+            await capture.MissingFile(file.FileName, context.HttpContext.Response, mode, async () => (await next()).Exception);
+            return;
+        }
+        if (mode != "delete-before-sendfile") throw new InvalidOperationException("Unknown controlled physical font fault.");
+        var original = context.HttpContext.Features.Get<IHttpResponseBodyFeature>()!;
+        context.HttpContext.Features.Set<IHttpResponseBodyFeature>(new MissingFileBodyFeature(original, capture, context.HttpContext.Response));
+        try { await next(); }
+        finally { context.HttpContext.Features.Set(original); }
+    }
+}
+public sealed class MissingFileBodyFeature(IHttpResponseBodyFeature original, Capture capture, HttpResponse response) : IHttpResponseBodyFeature {
+    public Stream Stream => original.Stream;
+    public PipeWriter Writer => original.Writer;
+    public void DisableBuffering() => original.DisableBuffering();
+    public Task StartAsync(CancellationToken cancellationToken = default) => original.StartAsync(cancellationToken);
+    public Task CompleteAsync() => original.CompleteAsync();
+    public Task SendFileAsync(string path, long offset, long? count, CancellationToken cancellationToken = default) =>
+        capture.MissingFile(path, response, "delete-before-sendfile", async () => {
+            await original.SendFileAsync(path, offset, count, cancellationToken); return null;
+        });
 }
 public class Stub : DispatchProxy {
     public Func<MethodInfo, object?[]?, object?> Handler = null!;

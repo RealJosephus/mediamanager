@@ -11,6 +11,7 @@ import { getCACertificates, setDefaultCACertificates } from 'node:tls';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import { remoteStaticStreamResult } from '../../src/playback/remote-static.js';
+import { openHttpStorage } from '../storage/http-fixture.js';
 
 const certificate = await readFile(new URL('./fixtures/localhost-tls.crt', import.meta.url));
 const key = await readFile(new URL('./fixtures/localhost-tls.key', import.meta.url));
@@ -104,9 +105,10 @@ test('the frozen runtime handler type does not follow a trusted HTTPS to HTTP do
 }));
 
 test('static remote proxy does not fetch an HTTP target after trusted HTTPS redirects', async t => {
+  const storage = await openHttpStorage(); t.after(() => storage.close());
   await withDowngradeServers(async ({ secureUrl, plainRequests, tlsRequests }) => {
     const proxy = createServer((request, response) => {
-      remoteStaticStreamResult(secureUrl).send(request, response).catch(error => response.destroy(error));
+      remoteStaticStreamResult(storage.vfs, storage.access(secureUrl)).send(request, response).catch(error => response.destroy(error));
     });
     proxy.listen(0, '127.0.0.1');
     await once(proxy, 'listening');
@@ -132,6 +134,7 @@ test('static remote proxy does not fetch an HTTP target after trusted HTTPS redi
 });
 
 test('static remote proxy follows an HTTPS redirect to trusted HTTPS bytes', async t => {
+  const storage = await openHttpStorage(); t.after(() => storage.close());
   const bytes = Buffer.from('trusted-https-redirect-bytes\n');
   const requests = [];
   const servers = [];
@@ -154,7 +157,7 @@ test('static remote proxy follows an HTTPS redirect to trusted HTTPS bytes', asy
     redirect.listen(0, '127.0.0.1');
     await once(redirect, 'listening');
     const proxy = createServer((request, response) => {
-      remoteStaticStreamResult(`https://127.0.0.1:${redirect.address().port}/redirect`).send(request, response)
+      remoteStaticStreamResult(storage.vfs, storage.access(`https://127.0.0.1:${redirect.address().port}/redirect`)).send(request, response)
         .catch(error => response.destroy(error));
     });
     servers.push(proxy);

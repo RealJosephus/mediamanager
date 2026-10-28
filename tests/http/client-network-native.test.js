@@ -8,6 +8,8 @@ import { currentNativeReference } from '../../tools/compat/current-native-refere
 import { createPrivateFilterOutput, filterEvidenceJson } from '../../tools/compat/filter-reference-output.js';
 import { validationOutputRoot } from '../../tools/validation/paths.js';
 import { createWebServerFixture } from '../web/web-fixture.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 const enabled = process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE
   && process.env.MEDIAMANAGER_TEST_CURRENT_NATIVE_SQLITE && process.env.MEDIAMANAGER_JELLYFIN_DLL;
@@ -39,7 +41,7 @@ async function observe(origin, route, { token, method = 'GET', localAddress } = 
         const contentType = response.headers['content-type'] ?? null;
         const result = { route, method, status: response.statusCode, contentType,
           contentLength: response.headers['content-length'] ?? null, bytes, sha256: hash.digest('hex') };
-        if (bytes <= 8192 && contentType?.includes('json')) result.body = JSON.parse(Buffer.concat(parts).toString('utf8'));
+        if (bytes <= 8192 && contentType?.includes('json')) result.body = parseLosslessJson(Buffer.concat(parts).toString('utf8'));
         resolve(result);
       });
     });
@@ -47,6 +49,26 @@ async function observe(origin, route, { token, method = 'GET', localAddress } = 
     request.on('error', reject).end();
   });
 }
+
+const networkProjection = response => ({ status: response.status, contentType: response.contentType,
+  ...(Object.hasOwn(response, 'body') ? { body: projectProblemTrace(response.body, response.status) } : {}) });
+
+test('network response comparison keeps full content type and only aligns actual ProblemDetails traces', () => {
+  const response = { status: 400, contentType: 'application/problem+json; charset=utf-8',
+    body: parseLosslessJson('{"status":400,"title":"Bad request","traceId":"request-trace","errors":{"traceId":["literal"]},"Unknown":{"MessageId":"literal","ticks":9223372036854775807}}') };
+  const expected = networkProjection(response);
+  assert.equal(expected.body.traceId, '$trace');
+  assert.deepEqual(expected.body.errors, response.body.errors);
+  assert.deepEqual(expected.body.Unknown, { MessageId: 'literal', ticks: 9223372036854775807n });
+  const absent = structuredClone(response); delete absent.body.traceId;
+  assert.notDeepEqual(networkProjection(absent), expected);
+  const invalid = structuredClone(response); invalid.body.traceId = false;
+  assert.throws(() => networkProjection(invalid), assert.AssertionError);
+  assert.notDeepEqual(networkProjection({ ...response, contentType: 'application/problem+json; charset=utf-16' }), expected);
+  assert.notDeepEqual(networkProjection({ ...response, contentType: response.contentType + '; profile="CaseSensitive"' }), expected);
+  const success = { ...response, status: 200 }, changed = structuredClone(success); changed.body.traceId = 'other-business-value';
+  assert.notDeepEqual(networkProjection(success), networkProjection(changed));
+});
 
 test('actual native HTTP endpoint classification and bitrate probes match the production entry', { skip: !enabled, timeout: 240000 }, async () => {
   const destination = path.join(validationOutputRoot(), `client-network-${randomUUID()}`);
@@ -107,16 +129,8 @@ test('actual native HTTP endpoint classification and bitrate probes match the pr
         node: await observe(fixture.origin, item.route, { ...options, token: item.authenticated ? tokens.node : undefined }) };
       report.cases.push(pair);
       try {
-        assert.equal(pair.node.status, pair.native.status, item.route);
-        if (pair.native.body) {
-          const functional = body => {
-            const { traceId: _traceId, ...value } = body;
-            return value;
-          };
-          assert.deepEqual(functional(pair.node.body), functional(pair.native.body), item.route);
-        }
+        assert.deepEqual(networkProjection(pair.node), networkProjection(pair.native), item.route);
         if (pair.native.status === 200 && item.route.startsWith('/Playback/BitrateTest')) {
-          assert.equal(pair.node.contentType, pair.native.contentType);
           assert.equal(pair.node.contentLength, pair.native.contentLength, item.route);
           assert.equal(pair.node.bytes, pair.native.bytes, item.route);
           assert.notEqual(pair.node.sha256, pair.native.sha256, 'Independent probes must supply fresh random bytes.');

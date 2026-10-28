@@ -2,6 +2,8 @@ import { guid } from '../library/records.js';
 import { member } from '../http/binding.js';
 import { stringifyNativeJson, withNativeFloats } from '../core/json.js';
 import { videoColorRange } from '../library/media-streams.js';
+import { isExternalSubtitleFallback, subtitleInputFormat } from './subtitle-source.js';
+import { supportsSubtitleTextConversion } from './subtitles.js';
 
 const get = (object, name, fallback) => member(object ?? {}, name) ?? fallback;
 const equal = (a, b) => String(a ?? '').toLowerCase() === String(b ?? '').toLowerCase();
@@ -164,8 +166,9 @@ export function subtitleProfile(source, stream, profile, container = source.Cont
     const embed = embedded.find(entry => textStream(stream) === isTextFormat(get(entry, 'Format')) && exact(entry)) ?? embedded.find(entry => canConvert(stream, get(entry, 'Format')));
     if (embed) return { Method: 'Embed', Format: get(embed, 'Format') };
   }
-  // External bytes or a configured copy-only extractor must actually be available.
+  // External bytes or a configured subtitle extractor must actually be available.
   const externalFile = stream.IsExternal && !/\.mks$/i.test(stream.Path ?? '');
+  const textFallback = externalFile && isExternalSubtitleFallback(stream);
   const externalProfile = allowConversion => {
     for (const entry of profiles) {
       const method = enumName(get(entry, 'Method', 'Encode'), subtitleMethods);
@@ -175,12 +178,11 @@ export function subtitleProfile(source, stream, profile, container = source.Cont
         && !/(?:pgs|dvdsub|vobsub)/iu.test(stream.Codec ?? '') && !/^sup$/iu.test(stream.Codec ?? '')) continue;
       if (equal(method, 'External') && vobSubMksProfile(entry, stream)) return { Method: method, Format: get(entry, 'Format') };
       if (vobSubMksDeliveryProfile(entry) || textStream(stream) !== isTextFormat(get(entry, 'Format'))
-        || !(externalFile || options.CanExtractSubtitle?.(stream, get(entry, 'Format')))) continue;
+        || !(textFallback ? options.CanExtractSubtitle?.(stream) : externalFile || options.CanExtractSubtitle?.(stream, get(entry, 'Format')))) continue;
       if (exact(entry)) return { Method: method, Format: get(entry, 'Format') };
-      if (allowConversion && !source.IsInfiniteStream && stream.SupportsExternalStream !== false) {
-        const from = stream.Codec?.toLowerCase(), to = get(entry, 'Format')?.toLowerCase();
-        if (['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa'].includes(from)
-          && (['vtt', 'webvtt', 'json'].includes(to) || ['srt', 'subrip'].includes(to) && ['subrip', 'ass', 'ssa'].includes(from))) {
+      if (allowConversion && canConvert(stream, get(entry, 'Format')) && !source.IsInfiniteStream && stream.SupportsExternalStream !== false) {
+        const inputFormat = textFallback ? 'srt' : subtitleInputFormat(stream);
+        if (supportsSubtitleTextConversion(inputFormat, get(entry, 'Format'))) {
           return { Method: method, Format: get(entry, 'Format') };
         }
       }

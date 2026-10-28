@@ -17,6 +17,9 @@ import hlsReference from './fixtures/hls-reference.json' with { type: 'json' };
 import native from './fixtures/hls-subtitle-reference.json' with { type: 'json' };
 import library from '../library/fixtures/reference-media.json' with { type: 'json' };
 import { createPostgresTestDatabase } from '../database/postgres-fixture.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
+import { projectHlsRequestIdentities, projectPlaybackRequestUrl } from '../helpers/playback-transport-projection.js';
 
 const id = '22222222222222222222222222222222';
 const token = 'fixture-token';
@@ -52,7 +55,7 @@ function streamingOptions(urlText) {
   return { ...options, AccessToken: token, CanDeliverHlsSubtitle: stream => stream.IsExternal && ['subrip', 'webvtt'].includes(stream.Codec) };
 }
 
-const normalized = value => value.replaceAll(token, '<token>').replaceAll(session, '<session>');
+const normalized = value => projectHlsRequestIdentities(value, { token, playSessionId: session });
 
 test('HLS subtitle delivery, master renditions and subtitle playlist match the current native instance', () => {
   const source = sourceFixture();
@@ -84,7 +87,7 @@ test('StreamBuilder negotiation selects the native Hls subtitle profile without 
     CanHls: (mediaSource, options) => { try { hlsPlan(mediaSource, { ...options, CanDeliverHlsSubtitle: stream => stream.IsExternal }); return true; } catch { return false; } },
   });
   assert.equal(source.SupportsTranscoding, true);
-  assert.equal(normalized(source.TranscodingUrl), native.playbackInfo.source.TranscodingUrl);
+  assert.equal(projectPlaybackRequestUrl(source.TranscodingUrl, { token, playSessionId: session }), native.playbackInfo.source.TranscodingUrl);
   assert.deepEqual(source.TranscodeReasons, ['ContainerNotSupported', 'SubtitleCodecNotSupported']);
   assert.deepEqual(source.MediaStreams.filter(stream => [3, 4].includes(stream.Index)).map(stream => ({ Index: stream.Index, Codec: stream.Codec,
     DisplayTitle: stream.DisplayTitle, Language: stream.Language, IsForced: stream.IsForced,
@@ -137,30 +140,29 @@ test('authenticated HTTP serves native master, subtitle manifest and timed WebVT
       body: JSON.stringify({ DeviceProfile: profile, MediaSourceId: id, SubtitleStreamIndex: 3 }) });
     assert.equal(infoResponse.status, 200);
     const info = await infoResponse.json(), actualSession = info.PlaySessionId;
-    const normalizeHttp = text => text.replaceAll(login.AccessToken, '<token>').replaceAll(actualSession, '<session>');
-    assert.equal(normalizeHttp(info.MediaSources[0].TranscodingUrl), native.playbackInfo.source.TranscodingUrl);
+    const identities = { token: login.AccessToken, playSessionId: actualSession };
+    assert.equal(projectPlaybackRequestUrl(info.MediaSources[0].TranscodingUrl, identities), native.playbackInfo.source.TranscodingUrl);
     assert.deepEqual(info.MediaSources[0].MediaStreams.filter(stream => stream.Type === 'Subtitle').map(stream => ({ Index: stream.Index, Codec: stream.Codec,
       DisplayTitle: stream.DisplayTitle, Language: stream.Language, IsForced: stream.IsForced,
       IsTextSubtitleStream: stream.IsTextSubtitleStream, DeliveryMethod: stream.DeliveryMethod })), native.playbackInfo.source.subtitles);
     const masterUrl = new URL(info.MediaSources[0].TranscodingUrl, origin);
     const master = await fetch(masterUrl, { headers });
     assert.equal(master.status, 200); assert.equal(master.headers.get('content-type'), native.master.contentType);
-    const masterText = await master.text(); assert.equal(normalizeHttp(masterText), native.master.text);
+    const masterText = await master.text(); assert.equal(projectHlsRequestIdentities(masterText, identities), native.master.text);
     const mediaLine = masterText.split(/\r?\n/).find(line => line.startsWith('#EXT-X-MEDIA'));
     const subtitleUrl = new URL(/URI="([^"]+)"/.exec(mediaLine)[1], masterUrl);
     const manifest = await fetch(subtitleUrl, { headers });
     assert.equal(manifest.status, 200); assert.equal(manifest.headers.get('content-type'), native.subtitlePlaylist.contentType);
-    const manifestText = await manifest.text(); assert.equal(normalizeHttp(manifestText), native.subtitlePlaylist.text);
+    const manifestText = await manifest.text(); assert.equal(projectHlsRequestIdentities(manifestText, identities), native.subtitlePlaylist.text);
     const segmentUrl = new URL(manifestText.split(/\r?\n/).find(line => line && !line.startsWith('#')), subtitleUrl);
     const segment = await fetch(segmentUrl, { headers });
     assert.equal(segment.status, 200); assert.equal(segment.headers.get('content-type'), native.subtitleSegment.contentType);
     assert.equal(await segment.text(), native.subtitleSegment.text);
     const missing = await fetch(new URL(subtitleUrl.pathname, origin), { headers });
     assert.equal(missing.status, native.missingLength.status); assert.equal(missing.headers.get('content-type'), native.missingLength.contentType);
-    const { traceId, ...missingProblem } = await missing.json();
-    const { traceId: nativeTraceId, ...nativeProblem } = JSON.parse(native.missingLength.text);
-    assert.match(traceId, /^00-[a-f0-9]{32}-[a-f0-9]{16}-00$/); assert.match(nativeTraceId, /^00-[a-f0-9]{32}-[a-f0-9]{16}-00$/);
-    assert.deepEqual(missingProblem, nativeProblem);
+    const missingProblem = parseLosslessJson(await missing.text()), nativeProblem = parseLosslessJson(native.missingLength.text);
+    for (const value of [missingProblem, nativeProblem]) { assert.equal(typeof value.traceId, 'string'); assert.ok(value.traceId.length > 0); }
+    assert.deepEqual(projectProblemTrace(missingProblem, missing.status), projectProblemTrace(nativeProblem, native.missingLength.status));
     const zero = new URL(subtitleUrl); zero.searchParams.set('SegmentLength', '0');
     const invalid = await fetch(zero, { headers });
     assert.equal(invalid.status, native.zeroLength.status); assert.equal(invalid.headers.get('content-type'), native.zeroLength.contentType);

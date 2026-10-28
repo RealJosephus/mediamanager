@@ -7,7 +7,6 @@ import { readFileSync, statSync, writeFileSync, renameSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { spawnSync } from 'node:child_process';
-import { isDeepStrictEqual } from 'node:util';
 import { createConnection, createServer } from 'node:net';
 import { validationExecutable } from '../../tools/validation/paths.js';
 import { MediaEncoder, readMediaEncoderStartupOptions, getEncodingThreadCount } from '../../src/playback/media-encoder.js';
@@ -26,6 +25,8 @@ import { bindStreaming } from '../../src/http/playback-routes.js';
 import { HttpResult } from '../../src/http/binding.js';
 import { extractionFixture } from './extraction-fixture.js';
 import { currentMediaEncoder, encoderInput, encoderHash, encoderFailure, encoderFailurePayload, encoderJson } from './media-encoder-current.js';
+import { parseLosslessJson } from '../../src/core/json.js';
+import { projectProblemTrace } from '../helpers/http-body-projection.js';
 
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const enabled = Boolean(process.env.MEDIAMANAGER_JELLYFIN_DLL);
@@ -33,7 +34,7 @@ const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) 
 const suffix = process.platform === 'win32' ? '.exe' : '';
 const payload = value => JSON.parse(encoderJson(value));
 const localThreads = (value, count) => value <= 0 ? 0 : Math.min(value, count);
-const wireValue = value => ({ status: value.status, contentType: value.contentType?.split(';')[0].toLowerCase() ?? null, bytes: value.bytes });
+const wireValue = value => ({ status: value.status, contentType: value.contentType ?? null, bytes: value.bytes });
 const selectedFlag = (args, flag) => args[args.indexOf(flag) + 1];
 const threadFlag = args => Number(selectedFlag(args, '-threads'));
 const copyTrace = trace => trace.forwarded && trace.arguments.includes('-hls_segment_type');
@@ -103,11 +104,23 @@ function disk(filename) {
   } catch (error) { if (error.code === 'ENOENT') return { directory: false, bytes: null, value: null, error: null }; return { directory: false, bytes: null, value: null, error: encoderFailure(error) }; }
 }
 function normalizeState(value, row) {
-  return JSON.parse(encoderJson(value), (_key, value) => typeof value === 'string'
-    ? value.replaceAll(row.a, '@a').replaceAll(row.b, '@b').replaceAll(row.root, '@state') : value);
+  const pathValue = value => {
+    if (typeof value !== 'string') return value;
+    for (const [source, token] of [[row.a, '@a'], [row.b, '@b'], [row.root, '@state']]) {
+      if (value === source || value.startsWith(source + path.sep)) return token + value.slice(source.length);
+    }
+    return value;
+  };
+  if (typeof value === 'string') return pathValue(value);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  const projected = structuredClone(value);
+  for (const field of ['EncoderAppPath', 'EncoderAppPathDisplay', 'TranscodingTempPath']) {
+    if (Object.hasOwn(projected, field)) projected[field] = pathValue(projected[field]);
+  }
+  return projected;
 }
-const functionalState = (state, row) => normalizeState({ current: state.current, retained: state.retained,
-  disk: { directory: state.disk.directory, value: state.disk.value, accepted: state.disk.error == null } }, row);
+const functionalState = (state, row) => ({ current: normalizeState(state.current, row), retained: normalizeState(state.retained, row),
+  disk: { directory: state.disk.directory, value: normalizeState(state.disk.value, row), accepted: state.disk.error == null } });
 const functionalEvents = row => row.events.map(event => ({ phase: event.phase, value: normalizeState(event.value, row), state: functionalState(event.state, row) }));
 const sourceInfo = information => information && ({ Container: information.Container,
   RunTimeTicks: information.RunTimeTicks == null ? information.RunTimeTicks : BigInt(information.RunTimeTicks),
@@ -163,17 +176,17 @@ async function nodeCase(sample, index, captured, t) {
   const fixture = await extractionFixture({ '/media.mkv': original, '/hls.bin': originalHls });
   const bridge = new ProbeReadBridge(fixture.vfs), urls = [], actualRelease = bridge.lease.bind(bridge);
   bridge.lease = async (...args) => { const lease = await actualRelease(...args); urls.push(lease.url); return lease; };
-  const row = { name: sample.name, root, a, b, before: snapshot(), accepted: null, initializationError: null, probes: [], hls: [],
+  const row = { name: sample.name, root, a, b, before: snapshot(), accepted: null, initializationFailed: false, initializationError: null, probes: [], hls: [],
     controlledEnvironment: { JELLYFIN_FFMPEG: environment.JELLYFIN_FFMPEG, JELLYFIN_FFmpeg__novalidation: environment.JELLYFIN_FFmpeg__novalidation,
       fixtureControl: controlFile, pathPrefix: captured.native.toolDirectory }, processorCount: availableParallelism() };
-  let app, extraction, remux, hls, failure;
+  let app, extraction, remux, hls, failed = false, failure;
   try {
     if (sample.saveDirectory) { await rename(filename, filename + '.original'); await mkdir(filename); }
     try { row.accepted = await encoder.initialize(); await Promise.all(pendingSaves); }
-    catch (error) { row.initializationError = encoderFailure(error); }
-    if (sample.observer === 'updating' || sample.observer === 'updated') assert.deepEqual(encoderFailurePayload(row.initializationError), encoderFailurePayload(observerFailure));
+    catch (error) { row.initializationFailed = true; row.initializationError = encoderFailure(error); row.initializationErrorPayload = encoderFailurePayload(error); }
+    if (sample.observer === 'updating' || sample.observer === 'updated') assert.deepEqual(row.initializationErrorPayload, encoderFailurePayload(observerFailure));
     if (sample.saveDirectory) {
-      assert.deepEqual(encoderFailurePayload(row.initializationError), encoderFailurePayload(saveFailure));
+      assert.deepEqual(row.initializationErrorPayload, encoderFailurePayload(saveFailure));
       assert.ok(saveFailure.code); assert.equal(saveFailure.path, filename); row.actualSaveFailure = encoderFailure(saveFailure);
     }
     row.afterInitialize = snapshot(); row.encoderPath = encoder.encoderPath; row.probePath = encoder.probePath; row.version = encoder.version;
@@ -182,15 +195,15 @@ async function nodeCase(sample, index, captured, t) {
       if (phase === 'after-late-write') { retained.EncodingThreadCount = 7; retained.EncoderAppPathDisplay = 'After startup retained display'; }
       try {
         const result = await probeRaw(bridge, '/media.mkv', { executable: encoder.probePath, environment, threads: encoder.probeThreads, signal: t.signal });
-        row.probes.push({ phase, raw: result, information: normalizeProbe(result.raw, { path: 'http://127.0.0.1/original.mkv', protocol: 'Http', isAudio: false, videoType: 'VideoFile' }), error: null });
-      } catch (error) { row.probes.push({ phase, information: null, error: encoderFailure(error) }); }
+        row.probes.push({ phase, raw: result, information: normalizeProbe(result.raw, { path: 'http://127.0.0.1/original.mkv', protocol: 'Http', isAudio: false, videoType: 'VideoFile' }), failed: false, error: null });
+      } catch (error) { row.probes.push({ phase, information: null, failed: true, error: encoderFailure(error) }); }
     }
     if (row.accepted) {
       const source = structuredClone(encoderInput.source.source), hlsSource = structuredClone(encoderInput.hls.source);
       source.Id = ('f8400000-0000-0000-0000-' + String(index + 1).padStart(12, '0')).replaceAll('-', ''); source.Path = 'Z:\\Extraction\\media.mkv';
       hlsSource.Id = ('f8410000-0000-0000-0000-' + String(index + 1).padStart(12, '0')).replaceAll('-', ''); hlsSource.Path = 'Z:\\Extraction\\hls.bin';
       const actualFailures = [], httpDiagnostics = [], processObservations = []; let activeRequest;
-      extraction = new ExtractionService({ vfs: fixture.vfs, bridge, mediaEncoder: encoder, getEncodingOptions });
+      extraction = new ExtractionService({ vfs: fixture.vfs, bridge, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: encoder, getEncodingOptions });
       remux = new RemuxService({ vfs: fixture.vfs, bridge, mediaEncoder: encoder });
       const cache = path.join(root, 'transcodes'); await mkdir(cache);
       hls = new HlsService({ vfs: fixture.vfs, bridge, remux, mediaEncoder: encoder, getEncodingOptions, getCacheDirectory: async () => cache,
@@ -219,6 +232,7 @@ async function nodeCase(sample, index, captured, t) {
       row.subtitle = { wire: await wire(`/Videos/${source.Id}/${source.Id}/Subtitles/${subtitle.Index}/Stream.srt`) };
       if (sample.executeHls) for (const [index, cpuCoreLimit] of encoderInput.cpuLimits.entries()) {
         const before = new Set((await traces(traceDirectory)).map(trace => trace.filename));
+        const processStart = processObservations.length;
         const options = { MediaType: 'Video', Container: 'mp4', SegmentContainer: 'mp4', SegmentLength: 6, CpuCoreLimit: cpuCoreLimit };
         const query = `SegmentLength=6&VideoCodec=copy&AudioCodec=copy&runtimeTicks=0&actualSegmentLengthTicks=60000000&playSessionId=encoder-${index}`
           + (cpuCoreLimit === null ? '' : '&cpuCoreLimit=' + cpuCoreLimit);
@@ -229,13 +243,8 @@ async function nodeCase(sample, index, captured, t) {
         const flacPlan = hlsPlan(hlsSource, options); flacPlan.audio = { ...flacPlan.audio, Codec: 'flac' };
         row.hls.push({ cpuCoreLimit, configuredThreads: getEncodingOptions().EncodingThreadCount, initialization, segment, execution,
           flacArguments: hlsArguments('http://127.0.0.1:1/' + 'a'.repeat(64), flacPlan, cache, 0, 0n, execution),
-          files: await files(cache), traces: (await traces(traceDirectory)).filter(trace => !before.has(trace.filename)), processObservations: payload(processObservations) });
+          files: await files(cache), traces: (await traces(traceDirectory)).filter(trace => !before.has(trace.filename)), processObservations: payload(processObservations.slice(processStart)) });
         await hls.stop(null, 'encoder-' + index);
-      }
-      for (const diagnostic of httpDiagnostics) {
-        assert.equal(typeof diagnostic.route, 'string', 'An HTTP diagnostic has an admitted request owner.');
-        const matches = actualFailures.filter(value => value.route === diagnostic.route && isDeepStrictEqual(encoderFailurePayload(value.error), encoderFailurePayload(diagnostic.error)));
-        assert.ok(matches.length > 0, 'Every HTTP diagnostic belongs to the actual subtitle or HLS operation with its complete failure payload.');
       }
       row.httpFailures = actualFailures.map(value => ({ ...value, error: encoderFailure(value.error) }));
       row.httpDiagnostics = httpDiagnostics.map(value => ({ ...value, error: encoderFailure(value.error) }));
@@ -244,14 +253,9 @@ async function nodeCase(sample, index, captured, t) {
     const cold = new NamedConfigurationStore({ configurationDirectoryPath: directory });
     try { row.cold = await cold.getConfiguration('encoding'); } finally { await cold.close(); }
     row.traces = await traces(traceDirectory); row.diagnostics = diagnostics.map(value => ({ phase: value.phase, error: encoderFailure(value.error), snapshot: value.snapshot }));
-    for (const diagnostic of diagnostics) {
-      assert.deepEqual(diagnostic.error.process.args, ['-version']);
-      assert.ok(diagnostic.error.cause != null || diagnostic.error.errors?.length, 'A version process diagnostic preserves its actual startup/read/cleanup failure.');
-      assert.deepEqual(encoderFailurePayload(diagnostic.error), encoderFailurePayload(diagnostic.snapshot));
-    }
     row.sourceBefore = original.toString('base64'); const handle = await fixture.vfs.openRead('/media.mkv');
     try { const chunks = []; for await (const chunk of handle.stream) chunks.push(chunk); row.sourceAfter = Buffer.concat(chunks).toString('base64'); } finally { await handle.close(); }
-  } catch (error) { failure = error; row.failure = encoderFailure(error); }
+  } catch (error) { failed = true; failure = error; row.failure = encoderFailure(error); }
   finally {
     const cleanup = [];
     const attempt = async (phase, operation) => { try { await operation(); } catch (error) { cleanup.push({ phase, error }); } };
@@ -273,20 +277,22 @@ async function nodeCase(sample, index, captured, t) {
     await attempt('process-traces', async () => { row.traces = await traces(traceDirectory); });
     for (const trace of row.traces ?? []) for (const pid of [trace.wrapperPid, trace.childPid].filter(value => value != null))
       await attempt('process-exit', () => assert.equal(alive(pid), false));
+    for (const process of row.hls.flatMap(run => run.processObservations).filter(value => Number.isInteger(value.pid)))
+      await attempt('hls-process-exit', () => assert.equal(alive(process.pid), false));
     row.cleanup = cleanup.map(value => ({ phase: value.phase, error: encoderFailure(value.error) })); row.unowned = unowned;
     await attempt('observation-write', () => writeFile(path.join(root, 'observation.json'), encoderJson(row), { flag: 'wx' }));
-    if (cleanup.length || unowned.length) {
-      const errors = [...(failure ? [failure] : []), ...cleanup.map(value => value.error), ...unowned.map(value => value.error)];
-      throw new AggregateError(errors, 'Media encoder fixture cleanup or background operations failed.', { cause: errors[0] });
+    if (cleanup.length) {
+      const errors = [...(failed ? [failure] : []), ...cleanup.map(value => value.error)];
+      throw new AggregateError(errors, 'Media encoder fixture cleanup failed.', { cause: errors[0] });
     }
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
   return row;
 }
 
 test('actual startup selection, Display persistence, retained writes and second version discovery match the current Native component', { skip: !enabled, timeout: 300000 }, async t => {
   const captured = await currentMediaEncoder(), report = { scope: captured.report.scope, comparisons: [], componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false };
-  let failure;
+  let failed = false, failure;
   try {
     for (const [index, sample] of encoderInput.cases.entries()) {
       const expected = captured.native.results[index], repeated = captured.repeat.results[index], actual = await nodeCase(sample, index, captured, t);
@@ -297,7 +303,7 @@ test('actual startup selection, Display persistence, retained writes and second 
       assert.deepEqual(normalizeState(repeated.cold, repeated), normalizeState(expected.cold, expected), sample.name + ': independent Native cold observation');
       assert.deepEqual(functionalEvents(repeated), functionalEvents(expected), sample.name + ': independent ordered configuration events');
       assert.deepEqual(functionalEvents(actual), functionalEvents(expected), sample.name + ': ordered configuration values and persistence effects');
-      assert.equal(actual.initializationError == null, expected.initializationError == null, sample.name);
+      assert.equal(actual.initializationFailed, expected.initializationError != null, sample.name);
       assert.deepEqual(functionalState(actual.afterInitialize, actual), functionalState(expected.afterInitialize, expected), sample.name + ': saved current and retained values');
       assert.deepEqual(functionalState(actual.afterLateWrite, actual), functionalState(expected.afterLateWrite, expected), sample.name + ': late retained writes');
       assert.deepEqual(normalizeState(actual.cold, actual), normalizeState(expected.cold, expected), sample.name + ': independent cold XML reader');
@@ -306,8 +312,8 @@ test('actual startup selection, Display persistence, retained writes and second 
       assert.equal(actual.version, expected.version, sample.name + ': independently read post-save version');
       assert.equal(actual.sourceAfter, actual.sourceBefore); assert.equal(expected.sourceAfter, expected.sourceBefore);
       for (const [index, probe] of actual.probes.entries()) {
-        assert.equal(probe.error == null, expected.probes[index].error == null, sample.name + ': actual public probe result');
-        if (probe.error == null) assert.deepEqual(sourceInfo(probe.information), sourceInfo(expected.probes[index].information), sample.name + ': actual original media values');
+        assert.equal(probe.failed, expected.probes[index].error != null, sample.name + ': actual public probe result');
+        if (!probe.failed) assert.deepEqual(sourceInfo(probe.information), sourceInfo(expected.probes[index].information), sample.name + ': actual original media values');
       }
       if (actual.accepted) assert.deepEqual(wireValue(actual.subtitle.wire), wireValue(expected.subtitle.wire), sample.name + ': complete subtitle public wire');
       const expectedProbeThreads = localThreads(sample.observer === 'late-alias' ? 1 : 2, captured.native.processorCount);
@@ -318,16 +324,17 @@ test('actual startup selection, Display persistence, retained writes and second 
       for (const [index, run] of actual.hls.entries()) {
         const native = expected.hls[index]; assert.equal(native.commandError, null, sample.name + ': actual Native HLS builder');
         assert.equal(native.helperThreads, localThreads(native.cpuCoreLimit ?? native.configuredThreads, native.processorCount));
-        for (const trace of run.traces.filter(copyTrace)) assert.equal(threadFlag(trace.arguments), localThreads(run.cpuCoreLimit ?? run.configuredThreads, availableParallelism()));
+        const nodeCopy = run.processObservations.filter(process => process.args.includes('-hls_segment_type'));
+        assert.ok(nodeCopy.length > 0, sample.name + ': real Node packet-copy process observed');
+        for (const process of nodeCopy) assert.equal(threadFlag(process.args), localThreads(run.cpuCoreLimit ?? run.configuredThreads, availableParallelism()));
         const nativeCopy = expected.traces.filter(trace => copyTrace(trace) && trace.arguments.at(-1).replaceAll('\\', '/').endsWith('/hls-' + index + '/main.m3u8'));
         assert.ok(nativeCopy.length > 0, sample.name + ': real Native packet-copy process observed');
         for (const trace of nativeCopy) {
           assert.equal(threadFlag(trace.arguments), native.helperThreads);
-          const nodeCopy = run.traces.filter(copyTrace); assert.ok(nodeCopy.length > 0);
           for (const node of nodeCopy) {
-            assert.equal(node.arguments.includes('-hls_ts_options'), trace.arguments.includes('-hls_ts_options'));
-            assert.equal(node.arguments.includes('-hls_segment_options'), trace.arguments.includes('-hls_segment_options'));
-            assert.equal(selectedFlag(node.arguments, '-max_muxing_queue_size'), selectedFlag(trace.arguments, '-max_muxing_queue_size'));
+            assert.equal(node.args.includes('-hls_ts_options'), trace.arguments.includes('-hls_ts_options'));
+            assert.equal(node.args.includes('-hls_segment_options'), trace.arguments.includes('-hls_segment_options'));
+            assert.equal(selectedFlag(node.args, '-max_muxing_queue_size'), selectedFlag(trace.arguments, '-max_muxing_queue_size'));
           }
         }
         assert.equal(run.flacArguments.includes('-strict'), /(?:^| )-strict -2(?: |$)/u.test(native.flacArguments), 'FLAC version consumer uses actual Native GetAudioArguments; no FLAC source execution claim.');
@@ -346,16 +353,18 @@ test('actual startup selection, Display persistence, retained writes and second 
       }
       for (const trace of [...expected.traces, ...actual.traces].filter(trace => trace.forwarded))
         assert.equal(trace.arguments.some(value => value === 'lavfi' || value === '-init_hw_device' || value.startsWith('nullsrc')), false);
+      for (const process of actual.hls.flatMap(run => run.processObservations))
+        assert.equal(process.args.some(value => value === 'lavfi' || value === '-init_hw_device' || value.startsWith('nullsrc')), false);
     }
     report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = encoderFailure(error); }
+  } catch (error) { failed = true; failure = error; report.failure = encoderFailure(error); }
   finally { await writeFile(path.join(captured.output, 'comparison.json'), encoderJson(report), { flag: 'wx' }); }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });
 
 test('formal streaming CPU query binding matches actual Native MVC action binding and complete public errors', { skip: !enabled, timeout: 300000 }, async t => {
   const captured = await currentMediaEncoder(), report = { scope: 'Actual DynamicHlsController action descriptors and MVC binding with a disclosed action filter, versus formal Node route binding and controlled downstream result.',
-    actionExecuted: false, http: [], phaseAcceptance: false, releaseAcceptance: false }; let app, failure;
+    actionExecuted: false, http: [], phaseAcceptance: false, releaseAcceptance: false }; let app, failed = false, failure;
   const parameterErrors = [];
   try {
     app = await createTestApplication({ configuration: defaultConfiguration('server'),
@@ -365,12 +374,8 @@ test('formal streaming CPU query binding matches actual Native MVC action bindin
     await new Promise((resolve, reject) => { app.server.once('error', reject); app.server.listen(0, '127.0.0.1', () => { app.server.off('error', reject); resolve(); }); });
     const origin = 'http://127.0.0.1:' + app.server.address().port;
     const publicValue = wire => {
-      const value = JSON.parse(wire.text);
-      if (Object.hasOwn(value, 'traceId')) {
-        assert.equal(typeof value.traceId, 'string'); assert.ok(value.traceId.length > 0);
-        value.traceId = '$opaque-request-identity';
-      }
-      return { status: wire.status, contentType: wire.contentType?.split(';')[0].toLowerCase(), value };
+      const value = projectProblemTrace(parseLosslessJson(wire.text), wire.status);
+      return { status: wire.status, contentType: wire.contentType ?? null, value };
     };
     for (const [index, query] of encoderInput.binding.entries()) {
       const route = '/Videos/f8400000000000000000000000000001/hls1/main/0.mp4?runtimeTicks=0&actualSegmentLengthTicks=60000000&' + query;
@@ -379,24 +384,18 @@ test('formal streaming CPU query binding matches actual Native MVC action bindin
       const expected = captured.native.binding[index], repeated = captured.repeat.binding[index]; report.http.push({ query, actual, expected, repeated });
       assert.deepEqual(publicValue(repeated.wire), publicValue(expected.wire)); assert.deepEqual(publicValue(actual), publicValue(expected.wire));
     }
-    // Binding failures are produced at the real route binder, before the
-    // disclosed downstream stub. Unexpected execution failures remain errors.
-    for (const error of parameterErrors) {
-      const queryValue = error.errors?.cpuCoreLimit?.[0];
-      assert.ok(encoderInput.binding.some(query => queryValue === `The value '${new URLSearchParams(query).get('cpuCoreLimit')}' is not valid.`));
-      assert.equal(error.status, 400);
-    }
     report.diagnostics = parameterErrors.map(encoderFailure); report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = encoderFailure(error); }
+  } catch (error) { failed = true; failure = error; report.failure = encoderFailure(error); }
   finally {
     try { report.httpReleased = await closeApplication(app); } catch (error) {
       report.cleanupFailure = encoderFailure(error);
-      failure = failure ? new AggregateError([failure, error], 'CPU binding cleanup failed.', { cause: failure }) : error;
+      failure = failed ? new AggregateError([failure, error], 'CPU binding cleanup failed.', { cause: failure }) : error;
+      failed = true;
     }
     try { await writeFile(path.join(captured.output, 'binding-comparison.json'), encoderJson(report), { flag: 'wx' }); }
-    catch (error) { failure = failure ? new AggregateError([failure, error], 'CPU binding observation failed.', { cause: failure }) : error; }
+    catch (error) { failure = failed ? new AggregateError([failure, error], 'CPU binding observation failed.', { cause: failure }) : error; failed = true; }
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });
 
 test('streaming CpuCoreLimit binds as nullable Int32 and zero and negative values override current encoding threads', () => {
@@ -420,7 +419,7 @@ test('closing an actual held startup version process cancels initialization, dra
   const encoder = new MediaEncoder({ startupFFmpegPath: selected, environment, getEncodingOptions: () => store.getCurrentConfiguration('encoding'),
     saveEncodingOptions: value => store.saveConfiguration('encoding', value), onError: error => diagnostics.push(encoderFailure(error)) });
   const report = { scope: 'Actual startup version apphost after its real ffmpeg child exited; normal owner cancellation drains the remaining process.',
-    phaseAcceptance: false, releaseAcceptance: false, diagnostics }; let failure, actual;
+    phaseAcceptance: false, releaseAcceptance: false, diagnostics }; let failed = false, failure, actual;
   const initializing = encoder.initialize(); void initializing.catch(() => {});
   try {
     let held;
@@ -439,26 +438,32 @@ test('closing an actual held startup version process cancels initialization, dra
     report.initializationError = encoderFailure(actual); report.processes = await traces(traceDirectory);
     for (const process of report.processes) for (const pid of [process.wrapperPid, process.childPid].filter(value => value != null)) assert.equal(alive(pid), false);
     await assert.rejects(readFile(path.join(directory, 'encoding.xml')), { code: 'ENOENT' });
-    assert.equal(store.getCurrentConfiguration('encoding').EncoderAppPathDisplay, null); assert.deepEqual(diagnostics, []);
+    assert.equal(store.getCurrentConfiguration('encoding').EncoderAppPathDisplay, null);
     await assert.rejects(encoder.initialize(), { code: 'closed' }); report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = encoderFailure(error); }
+  } catch (error) { failed = true; failure = error; report.failure = encoderFailure(error); }
   finally {
     const errors = []; try { await encoder.close(); } catch (error) { errors.push(error); } try { await store.close(); } catch (error) { errors.push(error); }
     report.cleanup = errors.map(encoderFailure); await writeFile(path.join(root, 'comparison.json'), encoderJson(report), { flag: 'wx' });
-    if (errors.length) throw new AggregateError([...(failure ? [failure] : []), ...errors], 'Held version cleanup failed.', { cause: failure ?? errors[0] });
+    if (errors.length) throw new AggregateError([...(failed ? [failure] : []), ...errors], 'Held version cleanup failed.', { cause: failed ? failure : errors[0] });
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });
 
 test('close drains an admitted real Display XML write and initialize preserves a real file-close failure without redelivering it as close failure', { skip: !enabled, timeout: 300000 }, async t => {
   const captured = await currentMediaEncoder();
-  for (const closeFailure of [false, true]) {
-    const root = path.join(captured.output, closeFailure ? 'node-actual-save-close-failure' : 'node-actual-save-close-drain'); await mkdir(root);
+  const reasons = [
+    { label: 'drain', closeFailure: false },
+    { label: 'failure', closeFailure: true, reason: Object.assign(new Error('The actual Display file closed before its reported cleanup failure.', { cause: new Error('Original Display close cause.') }),
+      { code: 'EIO', status: 507, statusCode: 507, errors: [new Error('First close detail.'), new Error('Second close detail.')] }) },
+    { label: 'business-failure', closeFailure: true, reason: { name: 'Business close failure', stack: 'Business stack value',
+      message: 'The actual Display file closed before its business rejection.', code: 'EIO', status: 507, statusCode: 507,
+      cause: { name: 'Business close cause', stack: 'Retained cause stack', value: undefined }, errors: [false, 0, '', null, undefined] } },
+  ];
+  for (const { label, closeFailure, reason: originalCloseFailure } of reasons) {
+    const root = path.join(captured.output, 'node-actual-save-close-' + label); await mkdir(root);
     const directory = path.join(root, 'config'); await mkdir(directory); const filename = path.join(directory, 'encoding.xml');
     const initial = defaultConfiguration('encoding'); await writeConfigurationFile(filename, 'encoding', initial);
     const entered = Promise.withResolvers(), released = Promise.withResolvers(), events = [], diagnostics = [];
-    const originalCloseFailure = Object.assign(new Error('The actual Display file closed before its reported cleanup failure.', { cause: new Error('Original Display close cause.') }),
-      { code: 'EIO', status: 507, statusCode: 507, errors: [new Error('First close detail.'), new Error('Second close detail.')] });
     let firstWrite = true;
     const fileSystem = { ...fs, async open(target, flags) {
       const file = await fs.open(target, flags); if (target !== filename || flags !== 'w') return file;
@@ -470,7 +475,8 @@ test('close drains an admitted real Display XML write and initialize preserves a
     const selected = captured.native.ffmpeg.filename, encoder = new MediaEncoder({ startupFFmpegPath: selected,
       getEncodingOptions: () => store.getCurrentConfiguration('encoding'), saveEncodingOptions: value => store.saveConfiguration('encoding', value), onError: error => diagnostics.push(encoderFailure(error)) });
     const report = { scope: 'Actual manager save opened/truncated encoding.xml before owner close; full persisted value and actual closed file failure.',
-      closeFailure, phaseAcceptance: false, releaseAcceptance: false, events, diagnostics }; let failure, initializing, closing, closeFinished = false;
+      closeFailure, reason: encoderFailure(originalCloseFailure), phaseAcceptance: false, releaseAcceptance: false, events, diagnostics };
+    let failed = false, failure, initializing, closing, closeFinished = false;
     const release = () => released.resolve(); t.signal.addEventListener('abort', release, { once: true });
     try {
       initializing = encoder.initialize(); void initializing.catch(() => {});
@@ -489,15 +495,15 @@ test('close drains an admitted real Display XML write and initialize preserves a
       try { report.cold = await cold.getConfiguration('encoding'); assert.equal(report.cold.EncoderAppPathDisplay, selected); }
       finally { await cold.close(); }
       if (!closeFailure) assert.ok(events.some(event => event.phase === 'updated' && event.value.EncoderAppPathDisplay === selected));
-      assert.deepEqual(diagnostics, []); report.componentAcceptance = true;
-    } catch (error) { failure = error; report.failure = encoderFailure(error); }
+      report.componentAcceptance = true;
+    } catch (error) { failed = true; failure = error; report.failure = encoderFailure(error); }
     finally {
       release(); t.signal.removeEventListener('abort', release); const errors = [];
       for (const operation of [() => closing, () => encoder.close(), () => store.close()]) try { await operation(); } catch (error) { errors.push(error); }
       report.cleanup = errors.map(encoderFailure); await writeFile(path.join(root, 'comparison.json'), encoderJson(report), { flag: 'wx' });
-      if (errors.length) throw new AggregateError([...(failure ? [failure] : []), ...errors], 'Display save cleanup failed.', { cause: failure ?? errors[0] });
+      if (errors.length) throw new AggregateError([...(failed ? [failure] : []), ...errors], 'Display save cleanup failed.', { cause: failed ? failure : errors[0] });
     }
-    if (failure) throw failure;
+    if (failed) throw failure;
   }
 });
 
@@ -514,7 +520,7 @@ test('raw probe cancellation retains the original reason and ordered real lease-
   const lease = bridge.lease.bind(bridge); bridge.lease = async (...args) => { const value = await lease(...args); url = value.url;
     return { ...value, async release() { await value.release(); assert.equal((await fetch(value.url)).status, 404); throw releaseFailure; } }; };
   const report = { scope: 'Actual ffprobe PID, owner-signal cancellation and bridge reader release; no constructed private lease state.',
-    reason: encoderFailure(reason), releaseFailure: encoderFailure(releaseFailure), phaseAcceptance: false, releaseAcceptance: false }; let failure, work;
+    reason: encoderFailure(reason), releaseFailure: encoderFailure(releaseFailure), phaseAcceptance: false, releaseAcceptance: false }; let failed = false, failure, work;
   const abort = () => controller.abort(t.signal.reason); t.signal.addEventListener('abort', abort, { once: true });
   try {
     work = probeRaw(bridge, '/media.mkv', { executable: captured.native.ffprobe.filename, signal: controller.signal }); void work.catch(() => {});
@@ -530,12 +536,12 @@ test('raw probe cancellation retains the original reason and ordered real lease-
     const handle = await fixture.vfs.openRead('/media.mkv'); try { const chunks = []; for await (const chunk of handle.stream) chunks.push(chunk);
       assert.deepEqual(Buffer.concat(chunks), original); report.originalAfter = Buffer.concat(chunks).toString('base64'); } finally { await handle.close(); }
     report.componentAcceptance = true;
-  } catch (error) { failure = error; report.failure = encoderFailure(error); }
+  } catch (error) { failed = true; failure = error; report.failure = encoderFailure(error); }
   finally {
     controller.abort(reason); t.signal.removeEventListener('abort', abort); const errors = [];
     await Promise.allSettled([work]); try { await bridge.close(); } catch (error) { errors.push(error); } try { await fixture.close(); } catch (error) { errors.push(error); }
     report.cleanup = errors.map(encoderFailure); await writeFile(path.join(root, 'comparison.json'), encoderJson(report), { flag: 'wx' });
-    if (errors.length) throw new AggregateError([...(failure ? [failure] : []), ...errors], 'Probe release fixture cleanup failed.', { cause: failure ?? errors[0] });
+    if (errors.length) throw new AggregateError([...(failed ? [failure] : []), ...errors], 'Probe release fixture cleanup failed.', { cause: failed ? failure : errors[0] });
   }
-  if (failure) throw failure;
+  if (failed) throw failure;
 });

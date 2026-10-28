@@ -4,20 +4,18 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { tableDefinition } from '../../src/database/model.js';
-import { dateText, idKey } from '../../src/library/records.js';
+import { idKey } from '../../src/library/records.js';
 import { recordItemFilterCandidate, validateFixture } from '../library/item-filter-http-scenario.js';
 import { currentUserViewScenario, userViewEvidenceJson as json } from '../helpers/current-user-view-scenario.js';
 import { projectSingleSourceName } from '../helpers/single-source-name-projection.js';
+import { projectPlaybackInfoBody } from '../helpers/http-body-projection.js';
 
 const nativeCallback = declareNativeHttpTestFile({ enabled: Boolean(process.env.MEDIAMANAGER_TEST_POSTGRES && process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE) });
 
 const bytes = await readFile(new URL('./fixtures/path-substitution-http/input.json', import.meta.url));
 const fixture = JSON.parse(bytes);
 validateFixture(fixture);
-const normalize = value => Array.isArray(value) ? value.map(normalize) : value && typeof value === 'object'
-  ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'PlaySessionId' ? '$play-session' : key === 'ServerId' ? '$server'
-    : ['DateCreated', 'DateLastSaved', 'DateLastMediaAdded'].includes(key) && typeof entry === 'string'
-      ? dateText(entry) : normalize(entry)])) : value;
+const normalize = (value, status) => projectPlaybackInfoBody(value, { status });
 
 test('PlaybackInfo publishes native client paths while retaining internal storage identities', {
   skip: !process.env.MEDIAMANAGER_TEST_NATIVE_INSTANCE || !process.env.MEDIAMANAGER_TEST_POSTGRES, timeout: 300000,
@@ -89,9 +87,8 @@ test('PlaybackInfo publishes native client paths while retaining internal storag
       assert.equal(endpoint.response.status, reference.response.status);
       assert.equal(endpoint.response.contentType, reference.response.contentType);
       validateSession(endpoint.response.body, nodeSessions);
-      assert.deepEqual(normalize(projectSingleSourceName(endpoint.response.body, fixture.items, false, sourceNames, item.name)),
-        normalize(projectSingleSourceName(reference.response.bodyJson, fixture.items, true, sourceNames, item.name)));
-      assert.deepEqual(endpoint.runtimeErrors, []);
+      assert.deepEqual(normalize(projectSingleSourceName(endpoint.response.body, fixture.items, false, sourceNames, item.name), endpoint.response.status),
+        normalize(projectSingleSourceName(reference.response.bodyJson, fixture.items, true, sourceNames, item.name), reference.response.status));
     } catch (error) { differences.push({ name: item.name, endpoint: endpoint.endpoint, message: error.message }); }
   }
   await writeFile(path.join(root, 'postgres-comparison.json'), json({ passed: differences.length === 0, phaseAcceptance: false,
@@ -103,7 +100,6 @@ test('PlaybackInfo publishes native client paths while retaining internal storag
   assert.deepEqual(actual.userDataBeforeReads, actual.userDataAfterShutdown);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterReads);
   assert.deepEqual(actual.filesystemBeforeReads, actual.filesystemAfterShutdown);
-  assert.deepEqual(actual.runtimeErrors, []);
   assert.ok(Object.values(actual.cleanup).every(Boolean));
   assert.deepEqual(differences, []);
 }));

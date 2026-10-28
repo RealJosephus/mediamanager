@@ -20,9 +20,9 @@ const alive = pid => { try { process.kill(pid, 0); return true; } catch (error) 
 const profileValue = value => value === null ? null : ({ Method: value.Method, Format: value.Format });
 const wireValue = value => ({ status: value.status, contentType: value.contentType?.split(';')[0].toLowerCase() ?? null, bytes: value.bytes });
 
-test('current named EnableSubtitleExtraction affects only the native subtitle negotiation branch', { skip: !enabled, timeout: 300000 }, async () => {
+test('current named extraction policy and external ASS/SSA profiles retain actual native subtitle negotiation', { skip: !enabled, timeout: 300000 }, async () => {
   const captured = await currentSubtitleConfiguration();
-  const report = { scope: 'Actual MediaEncoder capability plus StreamBuilder subtitle profile; Node current named values.',
+  const report = { scope: 'Actual MediaEncoder capability plus StreamBuilder.GetSubtitleProfile, including external ASS/SSA VTT Hls and exact-format External controls; Node current named values. This component does not execute MediaInfoHelper or compare its SupportsTranscoding advertisement with the R6-limited Node AV executor.',
     comparisons: [], phaseAcceptance: false, releaseAcceptance: false, componentAcceptance: false };
   const directory = path.join(captured.output, 'node-profile-config'); await mkdir(directory);
   const store = new NamedConfigurationStore({ configurationDirectoryPath: directory }); let failure;
@@ -57,7 +57,7 @@ async function nodeCase(sample, root, t) {
   const executable = validationExecutable('ffmpeg'), linkedBin = path.join(root, 'encoder-bin');
   if (sample.executableMissing) await symlink(path.dirname(executable), linkedBin, process.platform === 'win32' ? 'junction' : 'dir');
   const mediaEncoder = await createTestMediaEncoder(t, { startupFFmpegPath: sample.executableMissing ? path.join(linkedBin, path.basename(executable)) : executable });
-  const service = new ExtractionService({ vfs: fixture.vfs, bridge, mediaEncoder, getEncodingOptions,
+  const service = new ExtractionService({ vfs: fixture.vfs, bridge, subtitleCache: fixture.createSubtitleCache(), mediaEncoder, getEncodingOptions,
     onProcess: process => pids.push(structuredClone(process)) });
   const actualFailures = [], subtitleOperation = service.subtitle.bind(service);
   service.subtitle = async (...arguments_) => {
@@ -184,7 +184,7 @@ test('actual extraction preserves ordered operation/release failures and cancell
       assert.equal(response.status, 404); throw release;
     } };
   };
-  const service = new ExtractionService({ vfs: fixture.vfs, bridge, mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions() { throw primary; }, onProcess: process => pids.push(process) });
+  const service = new ExtractionService({ vfs: fixture.vfs, bridge, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions() { throw primary; }, onProcess: process => pids.push(process) });
   let failure;
   try {
     let actual;
@@ -218,7 +218,7 @@ test('explicit attachments ignore subtitle-only settings and actual cancellation
   const fixture = await extractionFixture({ '/media.mkv': original });
   let encoding = { ...defaultConfiguration('encoding'), EnableSubtitleExtraction: false, SubtitleExtractionTimeoutMinutes: 0 };
   const pids = [], getEncodingOptions = () => encoding;
-  const service = new ExtractionService({ vfs: fixture.vfs, mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions, onProcess: process => pids.push(process) });
+  const service = new ExtractionService({ vfs: fixture.vfs, subtitleCache: fixture.createSubtitleCache(), mediaEncoder: await createTestMediaEncoder(t), getEncodingOptions, onProcess: process => pids.push(process) });
   const reason = Object.assign(new Error('The real subtitle reader stopped.'), { code: 'reader-stopped', cause: new Error('Original caller cancellation.') });
   const report = { scope: 'Actual attachment bytes and cancellation through a long valid current subtitle timeout.',
     reason: subtitleFailure(reason), componentAcceptance: false, phaseAcceptance: false, releaseAcceptance: false };

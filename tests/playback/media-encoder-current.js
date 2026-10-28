@@ -19,7 +19,7 @@ export const encoderFailure = value => value == null || typeof value !== 'object
 export const encoderFailurePayload = value => {
   if (value == null || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map(encoderFailurePayload);
-  const error = value instanceof Error || Object.hasOwn(value, 'message');
+  const error = value instanceof Error;
   const names = [...new Set([...Object.getOwnPropertyNames(value), ...(error ? ['message', 'code', 'status', 'statusCode', 'cause', 'errors'] : [])])];
   return Object.fromEntries(names.filter(name => !error || !['name', 'stack'].includes(name)).map(name => [name, encoderFailurePayload(value[name])]));
 };

@@ -254,7 +254,7 @@ export function hlsPlan(source, options = {}) {
   // when the selected delivery method itself is Hls.
   const subtitleGroup = textSubtitles.length > 0 && options.SubtitleMethod === 'Hls'
     && !(selectedSubtitle && options.SubtitleMethod === 'Encode');
-  const externalHlsFormat = stream => ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa'].includes(lower(path.win32.extname(stream.Path ?? '').slice(1) || stream.Codec));
+  const externalHlsFormat = stream => ['srt', 'subrip', 'vtt', 'webvtt', 'ass', 'ssa', 'smi'].includes(lower(path.win32.extname(stream.Path ?? '').slice(1) || stream.Codec));
   const deliverable = stream => options.CanDeliverHlsSubtitle?.(stream) ?? (stream.IsExternal && externalHlsFormat(stream));
   if (!audioOnly && (!video || !['h264', 'hevc'].includes(lower(video.Codec))) || plan.streams.some(stream => stream.type === 'Subtitle')
     || video?.DvProfile != null || container === 'ts' && (video?.Rotation ?? 0) !== 0

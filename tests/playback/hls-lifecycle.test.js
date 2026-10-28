@@ -6,8 +6,9 @@ import { mkdtemp, mkdir, readdir, readFile, writeFile, rm } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { HlsService, hlsPlan, hlsArguments } from '../../src/playback/hls.js';
+import { HlsService, hlsPlan, hlsArguments, masterPlaylist } from '../../src/playback/hls.js';
 import { negotiateSource } from '../../src/playback/profile.js';
+import { PlaybackService } from '../../src/playback/service.js';
 import { defaultConfiguration } from '../../src/core/configuration-xml.js';
 import { createTestMediaEncoder } from '../helpers/media-encoder.js';
 import { extractionFixture } from './extraction-fixture.js';
@@ -30,6 +31,25 @@ test('native HLS StreamBuilder URLs and explicit packet-copy eligibility', () =>
   assert.equal(args[args.indexOf('-ss') + 1], '00:00:25.021');
   assert.equal(args[args.indexOf('-codec:v:0') + 1], 'copy'); assert.equal(args[args.indexOf('-codec:a:0') + 1], 'copy');
   assert.throws(() => hlsArguments('file:///media.mkv', plan, tmpdir(), 0, 0n, execution));
+});
+
+test('an external SAMI stream negotiates a separate WebVTT HLS rendition', () => {
+  const source = structuredClone(reference.source);
+  const stream = { Type: 'Subtitle', Index: 3, Codec: 'sami', Path: 'Z:\\Hls\\source.ko.smi', Language: 'kor',
+    IsExternal: true, IsTextSubtitleStream: true, SupportsExternalStream: true };
+  source.MediaStreams.push(stream);
+  const profile = { ...structuredClone(reference.profiles[0].profile), SubtitleProfiles: [{ Format: 'vtt', Method: 'Hls' }] };
+  const playback = new PlaybackService({ getEncodingOptions: () => defaultConfiguration('encoding') });
+  const deliverable = value => playback.canDeliverHlsSubtitle(source, value);
+  negotiateSource(source, { Id: source.Id, MediaType: 'Video' }, profile, { SubtitleStreamIndex: stream.Index,
+    CanHls: (value, options) => { try { hlsPlan(value, { ...options, CanDeliverHlsSubtitle: deliverable }); return true; } catch { return false; } } });
+  assert.equal(source.SupportsTranscoding, true);
+  assert.equal(stream.DeliveryMethod, 'Hls');
+  const options = { SegmentContainer: 'ts', SubtitleStreamIndex: stream.Index, SubtitleMethod: 'Hls', CanDeliverHlsSubtitle: deliverable };
+  assert.ok(hlsPlan(source, options).streams.every(value => value.type !== 'Subtitle'), 'SAMI remains a separate text rendition.');
+  assert.match(masterPlaylist(source, options), /#EXT-X-MEDIA:TYPE=SUBTITLES[^\r\n]+Subtitles\/3\/subtitles\.m3u8/u);
+  stream.Path = 'Z:\\Hls\\source.ko.sami';
+  assert.throws(() => hlsPlan(source, options), { code: 'not-supported' }, 'The unimplemented .sami fallback is not advertised by its codec alone.');
 });
 
 test('real HLS network input sharing, version isolation, concurrency, cancellation and shutdown', async t => {

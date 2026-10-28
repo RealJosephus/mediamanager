@@ -17,6 +17,7 @@ import libraryFixture from '../library/fixtures/reference-media.json' with { typ
 import streamsFixture from '../library/fixtures/reference-streams.json' with { type: 'json' };
 import { subtitleLayoutProjection } from './layout-projection.js';
 import { observeComparison } from '../comparison-observations.js';
+import { projectPlaybackTransportBody } from '../helpers/playback-transport-projection.js';
 const expected = parseLosslessJson(await readFile(new URL('./fixtures/http-reference.json', import.meta.url), 'utf8'));
 export const requiredValidationServices = ['dotnet', 'jellyfinDll'];
 const readerFixture = new URL('../consumer-contracts/fixtures/readers/input.json', import.meta.url);
@@ -85,29 +86,28 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
     const actual=await recordPlayback(`http://127.0.0.1:${runtime.networkHost.listeners.find(entry => entry.scheme === 'http').port}`);
     recorded = actual;
     assert.equal(actual.records.length,expected.records.length);
-    const normalize=value=>Array.isArray(value)?value.map(normalize):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).map(([key,entry])=>{
-      assert.notEqual(key, 'traceId', 'Undeclared response fields must not be discarded.');
-      assert.notEqual(key, 'PlaySessionId', 'Only the validated top-level playback identity may differ.');
-      return [key,normalize(entry)];
-    })):typeof value==='string'?value.replaceAll(expected.accessToken,'<token>').replaceAll(actual.accessToken,'<token>').replaceAll(expected.subtitleRoot,'<subtitle-root>').replaceAll(subtitleRoot,'<subtitle-root>'):value;
     const nativeSessions = new Set(), candidateSessions = new Set();
     const generated = new Map([['subtitle-vtt', 'vtt'], ['subtitle-offset', 'vtt'], ['subtitle-copy', 'vtt'], ['subtitle-time-map', 'vtt'],
       ['subtitle-query-offset', 'vtt'], ['subtitle-alias-subrip', 'srt'], ['subtitle-alias-subrip-offset', 'srt'], ['subtitle-alias-webvtt', 'vtt']]);
-    const contract = (record, sessions) => {
+    const contract = (record, sessions, identities) => {
       if (generated.has(record.name)) {
         const { 'content-length': ignoredLength, ...headers } = record.headers;
         return { ...record, headers, body: subtitleLayoutProjection(Buffer.from(record.body.base64, 'base64').toString('utf8'), generated.get(record.name)) };
       }
-      if (!record.body || !Object.hasOwn(record.body, 'PlaySessionId')) return normalize(record);
-      assert.equal(record.status, 200);
-      const { PlaySessionId, ...body } = record.body;
-      assert.match(PlaySessionId, /^[a-f0-9]{32}$/u);
-      assert.equal(sessions.has(PlaySessionId), false); sessions.add(PlaySessionId);
-      return { ...normalize({ ...record, body }), body: { ...normalize(body), PlaySessionId: '$validated-play-session' } };
+      if (!record.name.startsWith('info-')) return record;
+      if (record.body && Object.hasOwn(record.body, 'PlaySessionId')) {
+        assert.equal(record.status, 200);
+        assert.match(record.body.PlaySessionId, /^[a-f0-9]{32}$/u);
+        assert.equal(sessions.has(record.body.PlaySessionId), false); sessions.add(record.body.PlaySessionId);
+      }
+      const path = value => value === identities.subtitleRoot || value.startsWith(identities.subtitleRoot + '\\')
+        || value.startsWith(identities.subtitleRoot + '/') ? '<subtitle-root>' + value.slice(identities.subtitleRoot.length) : value;
+      return { ...record, body: projectPlaybackTransportBody(record.body, { status: record.status, token: identities.token, path }) };
     };
     for(let index=0;index<expected.records.length;index++) {
       if (generated.has(expected.records[index].name)) observeComparison(t, expected.records[index].name + ' generated delivery', actual.records[index], expected.records[index]);
-      assert.deepEqual(contract(actual.records[index], candidateSessions), contract(expected.records[index], nativeSessions), expected.records[index].name);
+      assert.deepEqual(contract(actual.records[index], candidateSessions, { token: actual.accessToken, subtitleRoot }),
+        contract(expected.records[index], nativeSessions, { token: expected.accessToken, subtitleRoot: expected.subtitleRoot }), expected.records[index].name);
     }
     const sub = `/Videos/${movieId}/${movieId}/Subtitles/5`;
     for (const [name, route, format] of [['subtitle-vtt', sub + '/Stream.vtt', 'vtt'],
@@ -145,10 +145,9 @@ test('native HTTP original bytes, complete negotiation and generated subtitle se
       assert.match(mapped.PlaySessionId, /^[a-f0-9]{32}$/u);
       assert.ok(!candidateSessions.has(mapped.PlaySessionId));
       const baseline = structuredClone(actual.records.find(record => record.name === name).body);
-      delete baseline.PlaySessionId;
-      const { PlaySessionId, ...visible } = mapped;
       for (const source of baseline.MediaSources) source.Path = mappedPath;
-      assert.deepEqual(normalize(visible), normalize(baseline));
+      const projection = value => projectPlaybackTransportBody(value, { status: response.status, token: actual.accessToken });
+      assert.deepEqual(projection(mapped), projection(baseline));
       assert.equal((await runtime.library.getMediaSources(movieId))[0].Path, identityPath);
       substitutions.push({ name, status: response.status, body: mapped });
     }
